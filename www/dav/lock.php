@@ -1,5 +1,0 @@
-<?php
-/***********
- * Lock/unlock file
- */
-?>
