@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- DOCTYPE article
+          PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0CR3//EN"
+          "sdocbook.dtd" -->
+<article>
+  <articleinfo>
+    <author>
+      <firstname>Staffan Olsson</firstname>
+      <surname>Wilcock</surname>
+    </author>
+    <title>Installera Repos</title>
+  </articleinfo>
+  <section>
+    <title>Systemkrav</title>
+    <para>
+      Jahajah
+    </para>
+  </section>
+</article>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- DOCTYPE article
+          PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0CR3//EN"
+          "sdocbook.dtd" -->
+<article>
+  <articleinfo>
+    <author>
+      <firstname>Staffan</firstname>
+      <surname>Olsson</surname>
+    </author>
+    <title>Repos Manual</title>
+  </articleinfo>
+  <section>
+    <title>Hello</title>
+    <para>
+      This is the "Hello" section.
+    </para>
+    <section>
+      <title>Hello Hello</title>
+      <para>
+  This is the "Hello Hello" section.
+      </para>
+    </section>
+  </section>
+</article>
