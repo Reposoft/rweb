@@ -8,7 +8,7 @@ define('STYLESHEET','../svnlayout/repos.xsl');
 
 $url = getTargetUrl();
 
-$cmd = getSvnOptions()." log $url";
+$cmd = getSvnCommand()." log $url";
 
 // passthrough with stylesheet
 header('Content-type: text/xml');
