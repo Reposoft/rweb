@@ -23,8 +23,8 @@ Needs the following model:
 		<input type="submit" value="Save"/>
 		</form>
 		<jsp:include page="../includes/end.inc.jsp"/>
-		<div id="autosaveDiv">
+		<% /* <div id="autosaveDiv">
 			<iframe width="100%" height="20" src="autosave.jwa" style="position:absolute; left:0px; bottom:0px; width:100%; right:0px; background-color:#333333;"></iframe>
-		</div>
+		</div> */ %>
     </body>
 </html>

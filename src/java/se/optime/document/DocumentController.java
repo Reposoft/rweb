@@ -49,10 +49,7 @@ public class DocumentController implements Controller {
 //        InputStreamReader isr = new InputStreamReader(file.getInputStream());
 //        BufferedReader reader = new BufferedReader(isr);
         
-        String user = request.getRemoteUser();
-        String type = request.getAuthType();
-        
-        logger.info("Request by " + user + " (" + type + "):" + authenticationResolver.getAuthenticatedPassword() + " = " + authenticationResolver.getBasicAuthenticationString());
+        logger.info("Request by " + authenticationResolver.getAuthenticatedUsername() + ":" + authenticationResolver.getAuthenticatedPassword() + " = " + authenticationResolver.getBasicAuthenticationString());
         
         model.put("contents","lite text"); //reader.readLine());
         

@@ -8,9 +8,6 @@ import net.sf.acegisecurity.AuthenticationCredentialsNotFoundException;
 import net.sf.acegisecurity.AuthenticationException;
 import net.sf.acegisecurity.AuthenticationManager;
 import net.sf.acegisecurity.AuthenticationServiceException;
-import net.sf.acegisecurity.GrantedAuthority;
-import net.sf.acegisecurity.GrantedAuthorityImpl;
-import net.sf.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 
 /**
  * Assuming a UsernamePasswordAuthenticationToken and setting authority USER
