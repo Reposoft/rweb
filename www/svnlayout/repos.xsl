@@ -358,7 +358,9 @@
 			</h3>
 			<xsl:if test="msg">
 				<p>
-					<xsl:value-of select="msg"/>
+					<xsl:call-template name="linebreak">
+						<xsl:with-param name="text" select="msg"/>
+					</xsl:call-template>
 				</p>
 			</xsl:if>
 			<xsl:apply-templates select="paths">
@@ -431,5 +433,21 @@
 				</td>
 			</tr>
 		</table>
+	</xsl:template>
+	<!-- *** replace newline with <br> *** -->
+	<xsl:template name="linebreak">
+	    <xsl:param name="text"/>
+	    <xsl:choose>
+	        <xsl:when test="contains($text, '&#13;')">
+	            <xsl:value-of select="substring-before($text, '&#13;')"/>
+	            <br/>
+	            <xsl:call-template name="linebreak">
+	                <xsl:with-param name="text" select="substring-after($text, '&#13;')"/>
+	            </xsl:call-template>
+	        </xsl:when>
+	        <xsl:otherwise>
+	            <xsl:value-of select="$text"/>
+	        </xsl:otherwise>
+	    </xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>

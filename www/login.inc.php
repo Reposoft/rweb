@@ -139,7 +139,17 @@ function getReposAuth() {
 // *** Subversion client usage ***
 
 /**
- * @return Start of command line for executing svn operations
+ * Execute svn command like the PHP passthru() function
+ * @param cmd The command without the SVN part, for example 'log /url/to/repo'
+ */
+function svnPassthru($cmd) {
+	$runthis = getSvnCommand().escapeshellcmd($cmd); 
+	passthru($runthis,$returnval);
+	if($returnval) handleSvnError($runthis,$returnval);
+}
+
+/**
+ * @return Start of command line for executing svn operations, with tailing space
  */
 function getSvnCommand() {
 	define(SVN_CONFIG_DIR,DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'svn-config-dir');
@@ -148,11 +158,9 @@ function getSvnCommand() {
 	return 'svn '.$auth.$options;
 }
 
-function svnPassthru($cmd) {
-	passthru("$cmd",$returnval);
-	if($returnval) handleSvnError($cmd,$returnval);
-}
-
+/**
+ * Errorhandling for SVN execute
+ */
 function handleSvnError($cmd,$errorcode) {
 	echo "<error code=\"$errorcode\"/>";
 	// try executing "$cmd 2>&1" to get stderr
