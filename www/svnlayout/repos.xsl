@@ -427,7 +427,7 @@
 						<xsl:with-param name="possible-cause">The file might have been moved from this location</xsl:with-param>
 					</xsl:apply-templates>
 					<code><pre>
-						<xsl:value-of select="."/>
+						<xsl:value-of select="node()"/>
 					</pre></code>
 				</td>
 			</tr>
@@ -441,14 +441,14 @@
 	<!-- ====== error node ======== -->
 	<xsl:template match="error">
 		<xsl:param name="possible-cause"/>
-		<h3 class="error">An error has occured</h3>
+		<h2 class="error">An error has occured</h2>
 		<p>
 			<xsl:text>Code </xsl:text>
 			<xsl:value-of select="@code"/>
 			<xsl:value-of select="$spacer"/>
 			<xsl:value-of select="$possible-cause"/>
 		</p>
-		<pre class="error"><xsl:value-of select="."/></pre>
+		<pre class="error"><xsl:value-of select="node()"/></pre>
 	</xsl:template>
 	<!-- *** replace newline with <br> *** -->
 	<xsl:template name="linebreak">
