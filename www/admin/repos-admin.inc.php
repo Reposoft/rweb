@@ -4,7 +4,7 @@ function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirna
 require( upOne(dirname(__FILE__)) . "/conf/repos.properties.php" );
 
 // --- output functions ---
-function start($title) {
+function html_start($title) {
 	echo "<html><head><title>$title</title></head><body>\n";
 	echo "<h1>$title</h1>\n";
 }
@@ -51,7 +51,7 @@ function error($message) {
  */
 function fatal($message, $code = 1) {
 	error( $message );
-	done( $code );
+	html_end( $code );
 }
 
 function output($message) {
@@ -77,7 +77,7 @@ function formatArray($message) {
 	return $msg;
 }
 
-function done($code = 0) {
+function html_end($code = 0) {
 	echo "</body></html>\n\n";
 	exit( $code );
 }
@@ -178,7 +178,7 @@ function getRevisionInfo($filename, $startsWith) {
 
 // ----- unit tests ----
 if ( isTestRun() ) {
-	start("Unit testing " . basename(__FILE__));
+	html_start("Unit testing " . basename(__FILE__));
 	
 	debug("---- testing: upOne ----");
 	assertEquals("/some/path",upOne("/some/path/child"));
@@ -247,7 +247,7 @@ if ( isTestRun() ) {
 	else
 		info("All tests passed");
 		
-	done();
+	html_end();
 }
 
 // {{{ Header
