@@ -3,11 +3,13 @@
 // Global Repos configuration entries for PHP iCalendar 2.0
 // gets the calendar url from query parameter 'src'
 
+include './repos.properties.php';
+
 $default_cal 			= $_GET['src'];
 $language 				= 'Swedish';		// Language support - 'English', 'Polish', 'German', 'French', 'Dutch', 'Danish', 'Italian', 'Japanese', 'Norwegian', 'Spanish', 'Swedish', 'Portuguese', 'Catalan', 'Traditional_Chinese', 'Esperanto', 'Korean'
 $week_start_day 		= 'Monday';			// Day of the week your week starts on
 $timezone 				= '';				// Set timezone. Read TIMEZONES file for more information
-$default_path			= REPOS_URL + '/phpicalendar'; // The HTTP URL to the PHP iCalendar directory, ie. http://www.example.com/phpicalendar
+$default_path			= $repos_config['repos_url'] + '/phpicalendar'; // The HTTP URL to the PHP iCalendar directory, ie. http://www.example.com/phpicalendar
 $charset				= 'UTF-8';			// Character set your calendar is in, suggested UTF-8, or iso-8859-1 for most languages.
 
 // Yes/No questions --- 'yes' means Yes, anything else means no. 'yes' must be lowercase.
