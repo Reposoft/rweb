@@ -2,10 +2,10 @@
 tinyMCE.importThemeLanguagePack();
 
 // Variable declarations
-var TinyMCE_advanced_autoImportCSSClasses = true;
-var TinyMCE_advanced_foreColor = "#000000";
-var TinyMCE_advanced_anchorName = "";
-var TinyMCE_advanced_buttons = [
+var TinyMCE_repos_autoImportCSSClasses = true;
+var TinyMCE_repos_foreColor = "#000000";
+var TinyMCE_repos_anchorName = "";
+var TinyMCE_repos_buttons = [
 		// Control id, button img, button title, command, user_interface, value
 		['bold', '{$lang_bold_img}', '{$lang_bold_desc}', 'Bold'],
 		['italic', '{$lang_italic_img}', '{$lang_italic_desc}', 'Italic'],
@@ -47,10 +47,10 @@ var TinyMCE_advanced_buttons = [
 /**
  * Returns HTML code for the specificed control.
  */
-function TinyMCE_advanced_getControlHTML(button_name) {
+function TinyMCE_repos_getControlHTML(button_name) {
 	// Lookup button in button list
-	for (var i=0; i<TinyMCE_advanced_buttons.length; i++) {
-		var but = TinyMCE_advanced_buttons[i];
+	for (var i=0; i<TinyMCE_repos_buttons.length; i++) {
+		var but = TinyMCE_repos_buttons[i];
 		if (but[0] == button_name)
 			return '<img id="{$editor_id}_' + but[0] + '" src="{$themeurl}/images/' + but[1] + '" title="' + but[2] + '" width="20" height="20" class="mceButtonNormal" onmouseover="tinyMCE.switchClass(this,\'mceButtonOver\');" onmouseout="tinyMCE.restoreClass(this);" onmousedown="tinyMCE.restoreAndSwitchClass(this,\'mceButtonDown\');" onclick="tinyMCE.execInstanceCommand(\'{$editor_id}\',\'' + but[3] + '\', ' + (but.length > 4 ? but[4] : false) + (but.length > 5 ? ', \'' + but[5] + '\'' : '') + ')">';
 	}
@@ -72,7 +72,7 @@ function TinyMCE_advanced_getControlHTML(button_name) {
 					</select>';
 
 		case "styleselect":
-			return '<select id="{$editor_id}_styleSelect" onmousedown="TinyMCE_advanced_setupCSSClasses(\'{$editor_id}\');" name="{$editor_id}_styleSelect" onchange="tinyMCE.execInstanceCommand(\'{$editor_id}\',\'mceSetCSSClass\',false,this.options[this.selectedIndex].value);" class="mceSelectList">{$style_select_options}</select>';
+			return '<select id="{$editor_id}_styleSelect" onmousedown="TinyMCE_repos_setupCSSClasses(\'{$editor_id}\');" name="{$editor_id}_styleSelect" onchange="tinyMCE.execInstanceCommand(\'{$editor_id}\',\'mceSetCSSClass\',false,this.options[this.selectedIndex].value);" class="mceSelectList">{$style_select_options}</select>';
 
 		case "fontselect":
 			return '<select id="{$editor_id}_fontNameSelect" name="{$editor_id}_fontNameSelect" onchange="tinyMCE.execInstanceCommand(\'{$editor_id}\',\'FontName\',false,this.options[this.selectedIndex].value);" class="mceSelectList">\
@@ -109,11 +109,11 @@ function TinyMCE_advanced_getControlHTML(button_name) {
 /**
  * Theme specific exec command handeling.
  */
-function TinyMCE_advanced_execCommand(editor_id, element, command, user_interface, value) {
+function TinyMCE_repos_execCommand(editor_id, element, command, user_interface, value) {
 	switch (command) {
 		case "mceForeColor":
 			var template = new Array();
-			var inputColor = TinyMCE_advanced_foreColor;
+			var inputColor = TinyMCE_repos_foreColor;
 
 			if (!inputColor)
 				inputColor = "#000000";
@@ -152,7 +152,7 @@ function TinyMCE_advanced_execCommand(editor_id, element, command, user_interfac
 			template['width'] = 320;
 			template['height'] = 110;
 
-			tinyMCE.openWindow(template, {editor_id : editor_id, name : TinyMCE_advanced_anchorName});
+			tinyMCE.openWindow(template, {editor_id : editor_id, name : TinyMCE_repos_anchorName});
 			return true;
 	}
 
@@ -163,7 +163,7 @@ function TinyMCE_advanced_execCommand(editor_id, element, command, user_interfac
 /**
  * Editor instance template function.
  */
-function TinyMCE_advanced_getEditorTemplate(settings) {
+function TinyMCE_repos_getEditorTemplate(settings) {
 	function removeFromArray(in_array, remove_array) {
 		var outArray = new Array();
 		for (var i=0; i<in_array.length; i++) {
@@ -250,7 +250,7 @@ function TinyMCE_advanced_getEditorTemplate(settings) {
 			styleSelectHTML += '<option value="' + value + '">' + key + '</option>';
 		}
 
-		TinyMCE_advanced_autoImportCSSClasses = false;
+		TinyMCE_repos_autoImportCSSClasses = false;
 	}
 
 	template['html'] = tinyMCE.replaceVar(template['html'], 'style_select_options', styleSelectHTML);
@@ -263,7 +263,7 @@ function TinyMCE_advanced_getEditorTemplate(settings) {
 /**
  * Insert link template function.
  */
-function TinyMCE_advanced_getInsertLinkTemplate() {
+function TinyMCE_repos_getInsertLinkTemplate() {
 	var template = new Array();
 
 	template['file'] = 'link.htm';
@@ -280,7 +280,7 @@ function TinyMCE_advanced_getInsertLinkTemplate() {
 /**
  * Insert image template function.
  */
-function TinyMCE_advanced_getInsertImageTemplate() {
+function TinyMCE_repos_getInsertImageTemplate() {
 	var template = new Array();
 
 	template['file'] = 'image.htm';
@@ -297,7 +297,7 @@ function TinyMCE_advanced_getInsertImageTemplate() {
 /**
  * Insert table template function.
  */
-function TinyMCE_advanced_getInsertTableTemplate(settings) {
+function TinyMCE_repos_getInsertTableTemplate(settings) {
 	var template = new Array();
 
 	template['file'] = 'table.htm';
@@ -314,7 +314,7 @@ function TinyMCE_advanced_getInsertTableTemplate(settings) {
 /**
  * Node change handler.
  */
-function TinyMCE_advanced_handleNodeChange(editor_id, node, undo_index, undo_levels, visual_aid, any_selection) {
+function TinyMCE_repos_handleNodeChange(editor_id, node, undo_index, undo_levels, visual_aid, any_selection) {
 	function selectByValue(select_elm, value) {
 		if (select_elm) {
 			for (var i=0; i<select_elm.options.length; i++) {
@@ -331,7 +331,7 @@ function TinyMCE_advanced_handleNodeChange(editor_id, node, undo_index, undo_lev
 	// Get element color
 	var colorElm = tinyMCE.getParentElement(node, "font", "color");
 	if (colorElm)
-		TinyMCE_advanced_foreColor = "" + colorElm.color.toUpperCase();
+		TinyMCE_repos_foreColor = "" + colorElm.color.toUpperCase();
 
 	// Reset old states
 	tinyMCE.switchClassSticky(editor_id + '_justifyleft', 'mceButtonNormal');
@@ -360,9 +360,9 @@ function TinyMCE_advanced_handleNodeChange(editor_id, node, undo_index, undo_lev
 
 	// Get anchor name
 	var anchorName = tinyMCE.getParentElement(node, "a", "name");
-	TinyMCE_advanced_anchorName = "";
+	TinyMCE_repos_anchorName = "";
 	if (anchorName) {
-		TinyMCE_advanced_anchorName = anchorName.getAttribute("name");
+		TinyMCE_repos_anchorName = anchorName.getAttribute("name");
 		tinyMCE.switchClassSticky(editor_id + '_anchor', 'mceButtonSelected');
 	}
 
@@ -410,7 +410,7 @@ function TinyMCE_advanced_handleNodeChange(editor_id, node, undo_index, undo_lev
 	// Select class in select box
 	var selectElm = document.getElementById(editor_id + "_styleSelect");
 	if (selectElm) {
-		TinyMCE_advanced_setupCSSClasses(editor_id);
+		TinyMCE_repos_setupCSSClasses(editor_id);
 
 		classNode = node;
 		breakOut = false;
@@ -533,8 +533,8 @@ function TinyMCE_advanced_handleNodeChange(editor_id, node, undo_index, undo_lev
 }
 
 // This function auto imports CSS classes into the class selection droplist
-function TinyMCE_advanced_setupCSSClasses(editor_id) {
-	if (!TinyMCE_advanced_autoImportCSSClasses)
+function TinyMCE_repos_setupCSSClasses(editor_id) {
+	if (!TinyMCE_repos_autoImportCSSClasses)
 		return;
 
 	var selectElm = document.getElementById(editor_id + '_styleSelect');
