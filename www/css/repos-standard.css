@@ -47,7 +47,7 @@ table.framed td {
 }
 /* tools and file listings */
 img { 
-	behavior: url("http://www.optime.se/repos/css/pngbehavior.htc");
+	behavior: url("http://www.repos.se/css/pngbehavior.htc");
 }
 a.filename {
 	margin-right: 10px;

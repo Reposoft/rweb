@@ -10,6 +10,9 @@
       To be set as SVNIndexXSLT in repository conf.
       Used at all directory levels, so urls must be absolute.
       (c) Staffan Olsson
+    
+      Note that browser transformations only work if the
+      stylesheet is read from the same domain as the XML
    -->
   <!-- why not generate user-tailored xslt from a .jwa url in Svnindex? -->
   <!-- add parameter rurl=".." when testing offline -->
