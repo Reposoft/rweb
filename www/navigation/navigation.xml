@@ -2,6 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="navigation.xsl"?>
 <!DOCTYPE navigation SYSTEM "file:/C:/Documents%20and%20Settings/solsson/Mina%20dokument/Code/repos/www/navigation/navigation.dtd">
 <navigation>
+    <!-- thing about if this should have the same DTD as xdocs/navigation.xml -->
     <unit name="Personligt" type="personal" href="/testuser">
         <unit name="repos" type="link" href="http://www.repos.se/"/>
     </unit>

@@ -79,7 +79,7 @@
                     <img height="14" width="18" src="{$imageUrl}collection.gif" alt=""/>
                 </td>
                 <td class="treeText" colspan="{$columns - 1}">
-                    <xsl:text>Overview</xsl:text>
+                    <xsl:text>Avdelningar</xsl:text>
                 </td>
             </tr>
             <!-- units -->
