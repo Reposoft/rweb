@@ -4,7 +4,7 @@
   <pomVersion>3</pomVersion>
   <id>repos</id>
   <name>Repos</name>
-  <groupId>optime</groupId>
+  <groupId>optime.se</groupId>
   <currentVersion>0.1</currentVersion>
   <organization>
     <name>Optime data</name>
@@ -42,14 +42,14 @@
     <developer>
       <name>Staffan Olsson</name>
       <id>solsson</id>
-      <email>staffan.AT.optime.DOT.se</email>
+      <email>staffan.A@T.optime.DOT.se</email>
       <organization>Optime</organization>
       <timezone>1</timezone>
     </developer>
     <developer>
       <name>Kalle Henriksson</name>
       <id>kalle</id>
-      <email>kalle.henriksson.AT.gmail.DOT.com</email>
+      <email>kalle.henriksson.A@T.gmail.DOT.com</email>
     </developer>
   </developers>
   <dependencies>
@@ -275,7 +275,7 @@
     </dependency>
   </dependencies>
   <build>
-    <nagEmailAddress>staffan@optime.se</nagEmailAddress>
+    <nagEmailAddress>solsson@gmail.com</nagEmailAddress>
     <sourceDirectory>src/java</sourceDirectory>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
     <integrationUnitTestSourceDirectory>src/iutest</integrationUnitTestSourceDirectory>
