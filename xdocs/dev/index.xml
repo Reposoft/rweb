@@ -26,9 +26,10 @@
       </subsection>
 
       <subsection name="Maven Build">
-         <p>Get maven</p>
-         <p>Install jcoverage using <code>maven plugin:download -DgroupId=maven -DartifactId=maven-jcoverage-plugin -Dversion=1.0.8</code></p>
-      </subsection>
+         <p>Get maven from <a href="http://maven.apache.org/">Apache</a>.</p>
+         <p>Install jcoverage using <code>maven plugin:download -DgroupId=maven -DartifactId=maven-jcoverage-plugin -Dversion=1.0.9</code></p>
+      	<p>Hint: If you want the maven repository to be somewhere else than {user.profile}/.maven/repository, just create a folder and symlink to that path. Use <a href="http://www.elsdoerfer.net/ntfslink/">NTFSLink</a> for symlinking in Windows</p>
+	  </subsection>
       
       <subsection name="Issuetracking">
          <p>Use mantis</p>

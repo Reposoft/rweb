@@ -13,6 +13,7 @@
       <item name="Branches" href="/dev/products.html"/>
       <item name="Join development" href="/dev/index.html"/>
       <item name="Directory structure" href="/dev/directories.html"/>
+	  <item name="Coding conversions" href="/dev/codingstandards.html"/>
       <item name="Ideas and editors" href="/components/index.html"/>
       <item name="Dependencies" href="/dependencies/index.html"/>
     </menu>

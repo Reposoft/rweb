@@ -10,6 +10,19 @@ function getMainReferrer() {
 	return window.referrer;
 }
 
+// ----- Sorting using hidden divs -----
+var currentSort;
+function firstSort() {
+	// TODO: Get current visible sort block
+}
+function showSort(fieldName) {
+	if (currentSort==null) {
+		firstSort();
+	}
+	currentSort.style.display = "none";
+	currentSort = document.getElementById("sort."+fieldname);
+}
+
 // ----- Client-server communication scripts -----
 
 // collect debug info about the user's environment
