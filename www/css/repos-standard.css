@@ -3,12 +3,10 @@ body {
     font-size: 0.8em;
     /* background-color: #CCCCCC; */
 }
-
 td {
 	font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
 	font-size: 0.8em;
 }
-
 th {
 	font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
 	font-size: 0.8em;
@@ -49,7 +47,7 @@ table.framed td {
 }
 /* tools and file listings */
 img { 
-	behavior: url("http://www.repos.se/css/pngbehavior.htc");
+	behavior: url("http://www.optime.se/repos/css/pngbehavior.htc");
 }
 a.filename {
 	margin-right: 10px;
