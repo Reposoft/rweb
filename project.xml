@@ -170,7 +170,7 @@
     <dependency>
       <groupId>optime</groupId>
       <artifactId>optime-utils</artifactId>
-      <version>1.0</version>
+      <version>SNAPSHOT</version>
       <type>jar</type>
       <properties>
         <war.bundle>true</war.bundle>
