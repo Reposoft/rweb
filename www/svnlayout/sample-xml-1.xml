@@ -23,6 +23,7 @@
      href="http://subversion.tigris.org/">
   <index rev="2" path="/testuser">
     <updir />
+    <dir name="subfolder" href="subfolder"></dir>
     <file name="out.jpg" href="out.jpg"></file>
     <file name="owordtest.doc" href="owordtest.doc"></file>
     <file name="privacy_sv.html" href="privacy_sv.html"></file>
