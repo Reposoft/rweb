@@ -381,7 +381,7 @@
 				<span class="action"><xsl:value-of select="@action"/></span>
 			</xsl:if>
 			<xsl:if test="@action='M'">
-				<a title="{$show-diff}" class="action" href="{$rurl}/diff/?repo={../../../@repo}&amp;path={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}"><xsl:value-of select="@action"/></a>
+				<a title="{$show-diff}" class="action" href="{$rurl}/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}"><xsl:value-of select="@action"/></a>
 			</xsl:if>
 			<xsl:value-of select="$spacer"/>
 			<span class="filename">

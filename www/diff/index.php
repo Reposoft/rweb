@@ -13,7 +13,7 @@ if(empty($revfrom) || empty($revto)) {
 	echo "Argument error: 'revfrom' and 'revto' not specified.";
 	exit;
 }
-$revisions = ' --notice-ancestry -r '.$revfrom.':'.$revto;
+$revisions = ' -r '.$revfrom.':'.$revto;
 
 $cmd = 'diff' . $revisions . ' '.$url;
 

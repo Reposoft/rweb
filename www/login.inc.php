@@ -48,9 +48,10 @@ function getReferer() {
 }
 
 /**
- * @return target in repository from query paramters WITH tailing slash if not a file
+ * @return target in repository from query paramters WITH tailing slash if it is a directory
  */
 function getTarget() {
+	if(isset($_GET['target'])) return $_GET['target'];
     // invalid parameters -> empty string
     if(!isset($_GET['path'])) return '';
     $path = $_GET['path'];
@@ -168,7 +169,7 @@ function handleSvnError($executedcmd,$errorcode) {
 	echo "<error code=\"$errorcode\"/>\n";
 	echo "<![CDATA[\n";
 	// show the command. WARNING: may contain password
-	echo "$executedcmd\n---------------------------------------";
+	echo "$executedcmd\n------------------ error ---------------------\n";
 	// show error message
 	passthru("$executedcmd 2>&1");
 	echo "]]>\n";
