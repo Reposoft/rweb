@@ -94,4 +94,9 @@ $apache_map['user2'] = array('');			// authenticated via HTTP will not see the p
 $apache_map['user3'] = array('');			// given any login/logout options. Calendar names not include the .ics suffix.
 $apache_map['user4'] = array('');			// Example: $apache_map['username'] = array('Calendar1', 'Calendar2');
 // add more lines as necessary
+
+// *** repos ***
+define('PATH_ROOT', str_repeat('../',substr_count($_SERVER['SCRIPT_FILENAME'],"/")-substr_count(__FILE__,"/")));
+require_once(realpath(PATH_ROOT . '../conf/phpicalendar.inc.php'));
+// *************
 ?>
