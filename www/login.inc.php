@@ -22,8 +22,10 @@
  * script is called, then fallback to settings is enabled.
  */
  
-// *** Enforce HTTPS ***
-if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) {
+// *** Enforce HTTPS, unless SKIP_SSL query parameter = 1 ***
+if( (isset($_GET['SKIP_SSL']) && $_GET['SKIP_SSL'] == 1) ||
+	isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) {
+	// OK, this is secure, or SSL disabled
 } else {
 	$secureUrl = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 	header("Location: $secureUrl");

@@ -24,7 +24,8 @@
 		<xsl:value-of select="$rurl"/>
 		<xsl:value-of select="$theme"/>/css</xsl:param>
 	<xsl:param name="iconsUrl">
-		<xsl:value-of select="$rurl"/>/icons</xsl:param>
+		<xsl:value-of select="$rurl"/>
+		<xsl:value-of select="$theme"/>/icons</xsl:param>
 	<xsl:param name="buttonsUrl">
 		<xsl:value-of select="$rurl"/>
 		<xsl:value-of select="$theme"/>/buttons</xsl:param>
