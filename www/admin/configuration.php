@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // svn propset svn:keywords "Rev" configuration.php
 $rev = strtr("$Rev$",'$',' ');
 // default configuration includes, the way they should be referenced in php files
@@ -151,7 +151,8 @@ function apache2() {
 	  DAV svn
 	  SVNPath <?php echo $repodir ?> 
 	  Options Indexes
-	  SVNIndexXSLT "<?php echo $reposweb . "/svnlayout/repos.xsl" ?>"
+	  #Only from the specified domain: SVNIndexXSLT "<?php echo $reposweb . "/svnlayout/repos.xsl" ?>"
+	  SVNIndexXSLT "<?php echo "/svnlayout/repos.xsl" ?>"
 	  # Allow edit from WebDAV folder
 	  SVNAutoversioning on
 	  

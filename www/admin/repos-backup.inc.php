@@ -225,8 +225,8 @@ function verifyFileMD5($path) {
 		fatal( "File $path does not exist so it can't be verified" );
 	$sums = getMD5sums(dirname($path));
 	$sum = md5_file( $path );
-	if ($sums[basename($path)] != $sum )
-		return false;
+	//debug("MD5 for $path (stored): $sum, (".$sums[basename($path)].")");
+	return $sums[basename($path)] == $sum;
 }
 
 /**
