@@ -34,7 +34,6 @@
 [groups]
 repos = *.repos.se
 optime = *.optime.se
-
     </echo>  	
   </target>
 
@@ -45,7 +44,6 @@ optime = *.optime.se
 [repos]
 http-timeout = 15
 ssl-authority-files = ${certdir}/repos.se.crt
-
     </echo>
   </target>
 
@@ -55,7 +53,6 @@ ssl-authority-files = ${certdir}/repos.se.crt
 [optime]
 http-timeout = 15
 ssl-authority-files = ${certdir}/optime.se.crt
-
     </echo>
   </target>	
 	

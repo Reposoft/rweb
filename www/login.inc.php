@@ -43,7 +43,7 @@ header("Pragma: no-cache");
 // *** url resolution functions, based on query parameters ***
 
 function getReferer() {
-    if (isset($_SERVER['HTTP_REFERER'])) return $_SERVER['HTTP_REFERER'];
+    if (isset($_SERVER['HTTP_REFERER'])) return rtrim($_SERVER['HTTP_REFERER'],'/');
     return false;
 }
 
@@ -67,20 +67,28 @@ function getTarget() {
  * @return Root url of the repository for this request
  */
 function getRepositoryUrl() {
+	// 1: query string
 	if (isset($_GET['repo'])) {
 		return $_GET['repo'];
 	}
+	// 2: reterer and query string param 'path'
     $ref = getReferer();
     if ($ref && isset($_GET['path'])) {
-		if($_GET['path']=='/') return $ref.'/';
-		$repo = substr($ref,0,strpos($ref,$_GET['path']));
-		if (count($repo)>0) return $repo; 
+		return getRepoRoot($ref,$_GET['path']);
     }
+	// 3: fallback to default repository
     if(function_exists('getConfig')) {
     	return getConfig('repo_url');
-	} else {
-		return false;	
 	}
+	return false;
+}
+
+/**
+ * @return repository url (to root) with no tailing slash.
+ *   Returns false if url is empty or if if path is not part of url. 
+ */
+function getRepoRoot($fullUrl,$pathFromRepoRoot) {
+	return substr($fullUrl, 0 , strpos($fullUrl, $pathFromRepoRoot)-1);
 }
 
 /**
