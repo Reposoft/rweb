@@ -7,6 +7,7 @@
 	<classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/servletapi/jars/servletapi-2.4.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/acegi-security/jars/acegi-security-0.6.jar"/>
+	<classpathentry sourcepath="MAVEN_REPO/acegi-security/src" kind="var" path="MAVEN_REPO/acegi-security/jars/acegi-security-0.6.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/commons-codec/jars/commons-codec-1.3.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -4,8 +4,10 @@
 package se.optime.repos.user;
 
 import net.sf.acegisecurity.Authentication;
+import net.sf.acegisecurity.AuthenticationCredentialsNotFoundException;
 import net.sf.acegisecurity.AuthenticationException;
 import net.sf.acegisecurity.AuthenticationManager;
+import net.sf.acegisecurity.AuthenticationServiceException;
 
 /**
  * @author solsson
@@ -16,11 +18,19 @@ public class BasicAuthenticationManager implements AuthenticationManager {
     /* (non-Javadoc)
      * @see net.sf.acegisecurity.AuthenticationManager#authenticate(net.sf.acegisecurity.Authentication)
      */
-    public Authentication authenticate(Authentication arg0)
+    public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
-        // TODO Auto-generated method stub
-        throw new java.lang.UnsupportedOperationException(
-                "Method BasicAuthenticationManager.authenticate not implemented");
+        
+        if (authentication==null)
+            throw new AuthenticationServiceException("AuthenticationMissing");
+        
+        if (authentication.getPrincipal()==null || authentication.getPrincipal().toString().length()==0)
+            throw new AuthenticationCredentialsNotFoundException("UsernameMissing");
+        
+        // all users are accepted
+        authentication.setAuthenticated(true);
+        
+        return authentication;
     }
 
 }
