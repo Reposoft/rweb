@@ -56,7 +56,8 @@
   <target name="install" depends="license" description="install" >
   	<property name="ifrom" value="${extracted.folder}/${icon.size.folder}"/>
   	<property name="ito" value="${basedir}"/>
-    <echo>Renaming icons to supported filetypes, deleting the rest</echo>
+    	<echo>Renaming icons to supported filetypes, deleting the rest</echo>
+  	<!-- commandbar -->
   	<move file="${ifrom}/actions/up.png" tofile="${ito}/_parent.png" overwrite="false"/>
   	<move file="${ifrom}/actions/attach.png" tofile="${ito}/_upload.png" overwrite="false"/>
               <move file="${ifrom}/actions/messagebox_info.png" tofile="${ito}/_log.png" overwrite="false"/>
@@ -66,6 +67,10 @@
   	<move file="${ifrom}/filesystems/folder_banana.png" tofile="${ito}/_folder.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/mime.png" tofile="${ito}/_file.png" overwrite="false"/>
   	<move file="${ifrom}/actions/stop.png" tofile="${ito}/_logout.png" overwrite="false"/>
+  	<move file="${ifrom}/actions/stop.png" tofile="${ito}/_logout.png" overwrite="false"/>
+  	<move file="${ifrom}/actions/leftjust.png" tofile="${ito}/_simple.png" overwrite="false"/>
+  	<move file="${ifrom}/actions/textblock.png" tofile="${ito}/_detailed.png" overwrite="false"/>
+  	<!-- filetypes -->
   	<move file="${ifrom}/mimetypes/archive_zip.png" tofile="${ito}/zip.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/archive_gz.png" tofile="${ito}/gz.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/archive_sit.png" tofile="${ito}/sit.png" overwrite="false"/>

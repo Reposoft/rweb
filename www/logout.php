@@ -74,7 +74,7 @@ if (isset($_GET['logout'])) {
 }
 // try to log out using redirect
 $logout_url = 'http';
-if($_SERVER['SERVER_PORT']==443) $logout_url += 's';
+if($_SERVER['SERVER_PORT']==443) $logout_url = $logout_url.'s';
 $logout_url = $logout_url . "://void:LoggedOut@" . $_SERVER['SERVER_NAME'] .  ':' . $_SERVER['SERVER_PORT'] . $_SERVER['SCRIPT_NAME'] . '?logout=1';
 // note that redirect including a password is illegal in IE
 header("Location: $logout_url");

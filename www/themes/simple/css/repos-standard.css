@@ -36,7 +36,7 @@ pre {
 }
 /* allow transparency in .png in explorer */
 img { 
-	behavior: url("http://www.repos.se/themes/simple/css/pngbehavior.htc");
+	behavior: url("https://www.repos.se/themes/simple/css/pngbehavior.htc");
 }
 /* page layout themes */
 .info {
@@ -67,6 +67,13 @@ th.info {
 }
 .workarea p {
 	margin: 0px;
+}
+.listhead {
+	background-color:#555555; 
+	border: 1px solid #FFFFFF;
+	padding-left:3px; 
+	padding-right:5px; 
+	white-space:nowrap;
 }
 .footer {
 	font-size: 0.7em;
