@@ -60,7 +60,7 @@
 <!-- shared entries for <head> tag. All pages should call this template. -->
 <xsl:template name="commonHeaders">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link href="{$cssUrl}main.css" rel="stylesheet" type="text/css" />
+	<link href="{$cssUrl}coordinator.css" rel="stylesheet" type="text/css" />
 	<!-- Script tags do some monkey business with XHTML. Page gets corrupted if they don't have contents. -->
 	<script language="JavaScript" type="text/javascript" src="{$jsUrl}navigation.js">&#160;</script>
 </xsl:template>
