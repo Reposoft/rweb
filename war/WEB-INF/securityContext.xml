@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- repos code -->
+	<bean id="authenticationManager" class="se.optime.repos.user.BasicAuthenticationManager">
+	</bean>
+
+	<!-- processing -->
+	<bean id="basicProcessingFilter" class="net.sf.acegisecurity.ui.basicauth.BasicProcessingFilter">
+	  <property name="authenticationManager"><ref bean="authenticationManager"/></property>
+	  <property name="authenticationEntryPoint"><ref bean="authenticationEntryPoint"/></property>
+	</bean>
+	
+	<bean id="authenticationEntryPoint" class="net.sf.acegisecurity.ui.basicauth.BasicProcessingFilterEntryPoint">
+	  <property name="realmName"><value>repos</value></property>
+	</bean>
+	
+	<!-- debug -->
+	<bean id="loggerListener" class="net.sf.acegisecurity.providers.dao.event.LoggerListener"/>
+	
+</beans>
