@@ -60,7 +60,7 @@ function line($text='') {
 if ( isset($_GET['download']) ) {
 	// download a configuration block
 	$block = $_GET['download'];
-	// We'll be outputting a PDF
+	// Send textfile to user
 	header('Content-type: text/plain');
 	// It will be called downloaded.pdf
 	header('Content-Disposition: attachment; filename="repos-' . $block . '.txt"');

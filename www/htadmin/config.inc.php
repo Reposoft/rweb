@@ -19,6 +19,13 @@ $cfgHTPasswd[1]['D'] = '';
 $cfgHTPasswd[2]['N'] = '';
 $cfgHTPasswd[2]['D'] = '';
 
+// --- override with repos properties ---
+function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
+require( upOne(dirname(__FILE__)) . "/conf/repos.properties.php" );
+$cfgHTPasswd[0]['N'] = getConfig('admin_folder').'/'.getConfig('users_file');
+$cfgHTPasswd[0]['D'] = 'Repos.se user account file.";
+// --------------------------------------
+
 $htpUser = array();
 
 $version = explode(".", phpversion());
