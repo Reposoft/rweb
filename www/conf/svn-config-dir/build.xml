@@ -39,20 +39,20 @@ optime = svn.optime.se
 
   <!-- Download and decompress dependency archive -->
   <target name="repos" depends="cfg">
-    <get src="http://www.repos.se/CA.crt" dest="${certdir}/repos.se.crt"/>
+    <get src="http://www.repos.se/CA.crt" dest="${certdir}/www.repos.se.crt"/>
     <echo file="${serversfile}" append="true">
 [repos]
 http-timeout = 15
-ssl-authority-files = ${certdir}/repos.se.crt
+ssl-authority-files = ${certdir}/www.repos.se.crt
     </echo>
   </target>
 
   <target name="optime" depends="cfg">
-    <get src="http://svn.optime.se/CA.crt" dest="${certdir}/optime.se.crt"/>
+    <get src="http://svn.optime.se/CA.crt" dest="${certdir}/svn.optime.se.crt"/>
     <echo file="${serversfile}" append="true">
 [optime]
 http-timeout = 15
-ssl-authority-files = ${certdir}/optime.se.crt
+ssl-authority-files = ${certdir}/svn.optime.se.crt
     </echo>
   </target>	
 	
@@ -64,5 +64,9 @@ ssl-authority-files = ${certdir}/optime.se.crt
 
   <!-- Remove dependency, leaving only repos sources. -->
   <target name="clean" description="clean up" >
+  	<delete file="${serversfile}" verbose="yes"/>
+  	<delete verbose="yes">
+  		<fileset dir="${certdir}" includes="*.crt"/>
+  	</delete>
   </target>
 </project>
