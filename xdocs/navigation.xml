@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Maven">
+
+  <title>repos.se</title>
+  <body>
+    <menu name="Overview">
+      <item name="News and Status" href="/status.html"/>
+      <item name="Development" href="/dev/index.html" collapse="true">
+        <item name="Code and compile" href="/dev/coding.html"/>
+        <item name="Install" href="/dev/install.html"/>
+        <item name="Products" href="/dev/products.html"/>
+      </item>
+    </menu>
+    <footer>
+        <a href="http://www.coo.se/">Coordinator</a>
+        <a href="http://www.ordbehandlare.se/">ordbehandlare.se</a>
+        <a href="http://www.repos.se/">repos.se</a>
+    </footer>
+  </body>
+</project>

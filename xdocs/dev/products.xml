@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>Code and compile</title>
+  </properties>
+
+  <body>
+    <section name="Repos branches">
+      <p>Revision $Id$</p>
+      <p>
+         Repos.se is the concept and the product we could sell.
+      </p>
+      <p>repos.se has a mail account at repos.se@gmail.com.
+      Staffan remembers the password if you remind him och his computer (the first)</p>
+      <p>repos.se is owned by Optime data</p>
+
+      <subsection name="ordbehandlare.se">
+         <p>This is for proving the concept. A perfect WebDAV application
+         where we see how well it works.</p>
+         <p>ordbehandlare.se has a mail account at ordbehandlare@gmail.com.
+          Staffan remembers the password if you remind him och his computer (the first)</p>
+         <p>ordbehandlare.se and .com is owned by Optime data</p>
+      </subsection>
+      
+      <subsection name="Coordinator">
+         <p>Coordinator 2.5 at <a href="http://www.coo.se/">www.coo.se</a> is our
+         current project management application. It builds on a relational database
+         and cannot be integrated into anything. However it shows what
+         collaboration software needs to be able to do.</p>
+         <p>Coordinator 3 will be based on repos.se</p>
+         <p>Coordinator and coo.se is owned by <a href="http://www.com-onweb.com">Com-onweb AB</a>.</p>
+         
+      </subsection>
+
+    </section>
+  </body>
+</document>

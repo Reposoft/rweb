@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
   <pomVersion>3</pomVersion>
+  <artifactId>repos</artifactId>
   <name>Repos</name>
   <groupId>optime</groupId>
-  <id>repos</id>
   <currentVersion>0.1</currentVersion>
   <package>se.optime.repos</package>
   <organization>
     <name>Optime data</name>
     <url>http://www.optime.se/</url>
-    <logo>/images/logo.gif</logo>
+    <logo>/logo/optime2004.png</logo>
   </organization>
-  <logo>/images/logo_small.gif</logo>
+  <logo>/logo/repos4.png</logo>
   <inceptionYear>2004</inceptionYear>
-  <shortDescription>To-the-point word processor for the web</shortDescription>
+  <shortDescription>repos.se - version control for people</shortDescription>
   <description>
-    Ordbehandlare. Word-processor for writing texts from anywhere.
+    Repos is a WebDAV and version control frontend. 
+    The user has access to the exact same information that the system works with. 
+    Everything is accessible from any WebDAV client, like Windows "Network folders" and Mozillas calendar application.
+    The frontend provides usability...
   </description>
   <url>http://www.ordbehandlare.se/</url>
   <issueTrackingUrl>http://www.optime.se/issuetracker/mantis/</issueTrackingUrl>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="http://www.optime.se/repos/static/ordbehandlare.xsl"?>
+<!DOCTYPE svn [
+  <!ELEMENT svn   (index)>
+  <!ATTLIST svn   version CDATA #REQUIRED
+                  href    CDATA #REQUIRED>
+  <!ELEMENT index (updir?, (file | dir)*)>
+  <!ATTLIST index name    CDATA #IMPLIED
+                  path    CDATA #IMPLIED
+                  rev     CDATA #IMPLIED>
+  <!ELEMENT updir EMPTY>
+  <!ELEMENT file  (prop)*>
+  <!ATTLIST file  name    CDATA #REQUIRED
+                  href    CDATA #REQUIRED>
+  <!ELEMENT dir   (prop)*>
+
+  <!ATTLIST dir   name    CDATA #REQUIRED
+                  href    CDATA #REQUIRED>
+  <!ELEMENT prop  (#PCDATA)>
+  <!ATTLIST prop  name    CDATA #REQUIRED>
+]>
+<svn version="1.0.0 (dev build)"
+     href="http://subversion.tigris.org/">
+  <index rev="2" path="/testuser">
+    <updir />
+    <file name="out.jpg" href="out.jpg"></file>
+    <file name="owordtest.doc" href="owordtest.doc"></file>
+    <file name="privacy_sv.html" href="privacy_sv.html"></file>
+
+  </index>
+</svn>

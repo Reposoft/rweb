@@ -1,0 +1,52 @@
+<!-- Customized maven behavior -->
+<project
+	xmlns:j="jelly:core">
+
+  <!-- after site:generate - copy www contents into development docs -->
+  <goal name="docs-images">
+  	<echo>Copying images to ${maven.docs.dest}</echo>
+    <copy todir="${maven.docs.dest}">
+      <fileset dir="www">
+        <include name="logo/*.png" />
+      </fileset>
+    </copy>
+  </goal>
+  <postGoal name="site:generate">
+  	<attainGoal name="docs-images"/>
+  </postGoal>
+  
+  
+  <goal name="war-jsp">
+  	<echo>Copying JSPs to ${maven.war.webapp.dir}/WEB-INF/jsp</echo> 
+    <copy todir="${maven.war.webapp.dir}/WEB-INF/jsp">
+      <fileset dir="www">
+        <include name="**/*.jsp" />
+      </fileset>
+    </copy>
+  </goal>
+
+  <!-- before making webapp - 
+  		copy jsp-s from editor friendly location to WAR's WEB-INF
+  		so that they are deployed to tomcat and hidden from direct access -->
+  <postGoal name="war:webapp">
+  	<echo>Copying JSPs to WAR</echo> 
+    <copy todir="${maven.war.webapp.dir}/WEB-INF/jsp">
+      <fileset dir="www">
+        <include name="**/*.jsp" />
+      </fileset>
+    </copy>
+      <!-- if not deploying contents to apache2 separately, 
+  		all static contents could be included in war  -->
+  	<echo>war.include.www is set to '${war.include.www}'</echo>
+  	<j:if test="${war.include.www}">
+	  	<echo>Copying all static web contents to WAR</echo>
+	    <copy todir="${maven.war.webapp.dir}">
+	      <fileset dir="www">
+	        <include name="**/*" />
+	        <exclude name="**/*.jsp" />
+	      </fileset>
+	    </copy>
+	</j:if>
+  </postGoal>
+  
+</project>

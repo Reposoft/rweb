@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>repos.se News and status</title>
+  </properties>
+
+  <body>
+      <section name="News and Status">
+
+         <subsection name="7th October 2004">
+            <p>
+             Staffan finds himself convinced this concept is brilliant. Starts writing it down.
+            </p>
+         </subsection>
+         
+         <subsection name="5th October 2004">
+            <p>
+             Staffan meets with Kalle in Bengtsfors and reveals the masterplan.
+            </p>
+         </subsection>
+         
+         <subsection name="Spring and summer 2004">
+            <p>
+             It's the question, that drives us. How do we want to store and share contents? J2EE architecture, the discovery of Subversion and a gooood summer vacation contibute to the evolution of the Repos idea.
+            </p>
+         </subsection>
+
+      </section>
+  </body>
+</document>

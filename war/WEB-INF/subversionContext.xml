@@ -3,9 +3,8 @@
 
 <beans>
 
-    <bean id="subversionRepository"
-        class="se.optime.repos.webdav.subversion.SubversionRepository">
-    </bean>
+	<!-- just need a bean for the file to be valid -->
+    <bean id="performanceMonitorListener" class="org.springframework.web.context.support.PerformanceMonitorListener"/>
 
     <!-- <bean id="svnClientAdapter"
         class="se.optime.subversion.SVNClientAdapterFactory"

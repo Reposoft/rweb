@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>Code and compile</title>
+  </properties>
+
+  <body>
+    <section name="Installing repos">
+      <p>Revision $Id$</p>
+
+      <subsection name="What you need">
+         <ul>
+             <li>Windows / Linux / Mac OS X</li>
+             <li>Apache 2+ HTTP server</li>
+             <li>... with mod_dav and mod_jk2</li>
+             <li>PHP 4+</li>
+             <li>Subversion 1.2 *</li>
+             <li>Tomcat 5+ supporting mod_jk2</li>
+         </ul>
+      </subsection>
+      
+      <subsection name="Instructions">
+         <p>Bring it on</p>
+      </subsection>
+
+    </section>
+  </body>
+</document>

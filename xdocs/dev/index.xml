@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>repos.se</title>
+  </properties>
+
+  <body>
+    <section name="Welcome">
+        <p>... as a proud Repos developer.</p>
+        <subsection name="Anarchy and order">
+            <p>This is an evolving product. We don't make the perfect design from the start.
+            We'll prbably never make the perfect design. We are always ready to refactor and
+            improve our code. We make the simplest possible solutions, and add features
+            only when they are requested</p>
+            <p>We mess with each other's code. If only the author understands the code, it sucks.
+            Feel free to change anywhere. Using Subversion, we can always undo. Use the following
+            versioning workflow:</p>
+            <ol>
+                <li>Checkout/update</li>
+                <li>Change anywhere</li>
+                <li>Update and resolve conflicts</li>
+                <li>Run tests to verify that everything works</li>
+                <li>Commit using a revealing log message</li>
+            </ol>
+        </subsection>
+        <p align="right"><i>Staffan</i></p>
+    </section>
+ </body>
+</document>
