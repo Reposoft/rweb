@@ -8,6 +8,8 @@ import java.net.URL;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.httpclient.HttpURL;
+import org.apache.commons.httpclient.URIException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValues;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -34,7 +36,7 @@ public class RepositoryDataBinder extends ServletRequestDataBinder {
                 ((HttpServletRequest)request).getRequestURI()));
         super.bind(request);
         if (super.getTarget() instanceof RepositoryPath) {
-            URL url = ((RepositoryPath)super.getTarget()).getUrl();
+            HttpURL url = ((RepositoryPath)super.getTarget()).getHttpURL();
             super.bind(this.getResourcePath(url));
         }
     }
@@ -46,9 +48,15 @@ public class RepositoryDataBinder extends ServletRequestDataBinder {
         return pvs;
     }
     
-    public PropertyValues getResourcePath(URL repositoryUrl) {
+    public PropertyValues getResourcePath(HttpURL url) {
         MutablePropertyValues pvs = new MutablePropertyValues();
-        String commaSeparatedPath = repositoryUrl.getPath().replace('/',',');
+        String commaSeparatedPath = "";
+        try {
+            commaSeparatedPath = url.getPath().replace('/',',');
+        } catch (URIException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         pvs.addPropertyValue("directories",commaSeparatedPath);
         return pvs;
     }

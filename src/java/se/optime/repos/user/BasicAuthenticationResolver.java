@@ -6,7 +6,6 @@ package se.optime.repos.user;
 import org.apache.commons.codec.binary.Base64;
 
 import net.sf.acegisecurity.Authentication;
-import net.sf.acegisecurity.AuthenticationCredentialsNotFoundException;
 import net.sf.acegisecurity.AuthenticationServiceException;
 import net.sf.acegisecurity.context.ContextHolder;
 import net.sf.acegisecurity.context.SecureContext;

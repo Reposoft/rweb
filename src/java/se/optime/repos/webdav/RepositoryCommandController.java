@@ -24,12 +24,18 @@ public abstract class RepositoryCommandController extends AbstractCommandControl
     protected ModelAndView handle(HttpServletRequest request,
             HttpServletResponse response, Object command, BindException errors)
             throws Exception {
-        // TODO Auto-generated method stub
-        throw new java.lang.UnsupportedOperationException(
-                "Method RepositoryCommandController.handle not implemented");
+        if (errors.hasErrors())
+            throw errors;
+        if ("POST".equals(request.getMethod()))
+            return save(request,(RepositoryPath)command);
+        return show(request, response, (RepositoryPath)command);
     }
     
-    protected abstract ModelAndView handle(HttpServletRequest request,
-            HttpServletResponse response, RepositoryPath command)
+    protected abstract ModelAndView show(HttpServletRequest request,
+            HttpServletResponse response, RepositoryPath resource)
+            throws Exception;
+    
+    protected abstract ModelAndView save(HttpServletRequest request,
+            RepositoryPath resource)
             throws Exception;
 }

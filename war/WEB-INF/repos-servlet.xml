@@ -21,7 +21,9 @@
 	
 	<!-- ======== controllers ======== -->
 	<bean id="documentController" class="se.optime.document.DocumentController">
-		<property name="repository"><ref bean="subversionRepository"/></property>
+	    <property name="commandClass">
+	        <value>se.optime.repos.webdav.RepositoryResource</value>
+	    </property>
 	</bean>
 
 	<!-- ========= mappings ========== -->
