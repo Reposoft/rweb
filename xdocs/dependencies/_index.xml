@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>repos.se dependencies</title>
+  </properties>
+
+  <body>
+  <section name="Pluggable dependencies">
+      {dependency.list}
+  </section>
+ </body>
+</document>
