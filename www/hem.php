@@ -1,4 +1,5 @@
 <?php
+require( dirname(__FILE__) . "/conf/repos.properties.php" ); // default repository
 require( dirname(__FILE__) . "/login.inc.php" );
 
 /**
