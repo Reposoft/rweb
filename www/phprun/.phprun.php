@@ -1,6 +1,7 @@
 <?php
 // need allow_url_fopen (which is default)
 require 'http://jaddajada/file_with_no_query.php';
+// there is a problem with includes in the included file, because paths would be relative to this file
 /*
 Need to rewrite repository urls in Apache, here's a thought:
 
