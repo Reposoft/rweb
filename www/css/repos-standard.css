@@ -30,7 +30,7 @@ h2 {
 	font-weight: normal;
 }
 img { 
-	behavior: url("../icons/pngbehavior.htc");
+	behavior: url("../css/pngbehavior.htc");
 }
 a.filename {
 	margin-right: 10px;
