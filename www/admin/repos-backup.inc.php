@@ -35,23 +35,20 @@ function load($backupPath, $repository, $fileprefix) {
 	if ( ! file_exists($repository) )
 		fatal("repository '$repository' does not exist");
 	
-	// iterate over the list of files
-	$allfiles = getDirContents($backupPath, $fileprefix);
-	if ( count($allfiles)==0 )
+	$files = getDirContents($backupPath,$fileprefix);
+	if ( count($files)==0 )
 		fatal("Directory '$backupPath' named $fileprefix*");
-		
-	// initiate looping over filenames
-	$revto = -1;
-	foreach ($allfiles as $filename) {
+
+	// go through files
+	$backup = getBackupInfo($files, $fileprefix);
+	$lastrev = -1;
+	foreach ($backup as $file) {
 		// extract revision numbers from filename
-		$rev = array();
-		if ( 0==ereg( '[0]*([0-9][0-9]*)-to-[0]*([0-9][0-9]*).*', substr($filename,strlen($fileprefix)), $rev) )
-			fatal("Could not extract revision numbers from filename ($fileprefix)$rev[0]");
-		if ( ! $rev[1] == $revto + 1 )
+		if ( ! $file[1] == $revto + 1 )
 			fatal("Revision number gap at $filename starting at revision $rev[1], last revision was $revto");
 		// read the files into repo
-		$revto = $rev[2];
-		loadDumpfile($backupPath . '/' . $filename,LOADCOMMAND);
+		$lastrev = $file[2];
+		loadDumpfile($backupPath . '/' . $file[0],LOADCOMMAND);
 	}
 	
 }
@@ -132,12 +129,5 @@ function gunzipInternal($fromfile, $tofile) {
 	}   
 	gzclose($zp) ;
 	fclose($fp) ;
-}
-
-/**
- * Get backup files base name from repository path
- */
-function getFilename($repository) {
-
 }
 ?>
