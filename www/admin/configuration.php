@@ -5,7 +5,8 @@ require( dirname(__FILE__) . '/repos.properties.php' );
 
 // page contents
 $links = array(
-	'index.php' => 'Check configuration'
+	'index.php' => 'Administration menu',
+	'../conf/index.php' => 'Check configuration'
 	);
 $sections = array(
 	'repository' => 'How to create the repository',
@@ -17,9 +18,17 @@ $sections = array(
 // global config analysis
 $isWindows = 0;
 // authentication defined
-$isAuth = isset($repos_config['users_file']);
+$isAuth = ! getConfig('users_file')===false;
 // access control defined
-$isAcl = isset($repos_config['access_file']);
+$isAcl = ! getConfig('access_file')===false;
+// export paths defined
+$isExport = ! getConfig('export_file')===false;
+
+if (isset($_GET['download']) {
+	// download a configuration block
+} else {
+	// display all configuration blocks
+}
 
 function repository() {
 	// create command

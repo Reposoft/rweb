@@ -54,7 +54,7 @@ function getLocalPath($pathWithSlashes) {
 /**
  * Get the execute path of the subversion command line tool
  * @param command Command name, i.e. 'svnadmin'. Optional. Defaults to 'svn'. 
- * @return command line command, false if the command is not supported
+ * @return command line command, false if the command shouldn't be needed in current OS. Error message starting with 'Error:' if command name is not supported.
  */
 function getCommand($command) {
 	if ( ! defined('USRBIN') )
@@ -71,7 +71,7 @@ function getCommand($command) {
 		case 'gunzip':
 			return ( isWindows() ? false : USRBIN . 'gunzip' );
 	}
-	return false;
+	return "\"Error: Repos does not support command '$command'\"";
 }
 
 ?>
