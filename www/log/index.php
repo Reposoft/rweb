@@ -10,7 +10,7 @@ $url = getTargetUrl();
 //$torev = $_GET['torev'];
 $user = getReposUser();
 $pass = getReposPass();
-$auth = " --username=$user --password=$pass";
+$auth = " --username=$user --password=$pass --no-auth-cache";
 $options = " -v --xml";
 $options .= " --incremental"; // to avoid xml declaration 
 //$revisions = " -r HEAD";

@@ -282,7 +282,7 @@
 		</xsl:choose>
 	</xsl:template>
 	<!--
-	========= svn log xml fromatting ==========
+	========= svn log xml formatting ==========
 	-->
 	<xsl:template match="log">
 		<table class="svnlayout">
@@ -293,7 +293,10 @@
 			</tr>
 			<tr>
 				<td id="commandbar" class="commandbar">
-					<xsl:value-of select="$spacer"/>
+					<a class="command" href="{@repo}{@path}">
+						<xsl:call-template name="showicon">
+							<xsl:with-param name="filetype" select="'_parent'"/>
+						</xsl:call-template>up</a>
 				</td>
 			</tr>
 			<tr>
@@ -323,28 +326,38 @@
 					<xsl:value-of select="date"/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<a class="action" href="{$rurl}/undo/?repo={../@repo}&amp;rev={@revision}">Undo</a>
+				<a class="action" href="{$rurl}/undo/?repo={../@repo}&amp;rev={@revision}">undo</a>
 			</h3>
 			<xsl:if test="msg">
 				<p>
 					<xsl:value-of select="msg"/>
 				</p>
 			</xsl:if>
-			<xsl:apply-templates select="paths"/>
+			<xsl:apply-templates select="paths">
+				<xsl:with-param name="revfrom" select="following-sibling::*[1]/@revision"/>
+			</xsl:apply-templates>
 		</div>
 	</xsl:template>
 	<xsl:template match="paths">
-		<xsl:apply-templates select="path"/>
+		<xsl:param name="revfrom"/>
+		<xsl:apply-templates select="path">
+			<xsl:with-param name="revfrom" select="$revfrom"/>
+		</xsl:apply-templates>
 	</xsl:template>
 	<xsl:template match="paths/path">
+		<xsl:param name="revfrom"/>
 		<p>
 			<span class="action">
 				<xsl:value-of select="@action"/>
 			</span>
-			<xsl:text/>
-			<span class="value">
+			<xsl:value-of select="$spacer"/>
+			<span class="filename">
 				<xsl:value-of select="."/>
 			</span>
+			<xsl:if test="@action='M'">
+				<xsl:value-of select="$spacer"/>
+				<a class="action" href="{$rurl}/diff/?repo={../../../@repo}&amp;path={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">diff</a>
+			</xsl:if>
 		</p>
 	</xsl:template>
 </xsl:stylesheet>
