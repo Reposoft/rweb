@@ -25,7 +25,7 @@
   <xsl:param name="theme"></xsl:param>
   <!-- static contents urls -->
   <xsl:param name="cssUrl"><xsl:value-of select="$rurl"/><xsl:value-of select="$theme"/>/css</xsl:param>
-  <xsl:param name="iconsUrl"><xsl:value-of select="$rurl"/><xsl:value-of select="$theme"/>/icons</xsl:param>
+  <xsl:param name="iconsUrl"><xsl:value-of select="$rurl"/>/images/icons</xsl:param>
   <xsl:param name="buttonsUrl"><xsl:value-of select="$rurl"/><xsl:value-of select="$theme"/>/buttons</xsl:param>
   <!-- avaliable icons -->
   <xsl:param name="icons">._folder._file.ai.bmp.xhm.doc.exe.gif.gz.htm.html.ics.jar.java.jpg.log.mpg.pdf.php.png.ps.psd.qt.sh.sit.sxw.tif.tmp.txt.vcf.xls.zip</xsl:param>

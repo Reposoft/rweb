@@ -8,7 +8,7 @@
   </description>
 
   <!-- package name in repos folder, for example www/some/dependency -> some.dependency -->
-  <property name="repos-package" value="icons"/>
+  <property name="repos-package" value="images.icons"/>
   <!-- home page of product, not used in script -->
   <property name="home" value="http://christopher.townson.biz/computing/"/>
 	
