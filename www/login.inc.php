@@ -182,6 +182,7 @@ function getSvnCommand() {
  */
 function handleSvnError($executedcmd,$errorcode) {
 	echo "<error code=\"$errorcode\">\n";
+	if(isset($_GET['DEBUG'])) echo '<exec cmd="'.strtr($executedcmd,'"',"'").'"/>';
 	echo "<![CDATA[\n";
 	// show error message
 	passthru("$executedcmd 2>&1");

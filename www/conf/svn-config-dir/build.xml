@@ -32,8 +32,8 @@
     <touch file="${serversfile}"/>
     <echo file="${serversfile}" append="false">
 [groups]
-repos = www.repos.se
-optime = svn.optime.se
+repos = *.repos.se
+optime = *.optime.se
     </echo>  	
   </target>
 
