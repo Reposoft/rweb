@@ -63,7 +63,7 @@ function getTarget() {
 	if(isset($_GET['target'])) return urlEncodeNames($_GET['target']);
 	$path = getPath();
     // append filename if specified
-    if(isset($_GET['file'])) $path .= rawurlencode($_GET['file']);
+    if(isset($_GET['file'])) return $path . rawurlencode($_GET['file']);
     return $path;
 }
 
