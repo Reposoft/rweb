@@ -5,7 +5,7 @@ require_once( upOne(dirname(__FILE__)) . "/conf/authentication.inc.php" );
 
 define('STYLESHEET','svnlog.xsl');
 
-$url = $_GET['url'];
+$url = getTargetUrl();
 //$fromrev = $_GET['fromrev'];
 //$torev = $_GET['torev'];
 $user = getReposUser();
@@ -21,6 +21,7 @@ $cmd = getCommand('svn') . $auth . $options . $revisions . " log $url";
 header('Content-type: text/xml');
 echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 echo '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
+echo '<!-- SVN log for '.$url.' -->';
 echo '<log>' . "\n";
 passthru($cmd);
 echo '</log>';
