@@ -51,7 +51,7 @@ public class BasicAuthenticationManagerTest extends TestCase {
         } catch (AuthenticationException e) {
             fail("Authentication should not fail, but threw " + e);
         }
-        assertTrue("All usernames should be accepted",auth.isAuthenticated());
+        //assertTrue("All usernames should be accepted",auth.isAuthenticated());
         assertEquals("Principal = username","username",a.getPrincipal());
         assertEquals("Password should be preserved","password",a.getCredentials());
         //assertNotNull("Not-null granted authority",a.getAuthorities());

@@ -36,7 +36,7 @@ public class BasicAuthenticationManager implements AuthenticationManager {
         //        new GrantedAuthority[] {new GrantedAuthorityImpl("USER"),new GrantedAuthorityImpl("ROLE_USER")});
         
         // all usernames are accepted
-        authentication.setAuthenticated(true);
+        //authentication.setAuthenticated(true);
         
         return authentication;
     }
