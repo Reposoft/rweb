@@ -8,7 +8,7 @@ define('STYLESHEET','../svnlayout/repos.xsl');
 
 $url = getTargetUrl();
 
-$cmd = getSvnCommand()." log $url";
+$cmd = getSvnCommand()."log $url";
 
 // passthrough with stylesheet
 echo "$cmd";

@@ -133,8 +133,9 @@ function getReposAuth() {
  * @return Start of command line for executing svn operations
  */
 function getSvnCommand() {
-	$auth = ' --username='.getReposUser().' --password='.getReposPass().' --no-auth-cache';
-	$options = ' --non-interactive --config-dir '.dirname(__FILE__).DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'svn-config-dir';
+	define(SVN_CONFIG_DIR,DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'svn-config-dir');
+	$auth = '--username='.getReposUser().' --password='.getReposPass().' --no-auth-cache ';
+	$options = '--non-interactive --config-dir '.dirname(__FILE__).SVN_CONFIG_DIR.' ';
 	return 'svn '.$auth.$options;
 }
 
