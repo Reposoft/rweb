@@ -4,7 +4,7 @@
     xmlns="http://www.w3.org/1999/xhtml">
 <xsl:output standalone="no"/>
 
-<xsl:param name="rootUrl" select="http://www.repos.se'"/><!-- get from repos.properties -->
+<xsl:param name="rootUrl" select="'http://www.repos.se'"/><!-- get from repos.properties -->
 <!-- layout properties -->
 <xsl:param name="imageUrl" select="'{$rootUrl}/images/'"/>
 <xsl:param name="cssUrl" select="'{$rootUrl}/css/'"/>

@@ -80,6 +80,143 @@
     </html>
 </xsl:template>
 
+<!-- gantt -->
+
+<xsl:template match="project">
+		<xsl:call-template name="windowhead">
+			<xsl:with-param name="title">Activities</xsl:with-param>
+		</xsl:call-template>
+		<div class="windowcontent">
+			<!-- today line -->
+			<!--<div class="gantt today" style="left:{@now div 100 * 0.8}%; height:{count(activityItem) * 45 + 40}px; clip:rect(0px 2px {count(activityItem) * 40 + 20}px 0px);">&#160;</div>-->
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
+			<tr>
+				<td id="tdGanttSpace" style="width:80%">
+					<div style="position:relative; left:0%; top:0%; width:100%;">
+						<table width="100%" cellpadding="0" cellspacing="0" border="0">
+						<tr>
+							<td class="gantt projectspan">
+								<table width="100%" cellpadding="0" cellspacing="0" border="0">
+								<tr>
+									<td><span class="white"><xsl:value-of select="@start"/></span></td>
+									<td align="right"><span class="white"><xsl:value-of select="@end"/></span></td>
+								</tr>
+								</table>
+							</td>
+						</tr>
+						</table>
+					</div>
+				</td>
+				<td width="20%"><!--<a href="javascript:alert(document.getElementById('tdGanttSpace').style.width);">test</a>-->&#160;</td>
+			</tr>
+				<xsl:apply-templates select="tasks"></xsl:apply-templates>
+			<tr>
+				<td colspan="2">&#160;</td>
+			</tr>
+			</table>
+		</div>
+</xsl:template>
+
+<xsl:template match="project/tasks">
+                <xsl:apply-templates select="task">
+                	<xsl:sort select="@start" order="ascending"/>
+                	<xsl:sort select="@duration" order="ascending"/>
+                	<xsl:sort select="@name" order="ascending"/>
+                </xsl:apply-templates>
+</xsl:template>    
+    
+<xsl:template match="project/tasks/task">
+			<!-- dashline -->
+			<tr>
+				<td width="80%">
+					<div style="position:relative; left:0%; top:0%; width:100%;">
+						<div style="position:relative; left:{@left div 100 + @width div 100 + 1}%; top:0%; width:{100 - @left div 100 - @width div 100 - 2}%; clip:rect(0% {100 - @left div 100 - @width div 100 - 2}% 20px 0%); border-bottom:1px dashed #dddddd">&#160;</div>
+					</div>
+				</td>
+				<td width="20%">&#160;</td>
+			</tr>
+			<!-- status images and name -->
+			<tr>
+				<td width="80%">
+					<div style="position:relative; left:0%; top:0%; width:100%;">
+						<div style="position:relative; left:{@left div 100}%; top:0%; width:{@width div 100}%; height:13px; clip:rect(0% {@width div 100}% 13px 0%); padding:1px; cursor:pointer;" onclick="location.href='.jwa?id={@id}'" onfocus="this.blur()">
+							<xsl:choose>
+								<xsl:when test="@status=5 or @status=6">
+									<xsl:attribute name="class"><xsl:value-of select="'status inactive'"/></xsl:attribute>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:choose>
+										<xsl:when test="@overdue">
+											<xsl:attribute name="class"><xsl:value-of select="'status overdue'"/></xsl:attribute>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:attribute name="class"><xsl:value-of select="'status'"/></xsl:attribute>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:otherwise>
+							</xsl:choose>
+							<div class="statusbar">
+								<xsl:choose>
+									<xsl:when test="@status=0">
+										<xsl:attribute name="style"><xsl:value-of select="'width:100%; height:100%; clip:rect(0% 100% 100% 0%); background-color:#ffffff;'"/></xsl:attribute>
+										<img style="margin-top:1px; margin-bottom:1px;" alt="" src="{$imageUrl}/status/status_unacc_arrow.gif" width="15" height="9" border="0"/>
+									</xsl:when>
+									<xsl:when test="@status=1">
+										<xsl:attribute name="style"><xsl:value-of select="'width:100%; height:100%; clip:rect(0% 100% 100% 0%); background-color:#ffffff;'"/></xsl:attribute>
+									</xsl:when>
+									<xsl:when test="@status=2">
+										<xsl:attribute name="style"><xsl:value-of select="'width:25%; height:100%; clip:rect(0% 25% 100% 0%);'"/></xsl:attribute>
+									</xsl:when>
+									<xsl:when test="@status=3">
+										<xsl:attribute name="style"><xsl:value-of select="'width:50%; height:100%; clip:rect(0% 50% 100% 0%);'"/></xsl:attribute>
+									</xsl:when>
+									<xsl:when test="@status=4">
+										<xsl:attribute name="style"><xsl:value-of select="'width:75%; height:100%; clip:rect(0% 75% 100% 0%);'"/></xsl:attribute>
+									</xsl:when>
+									<xsl:when test="@status=5">
+										<xsl:attribute name="style"><xsl:value-of select="'width:100%; height:100%; clip:rect(0% 100% 100% 0%);'"/></xsl:attribute>
+									</xsl:when>
+								</xsl:choose>
+							</div>
+						</div>
+					</div>
+				</td>
+				<td width="20%">
+					<a href=".jwa?id={@id}" onfocus="this.blur()">
+						<xsl:choose>
+							<xsl:when test="@overdue and @status='0'">
+								<xsl:attribute name="class"><xsl:value-of select="'overdue unread'"/></xsl:attribute>
+							</xsl:when>
+							<xsl:when test="@overdue and not(@status='0')">
+								<xsl:attribute name="class"><xsl:value-of select="'overdue'"/></xsl:attribute>
+							</xsl:when>
+							<xsl:when test="not(@overdue) and @status='0'">
+								<xsl:attribute name="class"><xsl:value-of select="'unread'"/></xsl:attribute>
+							</xsl:when>
+						</xsl:choose>
+						<xsl:value-of select="@name"/>
+					   </a>
+				</td>
+			</tr>
+			<!-- date -->
+			<tr>
+				<td width="80%">
+					<div style="position:relative; left:0%; top:0%; width:100%;">
+						<div style="position:relative; left:{@left div 100}%; top:0%; width:{@width div 100}%;">
+							<table width="100%" cellpadding="0" cellspacing="0" border="0">
+							<tr>
+								<td><span class="italic nobr"><xsl:value-of select="@start"/></span></td>
+								<td>&#160;</td>
+								<td align="right"><span class="italic nobr"><xsl:value-of select="@end"/></span></td>
+							</tr>
+							</table>
+						</div>
+					</div>
+				</td>
+				<td width="20%">&#160;</td>
+			</tr>
+</xsl:template>
+    
 <!-- 
 ****************
 *** ACTIVITY ***
@@ -175,7 +312,7 @@
 		<tr>
 			<td>&#160;</td>
 			<td>
-				<xsl:call-template name="linbreak">
+				<xsl:call-template name="linebreak">
 					<xsl:with-param name="text" select="."/>
 				</xsl:call-template>
 			</td>
@@ -197,139 +334,6 @@
 			<img alt="" src="{$imageUrl}spacer.gif" width="1" height="1" border="0"/>
 		</td>
 	</tr>	
-</xsl:template>
-
-<!-- gantt -->
-
-<xsl:template match="activityGantt">
-		<xsl:call-template name="windowhead">
-			<xsl:with-param name="title">Activities</xsl:with-param>
-		</xsl:call-template>
-		<div class="windowcontent">
-			<!-- today line -->
-			<!--<div class="gantt today" style="left:{@now div 100 * 0.8}%; height:{count(activityItem) * 45 + 40}px; clip:rect(0px 2px {count(activityItem) * 40 + 20}px 0px);">&#160;</div>-->
-			<table width="100%" cellpadding="0" cellspacing="0" border="0">
-			<tr>
-				<td id="tdGanttSpace" style="width:80%">
-					<div style="position:relative; left:0%; top:0%; width:100%;">
-						<table width="100%" cellpadding="0" cellspacing="0" border="0">
-						<tr>
-							<td class="gantt projectspan">
-								<table width="100%" cellpadding="0" cellspacing="0" border="0">
-								<tr>
-									<td><span class="white"><xsl:value-of select="@start"/></span></td>
-									<td align="right"><span class="white"><xsl:value-of select="@end"/></span></td>
-								</tr>
-								</table>
-							</td>
-						</tr>
-						</table>
-					</div>
-				</td>
-				<td width="20%"><!--<a href="javascript:alert(document.getElementById('tdGanttSpace').style.width);">test</a>-->&#160;</td>
-			</tr>
-			<xsl:apply-templates select="activityItem">
-				<xsl:sort select="@start" order="ascending"/>
-				<xsl:sort select="@end" order="ascending"/>
-				<xsl:sort select="@name" order="ascending"/>
-			</xsl:apply-templates>
-			<tr>
-				<td colspan="2">&#160;</td>
-			</tr>
-			</table>
-		</div>
-</xsl:template>
-
-<xsl:template match="activityGantt/activityItem">
-			<!-- dashline -->
-			<tr>
-				<td width="80%">
-					<div style="position:relative; left:0%; top:0%; width:100%;">
-						<div style="position:relative; left:{@left div 100 + @width div 100 + 1}%; top:0%; width:{100 - @left div 100 - @width div 100 - 2}%; clip:rect(0% {100 - @left div 100 - @width div 100 - 2}% 20px 0%); border-bottom:1px dashed #dddddd">&#160;</div>
-					</div>
-				</td>
-				<td width="20%">&#160;</td>
-			</tr>
-			<!-- status images and name -->
-			<tr>
-				<td width="80%">
-					<div style="position:relative; left:0%; top:0%; width:100%;">
-						<div style="position:relative; left:{@left div 100}%; top:0%; width:{@width div 100}%; height:13px; clip:rect(0% {@width div 100}% 13px 0%); padding:1px; cursor:pointer;" onclick="location.href='.jwa?id={@id}'" onfocus="this.blur()">
-							<xsl:choose>
-								<xsl:when test="@status=5 or @status=6">
-									<xsl:attribute name="class"><xsl:value-of select="'status inactive'"/></xsl:attribute>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:choose>
-										<xsl:when test="@overdue">
-											<xsl:attribute name="class"><xsl:value-of select="'status overdue'"/></xsl:attribute>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:attribute name="class"><xsl:value-of select="'status'"/></xsl:attribute>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:otherwise>
-							</xsl:choose>
-							<div class="statusbar">
-								<xsl:choose>
-									<xsl:when test="@status=0">
-										<xsl:attribute name="style"><xsl:value-of select="'width:100%; height:100%; clip:rect(0% 100% 100% 0%); background-color:#ffffff;'"/></xsl:attribute>
-										<img style="margin-top:1px; margin-bottom:1px;" alt="" src="{$imageUrl}/status/status_unacc_arrow.gif" width="15" height="9" border="0"/>
-									</xsl:when>
-									<xsl:when test="@status=1">
-										<xsl:attribute name="style"><xsl:value-of select="'width:100%; height:100%; clip:rect(0% 100% 100% 0%); background-color:#ffffff;'"/></xsl:attribute>
-									</xsl:when>
-									<xsl:when test="@status=2">
-										<xsl:attribute name="style"><xsl:value-of select="'width:25%; height:100%; clip:rect(0% 25% 100% 0%);'"/></xsl:attribute>
-									</xsl:when>
-									<xsl:when test="@status=3">
-										<xsl:attribute name="style"><xsl:value-of select="'width:50%; height:100%; clip:rect(0% 50% 100% 0%);'"/></xsl:attribute>
-									</xsl:when>
-									<xsl:when test="@status=4">
-										<xsl:attribute name="style"><xsl:value-of select="'width:75%; height:100%; clip:rect(0% 75% 100% 0%);'"/></xsl:attribute>
-									</xsl:when>
-									<xsl:when test="@status=5">
-										<xsl:attribute name="style"><xsl:value-of select="'width:100%; height:100%; clip:rect(0% 100% 100% 0%);'"/></xsl:attribute>
-									</xsl:when>
-								</xsl:choose>
-							</div>
-						</div>
-					</div>
-				</td>
-				<td width="20%">
-					<a href=".jwa?id={@id}" onfocus="this.blur()">
-						<xsl:choose>
-							<xsl:when test="@overdue and @status='0'">
-								<xsl:attribute name="class"><xsl:value-of select="'overdue unread'"/></xsl:attribute>
-							</xsl:when>
-							<xsl:when test="@overdue and not(@status='0')">
-								<xsl:attribute name="class"><xsl:value-of select="'overdue'"/></xsl:attribute>
-							</xsl:when>
-							<xsl:when test="not(@overdue) and @status='0'">
-								<xsl:attribute name="class"><xsl:value-of select="'unread'"/></xsl:attribute>
-							</xsl:when>
-						</xsl:choose>
-						<xsl:value-of select="@name"/>
-					   </a>
-				</td>
-			</tr>
-			<!-- date -->
-			<tr>
-				<td width="80%">
-					<div style="position:relative; left:0%; top:0%; width:100%;">
-						<div style="position:relative; left:{@left div 100}%; top:0%; width:{@width div 100}%;">
-							<table width="100%" cellpadding="0" cellspacing="0" border="0">
-							<tr>
-								<td><span class="italic nobr"><xsl:value-of select="@start"/></span></td>
-								<td>&#160;</td>
-								<td align="right"><span class="italic nobr"><xsl:value-of select="@end"/></span></td>
-							</tr>
-							</table>
-						</div>
-					</div>
-				</td>
-				<td width="20%">&#160;</td>
-			</tr>
 </xsl:template>
 
 <xsl:template match="activityDenied">
