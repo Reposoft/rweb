@@ -39,7 +39,7 @@
 	<xsl:param name="views">.doc.html.ics.gan</xsl:param>
 	<!-- icon dimensions -->
 	<xsl:param name="iconSize">22</xsl:param>
-	<xsl:param name="miniIconSize">22</xsl:param>
+	<xsl:param name="miniIconSize">16</xsl:param>
 	<xsl:param name="iconVspace">1</xsl:param>
 	<xsl:param name="iconHspace">10</xsl:param>
 	<!-- more layout definitions -->
@@ -381,7 +381,7 @@
 		<xsl:param name="revfrom"/>
 		<p>
 			<xsl:if test="@action='A'">
-				<span class="action" title="{@action} - added">
+				<span title="{@action} - added">
 					<xsl:call-template name="logicon"><xsl:with-param name="name" select="'_a'"/></xsl:call-template>
 				</span>
 				<xsl:value-of select="."/>
@@ -393,13 +393,13 @@
 				</xsl:if>
 			</xsl:if>
 			<xsl:if test="@action='D'">
-				<span class="action" title="{@action} - deleted">
+				<span title="{@action} - deleted">
 					<xsl:call-template name="logicon"><xsl:with-param name="name" select="'_d'"/></xsl:call-template>				
 				</span>
 				<xsl:value-of select="."/>
 			</xsl:if>
 			<xsl:if test="@action='M'">
-				<a title="{@action} - {$show-diff}" class="action" href="{$rurl}/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">
+				<a title="{@action} - {$show-diff}" href="{$rurl}/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">
 					<xsl:call-template name="logicon"><xsl:with-param name="name" select="'_m'"/></xsl:call-template>
 				</a>
 				<xsl:value-of select="."/>
