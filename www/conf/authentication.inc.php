@@ -2,8 +2,10 @@
 // PHP authentication compatible with webapp strategy.
 // Defines functions to retrieve credentials, abstracting the autentication method.
 // Returns a 401 header if credentials are not found.
+require_once( dirname(__FILE__) . "/repos.properties.php" );
+
 if (!isset($_SERVER['PHP_AUTH_USER']) || $_SERVER['PHP_AUTH_USER']=='void') {
-   header('WWW-Authenticate: Basic realm="repos"');
+   header('WWW-Authenticate: Basic realm="' . getSetting('repo_name') . '"');
    header('HTTP/1.0 401 Unauthorized');
    echo 'Please provide your Repos login';
    exit;

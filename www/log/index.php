@@ -1,8 +1,8 @@
 <?php
 
 function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
-require( upOne(dirname(__FILE__)) . "/conf/authentication.inc.php" );
-require( upOne(dirname(__FILE__)) . "/conf/repos.properties.php" );
+require_once( upOne(dirname(__FILE__)) . "/conf/authentication.inc.php" );
+require_once( upOne(dirname(__FILE__)) . "/conf/repos.properties.php" );
 
 define('STYLESHEET','svnlog.xsl');
 
