@@ -9,6 +9,7 @@
  *  - getReposUser() username
  *  - getReposPass() cleartext password for repository access
  *  - getReposAuth() encrypted authentication from browser
+ *  - getSvnCommand() command line for this user to run 'svn'
  *
  * Returns a 401 header if required credentials are not found
  *
@@ -125,4 +126,16 @@ function getReposAuth() {
 	global $repos_authentication;
 	return($repos_authentication['auth']);
 }
+
+// *** Subversion client usage ***
+
+/**
+ * @return Start of command line for executing svn operations
+ */
+function getSvnCommand() {
+	$auth = ' --username='.getReposUser().' --password='.getReposPass().' --no-auth-cache';
+	$options = ' --non-interactive --config-dir '.dirname(__FILE__).DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'svn-config-dir';
+	return 'svn '.$auth.$options;
+}
+
 ?>

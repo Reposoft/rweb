@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
 require_once( upOne(dirname(__FILE__)) . "/conf/repos.properties.php" );
@@ -13,15 +13,9 @@ if(empty($revfrom) || empty($revto)) {
 	echo "Argument error: 'revfrom' and 'revto' not specified.";
 	exit;
 }
-//$fromrev = $_GET['fromrev'];
-//$torev = $_GET['torev'];
-$user = getReposUser();
-$pass = getReposPass();
-$auth = " --username=$user --password=$pass --no-auth-cache";
-$options = " --non-interactive";
 $revisions = ' -r '.$revfrom.':'.$revto;
 
-$cmd = getCommand('svn') . $auth . $options . $revisions . " diff $url";
+$cmd = getSvnCommand() . " diff" . $revisions . " $url";
 
 // passthrough with stylesheet
 header('Content-type: text/xml');
