@@ -50,7 +50,6 @@
     <report>maven-junit-report-plugin</report>
     <report>maven-tasklist-plugin</report>
     <!--<report>maven-linkcheck-plugin</report>-->
-    <report>maven-linkcheck-plugin</report>
     <report>maven-jcoverage-plugin</report>
   </reports>
   <developers>

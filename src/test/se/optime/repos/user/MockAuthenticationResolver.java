@@ -69,5 +69,12 @@ public class MockAuthenticationResolver implements AuthenticationResolver {
         if (!passChecked)
             junit.framework.Assert.fail("Password not asked for");
     }
+    
+    public void assertUserNotAskedFor() {
+        if (userChecked)
+            junit.framework.Assert.fail("Username was asked for");
+        if (passChecked)
+            junit.framework.Assert.fail("Password was asked for");        
+    }
 
 }

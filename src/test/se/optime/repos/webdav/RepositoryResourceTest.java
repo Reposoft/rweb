@@ -6,9 +6,11 @@ package se.optime.repos.webdav;
 import java.io.IOException;
 import java.net.URL;
 
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpURL;
 import org.apache.commons.httpclient.URIException;
 import org.apache.webdav.lib.WebdavResource;
+import org.easymock.MockControl;
 
 import se.optime.repos.RepositoryAccessException;
 import se.optime.repos.WebResource;
@@ -30,6 +32,10 @@ public class RepositoryResourceTest extends TestCase {
     
     public void testAutmaticUserHandling() throws Exception {
         WebResource res = new RepositoryResource();
+        auth.assertUserNotAskedFor();
+        try {
+            res.getURL();
+        } catch (Exception e) {}
         auth.assertAskedFor();
     }
     
@@ -95,8 +101,44 @@ public class RepositoryResourceTest extends TestCase {
     }
     
     public void testGetDavFileHttpException() throws Exception {
-        // une dynamock for Webdav interface
+        MockControl mc = MockControl.createControl(Webdav.class);
+        Webdav w = (Webdav) mc.getMock();
+        WebdavFactory.setWebdav(w);
+        w.getWebdavResource(null);
+        HttpException ex = new HttpException("Test exception");
+        ex.setReasonCode(-999);
+        mc.setThrowable(ex);
+        mc.replay();
+        try {
+            RepositoryResource r =new RepositoryResource() {
+                protected HttpURL getHttpURL() { return null; }
+            };
+            WebdavResource f = r.getDavFile(); 
+            fail("Should have thrown an exception");
+        } catch (Exception e) {
+            assertTrue("Wrapped exception",e.getClass().equals(ConnectionException.class));
+            assertEquals("Http error code",-999,((ConnectionException)e).getError());
+        }
     }
+    
+    public void testGetDavFileIOException() throws Exception {
+        MockControl mc = MockControl.createControl(Webdav.class);
+        Webdav w = (Webdav) mc.getMock();
+        WebdavFactory.setWebdav(w);
+        w.getWebdavResource(null);
+        mc.setThrowable(new IOException("Test exception"));
+        mc.replay();
+        try {
+            RepositoryResource r =new RepositoryResource() {
+                protected HttpURL getHttpURL() { return null; }
+            };
+            WebdavResource f = r.getDavFile(); 
+            fail("Should have thrown an exception");
+        } catch (Exception e) {
+            assertTrue("Wrapped exception",e.getClass().equals(ConnectionException.class));
+            assertEquals("Http error code",ConnectionException.RESOURCE_READ_ERROR,((ConnectionException)e).getError());
+        }
+    }    
     
     public void testGetUrl() throws Exception {
         RepositoryResource res = new RepositoryResource();
@@ -105,12 +147,9 @@ public class RepositoryResourceTest extends TestCase {
         res.setPath("/path/");
         res.setHref("file.f");
         res.setSecure(true);
-        try {
-	        URL url = res.getURL();
-	        assertEquals("java url","https://host.test:443/repo/path/file.f",url.toString());
-        } catch (Exception e) {
-            fail("Making URL caused exception");
-        }
+        URL url = res.getURL();  // failure on thrown exception
+	    assertEquals("java url","https://host.test:443/repo/path/file.f",url.toString());
+	    
     }
     
     public void testGetUrlInvalid() throws Exception {
@@ -149,4 +188,5 @@ public class RepositoryResourceTest extends TestCase {
         res.setPort(1080);
         assertEquals("custom",1080,res.getPort());
     }
+    
 }

@@ -33,13 +33,13 @@ public class ConnectionExceptionTest extends TestCase {
     public void testConnectionException_IOException() {
         IOException e = new IOException();
         ConnectionException ce = new ConnectionException(false,new StubRepositoryPath().setTestValues(),e);
-        assertEquals("read error",ConnectionException.UNKNOWN_READ_ERROR,ce.getError());
+        assertEquals("read error",ConnectionException.RESOURCE_READ_ERROR,ce.getError());
     }
     
     public void testConnectionException_IOException_write() {
         IOException e = new IOException();
         ConnectionException ce = new ConnectionException(true,new StubRepositoryPath().setTestValues(),e);
-        assertEquals("write error",ConnectionException.UNKNOWN_WRITE_ERROR,ce.getError());
+        assertEquals("write error",ConnectionException.RESOURCE_WRITE_ERROR,ce.getError());
     }    
 
 }

@@ -41,7 +41,7 @@ public class ConnectionException extends RepositoryAccessException {
     
     private static int getErrorCode(boolean triedToWrite) {
         if (triedToWrite)
-            return UNKNOWN_WRITE_ERROR;
-        return UNKNOWN_READ_ERROR;
+            return RESOURCE_WRITE_ERROR;
+        return RESOURCE_READ_ERROR;
     }
 }

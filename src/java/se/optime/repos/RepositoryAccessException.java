@@ -25,32 +25,42 @@ package se.optime.repos;
  */
 public abstract class RepositoryAccessException extends RuntimeException {
     
-    // collect error codes here 
+    // collect error codes here
     public static final int UNKNOWN_ERROR = 0;
-    public static final int UNKNOWN_ACCESS_ERROR = 901;
-    public static final int UNKNOWN_READ_ERROR = 902;
-    public static final int UNKNOWN_WRITE_ERROR = 903;
-    public static final int FILE_EXPECTED = 910;
-    public static final int DIRECTORY_EXPECTED = 911;
-    public static final int RESULTING_URL_INVALID = 912;
-    public static final int EXPLICIT_URL_INVALID = 913;
-    public static final int ACCESS_FAILED_TEMPORARILY = 914;
+    
+    // related to contents of accessed resource
+    public static final int EMPTY_CONTENTS = 717;
+    public static final int CANNOT_PARSE_CONTENTS = 718;
+    
+    // connection related
+    public static final int RESOURCE_ACCESS_ERROR = 901;
+    public static final int RESOURCE_READ_ERROR = 902;
+    public static final int RESOURCE_WRITE_ERROR = 903;
     public static final int RESOURCE_DOES_NOT_EXIST = 915; // internal version of HTTP_NOT_FOUND, should maybe have the same code
+    
+    // input related
+    public static final int FILE_EXPECTED = 810;
+    public static final int DIRECTORY_EXPECTED = 811;
+    public static final int RESULTING_URL_INVALID = 812;
+    public static final int EXPLICIT_URL_INVALID = 813;
     public static final int WRONG_FILETYPE = 916;
-    public static final int EMPTY_CONTENTS = 917;
-    public static final int CANNOT_PARSE_CONTENTS = 918;
-    
+   
     // recognised and handled HttpClient codes
-    
     
     // recognised and handled HTTP status codes
     public static final int HTTP_NOT_WEBDAV = 405;
     public static final int HTTP_NOT_FOUND = 404;
     public static final int HTTP_ACCESS_DENIED = 401;
     
+    /**
+     * Error code, determined by subclass
+     */
     private int error;
+    /**
+     * The affected path
+     */
     private RepositoryPath path = null;
-       
+    
     public RepositoryAccessException(int error) {
         super();
         this.error = error;
@@ -75,11 +85,11 @@ public abstract class RepositoryAccessException extends RuntimeException {
      * Produce a message understandable for the user
      * @return Localised readable error message
      * @see java.lang.Throwable#getLocalizedMessage()
+     * @todo implement error code to message mapping
      */
     public String getLocalizedMessage() {
         // @param error Code named by iternal constant
         // @param path The path for which the error occured, may be null
-        // TODO
         return super.getLocalizedMessage();
     }
     /* (non-Javadoc)

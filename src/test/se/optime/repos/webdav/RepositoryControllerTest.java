@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import se.optime.repos.RepositoryPath;
 import se.optime.repos.StubRepositoryPath;
+import se.optime.repos.StubWebResource;
 import se.optime.repos.WebResource;
 import junit.framework.TestCase;
 
@@ -59,9 +60,12 @@ public class RepositoryControllerTest extends TestCase {
         RepositoryController c = new DummyRepositoryController();
         ModelAndView mv = null;
         try {
-            mv = c.handleDirectory(null,null,null);
+            StubWebResource wr = new StubWebResource();
+            wr.setTestValues();
+            wr.setHref(null);
+            mv = c.handleDirectory(null,null,wr);
         } catch (Exception e) {
-            fail("Base controller should handle directory without errors");
+            fail("Base controller should handle directory without errors but threw " + e);
         }
         assertNotNull("Need something to show the user",mv);
     }
