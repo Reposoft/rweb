@@ -51,6 +51,7 @@
     <report>maven-tasklist-plugin</report>
     <!--<report>maven-linkcheck-plugin</report>-->
     <report>maven-jcoverage-plugin</report>
+    <report>maven-xhtml-plugin</report>
   </reports>
   <developers>
     <developer>
@@ -140,7 +141,6 @@
       <version>1.0.b2</version>
       <type>jar</type>
     </dependency>
-    <!-- for mailer -->
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
@@ -169,6 +169,12 @@
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
+    </dependency>
+    <dependency>
+      <groupId>easymock</groupId>
+      <artifactId>easymock</artifactId>
+      <version>1.1</version>
+      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>optime</groupId>
@@ -243,10 +249,11 @@
       <type>jar</type>
     </dependency>
     <dependency>
-      <groupId>easymock</groupId>
-      <artifactId>easymock</artifactId>
-      <version>1.1</version>
-      <type>jar</type>
+      <groupId>maven-validator</groupId>
+      <artifactId>maven-xhtml-plugin</artifactId>
+      <version>1.2</version>
+      <type>plugin</type>
+      <url>http://maven-validator.sourceforge.net/maven/maven-validator/plugins/maven-xhtml-plugin-1.2.jar</url>
     </dependency>
   </dependencies>
   <build>
