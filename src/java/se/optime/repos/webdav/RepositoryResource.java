@@ -5,6 +5,9 @@ package se.optime.repos.webdav;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpURL;
@@ -12,10 +15,8 @@ import org.apache.commons.httpclient.HttpsURL;
 import org.apache.commons.httpclient.URIException;
 import org.apache.webdav.lib.WebdavResource;
 import org.springframework.core.io.AbstractResource;
-import org.springframework.core.io.Resource;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.view.RedirectView;
 
+import se.optime.repos.WebResource;
 import se.optime.repos.user.StaticAuthenticationResolver;
 
 /**
@@ -23,10 +24,10 @@ import se.optime.repos.user.StaticAuthenticationResolver;
  * @version $Id$
  */
 public class RepositoryResource extends AbstractResource
-		implements RepositoryPath, Resource {
+		implements WebResource {
 
     private String host = null;
-    private int port = 0;
+    private int port = -1;
     private String repo = null;
     private String path = null;
     private String href = null;
@@ -34,8 +35,6 @@ public class RepositoryResource extends AbstractResource
     
     private String user = StaticAuthenticationResolver.getAuthenticatedUsername();
     private String pass = StaticAuthenticationResolver.getAuthenticatedPassword();
-    
-    private String contents = null;
     
     /**
      * @param href The href to set.
@@ -56,14 +55,17 @@ public class RepositoryResource extends AbstractResource
         this.repo = repo;
     }
     
-    WebdavResource getDavFile() {
+    /**
+     * @return Reference to the resource
+     */
+    protected WebdavResource getDavFile() {
         HttpURL url = getHttpURL();
         try {
             return new WebdavResource(url);
         } catch (HttpException e) {
-            throw new RuntimeException("Could not get " + url.toString(),e);
+            throw new WrappedHttpException(false,this,e);
         } catch (IOException e) {
-            throw new RuntimeException("Could not read " + url.toString(),e);
+            throw new WrappedHttpException(false,this,e);
         }
     }
     
@@ -82,34 +84,32 @@ public class RepositoryResource extends AbstractResource
     }
     
     /* (non-Javadoc)
-     * @see se.optime.repos.webdav.RepositoryPath#getRepo()
+     * @see se.optime.repos.RepositoryPath#getRepo()
      */
     public String getRepo() {
         return repo;
     }
     /* (non-Javadoc)
-     * @see se.optime.repos.webdav.RepositoryPath#getPath()
+     * @see se.optime.repos.RepositoryPath#getPath()
      */
     public String getPath() {
         return path;
     }
     /* (non-Javadoc)
-     * @see se.optime.repos.webdav.RepositoryPath#getHref()
+     * @see se.optime.repos.RepositoryPath#getHref()
      */
     public String getHref() {
         return href;
     }
-    /* (non-Javadoc)
-     * @see se.optime.repos.webdav.RepositoryPath#getHttpURL()
-     */
-    public HttpURL getHttpURL() {
+
+    protected HttpURL getHttpURL() {
         try {
             if (isSecure())
                 return new HttpsURL(getUser(),getPass(),getHost(),getPort(),getAbsolutePath());
             else
                 return new HttpURL(getUser(),getPass(),getHost(),getPort(),getAbsolutePath());
         } catch (URIException e) {
-            throw new RuntimeException("Invalid URL",e);
+            throw new InvalidPathException(this,e);
         }
     }
     
@@ -132,7 +132,7 @@ public class RepositoryResource extends AbstractResource
      * @return Returns the port.
      */
     public int getPort() {
-        if (port==0)
+        if (port<0)
             if (isSecure())
                 return HttpsURL.DEFAULT_PORT;
             else
@@ -163,12 +163,6 @@ public class RepositoryResource extends AbstractResource
     protected String getUser() {
         return user;
     }
-    /* (non-Javadoc)
-     * @see se.optime.repos.webdav.RepositoryPath#isSecure()
-     */
-    public boolean isSecure() {
-        return secure;
-    }
     /**
      * @param host The host to set.
      */
@@ -176,13 +170,13 @@ public class RepositoryResource extends AbstractResource
         this.host = host;
     }
     /**
-     * @param pass The pass to set.
+     * @param pass User's password
      */
     public void setPass(String pass) {
         this.pass = pass;
     }
     /**
-     * @param secure The secure to set.
+     * @param secure Set to true if this is a secure connection.
      */
     public void setSecure(boolean secure) {
         this.secure = secure;
@@ -193,10 +187,44 @@ public class RepositoryResource extends AbstractResource
     public void setUser(String user) {
         this.user = user;
     }
-    /* (non-Javadoc)
-     * @see se.optime.repos.webdav.RepositoryPath#getQuery()
+    /**
+     * @return True if this is a file resource
      */
-    public String getQuery() {
+    public boolean isFile() {
+        return !isDirectory();
+    }
+    /**
+     * @return True if the path represents a repository directory
+     */
+    public boolean isDirectory() {
+        return getDavFile().isCollection();
+    }
+    /* (non-Javadoc)
+     * @see se.optime.repos.WebResource#getReader()
+     */
+    public Reader getReader() {
+        throw new UnsupportedOperationException("Method RepositoryResource#getReader not implemented yet.");
+    }
+    /* (non-Javadoc)
+     * @see se.optime.repos.RepositoryPath#isSecure()
+     */
+    public boolean isSecure() {
+        return secure;
+    }
+    /* (non-Javadoc)
+     * @see se.optime.repos.RepositoryPath#getURL()
+     */
+    public URL getURL() {
+        try {
+            return new URL(getHttpURL().toString());
+        } catch (MalformedURLException e) {
+            throw new InvalidPathException(this,e);
+        }
+    }
+    /* (non-Javadoc)
+     * @see se.optime.repos.RepositoryPath#getIdentifierQuery()
+     */
+    public String getIdentifierQuery() {
         StringBuffer q = new StringBuffer();
         q.append("host=").append(getHost())
         	.append("&repo=").append(getRepo())
@@ -206,45 +234,10 @@ public class RepositoryResource extends AbstractResource
             q.append("&port=").append(getPort());
         return q.toString();
     }
-    
-    /**
-     * @return Updated contents if anything has changed since the repository checkout
-     */
-    protected String getContents() {
-        return contents;
-    }
-    /**
-     * @param contents If changed from the version in repository, contents of the file is stored here
-     */
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
     /* (non-Javadoc)
-     * @see se.optime.repos.webdav.RepositoryPath#commitChanges()
+     * @see org.springframework.core.io.Resource#exists()
      */
-    public void commitChanges() {
-        if (getContents()==null)
-            throw new RuntimeException("No changes stored");
-        try {
-            getDavFile().putMethod(getContents());
-        } catch (HttpException e) {
-            throw new RuntimeException("Could not save changes");
-        } catch (IOException e) {
-            throw new RuntimeException("Error writing contents");
-        }
-    }
-    /* (non-Javadoc)
-     * @see se.optime.repos.webdav.RepositoryPath#isChanged()
-     */
-    public boolean isChanged() {
-        return getContents()!=null;
-    }
-    /* (non-Javadoc)
-     * @see se.optime.repos.webdav.RepositoryPath#getRedirectTo()
-     */
-    public View getRedirectTo() {
-        return new RedirectView(new StringBuffer()
-                .append(getFilename()).append(RepositoryCommandController.DEFAULT_EXTENSION)
-                .append('?').append(getQuery()).toString());
+    public boolean exists() {
+        return getDavFile().exists();
     }
 }

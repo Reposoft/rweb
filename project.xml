@@ -129,31 +129,7 @@
       <version>1.0.b2</version>
       <type>jar</type>
     </dependency>
-    <dependency>
-      <groupId>optime</groupId>
-      <artifactId>optime-utils</artifactId>
-      <version>1.0</version>
-      <type>jar</type>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
     <!-- for mailer -->
-    <dependency>
-      <groupId>springframework</groupId>
-      <artifactId>spring</artifactId>
-      <version>1.1.1</version>
-      <type>jar</type>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-    <dependency>
-      <groupId>servletapi</groupId>
-      <artifactId>jsp-api</artifactId>
-      <version>2.4</version>
-      <type>jar</type>
-    </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
@@ -173,6 +149,39 @@
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
+    </dependency>
+    <dependency>
+      <groupId>jical</groupId>
+      <artifactId>jical</artifactId>
+      <version>OPTIME</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>optime</groupId>
+      <artifactId>optime-utils</artifactId>
+      <version>1.0</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring</artifactId>
+      <version>1.1.1</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>servletapi</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.4</version>
+      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>xerces</groupId>

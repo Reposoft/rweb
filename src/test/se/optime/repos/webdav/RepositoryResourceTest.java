@@ -5,6 +5,7 @@ package se.optime.repos.webdav;
 
 import org.apache.commons.httpclient.HttpURL;
 
+import se.optime.repos.WebResource;
 import se.optime.repos.user.MockAuthenticationResolver;
 
 import junit.framework.TestCase;
@@ -22,7 +23,7 @@ public class RepositoryResourceTest extends TestCase {
     }
     
     public void testAutmaticUserHandling() throws Exception {
-        RepositoryResource res = new RepositoryResource();
+        WebResource res = new RepositoryResource();
         auth.assertAskedFor();
     }
     
@@ -51,13 +52,6 @@ public class RepositoryResourceTest extends TestCase {
         auth.assertAskedFor();
         assertEquals("Username",MockAuthenticationResolver.TESTUSER,url.getUser());
         assertEquals("Password",MockAuthenticationResolver.TESTPASS,url.getPassword());
-    }
-    
-    public void testContents() {
-        RepositoryResource res = new RepositoryResource();
-        assertFalse("Nothing changed yet",res.isChanged());
-        res.setContents("hepp");
-        assertTrue("Now simething has changed",res.isChanged());
     }
     
 }
