@@ -387,7 +387,7 @@
 				<xsl:value-of select="."/>
 				<xsl:value-of select="$spacer"/>
 				<xsl:if test="@copyfrom-path">
-					<span title="copied from"><xsl:call-template name="logicon"><xsl:with-param name="name" select="'_copiedfrom"/></xsl:call-template></span>
+					<span title="copied from"><xsl:call-template name="logicon"><xsl:with-param name="name" select="'_copiedfrom'"/></xsl:call-template></span>
 					<span class="path"><xsl:value-of select="@copyfrom-path"/>&#160;</span>
 					<span class="revision"><xsl:value-of select="@copyfrom-rev"/></span>
 				</xsl:if>
