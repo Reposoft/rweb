@@ -1,0 +1,3216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="svnlog.xsl"?>
+<!-- SVN log for http://alto.optime.se/repos/optime/repos/trunk/ -->
+<log path="/test/path">
+<logentry
+   revision="334">
+<author>solsson</author>
+<date>2005-02-06T18:55:14.460893Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/repos-backup.inc.php</path>
+</paths>
+<msg>Seems date format 'c' is not supported in PHP&lt;5</msg>
+</logentry>
+<logentry
+   revision="333">
+<author>solsson</author>
+<date>2005-02-06T18:49:07.641900Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/repos-backup.inc.php</path>
+</paths>
+<msg>Better log output</msg>
+</logentry>
+<logentry
+   revision="317">
+<author>solsson</author>
+<date>2005-01-28T15:51:19.175122Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="M">/repos/trunk/www/conf/logout.php</path>
+<path
+   action="M">/repos/trunk/xdocs/samples/repos-access</path>
+</paths>
+<msg>Bugfixes.</msg>
+</logentry>
+<logentry
+   revision="315">
+<author>solsson</author>
+<date>2005-01-28T15:27:55.519874Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties.php</path>
+<path
+   action="M">/repos/trunk/www/hem.php</path>
+</paths>
+<msg>Fixed headers</msg>
+</logentry>
+<logentry
+   revision="314">
+<author>solsson</author>
+<date>2005-01-28T15:14:00.846417Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/xdocs/samples/repos-access</path>
+<path
+   action="M">/repos/trunk/xdocs/samples/repos-users</path>
+<path
+   action="M">/repos/trunk/www/demo/index.html</path>
+<path
+   action="A">/repos/trunk/www/hem.php</path>
+</paths>
+<msg>Added startpage hem.php to go to a user's repository home.
+Updated authentication file templates.
+Updated links on demo page.</msg>
+</logentry>
+<logentry
+   revision="313">
+<author>solsson</author>
+<date>2005-01-28T14:48:46.335565Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/about/index.html</path>
+<path
+   action="D">/repos/trunk/xdocs/figures</path>
+</paths>
+<msg></msg>
+</logentry>
+<logentry
+   revision="310">
+<author>solsson</author>
+<date>2005-01-10T10:31:25.867675Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/securityContext.xml</path>
+<path
+   action="M">/repos/trunk/.classpath</path>
+</paths>
+<msg>Updated to stable version of Slide WebDAV client.
+Found SVN library that looks good.
+Tried to use properties file in spring config file.</msg>
+</logentry>
+<logentry
+   revision="296">
+<author>solsson</author>
+<date>2005-01-07T19:21:06.429767Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+</paths>
+<msg>Just completed command changes</msg>
+</logentry>
+<logentry
+   revision="295">
+<author>solsson</author>
+<date>2005-01-07T19:11:47.178995Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="A">/repos/trunk/www/dav/delete.php</path>
+<path
+   action="A">/repos/trunk/www/dav/upload.php</path>
+<path
+   action="M">/repos/trunk/www/xslt/common.xsl</path>
+<path
+   action="A">/repos/trunk/www/dav/lock.php</path>
+<path
+   action="A">/repos/trunk/www/dav</path>
+<path
+   action="A">/repos/trunk/www/dav/copy.php</path>
+</paths>
+<msg>Proposed DAV operations in PHP</msg>
+</logentry>
+<logentry
+   revision="294">
+<author>solsson</author>
+<date>2005-01-07T14:00:49.232595Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/images/userstatus/not_ok.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/bb_activity_unacc.gif</path>
+<path
+   action="A">/repos/trunk/www/images/filearchive</path>
+<path
+   action="A">/repos/trunk/www/images/activities/activity_0.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/_single.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/whiteline180.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/tooldiscussion.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_issue.gif</path>
+<path
+   action="A">/repos/trunk/www/images/actionbutton_left.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/activity_unacc_arrow.gif</path>
+<path
+   action="A">/repos/trunk/www/images/status/status_100.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/toolactivity_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/icon_file.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_short.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/toolsettings_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_back.gif</path>
+<path
+   action="A">/repos/trunk/www/images/filearchive/checkedOut.gif</path>
+<path
+   action="A">/repos/trunk/www/images/filearchive/icon_awaitingapproval.gif</path>
+<path
+   action="A">/repos/trunk/www/images/todo/to-do_0.gif</path>
+<path
+   action="A">/repos/trunk/www/images/actionbutton_right.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/toolnews_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/text10_en.gif</path>
+<path
+   action="A">/repos/trunk/www/images/status/status_50.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/toolevent_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/filearchive/checkedOutByMe.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/24_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/mode</path>
+<path
+   action="A">/repos/trunk/www/images/tree/18_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/activity_noact.gif</path>
+<path
+   action="A">/repos/trunk/www/images/filearchive/icon_checkedoutbyme.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/com-onweb.gif</path>
+<path
+   action="A">/repos/trunk/www/images/status/status_unacc_arrow.gif</path>
+<path
+   action="A">/repos/trunk/www/images/logo</path>
+<path
+   action="A">/repos/trunk/www/images/mode/logout.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/w144.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/bb_activity_completed.gif</path>
+<path
+   action="A">/repos/trunk/www/images/logo/coo_small_180.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_reload.gif</path>
+<path
+   action="A">/repos/trunk/www/images/arrow_coll.gif</path>
+<path
+   action="A">/repos/trunk/www/images/logo/logo_large.gif</path>
+<path
+   action="A">/repos/trunk/www/images/spacer.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/w18.gif</path>
+<path
+   action="M">/repos/trunk/www/xslt/common.xsl</path>
+<path
+   action="A">/repos/trunk/www/images/button_edit.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/18.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/expanded.gif</path>
+<path
+   action="A">/repos/trunk/www/images/filearchive/awaitingApproval.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_long.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/text3_en.gif</path>
+<path
+   action="A">/repos/trunk/www/images/userstatus/ok.gif</path>
+<path
+   action="A">/repos/trunk/www/images/todo/to-do_25.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_delete.gif</path>
+<path
+   action="A">/repos/trunk/www/images/event/invitation_accepted.gif</path>
+<path
+   action="A">/repos/trunk/www/images/mode/override_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/toolsettings.gif</path>
+<path
+   action="A">/repos/trunk/www/images/todo/to-do_unacc.gif</path>
+<path
+   action="A">/repos/trunk/www/images/mode/user.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/activity_25.gif</path>
+<path
+   action="A">/repos/trunk/www/images/filearchive/awaitingApprovalByMe.gif</path>
+<path
+   action="A">/repos/trunk/www/images/corner.png</path>
+<path
+   action="A">/repos/trunk/www/images/logo/coo_small.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/toolunit_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/filearchive/icon_awaitingapprovalbyme.gif</path>
+<path
+   action="A">/repos/trunk/www/images/userstatus</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/tooldiscussion_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/status/status_unacc.gif</path>
+<path
+   action="A">/repos/trunk/www/images/event/icon_meeting.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/25.gif</path>
+<path
+   action="A">/repos/trunk/www/images/logo/com-onweb.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/_expanded.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/bb_activity_noact.gif</path>
+<path
+   action="A">/repos/trunk/www/images/corner.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/text2_en.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/activity_completed.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar</path>
+<path
+   action="A">/repos/trunk/www/images/todo/to-do_75.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_download.gif</path>
+<path
+   action="A">/repos/trunk/www/images/line_dash.png</path>
+<path
+   action="A">/repos/trunk/www/images/button_check.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/bb_activity_25.gif</path>
+<path
+   action="A">/repos/trunk/www/images/event/invitation_pending.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/activity_75.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_priv.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/background.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/toolunit.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/25_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/toolevent.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/toolbb.gif</path>
+<path
+   action="A">/repos/trunk/www/images/todo/to-do_completed.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_help.gif</path>
+<path
+   action="A">/repos/trunk/www/images/bg_button.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/19_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/line_dash.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/dashbg.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/whiteline.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/text1_en.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/1_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/text9_en.gif</path>
+<path
+   action="A">/repos/trunk/www/images/logo/cw_small.gif</path>
+<path
+   action="A">/repos/trunk/www/images/arrow_exp.gif</path>
+<path
+   action="A">/repos/trunk/www/images/filearchive/icon_file.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/tooldocument_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/event</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/tooldocument.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/bb_activity_75.gif</path>
+<path
+   action="A">/repos/trunk/www/images/status</path>
+<path
+   action="A">/repos/trunk/www/images/tree/single.gif</path>
+<path
+   action="A">/repos/trunk/www/images/status/status_0.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/text100_en.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/100_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree</path>
+<path
+   action="A">/repos/trunk/www/images/todo/to-do_50.gif</path>
+<path
+   action="A">/repos/trunk/www/images/todo/pri_high.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/w108.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/1.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_logout.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/activity_50.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/_collapsed.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/tooltodo.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/collapsed.gif</path>
+<path
+   action="A">/repos/trunk/www/images/userstatus/pending.gif</path>
+<path
+   action="A">/repos/trunk/www/images/todo/to-do_100.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/activity_unacc.gif</path>
+<path
+   action="A">/repos/trunk/www/images/event/invitation_rejected.gif</path>
+<path
+   action="A">/repos/trunk/www/images/todo/to-do_noact.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/text13_en.gif</path>
+<path
+   action="A">/repos/trunk/www/images/status/status_25.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/text23_en.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/17_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/bb_activity_0.gif</path>
+<path
+   action="A">/repos/trunk/www/images/todo/pri_med.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/17.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_print.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/19.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/toolactivity.gif</path>
+<path
+   action="A">/repos/trunk/www/images/mode/user_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/100.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/text7_en.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/tooltodo_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities</path>
+<path
+   action="A">/repos/trunk/www/images/todo</path>
+<path
+   action="A">/repos/trunk/www/images/filearchive/icon_folder.gif</path>
+<path
+   action="A">/repos/trunk/www/images/activities/bb_activity_50.gif</path>
+<path
+   action="A">/repos/trunk/www/images/filearchive/icon_checkedout.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/toolnews.gif</path>
+<path
+   action="A">/repos/trunk/www/images/toolbar/toolbb_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/todo/pri_low.gif</path>
+<path
+   action="A">/repos/trunk/www/images/status/status_75.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/26_active.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/24.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_info.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_reply.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/26.gif</path>
+<path
+   action="A">/repos/trunk/www/images/actionbutton_middle.gif</path>
+<path
+   action="A">/repos/trunk/www/images/tree/w126.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_med.gif</path>
+<path
+   action="A">/repos/trunk/www/images/mode/override.gif</path>
+<path
+   action="A">/repos/trunk/www/images/button_view.gif</path>
+<path
+   action="A">/repos/trunk/www/images/userstatus/online.gif</path>
+</paths>
+<msg>Added default theme (co2) graphics.</msg>
+</logentry>
+<logentry
+   revision="293">
+<author>solsson</author>
+<date>2005-01-07T13:53:07.981938Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/js/layoutWorkspace.js</path>
+<path
+   action="M">/repos/trunk/www/activity/default.xsl</path>
+<path
+   action="D">/repos/trunk/www/includes</path>
+<path
+   action="M">/repos/trunk/www/xslt/common.xsl</path>
+</paths>
+<msg>Trying to adopt co2.5 layout.</msg>
+</logentry>
+<logentry
+   revision="292">
+<author>solsson</author>
+<date>2005-01-07T13:18:57.664285Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/authentication.inc.php</path>
+<path
+   action="A">/repos/trunk/www/css/coordinator.css</path>
+<path
+   action="A">/repos/trunk/www/activity/default.xsl</path>
+<path
+   action="A">/repos/trunk/www/xslt/common.xsl</path>
+<path
+   action="A">/repos/trunk/www/xslt</path>
+<path
+   action="A">/repos/trunk/www/activity</path>
+</paths>
+<msg>Added stylesheet from coordintor 2.5, not adapted to repos yet.</msg>
+</logentry>
+<logentry
+   revision="289">
+<author>solsson</author>
+<date>2005-01-07T12:57:44.867310Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="M">/repos/trunk/www/svnlayout/sample-layout.html</path>
+<path
+   action="M">/repos/trunk/www/cicons/build.xml</path>
+<path
+   action="D">/repos/trunk/www/cicons/pngbehavior.htc</path>
+</paths>
+<msg>Added link from directory listing to log</msg>
+</logentry>
+<logentry
+   revision="288">
+<author>solsson</author>
+<date>2005-01-07T12:45:21.255164Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/authentication.inc.php</path>
+<path
+   action="M">/repos/trunk/www/log/index.php</path>
+</paths>
+<msg>Updated authentication script to use repos settings.</msg>
+</logentry>
+<logentry
+   revision="287">
+<author>solsson</author>
+<date>2005-01-07T12:28:30.756295Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="M">/repos/trunk/www/css/repos-standard.css</path>
+</paths>
+<msg>Added important note to svnindex-xslt: The file must be on the ame domain as the repository.
+Changed absolute url of png transparency behavior. Running everything from www.repos.se</msg>
+</logentry>
+<logentry
+   revision="286">
+<author>solsson</author>
+<date>2005-01-07T11:29:35.247361Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="M">/repos/trunk/www/svnlayout/sample-layout.html</path>
+<path
+   action="M">/repos/trunk/www/admin/repos-export.php</path>
+<path
+   action="M">/repos/trunk/xdocs/samples/repos-export</path>
+</paths>
+<msg>Changed name of demo repository</msg>
+</logentry>
+<logentry
+   revision="285">
+<author>solsson</author>
+<date>2005-01-07T09:11:22.772799Z</date>
+<paths>
+<path
+   copyfrom-path="/repos/trunk/xdocs/figures"
+   copyfrom-rev="284"
+   action="A">/repos/trunk/docbook/figures</path>
+</paths>
+<msg>Moved sketches folder.</msg>
+</logentry>
+<logentry
+   revision="273">
+<author>solsson</author>
+<date>2005-01-02T17:23:51.652266Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/repos-backup.inc.php</path>
+</paths>
+<msg>Improved feedback messages.</msg>
+</logentry>
+<logentry
+   revision="272">
+<author>solsson</author>
+<date>2005-01-02T17:19:46.153475Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/repos-backup.inc.php</path>
+</paths>
+<msg>Bugfix</msg>
+</logentry>
+<logentry
+   revision="270">
+<author>solsson</author>
+<date>2005-01-02T17:11:08.821247Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/repos-backup.inc.php</path>
+<path
+   action="A">/repos/trunk/xdocs/figures/coordinator_outline.png</path>
+</paths>
+<msg>API-change. Switched order of backup script arguments to be more like svnadmin, and more intuitive.
+Added a sketch of coordinator v3.</msg>
+</logentry>
+<logentry
+   revision="232">
+<author>solsson</author>
+<date>2004-11-28T18:52:44.914886Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/configuration.php</path>
+<path
+   action="M">/repos/trunk/www/htadmin/config.inc.php</path>
+</paths>
+<msg>Insignisificant fixes.</msg>
+</logentry>
+<logentry
+   revision="231">
+<author>solsson</author>
+<date>2004-11-26T13:40:32.758687Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/configuration.php</path>
+</paths>
+<msg>Fixed misspelled configuration entry</msg>
+</logentry>
+<logentry
+   revision="230">
+<author>solsson</author>
+<date>2004-11-26T13:27:53.322489Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/configuration.php</path>
+</paths>
+<msg>Added svn:keywords 'Rev'
+</msg>
+</logentry>
+<logentry
+   revision="221">
+<author>solsson</author>
+<date>2004-11-22T16:39:33.965914Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/repos-admin.inc.php</path>
+<path
+   action="M">/repos/trunk/www/admin/repos-export.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties</path>
+</paths>
+<msg>Suggesting new name for demo/ordbehandlare repository.
+Started working on export script.</msg>
+</logentry>
+<logentry
+   revision="218">
+<author>solsson</author>
+<date>2004-11-22T16:13:20.804596Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="M">/repos/trunk/docbook/repos-admin.xml</path>
+<path
+   action="M">/repos/trunk/xdocs/navigation.xml</path>
+<path
+   action="M">/repos/trunk/www/js/everywhere.js</path>
+<path
+   action="A">/repos/trunk/xdocs/dev/codingstandards.xml</path>
+<path
+   action="M">/repos/trunk/xdocs/dev/index.xml</path>
+</paths>
+<msg>Updated to Springframework 1.1.2.
+Added coding standards to development docs.
+Verified that site:generate works with maven 1.0.1.</msg>
+</logentry>
+<logentry
+   revision="213">
+<author>solsson</author>
+<date>2004-11-19T14:17:40.099156Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/configuration.php</path>
+</paths>
+<msg>Completed apache2 configuration.
+There is a problem with apache2 config tags not being shown in HTML, unless escaped as HTML-entities. However we don't want entities in downloaded files.</msg>
+</logentry>
+<logentry
+   revision="212">
+<author>solsson</author>
+<date>2004-11-19T13:45:46.369758Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/configuration.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties</path>
+</paths>
+<msg>Did some serious brainstorming on generating configuration</msg>
+</logentry>
+<logentry
+   revision="208">
+<author>solsson</author>
+<date>2004-11-18T14:05:25.667369Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="M">/repos/trunk/www/admin/configuration.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties.php</path>
+<path
+   action="M">/repos/trunk/www/log/index.php</path>
+<path
+   action="M">/repos/trunk/www/log/svnlog.xsl</path>
+</paths>
+<msg>Added first configuration help section.
+Modified svnlog to only present log. Have found suggestions on how to present commit statistics for svn, bot none of them work.
+Added supported command 'whoami'.</msg>
+</logentry>
+<logentry
+   revision="206">
+<author>solsson</author>
+<date>2004-11-18T11:10:44.310885Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/repos-export.php</path>
+<path
+   action="M">/repos/trunk/www/conf/xslt/index.php</path>
+<path
+   action="M">/repos/trunk/www/log/index.php</path>
+<path
+   action="M">/repos/trunk/www/log/svnlog.xsl</path>
+</paths>
+<msg>Included stylesheet info in --xml output.
+Fixed svnlog.xsl. Apparently the XML format has changed since that file was created.</msg>
+</logentry>
+<logentry
+   revision="205">
+<author>solsson</author>
+<date>2004-11-18T09:24:58.996376Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="M">/repos/trunk/www/admin/configuration.php</path>
+<path
+   action="M">/repos/trunk/www/conf/xslt/index.php</path>
+<path
+   action="M">/repos/trunk/www/log/index.php</path>
+</paths>
+<msg>Fixed configuration checking of URLs.
+Applied proper content types where needed.</msg>
+</logentry>
+<logentry
+   revision="204">
+<author>solsson</author>
+<date>2004-11-18T08:47:24.273886Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/log</path>
+<path
+   action="A">/repos/trunk/www/conf/xslt/index.php</path>
+<path
+   action="A">/repos/trunk/www/log/index.php</path>
+<path
+   action="A">/repos/trunk/www/log/svnlog.xsl</path>
+<path
+   action="A">/repos/trunk/www/conf/xslt</path>
+<path
+   action="A">/repos/trunk/www/log/svnlog.css</path>
+</paths>
+<msg>Added xslt import file for repos.properties.
+Added simple log output as text.
+Added svnlog layout xslt that I found somewhere.</msg>
+</logentry>
+<logentry
+   revision="202">
+<author>solsson</author>
+<date>2004-11-16T16:36:45.535182Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+</paths>
+<msg>Tried to add localhost url to repository.</msg>
+</logentry>
+<logentry
+   revision="201">
+<author>solsson</author>
+<date>2004-11-16T16:27:55.487786Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="M">/repos/trunk/www/admin/configuration.php</path>
+<path
+   action="A">/repos/trunk/www/admin/index.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties.php</path>
+</paths>
+<msg>Completed configuration analysis.
+Added administration navigation.
+Updated skeleton for configuation help script.</msg>
+</logentry>
+<logentry
+   revision="200">
+<author>solsson</author>
+<date>2004-11-16T12:24:04.963358Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="M">/repos/trunk/www/admin/repos-admin.inc.php</path>
+<path
+   copyfrom-path="/repos/trunk/www/images/icons"
+   copyfrom-rev="199"
+   action="A">/repos/trunk/www/cicons</path>
+<path
+   action="D">/repos/trunk/www/images/icons</path>
+</paths>
+<msg>Moved icons to cicons not to collide woth apache default folder. Need cicons in root because it is default theme and could be overridden by new themes.
+Adde configuration presentation.</msg>
+</logentry>
+<logentry
+   revision="199">
+<author>solsson</author>
+<date>2004-11-16T11:08:17.773399Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+</paths>
+<msg>Added configuration presentation.</msg>
+</logentry>
+<logentry
+   revision="191">
+<author>solsson</author>
+<date>2004-11-13T21:35:04.916556Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/repos-backup.inc.php</path>
+</paths>
+<msg>Added MD5 sums checking.</msg>
+</logentry>
+<logentry
+   revision="190">
+<author>solsson</author>
+<date>2004-11-13T11:14:10.828397Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/repos-backup.inc.php</path>
+<path
+   action="M">/repos/trunk/www/admin/repos-admin.inc.php</path>
+<path
+   action="M">/repos/trunk/xdocs/samples/repos-export</path>
+<path
+   action="M">/repos/trunk/www/index.html</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties.php</path>
+</paths>
+<msg>Admin: Backup, load and verify now works on Windows.
+Updated startpage text.
+</msg>
+</logentry>
+<logentry
+   revision="189">
+<author>solsson</author>
+<date>2004-11-12T12:46:16.412546Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/repos-backup.inc.php</path>
+<path
+   action="M">/repos/trunk/www/admin/repos-admin.inc.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties.php</path>
+</paths>
+<msg>Wrote dump script. Still not tested.</msg>
+</logentry>
+<logentry
+   revision="188">
+<author>solsson</author>
+<date>2004-11-12T11:26:56.217903Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/repos-admin.inc.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties.php</path>
+</paths>
+<msg>repos-admin.inc.php is now working</msg>
+</logentry>
+<logentry
+   revision="187">
+<author>solsson</author>
+<date>2004-11-11T19:31:25.987167Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/admin/repos-backup.inc.php</path>
+<path
+   action="M">/repos/trunk/www/admin/repos-admin.inc.php</path>
+<path
+   action="D">/repos/trunk/www/administration</path>
+<path
+   copyfrom-path="/repos/trunk/www/administration"
+   copyfrom-rev="186"
+   action="A">/repos/trunk/www/admin</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties.php</path>
+</paths>
+<msg>Needed a shorter path to administration scripts.
+Added global helper functions and getters to repos.properties.
+Refactored admin scripts.
+Added simple unit test concept.</msg>
+</logentry>
+<logentry
+   revision="186">
+<author>solsson</author>
+<date>2004-11-11T14:22:10.479704Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/administration/repos-admin.inc.php</path>
+<path
+   action="M">/repos/trunk/www/administration/repos-backup.inc.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties.php</path>
+</paths>
+<msg>Started refactoring of admin scripts.
+</msg>
+</logentry>
+<logentry
+   revision="178">
+<author>solsson</author>
+<date>2004-11-10T21:24:50.449501Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/administration/repos-admin.inc.php</path>
+<path
+   action="A">/repos/trunk/www/administration/configuration.php</path>
+<path
+   action="A">/repos/trunk/www/administration/repos-export.php</path>
+<path
+   action="A">/repos/trunk/www/administration/update-www.sh</path>
+<path
+   action="A">/repos/trunk/www/administration/repos-backup-verify.php</path>
+<path
+   action="A">/repos/trunk/www/administration/repos-backup-svn-incremental.php</path>
+<path
+   action="A">/repos/trunk/www/administration/verify-svn-backup.sh</path>
+<path
+   action="A">/repos/trunk/www/administration/repos-backup-database-to-repo.php</path>
+<path
+   action="M">/repos/trunk/www/administration/repos-backup.inc.php</path>
+<path
+   action="A">/repos/trunk/www/administration/dump-mysql-to-repo</path>
+<path
+   action="A">/repos/trunk/www/administration/dump-svn-repo-incremental</path>
+<path
+   action="A">/repos/trunk/www/administration/verify-backup-optime.sh</path>
+</paths>
+<msg>Added administration ideas and the original shell scripts for reference.</msg>
+</logentry>
+<logentry
+   revision="177">
+<author>solsson</author>
+<date>2004-11-10T15:52:45.682380Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/administration/repos-admin.inc.php</path>
+<path
+   action="A">/repos/trunk/www/administration</path>
+<path
+   action="A">/repos/trunk/www/administration/repos-backup.inc.php</path>
+</paths>
+<msg>Added platform independent administration scripts.
+Verified backup recovery script on windows and SuSE.
+</msg>
+</logentry>
+<logentry
+   revision="176">
+<author>solsson</author>
+<date>2004-11-10T15:50:47.021797Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/logo/repos.ico</path>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties</path>
+<path
+   action="M">/repos/trunk/www/index.html</path>
+<path
+   action="M">/repos/trunk/www/phprun/.phprun.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties.php</path>
+</paths>
+<msg>Some more ideas on configuration.</msg>
+</logentry>
+<logentry
+   revision="91">
+<author>kalleh</author>
+<date>2004-11-04T07:30:26.029117Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/about/index.html</path>
+</paths>
+<msg>Rättning stavfel</msg>
+</logentry>
+<logentry
+   revision="90">
+<author>solsson</author>
+<date>2004-11-02T15:27:40.328183Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="M">/repos/trunk/.classpath</path>
+<path
+   action="M">/repos/trunk/www/phprun/.phprun.php</path>
+<path
+   action="A">/repos/trunk/www/iniedit/iniedit.php</path>
+</paths>
+<msg>Halfway through porting iniedit.pl to php.
+Updated Slide to beta2.</msg>
+</logentry>
+<logentry
+   revision="89">
+<author>solsson</author>
+<date>2004-10-26T07:13:02.007756Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/logout.php</path>
+<path
+   action="M">/repos/trunk/www/conf/phpicalendar.inc.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties.php</path>
+</paths>
+<msg>Found out why logout does not work in IE.
+Reinforced the use of repos.properties PHP wrapper.</msg>
+</logentry>
+<logentry
+   revision="88">
+<author>solsson</author>
+<date>2004-10-25T18:12:49.990174Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/authentication.inc.php</path>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="M">/repos/trunk/www/conf/logout.php</path>
+</paths>
+<msg>Logout script working in mozilla but looking strange in IE</msg>
+</logentry>
+<logentry
+   revision="87">
+<author>solsson</author>
+<date>2004-10-25T15:10:58.899189Z</date>
+<paths>
+<path
+   action="D">/repos/trunk/www/phpicalendar/index.php</path>
+<path
+   action="M">/repos/trunk/www/conf/phpicalendar.inc.php</path>
+<path
+   action="M">/repos/trunk/www/phpicalendar/config.inc.php</path>
+</paths>
+<msg>Added strategy for including file from included file that does not know the path of the running script (phpicalendar/config.inc.php).
+No longer need changed index.php.
+Added strategy for including with relative path from included file (phpcalendar.inc.php).</msg>
+</logentry>
+<logentry
+   revision="86">
+<author>solsson</author>
+<date>2004-10-25T14:19:03.268768Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/authentication.inc.php</path>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="A">/repos/trunk/www/conf/logout.php</path>
+<path
+   action="M">/repos/trunk/www/phpicalendar/index.php</path>
+<path
+   action="M">/repos/trunk/www/conf/phpicalendar.inc.php</path>
+<path
+   action="A">/repos/trunk/www/phpicalendar/config.inc.php</path>
+</paths>
+<msg>Fixed authentication, but the design needs a critical review.
+Added config file for phpicalendar because changes must be there instead of in index.html for them to be included in all scripts.</msg>
+</logentry>
+<logentry
+   revision="85">
+<author>solsson</author>
+<date>2004-10-25T10:32:54.495897Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/authentication.inc.php</path>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="M">/repos/trunk/www/conf/phpicalendar.inc.php</path>
+</paths>
+<msg>Verified</msg>
+</logentry>
+<logentry
+   revision="84">
+<author>solsson</author>
+<date>2004-10-25T10:31:42.547616Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/phpicalendar.inc.php</path>
+</paths>
+<msg>Tried authentication strategy</msg>
+</logentry>
+<logentry
+   revision="83">
+<author>solsson</author>
+<date>2004-10-25T10:18:38.618122Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/phpicalendar/index.php</path>
+</paths>
+<msg></msg>
+</logentry>
+<logentry
+   revision="82">
+<author>solsson</author>
+<date>2004-10-25T10:18:14.436721Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/authentication.inc.php</path>
+<path
+   action="M">/repos/trunk/www/conf/phpicalendar.inc.php</path>
+</paths>
+<msg></msg>
+</logentry>
+<logentry
+   revision="81">
+<author>solsson</author>
+<date>2004-10-25T10:02:40.308532Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/maven.xml</path>
+<path
+   action="D">/repos/trunk/war/WEB-INF/local.properties</path>
+<path
+   action="M">/repos/trunk/www/conf/authentication.inc.php</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/applicationContext.xml</path>
+<path
+   action="M">/repos/trunk/docbook/repos-admin.xml</path>
+<path
+   action="A">/repos/trunk/war/WEB-INF/repos.properties</path>
+</paths>
+<msg>Added copying settings from conf to webapp.</msg>
+</logentry>
+<logentry
+   revision="80">
+<author>solsson</author>
+<date>2004-10-25T09:53:56.349218Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties</path>
+</paths>
+<msg>Apparently comment lines should start with ';' in ini file.
+We already have a problem sith accessing authentication headers.</msg>
+</logentry>
+<logentry
+   revision="79">
+<author>solsson</author>
+<date>2004-10-25T09:42:54.632285Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties</path>
+</paths>
+<msg>Bugfixes</msg>
+</logentry>
+<logentry
+   revision="78">
+<author>solsson</author>
+<date>2004-10-25T09:39:53.373455Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="M">/repos/trunk/www/phpicalendar/index.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties</path>
+<path
+   action="M">/repos/trunk/www/conf/phpicalendar.inc.php</path>
+</paths>
+<msg>Added authentication debug.
+Added sample config property.
+Updated inclusion path for phpicalendar.</msg>
+</logentry>
+<logentry
+   revision="77">
+<author>solsson</author>
+<date>2004-10-25T09:28:21.770680Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="M">/repos/trunk/www/conf/repos.properties</path>
+<path
+   copyfrom-path="/repos/trunk/www/conf/derived/phpicalendar.inc.php"
+   copyfrom-rev="76"
+   action="A">/repos/trunk/www/conf/phpicalendar.inc.php</path>
+<path
+   copyfrom-path="/repos/trunk/www/conf/derived/repos.properties.php"
+   copyfrom-rev="76"
+   action="A">/repos/trunk/www/conf/repos.properties.php</path>
+<path
+   action="D">/repos/trunk/www/conf/derived/phpicalendar.inc.php</path>
+<path
+   action="D">/repos/trunk/www/conf/derived/repos.properties.php</path>
+</paths>
+<msg>Need everything in one folder to avoid path confusion. Seems consecutive include() in php is relative to the script that did the first inclusion.</msg>
+</logentry>
+<logentry
+   revision="76">
+<author>solsson</author>
+<date>2004-10-25T09:18:47.463475Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/conf/index.php</path>
+<path
+   action="A">/repos/trunk/www/conf/derived/phpicalendar.inc.php</path>
+<path
+   action="A">/repos/trunk/www/conf/derived/repos.properties.php</path>
+</paths>
+<msg>Some bugfixes for last commit</msg>
+</logentry>
+<logentry
+   revision="75">
+<author>solsson</author>
+<date>2004-10-25T09:12:49.968068Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/conf/authentication.inc.php</path>
+<path
+   action="A">/repos/trunk/www/conf/index.php</path>
+<path
+   action="A">/repos/trunk/www/conf/derived</path>
+<path
+   action="M">/repos/trunk/www/phpicalendar/index.php</path>
+<path
+   action="A">/repos/trunk/www/conf/repos.properties</path>
+</paths>
+<msg>Added settings file 'repos.properties'.
+Added authentication script for inclusion anywhere.
+Costomized phpicalendar configuration.</msg>
+</logentry>
+<logentry
+   revision="74">
+<author>solsson</author>
+<date>2004-10-25T07:34:32.751288Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/about/index.html</path>
+<path
+   action="A">/repos/trunk/www/conf</path>
+<path
+   action="A">/repos/trunk/www/phpicalendar/index.php</path>
+</paths>
+<msg>Added 'conf' directory for shared configuration.
+Added unmodified phpicalendar-2.0beta index file.</msg>
+</logentry>
+<logentry
+   revision="73">
+<author>solsson</author>
+<date>2004-10-23T17:35:25.991097Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/css/repos-standard.css</path>
+<path
+   action="M">/repos/trunk/www/index.html</path>
+</paths>
+<msg>Seems that the behavior (.htc) file must be on the same server as the repository.
+Fixed a typo in startpage.</msg>
+</logentry>
+<logentry
+   revision="72">
+<author>solsson</author>
+<date>2004-10-23T17:23:43.457438Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/demo</path>
+<path
+   action="M">/repos/trunk/www/index.html</path>
+<path
+   action="A">/repos/trunk/www/demo/index.html</path>
+</paths>
+<msg>Shouldn't be much text on an indexpage with the framed layout.</msg>
+</logentry>
+<logentry
+   revision="71">
+<author>solsson</author>
+<date>2004-10-23T17:14:03.484216Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="A">/repos/trunk/www/about/index.html</path>
+<path
+   action="M">/repos/trunk/www/css/repos-standard.css</path>
+<path
+   action="M">/repos/trunk/www/index.html</path>
+<path
+   action="M">/repos/trunk/readme.html</path>
+<path
+   action="A">/repos/trunk/www/about/dokumentation.html</path>
+</paths>
+<msg>Added "framed" layout to first page.
+Added marketing idéas to "about" folder.
+Fixed bug in svnindex xsl where {$iconsUrl} is now used properly.</msg>
+</logentry>
+<logentry
+   revision="70">
+<author>solsson</author>
+<date>2004-10-23T16:34:28.877296Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="D">/repos/trunk/www/icons</path>
+<path
+   copyfrom-path="/repos/trunk/www/icons/build.xml"
+   copyfrom-rev="66"
+   action="R">/repos/trunk/www/images/icons/build.xml</path>
+<path
+   copyfrom-path="/repos/trunk/www/icons"
+   copyfrom-rev="65"
+   action="A">/repos/trunk/www/images/icons</path>
+</paths>
+<msg>Had to move 'icons' folder because ir conflicted with the Apache folder with the same name.</msg>
+</logentry>
+<logentry
+   revision="69">
+<author>solsson</author>
+<date>2004-10-22T20:02:49.810555Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+</paths>
+<msg>Oops. Last commit of repos.xml was temporarily canged for local use.</msg>
+</logentry>
+<logentry
+   revision="68">
+<author>solsson</author>
+<date>2004-10-22T19:55:28.659064Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/css/blank.gif</path>
+<path
+   action="M">/repos/trunk/www/css/repos-standard.css</path>
+<path
+   action="M">/repos/trunk/www/css/pngbehavior.htc</path>
+<path
+   action="D">/repos/trunk/www/svnlayout/blank.gif</path>
+</paths>
+<msg>Added absolute reference to pngbehavior and blank.gif.
+Note that the url is hardcoded to http://www.repos.se/css.</msg>
+</logentry>
+<logentry
+   revision="67">
+<author>solsson</author>
+<date>2004-10-22T19:42:07.679969Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/css/repos-standard.css</path>
+<path
+   copyfrom-path="/repos/trunk/www/icons/pngbehavior.htc"
+   copyfrom-rev="66"
+   action="A">/repos/trunk/www/css/pngbehavior.htc</path>
+<path
+   action="D">/repos/trunk/www/icons/pngbehavior.htc</path>
+</paths>
+<msg>Moved transparency script
+</msg>
+</logentry>
+<logentry
+   revision="66">
+<author>solsson</author>
+<date>2004-10-22T19:39:11.651837Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="M">/repos/trunk/www/icons/build.xml</path>
+<path
+   action="M">/repos/trunk/www/icons/pngbehavior.htc</path>
+<path
+   action="D">/repos/trunk/www/css/svnindex.css</path>
+<path
+   action="A">/repos/trunk/www/svnlayout/blank.gif</path>
+<path
+   action="M">/repos/trunk/www/svnlayout/sample-xml-1.xml</path>
+</paths>
+<msg>Found new version of pngbehavior.htc
+Added blank.gif in page folder to make pngbehavior work.</msg>
+</logentry>
+<logentry
+   revision="65">
+<author>solsson</author>
+<date>2004-10-22T16:53:42.771260Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="M">/repos/trunk/www/svnlayout/sample-layout.html</path>
+<path
+   action="M">/repos/trunk/www/css/repos-standard.css</path>
+<path
+   action="A">/repos/trunk/www/icons/pngbehavior.htc</path>
+</paths>
+<msg>Tried to make 24bit pngs transparent in IE, using htc file. Relative reference (from css) not verified. Transparency seems to work but adds borders and funny icon in the middle of all images.</msg>
+</logentry>
+<logentry
+   revision="64">
+<author>solsson</author>
+<date>2004-10-22T13:23:35.455259Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="M">/repos/trunk/www/navigation/navigation.xsl</path>
+<path
+   action="M">/repos/trunk/www/svnlayout/sample-layout.html</path>
+<path
+   action="A">/repos/trunk/www/icons/xls.png</path>
+<path
+   action="M">/repos/trunk/www/css/repos-standard.css</path>
+<path
+   action="M">/repos/trunk/www/icons/build.xml</path>
+<path
+   action="M">/repos/trunk/www/navigation/navigation.xml</path>
+</paths>
+<msg>New good looking file listing with icons.
+Only problem is that 24 bit transparent pngs don't work in MSIE.</msg>
+</logentry>
+<logentry
+   revision="63">
+<author>solsson</author>
+<date>2004-10-21T14:21:41.334019Z</date>
+<paths>
+<path
+   action="D">/repos/trunk/www/icons/html.png</path>
+<path
+   action="D">/repos/trunk/www/icons/doc.png</path>
+<path
+   action="D">/repos/trunk/www/icons/_parent.png</path>
+<path
+   action="M">/repos/trunk/www/tinymce/build.xml</path>
+<path
+   action="D">/repos/trunk/www/icons/_folder.png</path>
+<path
+   action="A">/repos/trunk/www/icons/build.xml</path>
+<path
+   action="D">/repos/trunk/www/icons/_file.png</path>
+</paths>
+<msg>Added open source icon package.
+Added property Show_credits to dependency script.</msg>
+</logentry>
+<logentry
+   revision="62">
+<author>solsson</author>
+<date>2004-10-21T10:53:11.318653Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/xdocs/samples/repos-access</path>
+<path
+   action="A">/repos/trunk/xdocs/samples/repos-export</path>
+<path
+   action="A">/repos/trunk/xdocs/samples/repos-users</path>
+<path
+   action="M">/repos/trunk/readme.html</path>
+</paths>
+<msg>Refined template design.
+Added repository administration examples.</msg>
+</logentry>
+<logentry
+   revision="61">
+<author>solsson</author>
+<date>2004-10-21T09:04:46.143298Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/about/installing.html</path>
+<path
+   action="M">/repos/trunk/www/css/repos-standard.css</path>
+<path
+   action="A">/repos/trunk/www/about</path>
+<path
+   action="M">/repos/trunk/readme.html</path>
+</paths>
+<msg>New suggested layout for information pages.
+Added folder "about" for sales information.
+Added marketing text on how we implement Repos at the customer.</msg>
+</logentry>
+<logentry
+   revision="60">
+<author>solsson</author>
+<date>2004-10-20T07:55:00.643009Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/xdocs/dependencies/index.footer</path>
+<path
+   action="A">/repos/trunk/xdocs/dependencies/index.header</path>
+</paths>
+<msg>Added header and footer for dependency index file. These should probably never be changed.</msg>
+</logentry>
+<logentry
+   revision="59">
+<author>solsson</author>
+<date>2004-10-19T15:54:46.776039Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/maven.xml</path>
+<path
+   action="M">/repos/trunk/www/htadmin/build.xml</path>
+<path
+   copyfrom-path="/repos/trunk/xdocs/status.xml"
+   copyfrom-rev="57"
+   action="A">/repos/trunk/xdocs/index.xml</path>
+<path
+   action="M">/repos/trunk/www/tinymce/build.xml</path>
+<path
+   action="M">/repos/trunk/www/phpicalendar/build.xml</path>
+<path
+   action="M">/repos/trunk/docbook/repos-admin.xml</path>
+<path
+   action="M">/repos/trunk/xdocs/navigation.xml</path>
+<path
+   action="M">/repos/trunk/docbook/repos-manual.xml</path>
+<path
+   action="D">/repos/trunk/xdocs/status.xml</path>
+</paths>
+<msg>Verified site navigation</msg>
+</logentry>
+<logentry
+   revision="58">
+<author>solsson</author>
+<date>2004-10-19T15:44:45.772043Z</date>
+<paths>
+<path
+   action="D">/repos/trunk/xdocs/index.xml</path>
+<path
+   action="A">/repos/trunk/xdocs/dev/directories.xml</path>
+<path
+   action="M">/repos/trunk/xdocs/dependencies/build.xsl</path>
+<path
+   action="M">/repos/trunk/xdocs/components/index.xml</path>
+<path
+   action="D">/repos/trunk/xdocs/dependencies/_index.xml</path>
+<path
+   action="M">/repos/trunk/xdocs/navigation.xml</path>
+<path
+   action="M">/repos/trunk/xdocs/dev/products.xml</path>
+<path
+   action="D">/repos/trunk/xdocs/dev/coding.xml</path>
+<path
+   action="D">/repos/trunk/xdocs/dev/install.xml</path>
+<path
+   action="M">/repos/trunk/xdocs/dev/index.xml</path>
+</paths>
+<msg>Restructured documentation</msg>
+</logentry>
+<logentry
+   revision="57">
+<author>solsson</author>
+<date>2004-10-19T12:13:01.725847Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/index.html</path>
+</paths>
+<msg>Fixade innehåll på förstasidan</msg>
+</logentry>
+<logentry
+   revision="56">
+<author>solsson</author>
+<date>2004-10-19T10:29:51.168449Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/www/index.html</path>
+<path
+   action="M">/repos/trunk/readme.html</path>
+<path
+   action="M">/repos/trunk/www/logo/repos1.png</path>
+<path
+   action="M">/repos/trunk/www/logo/repos2.png</path>
+<path
+   action="M">/repos/trunk/www/logo/repos4.png</path>
+</paths>
+<msg>Updated welcome page and logos</msg>
+</logentry>
+<logentry
+   revision="55">
+<author>solsson</author>
+<date>2004-10-19T09:59:47.494478Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/tutorials/networkfolder.php</path>
+<path
+   action="A">/repos/trunk/xdocs/dependencies</path>
+<path
+   action="A">/repos/trunk/www/tutorials</path>
+<path
+   action="A">/repos/trunk/xdocs/dependencies/build.xsl</path>
+<path
+   action="A">/repos/trunk/xdocs/dependencies/_index.xml</path>
+</paths>
+<msg>Forgot some files yesterday</msg>
+</logentry>
+<logentry
+   revision="54">
+<author>solsson</author>
+<date>2004-10-19T09:19:55.230325Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/readme.html</path>
+</paths>
+<msg>added svn:keyword=Id property</msg>
+</logentry>
+<logentry
+   revision="53">
+<author>solsson</author>
+<date>2004-10-18T16:02:56.279845Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/docbook/sdocbook.css</path>
+<path
+   action="A">/repos/trunk/docbook/repos-admin.xml</path>
+<path
+   action="A">/repos/trunk/docbook/sdocbook.dtd</path>
+<path
+   action="A">/repos/trunk/docbook</path>
+<path
+   action="A">/repos/trunk/docbook/repos-manual.xml</path>
+</paths>
+<msg>Added user documentation as Docbook</msg>
+</logentry>
+<logentry
+   revision="52">
+<author>solsson</author>
+<date>2004-10-18T16:02:22.731731Z</date>
+<paths>
+<path
+   action="D">/repos/trunk/www/htadmin/index.php</path>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="M">/repos/trunk/maven.xml</path>
+<path
+   action="A">/repos/trunk/www/htadmin/build.xml</path>
+<path
+   action="M">/repos/trunk/xdocs/components/index.xml</path>
+<path
+   action="A">/repos/trunk/www/phpicalendar/build.xml</path>
+<path
+   action="A">/repos/trunk/www/phpicalendar</path>
+<path
+   action="M">/repos/trunk/xdocs/navigation.xml</path>
+<path
+   action="D">/repos/trunk/www/htadmin/edit.php</path>
+<path
+   action="D">/repos/trunk/www/htadmin/add.php</path>
+<path
+   action="A">/repos/trunk/www/tinymce/build.xml</path>
+<path
+   action="M">/repos/trunk/build.properties</path>
+<path
+   action="D">/repos/trunk/www/htadmin/create-htaccess.php</path>
+<path
+   action="A">/repos/trunk/www/index.html</path>
+<path
+   action="D">/repos/trunk/www/htadmin/header.inc.php</path>
+<path
+   action="D">/repos/trunk/www/htadmin/browse.php</path>
+<path
+   action="D">/repos/trunk/www/htadmin/view-htpasswd.php</path>
+<path
+   action="D">/repos/trunk/www/htadmin/footer.inc.php</path>
+<path
+   action="M">/repos/trunk/xdocs/dev/index.xml</path>
+</paths>
+<msg>Added automatic installation and documentation of www dependencies, using ant scripts named build.xml in any /www subfolder.</msg>
+</logentry>
+<logentry
+   revision="50">
+<author>solsson</author>
+<date>2004-10-16T08:24:35.858589Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   copyfrom-path="/repos/trunk/lib"
+   copyfrom-rev="49"
+   action="A">/repos/trunk/war/WEB-INF/lib</path>
+<path
+   action="D">/repos/trunk/lib</path>
+<path
+   action="M">/repos/trunk/build.properties</path>
+</paths>
+<msg>Added user documentation as Docbook (simple dtd)
+Moved lib to WEB-INF. Only for dependencies not handled by maven.</msg>
+</logentry>
+<logentry
+   revision="48">
+<author>solsson</author>
+<date>2004-10-13T12:01:37.526815Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/themes</path>
+<path
+   action="A">/repos/trunk/www/phprun/.phprun.php</path>
+<path
+   action="A">/repos/trunk/www/navigation/navigation.xml</path>
+<path
+   action="A">/repos/trunk/www/navigation</path>
+<path
+   action="A">/repos/trunk/www/navigation/toolbar.xml</path>
+<path
+   action="M">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="M">/repos/trunk/www/svnlayout/sample-layout.html</path>
+<path
+   action="A">/repos/trunk/www/navigation/navigation.xsl</path>
+<path
+   action="A">/repos/trunk/www/themes/coordinator/in-repository_copy_icons+buttons+css_to_here</path>
+<path
+   action="A">/repos/trunk/www/navigation/sample-main.html</path>
+<path
+   action="A">/repos/trunk/www/navigation/navigation.dtd</path>
+<path
+   action="A">/repos/trunk/www/themes/coordinator</path>
+<path
+   action="A">/repos/trunk/www/navigation/indexunit.html</path>
+<path
+   action="A">/repos/trunk/www/navigation/index.html</path>
+<path
+   action="A">/repos/trunk/www/phprun</path>
+<path
+   action="M">/repos/trunk/www/js/everywhere.js</path>
+<path
+   action="M">/repos/trunk/www/logo/repos.psd</path>
+<path
+   action="A">/repos/trunk/www/css/svnindex.css</path>
+<path
+   action="A">/repos/trunk/www/css/navigation.css</path>
+<path
+   action="M">/repos/trunk/www/svnlayout/sample-xml-1.xml</path>
+</paths>
+<msg>Added frames-based navigation.
+Added cookie handling to default js.
+Added idea on how to run php-code directly from repository.
+Added themes folder concept.
+Changed the logo: removed 1px height from icon.
+Set logo width/height ratio to be 4x1.</msg>
+</logentry>
+<logentry
+   revision="47">
+<author>solsson</author>
+<date>2004-10-11T15:10:42.917983Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/svnlayout/repos.xsl</path>
+<path
+   action="A">/repos/trunk/www/icons/html.png</path>
+<path
+   action="A">/repos/trunk/www/icons/doc.png</path>
+<path
+   action="A">/repos/trunk/www/svnlayout/sample-layout.html</path>
+<path
+   action="M">/repos/trunk/www/css/repos-standard.css</path>
+<path
+   action="A">/repos/trunk/www/icons/_parent.png</path>
+<path
+   action="A">/repos/trunk/www/icons/_folder.png</path>
+<path
+   action="A">/repos/trunk/www/icons</path>
+<path
+   action="A">/repos/trunk/www/icons/_file.png</path>
+<path
+   action="A">/repos/trunk/www/js</path>
+<path
+   action="A">/repos/trunk/www/js/everywhere.js</path>
+<path
+   action="M">/repos/trunk/www/logo/repos.psd</path>
+<path
+   action="M">/repos/trunk/www/logo/repos2.png</path>
+<path
+   action="M">/repos/trunk/www/svnlayout/sample-xml-1.xml</path>
+</paths>
+<msg>Added completely reqorked SVNIndexXSLT.
+Created shared layout templates in default stylesheet.
+Shared layout templates match TinyMCE layout. Could probably use TinyMCE for button hovering etc.
+Added icons.
+Made logo2 transparent, and using bilinear resize for sharper icon.</msg>
+</logentry>
+<logentry
+   revision="46">
+<author>solsson</author>
+<date>2004-10-11T09:19:13.884798Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="M">/repos/trunk/src/test/se/optime/repos/webdav/ConnectionExceptionTest.java</path>
+<path
+   action="M">/repos/trunk/www/css/repos-standard.css</path>
+<path
+   action="M">/repos/trunk/build.properties</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/ConnectionException.java</path>
+<path
+   action="M">/repos/trunk/src/test/se/optime/repos/user/MockAuthenticationResolver.java</path>
+<path
+   action="M">/repos/trunk/src/test/se/optime/repos/webdav/RepositoryControllerTest.java</path>
+<path
+   action="M">/repos/trunk/src/test/se/optime/repos/webdav/RepositoryResourceTest.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/RepositoryAccessException.java</path>
+</paths>
+<msg>Use of easymock dynamocks in testing.
+Classified error codes.
+Added recognition of @todo tag in javadoc and Task list.</msg>
+</logentry>
+<logentry
+   revision="45">
+<author>solsson</author>
+<date>2004-10-10T20:53:30.141804Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/user/BasicAuthenticationResolver.java</path>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/WebResource.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/ConnectionException.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/package.html</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/user/StaticAuthenticationResolver.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/calendar/package.html</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/InvalidPathException.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/InvalidContentsException.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryController.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/user/package.html</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/document/package.html</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryResource.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/document/DocumentController.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/action/package.html</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/webdav/action</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/webdav/action/RepositoryActionControllerTest.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryDataBinder.java</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/webdav/action/RepositoryUpdateTest.java</path>
+<path
+   action="M">/repos/trunk/build.properties</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/action/RepositoryActionController.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/WebdavFactory.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/tags/package.html</path>
+<path
+   action="M">/repos/trunk/.classpath</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/subversion/package.html</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/package.html</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/DoesNotExistException.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/InvalidTypeException.java</path>
+</paths>
+<msg>Javadocs are now covering all code.
+Added references in javadoc to important dependencies.</msg>
+</logentry>
+<logentry
+   revision="44">
+<author>solsson</author>
+<date>2004-10-10T18:11:29.958301Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/StubWebResource.java</path>
+<path
+   action="M">/repos/trunk/maven.xml</path>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/webdav/ConnectionExceptionTest.java</path>
+<path
+   copyfrom-path="/repos/trunk/src/java/se/optime/repos/webdav/WrappedHttpException.java"
+   copyfrom-rev="42"
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/ConnectionException.java</path>
+<path
+   action="M">/repos/trunk/xdocs/components/index.xml</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/webdav/RepositoryControllerTest.java</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/document</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/RepositoryPath.java</path>
+<path
+   action="M">/repos/trunk/src/test/se/optime/repos/webdav/RepositoryResourceTest.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryResource.java</path>
+<path
+   action="M">/repos/trunk/.project</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/tags/StreamOutputTagTest.java</path>
+<path
+   action="M">/repos/trunk/build.properties</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/tags/StreamOutputTag.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/action/RepositoryUpdate.java</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/webdav/RepositoryPathValidatorTest.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/WebdavFactory.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryPathValidator.java</path>
+<path
+   action="M">/repos/trunk/.classpath</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/webdav/DoesNotExistExceptionTest.java</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/RepositoryAccessExceptionTest.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/action/NewFolderController.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/RepositoryAccessException.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/action/NewFileController.java</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/StubRepositoryPath.java</path>
+<path
+   action="D">/repos/trunk/src/java/se/optime/repos/webdav/WrappedHttpException.java</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/document/DocumentControllerTest.java</path>
+<path
+   action="D">/repos/trunk/src/test/se/optime/repos/UnitTests.java</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/user/AccessDecisionVoterAllowAllTest.java</path>
+<path
+   copyfrom-path="/repos/trunk/src/test/se/optime/repos/UnitTests.java"
+   copyfrom-rev="43"
+   action="A">/repos/trunk/src/test/se/optime/repos/ReposUnitTests.java</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/tags</path>
+<path
+   action="M">/repos/trunk/xdocs/dev/coding.xml</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/Webdav.java</path>
+</paths>
+<msg>Upgraded acegi to 0.6.1.
+Added a whole lot of tests, and jcoverage report.</msg>
+</logentry>
+<logentry
+   revision="43">
+<author>solsson</author>
+<date>2004-10-08T18:30:06.142368Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/repos-servlet.xml</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/action/RepositoryActionController.java</path>
+<path
+   action="D">/repos/trunk/src/java/se/optime/document</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/action/RepositoryUpdate.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/action/SaveFileController.java</path>
+<path
+   action="M">/repos/trunk/www/document.tinymce.inc.jsp</path>
+<path
+   action="M">/repos/trunk/www/document.edit.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/src/java/se/optime/document"
+   copyfrom-rev="39"
+   action="A">/repos/trunk/src/java/se/optime/repos/document</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/InvalidTypeException.java</path>
+<path
+   copyfrom-path="/repos/trunk/www/repos._template.jsp"
+   copyfrom-rev="42"
+   action="A">/repos/trunk/www/directory.jsp</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/RepositoryAccessException.java</path>
+<path
+   copyfrom-path="/repos/trunk/src/java/se/optime/document/DocumentController.java"
+   copyfrom-rev="42"
+   action="R">/repos/trunk/src/java/se/optime/repos/document/DocumentController.java</path>
+<path
+   action="M">/repos/trunk/src/test/se/optime/repos/UnitTests.java</path>
+</paths>
+<msg>Completed Save action.
+Moved document editor and tested saving.</msg>
+</logentry>
+<logentry
+   revision="42">
+<author>solsson</author>
+<date>2004-10-08T12:41:07.682884Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="A">/repos/trunk/www/iniedit</path>
+<path
+   action="A">/repos/trunk/xdocs/components/index.xml</path>
+<path
+   action="D">/repos/trunk/src/java/se/optime/repos/webdav/subversion</path>
+<path
+   copyfrom-path="/repos/trunk/www/document/document.tinymce.inc.jsp"
+   copyfrom-rev="41"
+   action="A">/repos/trunk/www/document.tinymce.inc.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/www/includes/repos.head.inc.jsp"
+   copyfrom-rev="41"
+   action="A">/repos/trunk/www/repos.head.inc.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/www/document/document.edit.jsp"
+   copyfrom-rev="41"
+   action="A">/repos/trunk/www/document.edit.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/www/includes/repos.bottom.inc.jsp"
+   copyfrom-rev="41"
+   action="A">/repos/trunk/www/repos.bottom.inc.jsp</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/subversion/VersionedAccessException.java</path>
+<path
+   action="A">/repos/trunk/xdocs/components/repository-search.xml</path>
+<path
+   action="D">/repos/trunk/www/includes/repos.top.inc.jsp</path>
+<path
+   action="A">/repos/trunk/xdocs/components/msword-import.xml</path>
+<path
+   action="D">/repos/trunk/www/includes/repos.commandbar.inc.jsp</path>
+<path
+   action="M">/repos/trunk/build.properties</path>
+<path
+   action="M">/repos/trunk/xdocs/dev/products.xml</path>
+<path
+   action="M">/repos/trunk/xdocs/dev/index.xml</path>
+<path
+   action="A">/repos/trunk/xdocs/components</path>
+<path
+   action="A">/repos/trunk/www/iniedit/iniedit.pl</path>
+<path
+   action="M">/repos/trunk/xdocs/navigation.xml</path>
+<path
+   copyfrom-path="/repos/trunk/www/includes/repos.top.inc.jsp"
+   copyfrom-rev="41"
+   action="A">/repos/trunk/www/repos.top.inc.jsp</path>
+<path
+   action="M">/repos/trunk/www/repos._template.jsp</path>
+<path
+   action="M">/repos/trunk/www/tinymce/download.txt</path>
+<path
+   copyfrom-path="/repos/trunk/www/includes/repos.commandbar.inc.jsp"
+   copyfrom-rev="41"
+   action="A">/repos/trunk/www/repos.commandbar.inc.jsp</path>
+<path
+   action="A">/repos/trunk/xdocs/figures/concept_20041005_sv.png</path>
+<path
+   action="D">/repos/trunk/www/includes/repos.head.inc.jsp</path>
+<path
+   action="M">/repos/trunk/xdocs/index.xml</path>
+<path
+   action="D">/repos/trunk/www/includes/repos.bottom.inc.jsp</path>
+<path
+   action="D">/repos/trunk/www/document/document.tinymce.inc.jsp</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/document/DocumentController.java</path>
+<path
+   action="D">/repos/trunk/www/document/document.edit.jsp</path>
+<path
+   action="M">/repos/trunk/readme.html</path>
+<path
+   copyfrom-path="/repos/trunk/src/java/se/optime/repos/webdav/subversion"
+   copyfrom-rev="39"
+   action="A">/repos/trunk/src/java/se/optime/repos/subversion</path>
+</paths>
+<msg>Added components documentation.
+Verified JSP paths.
+Changed build.properties so that all www contents are included in war.</msg>
+</logentry>
+<logentry
+   revision="41">
+<author>solsson</author>
+<date>2004-10-08T08:49:23.713216Z</date>
+<paths>
+<path
+   copyfrom-path="/repos/trunk/www/includes/head.inc.jsp"
+   copyfrom-rev="40"
+   action="A">/repos/trunk/www/includes/repos.head.inc.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/www/includes/top.inc.jsp"
+   copyfrom-rev="40"
+   action="A">/repos/trunk/www/includes/repos.top.inc.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/www/includes/commandbar.inc.jsp"
+   copyfrom-rev="40"
+   action="A">/repos/trunk/www/includes/repos.commandbar.inc.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/www/includes/end.inc.jsp"
+   copyfrom-rev="40"
+   action="A">/repos/trunk/www/includes/repos.bottom.inc.jsp</path>
+<path
+   action="D">/repos/trunk/www/_template.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/www/document/tinymce.inc.jsp"
+   copyfrom-rev="40"
+   action="A">/repos/trunk/www/document/document.tinymce.inc.jsp</path>
+<path
+   action="D">/repos/trunk/www/document/tinymce.inc.jsp</path>
+<path
+   action="D">/repos/trunk/www/includes/head.inc.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/www/document/edit.jsp"
+   copyfrom-rev="40"
+   action="A">/repos/trunk/www/document/document.edit.jsp</path>
+<path
+   action="D">/repos/trunk/www/includes/top.inc.jsp</path>
+<path
+   action="D">/repos/trunk/www/includes/commandbar.inc.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/www/_template.jsp"
+   copyfrom-rev="40"
+   action="A">/repos/trunk/www/repos._template.jsp</path>
+<path
+   action="A">/repos/trunk/www/tinymce/download.txt</path>
+<path
+   action="D">/repos/trunk/www/document/edit.jsp</path>
+<path
+   action="D">/repos/trunk/www/includes/end.inc.jsp</path>
+</paths>
+<msg>Renamed JSPs for being in www root dir.</msg>
+</logentry>
+<logentry
+   revision="40">
+<author>solsson</author>
+<date>2004-10-07T19:39:48.568658Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/www/svnlayout/ordbehandlare.css</path>
+<path
+   action="A">/repos/trunk/www/logo/optime2004.png</path>
+<path
+   copyfrom-path="/repos/trunk/war/htadmin/config.inc.php"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/htadmin/config.inc.php</path>
+<path
+   action="A">/repos/trunk/war/javalog</path>
+<path
+   action="A">/repos/trunk/www/css</path>
+<path
+   action="D">/repos/trunk/war/htadmin</path>
+<path
+   action="A">/repos/trunk/xdocs</path>
+<path
+   action="D">/repos/trunk/war/WEB-INF/jsp/includes</path>
+<path
+   action="A">/repos/trunk/www/svnlayout</path>
+<path
+   copyfrom-path="/repos/trunk/war/WEB-INF/jsp/_template.jsp"
+   copyfrom-rev="34"
+   action="A">/repos/trunk/www/_template.jsp</path>
+<path
+   action="D">/repos/trunk/war/index.jsp</path>
+<path
+   action="A">/repos/trunk/xdocs/samples/jk2.conf</path>
+<path
+   copyfrom-path="/repos/trunk/war/tinymce/document-edit.html"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/tinymce/document-edit.html</path>
+<path
+   action="A">/repos/trunk/xdocs/dev/install.xml</path>
+<path
+   action="D">/repos/trunk/war/test.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/war/tinymce/text.css"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/tinymce/text.css</path>
+<path
+   action="D">/repos/trunk/war/WEB-INF/jsp/_template.jsp</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/subversionContext.xml</path>
+<path
+   action="A">/repos/trunk/www/logo</path>
+<path
+   action="A">/repos/trunk/xdocs/index.xml</path>
+<path
+   action="A">/repos/trunk/www/images</path>
+<path
+   action="A">/repos/trunk/www/css/repos-standard.css</path>
+<path
+   copyfrom-path="/repos/trunk/war/tinymce"
+   copyfrom-rev="34"
+   action="A">/repos/trunk/www/tinymce</path>
+<path
+   copyfrom-path="/repos/trunk/war/htadmin/create-htaccess.php"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/htadmin/create-htaccess.php</path>
+<path
+   action="A">/repos/trunk/xdocs/dev</path>
+<path
+   copyfrom-path="/repos/trunk/war/htadmin/header.inc.php"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/htadmin/header.inc.php</path>
+<path
+   copyfrom-path="/repos/trunk/war/WEB-INF/jsp/includes/top.inc.jsp"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/includes/top.inc.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/war/htadmin/browse.php"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/htadmin/browse.php</path>
+<path
+   action="A">/repos/trunk/xdocs/dev/coding.xml</path>
+<path
+   action="A">/repos/trunk/readme.html</path>
+<path
+   copyfrom-path="/repos/trunk/war/WEB-INF/jsp/document"
+   copyfrom-rev="34"
+   action="A">/repos/trunk/www/document</path>
+<path
+   copyfrom-path="/repos/trunk/war/WEB-INF/jsp/includes/end.inc.jsp"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/includes/end.inc.jsp</path>
+<path
+   action="A">/repos/trunk/www/svnlayout/sample-xml-1.xml</path>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="A">/repos/trunk/maven.xml</path>
+<path
+   action="D">/repos/trunk/design</path>
+<path
+   copyfrom-path="/repos/trunk/war/WEB-INF/jsp/document/edit.jsp"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/document/edit.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/war/htadmin/edit.php"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/htadmin/edit.php</path>
+<path
+   action="A">/repos/trunk/www</path>
+<path
+   action="A">/repos/trunk/xdocs/samples</path>
+<path
+   copyfrom-path="/repos/trunk/war/htadmin/add.php"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/htadmin/add.php</path>
+<path
+   action="A">/repos/trunk/www/svnlayout/ordbehandlare.xsl</path>
+<path
+   action="D">/repos/trunk/war/WEB-INF/jsp/document</path>
+<path
+   action="M">/repos/trunk/build.properties</path>
+<path
+   action="M">/repos/trunk/build.xml</path>
+<path
+   copyfrom-path="/repos/trunk/war/tinymce/page.css"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/tinymce/page.css</path>
+<path
+   action="A">/repos/trunk/xdocs/dev/products.xml</path>
+<path
+   action="A">/repos/trunk/www/includes/commandbar.inc.jsp</path>
+<path
+   action="D">/repos/trunk/war/tinymce</path>
+<path
+   action="A">/repos/trunk/xdocs/dev/index.xml</path>
+<path
+   copyfrom-path="/repos/trunk/war/htadmin/footer.inc.php"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/htadmin/footer.inc.php</path>
+<path
+   copyfrom-path="/repos/trunk/war/htadmin/index.php"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/htadmin/index.php</path>
+<path
+   copyfrom-path="/repos/trunk/war/htadmin"
+   copyfrom-rev="34"
+   action="A">/repos/trunk/www/htadmin</path>
+<path
+   action="M">/repos/trunk/war/error.jsp</path>
+<path
+   copyfrom-path="/repos/trunk/war/WEB-INF/jsp/document/tinymce.inc.jsp"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/document/tinymce.inc.jsp</path>
+<path
+   action="A">/repos/trunk/war/javalog/index.jsp</path>
+<path
+   action="A">/repos/trunk/xdocs/navigation.xml</path>
+<path
+   action="A">/repos/trunk/www/logo/repos1.png</path>
+<path
+   action="A">/repos/trunk/www/logo/repos2.png</path>
+<path
+   action="A">/repos/trunk/www/logo/repos4.png</path>
+<path
+   action="A">/repos/trunk/xdocs/figures</path>
+<path
+   action="A">/repos/trunk/www/tinymce/jscripts/tiny_mce/themes/repos/images/save.gif</path>
+<path
+   copyfrom-path="/repos/trunk/war/WEB-INF/jsp/includes"
+   copyfrom-rev="34"
+   action="A">/repos/trunk/www/includes</path>
+<path
+   copyfrom-path="/repos/trunk/war/tinymce/jscripts"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/tinymce/jscripts</path>
+<path
+   copyfrom-path="/repos/trunk/war/WEB-INF/jsp/includes/head.inc.jsp"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/includes/head.inc.jsp</path>
+<path
+   action="A">/repos/trunk/LICENSE.txt</path>
+<path
+   action="A">/repos/trunk/www/logo/repos.psd</path>
+<path
+   action="A">/repos/trunk/xdocs/status.xml</path>
+<path
+   copyfrom-path="/repos/trunk/war/htadmin/view-htpasswd.php"
+   copyfrom-rev="39"
+   action="R">/repos/trunk/www/htadmin/view-htpasswd.php</path>
+</paths>
+<msg>Added xdocs documentation.
+Collected all web contents in /www.
+Added maven goals customization to handle web contents.
+Remains to solve how to edit JSPs with links to static contents and include files and then deploy them without the links being broken.</msg>
+</logentry>
+<logentry
+   revision="39">
+<author>solsson</author>
+<date>2004-10-06T09:51:49.000869Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/action/NewFileController.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/calendar/IcalController.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/WebResource.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/action/SaveFileController.java</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/calendar</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/WrappedHttpException.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/calendar</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/action/LockingException.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/InvalidPathException.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryController.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/InvalidContentsException.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/RepositoryPath.java</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/calendar/IcalParserTest.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/calendar/IcalParser.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/action</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/calendar/IcalDao.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/action/RepositoryActionController.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/subversion/VersionedAccessException.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/action/RepositoryUpdate.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryPathValidator.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/action/NewFolderController.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/InvalidTypeException.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/DoesNotExistException.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/RepositoryAccessException.java</path>
+</paths>
+<msg>Added calendar parsing skeleton.
+Added webdav exception hierarchy.</msg>
+</logentry>
+<logentry
+   revision="38">
+<author>solsson</author>
+<date>2004-10-06T09:51:02.280341Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="D">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryPath.java</path>
+<path
+   action="D">/repos/trunk/src/java/se/optime/repos/webdav/bind</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryDataBinder.java</path>
+<path
+   action="D">/repos/trunk/src/java/se/optime/repos/webdav/subversion/RevisionRepository.java</path>
+<path
+   action="D">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryResourceValidator.java</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/repos-servlet.xml</path>
+<path
+   action="D">/repos/trunk/src/java/se/optime/repos/webdav/subversion/SubversionRepository.java</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/jsp/document/edit.jsp</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/document/DocumentController.java</path>
+<path
+   action="D">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryCommandController.java</path>
+<path
+   action="M">/repos/trunk/.classpath</path>
+<path
+   action="M">/repos/trunk/src/test/se/optime/repos/webdav/RepositoryResourceTest.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryResource.java</path>
+</paths>
+<msg>Did some serious refactoring.</msg>
+</logentry>
+<logentry
+   revision="37">
+<author>solsson</author>
+<date>2004-10-05T08:14:35.084845Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/war/WEB-INF/jsp/document/tinymce.inc.jsp</path>
+<path
+   action="M">/repos/trunk/war/tinymce/document-edit.html</path>
+<path
+   action="D">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template_src.js</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/tags/StreamOutputTag.java</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/jsp/document/edit.jsp</path>
+<path
+   action="M">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template.js</path>
+</paths>
+<msg>Save button now works.
+Still have a problem with browser saying "loading..." after the page has loaded.</msg>
+</logentry>
+<logentry
+   revision="36">
+<author>solsson</author>
+<date>2004-10-04T16:48:44.181887Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/war/WEB-INF/jsp/document/tinymce.inc.jsp</path>
+<path
+   action="A">/repos/trunk/war/WEB-INF/log/repos.log</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/webdav</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/jsp/document/edit.jsp</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/user/MockAuthenticationResolver.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/user/StaticAuthenticationResolver.java</path>
+<path
+   action="A">/repos/trunk/src/itest/se/optime/repos</path>
+<path
+   action="A">/repos/trunk/war/WEB-INF/tld/repos.tld</path>
+<path
+   action="A">/repos/trunk/src/itest</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/webdav/RepositoryResourceTest.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryResource.java</path>
+<path
+   action="A">/repos/trunk/src/itest/se/optime/repos/webdav</path>
+<path
+   action="A">/repos/trunk/src/itest/se/optime</path>
+<path
+   action="A">/repos/trunk/src/test/log4j.xml</path>
+<path
+   action="A">/repos/trunk/src/itest/se</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/subversion/RevisionRepository.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryResourceValidator.java</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/tags/StreamOutputTag.java</path>
+<path
+   action="A">/repos/trunk/src/itest/se/optime/repos/webdav/SlideWebdavClientTest.java</path>
+<path
+   action="A">/repos/trunk/war/WEB-INF/log</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/tags</path>
+</paths>
+<msg>Added code.
+Changed the document editor to use new style. Save button still doesn't work.</msg>
+</logentry>
+<logentry
+   revision="35">
+<author>solsson</author>
+<date>2004-10-04T16:47:37.112458Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/war/tinymce/document-edit.html</path>
+<path
+   action="M">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template_src.js</path>
+<path
+   action="M">/repos/trunk/war/tinymce/text.css</path>
+<path
+   action="M">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_content.css</path>
+<path
+   action="M">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_ui.css</path>
+<path
+   action="M">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template.js</path>
+</paths>
+<msg>Selected buttons for ordbehandlare.
+Changed editor style.
+Removed cutom stylesheet for editor contents, so now the default theme style is used.
+Added save button (that does not work as of now).</msg>
+</logentry>
+<logentry
+   revision="34">
+<author>solsson</author>
+<date>2004-10-04T10:50:30.220096Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="M">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template_src.js</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/log4j.properties</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/web.xml</path>
+<path
+   action="M">/repos/trunk/.classpath</path>
+<path
+   copyfrom-path="/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template.js"
+   copyfrom-rev="33"
+   action="R">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template.js</path>
+<path
+   action="M">/repos/trunk/.project</path>
+</paths>
+<msg>Updated to tinyMCD 1.34.
+Added UTF-8 encoding filter.
+Moved logfile out of webapp to prevent tomcat from locking  deploy.</msg>
+</logentry>
+<logentry
+   revision="33">
+<author>solsson</author>
+<date>2004-10-03T13:47:01.095139Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/war/htadmin/edit.php</path>
+<path
+   action="A">/repos/trunk/war/htadmin/view-htpasswd.php</path>
+<path
+   action="A">/repos/trunk/war/htadmin/footer.inc.php</path>
+<path
+   action="A">/repos/trunk/war/htadmin/index.php</path>
+<path
+   action="A">/repos/trunk/war/htadmin/add.php</path>
+<path
+   action="A">/repos/trunk/war/htadmin</path>
+<path
+   action="A">/repos/trunk/war/htadmin/config.inc.php</path>
+<path
+   action="A">/repos/trunk/war/htadmin/create-htaccess.php</path>
+<path
+   action="A">/repos/trunk/war/htadmin/header.inc.php</path>
+<path
+   action="A">/repos/trunk/war/htadmin/browse.php</path>
+</paths>
+<msg>Added HTAdmin 1.2.4</msg>
+</logentry>
+<logentry
+   revision="32">
+<author>solsson</author>
+<date>2004-10-03T12:40:14.691188Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/war/WEB-INF/jsp/document/tinymce.inc.jsp</path>
+<path
+   action="M">/repos/trunk/war/tinymce/document-edit.html</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/jsp/document/edit.jsp</path>
+<path
+   action="A">/repos/trunk/war/WEB-INF/log4j.properties</path>
+<path
+   action="M">/repos/trunk/war/tinymce/text.css</path>
+<path
+   copyfrom-path="/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template_src.js"
+   copyfrom-rev="31"
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template.js</path>
+</paths>
+<msg>Document editor working with visual html</msg>
+</logentry>
+<logentry
+   revision="31">
+<author>solsson</author>
+<date>2004-10-03T12:08:28.432546Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template_src.js</path>
+<path
+   action="D">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template.js</path>
+</paths>
+<msg>Replaced function names to _repos_</msg>
+</logentry>
+<logentry
+   revision="30">
+<author>solsson</author>
+<date>2004-10-03T11:51:53.001365Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/anchor.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/paste.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/spacer.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/right.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/langs/se.js</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/bold_de_se.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/indent.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template.js</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_popup.css</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/help.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/table_insert_col_after.gif</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryPath.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryDataBinder.java</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/table_delete_row.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/image.htm</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/unlink.gif</path>
+<path
+   action="M">/repos/trunk/.classpath</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/strikethrough.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/page.css</path>
+<path
+   action="A">/repos/trunk/war/tinymce/document-edit.html</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/code.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/center.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/visualaid.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/source_editor.htm</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/table.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/cleanup.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/anchor.htm</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/sub.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/table_insert_col_before.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/cut.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/langs</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/web.xml</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_content.css</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/undo.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/table_delete_col.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/removeformat.gif</path>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/sup.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/bold_fr.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/hr.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/copy.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/charmap.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/link.htm</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/bullist.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/bold.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/image.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/table_insert_row_before.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/langs/uk.js</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/redo.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/charmap.htm</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/left.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/forecolor.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/custom_1.gif</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/repos-servlet.xml</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/numlist.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/link.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_ui.css</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/full.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/jsp/document/edit.jsp</path>
+<path
+   action="A">/repos/trunk/war/tinymce/text.css</path>
+<path
+   action="A">/repos/trunk/war/error.jsp</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryCommandController.java</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/outdent.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/table_insert_row_after.gif</path>
+<path
+   action="M">/repos/trunk/src/test/se/optime/repos/UnitTests.java</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/underline.gif</path>
+<path
+   action="D">/repos/trunk/war/WEB-INF/classes/log4j.properties</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/color_picker.htm</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/editor_template_src.js</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/document/DocumentController.java</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/italic_de_se.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/images/italic.gif</path>
+<path
+   action="A">/repos/trunk/war/tinymce/jscripts/tiny_mce/themes/repos/table.htm</path>
+</paths>
+<msg>Added logfile to log4j.
+Added 'repos' theme to TinyMCE 1.33 under /war/tinymce.</msg>
+</logentry>
+<logentry
+   revision="29">
+<author>solsson</author>
+<date>2004-10-02T12:40:00.378312Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/user/BasicAuthenticationResolver.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryPath.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryDataBinder.java</path>
+<path
+   action="D">/repos/trunk/src/java/se/optime/repos/webdav/WebRepository.java</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/repos-servlet.xml</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/subversion/SubversionRepository.java</path>
+<path
+   action="D">/repos/trunk/src/java/se/optime/repos/webdav/RevisionRepository.java</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/jsp/document/edit.jsp</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/document/DocumentController.java</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/web.xml</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/webdav/RepositoryCommandController.java</path>
+<path
+   action="M">/repos/trunk/.classpath</path>
+<path
+   action="M">/repos/trunk/.project</path>
+</paths>
+<msg>Added Webdav Resource handling</msg>
+</logentry>
+<logentry
+   revision="28">
+<author>solsson</author>
+<date>2004-09-23T16:17:03.272914Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/design</path>
+<path
+   action="A">/repos/trunk/design/administration/gmail-repos.txt</path>
+<path
+   action="A">/repos/trunk/design/administration/gmail-ordbehandlare.txt</path>
+<path
+   action="A">/repos/trunk/design/administration</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/UnitTests.java</path>
+</paths>
+<msg>mail accounts</msg>
+</logentry>
+<logentry
+   revision="27">
+<author>solsson</author>
+<date>2004-09-22T15:37:50.296112Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/war/WEB-INF/classes/log4j.properties</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/jsp/document/edit.jsp</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/document/DocumentController.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/user/BasicAuthenticationManager.java</path>
+</paths>
+<msg>AuthenticationManager should not set isAuthenticated.\nrequest.getAuth etc does not work because BASIC authentication is not integrated with tomcat.</msg>
+</logentry>
+<logentry
+   revision="26">
+<author>solsson</author>
+<date>2004-09-22T15:07:42.078835Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/src/test/se/optime/repos/user/BasicAuthenticationManagerTest.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/user/BasicAuthenticationManager.java</path>
+</paths>
+<msg>Needed acegi autointegration filter for login to work</msg>
+</logentry>
+<logentry
+   revision="25">
+<author>solsson</author>
+<date>2004-09-22T15:04:43.920259Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/war/WEB-INF/classes/log4j.properties</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/user/AccessDecisionVoterAllowAll.java</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/securityContext.xml</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/document/DocumentController.java</path>
+<path
+   action="M">/repos/trunk/war/WEB-INF/web.xml</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/user/BasicAuthenticationManager.java</path>
+</paths>
+<msg>Needed acegi autointegration filter for login to work</msg>
+</logentry>
+<logentry
+   revision="24">
+<author>solsson</author>
+<date>2004-09-22T12:44:13.589787Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/project.xml</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/user/BasicAuthenticationResolver.java</path>
+<path
+   action="A">/repos/trunk/war/WEB-INF/tld/c.tld</path>
+<path
+   action="A">/repos/trunk/war/WEB-INF/tld/spring.tld</path>
+<path
+   action="A">/repos/trunk/war/WEB-INF/tld/fn.tld</path>
+<path
+   action="M">/repos/trunk/src/test/se/optime/repos/user/BasicAuthenticationManagerTest.java</path>
+<path
+   action="M">/repos/trunk/src/java/se/optime/repos/user/BasicAuthenticationManager.java</path>
+<path
+   action="M">/repos/trunk/.classpath</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/user/AuthenticationResolver.java</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/user/BasicAuthenticationResolverTest.java</path>
+</paths>
+<msg>Completed basic user resolution</msg>
+</logentry>
+<logentry
+   revision="23">
+<author>solsson</author>
+<date>2004-09-22T09:54:12.224910Z</date>
+<paths>
+<path
+   action="A">/repos/trunk/src/test/se/optime</path>
+<path
+   action="A">/repos/trunk/war/WEB-INF/securityContext.xml</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/user/BasicAuthenticationManagerTest.java</path>
+<path
+   action="A">/repos/trunk/src/test/se</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/user/BasicAuthenticationManager.java</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos/user</path>
+<path
+   action="A">/repos/trunk/src/java/se/optime/repos/user</path>
+<path
+   action="A">/repos/trunk/src/test/se/optime/repos</path>
+<path
+   action="A">/repos/trunk/war/WEB-INF/tld</path>
+</paths>
+<msg>... and added the files :)</msg>
+</logentry>
+<logentry
+   revision="22">
+<author>solsson</author>
+<date>2004-09-22T09:52:32.576788Z</date>
+<paths>
+<path
+   action="M">/repos/trunk/war/WEB-INF/web.xml</path>
+<path
+   action="M">/repos/trunk/.classpath</path>
+</paths>
+<msg>Added BASIC authentication skeleton</msg>
+</logentry>
+<logentry
+   revision="21">
+<author>solsson</author>
+<date>2004-09-20T07:09:26.436723Z</date>
+<paths>
+<path
+   action="D">/coordinator3</path>
+<path
+   copyfrom-path="/coordinator3"
+   copyfrom-rev="20"
+   action="A">/repos</path>
+</paths>
+<msg>Renamed coordinator3 to repos</msg>
+</logentry>
+<logentry
+   revision="20">
+<author>solsson</author>
+<date>2004-09-10T08:42:19.211977Z</date>
+<paths>
+<path
+   action="M">/coordinator3/trunk/src/java/se/optime/document/DocumentController.java</path>
+<path
+   action="M">/coordinator3/trunk/.classpath</path>
+</paths>
+<msg>Testing basic authentication</msg>
+</logentry>
+<logentry
+   revision="19">
+<author>solsson</author>
+<date>2004-09-08T13:42:48.613341Z</date>
+<paths>
+<path
+   action="M">/coordinator3/trunk/war/WEB-INF/repos-servlet.xml</path>
+<path
+   action="M">/coordinator3/trunk/war/WEB-INF/jsp/document/edit.jsp</path>
+<path
+   action="M">/coordinator3/trunk/src/java/se/optime/document/DocumentController.java</path>
+<path
+   action="M">/coordinator3/trunk/war/WEB-INF/web.xml</path>
+</paths>
+<msg>Reading from webdav</msg>
+</logentry>
+<logentry
+   revision="18">
+<author>solsson</author>
+<date>2004-09-08T13:34:26.892051Z</date>
+<paths>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/subversionContext.xml</path>
+</paths>
+<msg>Subversion beans in separate file</msg>
+</logentry>
+<logentry
+   revision="17">
+<author>solsson</author>
+<date>2004-09-08T13:28:18.657986Z</date>
+<paths>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime/repos/webdav/bind</path>
+<path
+   action="M">/coordinator3/trunk/src/java/se/optime/repos/webdav/RepositoryDataBinder.java</path>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime/repos/webdav/WebRepository.java</path>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime/repos/webdav/RevisionRepository.java</path>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime/repos/webdav/subversion/SubversionRepository.java</path>
+<path
+   action="M">/coordinator3/trunk/war/WEB-INF/jsp/document/edit.jsp</path>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime/repos/webdav/subversion</path>
+<path
+   action="M">/coordinator3/trunk/src/java/se/optime/document/DocumentController.java</path>
+<path
+   action="M">/coordinator3/trunk/src/java/se/optime/repos/webdav/RepositoryCommandController.java</path>
+</paths>
+<msg>Added webdav handling</msg>
+</logentry>
+<logentry
+   revision="16">
+<author>solsson</author>
+<date>2004-09-08T12:52:06.052264Z</date>
+<paths>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/classes/log4j.properties</path>
+<path
+   action="M">/coordinator3/trunk/war/WEB-INF/repos-servlet.xml</path>
+<path
+   action="M">/coordinator3/trunk/war/WEB-INF/jsp/document/edit.jsp</path>
+<path
+   action="M">/coordinator3/trunk/war/WEB-INF/web.xml</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/classes</path>
+<path
+   action="D">/coordinator3/trunk/war/WEB-INF/repos-mapping.xml</path>
+<path
+   action="M">/coordinator3/trunk/project.xml</path>
+</paths>
+<msg>Working mapping and taglibs</msg>
+</logentry>
+<logentry
+   revision="15">
+<author>solsson</author>
+<date>2004-09-08T12:08:08.742567Z</date>
+<paths>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/applicationContext.xml</path>
+<path
+   action="M">/coordinator3/trunk/war/WEB-INF/web.xml</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/repos-mapping.xml</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/local.properties</path>
+</paths>
+<msg>Initial context declaration</msg>
+</logentry>
+<logentry
+   revision="14">
+<author>solsson</author>
+<date>2004-09-08T11:57:18.479327Z</date>
+<paths>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime/repos/webdav/RepositoryPath.java</path>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime/repos/webdav/RepositoryDataBinder.java</path>
+<path
+   action="M">/coordinator3/trunk/war/WEB-INF/repos-servlet.xml</path>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime/document</path>
+<path
+   copyfrom-path="/coordinator3/trunk/war/WEB-INF/jsp/document/docedit.jsp"
+   copyfrom-rev="13"
+   action="A">/coordinator3/trunk/war/WEB-INF/jsp/document/edit.jsp</path>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime</path>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime/document/DocumentController.java</path>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime/repos/webdav</path>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime/repos/webdav/RepositoryCommandController.java</path>
+<path
+   action="A">/coordinator3/trunk/src/java/se</path>
+<path
+   action="M">/coordinator3/trunk</path>
+<path
+   action="A">/coordinator3/trunk/.classpath</path>
+<path
+   action="D">/coordinator3/trunk/war/WEB-INF/jsp/document/docedit.jsp</path>
+<path
+   action="A">/coordinator3/trunk/.project</path>
+<path
+   action="A">/coordinator3/trunk/src/java/se/optime/repos</path>
+</paths>
+<msg>Concept test</msg>
+</logentry>
+<logentry
+   revision="13">
+<author>solsson</author>
+<date>2004-09-08T09:00:29.439356Z</date>
+<paths>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/jsp/includes/top.inc.jsp</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/jsp/document</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/jsp/includes/end.inc.jsp</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/jsp/document/docedit.jsp</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/jsp/_template.jsp</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/jsp/includes</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/jsp/includes/head.inc.jsp</path>
+</paths>
+<msg>Basic JSPs</msg>
+</logentry>
+<logentry
+   revision="12">
+<author>solsson</author>
+<date>2004-09-08T08:49:11.845708Z</date>
+<paths>
+<path
+   action="A">/coordinator3/trunk/war/META-INF</path>
+<path
+   action="M">/coordinator3/trunk/build.properties</path>
+<path
+   action="M">/coordinator3/trunk/war/index.jsp</path>
+<path
+   action="A">/coordinator3/trunk/war/META-INF/context.xml</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/jsp</path>
+<path
+   action="M">/coordinator3/trunk/build.xml</path>
+<path
+   action="M">/coordinator3/trunk/project.xml</path>
+</paths>
+<msg>Working WAR</msg>
+</logentry>
+<logentry
+   revision="11">
+<author>solsson</author>
+<date>2004-09-08T07:46:10.771214Z</date>
+<paths>
+<path
+   action="M">/coordinator3/trunk/build.properties</path>
+<path
+   action="A">/coordinator3/trunk/project.xml</path>
+</paths>
+<msg>ordbehandlare buildfiles</msg>
+</logentry>
+<logentry
+   revision="10">
+<author>solsson</author>
+<date>2004-09-08T07:25:20.986447Z</date>
+<paths>
+<path
+   action="A">/coordinator3/trunk/src</path>
+<path
+   action="A">/coordinator3/trunk/src/java</path>
+<path
+   action="A">/coordinator3/trunk/war</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/repos-servlet.xml</path>
+<path
+   action="A">/coordinator3/trunk/build.properties</path>
+<path
+   action="A">/coordinator3/trunk/war/index.jsp</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF/web.xml</path>
+<path
+   action="A">/coordinator3/trunk/build.xml</path>
+<path
+   action="A">/coordinator3/trunk/war/WEB-INF</path>
+<path
+   action="A">/coordinator3/trunk/war/test.jsp</path>
+<path
+   action="A">/coordinator3/trunk/lib</path>
+<path
+   action="A">/coordinator3/trunk/src/test</path>
+</paths>
+<msg>copied spring webapp-minimal sample</msg>
+</logentry>
+<logentry
+   revision="9">
+<author>solsson</author>
+<date>2004-09-08T07:17:28.666892Z</date>
+<paths>
+<path
+   action="A">/coordinator3/tags</path>
+<path
+   action="A">/coordinator3</path>
+<path
+   action="A">/coordinator3/trunk</path>
+<path
+   action="A">/coordinator3/branches</path>
+</paths>
+<msg>coordinator3 project</msg>
+</logentry>
+</log>

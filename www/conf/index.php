@@ -4,7 +4,8 @@
  */
 
 // default configuration includes, the way they should be referenced in php files
-require( dirname(__FILE__) . '/authentication.inc.php' );
+function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
+require( upOne(dirname(__FILE__)) . '/login.inc.php' );
 
 // configuration index settings
 $sections = array(
@@ -18,7 +19,7 @@ $sections = array(
 	);
 // validating configuration
 $links = array(
-	'logout.php' => 'Log out',
+	'../logout.php' => 'Log out',
 	'../admin/configuration.php' => 'System configuration help',
 	'../admin/' => 'Administration'
 	);

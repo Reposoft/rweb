@@ -15,16 +15,16 @@
 	<!-- add parameter rurl=".." when testing offline -->
 	<!-- status images like 'locked' could be generated on the fly -->
 	<!-- repos webapp URL (root), does not end with slash -->
-	<xsl:param name="rurl">http://www.repos.se</xsl:param>
+	<xsl:param name="rurl">https://www.repos.se</xsl:param>
 	<!--<xsl:param name="rurl">http://alto.optime.se/repos</xsl:param>-->
 	<!-- current theme, for example '/theme', empty for root theme -->
-	<xsl:param name="theme"/>
+	<xsl:param name="theme" select="'/themes/simple"/>
 	<!-- static contents urls -->
 	<xsl:param name="cssUrl">
 		<xsl:value-of select="$rurl"/>
 		<xsl:value-of select="$theme"/>/css</xsl:param>
 	<xsl:param name="iconsUrl">
-		<xsl:value-of select="$rurl"/>/cicons</xsl:param>
+		<xsl:value-of select="$rurl"/>/icons</xsl:param>
 	<xsl:param name="buttonsUrl">
 		<xsl:value-of select="$rurl"/>
 		<xsl:value-of select="$theme"/>/buttons</xsl:param>

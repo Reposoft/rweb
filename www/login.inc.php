@@ -2,7 +2,19 @@
 // PHP authentication compatible with webapp strategy.
 // Defines functions to retrieve credentials, abstracting the autentication method.
 // Returns a 401 header if credentials are not found.
-require_once( dirname(__FILE__) . "/repos.properties.php" );
+
+// Check that this is HTTPS
+if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) {
+	echo 'hepp';
+	exit;
+} else {
+	$secure-url = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+	echo("Location: $secure-url");
+	exit;
+}
+
+// Get functions for finding out realm name etcetera
+require_once( dirname(__FILE__) . "/header.inc.php" );
 
 if (!isset($_SERVER['PHP_AUTH_USER']) || $_SERVER['PHP_AUTH_USER']=='void') {
    header('WWW-Authenticate: Basic realm="' . getRepositoryUrl() . '"');

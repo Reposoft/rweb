@@ -1,5 +1,5 @@
 <?php
-require( dirname(__FILE__) . "/conf/authentication.inc.php" );
+require( dirname(__FILE__) . "/login.inc.php" );
 
 /**
  * Get a user's home directory of a repository

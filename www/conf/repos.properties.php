@@ -1,19 +1,6 @@
 <?php
 
 /**
- * It is assumed that all pages include this file, so we fix the headers here
- */
-// Date in the past
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-// always modified
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-// HTTP/1.1
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0, pre-check=0", false);
-// HTTP/1.0
-header("Pragma: no-cache");
-
-/**
  * Repos properties as php variables. Should be accessed through getConfig('key')
  */
 $repos_config = parse_ini_file( dirname(__FILE__) . '/repos.properties', false );
@@ -28,65 +15,6 @@ function getConfig($key) {
 	if (isset($repos_config[$key]))
 		return ($repos_config[$key] );
 	return false;
-}
-
-// ------ url resolution functions -----
-
-function getReferer() {
-    if (isset($_SERVER['HTTP_REFERER'])) return $_SERVER['HTTP_REFERER'];
-    return false;
-}
-
-/**
- * @return target in repository from query paramters WITH tailing slash if no file
- */
-function getTarget() {
-    // invalid parameters -> empty string
-    if(!isset($_GET['path'])) return '';
-    $path = $_GET['path'];
-    // end with slash
-    $path = rtrim($path,'/').'/';
-    // append filename if specified
-    if(isset($_GET['file'])) $path .= $_GET['file'];
-    return $path;
-}
-
-/**
- * Repository is resolved using HTTP Referrer with fallback to settings.
- * To find out where root is, query paramter 'path' must be set.
- * @return Root url of the repository for this request
- */
-function getRepositoryUrl() {
-	if (isset($_GET['repo'])) {
-		return $_GET['repo'];
-	}
-    $ref = getReferer();
-    if ($ref && isset($_GET['path'])) {
-		$repo = substr($ref,0,strpos($ref,$_GET['path']));
-		if (count($repo)>0) return $repo; 
-    }
-    return getConfig('repo_url');
-}
-
-/**
- * Target url is resolved from query parameters
- *  'repo' (fallback to getRepositoryUrl) = root url
- *  'path' = path from repository root
- *  'file' (omitted if not found) = filename inside path
- * @return Full url of the file or directory this request targets
- */
-function getTargetUrl() {
-    return getRepositoryUrl() . getTarget();
-}
-
-// ------ unit testing support -----
-
-/**
- * @return true if scripts should run self-test
- */
-function isTestRun() {
-	global $argv;
-	return ( (isset($argv[1]) && $argv[1]=='unitTest') || isset($_GET['unitTest']) );
 }
 
 // ------ functions to keep scripts portable -----
@@ -145,4 +73,13 @@ function getCommand($command) {
 	return "\"Error: Repos does not support command '$command'\"";
 }
 
+// ------ unit testing support -----
+
+/**
+ * @return true if scripts should run self-test
+ */
+function isTestRun() {
+	global $argv;
+	return ( (isset($argv[1]) && $argv[1]=='unitTest') || isset($_GET['unitTest']) );
+}
 ?>
