@@ -1,10 +1,7 @@
 <?php
-// PHP authentication compatible with webapp strategy
-// defines the constants
-//	REPOS_USER = username
-//  REPOS_PASS = password
-//  REPOS_AUTH = basic authentication string
-// Returns a 401 header if credentials are not found
+// PHP authentication compatible with webapp strategy.
+// Defines functions to retrieve credentials, abstracting the autentication method.
+// Returns a 401 header if credentials are not found.
 if (!isset($_SERVER['PHP_AUTH_USER'])) {
    header('WWW-Authenticate: Basic realm="repos"');
    header('HTTP/1.0 401 Unauthorized');
@@ -18,7 +15,14 @@ if (!isset($_SERVER['PHP_AUTH_USER'])) {
 }
 // "PHP_AUTH variables will not be set if external authentication is enabled for that particular page and safe mode is enabled"
 // set credentials as constants, so that dependencies are not tied to the server variables
-define('REPOS_USER',$_SERVER['PHP_AUTH_USER']);
-define('REPOS_PASS',$_SERVER['PHP_AUTH_PW']);
-define('REPOS_AUTH',$_SERVER['REMOTE_USER']); // not verified
+
+function getReposUser() {
+	return $_SERVER['PHP_AUTH_USER'];
+}
+function getReposPassword() {
+	return $_SERVER['PHP_AUTH_PW'];
+}
+function getReposAuthentication() {
+	return $_SERVER['PHP_AUTH_PW'];
+}
 ?>
