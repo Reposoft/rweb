@@ -1,8 +1,5 @@
-<html>
-<head>
-
 <!-- tinyMCE -->
-<script language="javascript" type="text/javascript" src="jscripts/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript" src="../tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script language="javascript" type="text/javascript">
 	tinyMCE.init({
 		theme : "repos",
@@ -11,7 +8,7 @@
 		//insertlink_callback : "customInsertLink",
 		//insertimage_callback : "customInsertImage",
 		save_callback : "customSave",
-		content_css : "text.css",
+		content_css : "../tinymce/text.css",
 		extended_valid_elements : "a[href|target|name]",
 		//invalid_elements : "a",
 		theme_advanced_styles : "Header 1=header1;Header 2=header2;Header 3=header3", // Theme specific setting CSS classes
@@ -63,25 +60,3 @@
 	}
 </script>
 <!-- /tinyMCE -->
-
-</head>
-<body>
-
-
-<!-- Form with textare element with width: 100% -->
-<form method="post" action="post.php">
-<textarea id="elm1" name="elm2" style="width:100%" rows="15">
-	<span class="header1">Test header 1</span><br />
-	<span class="header2">Test header 2</span><br />
-	<span class="header3">Test header 3</span><br />
-	Some <b>element</b>, this is to be editor 1. <br /> This editor instance has a 100% width to it.
-	<p>Some paragraph. <a href="http://www.sourceforge.net">Some link</a></p>
-</textarea>
-<br>
-<input type="button" name="save" value="save" onclick="tinyMCE.triggerSave();"> 
-to ordbehandlare.se
-</form>
-
-<!-- Div elements that gets to be a editor instance aswell -->
-</body>
-</html>
