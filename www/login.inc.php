@@ -54,6 +54,7 @@ function getPath() {
 	if(!isset($_GET['path'])) return false;
 	$path = urlEncodeNames($_GET['path']);
     $path = rtrim($path,'/').'/';
+	return $path;
 }
 
 /**
@@ -61,10 +62,9 @@ function getPath() {
  */
 function getTarget() {
 	if(isset($_GET['target'])) return urlEncodeNames($_GET['target']);
-	$path = getPath();
     // append filename if specified
-    if(isset($_GET['file'])) return $path . rawurlencode($_GET['file']);
-    return $path;
+    if(isset($_GET['file'])) return getPath() . rawurlencode($_GET['file']);
+    return getPath();
 }
 
 /**
