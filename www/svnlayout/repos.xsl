@@ -18,7 +18,7 @@
 	<xsl:param name="rurl">https://www.repos.se</xsl:param>
 	<!--<xsl:param name="rurl">http://alto.optime.se/repos</xsl:param>-->
 	<!-- current theme, for example '/theme', empty for root theme -->
-	<xsl:param name="theme" select="'/themes/simple"/>
+	<xsl:param name="theme" select="'/themes/simple'"/>
 	<!-- static contents urls -->
 	<xsl:param name="cssUrl">
 		<xsl:value-of select="$rurl"/>
