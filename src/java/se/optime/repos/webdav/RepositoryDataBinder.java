@@ -3,8 +3,6 @@
  */
 package se.optime.repos.webdav;
 
-import java.net.URL;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 

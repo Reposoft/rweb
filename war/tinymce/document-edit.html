@@ -1,0 +1,88 @@
+<html>
+<head>
+<link href="page.css" rel="stylesheet" type="text/css">
+
+<!-- tinyMCE -->
+<script language="javascript" type="text/javascript" src="jscripts/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript">
+	tinyMCE.init({
+		theme : "repos",
+		//language : "se",
+		mode : "exact",
+		elements : "elm1",
+		//insertlink_callback : "customInsertLink",
+		//insertimage_callback : "customInsertImage",
+		save_callback : "customSave",
+		content_css : "text.css",
+		extended_valid_elements : "a[href|target|name]",
+		//invalid_elements : "a",
+		theme_advanced_styles : "Header 1=header1;Header 2=header2;Header 3=header3", // Theme specific setting CSS classes
+		debug : false
+	});
+
+	// Custom insert link callback, extends the link function
+	function customInsertLink(href, target) {
+		var result = new Array();
+
+		alert("customInsertLink called href: " + href + " target: " + target);
+
+		result['href'] = "http://www.sourceforge.net";
+		result['target'] = '_blank';
+
+		return result;
+	}
+
+	// Custom insert image callback, extends the image function
+	function customInsertImage(src, alt, border, hspace, vspace, width, height, align) {
+		var result = new Array();
+
+		var debug = "CustomInsertImage called:\n"
+		debug += "src: " + src + "\n";
+		debug += "alt: " + alt + "\n";
+		debug += "border: " + border + "\n";
+		debug += "hspace: " + hspace + "\n";
+		debug += "vspace: " + vspace + "\n";
+		debug += "width: " + width + "\n";
+		debug += "height: " + height + "\n";
+		debug += "align: " + align + "\n";
+		alert(debug);
+
+		result['src'] = "logo.jpg";
+		result['alt'] = "test description";
+		result['border'] = "2";
+		result['hspace'] = "5";
+		result['vspace'] = "5";
+		result['width'] = width;
+		result['height'] = height;
+		result['align'] = "right";
+
+		return result;
+	}
+
+	// Custom save callback, gets called when the contents is to be submitted
+	function customSave(id, content) {
+		alert(id + "=" + content);
+	}
+</script>
+<!-- /tinyMCE -->
+
+</head>
+<body>
+
+
+<!-- Form with textare element with width: 100% -->
+<form method="post" action="post.php">
+<textarea id="elm1" name="elm2" style="width:100%" rows="15">
+	<span class="header1">Test header 1</span><br />
+	<span class="header2">Test header 2</span><br />
+	<span class="header3">Test header 3</span><br />
+	Some <b>element</b>, this is to be editor 1. <br /> This editor instance has a 100% width to it.
+	<p>Some paragraph. <a href="http://www.sourceforge.net">Some link</a></p>
+</textarea>
+<br>
+<input type="button" name="save" value="save" onclick="tinyMCE.triggerSave();">
+</form>
+
+<!-- Div elements that gets to be a editor instance aswell -->
+</body>
+</html>

@@ -5,6 +5,23 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-app_2_4.xsd"
          version="2.4">
+
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>repos.root</param-value>
+    </context-param>
+
+	<!--
+	  - Location of the Log4J config file, for initialization and refresh checks.
+	  - Applied by Log4jConfigListener.
+	  -->
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/log4j.properties</param-value>
+	</context-param>
+    <listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
     
     <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -16,7 +33,7 @@
     </context-param>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+    </listener>    
     
     <!--
     - Servlet that dispatches request to registered handlers (Controller implementations).

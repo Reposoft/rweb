@@ -30,7 +30,14 @@ public class DocumentController extends RepositoryCommandController {
      * @see se.optime.repos.webdav.RepositoryCommandController#save(javax.servlet.http.HttpServletRequest, se.optime.repos.webdav.RepositoryPath)
      */
     protected ModelAndView save(HttpServletRequest request, RepositoryPath resource) throws Exception {
-        throw new UnsupportedOperationException("Method DocumentController#save not implemented yet.");
+        if (resource.isChanged()) {
+            logger.info("Saving changes to " + resource.toString());
+            resource.commitChanges();
+        } else {
+            if (logger.isDebugEnabled())
+                logger.debug("No changes made to " + resource.toString());
+        }
+        return new ModelAndView(resource.getRedirectTo());
     }
 
 }

@@ -7,8 +7,7 @@
 <beans>
 
 	<!-- =========== views =========== -->
-	
-	
+
 	<!-- =========== resolvers =========== -->
 	
 	<!-- internal url, last in resolver chain -->
@@ -20,10 +19,12 @@
 	</bean>
 	
 	<!-- ======== controllers ======== -->
+	<bean id="resourceValidator" class="se.optime.repos.webdav.RepositoryResourceValidator">
+    </bean>
+	
 	<bean id="documentController" class="se.optime.document.DocumentController">
-	    <property name="commandClass">
-	        <value>se.optime.repos.webdav.RepositoryResource</value>
-	    </property>
+	    <property name="commandClass"><value>se.optime.repos.webdav.RepositoryResource</value></property>
+	    <property name="validator"><ref local="resourceValidator"/></property>
 	</bean>
 
 	<!-- ========= mappings ========== -->

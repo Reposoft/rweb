@@ -17,7 +17,9 @@ import se.optime.repos.webdav.RepositoryPath;
  * @version $Id$
  */
 public abstract class RepositoryCommandController extends AbstractCommandController {
-
+    
+    public static final String DEFAULT_EXTENSION = ".jwa";
+    
     /* (non-Javadoc)
      * @see org.springframework.web.servlet.mvc.AbstractCommandController#handle(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, org.springframework.validation.BindException)
      */

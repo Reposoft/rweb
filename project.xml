@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <project>
   <pomVersion>3</pomVersion>
-  <name>Ordbehandlare.se</name>
+  <name>Repos</name>
   <groupId>optime</groupId>
   <id>repos</id>
   <currentVersion>0.1</currentVersion>
-  <package>se.optime.ordbehandlare</package>
+  <package>se.optime.repos</package>
 
   <organization>
     <name>Optime data</name>
@@ -104,6 +104,12 @@
     <dependency>
       <groupId>servletapi</groupId>
       <artifactId>servletapi</artifactId>
+      <version>2.4</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>servletapi</groupId>
+      <artifactId>jsp-api</artifactId>
       <version>2.4</version>
     </dependency>
 

@@ -3,7 +3,6 @@
  */
 package se.optime.repos;
 
-import se.optime.repos.user.BasicAuthenticationManagerTest;
 import junit.framework.TestSuite;
 
 /**
