@@ -1,33 +1,33 @@
 /* repository visualization, minimal number of classes */
 body {
-    font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
+	font-family: Georgia, "Times New Roman", Times, serif;
     font-size: 0.8em;
 }
 td {
-	font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
 	font-size: 0.8em;
 }
 th {
-	font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
 	font-size: 0.8em;
 }
 code {
 	font-size: 1.1em;
 }
 a {
-	color: #000066;
 	text-decoration: none;
 }
-a:hover {
-	text-decoration: underline;
+hr {
+	border: 2px solid #CCCC99;
 }
 h1 {
+	font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
 	font-weight: normal;
 }
 h2 {
+	font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
 	font-weight: normal;
 }
 h3 {
+	font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
 	font-weight: normal;
 	margin-bottom: 3px;
 }
@@ -36,11 +36,13 @@ pre {
 }
 /* page layout themes */
 .info {
+	font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
 	border: 2px solid #CCCC99;
 	border-collapse: collapse;
 	padding: 16px;
 }
 th.info {
+	font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
 	font-weight: normal;
 	letter-spacing: 0.2em;
 	border: 2px solid #CCCC99;
@@ -832,4 +834,3 @@ year
 {
   display: inline;
 }
-
