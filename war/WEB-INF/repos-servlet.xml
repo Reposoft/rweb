@@ -22,7 +22,12 @@
 	<bean id="pathValidator" class="se.optime.repos.webdav.RepositoryPathValidator">
     </bean>
 	
-	<bean id="documentController" class="se.optime.document.DocumentController">
+	<bean id="saveController" class="se.optime.repos.webdav.action.SaveFileController">
+	    <property name="commandClass"><value>se.optime.repos.webdav.action.RepositoryUpdate</value></property>
+	    <property name="validator"><ref local="pathValidator"/></property>	    
+	</bean>
+	
+	<bean id="documentController" class="se.optime.repos.document.DocumentController">
 	    <property name="commandClass"><value>se.optime.repos.webdav.RepositoryResource</value></property>
 	    <property name="validator"><ref local="pathValidator"/></property>
 	</bean>
@@ -31,6 +36,8 @@
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
             <props>
+                <!-- shared actions -->
+                <prop key="/save.jwa">saveController</prop>
                 <!-- filetypes -->
                 <prop key="/**/*.doc.jwa">documentController</prop>
                 <prop key="/**/*.html.jwa">documentController</prop>

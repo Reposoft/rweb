@@ -51,6 +51,7 @@
     <report>maven-tasklist-plugin</report>
     <!--<report>maven-linkcheck-plugin</report>-->
     <report>maven-linkcheck-plugin</report>
+    <report>maven-jcoverage-plugin</report>
   </reports>
   <developers>
     <developer>

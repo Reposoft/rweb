@@ -20,7 +20,7 @@ Needs the following model:
 </head>
 <body bgcolor="#CCCCCC">
 <jsp:include page="document.top.inc.jsp"/>
-<form name="ordbehandlare" id="ordbehandlare" action="${resource.filename}.jwa?${resource.identifierQuery}" method="POST">
+<form name="ordbehandlare" id="ordbehandlare" action="save.jwa?${resource.identifierQuery}" method="POST">
 <textarea name="contents" style="width:100%" rows="30"><repos:stream contents="${resource.inputStream}"/></textarea>
 </form>
 <jsp:include page="document.bottom.inc.jsp"/>

@@ -36,8 +36,9 @@ public abstract class RepositoryAccessException extends RuntimeException {
     public static final int EXPLICIT_URL_INVALID = 13;
     public static final int ACCESS_FAILED_TEMPORARILY = 14;
     public static final int RESOURCE_DOES_NOT_EXIST = 15;
-    public static final int EMPTY_CONTENTS = 16;
-    public static final int CANNOT_PARSE_CONTENTS = 17;
+    public static final int WRONG_FILETYPE = 16;
+    public static final int EMPTY_CONTENTS = 17;
+    public static final int CANNOT_PARSE_CONTENTS = 18;
     
     // also allow HTTP status codes
     

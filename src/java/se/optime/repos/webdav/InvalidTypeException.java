@@ -12,21 +12,47 @@ import se.optime.repos.RepositoryPath;
  */
 public class InvalidTypeException extends RepositoryAccessException {
 
+    private String expectedFiletype = null;
+    
     /**
-     * @param filetypeMismatch If the error is due to an unexpected filetype, false if wron resource type
-     * @param path
+     * Expected file but resource is directory, or the reverse
+     * @param path The unaccepted resource
      */
-    public InvalidTypeException(boolean filetypeMismatch, RepositoryPath path) {
-        super(getErrorCode(filetypeMismatch, path), path);
+    public InvalidTypeException(RepositoryPath path) {
+        super(getErrorCode(path), path);
     }
 
-    private static int getErrorCode(boolean filetypeMismatch, RepositoryPath path) {
-        if (filetypeMismatch)
-            return CANNOT_PARSE_CONTENTS;
+    /**
+     * Expected a certain filetype, and suspecting this is not of the correct type
+     * @param expectedFiletype Specifying the filetype
+     * @param path The unaccepted resource
+     */
+    public InvalidTypeException(String expectedFiletype, RepositoryPath path) {
+        super(WRONG_FILETYPE, path);
+        setExpectedFiletype(expectedFiletype);
+    }
+    
+    /**
+     * @param path
+     * @return error code based on if resource is a file or a directory
+     */
+    private static int getErrorCode(RepositoryPath path) {
         if (path.getHref()==null)
             return FILE_EXPECTED;
         else
             return DIRECTORY_EXPECTED;
     }
 
+    /**
+     * @return Returns the expectedFiletype.
+     */
+    public String getExpectedFiletype() {
+        return expectedFiletype;
+    }
+    /**
+     * @param expectedFiletype The expectedFiletype to set.
+     */
+    public void setExpectedFiletype(String expectedFiletype) {
+        this.expectedFiletype = expectedFiletype;
+    }
 }

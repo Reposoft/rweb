@@ -1,7 +1,7 @@
 /*
  * Created on 2004-okt-02
  */
-package se.optime.document;
+package se.optime.repos.document;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -26,7 +26,8 @@ public class RepositoryUpdate extends RepositoryResource {
     private String contents = null;
 
     /**
-     * 
+     * Save changes to this file, if there are any.
+     * Empty contents will not be saves unless allowEmpty is set to true.
      */
     public void commitContents() {
         if (!allowEmpty && getContents()==null)
@@ -40,6 +41,9 @@ public class RepositoryUpdate extends RepositoryResource {
         }
     }
 
+    /** 
+     * @return MVC View that can be returned to the request handler
+     */
     public View getForwardView() {
         return new RedirectView(getForward());
     }
@@ -88,7 +92,7 @@ public class RepositoryUpdate extends RepositoryResource {
      */
     public Resource createRelative(String relativePath) throws IOException {
         if (isFile())
-            throw new InvalidTypeException(false,this);
+            throw new InvalidTypeException(this);
         throw new UnsupportedOperationException(
                 "Method RepositoryUpdate#createRelative not implemented yet.");
     }
