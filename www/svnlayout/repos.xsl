@@ -394,9 +394,8 @@
 			</xsl:if>
 			<xsl:if test="@action='A'">
 				<xsl:if test="@copyfrom-path">
-					<xsl:text>copied from</xsl:text>
-					<span class="path"><xsl:value-of select="@copyfrom-path"/></span>
-					<xsl:value-of select="$spacer"/>
+					<xsl:text>copied from </xsl:text>
+					<span class="path"><xsl:value-of select="@copyfrom-path"/> </span>
 					<span class="revision"><xsl:value-of select="@copyfrom-rev"/></span>
 				</xsl:if>
 			</xsl:if>
