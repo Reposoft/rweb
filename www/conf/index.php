@@ -1,6 +1,7 @@
 <?php
 include './authentication.inc.php';
 
+echo '<small><a href="logout.php">Log out</a></small>';
 echo "<pre>\n";
 echo "==== Test retrieval of credentials ===";
 echo "\nUsername = ";
