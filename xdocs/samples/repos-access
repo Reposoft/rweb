@@ -1,15 +1,12 @@
 [groups]
-administrators = admin
+admin = administrator
+demo-projekt = svensson
 
 [/]
-@administrators = rw
+@admin = rw
 
-[/testuser]
-testuser = rw
+[svensson]
+svensson = rw
 
-[/testuser2]
-testuser2 = rw
-
-[/testproject]
-testuser = rw
-testuser2 = r
+[demo-projekt]
+@demo-projekt = rw
