@@ -2,7 +2,7 @@
 /**
  * Logging out of BASIC authentication
  */
-function showLogoutScreen() {
+function showLogoutScreen($message) {
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -16,7 +16,10 @@ function showLogoutScreen() {
 <table width="760" border="0" align="center" class="info">
   <tr>
 	<th class="info" width="25%">Logout</th>
-	<td class="info" colspan="3">You have been logged out (hopefully, but this is still beta)</td>
+	<td class="info" colspan="3">
+		You have been logged out (hopefully, but this is still beta).<br />
+		<?php echo $message ?>
+	</td>
   </tr>
 </table>
 </body>
@@ -31,27 +34,48 @@ if (!isset($_SERVER['PHP_AUTH_USER'])) {
 */
 
 // *** IE6 SP1+ ****
-	// seems not to work. Maybe a javascript is needed to do a redirect like the one below
-	// Or when calling logout page from somewhere include the user and password already
 if (strstr ($_SERVER['HTTP_USER_AGENT'], "MSIE")) {
-	header('HTTP/1.0 401 Unauthorized');
-	showLogoutScreen("IE6 sent 401 headers");
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>repos.se</title>
+<link href="../themes/simple/css/repos-standard.css" rel="stylesheet" type="text/css">
+</head>
+<script language="javascript">
+document.execCommand('ClearAuthenticationCache') //clear cache
+parent.location.href="http://www.repos.se/" //redirect after logged out
+</script>
+<body>
+<table width="760" border="0" align="center" class="info">
+  <tr>
+	<th class="info" width="25%">Logout</th>
+	<td class="info" colspan="3">You are now logged out using javascript for Internet Explorer 6 SP1+.<br />Redirecting to <a href="http://www.repos.se/">http://www.repos.se/</a>.</td>
+  </tr>
+</table>
+</body>
+</html>
+<?php
+	exit;
 }
 
 // *** other browsers ***
+// first need to check the credentials for this realm
+require_once('login.inc.php');
+// a successful logout using forced username and redirect would get us here
 if ($_SERVER['PHP_AUTH_USER']=='void') {
 	showLogoutScreen("Basic auth username was set to 'void'");
 }
-require_once('login.inc.php');
+// an unsuccessful logout would end up here, if the logout attemt sets the 'logout' paramter
 if (isset($_GET['logout'])) {
 	header('HTTP/1.0 401 Unauthorized');
-	echo 'Error logging out. You need to close your browser to clear authentication.';	
-} else {
-	$logout_url = 'http';
-	if($_SERVER['SERVER_PORT']==443) $logout_url += 's';
-	$logout_url = $logout_url . "://void:LoggedOut@" . $_SERVER['SERVER_NAME'] .  ':' . $_SERVER['SERVER_PORT'] . $_SERVER['SCRIPT_NAME'] . '?logout=1';
-	// note that redirect including a password is illegal in IE
-	header("Location: $logout_url");
+	showLogoutScreen("Did an attempt to log you out, but your browser may not support it.");
 }
-}
+// try to log out using redirect
+$logout_url = 'http';
+if($_SERVER['SERVER_PORT']==443) $logout_url += 's';
+$logout_url = $logout_url . "://void:LoggedOut@" . $_SERVER['SERVER_NAME'] .  ':' . $_SERVER['SERVER_PORT'] . $_SERVER['SCRIPT_NAME'] . '?logout=1';
+// note that redirect including a password is illegal in IE
+header("Location: $logout_url");
 ?>

@@ -29,12 +29,14 @@
 	<xsl:param name="buttonsUrl">
 		<xsl:value-of select="$rurl"/>
 		<xsl:value-of select="$theme"/>/buttons</xsl:param>
+	<!-- webdav operations url, empty if not available -->
+	<xsl:param name="webdavUrl"></xsl:param>
 	<!-- avaliable icons -->
 	<xsl:param name="icons">._folder._file.ai.bmp.xhm.doc.exe.gif.gz.htm.html.ics.jar.java.jpg.log.mpg.pdf.php.png.ps.psd.qt.sh.sit.sxw.tif.tmp.txt.vcf.xls.zip</xsl:param>
 	<!-- filetype for which there is a thumbnail generator -->
 	<xsl:param name="thumbs">.jpeg</xsl:param>
 	<!-- filetype for which there is an integrated viewer -->
-	<xsl:param name="views">.doc.ics.gan</xsl:param>
+	<xsl:param name="views">.doc.html.ics.gan</xsl:param>
 	<!-- icon dimensions -->
 	<xsl:param name="iconSize">22</xsl:param>
 	<xsl:param name="iconVspace">1</xsl:param>
@@ -125,22 +127,24 @@
 					<xsl:with-param name="filetype" select="'_parent'"/>
 				</xsl:call-template>up</span>
 		</xsl:if>
-		<span class="command">
-			<xsl:call-template name="showicon">
-				<xsl:with-param name="filetype" select="'_newfolder'"/>
-			</xsl:call-template>new folder</span>
-		<span class="command">
-			<xsl:call-template name="showicon">
-				<xsl:with-param name="filetype" select="'_upload'"/>
-			</xsl:call-template>upload</span>
-		<span class="command">
+		<xsl:if test="$webdavUrl">
+			<span class="command">
+				<xsl:call-template name="showicon">
+					<xsl:with-param name="filetype" select="'_newfolder'"/>
+				</xsl:call-template>new folder</span>
+			<span class="command">
+				<xsl:call-template name="showicon">
+					<xsl:with-param name="filetype" select="'_upload'"/>
+				</xsl:call-template>upload</span>
+		</xsl:if>
+		<a class="command" href="{$rurl}/tutorials/?show=networkfolder">
 			<xsl:call-template name="showicon">
 				<xsl:with-param name="filetype" select="'_windowsfolder'"/>
-			</xsl:call-template>open in Windows</span>
-		<span class="command">
+			</xsl:call-template>open folder</a>
+		<a class="command" href="{$rurl}/tutorials/?show=checkout">
 			<xsl:call-template name="showicon">
 				<xsl:with-param name="filetype" select="'_tortoisefolder'"/>
-			</xsl:call-template>check out</span>
+			</xsl:call-template>check out</a>
 		<a class="command" href="{$rurl}/log/?path={@path}">
 			<xsl:call-template name="showicon">
 				<xsl:with-param name="filetype" select="'_log'"/>
@@ -185,9 +189,11 @@
 			</a>
 			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
-			<span class="action">rename</span>
-			<span class="action">copy</span>
-			<span class="action">delete</span>
+			<xsl:if test="$webdavUrl">
+				<span class="action">rename</span>
+				<span class="action">copy</span>
+				<span class="action">delete</span>
+			</xsl:if>
 		</p>
 	</xsl:template>
 	<!-- generate file -->
@@ -199,41 +205,53 @@
 			</a>
 			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
-			<xsl:call-template name="getReposLink">
+			<xsl:call-template name="getViewAction">
 				<xsl:with-param name="text">open</xsl:with-param>
 			</xsl:call-template>
-			<span class="action">rename</span>
-			<span class="action">copy</span>
-			<span class="action">delete</span>
-			<span class="action">lock</span>
-			<span class="action">upload changes</span>
+			<xsl:if test="$webdavUrl">
+				<span class="action">rename</span>
+				<span class="action">copy</span>
+				<span class="action">delete</span>
+				<span class="action">lock</span>
+				<span class="action">upload changes</span>
+			</xsl:if>
 		</p>
 	</xsl:template>
 	<!-- display link to open the resource in Repos -->
-	<xsl:template name="getReposLink">
+	<xsl:template name="getViewAction">
 		<xsl:param name="name" select="@name"/>
 		<xsl:param name="path" select="../@path"/>
 		<xsl:param name="text" select="@name"/>
 		<xsl:param name="file" select="@href"/>
-		<xsl:element name="a">
-			<xsl:attribute name="class">
-				<xsl:value-of select="'action'"/>
-			</xsl:attribute>
-			<xsl:attribute name="href">
-				<xsl:value-of select="$rurl"/>
-				<xsl:value-of select="'/'"/>
-				<!-- ...file.type.jwa mapping to controller -->
-				<xsl:value-of select="$name"/>
-				<xsl:value-of select="'.jwa'"/>
-				<!-- path not ending with '/' -->
-				<xsl:value-of select="'&amp;path='"/>
-				<xsl:value-of select="$path"/>
-				<!-- filename -->
-				<xsl:value-of select="'&amp;file='"/>
-				<xsl:value-of select="$file"/>
-			</xsl:attribute>
-			<xsl:value-of select="$text"/>
-		</xsl:element>
+		<xsl:param name="filetype">
+			<xsl:call-template name="getFiletype"/>
+		</xsl:param>
+		<xsl:choose>
+			<xsl:when test="contains($views,concat(.,$filetype))">
+				<xsl:element name="a">
+					<xsl:attribute name="class">
+						<xsl:value-of select="'action'"/>
+					</xsl:attribute>
+					<xsl:attribute name="href">
+						<xsl:value-of select="$rurl"/>
+						<xsl:value-of select="'/'"/>
+						<!-- ...file.type.jwa mapping to controller -->
+						<xsl:value-of select="$name"/>
+						<xsl:value-of select="'.jwa'"/>
+						<!-- path not ending with '/' -->
+						<xsl:value-of select="'&amp;path='"/>
+						<xsl:value-of select="$path"/>
+						<!-- filename -->
+						<xsl:value-of select="'&amp;file='"/>
+						<xsl:value-of select="$file"/>
+					</xsl:attribute>
+					<xsl:value-of select="$text"/>
+				</xsl:element>
+			</xsl:when>
+			<xsl:otherwise>
+				<span class="action"><xsl:value-of select="$text"/></span>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	<!-- generate icon based on filetype and settings -->
 	<xsl:template name="getIcon">
@@ -295,7 +313,7 @@
 	<xsl:param name="undo">Reverse the changes made from previous revision to this one</xsl:param>
 	<!-- layout -->
 	<xsl:template match="log">
-		<table class="svnlayout">
+		<table class="info">
 			<tr>
 				<td id="titlebar" class="titlebar">
 					<xsl:call-template name="titlebar"/>
@@ -373,7 +391,7 @@
 	========= svn diff formatting ==========
 	-->
 	<xsl:template match="diff">
-		<table class="svnlayout">
+		<table class="info">
 			<tr>
 				<td id="titlebar" class="titlebar">
 					<xsl:call-template name="titlebar"/>
