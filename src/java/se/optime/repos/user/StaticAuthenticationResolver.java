@@ -7,6 +7,12 @@ import net.sf.acegisecurity.Authentication;
 import net.sf.acegisecurity.AuthenticationServiceException;
 
 /**
+ * Providing access to the current user credentials from a command instance.
+ * 
+ * <p>Just delgates to an AuthenticationResolver. The default instance is a
+ * {@link BasicAuthenticationResolver}.
+ * This can be changed (global) using the {@link #setResolver(AuthenticationResolver) setResolver} method.
+ * 
  * @author solsson
  * @version $Id$
  */

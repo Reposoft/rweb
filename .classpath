@@ -26,5 +26,6 @@
 	<classpathentry kind="var" path="MAVEN_REPO/optime/jars/optime-utils-1.0.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/jical/jars/jical-OPTIME.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-mock-1.1.1.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/easymock/jars/easymock-1.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

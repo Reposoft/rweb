@@ -7,6 +7,7 @@ import se.optime.repos.RepositoryAccessException;
 import se.optime.repos.RepositoryPath;
 
 /**
+ * Connection was successful but the resource is not there.
  * @author solsson
  * @version $Id$
  */

@@ -32,7 +32,7 @@ public class WebdavFactory {
     }
     
     /**
-     * @param webdav Webdav implementation other than the default.
+     * @param webdavImplementation Webdav implementation other than the default.
      */
     static void setWebdav(Webdav webdavImplementation) {
         webdav = webdavImplementation;

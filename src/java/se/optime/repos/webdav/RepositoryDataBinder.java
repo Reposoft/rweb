@@ -9,6 +9,7 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 
 
 /**
+ * Custom binding of ResourcePath, currently not needed and not employed.
  * @author solsson
  * @version $Id$
  */

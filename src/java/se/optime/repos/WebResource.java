@@ -8,6 +8,13 @@ import java.io.Reader;
 import org.springframework.core.io.Resource;
 
 /**
+ * Providing the contents of a WebDAV file.
+ * 
+ * <p>This is the {@link org.springframework.core.io.Resource Springframework Resource} interface
+ * identified by a repository path. As a WebDAV resource, it is assumed to be
+ * updateable. Implementations must provide methods for reading the file,
+ * and may also provide methods for writing to the file.</p>
+ * 
  * @author solsson
  * @version $Id$
  */
@@ -20,7 +27,7 @@ public interface WebResource
      */    
     
     /**
-     * @return a character encoding agnostic Reader of the entire contents
+     * @return a character encoding aware Reader for the entire contents
      */
     public Reader getReader();
 

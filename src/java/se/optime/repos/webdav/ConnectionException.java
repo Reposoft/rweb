@@ -11,7 +11,12 @@ import se.optime.repos.RepositoryAccessException;
 import se.optime.repos.RepositoryPath;
 
 /**
- * Wrapper to analyze common checked exceptions like HttpException and IOException.
+ * Connection attempted, URL seemed valid but reading or writing failed.
+ * 
+ * <p>Analyzes common checked exceptions like HttpException and IOException.
+ * Distinguishes between read and write operations to determine severity in 
+ * for exampel transaction management.</p>
+ * 
  * @author solsson
  * @version $Id$
  */

@@ -7,6 +7,7 @@ import se.optime.repos.RepositoryAccessException;
 import se.optime.repos.RepositoryPath;
 
 /**
+ * Unexpected contents of resource, empty or not well formed.
  * @author solsson
  * @version $Id$
  */

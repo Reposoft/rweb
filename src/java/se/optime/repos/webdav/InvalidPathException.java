@@ -11,6 +11,7 @@ import se.optime.repos.RepositoryAccessException;
 import se.optime.repos.RepositoryPath;
 
 /**
+ * The WebDAV resource identifier is not valid.
  * @author solsson
  * @version $Id$
  */

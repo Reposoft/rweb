@@ -20,6 +20,11 @@ import se.optime.repos.WebResource;
 import se.optime.repos.user.StaticAuthenticationResolver;
 
 /**
+ * WebDAV file or directory with operations to read contents.
+ * 
+ * <p>When needed, this class looks up user credentials using
+ * {@link StaticAuthenticationResolver}. However they are never stored here.</p>
+ * 
  * @author solsson
  * @version $Id$
  */
@@ -33,8 +38,8 @@ public class RepositoryResource extends AbstractResource
     private String href = null;
     boolean secure = false;
     
-    private String user = StaticAuthenticationResolver.getAuthenticatedUsername();
-    private String pass = StaticAuthenticationResolver.getAuthenticatedPassword();
+    private String user = null;
+    private String pass = null;
     
     /**
      * @param href The href to set.
@@ -155,12 +160,16 @@ public class RepositoryResource extends AbstractResource
      * @return Returns the pass.
      */
     protected String getPass() {
+        if (pass==null)
+            return StaticAuthenticationResolver.getAuthenticatedPassword();
         return pass;
     }
     /**
      * @return Returns the user.
      */
     protected String getUser() {
+        if (user==null)
+            return StaticAuthenticationResolver.getAuthenticatedUsername();
         return user;
     }
     /**
@@ -222,6 +231,12 @@ public class RepositoryResource extends AbstractResource
         }
     }
     /* (non-Javadoc)
+     * @see org.springframework.core.io.Resource#exists()
+     */
+    public boolean exists() {
+        return getDavFile().exists();
+    }
+    /* (non-Javadoc)
      * @see se.optime.repos.RepositoryPath#getIdentifierQuery()
      */
     public String getIdentifierQuery() {
@@ -234,10 +249,12 @@ public class RepositoryResource extends AbstractResource
             q.append("&port=").append(getPort());
         return q.toString();
     }
-    /* (non-Javadoc)
-     * @see org.springframework.core.io.Resource#exists()
+    /**
+     * @return All fields as query string
      */
-    public boolean exists() {
-        return getDavFile().exists();
+    public String toString() {
+        StringBuffer s = new StringBuffer(getIdentifierQuery());
+        s.append("&secure=").append(isSecure());
+        return s.toString();
     }
 }

@@ -12,6 +12,8 @@ import se.optime.repos.WebResource;
 import se.optime.repos.webdav.RepositoryController;
 
 /**
+ * Managing document contents, in particular validating the format.
+ * 
  * @author solsson
  * @version $Id$
  */

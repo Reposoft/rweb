@@ -11,6 +11,8 @@ import net.sf.acegisecurity.context.ContextHolder;
 import net.sf.acegisecurity.context.SecureContext;
 
 /**
+ * Resolves user creadentials from HTTP Basic authentication.
+ * 
  * @author solsson
  * @version $Id$
  */

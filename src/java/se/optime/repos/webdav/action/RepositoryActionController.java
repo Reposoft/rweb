@@ -51,20 +51,27 @@ public abstract class RepositoryActionController extends
     }
     
     /**
-     * @param request
-     * @param command Make sure this has some place to redirect to
+     * @param request Request, possibly containing a 'Referer' header
+     * @param command Make sure we have some place to redirect to
      */
-    private void checkForward(HttpServletRequest request, RepositoryUpdate command) {
+    protected void checkForward(HttpServletRequest request, RepositoryUpdate command) {
         if (command.getForward()==null) {
             String referrer = request.getHeader("Referer");
             if (referrer==null) {
-                logger.warn("WebDAV action called without 'forward' set and without referer. Redirection to repository.");
+                logger.warn("WebDAV action called without 'forward' set and without referer. Redirecting to repository.");
                 referrer = command.getURL().toString();
             }
             command.setForward(referrer);
         }
     }
 
+    /**
+     * Perform the update to the repository
+     * @param request
+     * @param resource
+     * @return View when the action is commited
+     * @throws Exception if the action could not be performed
+     */
     protected abstract View execute(HttpServletRequest request, RepositoryUpdate resource)
     		throws Exception;
 }
