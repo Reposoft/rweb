@@ -4,11 +4,11 @@
     xmlns="http://www.w3.org/1999/xhtml">
 <xsl:output standalone="no"/>
 
-<xsl:param name="rootUrl" select="'http://www.repos.se'"/><!-- get from repos.properties -->
+<xsl:param name="rootUrl" select="'http://www.repos.se/'"/><!-- get from repos.properties -->
 <!-- layout properties -->
-<xsl:param name="imageUrl" select="'{$rootUrl}/images/'"/>
-<xsl:param name="cssUrl" select="'{$rootUrl}/css/'"/>
-<xsl:param name="jsUrl" select="'{$rootUrl}/js/'"/>
+<xsl:param name="imageUrl"><xsl:value-of select="$rootUrl"/><xsl:value-of select="'images/'"/></xsl:param>
+<xsl:param name="cssUrl"><xsl:value-of select="$rootUrl"/><xsl:value-of select="'css/'"/></xsl:param>
+<xsl:param name="jsUrl"><xsl:value-of select="$rootUrl"/><xsl:value-of select="'js/'"/></xsl:param>
     
 <!-- *** replace newline with <br> *** -->
 <xsl:template name="linebreak">
