@@ -26,7 +26,7 @@
                      HTML Settings
     ################################################### -->   
 
-    <xsl:param name="html.stylesheet">styles/html/acegi.css</xsl:param>
+    <xsl:param name="html.stylesheet">repos-docs.css</xsl:param>
 
     <!-- These extensions are required for table printing and other stuff -->
     <xsl:param name="use.extensions">1</xsl:param>

@@ -28,7 +28,7 @@
 
     <xsl:param name="chunk.section.depth">'5'</xsl:param>
     <xsl:param name="use.id.as.filename">'1'</xsl:param>
-    <xsl:param name="html.stylesheet">styles/html/acegi.css</xsl:param>
+    <xsl:param name="html.stylesheet">repos-docs.css</xsl:param>
 
     <!-- These extensions are required for table printing and other stuff -->
     <xsl:param name="use.extensions">1</xsl:param>

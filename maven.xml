@@ -1,11 +1,23 @@
 <!-- Customized maven behavior -->
 <project
-	xmlns:j="jelly:core">
+	xmlns:j="jelly:core"
+  xmlns:maven="jelly:maven">
 
   <!-- before generating project documentation, include repos manual -->
   <postGoal name="xdoc:generate-from-pom">
   	<attainGoal name="docbook:transform"/>
   	<attainGoal name="dependency-info"/>
+  </postGoal>
+  
+  <!-- When generating manual, use custom stylesheet -->
+  <postGoal name="sdocbook:prepare-filesystem">
+    <maven:get var="maven.sdocbook.stylesheets.dir"
+        plugin="maven-sdocbook-plugin"
+        property="maven.sdocbook.stylesheets.dir"/>
+    <!-- use custom stylesheets -->
+    <copy todir="${maven.sdocbook.stylesheets.dir}">
+        <fileset dir="${maven.sdocbook.src.dir}/styles"/>
+    </copy>
   </postGoal>
   
   <!-- collect dependency installation files for reference -->
