@@ -20,12 +20,12 @@ if ( $args >= 0 ) {
 		echo "Supported commands are: dump, load, verify, verifyMD5\n";
 	} elseif ( $argv[1] == "dump" ) {
 		if ($args != 3 || eregi("-*help",$argv[2])>0 )
-			echo "Usage: dump backup-path repository-path\n";
+			echo "Usage: dump repository-path backup-path\n";
 		else
 			dump($argv[2], $argv[3], getPrefix($argv[3]));
 	} elseif ( $argv[1] == "load" ) {
 		if ($args < 3 || eregi("-*help",$argv[2])>0 )
-			echo "Load all backup files into repository.\nUsage: load backup-path repository-path [prefix]\nDefault prefix is derived from repository path.\n";
+			echo "Load all backup files into repository.\nUsage: load repository-path backup-path [prefix]\nDefault prefix is derived from repository path.\n";
 		else
 			load($argv[2], $argv[3], isset($argv[4]) ? $argv[4] : getPrefix($argv[3]));
 	} elseif ( $argv[1] == "verify" ) {
@@ -65,7 +65,7 @@ function create($repository) {
  * @param repository Local path of the repository to back up
  * @param fileprefix
  */
-function dump($backupPath, $repository, $fileprefix) {
+function dump($repository, $backupPath, $fileprefix) {
 	$current = getCurrentBackup( $backupPath, $fileprefix );
 	$files = count($current);
 	$headrev = getHeadRevisionNumber( $repository );
@@ -147,7 +147,7 @@ function getCurrentBackup($backupPath, $fileprefix) {
  * @param repository Absolute path of the repository to load to
  * @param fileprefix Filenames up to first revision number, for example "myrepo-" for myrepo-00?-to-0??.svndump.gz
  */
-function load($backupPath, $repository, $fileprefix) {
+function load($repository, $backupPath, $fileprefix) {
 	define("LOADCOMMAND",getCommand('svnadmin') . " load $repository");
 
 	// validate input
