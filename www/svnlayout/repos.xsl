@@ -16,7 +16,7 @@
 	<!-- status images like 'locked' could be generated on the fly -->
 	
 	<!-- repos webapp URL (root), does not end with slash -->
-	<xsl:param name="rurl">http://alto.optime.se/repos</xsl:param>
+	<xsl:param name="rurl">http://www.repos.se</xsl:param>
 	<!-- current theme, for example '/theme', empty for root theme -->
 	<xsl:param name="theme"/>
 	<!-- static contents urls -->
