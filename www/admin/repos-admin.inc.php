@@ -85,6 +85,13 @@ function done($code = 0) {
 // --- helper functions ---
 
 /**
+ * Send message to the administrator whose address is specified in repos.properties
+ */
+function notifyAdministrator($text) {
+	
+}
+
+/**
  * @return valid filename representing an absolute repository path
  */
 function getPrefix($repository) {

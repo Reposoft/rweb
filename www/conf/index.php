@@ -1,11 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Untitled Document</title>
-</head>
-
-<body>
 <?php
 /**
  * Debug and visualize repos configuration
@@ -18,14 +10,33 @@ require( dirname(__FILE__) . '/repos.properties.php' );
 // configuration index settings
 $sections = array(
 	'links' => 'Links',
+	'requiredConfig' => 'Required configuration entries',
 	'debug' => 'Debug info'
 	);
+// validating configuration
 $links = array(
 	'logout.php' => 'Log out',
 	'configuration.php' => 'Configuration help'
 	);
-	
+$requiredConfig = array(
+	'administrator_email' => 'Administrator E-mail',
+	'repo_url' => 'Repoisitory root',
+	'local_path' => 'Local path of repository',
+	'admin_folder' => 'Administration folder',
+	'users_file' => 'File for usernames and passwords',
+	'backup_folder' => 'Local path for storage of backup'
+	);
+$dependencies = array(
+	'svn' => '',
+	'svnlook' => '',
+	'svnadmin' => '',
+);
+$requiredUrls = array(
+	);
+
+html_start();	
 sections();
+html_end();
 
 // --- layout ---
 function sections() {
@@ -36,15 +47,32 @@ function sections() {
 	}
 }
 
-// --- helper functions ---
+function html_start() {
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Repos Configuration Info</title>
+</head>
 
-/**
- * Check that path exists
- */
-function checkPath($path) {
-
+<body>
+<?
 }
 
+function html_end() {
+	echo "</body></html>";
+}
+
+// --- helper functions ---
+
+function sayOK($msg = 'OK') {
+	?><span style="color:#006600; padding-left:5px; padding-right:5px;"><strong><? echo $msg ?></strong></span><?
+}
+
+function sayFailed($msg = 'Failed') {
+	?><span style="color:#990000; padding-left:5px; padding-right:5px;"><strong><? echo $msg ?></strong></span><?
+}
 
 // --- sections' presentation ---
 
@@ -55,6 +83,19 @@ function links() {
 		echo "<a href=\"$url\">$name</a> &nbsp; ";
 	}
 	echo "</p>\n";
+}
+
+function requiredConfig() {
+	global $requiredConfig;
+	foreach ($requiredConfig as $key => $descr) {
+		$val = getConfig($key);
+		echo "<p>$descr ($key): ";
+		if ($val === false)
+			sayFailed("Missing");
+		else
+			sayOk($val);
+		echo "</p>";
+	}
 }
 
 // Debug output, does nothing
@@ -81,5 +122,3 @@ function debug() {
 }
 
 ?>
-</body>
-</html>
