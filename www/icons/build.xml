@@ -69,7 +69,7 @@
   	<move file="${ifrom}/mimetypes/archive_sit.png" tofile="${ito}/sit.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/chm.png" tofile="${ito}/chm.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/exec_wine.png" tofile="${ito}/exe.png" overwrite="false"/>
-  	<move file="${ifrom}/mimetypes/html.png" tofile="${ito}/html.png" overwrite="false"/>
+  	<copy file="${ifrom}/mimetypes/html.png" tofile="${ito}/html.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/html.png" tofile="${ito}/htm.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/msword_doc.png" tofile="${ito}/doc.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/image_ai.png" tofile="${ito}/ai.png" overwrite="false"/>
