@@ -48,16 +48,17 @@ $dependencies = array(
 $repository = array(
 	getCommand('svnlook') . ' youngest ' . getConfig('local_path') => "Local path contains repository revision: "
 );
+// checking urls needed for repository access
 $rurl = getConfig('repo_url');
 $aurl = str_replace("://","://" . getReposUser() . ":" .  getReposPass() . "@", getConfig('repo_url'));
-$lurl = ereg_replace("://[\w\.-_]+/","://localhost/", getConfig('repo_url'));
-$requiredUrls = array( 
-	getConfig('repos_web') => 'Acces to static contents ' . getConfig('repos_web'),
-	$rurl => 'Anonymous acces to the repository ' . getConfig('repo_url'),
-	$aurl => "Access to repository with current authenticatied user (" . getReposUser() . ")",
-	$lurl => "Access to repository using localhost"
-	);
-print_r($requiredUrls);
+$lurl = ereg_replace("://[^/<>[:space:]]+[[:alnum:]]/","://localhost/", getConfig('repo_url'));
+if ( getConfig('repos_web'==$rurl) )
+	echo "Warning: repos_web and repos_url are the same - mixing static resources and repository";
+$requiredUrls = array( getConfig('repos_web') => 'Acces to static contents ' . getConfig('repos_web') );
+$requiredUrls[$rurl] = 'Anonymous acces to the repository ' . getConfig('repo_url');
+$requiredUrls[$aurl] = "Access to repository with current authenticatied user (" . getReposUser() . ")";
+$requiredUrls[$lurl] = "Access to repository using localhost";
+
 
 html_start();	
 sections();

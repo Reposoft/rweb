@@ -26,6 +26,13 @@ $isExport = ! getConfig('export_file')===false;
 
 if (isset($_GET['download']) {
 	// download a configuration block
+	$block = $_GET['download'];
+	// We'll be outputting a PDF
+	header('Content-type: text/plain');
+	// It will be called downloaded.pdf
+	header('Content-Disposition: attachment; filename="' . $block . '.txt"');
+	// call_user_func( "$block" ); // this is probably a security risk right now
+	echo "Configuration block $block is not defined yet".
 } else {
 	// display all configuration blocks
 }

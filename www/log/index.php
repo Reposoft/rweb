@@ -10,13 +10,13 @@ $url = $_GET['url'];
 $user = getReposUser();
 $pass = getReposPass();
 $auth = " --username=$user --password=$pass";
-//$options = " -v --xml";
-$options = "";
+$options = " -v --xml";
 //$revisions = " -r HEAD";
 
 $cmd = getCommand('svn') . $auth . $options . $revisions . " log $url";
 
 // passthrough with stylesheet
+header('Content-type: text/xml');
 passthru($cmd);
 
 ?>
