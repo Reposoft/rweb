@@ -89,6 +89,9 @@ th.info {
 .datetime {
 	color: #666666;
 }
+.error {
+	color: #CC3300;
+}
 /* commands = toolbarbuttons, <a> is  active, <span> is greyed out */
 a.command {
 	background-color: #F0F0EE;

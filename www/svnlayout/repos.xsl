@@ -329,6 +329,7 @@
 			</tr>
 			<tr>
 				<td id="workarea" class="workarea">
+					<xsl:apply-templates select="error"/>
 					<xsl:apply-templates select="logentry"/>
 				</td>
 			</tr>
@@ -411,7 +412,7 @@
 				<td id="workarea" class="workarea">
 					<h2>
 						<span class="filename">
-							<xsl:value-of select="@path"/>
+							<xsl:value-of select="@target"/>
 						</span>
 						<xsl:value-of select="$spacer"/>
 						<span class="revision">
@@ -422,6 +423,9 @@
 							<xsl:value-of select="@revto"/>
 						</span>
 					</h2>
+					<xsl:apply-templates select="error">
+						<xsl:with-param name="possible-cause">The file might have been moved from this location</xsl:with-param>
+					</xsl:apply-templates>
 					<code><pre>
 						<xsl:value-of select="."/>
 					</pre></code>
@@ -433,6 +437,18 @@
 				</td>
 			</tr>
 		</table>
+	</xsl:template>
+	<!-- ====== error node ======== -->
+	<xsl:template match="error">
+		<xsl:param name="possible-cause"/>
+		<h3 class="error">An error has occured</h3>
+		<p>
+			<xsl:text>Code </xsl:text>
+			<xsl:value-of select="@code"/>
+			<xsl:value-of select="$spacer"/>
+			<xsl:value-of select="$possible-cause"/>
+		</p>
+		<pre class="error"><xsl:value-of select="."/></pre>
 	</xsl:template>
 	<!-- *** replace newline with <br> *** -->
 	<xsl:template name="linebreak">

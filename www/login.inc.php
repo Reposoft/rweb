@@ -166,13 +166,12 @@ function getSvnCommand() {
  * Errorhandling for SVN execute
  */
 function handleSvnError($executedcmd,$errorcode) {
-	echo "<error code=\"$errorcode\"/>\n";
+	echo "<error code=\"$errorcode\">\n";
 	echo "<![CDATA[\n";
-	// show the command. WARNING: may contain password
-	echo "$executedcmd\n------------------ error ---------------------\n";
 	// show error message
 	passthru("$executedcmd 2>&1");
 	echo "]]>\n";
+	echo "</error>";
 }
 
 ?>
