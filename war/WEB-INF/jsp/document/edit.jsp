@@ -13,7 +13,7 @@ Needs the following model:
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title><c:out value="${url}"/></title>
+        <title><c:out value="<%= request.getAttribute("url") %>"/></title>
 		<jsp:include page="../includes/head.inc.jsp"/>
     </head>
     <body>

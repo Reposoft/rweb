@@ -10,6 +10,8 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractCommandController;
 
+import se.optime.repos.webdav.RepositoryPath;
+
 /**
  * @author solsson
  * @version $Id$

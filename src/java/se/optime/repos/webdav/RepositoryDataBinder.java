@@ -12,6 +12,8 @@ import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValues;
 import org.springframework.web.bind.ServletRequestDataBinder;
 
+import se.optime.repos.webdav.RepositoryPath;
+
 /**
  * @author solsson
  * @version $Id$
