@@ -1,5 +1,5 @@
 <?php
-$rev = strtr("$Rev$",'$','_');
+$rev = strtr("$Rev$",'$',' ');
 // default configuration includes, the way they should be referenced in php files
 function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
 //require( upOne(dirname(__FILE__)) . '/conf/authentication.inc.php' );
@@ -24,15 +24,13 @@ $repourl = getConfig( 'repo_url' );
 $repodir = getConfig( 'local_path' );
 $reposweb = getConfig( 'repos_web' );
 $admindir = getConfig( 'admin_folder' );
-$repouri = dirname( $repo );
+$repouri = ereg_replace("[[:alpha:]]+://[^-/<>[:space:]]+[[:alnum:]/]","/", $repourl);
 $user = exec( getCommand('whoami') );
 $self = $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'];
 $date = date("Y-m-d H:i:s");
 $backupdir = getConfig( 'backup_dir' );
 $backupurl = getConfig( 'backup_url' );
-$backupurl = dirname( $backupurl );
-// global config analysis
-$isWindows = 0;
+$backupuri = ereg_replace("[[:alpha:]]+://[^/<>[:space:]]+[[:alnum:]/]","/", $backupurl);
 // authentication defined
 $isAuth = ! getConfig('users_file')===false;
 // access control defined
@@ -42,17 +40,20 @@ $isExport = ! getConfig('export_file')===false;
 // backup settings defined
 $isBackup = ! getConfig('backup_url')===false;
 
+global $reponame, $repourl, $repodir, $reposweb, $admindir, $repouri, $user, $self, $date, $backupdir, $backupurl, $backupuri, $rev, $isAuth, $isAcl, $isExport, $isBackup;
+
 // config file layout
 function showHeader($title, $Q=';') {
-	line("$Q ---- Repos.se configuration ----");
-	line("$Q -- $title");
-	line("$Q -- $self $rev at £date");
+	global $reponame, $repourl, $repodir, $reposweb, $admindir, $repouri, $user, $self, $date, $backupdir, $backupurl, $backupuri, $rev, $isAuth, $isAcl, $isExport, $isBackup;
+	line("$Q ---- Repos.se configuration ----" );
+	line("$Q -- $title" );
+	line("$Q -- $self $rev at $date" );
 }
-function showFooter($title, $comment=';') {
-	line("$Q --------------------------------");
+function showFooter($Q=';') {
+	line("$Q --------------------------------" );
 }
 function line($text='') {
-	line ( "$text");
+	echo "$text\n\r";
 }
 
 if ( isset($_GET['download']) ) {
@@ -65,24 +66,34 @@ if ( isset($_GET['download']) ) {
 	if ( is_callable( $block ) )
 		call_user_func( $block );
 	else
-		line ( "Configuration block $block is not defined yet";
+		line( "Configuration block $block is not defined yet" );
 } else {
-	line ( "<html><body><h1>Repos configuration</h1>");
+	$tilte = "Repos configuration"?>
+	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+	<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title><?php echo $title ?></title>
+	<link href="../css/repos-standard.css" rel="stylesheet" type="text/css">
+	</head>
+	
+	<body>
+	<?php
 	foreach ( $sections as $name => $descr ) {
-		line ( "<h2>$name</h2>");
-		line ( "<p>$descr</p>");
-		line ( "<a href=\"?download=$name\">download</a>";
-		line ( "<pre>");
+		line( "<h2>$name</h2>" );
+		line( "<p>$descr</p>" );
+		line( "<a href=\"?download=$name\">download</a>" );
+		line( "<pre>" );
 		call_user_func( $name );
-		line ( "</pre>";
+		line( "</pre>" );
 	}
-	line ( "</body></html>";
+	line( "</body></html>" );
 }
 
 function repository() {
 	$cmd = getCommand( 'svnadmin' );
 	// create command
-	showHeader("Create repository $dir accessible for system user $user","#");;
+	showHeader("Create repository $dir accessible for system user $user","#" );
 	line( "mkdir $repodir" );
 	line( "$cmd create $repodir" );
 	if ( ! isWindows() ) {
@@ -101,23 +112,23 @@ function administration() {
 	if ( $isAcl ) {
 		// authorization
 		$acl = getConfig('access_file');
-		showHeader("Subversion access control list $path/$acl");
+		showHeader("Subversion access control list $path/$acl" );
 		line();
-		line("[groups]");
-		line( "administrators = ");
-		line( "");
-		line( "[/]");
-		line( "@administrators = rw");
+		line("[groups]" );
+		line( "administrators = " );
+		line( "" );
+		line( "[/]" );
+		line( "@administrators = rw" );
 	} else {
-		line( "No access control file defined in repos.properties";
+		line( "No access control file defined in repos.properties" );
 	}
 	// export
 	if ( $isExport ) {
 		$export = getConfig( 'export_file' );
-		showHeader(" Subversion export path list $path/$export");
-		line ( "; Syntax: system-path = repository path" );		
+		showHeader(" Subversion export path list $path/$export" );
+		line( "; Syntax: system-path = repository path" );		
 	} else {
-		line ( "; No export file defined in repos.properties" );	
+		line( "; No export file defined in repos.properties" );	
 	}
 }
 
@@ -128,15 +139,16 @@ function crontab() {
 }
 
 function apache2() {
-	showHeader "# ---- Apache2 .conf block for repository $reponame ----\n" );
-	$requirements = "# Requires modules: dav, dav_svn"
+	global $reponame, $repourl, $repodir, $reposweb, $admindir, $repouri, $user, $self, $date, $backupdir, $backupurl, $backupuri, $rev, $isAuth, $isAcl, $isExport, $isBackup;
+	showHeader( "Apache2 .conf block for repository $reponame", "#" );
+	$requirements = "# Requires modules: dav, dav_svn";
 	if ( $isAcl )
 		$requirements .= ", authz_svn";
 	?>
-	# Repository <?php echo $repourl ?>
-	<Location <?php echo $repouri ?>>
+	# Repository <?php echo $repourl ?> 
+	&lt;Location <?php echo $repouri ?>&gt;
 	  DAV svn
-	  SVNPath <?php echo $repodir ?>
+	  SVNPath <?php echo $repodir ?> 
 	  Options Indexes
 	  SVNIndexXSLT "<?php echo $reposweb . "/svnlayout/repos.xsl" ?>"
 	  # Allow edit from WebDAV folder
@@ -144,34 +156,34 @@ function apache2() {
 	  
 	  AuthType Basic
 	  AuthName "<?php echo $reponame ?>"
-	  AuthUserFile <?php echo $admindir . '/' . getConfig('users_file'); ?>
+	  AuthUserFile <?php echo $admindir . '/' . getConfig('users_file'); ?> 
 	  Require valid-user
-	  <?php if ( $isAcl ) { ?>
-	  AuthzSVNAccessFile <?php echo $admindir . '/' . getConfig('access_file'); ?>
-	  <?php } ?>
-	</Location>
+	  <?php if ( $isAcl ) { ?> 
+	  AuthzSVNAccessFile <?php echo $admindir . '/' . getConfig('access_file'); ?> 
+	  <?php } ?> 
+	&lt;/Location&gt;
 	# Tomcat connector
-	<IfModule mod_jk2.c>
+	&lt;IfModule mod_jk2.c&gt;
 		# Jk2 worker lb must be properly set up, see installation docs
-	    <Location ~ "<?php echo $repouri ?>/.*\.jwa">
+		&lt;Location ~ "<?php echo $repouri ?>/.*\.jwa"&gt;
 			JkUriSet group lb:lb
 			JkUriSet info "<?php echo $reponame ?>"
-		</Location>
-	    <Location ~ "<?php echo $repouri ?>/.*\.jsp">
+		&lt;/Location&gt;
+		&lt;Location ~ "<?php echo $repouri ?>/.*\.jsp"&gt;
 			JkUriSet group lb:lb
 			JkUriSet info "<?php echo $reponame ?>"
-		</Location>
-	</IfModule>
-	<IfModule mod_jk.c>
+		&lt;/Location&gt;
+	&lt;/IfModule&gt;
+	&lt;IfModule mod_jk.c&gt;
 		# Jk worker ajp13 must be properly set up
 		JkMount <?php echo $repouri ?>/*.jsp ajp13
 		JkMount <?php echo $repouri ?>/*.jwa ajp13
-	</IfModule>
+	&lt;/IfModule&gt;
 	
 	<?php if ( $isBackup ) { ?>
-	# Repository backup folder for mirroring <?php echo $backupurl ?>
-	Alias <?php echo $backupuri ?> <?php echo $backupdir ?>
-	<Directory <?php echo $backupdir ?>>
+	# Repository backup folder for mirroring <?php echo $backupurl ?> 
+	Alias <?php echo $backupuri ?> <?php echo $backupdir ?> 
+	&lt;Directory <?php echo $backupdir ?>&gt;
 		Options Indexes
 
 	    Order Deny,Allow
@@ -180,14 +192,13 @@ function apache2() {
 	
 		AuthType Basic
 		AuthName "<?php echo $reponame ?>"
-		AuthUserFile <?php echo $admindir . '/' . getConfig('users_file'); ?>
+		AuthUserFile <?php echo $admindir . '/' . getConfig('users_file'); ?> 
 		Require user administrator
 
 		Satisfy Any
-	</Directory>
-	<?php } ?>
-	<?php
-	showFooter();
+	&lt;/Directory&gt;
+	<?php } 
+	showFooter("#");
 }
 
 function hooks() {
