@@ -88,7 +88,7 @@ function getRepositoryUrl() {
  *   Returns false if url is empty or if if path is not part of url. 
  */
 function getRepoRoot($fullUrl,$pathFromRepoRoot) {
-	return substr($fullUrl, 0 , strpos($fullUrl, $pathFromRepoRoot)-1);
+	return substr($fullUrl, 0 , strpos($fullUrl, $pathFromRepoRoot));
 }
 
 /**
