@@ -27,20 +27,26 @@ public abstract class RepositoryAccessException extends RuntimeException {
     
     // collect error codes here 
     public static final int UNKNOWN_ERROR = 0;
-    public static final int UNKNOWN_ACCESS_ERROR = 1;
-    public static final int UNKNOWN_READ_ERROR = 2;
-    public static final int UNKNOWN_WRITE_ERROR = 3;
-    public static final int FILE_EXPECTED = 10;
-    public static final int DIRECTORY_EXPECTED = 11;
-    public static final int RESULTING_URL_INVALID = 12;
-    public static final int EXPLICIT_URL_INVALID = 13;
-    public static final int ACCESS_FAILED_TEMPORARILY = 14;
-    public static final int RESOURCE_DOES_NOT_EXIST = 15;
-    public static final int WRONG_FILETYPE = 16;
-    public static final int EMPTY_CONTENTS = 17;
-    public static final int CANNOT_PARSE_CONTENTS = 18;
+    public static final int UNKNOWN_ACCESS_ERROR = 901;
+    public static final int UNKNOWN_READ_ERROR = 902;
+    public static final int UNKNOWN_WRITE_ERROR = 903;
+    public static final int FILE_EXPECTED = 910;
+    public static final int DIRECTORY_EXPECTED = 911;
+    public static final int RESULTING_URL_INVALID = 912;
+    public static final int EXPLICIT_URL_INVALID = 913;
+    public static final int ACCESS_FAILED_TEMPORARILY = 914;
+    public static final int RESOURCE_DOES_NOT_EXIST = 915; // internal version of HTTP_NOT_FOUND, should maybe have the same code
+    public static final int WRONG_FILETYPE = 916;
+    public static final int EMPTY_CONTENTS = 917;
+    public static final int CANNOT_PARSE_CONTENTS = 918;
     
-    // also allow HTTP status codes
+    // recognised and handled HttpClient codes
+    
+    
+    // recognised and handled HTTP status codes
+    public static final int HTTP_NOT_WEBDAV = 405;
+    public static final int HTTP_NOT_FOUND = 404;
+    public static final int HTTP_ACCESS_DENIED = 401;
     
     private int error;
     private RepositoryPath path = null;
@@ -51,14 +57,12 @@ public abstract class RepositoryAccessException extends RuntimeException {
     }
 
     public RepositoryAccessException(int error, RepositoryPath path) {
-        super();
-        this.error = error;
+        this(error);
         setPath(path);
     }
 
     public RepositoryAccessException(int error, RepositoryPath path, Throwable cause) {
-        super(cause);
-        this.error = error;
+        this(error,cause);
         setPath(path);
     }
     

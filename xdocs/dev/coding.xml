@@ -14,6 +14,7 @@
 
       <subsection name="Maven Build">
          <p>Get maven</p>
+         <p>Install jcoverage using <code>maven plugin:download -DgroupId=maven -DartifactId=maven-jcoverage-plugin -Dversion=1.0.8</code></p>
       </subsection>
       
       <subsection name="Issuetracking">

@@ -5,7 +5,7 @@
 	<classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry sourcepath="MAVEN_REPO/springframework/src" kind="var" path="MAVEN_REPO/springframework/jars/spring-1.1.1.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/acegi-security/jars/acegi-security-0.6.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/acegi-security/jars/acegi-security-0.6.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-codec/jars/commons-codec-1.3.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/servletapi/jars/servletapi-2.4.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/log4j/jars/log4j-1.2.8.jar"/>
@@ -25,5 +25,6 @@
 	<classpathentry kind="var" path="MAVEN_REPO/servletapi/jars/jsp-api-2.4.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/optime/jars/optime-utils-1.0.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/jical/jars/jical-OPTIME.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-mock-1.1.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

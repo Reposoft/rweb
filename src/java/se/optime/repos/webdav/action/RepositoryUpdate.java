@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import se.optime.repos.webdav.InvalidContentsException;
 import se.optime.repos.webdav.InvalidTypeException;
 import se.optime.repos.webdav.RepositoryResource;
-import se.optime.repos.webdav.WrappedHttpException;
+import se.optime.repos.webdav.ConnectionException;
 
 /**
  * @author solsson
@@ -35,9 +35,9 @@ public class RepositoryUpdate extends RepositoryResource {
         try {
             getDavFile().putMethod(getContents());
         } catch (HttpException e) {
-            throw new WrappedHttpException(true,this,e);
+            throw new ConnectionException(true,this,e);
         } catch (IOException e) {
-            throw new WrappedHttpException(true,this,e);
+            throw new ConnectionException(true,this,e);
         }
     }
 

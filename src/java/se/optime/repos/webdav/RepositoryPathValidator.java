@@ -27,21 +27,21 @@ public class RepositoryPathValidator implements Validator {
      * @see org.springframework.validation.Validator#validate(java.lang.Object, org.springframework.validation.Errors)
      */
     public void validate(Object command, Errors errors) {
-        RepositoryPath path = (RepositoryPath)command;
+        RepositoryPath path = (RepositoryPath)command;  
         if (path.getHost()==null)
             errors.rejectValue("host","host.missing",null,"Host must be specified");
         if (path.getRepo()==null)
             errors.rejectValue("repo","repo.missing",null,"Repository root must be specified");
-        if (!path.getRepo().startsWith("/"))
+        if (path.getRepo()!=null && !path.getRepo().startsWith("/"))
             errors.rejectValue("repo","repo.nostartslash",null,"Repository must be specified from root, and thus start with a slash");
-        if (path.getRepo().endsWith("/"))
+        if (path.getRepo()!=null && path.getRepo().endsWith("/"))
             errors.rejectValue("repo","repo.noendslash",null,"Repository can not end with slash");
         if (path.getPath()==null)
             errors.rejectValue("path","path.missing",null,"Path must be specified");
-        if (!path.getPath().startsWith("/"))
+        if (path.getPath()!=null && !path.getPath().startsWith("/"))
             errors.rejectValue("path","path.nostartslash",null,"Path must be specified from root, and thus start with a slash");
         if (path.getHref()!=null) {
-            if(!path.getPath().endsWith("/"))
+            if(path.getPath()!=null && !path.getPath().endsWith("/"))
                 errors.rejectValue("path","path.noendslash",null,"Path must end with slash when file is specified");
             if(path.getHref().indexOf('/')>=0)
                 errors.rejectValue("href","href.nested",null,"Href may not contain slash");

@@ -71,7 +71,7 @@
     <dependency>
       <groupId>acegi-security</groupId>
       <artifactId>acegi-security</artifactId>
-      <version>0.6</version>
+      <version>0.6.1</version>
       <type>jar</type>
       <properties>
         <war.bundle>true</war.bundle>
@@ -237,6 +237,12 @@
         <war.bundle>false</war.bundle>
       </properties>
     </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-mock</artifactId>
+      <version>1.1.1</version>
+      <type>jar</type>
+    </dependency>
   </dependencies>
   <build>
     <nagEmailAddress>staffan@optime.se</nagEmailAddress>
@@ -255,10 +261,7 @@
           <directory>${pom.build.unitTestSourceDirectory}</directory>
           <includes>
             <include>log4j.xml</include>
-            <include>jndi.properties</include>
           </includes>
-          <!-- messages_*.properties -->
-          <!-- hibernate files -->
           <filtering>false</filtering>
         </resource>
       </resources>

@@ -68,9 +68,10 @@
                     <td>Visual HTML editor from <a href="http://tinymce.sourceforge.net/">tinymce.sourceforge.net</a></td>
                   </tr>
                   <tr>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
+                    <td>GnuWin32</td>
+                    <td>stable</td>
+                    <td>To feel at hom in Windows command prompt, go to <a href="http://gnuwin32.sourceforge.net/">GnuWin32</a> and add C:\Program\GnuWin32\bin to path.<br />
+                    We currently don't use any cross-platform system commands. Also, remember this is GPL license.</td>
                   </tr>
                </table>               
            </subsection>

@@ -4,11 +4,8 @@
 package se.optime.repos.webdav.action;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.servlet.ModelAndView;
-
-import se.optime.repos.WebResource;
+import org.springframework.web.servlet.View;
 
 
 /**
@@ -18,11 +15,10 @@ import se.optime.repos.WebResource;
 public class NewFileController extends RepositoryActionController {
 
     /* (non-Javadoc)
-     * @see se.optime.repos.webdav.RepositoryController#handle(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, se.optime.repos.WebResource)
+     * @see se.optime.repos.webdav.action.RepositoryActionController#execute(javax.servlet.http.HttpServletRequest, se.optime.repos.webdav.action.RepositoryUpdate)
      */
-    protected ModelAndView handle(HttpServletRequest request, HttpServletResponse response, WebResource resource) throws Exception {
-        throw new UnsupportedOperationException("Method NewFileController#handle not implemented yet.");
+    protected View execute(HttpServletRequest request, RepositoryUpdate resource) throws Exception {
+        throw new UnsupportedOperationException("Method NewFileController#execute not implemented yet.");
     }
-
 
 }

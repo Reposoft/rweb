@@ -51,6 +51,7 @@ public interface RepositoryPath {
     
     /**
      * @return resulting url
+     * @throws RepositoryAccessException in case of null 'repo', for example, but not for empty host
      */
     public java.net.URL getURL();
     

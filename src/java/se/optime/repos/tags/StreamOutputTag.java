@@ -13,6 +13,11 @@ import java.io.Writer;
 import org.springframework.web.servlet.tags.RequestContextAwareTag;
 
 /**
+ * JSP tag to print out all contents of an InputStream to the response writer.
+ * 
+ * <p>The doStartTag method just forwards to {@link #doPipe(java.io.InputStream, java.io.Writer) doPipe}
+ * where all logic is done. Unit testing doPipe should be sufficient.</p>
+ * 
  * @author solsson
  * @version $Id$
  */

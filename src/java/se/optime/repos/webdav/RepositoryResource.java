@@ -61,11 +61,11 @@ public class RepositoryResource extends AbstractResource
     protected WebdavResource getDavFile() {
         HttpURL url = getHttpURL();
         try {
-            return new WebdavResource(url);
+            return WebdavFactory.getWebdav().getWebdavResource(url);
         } catch (HttpException e) {
-            throw new WrappedHttpException(false,this,e);
+            throw new ConnectionException(false,this,e);
         } catch (IOException e) {
-            throw new WrappedHttpException(false,this,e);
+            throw new ConnectionException(false,this,e);
         }
     }
     
@@ -230,7 +230,7 @@ public class RepositoryResource extends AbstractResource
         	.append("&repo=").append(getRepo())
         	.append("&path=").append(getPath())
         	.append("&href=").append(getHref());
-        if (port!=0)
+        if (port>=0)
             q.append("&port=").append(getPort());
         return q.toString();
     }
