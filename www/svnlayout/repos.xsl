@@ -120,6 +120,7 @@
     <span class="command"><xsl:call-template name="showicon"><xsl:with-param name="filetype" select="'_upload'"/></xsl:call-template>upload</span>
     <span class="command"><xsl:call-template name="showicon"><xsl:with-param name="filetype" select="'_windowsfolder'"/></xsl:call-template>open in Windows</span>
     <span class="command"><xsl:call-template name="showicon"><xsl:with-param name="filetype" select="'_tortoisefolder'"/></xsl:call-template>check out</span>
+    <a class="command" href="{$rurl}/log/?url={$repoUrl}{@path}"><xsl:call-template name="showicon"><xsl:with-param name="filetype" select="'_log'"/></xsl:call-template>show log</a>
   </xsl:template>
 
   <!-- directory listing -->

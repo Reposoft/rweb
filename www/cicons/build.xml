@@ -59,6 +59,7 @@
     <echo>Renaming icons to supported filetypes, deleting the rest</echo>
   	<move file="${ifrom}/actions/up.png" tofile="${ito}/_parent.png" overwrite="false"/>
   	<move file="${ifrom}/actions/attach.png" tofile="${ito}/_upload.png" overwrite="false"/>
+              <move file="${ifrom}/actions/messagebox_info.png" tofile="${ito}/_log.png" overwrite="false"/>
   	<move file="${ifrom}/filesystems/folder_whitelinen_open.png" tofile="${ito}/_newfolder.png" overwrite="false"/>
   	<move file="${ifrom}/filesystems/folder_sharkskin_open.png" tofile="${ito}/_windowsfolder.png" overwrite="false"/>
   	<move file="${ifrom}/filesystems/folder_applegreen_open.png" tofile="${ito}/_tortoisefolder.png" overwrite="false"/>
