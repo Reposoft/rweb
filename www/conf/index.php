@@ -1,18 +1,25 @@
 <?php
-include('./authentication.inc.php');
+include './authentication.inc.php';
 
-echo("<pre>\n");
-echo("==== Test retrieval of credentials ===\n");
-echo("Username = " + getReposUser());
-echo("Password = " + getReposPass());
-echo("BASIC string = " + getReposAuthentication());
+echo "<pre>\n";
+echo "==== Test retrieval of credentials ===";
+echo "\nUsername = ";
+//echo $repos_authentication['user'];
+echo getReposUser();
+echo "\nPassword = ";
+echo getReposPass();
+//echo $repos_authentication['pass'];
+echo "\nBASIC string = ";
+echo getReposAuth();
+//echo $repos_authentication['auth'];
+echo "\n";
 
 // Display info about current repos configuration
-include('./repos.properties.php');
-echo("\n==== Configuration files are apparently accessible ===\n");
+include './repos.properties.php';
+echo "\n==== Configuration files are apparently accessible ===\n";
 print_r($repos_config);
-echo("\n==== Debug info: server variables ===\n");
+echo "\n==== Debug info: server variables ===\n";
 print_r($_SERVER);
-echo("</pre>\n");
+echo "</pre>\n";
 
 ?>

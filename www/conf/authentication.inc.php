@@ -15,14 +15,21 @@ if (!isset($_SERVER['PHP_AUTH_USER'])) {
 }
 // "PHP_AUTH variables will not be set if external authentication is enabled for that particular page and safe mode is enabled"
 // set credentials as constants, so that dependencies are not tied to the server variables
+$repos_authentication;
+$repos_authentication['user'] = $_SERVER['PHP_AUTH_USER'];
+$repos_authentication['pass'] = $_SERVER['PHP_AUTH_PW'];
+$repos_authentication['auth'] = substr($_SERVER['HTTP_AUTHORIZATION'], 6);
 
 function getReposUser() {
-	return $_SERVER['PHP_AUTH_USER'];
+	global $repos_authentication;
+	return($repos_authentication['user']);
 }
 function getReposPass() {
-	return $_SERVER['PHP_AUTH_PW'];
+	global $repos_authentication;
+	return($repos_authentication['pass']);
 }
-function getReposAuthentication() {
-	return $_SERVER['PHP_AUTH_PW'];
+function getReposAuth() {
+	global $repos_authentication;
+	return($repos_authentication['auth']);
 }
 ?>

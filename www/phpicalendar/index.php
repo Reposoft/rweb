@@ -1,7 +1,4 @@
 <?php
-// *** repos ***
-include '../conf/authentication.inc.php';
-// *****
 if (!isset($ALL_CALENDARS_COMBINED))  $ALL_CALENDARS_COMBINED = 'all_calendars_combined971';
 include "./config.inc.php";
 // *** repos ***
