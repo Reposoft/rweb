@@ -15,7 +15,7 @@ function getDefaultRepositoryHomeDir() {
 	return getHomeDir( getConfig('repo_url') );
 }
 
-var $home = getDefaultRepositoryHomeDir();
+$home = getDefaultRepositoryHomeDir();
 header("Location: " . $home);
 
 ?>
