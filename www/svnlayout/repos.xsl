@@ -385,9 +385,9 @@
 				<a title="{$show-diff}" class="action" href="{$rurl}/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}"><xsl:value-of select="@action"/></a>
 			</xsl:if>
 			<xsl:value-of select="$spacer"/>
-			<span class="filename">
+			<a class="filename" href="{$rurl}/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">
 				<xsl:value-of select="."/>
-			</span>
+			</a>
 		</p>
 	</xsl:template>
 	<!--
@@ -426,9 +426,53 @@
 					<xsl:apply-templates select="error">
 						<xsl:with-param name="possible-cause">The file might have been moved from this location</xsl:with-param>
 					</xsl:apply-templates>
-					<code><pre>
-						<xsl:value-of select="."/>
-					</pre></code>
+					<xsl:apply-templates select="plaintext"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="footer" class="footer">
+					<xsl:value-of select="$spacer"/>
+				</td>
+			</tr>
+		</table>
+	</xsl:template>
+	<xsl:template match="plaintext">
+		<pre>
+			<xsl:value-of select="."/>
+		</pre>	
+	</xsl:template>
+	<!--
+	========= svn cat formatting ==========
+	-->
+	<xsl:template match="cat">
+		<table class="info" width="98%" align="center">
+			<tr>
+				<td id="titlebar" class="titlebar">
+					<xsl:call-template name="titlebar"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="commandbar" class="commandbar">
+					<a class="command" href="#" onclick="history.back()">
+						<xsl:call-template name="showicon">
+							<xsl:with-param name="filetype" select="'_parent'"/>
+						</xsl:call-template>back</a>
+				</td>
+			</tr>
+			<tr>
+				<td id="workarea" class="workarea">
+					<h2>
+						<span class="filename">
+							<xsl:value-of select="@target"/>
+						</span>
+						<xsl:value-of select="$spacer"/>
+						<span class="revision">
+							<xsl:text>from revision </xsl:text>
+							<xsl:value-of select="@rev"/>
+						</span>
+						<a class="action" href="{$rurl}/cat/?repo={@repo}&amp;target={@target}&amp;rev={@rev}">open old file</a>
+					</h2>
+					<xsl:apply-templates select="*">
 				</td>
 			</tr>
 			<tr>
