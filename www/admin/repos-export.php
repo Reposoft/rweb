@@ -36,7 +36,32 @@ function export_full( $local, $url ) {
 
 function export_incremental() {
 	info( "Doing incremental export to $local from repository path $url" );
+	// how do we get which files have local modifications?
+	//  check their last change i repo?
+	//  check date of all files at every commit
 }
 
+function getExportDefinitions($frominifile) {
+
+}
+
+function getLocalModificationTime($filepath) {
+
+}
+
+/**
+ * Figure out when a file was last changed in repository (before this commit)
+ */
+function getPreviousCommitTime($filehref) {
+
+}
+
+/**
+ * Get repository log
+ * @return array ('/repository/href' => SVN operation)
+ */
+function getParsedLog($href) {
+
+}
 
 ?>

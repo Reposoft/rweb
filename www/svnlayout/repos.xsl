@@ -16,7 +16,7 @@
   <!-- status images like 'locked' could be generated on the fly -->
 
   <!-- display name of the repository -->
-  <xsl:param name="repoName">www.repos.se/repos</xsl:param>
+  <xsl:param name="repoName">www.repos.se/sweden</xsl:param>
   <!-- repository URL, use path that works for user ('localhost' could break redirects) -->
   <xsl:param name="repoUrl">http://<xsl:value-of select="$repoName"/></xsl:param>
   <!-- repos webapp URL (root), does not end with slash -->
