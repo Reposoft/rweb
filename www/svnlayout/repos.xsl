@@ -206,7 +206,7 @@
 			</a>
 			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
-			<a class="action" title="this file can be opened in Repos" href="{$rurl}/open/?path={../@path}&amp;file={@href}"/>open</a>
+			<a class="action" title="this file can be opened in Repos" href="{$rurl}/open/?path={../@path}&amp;file={@href}">open</a>
 			<xsl:if test="$webdavUrl">
 				<span class="action">rename</span>
 				<span class="action">copy</span>
