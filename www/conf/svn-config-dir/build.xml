@@ -37,7 +37,7 @@ optime = svn.optime.se
     </echo>  	
   </target>
 
-  <!-- Download and decompress dependency archive -->
+  <!-- www.repos.se  -->
   <target name="repos" depends="cfg">
     <get src="http://www.repos.se/CA.crt" dest="${certdir}/www.repos.se.crt"/>
     <echo file="${serversfile}" append="true">
@@ -47,6 +47,7 @@ ssl-authority-files = ${certdir}/www.repos.se.crt
     </echo>
   </target>
 
+  <!-- svn.optime.se  -->	
   <target name="optime" depends="cfg">
     <get src="http://svn.optime.se/CA.crt" dest="${certdir}/svn.optime.se.crt"/>
     <echo file="${serversfile}" append="true">
@@ -55,11 +56,25 @@ http-timeout = 15
 ssl-authority-files = ${certdir}/svn.optime.se.crt
     </echo>
   </target>	
-	
+
   <!-- Customized installation steps for this dependency -->
   <target name="install"
   	depends="repos,optime"
   	description="download all certificates and write config file" >
+  	<path id="certificates">
+  		<fileset dir="${certdir}" includes="*.crt"/>
+  	</path>
+  	<echo>======= SVN servers config ======</echo>
+  	<concat fixlastline="yes">
+  		<filelist dir="${basedir}"><file name="servers"/></filelist>
+  	</concat>
+  	<echo>========== Certificates =========</echo>
+  	<property name="certlist" refid="certificates"/>
+  	<echo message="${certlist}"/>
+  	<echo/>
+  	<concat fixlastline="yes">
+  		<path refid="certificates"/>
+  	</concat>
   </target>
 
   <!-- Remove dependency, leaving only repos sources. -->
