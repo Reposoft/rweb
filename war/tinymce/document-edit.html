@@ -59,7 +59,6 @@
 
 	// Custom save callback, gets called when the contents is to be submitted
 	function customSave(id, content) {
-		alert(document.getElementById('contentsForm')
 		alert(id + "=" + content);
 	}
 </script>
@@ -70,8 +69,8 @@
 
 
 <!-- Form with textare element with width: 100% -->
-<form method="post" action="post.php">
-<textarea id="contentsForm" style="width:100%" rows="15">
+<form name="ordbehandlare" id="ordbehandlare" method="post" action="post.php">
+<textarea name="contents" style="width:100%" rows="15">
 	<span class="header1">Test header 1</span><br />
 	<span class="header2">Test header 2</span><br />
 	<span class="header3">Test header 3</span><br />

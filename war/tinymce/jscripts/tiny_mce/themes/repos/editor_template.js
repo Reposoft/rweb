@@ -7,7 +7,7 @@ var TinyMCE_repos_foreColor = "#000000";
 var TinyMCE_repos_anchorName = "";
 var TinyMCE_repos_buttons = [
 		// Control id, button img, button title, command, user_interface, value
-		['save', 'save.gif', '{$lang_save_desc}', 'save'],
+		['save', 'save.gif', '{$lang_save1_desc}', 'reposSave'],
 		['bold', '{$lang_bold_img}', '{$lang_bold_desc}', 'Bold'],
 		['italic', '{$lang_italic_img}', '{$lang_italic_desc}', 'Italic'],
 		['underline', 'underline.gif', '{$lang_underline_desc}', 'Underline'],
@@ -68,8 +68,6 @@ function TinyMCE_repos_getControlHTML(button_name) {
 					<option value="<h2>">{$lang_theme_h2}</option>\
 					<option value="<h3>">{$lang_theme_h3}</option>\
 					<option value="<h4>">{$lang_theme_h4}</option>\
-					<option value="<h5>">{$lang_theme_h5}</option>\
-					<option value="<h6>">{$lang_theme_h6}</option>\
 					</select>';
 
 		case "styleselect":
@@ -112,8 +110,9 @@ function TinyMCE_repos_getControlHTML(button_name) {
  */
 function TinyMCE_repos_execCommand(editor_id, element, command, user_interface, value) {
 	switch (command) {
-		case "save":
+		case "reposSave":
 			tinyMCE.triggerSave();
+			document.getElementById('ordbehandlare').submit();
 			return true;
 		
 		case "mceForeColor":

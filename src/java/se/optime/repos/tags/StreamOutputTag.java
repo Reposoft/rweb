@@ -33,6 +33,8 @@ public class StreamOutputTag extends RequestContextAwareTag {
         int c;
         while ((c=reader.read()) != -1)
             to.write(c);
+        reader.close();
+        to.flush();
     }
 
     /**

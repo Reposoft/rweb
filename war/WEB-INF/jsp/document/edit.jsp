@@ -20,10 +20,9 @@ Needs the following model:
 </head>
 <body bgcolor="#CCCCCC">
 <jsp:include page="../includes/top.inc.jsp"/>
-<form action="${resource.filename}.jwa?${resource.query}" id="contentsForm" method="POST">
+<form name="ordbehandlare" id="ordbehandlare" action="${resource.filename}.jwa?${resource.query}" method="POST">
 <textarea name="contents" style="width:100%" rows="30"><repos:stream contents="${resource.inputStream}"/></textarea>
-<br /><input type="submit" value="Save"/>
-</form>
+<!--<br /><input type="submit" value="Save"/>--></form>
 <jsp:include page="../includes/end.inc.jsp"/>
 <% /* <div id="autosaveDiv">
 	<iframe width="100%" height="20" src="autosave.jwa" style="position:absolute; left:0px; bottom:0px; width:100%; right:0px; background-color:#333333;"></iframe>
