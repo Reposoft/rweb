@@ -1,7 +1,10 @@
 <?php
 // need allow_url_fopen (which is default)
-require 'http://jaddajada/file_with_no_query.php';
+$filename = 'http://jaddajada/file_with_no_query.php'
+require $filename;
 // there is a problem with includes in the included file, because paths would be relative to this file
+// this *could* help:
+ini_set("include_path", dirname($filename));
 /*
 Need to rewrite repository urls in Apache, here's a thought:
 
