@@ -5,8 +5,8 @@ demo-projekt = svensson
 [/]
 @admin = rw
 
-[svensson]
+[/svensson]
 svensson = rw
 
-[demo-projekt]
+[/demo-projekt]
 @demo-projekt = rw

@@ -1,4 +1,7 @@
 <?php
+/**
+ * This is currently only a test script to try logging out of BASIC auth.
+ */
 
 if (strstr ($_SERVER['HTTP_USER_AGENT'], "MSIE")) {
 	// seems t not work. Maybe a javascript is needed to do a redirect like the one below

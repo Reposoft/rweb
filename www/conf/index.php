@@ -5,7 +5,6 @@
 
 // default configuration includes, the way they should be referenced in php files
 require( dirname(__FILE__) . '/authentication.inc.php' );
-require( dirname(__FILE__) . '/repos.properties.php' );
 
 // configuration index settings
 $sections = array(

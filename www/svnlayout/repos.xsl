@@ -188,9 +188,10 @@
 			<xsl:attribute name="href">
 				<xsl:value-of select="../@href"/>
 			</xsl:attribute>
+			<xsl:attribute name="target"><xsl:value-of select="'_blank'"/></xsl:attribute>
 			<xsl:text>Subversion</xsl:text>
 		</xsl:element>
-		<xsl:text/>
+		<xsl:text>&#160;</xsl:text>
 		<xsl:value-of select="../@version"/>
 	</xsl:template>
 	<!-- generate directory -->
