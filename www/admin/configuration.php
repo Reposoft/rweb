@@ -29,7 +29,7 @@ $repouri = ereg_replace("[[:alpha:]]+://[^-/<>[:space:]]+[[:alnum:]/]","/", $rep
 $user = exec( getCommand('whoami') );
 $self = $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'];
 $date = date("Y-m-d H:i:s");
-$backupdir = getConfig( 'backup_dir' );
+$backupdir = getConfig( 'backup_folder' );
 $backupurl = getConfig( 'backup_url' );
 $backupuri = ereg_replace("[[:alpha:]]+://[^/<>[:space:]]+[[:alnum:]/]","/", $backupurl);
 // authentication defined
