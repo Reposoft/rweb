@@ -48,10 +48,6 @@
         <td valign="top">Integration test cases, for testing collaboration with production environment</td>
       </tr>
       <tr>
-        <td valign="top"> - /lib</td>
-        <td valign="top">Java libraries that are not handled as maven dependencies. </td>
-      </tr>
-      <tr>
         <td valign="top">- /target </td>
         <td valign="top">Build directory, not to be included in source</td>
       </tr>
@@ -74,6 +70,10 @@
       <tr>
         <td valign="top">- - /samples </td>
         <td valign="top">Examples of configuration files </td>
+      </tr>
+      <tr>
+        <td valign="top"> - /docbook</td>
+        <td valign="top">User friendly documentation</td>
       </tr>
     </table>
   </section>

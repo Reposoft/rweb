@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="TinyMCE" default="install" basedir=".">
+
+  <description>
+	TinyMCE is transforms a textbox to a word processor. We use it as editor for XHTML files.
+  </description>
+	
+  <property name="home" value="http://tinymce.sourceforge.net/"/>
+	
+  <!-- set global properties for this build -->
+  <property name="archive" value="http://heanet.dl.sourceforge.net/sourceforge/tinymce/tinymce_1_35.zip"/>
+  <property name="archive.type" value="zip"/>
+  <property name="extracted.folder" value="${basedir}/tinymce"/>
+	
+  <!-- derived -->
+  <property name="download.file" value="${basedir}/downloaded-dependency.${archive.type}"/>
+	
+  <!-- Create the time stamp and basic directory structure -->
+  <target name="init">
+    <tstamp/>
+  </target>
+
+  <!-- Download and decompress dependency archive -->
+  <target name="download" depends="init" description="download depedency">
+  	<get src="${archive}" dest="${download.file}"/>
+  	<unzip src="${download.file}" dest="${basedir}"/>
+  	<delete file="${download.file}"/>
+  </target>
+	
+  <!-- display license info -->	
+  <target name="license" depends="download">
+  	<property name="license.file" value="${extracted.folder}/lgpl.txt"/>
+  	<property name="License_type" value="LGPL"/>
+	<property name="May_redistribute" value=""/>
+  	<property name="May_alter" value=""/>
+  	<property name="Only_nonprofit" value=""/>
+  	<echo>no license summary entered</echo>
+  </target>
+
+  <!-- Customized installation steps for this dependency -->
+  <target name="install" depends="license" description="install" >
+  	<move todir="${basedir}/jscripts" overwrite="false">
+  	    <fileset dir="${extracted.folder}/jscripts"/>
+  	</move>
+  	<echo>Repos theme is based on 'Advanced'</echo>
+  	<move todir="${basedir}/jscripts/tiny_mce/themes/repos" overwrite="false">
+  	    <fileset dir="${basedir}/jscripts/tiny_mce/themes/advanced"/>
+  	</move>
+  </target>
+
+  <!-- Remove dependency, leaving only repos sources. -->
+  <target name="clean" description="clean up" >
+  	<delete dir="${extracted.folder}"/>
+  	<echo>You need to delete 'jscript' manually, as it contains our theme, and check out the sources from repository</echo>
+  </target>
+</project>

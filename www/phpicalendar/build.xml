@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="PHP iCalendar" default="install" basedir=".">
+
+  <description>
+	This is a nice .ics file viewer, to allow web based view of what's shared with WebDAV enabled calendar clients.
+  </description>
+	
+  <property name="home" value="http://phpicalendar.net/"/>
+	
+  <!-- set global properties for this build -->
+  <property name="archive" value="http://heanet.dl.sourceforge.net/sourceforge/phpicalendar/phpicalendar-2.0b.zip"/>
+  <property name="archive.type" value="zip"/>
+  <property name="extracted.folder" value="${basedir}/phpicalendar-2.0b"/>
+	
+  <!-- derived -->
+  <property name="download.file" value="${basedir}/downloaded-dependency.${archive.type}"/>
+	
+  <!-- Create the time stamp and basic directory structure -->
+  <target name="init">
+    <tstamp/>
+  </target>
+
+  <!-- Download and decompress dependency archive -->
+  <target name="download" depends="init" description="download depedency">
+  	<get src="${archive}" dest="${download.file}"/>
+  	<unzip src="${download.file}" dest="${basedir}"/>
+  	<delete file="${download.file}"/>
+  </target>
+	
+  <!-- display license info -->	
+  <target name="license" depends="download">
+  	<property name="license.file" value="${extracted.folder}/lgpl.txt"/>
+  	<property name="License_type" value=""/>
+	<property name="May_redistribute" value=""/>
+  	<property name="May_alter" value=""/>
+  	<property name="Only_nonprofit" value=""/>
+  	<echo>no license summary entered</echo>
+  </target>
+
+  <!-- Customized installation steps for this dependency -->
+  <target name="install" depends="license" description="install" >
+  	<move todir="${basedir}" overwrite="false">
+  	    <fileset dir="${extracted.folder}"/>
+  	</move>
+  	<delete dir="${extracted.folder}"/>
+  </target>
+
+  <!-- Remove dependency, leaving only repos sources. -->
+  <target name="clean" description="clean up" >
+  </target>
+</project>

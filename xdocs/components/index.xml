@@ -55,23 +55,14 @@
                   </tr>
                </table>
            </subsection>
-           <subsection name="dependencies">
+           <subsection name="development tools">
                <table>
-                  <tr>
-                    <td>HTAdmin</td>
-                    <td>stable</td>
-                    <td>Access control administration using <a href="http://www.hido.net/projects/htadmin/">HTAdmin 1.2.x</a></td>
-                  </tr>
-                  <tr>
-                    <td>TinyMCE</td>
-                    <td>stable</td>
-                    <td>Visual HTML editor from <a href="http://tinymce.sourceforge.net/">tinymce.sourceforge.net</a></td>
-                  </tr>
                   <tr>
                     <td>GnuWin32</td>
                     <td>stable</td>
-                    <td>To feel at hom in Windows command prompt, go to <a href="http://gnuwin32.sourceforge.net/">GnuWin32</a> and add C:\Program\GnuWin32\bin to path.<br />
-                    We currently don't use any cross-platform system commands. Also, remember this is GPL license.</td>
+                    <td>Linux command line tools often allow simple solutions. They can be considered cross-platform if found in <a href="http://gnuwin32.sourceforge.net/">GnuWin32</a>.
+                    Download to Windows and add C:\Program\GnuWin32\bin to path.<br />
+                    However, the commands are GPL and should be used for supporting development rather than in production deployment.</td>
                   </tr>
                </table>               
            </subsection>

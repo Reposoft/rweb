@@ -1,58 +1,97 @@
 <!-- Customized maven behavior -->
 <project
-	xmlns:j="jelly:core">
+	xmlns:j="jelly:core"
+	xmlns:ant="jelly:ant">
 
-  <!-- after site:generate - copy www contents into development docs -->
-  <goal name="docs-images">
-  	<echo>Copying images to ${maven.docs.dest}</echo>
-    <copy todir="${maven.docs.dest}">
-      <fileset dir="www">
-        <include name="logo/*.png" />
-      </fileset>
-    </copy>
+  <!-- before generating project documentation, include repos manual -->
+  <postGoal name="xdoc:generate-from-pom">
+  	<attainGoal name="docbook:transform"/>
+  	<attainGoal name="dependency-info"/>
+  </postGoal>
+  
+  <!-- collect dependency installation files for reference -->
+  <goal name="dependency-info">
+    <ant:echo>Transforming dependency buildfiles</ant:echo>
+    <ant:copy todir="${maven.docs.dest}/dependencies">
+      <ant:mapper type="package" from="*.xml" to="*.xml"/>
+      <ant:fileset dir="www">
+        <ant:include name="**/build.xml" />
+      </ant:fileset>
+    </ant:copy>
+    
+    <!-- trying to find a way to automatically build an index -->
+    <ant:path id="dependency.collection">
+        <ant:fileset dir="${maven.docs.dest}/dependencies">
+            <ant:include name="*.build.xml"/>
+        </ant:fileset>
+    </ant:path>
+    <echo>Running ${dependency.collection}</echo>
+    <j:forEach items="${dependency.collection}" var="dependency.name">
+        <echo>${filename}</echo>
+    </j:forEach>
+    
+    ${systemScope.setProperty('javax.xml.transform.TransformerFactory','org.apache.xalan.processor.TransformerFactoryImpl')}
+    <ant:style basedir="${maven.docs.dest}/dependencies"
+      includes="*.xml" processor="trax" extension=".xml"
+      destdir="${maven.gen.docs}/dependencies"
+      style="${maven.docs.src}/dependencies/build.xsl">
+	</ant:style>
   </goal>
+  
+  <!-- collect extra documentation site contents -->
   <postGoal name="site:generate">
   	<attainGoal name="docs-images"/>
   </postGoal>
+
+  <!-- copy www contents into development docs -->
+  <goal name="docs-images">
+  	<ant:echo>Copying images to ${maven.docs.dest}</ant:echo>
+    <ant:copy todir="${maven.docs.dest}">
+      <ant:fileset dir="www">
+        <ant:include name="logo/*.png" />
+      </ant:fileset>
+    </ant:copy>
+  </goal>
   
+  <!-- JSPs are edited in www directory but should be included in WAR only -->
   <goal name="war-jsp">
-  	<echo>Copying JSPs to ${maven.war.webapp.dir}/WEB-INF/jsp</echo> 
-    <copy todir="${maven.war.webapp.dir}/WEB-INF/jsp">
-      <fileset dir="www">
-        <include name="**/*.jsp" />
-      </fileset>
-    </copy>
+  	<ant:echo>Copying JSPs to ${maven.war.webapp.dir}/WEB-INF/jsp</ant:echo> 
+    <ant:copy todir="${maven.war.webapp.dir}/WEB-INF/jsp">
+      <ant:fileset dir="www">
+        <ant:include name="**/*.jsp" />
+      </ant:fileset>
+    </ant:copy>
   </goal>
 
   <!-- before making webapp - 
   		copy jsp-s from editor friendly location to WAR's WEB-INF
   		so that they are deployed to tomcat and hidden from direct access -->
   <postGoal name="war:webapp">
-  	<echo>Copying JSPs to WAR</echo> 
-    <copy todir="${maven.war.webapp.dir}/WEB-INF/jsp">
-      <fileset dir="www">
-        <include name="**/*.jsp" />
-      </fileset>
-    </copy>
+  	<ant:echo>Copying JSPs to WAR</ant:echo> 
+    <ant:copy todir="${maven.war.webapp.dir}/WEB-INF/jsp">
+      <ant:fileset dir="www">
+        <ant:include name="**/*.jsp" />
+      </ant:fileset>
+    </ant:copy>
     <!-- if not deploying contents to apache2 separately, 
   		all static contents could be included in war  -->
-  	<echo>war.include.www is set to '${war.include.www}'</echo>
+  	<ant:echo>war.include.www is set to '${war.include.www}'</ant:echo>
   	<j:if test="${war.include.www}">
-	  	<echo>Including all static web contents in war-file.</echo>
-	    <copy todir="${maven.war.webapp.dir}">
-	      <fileset dir="www">
-	        <include name="**/*" />
-	        <exclude name="**/*.jsp" />
-	      </fileset>
-	    </copy>
+	  	<ant:echo>Including all static web contents in war-file.</ant:echo>
+	    <ant:copy todir="${maven.war.webapp.dir}">
+	      <ant:fileset dir="www">
+	        <ant:include name="**/*" />
+	        <ant:exclude name="**/*.jsp" />
+	      </ant:fileset>
+	    </ant:copy>
 	</j:if>
 	<!-- custom cleanup -->
-	<delete file="${basedir}/velocity.log"/>
+	<ant:delete file="${basedir}/velocity.log"/>
   </postGoal>
   
   <!-- clean up jcoverage data that could corrupt subsequent reports -->
   <postGoal name="jcoverage">
-  	<delete file="${basedir}/jcoverage.ser"/>
+  	<ant:delete file="${basedir}/jcoverage.ser"/>
   </postGoal>
   
 </project>

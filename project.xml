@@ -20,10 +20,10 @@
     Everything is accessible from any WebDAV client, like Windows "Network folders" and Mozillas calendar application.
     The frontend provides usability...
   </description>
-  <url>http://www.ordbehandlare.se/</url>
-  <issueTrackingUrl>http://www.optime.se/issuetracker/mantis/</issueTrackingUrl>
-  <siteAddress>www.ordbehandlare.se</siteAddress>
-  <siteDirectory>/srv/www/htdocs/ordbehandlare/pm</siteDirectory>
+  <url>http://www.repos.se/</url>
+  <issueTrackingUrl>http://www.optime.se/issuetracker/repos/</issueTrackingUrl>
+  <siteAddress>www.repos.se</siteAddress>
+  <siteDirectory>/srv/www/htdocs/repos/development</siteDirectory>
   <distributionDirectory>/srv/www/htdocs/ordbehandlare/pm/dist</distributionDirectory>
   <repository>
     <!-- <developerConnection>scm|svn|http://www.optime.se/repos/optime/repos/trunk</developerConnection> -->
@@ -254,6 +254,12 @@
       <version>1.2</version>
       <type>plugin</type>
       <url>http://maven-validator.sourceforge.net/maven/maven-validator/plugins/maven-xhtml-plugin-1.2.jar</url>
+    </dependency>
+    <dependency>
+      <groupId>ical4j</groupId>
+      <artifactId>ical4j</artifactId>
+      <version>0.9.8</version>
+      <type>jar</type>
     </dependency>
   </dependencies>
   <build>
