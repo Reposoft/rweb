@@ -256,7 +256,7 @@
   <!-- just display filetype icon, no check -->
   <xsl:template name="showicon">
       <xsl:param name="filetype"><xsl:call-template name="getFiletype"/></xsl:param>
-      <img src="{$rurl}/icons/{$filetype}.png" border="0" align="absmiddle" width="{$iconSize}" height="{$iconSize}" hspace="{$iconHspace}" vspace="{$iconVspace}"/>
+      <img src="{$iconsUrl}/{$filetype}.png" border="0" align="absmiddle" width="{$iconSize}" height="{$iconSize}" hspace="{$iconHspace}" vspace="{$iconVspace}"/>
   </xsl:template>
   
   <!-- display thumbnail as icon -->

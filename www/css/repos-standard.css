@@ -13,6 +13,9 @@ th {
 	font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
 	font-size: 0.8em;
 }
+code {
+	font-size: 1.1em;
+}
 a {
 	color: #000066;
 	text-decoration: none;
@@ -29,6 +32,22 @@ h2 {
 h2 {
 	font-weight: normal;
 }
+/* page layout themes */
+table.framed {
+	border: 2px solid #CCCC99;
+	border-collapse: collapse;
+}
+table.framed th {
+	border: 2px solid #CCCC99;
+	font-weight: normal;
+	letter-spacing: 0.2em;
+	padding: 16px;
+}
+table.framed td {
+	border: 2px solid #CCCC99;
+	padding: 16px;
+}
+/* tools and file listings */
 img { 
 	behavior: url("http://www.repos.se/css/pngbehavior.htc");
 }
@@ -70,7 +89,6 @@ a.action {
 	border-left: 1px solid #CCCCCC;
 	margin-left: 2px;
 	margin-right: 2px;
-	clip: rect(-1px,auto,auto,auto);
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
