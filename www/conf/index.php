@@ -48,11 +48,16 @@ $dependencies = array(
 $repository = array(
 	getCommand('svnlook') . ' youngest ' . getConfig('local_path') => "Local path contains repository revision: "
 );
-$requiredUrls = array(
+$rurl = getConfig('repo_url');
+$aurl = str_replace("://","://" . getReposUser() . ":" .  getReposPass() . "@", getConfig('repo_url'));
+$lurl = ereg_replace("://[\w\.-_]+/","://localhost/", getConfig('repo_url'));
+$requiredUrls = array( 
 	getConfig('repos_web') => 'Acces to static contents ' . getConfig('repos_web'),
-	getConfig('repo_url') => 'Anonymous acces to the repository ' . getConfig('repo_url'),
-	str_replace("://","://" . getReposUser() . ":" .  getReposPass() . "@", getConfig('repo_url')) => "Access to repository with user '" . getReposUser() . "'"
+	$rurl => 'Anonymous acces to the repository ' . getConfig('repo_url'),
+	$aurl => "Access to repository with current authenticatied user (" . getReposUser() . ")",
+	$lurl => "Access to repository using localhost"
 	);
+print_r($requiredUrls);
 
 html_start();	
 sections();
