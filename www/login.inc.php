@@ -43,7 +43,7 @@ header("Pragma: no-cache");
 // *** url resolution functions, based on query parameters ***
 
 function getReferer() {
-    if (isset($_SERVER['HTTP_REFERER'])) return rtrim($_SERVER['HTTP_REFERER'],'/');
+    if (isset($_SERVER['HTTP_REFERER'])) return $_SERVER['HTTP_REFERER'];
     return false;
 }
 
@@ -51,7 +51,7 @@ function getReferer() {
  * @return path from repository root, ending with '/', non alphanumerical characters except '/' encoded
  */
 function getPath() {
-	if(!isset($_GET['path'])) return '/';
+	if(!isset($_GET['path'])) return false;
 	$path = urlEncodeNames($_GET['path']);
     $path = rtrim($path,'/').'/';
 }
@@ -79,8 +79,9 @@ function getRepositoryUrl() {
 	}
 	// 2: reterer and query string param 'path'
     $ref = getReferer();
-    if ($ref && isset($_GET['path'])) {
-		return getRepoRoot($ref,$_GET['path']);
+	$path = getPath();
+    if ($ref && $path) {
+		return getRepoRoot($ref,$path);
     }
 	// 3: fallback to default repository
     if(function_exists('getConfig')) {
