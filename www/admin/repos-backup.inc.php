@@ -22,12 +22,12 @@ if ( $args >= 0 ) {
 		if ($args != 3 || eregi("-*help",$argv[2])>0 )
 			echo "Usage: dump repository-path backup-path\n";
 		else
-			dump($argv[2], $argv[3], getPrefix($argv[3]));
+			dump($argv[2], $argv[3], getPrefix($argv[2]));
 	} elseif ( $argv[1] == "load" ) {
 		if ($args < 3 || eregi("-*help",$argv[2])>0 )
 			echo "Load all backup files into repository.\nUsage: load repository-path backup-path [prefix]\nDefault prefix is derived from repository path.\n";
 		else
-			load($argv[2], $argv[3], isset($argv[4]) ? $argv[4] : getPrefix($argv[3]));
+			load($argv[2], $argv[3], isset($argv[4]) ? $argv[4] : getPrefix($argv[2]));
 	} elseif ( $argv[1] == "verify" ) {
 		if ($args != 2 || eregi("-*help",$argv[2])>0 )
 			echo "Verify repository.\nUsage: verify repository-path\n";
