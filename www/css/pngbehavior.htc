@@ -27,6 +27,11 @@ var supported = /MSIE ((5\.5)|[6789])/.test(navigator.userAgent) &&
 
 var realSrc;
 var blankSrc = "blank.gif";
+// using absolute url to allow reference from anywhere (for example
+if (window.location.href.substr(0,5)=="file:")
+    blankSrc = "../css/" + blankSrc;
+else
+    blankSrc = "http://www.repos.se/css/" + blankSrc;
 var isPrinting = false;
 
 if (supported) fixImage();

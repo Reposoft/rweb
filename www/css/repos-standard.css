@@ -30,7 +30,7 @@ h2 {
 	font-weight: normal;
 }
 img { 
-	behavior: url("../css/pngbehavior.htc");
+	behavior: url("http://www.repos.se/css/pngbehavior.htc");
 }
 a.filename {
 	margin-right: 10px;
