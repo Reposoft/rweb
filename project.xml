@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project>
   <pomVersion>3</pomVersion>
   <name>Repos</name>
@@ -6,7 +6,6 @@
   <id>repos</id>
   <currentVersion>0.1</currentVersion>
   <package>se.optime.repos</package>
-
   <organization>
     <name>Optime data</name>
     <url>http://www.optime.se/</url>
@@ -18,25 +17,14 @@
   <description>
     Ordbehandlare. Word-processor for writing texts from anywhere.
   </description>
-
   <url>http://www.ordbehandlare.se/</url>
-  <issueTrackingUrl>
-    http://www.optime.se/issuetracker/mantis/
-  </issueTrackingUrl>
+  <issueTrackingUrl>http://www.optime.se/issuetracker/mantis/</issueTrackingUrl>
   <siteAddress>www.ordbehandlare.se</siteAddress>
-  <siteDirectory>
-    /srv/www/htdocs/ordbehandlare/pm
-  </siteDirectory>
-  <distributionDirectory>
-    /srv/www/htdocs/ordbehandlare/pm/dist
-  </distributionDirectory>
-
+  <siteDirectory>/srv/www/htdocs/ordbehandlare/pm</siteDirectory>
+  <distributionDirectory>/srv/www/htdocs/ordbehandlare/pm/dist</distributionDirectory>
   <repository>
-    <url>
-      http://www.optime.se/repos/optime/ordbehandare/
-    </url>
+    <url>http://www.optime.se/repos/optime/ordbehandare/</url>
   </repository>
-	
   <versions>
     <version>
       <id>0.1</id>
@@ -44,7 +32,6 @@
       <tag>HEAD</tag>
     </version>
   </versions>
-
   <reports>
     <report>maven-jdepend-plugin</report>
     <report>maven-checkstyle-plugin</report>
@@ -60,184 +47,180 @@
     <report>maven-tasklist-plugin</report>
     <!--<report>maven-linkcheck-plugin</report>-->
   </reports>
-
   <developers>
-
     <developer>
       <name>Staffan Olsson</name>
       <id>solsson</id>
       <email>staffan@optime.se</email>
       <organization>Optime</organization>
     </developer>
-
   </developers>
-
   <dependencies>
-
-    <dependency>
-      <groupId>springframework</groupId>
-      <artifactId>spring</artifactId>
-      <version>1.1.1</version>
-      <properties>
-          <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-    
     <dependency>
       <groupId>acegi-security</groupId>
       <artifactId>acegi-security</artifactId>
       <version>0.6</version>
+      <type>jar</type>
       <properties>
-          <war.bundle>true</war.bundle>
+        <war.bundle>true</war.bundle>
       </properties>
     </dependency>
-
-	<dependency>
+    <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
       <version>1.3</version>
+      <type>jar</type>
       <properties>
-          <war.bundle>true</war.bundle>
+        <war.bundle>true</war.bundle>
       </properties>
     </dependency>
-
     <dependency>
       <groupId>servletapi</groupId>
       <artifactId>servletapi</artifactId>
       <version>2.4</version>
+      <type>jar</type>
     </dependency>
-    
-    <dependency>
-      <groupId>servletapi</groupId>
-      <artifactId>jsp-api</artifactId>
-      <version>2.4</version>
-    </dependency>
-
-    <dependency>
-      <id>log4j</id>
-      <version>1.2.8</version>
-      <url>http://jakarta.apache.org/log4j/</url>
-      <properties>
-          <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-
-    <dependency>
-      <id>commons-logging</id>
-      <version>1.0.4</version>
-      <url>http://jakarta.apache.org/commons/logging.html</url>
-      <properties>
-          <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-
-    <dependency>
-      <groupId>xerces</groupId>
-      <artifactId>xercesImpl</artifactId>
-      <version>2.6.2</version>
-    </dependency>
-    
     <dependency>
       <groupId>xalan</groupId>
       <artifactId>xalan</artifactId>
       <version>2.6.0</version>
+      <type>jar</type>
     </dependency>
-    
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
       <version>20040706</version>
+      <type>jar</type>
       <properties>
-          <war.bundle>true</war.bundle>
-      </properties>	      
+        <war.bundle>true</war.bundle>
+      </properties>
     </dependency>
-
     <dependency>
       <groupId>jstl</groupId>
       <artifactId>jstl</artifactId>
       <version>1.1.1</version>
+      <type>jar</type>
       <properties>
-          <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>	
-	
-	<dependency>
-      <groupId>taglibs</groupId>
-      <artifactId>standard</artifactId>
-      <version>1.1.1</version>
-      <properties>
-          <war.bundle>true</war.bundle>
+        <war.bundle>true</war.bundle>
       </properties>
     </dependency>
-    
     <!-- DAV -->
     <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
       <version>2.0.1</version>
+      <type>jar</type>
       <properties>
-          <war.bundle>true</war.bundle>
-      </properties>         
+        <war.bundle>true</war.bundle>
+      </properties>
     </dependency>
-    
-    <dependency>
-      <groupId>slide</groupId>
-      <artifactId>jakarta-slide-webdavlib</artifactId>
-      <version>2.1M1</version>
-      <properties>
-          <war.bundle>true</war.bundle>
-      </properties>         
-    </dependency>
-    
     <dependency>
       <groupId>jdom</groupId>
       <artifactId>jdom</artifactId>
       <version>1.0</version>
+      <type>jar</type>
       <properties>
-          <war.bundle>true</war.bundle>
-      </properties>         
+        <war.bundle>true</war.bundle>
+      </properties>
     </dependency>
-    
     <dependency>
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
       <version>1.0.b2</version>
+      <type>jar</type>
     </dependency>
-		
+    <dependency>
+      <groupId>optime</groupId>
+      <artifactId>optime-utils</artifactId>
+      <version>1.0</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
     <!-- for mailer -->
-    
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring</artifactId>
+      <version>1.1.1</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>servletapi</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.4</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.8</version>
+      <type>jar</type>
+      <url>http://jakarta.apache.org/log4j/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.4</version>
+      <type>jar</type>
+      <url>http://jakarta.apache.org/commons/logging.html</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.6.2</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>taglibs</groupId>
+      <artifactId>standard</artifactId>
+      <version>1.1.1</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>slide</groupId>
+      <artifactId>jakarta-slide-webdavlib</artifactId>
+      <version>2.1M1</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
     <dependency>
       <groupId>j2ee</groupId>
       <artifactId>mail</artifactId>
       <version>1.3.1</version>
+      <type>jar</type>
       <properties>
-          <war.bundle>false</war.bundle>
-      </properties>      
+        <war.bundle>false</war.bundle>
+      </properties>
     </dependency>
-
     <dependency>
       <groupId>j2ee</groupId>
       <artifactId>activation</artifactId>
       <version>1.0.2</version>
+      <type>jar</type>
       <properties>
-          <war.bundle>false</war.bundle>
+        <war.bundle>false</war.bundle>
       </properties>
     </dependency>
-
   </dependencies>
-
   <build>
-
-    <nagEmailAddress>
-      staffan@optime.se
-    </nagEmailAddress>
-
+    <nagEmailAddress>staffan@optime.se</nagEmailAddress>
     <sourceDirectory>src/java</sourceDirectory>
-
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
-
-    <aspectSourceDirectory/>
-
     <!-- Unit test cases -->
     <unitTest>
       <includes>
@@ -255,12 +238,12 @@
           </includes>
           <!-- messages_*.properties -->
           <!-- hibernate files -->
+          <filtering>false</filtering>
         </resource>
       </resources>
     </unitTest>
-
     <!-- Integration unit test cases -->
-    <integrationUnitTest/>
-
+    <integrationUnitTest />
   </build>
 </project>
+
