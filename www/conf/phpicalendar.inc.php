@@ -3,7 +3,7 @@
 // Global Repos configuration entries for PHP iCalendar 2.0
 // gets the calendar url from query parameter 'src'
 require_once(dirname(__FILE__) . '/authentication.inc.php');
-parse_ini_file(dirname(__FILE__) . '/repos.properties');
+require_once(dirname(__FILE__) . '/repos.properties.php');
 
 $r_auth = getReposUser() . ':' . getReposPass() . '@';
 $default_cal 			= substr_replace($_GET['src'], "$r_auth", strpos($_GET['src'],'://')+3, 0);
