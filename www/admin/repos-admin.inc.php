@@ -38,6 +38,7 @@ function warn($message) {
 
 $hasErrors = false; // error events are recorded
 function error($message) {
+	global $hasErrors;
 	$hasErrors = true;
 	linestart('error');
 	output($message);
@@ -57,13 +58,18 @@ function output($message) {
 
 function formatArray($message) {
 	$msg = '';
+	$linebreak = "<br />\n";
 	foreach ( $message as $key=>$val ) {
 		if ( $val===false )
 			$val = 0;
 		if ( is_string($key) )
 			$msg .= "$key: ";
-		$msg .= "$val<br />\n";
+		$msg .= "$val$linebreak";
 	}
+	// remove last linebreak
+	$last = strlen($msg)-strlen($linebreak);
+	if ( $last>=0 )
+		$msg = substr( $msg, 0, $last);
 	return $msg;
 }
 
@@ -100,20 +106,30 @@ function formatRev($number) {
 }
 
 /**
+ * @return true if string starts with the given prefix (case-insensitive). Empty prefix returns true.
+ */
+function startsWith($string, $prefix) {
+	if ( strlen($prefix)==0 )
+		return true;
+	return strncasecmp ( $string, $prefix, strlen($prefix) ) == 0;
+}
+
+/**
  * Get files and subdirectories in directory.
  * @param directory Path to check
  * @param startsWith Optional. Include only names that start with this prefix. 
  * @return Filenames as array sorted alpabetically
  */
-function getDirContents($directory, $startsWith='') {
+function getDirContents($directory, $startsWith="") {
 	if ( ! file_exists($directory) )
 		warn( "Directory $directory does not exist" );
 	$filelist = array();
 	if ($dir = opendir($directory)) {
-	   while (false !== ($file = readdir($dir))) 
-		   if($file != ".." && $file != ".")
-		   		if ( stristr($file,$startsWith)==$file )
-					$filelist[] = $file;
+	   while (false !== ($file = readdir($dir))) { 
+		   if ( $file != ".." && $file != "." && startsWith($file,$startsWith) ) {
+				$filelist[] = $file;
+		   }
+	   }
 	   closedir($dir);
 	} else {
 		warn( "Directory $directory could not be opened" );
@@ -129,7 +145,8 @@ function getDirContents($directory, $startsWith='') {
  * @return array with one entry for each file, each entry containing an array 0=>filename, 1=>start revision, 2=>end revision
  */
 function getBackupInfo($files, $startsWith='') {
-	return array_map( 'getRevisionInfo', $files, $startsWith);
+	$mapargs = array_fill( 0, count($files), $startsWith );
+	return array_map( 'getRevisionInfo', $files, $mapargs);
 }
 
 /**
@@ -141,7 +158,7 @@ function getRevisionInfo($filename, $startsWith) {
 		fatal("Could not extract revision numbers from filename $filename assuming the given prefix $startsWith");
 	$rev[0] = $startsWith . $rev[0];
 	$rev[1] = (int) $rev[1];
-	$rev[2] = (int) $rev[2];	
+	$rev[2] = (int) $rev[2];
 	return $rev;
 }
 
@@ -158,7 +175,16 @@ function getUserInput($message='Provide input and press return:\n') {
 
 // ----- unit tests ----
 if ( isTestRun() ) {
+	start("Unit testing " . basename(__FILE__));
 	
+	debug("---- testing: startsWith ----");
+	assertEquals(true, startsWith("hepp","") );
+	assertEquals(true, startsWith("hepp","he") );
+	assertEquals(true, startsWith("hepp","hepp") );
+	assertEquals(false, startsWith("","hepp") );
+	assertEquals(false, startsWith("hepp","hopp") );
+	assertEquals(false, startsWith("hep","hepp") );
+				
 	debug("---- testing: formatRev ----");
 	assertEquals( "0000012", formatRev(12) );
 	
@@ -174,10 +200,39 @@ if ( isTestRun() ) {
 	assertEquals( "svnrepo-foo-0000000-to-1234567.dump.gz", $info[0] );
 	assertEquals( 0, $info[1] );
 	assertEquals( 1234567, $info[2] );
+	
+	debug("---- testing: getBackupInfo ----");
+	$files = array(
+		getFilename( getPrefix("/path/to/repo"), 3, 12),
+		getFilename( getPrefix("/path/to/repo"), 100, 1000),
+		getFilename( getPrefix("/path/to/repo"), 1111111, 1111111)
+		);
+	$revs = getbackupInfo( $files, getPrefix("/path/to/repo") );
+	assertEquals( getFilename( getPrefix("/path/to/repo"), 1111111, 1111111), $revs[2][0], "name of third file");
+	assertEquals( 3, $revs[0][1] );
+	assertEquals( 12, $revs[0][2] );
+	assertEquals( 100, $revs[1][1] );
+	assertEquals( 1000, $revs[1][2] );
+	assertEquals( 1111111, $revs[2][1] );
+	assertEquals( 1111111, $revs[2][2] );
 		
-	debug("---- testing: getConfig ----");
-	$dir = getConfig('backup_folder');
-
+	debug("---- testing: getDirContents ----");
+	$dir = getConfig("backup_folder");
+	$prefix = getPrefix( getConfig("local_path") );
+	debug("This test depends on file in backup_folder $dir, and local_path wich gives prefix $prefix");
+	$files1 = getDirContents($dir);
+	$total = count($files1);
+	if ( $total<1 )
+		error("No files found in $dir");
+	$files2 = getDirContents($dir, $prefix);
+	$filtered = count($files2);
+	if ( $filtered<1 )
+		warn("No files found in $dir with prefix $prefix");
+	if ( $total < $filtered )
+		error( "Filtering with prefix makes $total files become $filtered, which is very strange");
+	if ( $total == $filtered )
+		warn( "Total number of files is same as filtered, this may indicate that $prefix filtering makes no difference");
+		
 	// debug("---- testing:  ----");
 	
 	global $hasErrors;
@@ -185,6 +240,8 @@ if ( isTestRun() ) {
 		fatal("There were test errors");
 	else
 		info("All tests passed");
+		
+	done();
 }
 
 // {{{ Header

@@ -11,6 +11,7 @@ $repos_config = parse_ini_file( dirname(__FILE__) . '/repos.properties', false )
  * @return the value corresponding to the specified key. False if key not defined.
  */ 
 function getConfig($key) {
+	global $repos_config;
 	if (isset($repos_config[$key]))
 		return ($repos_config[$key] );
 	return false;
