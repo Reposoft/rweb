@@ -14,7 +14,7 @@ if(empty($rev)) {
 	exit;
 }
 $revisions = ' -r '.$rev;
-$cmd = 'cat' . $revisions . ' '.$url;
+$cmd = 'cat' . $revisions . ' "'.$url.'"';
 
 // passthrough with stylesheet
 if ($justOpen) {

@@ -7,7 +7,7 @@ require_once( upOne(dirname(__FILE__)) . "/login.inc.php" );
 define('STYLESHEET','../svnlayout/repos.xsl');
 
 $url = getTargetUrl();
-$cmd = "log -v --xml --incremental $url";
+$cmd = 'log -v --xml --incremental "'.$url\.'"';
 
 // passthrough with stylesheet
 header('Content-type: text/xml');
