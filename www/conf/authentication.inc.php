@@ -19,7 +19,7 @@ if (!isset($_SERVER['PHP_AUTH_USER'])) {
 function getReposUser() {
 	return $_SERVER['PHP_AUTH_USER'];
 }
-function getReposPassword() {
+function getReposPass() {
 	return $_SERVER['PHP_AUTH_PW'];
 }
 function getReposAuthentication() {

@@ -3,9 +3,9 @@ include('./authentication.inc.php');
 
 echo("<pre>\n");
 echo("==== Test retrieval of credentials ===\n");
-echo("Username = " + REPOS_USER);
-echo("Password = " + REPOS_PASS);
-echo("BASIC string = " + REPOS_AUTH);
+echo("Username = " + getReposUser());
+echo("Password = " + getReposPass());
+echo("BASIC string = " + getReposAuthentication());
 
 // Display info about current repos configuration
 include('./repos.properties.php');
