@@ -438,11 +438,11 @@
 	<xsl:template name="linebreak">
 	    <xsl:param name="text"/>
 	    <xsl:choose>
-	        <xsl:when test="contains($text, '&#13;')">
-	            <xsl:value-of select="substring-before($text, '&#13;')"/>
+	        <xsl:when test="contains($text, '&#10;')">
+	            <xsl:value-of select="substring-before($text, '&#10;')"/>
 	            <br />
 	            <xsl:call-template name="linebreak">
-	                <xsl:with-param name="text" select="substring-after($text, '&#13;')"/>
+	                <xsl:with-param name="text" select="substring-after($text, '&#10;')"/>
 	            </xsl:call-template>
 	        </xsl:when>
 	        <xsl:otherwise>

@@ -13,7 +13,7 @@ if(empty($revfrom) || empty($revto)) {
 	echo "Argument error: 'revfrom' and 'revto' not specified.";
 	exit;
 }
-$revisions = ' -r '.$revfrom.':'.$revto;
+$revisions = ' --notice-ancestry -r '.$revfrom.':'.$revto;
 
 $cmd = 'diff' . $revisions . ' '.$url;
 
@@ -23,8 +23,6 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 echo '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
 echo "<!-- SVN diff for .$url. -->\n";
 echo '<diff repo="'.getRepositoryUrl().'" path="'.$_GET['path'].'" revfrom="'.$revfrom.'" revto="'.$revto.'">' . "\n";
-echo '<![CDATA['."\n";
-svnPassthru($cmd);
-echo ']]>'."\n";
+svnPassthru($cmd,true);
 echo '</diff>';
 ?>

@@ -141,10 +141,13 @@ function getReposAuth() {
 /**
  * Execute svn command like the PHP passthru() function
  * @param cmd The command without the SVN part, for example 'log /url/to/repo'
+ * @param cdata True if the result should be enclosed in CDATA tag
  */
-function svnPassthru($cmd) {
-	$runthis = getSvnCommand().escapeshellcmd($cmd); 
+function svnPassthru($cmd, $cdata=false) {
+	$runthis = getSvnCommand().escapeshellcmd($cmd);
+	if($cdata) echo "<![CDATA[\n";
 	passthru($runthis,$returnval);
+	if($cdata) echo "]]>\n";
 	if($returnval) handleSvnError($runthis,$returnval);
 }
 
@@ -164,6 +167,9 @@ function getSvnCommand() {
 function handleSvnError($executedcmd,$errorcode) {
 	echo "<error code=\"$errorcode\"/>\n";
 	echo "<![CDATA[\n";
+	// show the command. WARNING: may contain password
+	echo "$executedcmd\n---------------------------------------";
+	// show error message
 	passthru("$executedcmd 2>&1");
 	echo "]]>\n";
 }
