@@ -71,6 +71,7 @@
 				<xsl:apply-templates select="svn"/>
 				<xsl:apply-templates select="log"/>
 				<xsl:apply-templates select="diff"/>
+				<xsl:apply-templates select="cat"/>
 			</body>
 		</html>
 	</xsl:template>
@@ -383,11 +384,22 @@
 			</xsl:if>
 			<xsl:if test="@action='M'">
 				<a title="{$show-diff}" class="action" href="{$rurl}/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}"><xsl:value-of select="@action"/></a>
+				<xsl:value-of select="$spacer"/>
 			</xsl:if>
+			<xsl:value-of select="."/>
 			<xsl:value-of select="$spacer"/>
-			<a class="filename" href="{$rurl}/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">
-				<xsl:value-of select="."/>
-			</a>
+			<xsl:if test="@action='M'">
+				<a class="action" href="{$rurl}/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={$revfrom}">before</a>
+				<a class="action" href="{$rurl}/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>
+			</xsl:if>
+			<xsl:if test="@action='A'">
+				<xsl:if test="@copyfrom-path">
+					<xsl:text>copied from</xsl:text>
+					<span class="path"><xsl:value-of select="@copyfrom-path"/></span>
+					<xsl:value-of select="$spacer"/>
+					<span class="revision"><xsl:value-of select="@copyfrom-rev"/></span>
+				</xsl:if>
+			</xsl:if>
 		</p>
 	</xsl:template>
 	<!--
@@ -470,8 +482,8 @@
 							<xsl:text>from revision </xsl:text>
 							<xsl:value-of select="@rev"/>
 						</span>
-						<a class="action" href="{$rurl}/cat/?repo={@repo}&amp;target={@target}&amp;rev={@rev}">open old file</a>
 					</h2>
+					<p><a class="action" href="{$rurl}/cat/?repo={@repo}&amp;target={@target}&amp;rev={@rev}&amp;open=1">open old file</a></p>
 					<xsl:apply-templates select="*"/>
 				</td>
 			</tr>
