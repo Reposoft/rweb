@@ -13,13 +13,13 @@ Needs the following model:
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title><c:out value="${contents.filename}"/></title>
+        <title><c:out value="${url}"/></title>
 		<jsp:include page="../includes/head.inc.jsp"/>
     </head>
     <body>
 		<jsp:include page="../includes/top.inc.jsp"/>
-		<form action="save.jwa?${contents.query}" method="POST">
-		<textarea rows="40" cols="60" style="height:100%; width:100%;"><c:out value="${contents.contents}"/></textarea><br/>
+		<form action="save.jwa" method="POST">
+		<textarea rows="40" cols="60" style="height:100%; width:100%;"><c:out value="${url}"/></textarea><br/>
 		<input type="submit" value="Save"/>
 		</form>
 		<jsp:include page="../includes/end.inc.jsp"/>

@@ -4,19 +4,33 @@
 <!--
   - Views and controllers
   -->
-
 <beans>
 
 	<!-- =========== views =========== -->
 	
+	
+	<!-- =========== resolvers =========== -->
+	
 	<!-- internal url, last in resolver chain -->
 	<bean id="viewResolver" 
-	      class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+	      class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 	    <property name="prefix"><value>/WEB-INF/jsp/</value></property>
 	    <property name="suffix"><value>.jsp</value></property>
+	    <property name="viewClass"><value>org.springframework.web.servlet.view.JstlView</value></property>
 	</bean>
 	
 	<!-- ======== controllers ======== -->
-	
+	<bean id="documentController" class="se.optime.document.DocumentController"/>
+
+	<!-- ========= mappings ========== -->
+    <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <!-- filetypes -->
+                <prop key="/**/*.doc.jwa">documentController</prop>
+                <prop key="/**/*.html.jwa">documentController</prop>
+             </props>
+        </property>
+    </bean>
 
 </beans>
