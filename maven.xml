@@ -68,9 +68,16 @@
   </goal>
 
   <!-- before making webapp - 
-  		copy jsp-s from editor friendly location to WAR's WEB-INF
+        - copy configuration file from shared conf folder.
+  		- copy jsp-s from editor friendly location to WAR's WEB-INF
   		so that they are deployed to tomcat and hidden from direct access -->
   <postGoal name="war:webapp">
+    <echo>Copying configuration files to ${maven.war.webapp.dir}/WEB-INF</echo>
+    <copy todir="${maven.war.webapp.dir}/WEB-INF">
+      <fileset dir="www/conf">
+        <include name="**/*.properties" />
+      </fileset>
+    </copy>
   	<echo>Copying JSPs to WAR</echo> 
     <copy todir="${maven.war.webapp.dir}/WEB-INF/jsp">
       <fileset dir="www">

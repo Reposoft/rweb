@@ -15,11 +15,10 @@ if (!isset($_SERVER['PHP_AUTH_USER'])) {
    // - $_SERVER['REMOTE_USER'] = Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
    // - list($user, $pw) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
    // For HTTP Authentication to work with IIS, the PHP directive cgi.rfc2616_headers must be set to 0 (the default value).
-} else {
-   // "PHP_AUTH variables will not be set if external authentication is enabled for that particular page and safe mode is enabled"
-   // set credentials as constants, so that dependencies are not tied to the server variables
-   define('REPOS_USER',$_SERVER['PHP_AUTH_USER']);
-   define('REPOS_PASS',$_SERVER['PHP_AUTH_PW']);
-   define('REPOS_AUTH',$_SERVER['REMOTE_USER']); // not verified
 }
+// "PHP_AUTH variables will not be set if external authentication is enabled for that particular page and safe mode is enabled"
+// set credentials as constants, so that dependencies are not tied to the server variables
+define('REPOS_USER',$_SERVER['PHP_AUTH_USER']);
+define('REPOS_PASS',$_SERVER['PHP_AUTH_PW']);
+define('REPOS_AUTH',$_SERVER['REMOTE_USER']); // not verified
 ?>

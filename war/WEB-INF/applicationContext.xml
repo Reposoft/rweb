@@ -6,7 +6,7 @@
     <!-- deploy-time properties -->
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
-				<value>WEB-INF/local.properties</value>
+				<value>WEB-INF/repos.properties</value>
 		</property>
 	</bean>
 	

@@ -39,4 +39,17 @@
          </ul>
       </section>
   </section>
+  <section>
+      <title>User authentication</title>
+      <para>
+         <p>Authentication is configured a three different places:</p>
+         <ul>
+             <li>Apache configuration in the repository mapping</li>
+             <li>Webapp authentication module (Acegi)</li>
+             <li>PHP authentication scriptlet, in <code>conf/authenticationl.inc.php</code></li>
+         </ul>
+         <p>Only Apache actually verifies the login. Repos code only makes sure it has access to the credential, to be able to retrieve resources for the user.<p>
+         <p>They all need to be configured with BASIC authentication, realm '<b>repos</b>'</p>
+      </para>
+  </section>
 </article>
