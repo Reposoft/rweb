@@ -22,14 +22,13 @@
   </description>
   <shortDescription>repos.se - version control for people</shortDescription>
   <url>http://www.repos.se/</url>
-  <issueTrackingUrl>http://www.optime.se/issuetracker/repos/</issueTrackingUrl>
-  <siteAddress>www.repos.se</siteAddress>
-  <siteDirectory>/srv/www/htdocs/repos/development</siteDirectory>
-  <distributionDirectory>/srv/www/htdocs/ordbehandlare/pm/dist</distributionDirectory>
+  <issueTrackingUrl>http://www.optime.se/engine/issuetracker/repos/</issueTrackingUrl>
+  <siteAddress>http://www.optime.se/engine/se/repos</siteAddress>
+  <siteDirectory>/srv/www/htdocs/engine/se/repos</siteDirectory>
+  <distributionDirectory>/srv/www/htdocs/engine/se/repos</distributionDirectory>
   <repository>
-    <connection>scm|svn|http://www.optime.se/repos/optime/repos/trunk</connection>
-    <developerConnection>scm|svn|http://www.optime.se/repos/optime/repos/trunk</developerConnection>
-    <url>http://www.optime.se/repos/optime/repos</url>
+    <connection>scm|svn|https|//svn.optime.se/optime/repos/trunk</connection>
+    <url>https://svn.optime.se/optime/repos</url>
   </repository>
   <versions>
     <version>
