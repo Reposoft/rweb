@@ -17,7 +17,7 @@
   <property name="archive.type" value="tar.bz2"/>
   <property name="extracted.folder" value="${basedir}/Cezanne"/>
   <property name="icon.size.folder" value="/22x22"/>
-  <property name="icon.size.folder" value="/16x16"/>
+  <property name="miniicon.size.folder" value="/16x16"/>
 	
   <!-- derived -->
   <property name="download.file" value="${basedir}/downloaded-dependency.${archive.type}"/>
@@ -32,7 +32,7 @@
   	<get src="${archive}" dest="${download.file}" verbose="true" usetimestamp="true"/>
   	<bunzip2 src="${download.file}" dest="${download.file}.tar"/>
   	<untar src="${download.file}.tar" dest="${basedir}"/>
-  	<delete file="${download.file}"/>
+  	<!-- <delete file="${download.file}"/> -->
   	<delete file="${download.file}.tar"/>
   </target>
 	
@@ -56,7 +56,7 @@
   <!-- Customized installation steps for this dependency -->
   <target name="install" depends="license" description="install" >
   	<property name="ifrom" value="${extracted.folder}/${icon.size.folder}"/>
-  	<property name="sfrom" value="${extracted.folder}/$miniicon.size.folder}"/>
+  	<property name="sfrom" value="${extracted.folder}/${miniicon.size.folder}"/>
   	<property name="ito" value="${basedir}"/>
     	<echo>Renaming icons to supported filetypes, deleting the rest</echo>
   	<!-- commandbar -->
