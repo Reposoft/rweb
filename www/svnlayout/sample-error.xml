@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SVN diff for .https://www.repos.se/sweden/svensson/files/document.html. -->
-<diff repo="https://www.repos.se/sweden" path="" revfrom="4" revto="5">
+<diff repo="https://www.repos.se/sweden" target="/trunk/document.html" revfrom="4" revto="5">
 <![CDATA[
 ]]>
 <error code="1">

@@ -22,7 +22,7 @@ header('Content-type: text/xml');
 echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 echo '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
 echo "<!-- SVN diff for .$url. -->\n";
-echo '<diff repo="'.getRepositoryUrl().'" path="'.$_GET['target'].'" revfrom="'.$revfrom.'" revto="'.$revto.'">' . "\n";
+echo '<diff repo="'.getRepositoryUrl().'" target="'.$_GET['target'].'" revfrom="'.$revfrom.'" revto="'.$revto.'">' . "\n";
 svnPassthru($cmd,true);
 echo '</diff>';
 ?>

@@ -163,7 +163,9 @@ function getSvnCommand() {
 }
 
 /**
- * Errorhandling for SVN execute
+ * Errorhandling for SVN execute.
+ * WARNING: runs the command agin, and is only suatable for read-only commands
+ * (as is this entire PHP solution)
  */
 function handleSvnError($executedcmd,$errorcode) {
 	echo "<error code=\"$errorcode\">\n";
@@ -171,7 +173,7 @@ function handleSvnError($executedcmd,$errorcode) {
 	// show error message
 	passthru("$executedcmd 2>&1");
 	echo "]]>\n";
-	echo "</error>";
+	echo "</error>\n";
 }
 
 ?>
