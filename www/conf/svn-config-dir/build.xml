@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Repos.se accepted certificates" default="install" basedir=".">
+
+  <description>
+	This script gets the PEM certificate for SSL servers accepted by repos.
+  	Needed for servers that have a certificate which is not automatically verified by the subversion client.
+  </description>
+
+  <!-- package name in repos folder, for example www/some/dependency -> some.dependency -->
+  <property name="repos-package" value="conf.svn-config-dir"/>
+	
+  <!-- set global properties for this build -->
+  <condition property="isWindows">
+      <os family="windows"/>
+  </condition>
+	
+  <!-- set paths -->
+  <target name="init-win" if="isWindows">
+    <echo>OS is Windows.</echo>	
+    <property name="certdir" value="${basedir}\accepted-ssl"/>
+    <property name="serversfile" value="${basedir}\servers"/>
+  </target>
+  <target name="init" unless="isWindows">
+    <echo>OS is not Windows.</echo>
+    <property name="certdir" value="${basedir}/accepted-ssl"/>
+    <property name="serversfile" value="${basedir}/servers"/>
+  </target>	
+	
+  <target name="cfg" depends="init-win,init">
+    <echo>Collecting certificates to ${certdir}/</echo>
+    <echo>Creating SVN config file ${serversfile}</echo>
+    <touch file="${serversfile}"/>
+    <echo file="${serversfile}" append="false">
+	[groups]
+	repos = *.repos.se
+	optime = *.optime.se
+    	
+    </echo>  	
+  </target>
+
+  <!-- Download and decompress dependency archive -->
+  <target name="repos" depends="cfg">
+    <property name="certname" value="repos.se.crt"/>
+    <get src="http://www.repos.se/CA.crt" dest="${certdir}/${certname}"/>
+    <echo file="${serversfile}" append="true">
+	[repos]
+	http-timeout = 15
+	ssl-authority-files = ${certdir}/${certname}
+    	
+    </echo>
+  </target>
+
+  <target name="optime" depends="cfg">
+    <property name="certname" value="optime.se.crt"/>
+    <get src="http://www.optime.se/CA.crt" dest="${certdir}/${certname}"/>
+    <echo file="${serversfile}" append="true">
+	[optime]
+	http-timeout = 15
+	ssl-authority-files = ${certdir}/${certname}
+    	
+    </echo>
+  </target>	
+	
+  <!-- Customized installation steps for this dependency -->
+  <target name="install"
+  	depends="repos,optime"
+  	description="download all certificates and write config file" >
+  </target>
+
+  <!-- Remove dependency, leaving only repos sources. -->
+  <target name="clean" description="clean up" >
+  </target>
+</project>

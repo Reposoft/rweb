@@ -72,6 +72,7 @@ function getRepositoryUrl() {
 	}
     $ref = getReferer();
     if ($ref && isset($_GET['path'])) {
+		if($_GET['path']=='/') return $ref.'/';
 		$repo = substr($ref,0,strpos($ref,$_GET['path']));
 		if (count($repo)>0) return $repo; 
     }
