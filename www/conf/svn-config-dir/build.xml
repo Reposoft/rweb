@@ -31,33 +31,31 @@
     <echo>Creating SVN config file ${serversfile}</echo>
     <touch file="${serversfile}"/>
     <echo file="${serversfile}" append="false">
-	[groups]
-	repos = *.repos.se
-	optime = *.optime.se
-    	
+[groups]
+repos = *.repos.se
+optime = *.optime.se
+
     </echo>  	
   </target>
 
   <!-- Download and decompress dependency archive -->
   <target name="repos" depends="cfg">
-    <property name="certname" value="repos.se.crt"/>
-    <get src="http://www.repos.se/CA.crt" dest="${certdir}/${certname}"/>
+    <get src="http://www.repos.se/CA.crt" dest="${certdir}/repos.se.crt"/>
     <echo file="${serversfile}" append="true">
-	[repos]
-	http-timeout = 15
-	ssl-authority-files = ${certdir}/${certname}
-    	
+[repos]
+http-timeout = 15
+ssl-authority-files = ${certdir}/repos.se.crt
+
     </echo>
   </target>
 
   <target name="optime" depends="cfg">
-    <property name="certname" value="optime.se.crt"/>
-    <get src="http://www.optime.se/CA.crt" dest="${certdir}/${certname}"/>
+    <get src="http://www.optime.se/CA.crt" dest="${certdir}/optime.se.crt"/>
     <echo file="${serversfile}" append="true">
-	[optime]
-	http-timeout = 15
-	ssl-authority-files = ${certdir}/${certname}
-    	
+[optime]
+http-timeout = 15
+ssl-authority-files = ${certdir}/optime.se.crt
+
     </echo>
   </target>	
 	
