@@ -2,7 +2,6 @@
 body {
     font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
     font-size: 0.8em;
-    /* background-color: #CCCCCC; */
 }
 td {
 	font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
@@ -36,19 +35,42 @@ img {
 	behavior: url("http://www.repos.se/css/pngbehavior.htc");
 }
 /* page layout themes */
-table.framed {
+.info {
 	border: 2px solid #CCCC99;
 	border-collapse: collapse;
+	padding: 16px;
 }
-table.framed th {
-	border: 2px solid #CCCC99;
+th.info {
 	font-weight: normal;
 	letter-spacing: 0.2em;
-	padding: 16px;
-}
-table.framed td {
 	border: 2px solid #CCCC99;
-	padding: 16px;
+}
+/* repository view page (like index and log) layout */
+.titlebar {
+	padding: 3px;
+	padding-left: 10px;
+	background-color: #FFFFCC;
+	font-size: 1.0em;
+}
+.commandbar {
+	padding: 3px;
+	padding-left: 10px;
+	background-color: #EEEEEE;
+	border: 1px solid #CCCC99;
+}
+.workarea {
+	padding: 10px;
+}
+.workarea p {
+	margin: 0px;
+}
+.footer {
+	font-size: 0.7em;
+	padding: 3px;
+	padding-left: 10px;
+	border: 1px solid #CCCC99;
+	clear: both;
+	background-color: #FFFFCC;
 }
 /* layout of version contron concepts */
 .path {
@@ -117,62 +139,4 @@ span.action {
 	border-left: 1px solid #CCCCCC;
 	margin-left: 2px;
 	margin-right: 2px;
-}
-/* repository view page (like index and log) layout */
-.svnlayout {
-	position: absolute;
-	left: 1%;
-	top: 0px;
-	width: 98%;
-	border-collapse: collapse;
-	border-right-width:1px;
-	border-left-width:1px;
-	border-right-style: solid;
-	border-left-style: solid;
-	border-right-color: #CCCCCC;
-	border-left-color: #CCCCCC;
-}
-.svnlayout td {
-	padding-left: 10px;
-	padding-right: 10px;
-}
-.titlebar {
-	padding-top: 3px;
-	padding-bottom: 3px;
-	border-bottom-width: 1px;
-	border-bottom-color: #CCCCCC;
-	border-bottom-style: none;
-	background-color: #FFFFCC;
-}
-.commandbar {
-	padding-top: 3px;
-	padding-bottom: 3px;
-	background-color: #F0F0EE;
-	border-top-width: 1px;
-	border-bottom-width:1px;
-	border-top-style: solid;
-	border-bottom-style: solid;
-	border-top-color: #CCCCCC;
-	border-bottom-color: #CCCCCC;
-}
-.workarea {
-	padding-top: 10px;
-	padding-bottom: 10px;
-}
-.workarea p {
-	padding: 0px;
-	margin: 0px;
-}
-.footer {
-	font-size: smaller;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	border-top-width: 1px;
-	border-bottom-width:1px;
-	border-top-style: solid;
-	border-bottom-style: solid;
-	border-top-color: #CCCCCC;
-	border-bottom-color: #CCCCCC;
-	clear: both;
-	background-color: #FFFFCC;
 }

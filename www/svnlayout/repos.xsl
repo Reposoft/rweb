@@ -78,7 +78,7 @@
 	<!-- body contents -->
 	<xsl:template match="index">
 		<!-- using table instead of divs now -->
-		<table class="svnlayout">
+		<table class="info" width="98%" align="center">
 			<tr>
 				<td id="titlebar" class="titlebar">
 					<xsl:call-template name="titlebar"/>
@@ -145,6 +145,10 @@
 			<xsl:call-template name="showicon">
 				<xsl:with-param name="filetype" select="'_log'"/>
 			</xsl:call-template>show log</a>
+		<a class="command" href="{$rurl}/logout.php">
+			<xsl:call-template name="showicon">
+				<xsl:with-param name="filetype" select="'_logout'"/>
+			</xsl:call-template>logout</a>
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="workarea">

@@ -65,6 +65,7 @@
   	<move file="${ifrom}/filesystems/folder_applegreen_open.png" tofile="${ito}/_tortoisefolder.png" overwrite="false"/>
   	<move file="${ifrom}/filesystems/folder_banana.png" tofile="${ito}/_folder.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/mime.png" tofile="${ito}/_file.png" overwrite="false"/>
+  	<move file="${ifrom}/actions/stop.png" tofile="${ito}/_logout.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/archive_zip.png" tofile="${ito}/zip.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/archive_gz.png" tofile="${ito}/gz.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/archive_sit.png" tofile="${ito}/sit.png" overwrite="false"/>
