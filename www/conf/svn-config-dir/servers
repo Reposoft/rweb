@@ -25,4 +25,4 @@ optime = *.optime.se
 
 [repos]
 http-timeout = 15
-ssl-authority-files = accepted-ssl/repos.crt
+ssl-authority-files = /home/solsson/www/repos/CA.crt
