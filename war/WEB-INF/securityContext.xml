@@ -19,7 +19,7 @@
 	</bean>
 	
 	<bean id="authenticationEntryPoint" class="net.sf.acegisecurity.ui.basicauth.BasicProcessingFilterEntryPoint">
-	  <property name="realmName"><value>repos</value></property>
+	  <property name="realmName"><value>${repo_name}</value></property>
 	</bean>
 	
 	<bean id="autoIntegrationFilter" class="net.sf.acegisecurity.ui.AutoIntegrationFilter" />
