@@ -472,7 +472,7 @@
 						</span>
 						<a class="action" href="{$rurl}/cat/?repo={@repo}&amp;target={@target}&amp;rev={@rev}">open old file</a>
 					</h2>
-					<xsl:apply-templates select="*">
+					<xsl:apply-templates select="*"/>
 				</td>
 			</tr>
 			<tr>
