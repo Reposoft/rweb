@@ -1,0 +1,72 @@
+#!/bin/bash
+# Dumps a named svn repository to predefined backup directory, 
+#  saving the youngest revision of this backup to a file
+#  for use in the next backup
+# (c) Staffan Olsson www.optime.se
+
+# Run 'echo -1 > .svnrepo-path-to-repo' in $BACKUP_PATH for first backup
+
+# exit codes
+# 0 = successful dump
+# 1 = no new revisions in repository since last backup
+# 5 = no record of last backup. can not do incremental.
+# 6 = invalid record of last backup
+# 7 = repository path invalid / could not get latest revision number
+
+# parameters
+# 1: The full local path to the repository
+#
+REPO=$1
+if test -d $FILENAME
+then
+	echo "Trying to back up repository $REPO"
+else
+	echo "Warning: Directory $REPO does not exist. Can not do backup."
+	exit 1
+fi
+# defaults
+BACKUP_PATH="/srv/backup"
+# generate filename
+FILENAME="svnrepo$(echo $REPO | sed 's/\//-/g')"
+# check that last revision is indicated
+if test -f "$BACKUP_PATH/.$FILENAME"
+then
+	echo "Backing up repository $REPO"
+else
+	echo "Could not find $BACKUP_PATH/.$FILENAME. Exiting."
+	exit 5
+fi
+# revision range
+PREVIOUS="$(cat $BACKUP_PATH/.$FILENAME)"
+if test -z "$PREVIOUS"
+then
+	echo "Could not get previous backup revision. Exiting."
+	exit 6
+fi
+# lower revision number is OK, save it and get current revision
+LOWER=$(($PREVIOUS + 1))
+YOUNGEST="$(/usr/bin/svnlook youngest $REPO)"
+if test -z "$YOUNGEST"
+then
+	echo "Could not get current revision number. Exiting."
+	exit 8
+fi
+# check that there are new revisions
+if test $LOWER -le $YOUNGEST
+then
+	echo "Backing up $REPO from rev $LOWER to $YOUNGEST"
+else
+	echo "Nothing to back up. Revision is still $PREVIOUS."
+	exit 1
+fi
+FILE="$BACKUP_PATH/$FILENAME-$(/usr/bin/printf %06i $LOWER)-to-$(/usr/bin/printf %06i $YOUNGEST).svndump"
+# do dump
+echo "Dumping incremetal to $FILE"
+#(for svn 1.0) /usr/bin/svnadmin dump "$REPO" --revision $LOWER:$YOUNGEST --incremental > "$FILE"
+/usr/bin/svnadmin dump "$REPO" --revision $LOWER:$YOUNGEST --incremental --deltas > "$FILE"
+# compress the file
+/usr/bin/gzip -9 "$FILE"
+# ------ upload backup --------
+#/srv/scripts/save-backup-file "$FILE.gz"
+# everything done, set upper revision as the latest backup
+echo "$YOUNGEST" > $BACKUP_PATH/.$FILENAME

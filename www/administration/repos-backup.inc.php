@@ -1,6 +1,6 @@
 <?php
 
-require 'repos-admin.inc.php';
+require( dirname(__FILE__) . '/repos-admin.inc.php' );
 
 // test
 start( 'test load' );

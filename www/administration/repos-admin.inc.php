@@ -1,4 +1,6 @@
 <?php
+
+require( realpath("/../repos.properties.php") );
 $isWindows = (substr(PHP_OS, 0, 3) == 'WIN');
 
 // --- output functions ---

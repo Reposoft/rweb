@@ -1,0 +1,45 @@
+#!/bin/bash
+# Fully automated script for backing up mysql databases to svn repository
+# Needs no parameters
+# Note that the temporary directory is deleted by this script
+# You need a backup account for the db: GRANT SELECT , FILE , LOCK TABLES ON * . * TO "reader"@ "localhost";
+#
+# Exit codes
+# 0 = successful
+# 5 = could not find previous backup in repository
+# 6 = file/directory error
+#
+# Warning: the temp dir is deleted
+TEMPDIR="~/temp/dbbackup"
+FILENAME="olsson.sql"
+# repository that contains the file, and is accessable without login
+REPOSITORY="http://localhost/repos/olsson/db_mysql1"
+# Delete temp dir
+if test -z "$TEMPDIR"
+then
+	echo "Temp dir not set"
+	exit 6
+fi
+# remove old contents of temp dir
+if test -d "$TEMPDIR"
+then
+	rm -Rf "$TEMPDIR"
+fi
+# Create temp dir
+mkdir "$TEMPDIR"
+# Check out
+/usr/bin/svn co "$REPOSITORY" "$TEMPDIR"
+# Verify checkout
+if test -f "$TEMPDIR/$FILENAME"
+then
+	echo "Updating repository $REPOSITORY with file $TEMPDIR/$FILENAME"
+else
+	echo "File $FILENAME was not found in repository $REPOSITORY. Exiting."
+	exit 5
+fi
+# Dump the database, with one INSERT per row
+/usr/bin/mysqldump --opt --all-databases --user=reader --complete-insert=TRUE --extended-insert=TRUE > "$TEMPDIR/$FILENAME"
+# Check in result
+/usr/bin/svn -m "Backup at $(date '+%T %Y-%m-%d')" commit "$TEMPDIR"
+# Done
+exit 0
