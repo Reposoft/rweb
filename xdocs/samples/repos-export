@@ -1,0 +1,6 @@
+# post-commit export paths using Repos script
+[/repos/trunk/www]
+/srv/www/htdocs/repos
+
+[/repos/trunk]
+/home/repos/nightly-build

@@ -1,0 +1,15 @@
+[groups]
+administrators = admin
+
+[/]
+@administrators = rw
+
+[/testuser]
+testuser = rw
+
+[/testuser2]
+testuser2 = rw
+
+[/testproject]
+testuser = rw
+testuser2 = r
