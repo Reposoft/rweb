@@ -18,6 +18,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
+import se.optime.repos.user.BasicAuthenticationResolver;
 import se.optime.repos.webdav.WebRepository;
 import sun.misc.BASE64Decoder;
 
@@ -28,6 +29,7 @@ import sun.misc.BASE64Decoder;
 public class DocumentController implements Controller {
 
     private WebRepository repository = null;
+    private BasicAuthenticationResolver authenticationResolver = new BasicAuthenticationResolver();
     
     protected final Log logger = LogFactory.getLog(this.getClass());
     
@@ -50,11 +52,7 @@ public class DocumentController implements Controller {
         String user = request.getRemoteUser();
         String type = request.getAuthType();
         
-        // Get Authorization header
-        String auth = request.getHeader("Authorization");
-        BASE64Decoder dec = new BASE64Decoder();
-        String authority = getAuthorization(auth);
-        logger.info("Request by " + user + " (" + type + "):" + auth + " = " + authority);
+        logger.info("Request by " + user + " (" + type + "):" + authenticationResolver.getAuthenticatedPassword() + " = " + authenticationResolver.getBasicAuthenticationString());
         
         model.put("contents","lite text"); //reader.readLine());
         
