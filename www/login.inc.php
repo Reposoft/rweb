@@ -148,4 +148,14 @@ function getSvnCommand() {
 	return 'svn '.$auth.$options;
 }
 
+function svnPassthru($cmd) {
+	passthru("$cmd",$returnval);
+	if($returnval) handleSvnError($cmd,$returnval);
+}
+
+function handleSvnError($cmd,$errorcode) {
+	echo "<error code=\"$errorcode\"/>";
+	// try executing "$cmd 2>&1" to get stderr
+}
+
 ?>

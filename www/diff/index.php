@@ -24,7 +24,7 @@ echo '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
 echo "<!-- SVN diff for .$url. -->\n";
 echo '<diff repo="'.getRepositoryUrl().'" path="'.$_GET['path'].'" revfrom="'.$revfrom.'" revto="'.$revto.'">' . "\n";
 echo '<![CDATA['."\n";
-passthru($cmd);
+svnPassthru($cmd);
 echo ']]>'."\n";
 echo '</diff>';
 ?>
