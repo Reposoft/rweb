@@ -57,9 +57,13 @@ function getTarget() {
  * @return Root url of the repository for this request
  */
 function getRepositoryUrl() {
+	if (isset($_GET['repo'])) {
+		return $_GET['repo'];
+	}
     $ref = getReferer();
     if ($ref && isset($_GET['path'])) {
-        return substr($ref,0,strpos($ref,$_GET['path']));
+		$repo = substr($ref,0,strpos($ref,$_GET['path']));
+		if (count($repo)>0) return $repo; 
     }
     return getConfig('repo_url');
 }

@@ -67,6 +67,7 @@
 				<!-- supported contents -->
 				<xsl:apply-templates select="svn"/>
 				<xsl:apply-templates select="log"/>
+				<xsl:apply-templates select="diff"/>
 			</body>
 		</html>
 	</xsl:template>
@@ -284,6 +285,10 @@
 	<!--
 	========= svn log xml formatting ==========
 	-->
+	<!-- text strings -->
+	<xsl:param name="show-diff">Show changes (differeces from previous revision)</xsl:param>
+	<xsl:param name="undo">Reverse the changes made from previous revision to this one</xsl:param>
+	<!-- layout -->
 	<xsl:template match="log">
 		<table class="svnlayout">
 			<tr>
@@ -306,7 +311,7 @@
 			</tr>
 			<tr>
 				<td id="footer" class="footer">
-					
+					<xsl:value-of select="$spacer"/>
 				</td>
 			</tr>
 		</table>
@@ -326,7 +331,7 @@
 					<xsl:value-of select="date"/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<a class="action" href="{$rurl}/undo/?repo={../@repo}&amp;rev={@revision}">undo</a>
+				<a title="{$undo}" class="action" href="{$rurl}/undo/?repo={../@repo}&amp;rev={@revision}">undo</a>
 			</h3>
 			<xsl:if test="msg">
 				<p>
@@ -347,17 +352,61 @@
 	<xsl:template match="paths/path">
 		<xsl:param name="revfrom"/>
 		<p>
-			<span class="action">
-				<xsl:value-of select="@action"/>
-			</span>
+			<xsl:if test="not(@action='M')">
+				<span class="action"><xsl:value-of select="@action"/></span>
+			</xsl:if>
+			<xsl:if test="@action='M'">
+				<a title="{$show-diff}" class="action" href="{$rurl}/diff/?repo={../../../@repo}&amp;path={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}"><xsl:value-of select="@action"/></a>
+			</xsl:if>
 			<xsl:value-of select="$spacer"/>
 			<span class="filename">
 				<xsl:value-of select="."/>
 			</span>
-			<xsl:if test="@action='M'">
-				<xsl:value-of select="$spacer"/>
-				<a class="action" href="{$rurl}/diff/?repo={../../../@repo}&amp;path={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">diff</a>
-			</xsl:if>
 		</p>
+	</xsl:template>
+	<!--
+	========= svn diff formatting ==========
+	-->
+	<xsl:template match="diff">
+		<table class="svnlayout">
+			<tr>
+				<td id="titlebar" class="titlebar">
+					<xsl:call-template name="titlebar"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="commandbar" class="commandbar">
+					<a class="command" href="#" onclick="history.back()">
+						<xsl:call-template name="showicon">
+							<xsl:with-param name="filetype" select="'_parent'"/>
+						</xsl:call-template>back</a>
+				</td>
+			</tr>
+			<tr>
+				<td id="workarea" class="workarea">
+					<h2>
+						<span class="filename">
+							<xsl:value-of select="@path"/>
+						</span>
+						<xsl:value-of select="$spacer"/>
+						<span class="revision">
+							<xsl:value-of select="@revfrom"/>
+						</span>
+						<xsl:value-of select="':'"/>
+						<span class="revision">
+							<xsl:value-of select="@revto"/>
+						</span>
+					</h2>
+					<code><pre>
+						<xsl:value-of select="."/>
+					</pre></code>
+				</td>
+			</tr>
+			<tr>
+				<td id="footer" class="footer">
+					<xsl:value-of select="$spacer"/>
+				</td>
+			</tr>
+		</table>
 	</xsl:template>
 </xsl:stylesheet>
