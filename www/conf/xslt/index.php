@@ -6,7 +6,7 @@
 function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
 require( upOne(dirname(__FILE__)) . "/repos.properties.php" );
 
-header('Content-type: text/xml');
+header('Content-type: text/xsl');
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 ?>
 <xsl:stylesheet version="1.0"

@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 
 <!-- Sample html conversion stylesheet for the subversion commit stats 1.01 -->
-<!-- run 'svn log -v --xml repository-url-->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -29,19 +28,27 @@
 <xsl:variable name="file.commits.first" select="'first'"/>
 <xsl:variable name="file.commits.last" select="'last'"/>
 
+<xsl:template match="/">
+	<xsl:apply-templates select="log"/>
+</xsl:template>
+
 <xsl:template match="log">
   <html>
     <head>
       <title><xsl:value-of select="$title"/></title>
-      <link rel="stylesheet" href="changelog.css" type="text/css"/>
+      <link rel="stylesheet" href="svnlog.css" type="text/css"/>
     </head>
     <body>
+	<xsl:value-of select="'pecka'"/>
     <div id="content">
       <h1><xsl:value-of select="$title"/></h1>
       <h2><xsl:value-of select="$header.commit-statistics"/></h2>
       <xsl:apply-templates select="authors|files"/>
-	  <h2><xsl:value-of select="$header.changelog"/></h2>      
-      <xsl:apply-templates select="logentries"/>
+	  <h2><xsl:value-of select="$header.changelog"/></h2>     
+	  <div id="revisions">
+    	<h3><xsl:value-of select="$header.revisions"/></h3>
+    	<xsl:apply-templates select="logentry"/>
+  	  </div> 
     </div>
     </body>
   </html>
@@ -102,14 +109,6 @@
      <li><span class="first"><xsl:value-of select="$file.commits.first"/></span><xsl:text> </xsl:text><span class="value"><xsl:value-of select="first"/></span></li>
      <li><span class="last"><xsl:value-of select="$file.commits.last"/></span><xsl:text> </xsl:text><span class="value"><xsl:value-of select="last"/></span></li>
    </ul>
-</xsl:template>
-
-
-<xsl:template match="logentries">
-  <div id="revisions">
-    <h3><xsl:value-of select="$header.revisions"/></h3>
-    <xsl:apply-templates/>
-  </div>
 </xsl:template>
 
 <xsl:template match="logentry">
