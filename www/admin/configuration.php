@@ -1,4 +1,5 @@
 <?php
+// svn propset svn:keywords "Rev" configuration.php
 $rev = strtr("$Rev$",'$',' ');
 // default configuration includes, the way they should be referenced in php files
 function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
