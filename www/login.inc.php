@@ -48,17 +48,22 @@ function getReferer() {
 }
 
 /**
+ * @return path from repository root, ending with '/', non alphanumerical characters except '/' encoded
+ */
+function getPath() {
+	if(!isset($_GET['path'])) return '/';
+	$path = urlEncodeNames($_GET['path']);
+    $path = rtrim($path,'/').'/';
+}
+
+/**
  * @return target in repository from query paramters WITH tailing slash if it is a directory
  */
 function getTarget() {
-	if(isset($_GET['target'])) return $_GET['target'];
-    // invalid parameters -> empty string
-    if(!isset($_GET['path'])) return '';
-    $path = $_GET['path'];
-    // end with slash
-    $path = rtrim($path,'/').'/';
+	if(isset($_GET['target'])) return urlEncodeNames($_GET['target']);
+	$path = getPath();
     // append filename if specified
-    if(isset($_GET['file'])) $path .= $_GET['file'];
+    if(isset($_GET['file'])) $path .= rawurlencode($_GET['file']);
     return $path;
 }
 
@@ -97,15 +102,14 @@ function getRepoRoot($fullUrl,$pathFromRepoRoot) {
  *  'repo' (fallback to getRepositoryUrl) = root url
  *  'path' = path from repository root
  *  'file' (omitted if not found) = filename inside path
- * Spaces are replaces with %20
  * @return Full url of the file or directory this request targets
  */
 function getTargetUrl() {
-    return getRepositoryUrl() . encodeUrlPath(getTarget());
+    return getRepositoryUrl() . getTarget();
 }
 
-function encodeUrlPath($uri) {
-	$parts = explode('/', $uri);
+function urlEncodeNames($url) {
+	$parts = explode('/', $url);
 	for ($i = 0; $i < count($parts); $i++) {
 		$parts[$i] = rawurlencode($parts[$i]);
 	}
