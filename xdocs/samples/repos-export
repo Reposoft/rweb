@@ -1,4 +1,5 @@
-# post-commit export paths using Repos script
+; post-commit export paths using Repos script
+; ini-file format
 [/repos/trunk/www]
 /srv/www/htdocs/repos
 

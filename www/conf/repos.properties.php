@@ -29,7 +29,7 @@ function isWindows() {
  */
 function isTestRun() {
 	global $argv;
-	return ( $argv[1] == 'unitTest' || isset($_GET['unitTest']) );
+	return ( (isset($argv[1]) && $argv[1]=='unitTest') || isset($_GET['unitTest']) );
 }
 
 /**

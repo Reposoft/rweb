@@ -1,14 +1,70 @@
 <?php
 
+/**
+ * Functions for reading and writing an ordered list of incremental SVN dumpfiles
+ * 
+ * If this file is not included from some script, it is assumed to be run in command line mode
+ */
+
 require( dirname(__FILE__) . '/repos-admin.inc.php' );
 
-// test
-// load( getLocalPath('/srv/backup'), getLocalPath('~/testrepo'), 'svnrepo-testrepo-' );
-// verify( getLocalPath('~/test') ); 
-dump( getLocalPath('~/testbackup'), getLocalPath('~/test'), getPrefix("/home/solsson/test") );
+define('TEMP_DIR',"/tmp");
 
-// Functions for reading and writing an ordered list of incremental SVN dumpfiles
+// Command line mode, note that this file must be called using absolute path
+$args = count( $argv ) - 1;
+//if ( 0==strcasecmp($_SERVER['SCRIPT_FILENAME'],__FILE__) ) {
+if ( $args >= 0 ) {
+	$args = count( $argv ) - 1;
+	if ( $args == 0 || eregi("-*help",$argv[1])>0 ) {
+		echo "Usage: php " . __FILE__ . " command [parameters]\n";
+		echo "Supported commands are: dump, load, verify, verifyMD5\n";
+	} elseif ( $argv[1] == "dump" ) {
+		if ($args != 3 || eregi("-*help",$argv[2])>0 )
+			echo "Usage: dump backup-path repository-path\n";
+		else
+			dump($argv[2], $argv[3], getPrefix($argv[3]));
+	} elseif ( $argv[1] == "load" ) {
+		if ($args < 3 || eregi("-*help",$argv[2])>0 )
+			echo "Load all backup files into repository.\nUsage: load backup-path repository-path [prefix]\nDefault prefix is derived from repository path.\n";
+		else
+			load($argv[2], $argv[3], isset($argv[4]) ? $argv[4] : getPrefix($argv[3]));
+	} elseif ( $argv[1] == "verify" ) {
+		if ($args != 2 || eregi("-*help",$argv[2])>0 )
+			echo "Verify repository.\nUsage: verify repository-path\n";
+		else
+			verify($argv[2]);
+	} elseif ( $argv[1] == "verifyMD5" ) {
+		if ($args != 2 || eregi("-*help",$argv[2])>0 )
+			echo "Verify that each entry in MD5SUMS file has a matching file.\nUsage: verifyMD5 backup-path\n";
+		else
+			verifyMD5($argv[2]);
+	}
+}
 
+/**
+ * Create a repository in the given local path
+ * @param repository absolute path. If the directory does not exist it is created.
+ * @return true if successful
+ */
+function create($repository) {
+	if ( ! file_exists($repository) ) {
+		debug ("Creating repository directory $repository");
+		mkdir($repository, 0700);
+	}
+	$command = getCommand("svnadmin") . " create $repository";
+	$output = array();
+	$return = 0;
+	$result = (int) exec($command, $output, $return);
+	$info ("$command said $result and outputted: " . $output);
+	return ( $return==0 );
+}
+
+/**
+ * Produce a compressed backup of new revisions in a repository
+ * @param backupPath Path containing the previous backups of the repository, if directory is empty the entire repository will be backed up. No tailing slash.
+ * @param repository Local path of the repository to back up
+ * @param fileprefix
+ */
 function dump($backupPath, $repository, $fileprefix) {
 	$current = getCurrentBackup( $backupPath, $fileprefix );
 	$files = count($current);
@@ -16,12 +72,22 @@ function dump($backupPath, $repository, $fileprefix) {
 	$fromrev = 0;
 	if ( $files>0 )
 		$fromrev = $current[$files-1][2] + 1;
+	if ( $fromrev > $headrev )
+		fatal( "Backup has more revisions ($fromrev) than repository ($headrev)." );
+	if ( $fromrev == $headrev ) {
+		debug( "No further backup needed. Both dumpfiles and repository are at revision $headrev." );
+		return;
+	}
 	$success = dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $headrev);
 	if ( ! $success )
 		fatal("Could not dump $repository revision $fromrev to $headrev to folder $backupPath");
-	debug("Dumped $repository revision $fromrev to $headrev to folder $backupPath");
+	info("Dumped $repository revision $fromrev to $headrev to folder $backupPath");
 }
 
+/**
+ * The same HEAD revision number must be used thorughout backup, or a concurrent transaction could cause invalid backup
+ * @return revision number integer
+ */
 function getHeadRevisionNumber($repository) {
 	$command = getCommand("svnlook") . " youngest $repository";
 	$output = array();
@@ -34,15 +100,16 @@ function getHeadRevisionNumber($repository) {
 
 /**
  * @param backupPath no tailing slash
- * @return true if successful
+ * @return true if successful, in which case there is a $backupPath/$fileprefix[revisions].svndump.gz file
  */
 function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) {
 	$extension = ".svndump";
 	$filename = getFilename( $fileprefix, $fromrev, $torev ) . $extension;
 	$path = $backupPath . DIRECTORY_SEPARATOR . $filename;
 	$command = getCommand("svnadmin") . " dump $repository --revision $fromrev:$torev --incremental --deltas";
+	$tmpfile = tempnam(TEMP_DIR, "svn");
 	if ( isWindows() )
-		$command .=  " > $path";
+		$command .=  " > $tmpfile";
 	else
 		$command .= " | gzip -9 > $path.gz";
 	$output = array();
@@ -50,8 +117,12 @@ function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) 
 	exec($command, $output, $return);
 	if ( $return != 0 )
 		return false;
-	if ( isWindows() )
-		echo "TODO: gzip $path";
+	// in windows file has not been compressed in the first command
+	if ( isWindows() ) {
+		$success = gzipInternal($tmpfile,"$path.gz");
+		unlink($tmpfile);
+		return $success;
+	}
 }
 
 /**
@@ -64,7 +135,7 @@ function getCurrentBackup($backupPath, $fileprefix) {
 	// get backup files in directory
 	$files = getDirContents($backupPath,$fileprefix);
 	if ( count($files)==0 )
-		fatal("Directory '$backupPath' contains no files named $fileprefix*");
+		warn("Directory '$backupPath' contains no files named $fileprefix*.");
 	return getBackupInfo($files, $fileprefix);
 }
 
@@ -95,7 +166,7 @@ function load($backupPath, $repository, $fileprefix) {
 			fatal("Revision number gap at $file[0] starting at revision $file[1], last revision was $lastrev");
 		// read the files into repo
 		$lastrev = $file[2];
-		loadDumpfile($backupPath . '/' . $file[0],LOADCOMMAND);
+		loadDumpfile($backupPath . DIRECTORY_SEPARATOR . $file[0],LOADCOMMAND);
 	}
 	
 }
@@ -107,13 +178,12 @@ function load($backupPath, $repository, $fileprefix) {
  */
 function verify($repository) {
 	define("VERIFYCOMMAND", getCommand('svnadmin') . " verify $repository" );
-	$output = array();
 	$return = 0;
 	exec( VERIFYCOMMAND, $output, $return );
 	if ( $return == 0 )
-		debug( "$repository verified with return code $return, output: \n" . implode(" \n",$output) );
+		debug( "$repository verified and seems OK." );
 	else
-		error( VERIFFYCOMMAND . " returned code $return, output: $output" );
+		error( VERIFFYCOMMAND . " returned code $return. Repository is not valid." );
 	return $return==0;
 }
 
@@ -142,42 +212,75 @@ function createMD5($file) {
 
 /**
  * @return return value of the resulting command
+ * @param file the compressed dumpfile to load
+ * @param loadcommand the svnadmin load command, excluding input pipe
  */
 function loadDumpfile($file,$loadcommand) {
-	global $isWindows;
 	$command = '';
-	$tmpfile = tempnam("/tmp", "svn");
-	if ($isWindows) {
-		gunzipInternal($file,$tmpfile);
+	$tmpfile = tempnam(TEMP_DIR, "svn");
+	if ( isWindows() ) {
+		if ( ! gunzipInternal($file,$tmpfile) ) fatal("Could not extract file $file");
 		$command = "$loadcommand < $tmpfile";
 	} else {
 		$command = getCommand('gunzip') . " -c $file | $loadcommand";
 	}
+	$return = 0;
 	debug("Executing: $command");
-	$output = array();
-	$return_val = 0;
-	exec( $command, $output, $return_val);
-	debug( $output );
-	unlink($tmpfile);
-	return $return_val;
+	exec( $command, $output, $return);
+	//unlink( $tmpfile );
+	return $return;
 }
 
 /**
  * Gunzip file using php functions
+ * Does not remove original file
+ * @return true if successful, meaning there is now another file. false on any error
  */
-function gunzipInternal($fromfile, $tofile) {
-	$fp = fopen("$tofile", "w") ;
-	$zp = gzopen("$fromfile", "r");
+function gunzipInternal($compressedfile, $tofile) {
+	$fp = fopen($tofile, "w") ;
+	if ( ! $fp ) return false;
+	$zp = gzopen($compressedfile, "r");
+	$sum = 0;
 	if ($zp) {
-	  while (!gzeof($zp))
-	  {
-	   $buff1 = gzgets ($zp, 4096) ;
-	   fputs($fp, $buff1) ;
-	  }               
+	  	while (!gzeof($zp)) {
+			$buff1 = gzgets ($zp, 4096) ;
+			fputs($fp, $buff1) ;
+			$sum += strlen($buff1);
+		} 
+		gzclose($zp);
+		fclose($fp);
+		debug("Wrote $sum bytes to $tofile, from compressed $compressedfile.");
 	} else {
-		fatal("Could not extract file $fromfile");
-	}   
-	gzclose($zp) ;
-	fclose($fp) ;
+		fclose($fp);
+		return false;
+	}
+	return true;   
+}
+
+/**
+ * Compress file with gzip.
+ * @param originalfile Full path of uncompressed file.
+ * @param tofile Full path of target file, must be different than original.
+ * @return true if successful, meaning there is now another file. false on any error
+ */
+function gzipInternal($originalfile, $tofile) {
+	$fp = fopen($originalfile, "r") ;
+	if ( ! $fp ) return false;
+	$zp = gzopen($tofile, "w");
+	$sum = 0;
+	if ($zp) {
+		while (!feof($fp)) {
+			$buff1 = fgets ($fp, 4096) ;
+			gzputs($zp, $buff1) ;
+			$sum += strlen($buff1);
+		} 
+		gzclose($zp);
+		fclose($fp);
+		debug("Read $sum bytes from $originalfile, wrote to compressed $tofile.");
+	} else {
+		fclose($fp);
+		return false;
+	}
+	return true;
 }
 ?>

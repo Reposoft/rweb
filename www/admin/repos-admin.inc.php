@@ -1,7 +1,7 @@
 <?php
 
-// include from the parent directory, offset 1 could be used instead of rtrim in php5
-require( substr(dirname(__FILE__), 0, strrpos(rtrim(strtr(dirname(__FILE__),'\\','/'),'/'),'/') ) . "/conf/repos.properties.php" );
+function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
+require( upOne(dirname(__FILE__)) . "/conf/repos.properties.php" );
 
 // --- output functions ---
 function start($title) {
@@ -45,6 +45,10 @@ function error($message) {
 	lineend();
 }
 
+/**
+ * Fatal error causes output to end and script to exit.
+ * It is assumed that fatal errors are handled manually by the administrator.
+ */
 function fatal($message, $code = 1) {
 	error( $message );
 	done( $code );
@@ -145,7 +149,10 @@ function getDirContents($directory, $startsWith="") {
  * @return array with one entry for each file, each entry containing an array 0=>filename, 1=>start revision, 2=>end revision
  */
 function getBackupInfo($files, $startsWith='') {
-	$mapargs = array_fill( 0, count($files), $startsWith );
+	$c = count($files);
+	if ( $c==0 )
+		return array();
+	$mapargs = array_fill( 0, $c, $startsWith );
 	return array_map( 'getRevisionInfo', $files, $mapargs);
 }
 
@@ -165,6 +172,9 @@ function getRevisionInfo($filename, $startsWith) {
 // ----- unit tests ----
 if ( isTestRun() ) {
 	start("Unit testing " . basename(__FILE__));
+	
+	debug("---- testing: upOne ----");
+	assertEquals("/some/path",upOne("/some/path/child"));
 	
 	debug("---- testing: startsWith ----");
 	assertEquals(true, startsWith("hepp","") );
