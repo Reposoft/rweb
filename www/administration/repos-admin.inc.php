@@ -1,7 +1,7 @@
 <?php
 
-require( realpath("/../repos.properties.php") );
-$isWindows = (substr(PHP_OS, 0, 3) == 'WIN');
+// include from the parent directory, offset 1 could be used instead of rtrim in php5
+require( substr(dirname(__FILE__), 0, strrpos(rtrim(dirname(__FILE__),'/'),'/') ) . "/conf/repos.properties.php" );
 
 // --- output functions ---
 function start($title) {
@@ -73,18 +73,17 @@ function getNewLine() {
  * @return command line command, false if internal function should be used
  */
 function getCommand($command) {
-	global $isWindows;
 	if ( ! defined('USRBIN') )
 		define( 'USRBIN', "/usr/bin/" );
 	switch($command) {
 		case 'svn':
-			return ( $isWindows ? 'svn' : USRBIN . 'svn' );
+			return ( isWindows() ? 'svn' : USRBIN . 'svn' );
 		case 'svnadmin':
-			return ( $isWindows ? 'svnadmin' : USRBIN . 'svnadmin' );
+			return ( isWindows() ? 'svnadmin' : USRBIN . 'svnadmin' );
 		case 'gzip':
-			return ( $isWindows ? false : USRBIN . 'gzip' );
+			return ( isWindows() ? false : USRBIN . 'gzip' );
 		case 'gunzip':
-			return ( $isWindows ? false : USRBIN . 'gunzip' );
+			return ( isWindows() ? false : USRBIN . 'gunzip' );
 		default:
 			fatal("Command '$command' not supported");
 	}
@@ -95,26 +94,29 @@ function getCommand($command) {
  * @param pathWithSlashes for example /absolute/path or ../relative
  */
 function getLocalPath($pathWithSlashes) {
-	if ($isWindows)
+	if (isWindows())
 		return 'C:' . $pathWithSlashes;
 	return $pathWithSlashes;
 }
 
 /**
- * Get files (not subdirs) in directory.
+ * Get files and subdirectories in directory.
  * @param directory Path to check
+ * @param startsWith Optional. Include only names that start with this prefix. 
  * @return Filenames as array sorted alpabetically
  */
-function getFilesInDir($directory) {
+function getDirContents($directory, $startsWith='') {
 	if ( ! file_exists($directory) )
 		warn( "Directory $directory does not exist" );
 	$filelist = array();
 	if ($dir = opendir($directory)) {
-	   while (false !== ($file = readdir($dir))) { 
+	   while (false !== ($file = readdir($dir))) 
 		   if($file != ".." && $file != ".")
-				$filelist[] = $file;
-	   }
+		   		if ( stristr($file,$startsWith)==$file )
+					$filelist[] = $file;
 	   closedir($dir);
+	} else {
+		warn( "Directory $directory couls not be opened" );
 	}
 	asort($filelist);
 	return $filelist;
@@ -129,6 +131,13 @@ function getUserInput($message='Provide input and press return:\n') {
 	$input = fgets($stdin,100); 
 	fclose($stdin); 
 	return $input;
+}
+
+// ----- unit tests ----
+if ( isTestRun() ) {
+	debug("---- Running unit tests ----");
+	php repos-admin.inc.php unitTest
+
 }
 
 ?>

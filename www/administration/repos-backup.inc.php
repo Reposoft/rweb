@@ -36,16 +36,13 @@ function load($backupPath, $repository, $fileprefix) {
 		fatal("repository '$repository' does not exist");
 	
 	// iterate over the list of files
-	$allfiles = getFilesInDir($backupPath);
+	$allfiles = getDirContents($backupPath, $fileprefix);
 	if ( count($allfiles)==0 )
-		fatal("Directory '$backupPath' is empty");
+		fatal("Directory '$backupPath' named $fileprefix*");
 		
 	// initiate looping over filenames
 	$revto = -1;
 	foreach ($allfiles as $filename) {
-		// check that this is a backup file
-		if ( stristr($filename,$fileprefix)!=$filename )
-			continue;
 		// extract revision numbers from filename
 		$rev = array();
 		if ( 0==ereg( '[0]*([0-9][0-9]*)-to-[0]*([0-9][0-9]*).*', substr($filename,strlen($fileprefix)), $rev) )
