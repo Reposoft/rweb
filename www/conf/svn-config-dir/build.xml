@@ -21,7 +21,7 @@
     <property name="serversfile" value="${basedir}\servers"/>
   </target>
   <target name="init" unless="isWindows">
-    <echo>OS is not Windows.</echo>
+    <echo>OS is non-Windows.</echo>
     <property name="certdir" value="${basedir}/accepted-ssl"/>
     <property name="serversfile" value="${basedir}/servers"/>
   </target>	
@@ -39,21 +39,21 @@ optime = *.optime.se
 
   <!-- www.repos.se  -->
   <target name="repos" depends="cfg">
-    <get src="http://www.repos.se/CA.crt" dest="${certdir}/www.repos.se.crt"/>
+    <get src="http://www.repos.se/CA.crt" dest="${certdir}/repos.se.crt"/>
     <echo file="${serversfile}" append="true">
 [repos]
 http-timeout = 15
-ssl-authority-files = ${certdir}/www.repos.se.crt
+ssl-authority-files = ${certdir}/repos.se.crt
     </echo>
   </target>
 
   <!-- svn.optime.se  -->	
   <target name="optime" depends="cfg">
-    <get src="http://svn.optime.se/CA.crt" dest="${certdir}/svn.optime.se.crt"/>
+    <get src="http://svn.optime.se/CA.crt" dest="${certdir}/optime.se.crt"/>
     <echo file="${serversfile}" append="true">
 [optime]
 http-timeout = 15
-ssl-authority-files = ${certdir}/svn.optime.se.crt
+ssl-authority-files = ${certdir}/optime.se.crt
     </echo>
   </target>	
 
