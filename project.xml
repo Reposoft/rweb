@@ -28,6 +28,7 @@
   <distributionDirectory>/srv/www/htdocs/engine/se/repos</distributionDirectory>
   <repository>
     <connection>scm|svn|https|//svn.optime.se/optime/repos/trunk</connection>
+    <developerConnection>scm|svn|https://svn.optime.se/optime/repos/trunk</developerConnection>
     <url>https://svn.optime.se/optime/repos</url>
   </repository>
   <versions>
@@ -312,6 +313,7 @@
     <report>maven-simian-plugin</report>
     <report>maven-changes-plugin</report>
     <report>maven-changelog-plugin</report>
+    <report>maven-cruisecontrol-plugin</report>
     <!--<report>maven-file-activity-plugin</report>-->
     <!--<report>maven-developer-activity-plugin</report>-->
     <report>maven-javadoc-plugin</report>
