@@ -73,15 +73,15 @@ function dump($repository, $backupPath, $fileprefix) {
 	if ( $files>0 )
 		$fromrev = $current[$files-1][2] + 1;
 	if ( $fromrev - 1 > $headrev )
-		fatal( "Serious error in $repository backup. Backup has more revisions ($fromrev) than repository ($headrev)." );
+		fatal(getTime()." Serious error in $repository backup. Backup has more revisions ($fromrev) than repository ($headrev)." );
 	if ( $fromrev - 1 == $headrev ) {
-		debug( "No further backup needed for $repository. Both dumpfiles and repository are at revision $headrev." );
+		debug(getTime()." No further backup needed for $repository. Both dumpfiles and repository are at revision $headrev." );
 		return;
 	}
 	$success = dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $headrev);
 	if ( ! $success )
-		fatal("Could not dump $repository revision $fromrev to $headrev to folder $backupPath");
-	info(date("Y-m-d\TH:i:sO")." Dumped $repository revision $fromrev to $headrev to folder $backupPath");
+		fatal(getTime()." Could not dump $repository revision $fromrev to $headrev to folder $backupPath");
+	info(getTime()." Dumped $repository revision $fromrev to $headrev to folder $backupPath");
 }
 
 /**

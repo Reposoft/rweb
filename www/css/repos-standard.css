@@ -1,3 +1,4 @@
+/* repository visualization, minimal number of classes */
 body {
     font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
     font-size: 0.8em;
@@ -27,8 +28,12 @@ h1 {
 h2 {
 	font-weight: normal;
 }
-h2 {
+h3 {
 	font-weight: normal;
+	margin-bottom: 3px;
+}
+img { 
+	behavior: url("http://www.repos.se/css/pngbehavior.htc");
 }
 /* page layout themes */
 table.framed {
@@ -45,13 +50,23 @@ table.framed td {
 	border: 2px solid #CCCC99;
 	padding: 16px;
 }
-/* tools and file listings */
-img { 
-	behavior: url("http://www.repos.se/css/pngbehavior.htc");
+/* layout of version contron concepts */
+.path {
+
 }
-a.filename {
-	margin-right: 10px;
+.filename {
+
 }
+.revision {
+	color: #006600;
+}
+.username {
+
+}
+.datetime {
+	color: #666666;
+}
+/* commands = toolbarbuttons, <a> is  active, <span> is greyed out */
 a.command {
 	background-color: #F0F0EE;
 	padding: 0px 3px;
@@ -77,6 +92,7 @@ span.command {
 	margin-left: 2px;
 	margin-right: 2px;
 }
+/* action is for buttons inside listings, <a> is  active, <span> is greyed out */
 a.action {
 	background-color: #F0F0EE;
 	padding: 0px 3px;
@@ -102,6 +118,7 @@ span.action {
 	margin-left: 2px;
 	margin-right: 2px;
 }
+/* repository view page (like index and log) layout */
 .svnlayout {
 	position: absolute;
 	left: 1%;

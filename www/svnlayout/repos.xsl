@@ -14,9 +14,9 @@
 	<!-- why not generate user-tailored xslt from a .jwa url in Svnindex? -->
 	<!-- add parameter rurl=".." when testing offline -->
 	<!-- status images like 'locked' could be generated on the fly -->
-	
 	<!-- repos webapp URL (root), does not end with slash -->
-	<xsl:param name="rurl">http://www.repos.se</xsl:param>
+	<!--<xsl:param name="rurl">http://www.repos.se</xsl:param>-->
+	<xsl:param name="rurl">http://alto.optime.se/repos</xsl:param>
 	<!-- current theme, for example '/theme', empty for root theme -->
 	<xsl:param name="theme"/>
 	<!-- static contents urls -->
@@ -38,15 +38,16 @@
 	<xsl:param name="iconSize">22</xsl:param>
 	<xsl:param name="iconVspace">1</xsl:param>
 	<xsl:param name="iconHspace">10</xsl:param>
+	<!-- more layout definitions -->
+	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- thumbnail generators -->
 	<xsl:param name="thumbUrl">
 		<xsl:value-of select="$rurl"/>/phpThumb/phpThumbq.php?src=</xsl:param>
 	<!-- include  repos.se shared templates -->
 	<!-- <xsl:include href=""/> -->
-	<!-- local templates -->
-	<xsl:template match="*"/>
+
 	<!-- document skeleton -->
-	<xsl:template match="svn">
+	<xsl:template match="/">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<head>
 				<title>
@@ -63,9 +64,14 @@
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}/repos-standard.css"/>
 			</head>
 			<body>
-				<xsl:apply-templates/>
+				<!-- supported contents -->
+				<xsl:apply-templates select="svn"/>
+				<xsl:apply-templates select="log"/>
 			</body>
 		</html>
+	</xsl:template>
+	<xsl:template match="svn">
+		<xsl:apply-templates select="index"/>
 	</xsl:template>
 	<!-- body contents -->
 	<xsl:template match="index">
@@ -73,7 +79,7 @@
 		<table class="svnlayout">
 			<tr>
 				<td id="titlebar" class="titlebar">
-					<xsl:call-template name="titlebar-list"/>
+					<xsl:call-template name="titlebar"/>
 				</td>
 			</tr>
 			<tr>
@@ -83,7 +89,7 @@
 			</tr>
 			<tr>
 				<td id="workarea" class="workarea">
-					<xsl:call-template name="workarea-list"/>
+					<xsl:call-template name="workarea"/>
 				</td>
 			</tr>
 			<tr>
@@ -94,12 +100,14 @@
 		</table>
 	</xsl:template>
 	<!-- header with path information -->
-	<xsl:template name="titlebar-list">
+	<xsl:template name="titlebar">
 		<a href="http://www.repos.se/">
 			<img src="{$rurl}/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		</a>
-		<xsl:value-of select="@path"/> &#160;
-		version <xsl:value-of select="@rev"/>
+		<xsl:if test="@repo"><xsl:value-of select="@repo"/><xsl:value-of select="$spacer"/></xsl:if>
+		<span class="path"><xsl:value-of select="@path"/></span>
+		<xsl:value-of select="$spacer"/>
+		<xsl:if test="@rev">revision <span class="revision"><xsl:value-of select="@rev"/></span></xsl:if>
 	</xsl:template>
 	<!-- directory actions, stuff like that -->
 	<xsl:template name="commandbar">
@@ -137,23 +145,13 @@
 			</xsl:call-template>show log</a>
 	</xsl:template>
 	<!-- directory listing -->
-	<xsl:template name="workarea-list">
-		<xsl:apply-templates select="dir" mode="list">
+	<xsl:template name="workarea">
+		<xsl:apply-templates select="dir">
 			<xsl:sort select="@name"/>
 		</xsl:apply-templates>
-		<xsl:apply-templates select="file" mode="list">
+		<xsl:apply-templates select="file">
 			<xsl:sort select="@name"/>
 		</xsl:apply-templates>
-	</xsl:template>
-	<xsl:template name="workarea-box">
-		<table width="100%" border="0" cellspacing="0">
-			<tr>
-				<td>
-					<xsl:apply-templates select="dir" mode="box"/>
-					<xsl:apply-templates select="file" mode="box"/>
-				</td>
-			</tr>
-		</table>
 	</xsl:template>
 	<!-- extra info, links to top -->
 	<xsl:template name="footer">
@@ -162,33 +160,16 @@
 			<xsl:attribute name="href">
 				<xsl:value-of select="../@href"/>
 			</xsl:attribute>
-			<xsl:attribute name="target"><xsl:value-of select="'_blank'"/></xsl:attribute>
+			<xsl:attribute name="target">
+				<xsl:value-of select="'_blank'"/>
+			</xsl:attribute>
 			<xsl:text>Subversion</xsl:text>
 		</xsl:element>
 		<xsl:text>&#160;</xsl:text>
 		<xsl:value-of select="../@version"/>
 	</xsl:template>
 	<!-- generate directory -->
-	<xsl:template match="dir" mode="box">
-		<table class="file" border="0">
-			<tr>
-				<td rowspan="2" width="36">
-					<img src="{$rurl}/icons/_folder.png" width="36" height="36"/>
-				</td>
-				<td>
-					<a class="filename" href="{@href}">
-						<xsl:value-of select="@name"/>
-					</a>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<small>[info] [delete]</small>
-				</td>
-			</tr>
-		</table>
-	</xsl:template>
-	<xsl:template match="dir" mode="list">
+	<xsl:template match="dir">
 		<p>
 			<a class="filename" href="{@href}">
 				<xsl:call-template name="getIcon">
@@ -196,6 +177,7 @@
 				</xsl:call-template>
 				<xsl:value-of select="@name"/>
 			</a>
+			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
 			<span class="action">rename</span>
 			<span class="action">copy</span>
@@ -203,34 +185,13 @@
 		</p>
 	</xsl:template>
 	<!-- generate file -->
-	<!-- note the fixed icon width -->
-	<xsl:template match="file" mode="box">
-		<table class="file" border="0">
-			<tr>
-				<td rowspan="2" width="36">
-					<xsl:call-template name="getIcon"/>
-				</td>
-				<td>
-					<a class="filename" href="{@href}">
-						<xsl:value-of select="@name"/>
-					</a>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<small>[info] <xsl:call-template name="getReposLink">
-							<xsl:with-param name="text">open</xsl:with-param>
-						</xsl:call-template>] [delete] [upload changes] [locked?]</small>
-				</td>
-			</tr>
-		</table>
-	</xsl:template>
-	<xsl:template match="file" mode="list">
+	<xsl:template match="file">
 		<p>
 			<a class="filename" href="{@href}">
 				<xsl:call-template name="getIcon"/>
 				<xsl:value-of select="@name"/>
 			</a>
+			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
 			<xsl:call-template name="getReposLink">
 				<xsl:with-param name="text">open</xsl:with-param>
@@ -319,5 +280,71 @@
 				<xsl:value-of select="translate($filename,$ucletters,$lcletters)"/>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+	<!--
+	========= svn log xml fromatting ==========
+	-->
+	<xsl:template match="log">
+		<table class="svnlayout">
+			<tr>
+				<td id="titlebar" class="titlebar">
+					<xsl:call-template name="titlebar"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="commandbar" class="commandbar">
+					<xsl:value-of select="$spacer"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="workarea" class="workarea">
+					<xsl:apply-templates select="logentry"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="footer" class="footer">
+					
+				</td>
+			</tr>
+		</table>
+	</xsl:template>
+	<xsl:template match="logentry">
+		<div id="rev{@revision}">
+			<h3>
+				<span class="revision">
+					<xsl:value-of select="@revision"/>
+				</span>
+				<xsl:value-of select="$spacer"/>
+				<span class="username">
+					<xsl:value-of select="author"/>
+				</span>
+				<xsl:value-of select="$spacer"/>
+				<span class="datetime">
+					<xsl:value-of select="date"/>
+				</span>
+				<xsl:value-of select="$spacer"/>
+				<a class="action" href="{$rurl}/undo/?repo={../@repo}&amp;rev={@revision}">Undo</a>
+			</h3>
+			<xsl:if test="msg">
+				<p>
+					<xsl:value-of select="msg"/>
+				</p>
+			</xsl:if>
+			<xsl:apply-templates select="paths"/>
+		</div>
+	</xsl:template>
+	<xsl:template match="paths">
+		<xsl:apply-templates select="path"/>
+	</xsl:template>
+	<xsl:template match="paths/path">
+		<p>
+			<span class="action">
+				<xsl:value-of select="@action"/>
+			</span>
+			<xsl:text/>
+			<span class="value">
+				<xsl:value-of select="."/>
+			</span>
+		</p>
 	</xsl:template>
 </xsl:stylesheet>

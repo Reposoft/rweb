@@ -9,6 +9,11 @@ function html_start($title) {
 	echo "<h1>$title</h1>\n";
 }
 
+// formatted date
+function getTime() {
+    return '<span class="timestamp">'.date("Y-m-d\TH:i:sO").'</span>';
+}
+
 // internal
 function linestart($class='normal') {
 	echo "<p class=\"$class\">";
