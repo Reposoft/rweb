@@ -4,7 +4,8 @@
   <description>
 	This is a nice .ics file viewer, to allow web based view of what's shared with WebDAV enabled calendar clients.
   </description>
-	
+
+  <property name="repos-package" value="phpicalendar"/>
   <property name="home" value="http://phpicalendar.net/"/>
 	
   <!-- set global properties for this build -->

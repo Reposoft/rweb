@@ -4,7 +4,10 @@
   <description>
 	TinyMCE is transforms a textbox to a word processor. We use it as editor for XHTML files.
   </description>
-	
+
+  <!-- package name in repos folder, for example www/some/dependency -> some.dependency -->
+  <property name="repos-package" value="tinymce"/>
+  <!-- home page of product, not used in script -->
   <property name="home" value="http://tinymce.sourceforge.net/"/>
 	
   <!-- set global properties for this build -->

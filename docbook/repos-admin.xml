@@ -5,15 +5,38 @@
 <article>
   <articleinfo>
     <author>
-      <firstname>Staffan Olsson</firstname>
-      <surname>Wilcock</surname>
+      <firstname>Staffan</firstname>
+      <surname>Olsson</surname>
     </author>
-    <title>Installera Repos</title>
+    <!-- add authors here -->
+    <title>Repos administration guide</title>
   </articleinfo>
   <section>
-    <title>Systemkrav</title>
-    <para>
-      Jahajah
-    </para>
+      <title>Installation</title>
+      <section>
+        <title>System requirements</title>
+        <para>
+          Computer with internet connection.
+        </para>
+      </section>
+      <section>
+         <title>What Repos needs to compile</title>
+         <ul>
+             <li>Java 1.4+</li>
+             <li>Apache ant 1.6+</li>
+             <li>Maven 1.0+</li>
+         </ul>          
+      </section>
+      <section>
+         <title>What Repos needs to run</title>
+         <ul>
+             <li>Windows / Linux / Mac OS X</li>
+             <li>Apache 2+ HTTP server</li>
+             <li>... with mod_dav and mod_jk2</li>
+             <li>PHP 4+</li>
+             <li>Subversion 1.2 *</li>
+             <li>Tomcat 5+ supporting mod_jk2</li>
+         </ul>
+      </section>
   </section>
 </article>

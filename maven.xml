@@ -1,7 +1,6 @@
 <!-- Customized maven behavior -->
 <project
-	xmlns:j="jelly:core"
-	xmlns:ant="jelly:ant">
+	xmlns:j="jelly:core">
 
   <!-- before generating project documentation, include repos manual -->
   <postGoal name="xdoc:generate-from-pom">
@@ -11,31 +10,36 @@
   
   <!-- collect dependency installation files for reference -->
   <goal name="dependency-info">
-    <ant:echo>Transforming dependency buildfiles</ant:echo>
-    <ant:copy todir="${maven.docs.dest}/dependencies">
-      <ant:mapper type="package" from="*.xml" to="*.xml"/>
-      <ant:fileset dir="www">
-        <ant:include name="**/build.xml" />
-      </ant:fileset>
-    </ant:copy>
-    
-    <!-- trying to find a way to automatically build an index -->
-    <ant:path id="dependency.collection">
-        <ant:fileset dir="${maven.docs.dest}/dependencies">
-            <ant:include name="*.build.xml"/>
-        </ant:fileset>
-    </ant:path>
-    <echo>Running ${dependency.collection}</echo>
-    <j:forEach items="${dependency.collection}" var="dependency.name">
-        <echo>${filename}</echo>
-    </j:forEach>
-    
+    <property name="dp.src" value="${maven.docs.src}/dependencies"/>
+    <property name="dp.temp" value="${maven.docs.dest}/dependencies"/>
+    <echo>Transforming dependency buildfiles</echo>
+    <copy todir="${maven.docs.dest}/dependencies">
+      <mapper type="package" from="*.xml" to="*.xml"/>
+      <fileset dir="www">
+        <include name="**/build.xml" />
+      </fileset>
+    </copy>
+    <!-- automatically build an index --> 
+    <concat destfile="${dp.temp}/index.concat">
+        <fileset dir="${dp.temp}" includes="*build.xml"/>
+    </concat>
+    <replace file="${dp.temp}/index.concat" token="?xml" value="!-- "/>
+    <replace file="${dp.temp}/index.concat" token="?>" value=" -->"/>
+    <concat destfile="${dp.temp}/index.xml" append="false"><fileset file="${dp.src}/index.header"/></concat>
+    <concat destfile="${dp.temp}/index.xml" append="true"><fileset file="${dp.temp}/index.concat"/></concat>
+    <concat destfile="${dp.temp}/index.xml" append="true"><fileset file="${dp.src}/index.footer"/></concat>
+    <delete file="${dp.temp}/index.concat"/>
+    <!-- do transformations to xdoc -->
     ${systemScope.setProperty('javax.xml.transform.TransformerFactory','org.apache.xalan.processor.TransformerFactoryImpl')}
-    <ant:style basedir="${maven.docs.dest}/dependencies"
+    <style basedir="${dp.temp}"
       includes="*.xml" processor="trax" extension=".xml"
       destdir="${maven.gen.docs}/dependencies"
-      style="${maven.docs.src}/dependencies/build.xsl">
-	</ant:style>
+      style="${dp.src}/build.xsl">
+	</style>
+	<!-- clean -->
+    <delete>
+        <fileset dir="${dp.temp}" includes="*.xml"/>
+    </delete>
   </goal>
   
   <!-- collect extra documentation site contents -->
@@ -45,53 +49,53 @@
 
   <!-- copy www contents into development docs -->
   <goal name="docs-images">
-  	<ant:echo>Copying images to ${maven.docs.dest}</ant:echo>
-    <ant:copy todir="${maven.docs.dest}">
-      <ant:fileset dir="www">
-        <ant:include name="logo/*.png" />
-      </ant:fileset>
-    </ant:copy>
+  	<echo>Copying images to ${maven.docs.dest}</echo>
+    <copy todir="${maven.docs.dest}">
+      <fileset dir="www">
+        <include name="logo/*.png" />
+      </fileset>
+    </copy>
   </goal>
   
   <!-- JSPs are edited in www directory but should be included in WAR only -->
   <goal name="war-jsp">
-  	<ant:echo>Copying JSPs to ${maven.war.webapp.dir}/WEB-INF/jsp</ant:echo> 
-    <ant:copy todir="${maven.war.webapp.dir}/WEB-INF/jsp">
-      <ant:fileset dir="www">
-        <ant:include name="**/*.jsp" />
-      </ant:fileset>
-    </ant:copy>
+  	<echo>Copying JSPs to ${maven.war.webapp.dir}/WEB-INF/jsp</echo> 
+    <copy todir="${maven.war.webapp.dir}/WEB-INF/jsp">
+      <fileset dir="www">
+        <include name="**/*.jsp" />
+      </fileset>
+    </copy>
   </goal>
 
   <!-- before making webapp - 
   		copy jsp-s from editor friendly location to WAR's WEB-INF
   		so that they are deployed to tomcat and hidden from direct access -->
   <postGoal name="war:webapp">
-  	<ant:echo>Copying JSPs to WAR</ant:echo> 
-    <ant:copy todir="${maven.war.webapp.dir}/WEB-INF/jsp">
-      <ant:fileset dir="www">
-        <ant:include name="**/*.jsp" />
-      </ant:fileset>
-    </ant:copy>
+  	<echo>Copying JSPs to WAR</echo> 
+    <copy todir="${maven.war.webapp.dir}/WEB-INF/jsp">
+      <fileset dir="www">
+        <include name="**/*.jsp" />
+      </fileset>
+    </copy>
     <!-- if not deploying contents to apache2 separately, 
   		all static contents could be included in war  -->
-  	<ant:echo>war.include.www is set to '${war.include.www}'</ant:echo>
+  	<echo>war.include.www is set to '${war.include.www}'</echo>
   	<j:if test="${war.include.www}">
-	  	<ant:echo>Including all static web contents in war-file.</ant:echo>
-	    <ant:copy todir="${maven.war.webapp.dir}">
-	      <ant:fileset dir="www">
-	        <ant:include name="**/*" />
-	        <ant:exclude name="**/*.jsp" />
-	      </ant:fileset>
-	    </ant:copy>
+	  	<echo>Including all static web contents in war-file.</echo>
+	    <copy todir="${maven.war.webapp.dir}">
+	      <fileset dir="www">
+	        <include name="**/*" />
+	        <exclude name="**/*.jsp" />
+	      </fileset>
+	    </copy>
 	</j:if>
 	<!-- custom cleanup -->
-	<ant:delete file="${basedir}/velocity.log"/>
+	<delete file="${basedir}/velocity.log"/>
   </postGoal>
   
   <!-- clean up jcoverage data that could corrupt subsequent reports -->
   <postGoal name="jcoverage">
-  	<ant:delete file="${basedir}/jcoverage.ser"/>
+  	<delete file="${basedir}/jcoverage.ser"/>
   </postGoal>
   
 </project>

@@ -5,11 +5,12 @@
 	HTAdmin is a very to-the-point htpasswd file editor.
   	We use the 1.2.x version as logic for editing user accounts.
   </description>	
-	
+
+  <property name="repos-package" value="htadmin"/>
   <property name="home" value="http://www.hido.net/projects/htadmin/"/>
 	
   <!-- set global properties for this build -->
-  <property name="archive" value="http://www.hido.net/projects/htadmin/HTAdmin-1.2.4.zip"/>
+  <property name="archive" value="${home}/HTAdmin-1.2.4.zip"/>
   <property name="archive.type" value="zip"/>
   <property name="extracted.folder" value="${basedir}/HTAdmin-1.2.4"/>
 	

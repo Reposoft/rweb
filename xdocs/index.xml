@@ -7,7 +7,14 @@
   </properties>
 
   <body>
-      <section name="News and Status">
+      <section name="Repos development">
+
+         <subsection name="19th October 2004">
+            <p>
+             Puh! Feels like documentation is useful for collaboration now. The Idéa is that everyone should keep it updated.<br />
+             I have also added automatic handling of www dependencies, using ant scripts.
+            </p>
+         </subsection>
 
          <subsection name="7th October 2004">
             <p>
