@@ -81,7 +81,7 @@ function dump($repository, $backupPath, $fileprefix) {
 	$success = dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $headrev);
 	if ( ! $success )
 		fatal("Could not dump $repository revision $fromrev to $headrev to folder $backupPath");
-	info("Dumped $repository revision $fromrev to $headrev to folder $backupPath");
+	info(date('c')." Dumped $repository revision $fromrev to $headrev to folder $backupPath");
 }
 
 /**
