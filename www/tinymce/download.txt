@@ -1,0 +1,1 @@
+Download the latest release from tinymce.sourceforge.net. Extracti it here. We only keep our own theme 'repos' in the repository. The files in this folder are for testing.
