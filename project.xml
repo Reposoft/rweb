@@ -26,7 +26,8 @@
   <siteDirectory>/srv/www/htdocs/ordbehandlare/pm</siteDirectory>
   <distributionDirectory>/srv/www/htdocs/ordbehandlare/pm/dist</distributionDirectory>
   <repository>
-    <url>http://www.optime.se/repos/optime/ordbehandare/</url>
+    <!-- <developerConnection>scm|svn|http://www.optime.se/repos/optime/repos/trunk</developerConnection> -->
+    <url>http://www.optime.se/repos/optime/repos</url>
   </repository>
   <versions>
     <version>
@@ -49,13 +50,20 @@
     <report>maven-junit-report-plugin</report>
     <report>maven-tasklist-plugin</report>
     <!--<report>maven-linkcheck-plugin</report>-->
+    <report>maven-linkcheck-plugin</report>
   </reports>
   <developers>
     <developer>
       <name>Staffan Olsson</name>
       <id>solsson</id>
-      <email>staffan@optime.se</email>
+      <email>staffan.AT.optime.DOT.se</email>
       <organization>Optime</organization>
+      <timezone>GMT+1</timezone>
+    </developer>
+    <developer>
+      <name>Kalle Henriksson</name>
+      <id>kalle</id>
+      <email>kalle.henriksson.AT.gmail.DOT.com</email>
     </developer>
   </developers>
   <dependencies>

@@ -1,7 +1,7 @@
 /*
  * Created on 2004-okt-05
  */
-package se.optime.repos.webdav.subversion;
+package se.optime.repos.subversion;
 
 import se.optime.repos.RepositoryAccessException;
 import se.optime.repos.RepositoryPath;

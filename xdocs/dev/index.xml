@@ -24,7 +24,58 @@
                 <li>Commit using a revealing log message</li>
             </ol>
         </subsection>
-        <p align="right"><i>Staffan</i></p>
     </section>
+    <section name="Directory structure">
+      <table width="100%"  border="0" cellspacing="10">
+      <tr>
+        <td valign="top">/repos/trunk</td>
+        <td valign="top">Main development branch</td>
+      </tr>
+      <tr>
+        <td valign="top">- /src </td>
+        <td valign="top">Java sources </td>
+      </tr>
+      <tr>
+        <td valign="top">- - /java</td>
+        <td valign="top">Completely documented functional code </td>
+      </tr>
+      <tr>
+        <td valign="top">- - /test </td>
+        <td valign="top">Unit tests of as much functional code as possible </td>
+      </tr>
+      <tr>
+        <td valign="top">- - /iutest </td>
+        <td valign="top">Integration test cases, for testing collaboration with production environment</td>
+      </tr>
+      <tr>
+        <td valign="top"> - /lib</td>
+        <td valign="top">Java libraries that are not handled as maven dependencies. </td>
+      </tr>
+      <tr>
+        <td valign="top">- /target </td>
+        <td valign="top">Build directory, not to be included in source</td>
+      </tr>
+      <tr>
+        <td valign="top">- /war </td>
+        <td valign="top">J2EE webapp</td>
+      </tr>
+      <tr>
+        <td valign="top">- /www </td>
+        <td valign="top">Web contents, with one subdirectory per component (roughly) </td>
+      </tr>
+      <tr>
+        <td valign="top">- - **/.jsp</td>
+        <td valign="top">JSPs will be copied to webapp at build time. During development they are treated as web contents to allow relative links. The location of JSPs inside www must reflect how they are mapped by the Request Dispatcher. For example repos.se/file.doc.jwa, maps to document, means document.jsp must be in root.</td>
+      </tr>
+      <tr>
+        <td valign="top">- /xdocs </td>
+        <td valign="top">Where we document all important thoughts and decisions, except those that are allready in javadocs. </td>
+      </tr>
+      <tr>
+        <td valign="top">- - /samples </td>
+        <td valign="top">Examples of configuration files </td>
+      </tr>
+    </table>
+  </section>
  </body>
 </document>

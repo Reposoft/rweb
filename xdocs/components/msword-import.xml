@@ -1,0 +1,24 @@
+<document>
+
+   <properties>
+      <title>repos.se imports word files</title>
+   </properties>
+
+   <body>
+       <section name="MS Word import">
+           <p>A user dumping Word for a word processor is a small step for one person, but a giant leap for mankind.</p>
+           <subsection name="accepted formats">
+               <p>Word 97-2003</p>
+           </subsection>
+           <subsection name="output format">
+               <p>XHTML 1.0 strict</p>
+           </subsection>
+           <subsection name="upload methods">
+               <p>Upload form with no need to log in</p>
+               <p>Paste url with no need to log in</p>
+               <p>On access conversion of in-repository .doc</p>
+           </subsection>
+       </section>
+   </body>
+   
+</document>

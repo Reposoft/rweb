@@ -21,7 +21,7 @@ public class DocumentController extends RepositoryController {
      * @see se.optime.repos.webdav.RepositoryController#handle(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, se.optime.repos.WebResource)
      */
     protected ModelAndView handle(HttpServletRequest request, HttpServletResponse response, WebResource resource) throws Exception {
-        return new ModelAndView("document/edit",RESOURCE_NAME,resource);
+        return new ModelAndView("document.edit",RESOURCE_NAME,resource);
     }
 
 }
