@@ -14,11 +14,7 @@
 	<!-- why not generate user-tailored xslt from a .jwa url in Svnindex? -->
 	<!-- add parameter rurl=".." when testing offline -->
 	<!-- status images like 'locked' could be generated on the fly -->
-	<!-- display name of the repository -->
-	<xsl:param name="repoName">www.repos.se/sweden</xsl:param>
-	<!-- repository URL, use path that works for user ('localhost' could break redirects) -->
-	<xsl:param name="repoUrl">http://<xsl:value-of select="$repoName"/>
-	</xsl:param>
+	
 	<!-- repos webapp URL (root), does not end with slash -->
 	<xsl:param name="rurl">http://www.repos.se</xsl:param>
 	<!-- current theme, for example '/theme', empty for root theme -->
@@ -98,33 +94,11 @@
 		</table>
 	</xsl:template>
 	<!-- header with path information -->
-	<xsl:template name="titlebar-box">
-		<table width="100%" border="0" cellpadding="0" cellspacing="5">
-			<tr>
-				<td>repo: <xsl:value-of select="$repoName"/>
-				</td>
-				<td>
-					<div align="right">version: <xsl:value-of select="@rev"/>
-					</div>
-				</td>
-				<td>&#160;</td>
-				<td rowspan="2" align="right">
-					<img src="{$rurl}/logo/repos2.png" width="142" height="38"/>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<xsl:value-of select="@path"/>
-				</td>
-				<td>&#160;</td>
-			</tr>
-		</table>
-	</xsl:template>
 	<xsl:template name="titlebar-list">
 		<a href="http://www.repos.se/">
 			<img src="{$rurl}/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		</a>
-		<xsl:value-of select="$repoName"/> &#160; <xsl:value-of select="@path"/> &#160;
+		<xsl:value-of select="@path"/> &#160;
 		version <xsl:value-of select="@rev"/>
 	</xsl:template>
 	<!-- directory actions, stuff like that -->
@@ -157,7 +131,7 @@
 			<xsl:call-template name="showicon">
 				<xsl:with-param name="filetype" select="'_tortoisefolder'"/>
 			</xsl:call-template>check out</span>
-		<a class="command" href="{$rurl}/log/?url={$repoUrl}{@path}">
+		<a class="command" href="{$rurl}/log/?path={@path}">
 			<xsl:call-template name="showicon">
 				<xsl:with-param name="filetype" select="'_log'"/>
 			</xsl:call-template>show log</a>
@@ -284,9 +258,6 @@
 				<!-- ...file.type.jwa mapping to controller -->
 				<xsl:value-of select="$name"/>
 				<xsl:value-of select="'.jwa'"/>
-				<!-- repo not ending with '/' -->
-				<xsl:value-of select="'?repo='"/>
-				<xsl:value-of select="$repoUrl"/>
 				<!-- path not ending with '/' -->
 				<xsl:value-of select="'&amp;path='"/>
 				<xsl:value-of select="$path"/>
@@ -330,7 +301,7 @@
 	</xsl:template>
 	<!-- display thumbnail as icon -->
 	<xsl:template name="thumbnail">
-		<img src="{$thumbUrl}{$repoUrl}{../@path}/{@href}" vspace="5" hspace="5" border="0"/>
+		<img src="{$thumbUrl}{../@path}/{@href}" vspace="5" hspace="5" border="0"/>
 	</xsl:template>
 	<!-- get file extension from attribute @href or param 'filename' -->
 	<xsl:template name="getFiletype">
