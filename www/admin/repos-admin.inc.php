@@ -162,17 +162,6 @@ function getRevisionInfo($filename, $startsWith) {
 	return $rev;
 }
 
-/**
- * Request input from user. Currently requires command line.
- */ 
-function getUserInput($message='Provide input and press return:\n') {
-	$stdin = fopen('php://stdin', 'r'); 
-	echo "$message\n";
-	$input = fgets($stdin,100); 
-	fclose($stdin); 
-	return $input;
-}
-
 // ----- unit tests ----
 if ( isTestRun() ) {
 	start("Unit testing " . basename(__FILE__));

@@ -3,13 +3,69 @@
 require( dirname(__FILE__) . '/repos-admin.inc.php' );
 
 // test
-start( 'test load' );
-load( getLocalPath('/srv/backup'), getLocalPath('/srv/repos/staffan'), 'svnrepo-srv-repos-staffan-' );
-	
+// load( getLocalPath('/srv/backup'), getLocalPath('~/testrepo'), 'svnrepo-testrepo-' );
+// verify( getLocalPath('~/test') ); 
+dump( getLocalPath('~/testbackup'), getLocalPath('~/test'), getPrefix("/home/solsson/test") );
+
 // Functions for reading and writing an ordered list of incremental SVN dumpfiles
 
-function dump() {
+function dump($backupPath, $repository, $fileprefix) {
+	$current = getCurrentBackup( $backupPath, $fileprefix );
+	$files = count($current);
+	$headrev = getHeadRevisionNumber( $repository );
+	$fromrev = 0;
+	if ( $files>0 )
+		$fromrev = $current[$files-1][2] + 1;
+	$success = dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $headrev);
+	if ( ! $success )
+		fatal("Could not dump $repository revision $fromrev to $headrev to folder $backupPath");
+	debug("Dumped $repository revision $fromrev to $headrev to folder $backupPath");
+}
 
+function getHeadRevisionNumber($repository) {
+	$command = getCommand("svnlook") . " youngest $repository";
+	$output = array();
+	$return = 0;
+	$rev = (int) exec($command, $output, $return);
+	if ($return!=0)
+		fatal ("Could not get revision number using $command");
+	return $rev;
+}
+
+/**
+ * @param backupPath no tailing slash
+ * @return true if successful
+ */
+function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) {
+	$extension = ".svndump";
+	$filename = getFilename( $fileprefix, $fromrev, $torev ) . $extension;
+	$path = $backupPath . DIRECTORY_SEPARATOR . $filename;
+	$command = getCommand("svnadmin") . " dump $repository --revision $fromrev:$torev --incremental --deltas";
+	if ( isWindows() )
+		$command .=  " > $path";
+	else
+		$command .= " | gzip -9 > $path.gz";
+	$output = array();
+	$return = 0;
+	exec($command, $output, $return);
+	if ( $return != 0 )
+		return false;
+	if ( isWindows() )
+		echo "TODO: gzip $path";
+}
+
+/**
+ * @return listing of the current backup files named fileprefix* in backupPath
+ */
+function getCurrentBackup($backupPath, $fileprefix) {
+	// check arguments
+	if ( ! file_exists($backupPath) )
+		fatal("backupPath '$backupPath' does not exist");
+	// get backup files in directory
+	$files = getDirContents($backupPath,$fileprefix);
+	if ( count($files)==0 )
+		fatal("Directory '$backupPath' contains no files named $fileprefix*");
+	return getBackupInfo($files, $fileprefix);
 }
 
 /**
@@ -28,24 +84,15 @@ function load($backupPath, $repository, $fileprefix) {
 		fatal("repository not set");	
 
 	// check preconditions derived from input
-	if ( ! file_exists($backupPath) )
-		fatal("backupPath '$backupPath' does not exist");
 	debug("Reading backup files starting with '$fileprefix' in $backupPath");
-	
 	if ( ! file_exists($repository) )
 		fatal("repository '$repository' does not exist");
 	
-	$files = getDirContents($backupPath,$fileprefix);
-	if ( count($files)==0 )
-		fatal("Directory '$backupPath' named $fileprefix*");
-
-	// go through files
-	$backup = getBackupInfo($files, $fileprefix);
+	$backup = getCurrentBackup($backupPath, $fileprefix);
 	$lastrev = -1;
 	foreach ($backup as $file) {
-		// extract revision numbers from filename
-		if ( ! $file[1] == $revto + 1 )
-			fatal("Revision number gap at $filename starting at revision $rev[1], last revision was $revto");
+		if ( ! $file[1] == $lastrev + 1 )
+			fatal("Revision number gap at $file[0] starting at revision $file[1], last revision was $lastrev");
 		// read the files into repo
 		$lastrev = $file[2];
 		loadDumpfile($backupPath . '/' . $file[0],LOADCOMMAND);
@@ -59,11 +106,14 @@ function load($backupPath, $repository, $fileprefix) {
  * @return true if repository is valid
  */
 function verify($repository) {
-	define("VERIFYCOMMAND", getSvnCommand('svnadmin') . " verify $repository" );
+	define("VERIFYCOMMAND", getCommand('svnadmin') . " verify $repository" );
 	$output = array();
 	$return = 0;
 	exec( VERIFYCOMMAND, $output, $return );
-	debug( $output );
+	if ( $return == 0 )
+		debug( "$repository verified with return code $return, output: \n" . implode(" \n",$output) );
+	else
+		error( VERIFFYCOMMAND . " returned code $return, output: $output" );
 	return $return==0;
 }
 

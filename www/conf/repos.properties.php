@@ -62,6 +62,8 @@ function getCommand($command) {
 	switch($command) {
 		case 'svn':
 			return ( isWindows() ? 'svn' : USRBIN . 'svn' );
+		case 'svnlook':
+			return ( isWindows() ? 'svnlook' : USRBIN . 'svnlook' );
 		case 'svnadmin':
 			return ( isWindows() ? 'svnadmin' : USRBIN . 'svnadmin' );
 		case 'gzip':
