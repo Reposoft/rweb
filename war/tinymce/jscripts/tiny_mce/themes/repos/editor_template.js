@@ -7,6 +7,7 @@ var TinyMCE_repos_foreColor = "#000000";
 var TinyMCE_repos_anchorName = "";
 var TinyMCE_repos_buttons = [
 		// Control id, button img, button title, command, user_interface, value
+		['save', 'save.gif', '{$lang_save_desc}', 'save'],
 		['bold', '{$lang_bold_img}', '{$lang_bold_desc}', 'Bold'],
 		['italic', '{$lang_italic_img}', '{$lang_italic_desc}', 'Italic'],
 		['underline', 'underline.gif', '{$lang_underline_desc}', 'Underline'],
@@ -111,6 +112,10 @@ function TinyMCE_repos_getControlHTML(button_name) {
  */
 function TinyMCE_repos_execCommand(editor_id, element, command, user_interface, value) {
 	switch (command) {
+		case "save":
+			tinyMCE.triggerSave();
+			return true;
+		
 		case "mceForeColor":
 			var template = new Array();
 			var inputColor = TinyMCE_repos_foreColor;
@@ -190,10 +195,10 @@ function TinyMCE_repos_getEditorTemplate(settings) {
 
 	var template = new Array();
 	var toolbarHTML = "";
-	var toolbarLocation = tinyMCE.getParam("theme_advanced_toolbar_location", "bottom");
+	var toolbarLocation = tinyMCE.getParam("theme_advanced_toolbar_location", "top");
 
 	// Render row 1
-	var buttonNamesRow1 = tinyMCE.getParam("theme_advanced_buttons1", "bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,styleselect,formatselect").split(',');
+	var buttonNamesRow1 = tinyMCE.getParam("theme_advanced_buttons1", "save,separator,undo,redo,separator,link,unlink,anchor,image,cleanup,separator,table,separator,row_before,row_after,delete_row,separator,col_before,col_after,delete_col,separator,help").split(',');
 	buttonNamesRow1 = removeFromArray(buttonNamesRow1, tinyMCE.getParam("theme_advanced_disable", "").split(','));
 	buttonNamesRow1 = addToArray(buttonNamesRow1, tinyMCE.getParam("theme_advanced_buttons1_add", "").split(','));
 	for (var i=0; i<buttonNamesRow1.length; i++)
@@ -203,7 +208,7 @@ function TinyMCE_repos_getEditorTemplate(settings) {
 		toolbarHTML += "<br>";
 
 	// Render row 2
-	var buttonNamesRow2 = tinyMCE.getParam("theme_advanced_buttons2", "bullist,numlist,separator,outdent,indent,separator,undo,redo,separator,link,unlink,anchor,image,cleanup,help,code").split(',');
+	var buttonNamesRow2 = tinyMCE.getParam("theme_advanced_buttons2", "formatselect,separator,bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,separator,bullist,numlist,separator,outdent,indent,separator,sub,sup,separator,removeformat,charmap,code").split(',');
 	buttonNamesRow2 = removeFromArray(buttonNamesRow2, tinyMCE.getParam("theme_advanced_disable", "").split(','));
 	buttonNamesRow2 = addToArray(buttonNamesRow2, tinyMCE.getParam("theme_advanced_buttons2_add", "").split(','));
 	for (var i=0; i<buttonNamesRow2.length; i++)
@@ -213,11 +218,11 @@ function TinyMCE_repos_getEditorTemplate(settings) {
 		toolbarHTML += "<br>";
 
 	// Render row 3
-	var buttonNamesRow3 = tinyMCE.getParam("theme_advanced_buttons3", "table,separator,row_before,row_after,delete_row,separator,col_before,col_after,delete_col,separator,hr,removeformat,visualaid,separator,sub,sup,separator,charmap").split(',');
+	/* var buttonNamesRow3 = tinyMCE.getParam("theme_advanced_buttons3", "table,separator,row_before,row_after,delete_row,separator,col_before,col_after,delete_col,separator,hr,removeformat,visualaid,separator,sub,sup,separator,charmap").split(',');
 	buttonNamesRow3 = removeFromArray(buttonNamesRow3, tinyMCE.getParam("theme_advanced_disable", "").split(','));
 	buttonNamesRow3 = addToArray(buttonNamesRow3, tinyMCE.getParam("theme_advanced_buttons3_add", "").split(','));
 	for (var i=0; i<buttonNamesRow3.length; i++)
-		toolbarHTML += tinyMCE.getControlHTML(buttonNamesRow3[i]);
+		toolbarHTML += tinyMCE.getControlHTML(buttonNamesRow3[i]); */
 
 	// Setup template html
 	template['html'] = '<table class="mceEditor" border="0" cellpadding="0" cellspacing="0" width="{$width}" height="{$height}">';

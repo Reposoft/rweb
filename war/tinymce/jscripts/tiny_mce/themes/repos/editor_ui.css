@@ -78,7 +78,7 @@
 	padding: 0px;
 	display: inline;
 	vertical-align: top;
-	background-color: #F0F0EE
+	background-color: #F9F9EE;
 }
 
 .mceLabel, .mceLabelDisabled {
@@ -97,7 +97,7 @@
 
 .mceEditor {
 	background: #F0F0EE;
-	border: 1px solid #cccccc;
+	border: 1px solid #999999;
 }
 
 .mceEditorArea {
