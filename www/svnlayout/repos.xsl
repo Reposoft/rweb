@@ -54,6 +54,12 @@
           <xsl:value-of select="index/@path"/>
         </title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <!-- don't cache -->
+        <meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="expires" content="0" />
+		<!-- if google may index the repository (googlebot.com has access), contents should not be cached -->
+		<meta name="robots" content="noarchive" />
+		<!-- default stylesheet -->
         <link rel="stylesheet" type="text/css" href="{$cssUrl}/repos-standard.css"/>
       </head>
       <body>
@@ -94,7 +100,7 @@
   <xsl:template name="commandbar">
       <div class="commandbar">
           <xsl:call-template name="updir"/>
-          <xsl:text> [new folder] [upload file] [open in windows] [checkout to my computer (tortoise)]</xsl:text>
+          <xsl:text> [new folder] [upload file] [open in Windows] [checkout to my computer (tortoise)]</xsl:text>
       </div>
   </xsl:template>
 
@@ -147,7 +153,7 @@
         <td><xsl:call-template name="getLink"/></td>
       </tr>
       <tr>
-        <td>[info] [delete]</td>
+        <td><small>[info] [delete]</small></td>
       </tr>
     </table>
   </xsl:template>
@@ -161,7 +167,7 @@
         <td><xsl:call-template name="getLink"/></td>
       </tr>
       <tr>
-        <td>[info] [<xsl:call-template name="getReposLink"><xsl:with-param name="text">open</xsl:with-param></xsl:call-template>] [delete]</td>
+        <td><small>[info] [<xsl:call-template name="getReposLink"><xsl:with-param name="text">open</xsl:with-param></xsl:call-template>] [delete] [upload changes] [locked?]</small></td>
       </tr>
     </table>
   </xsl:template>
@@ -236,20 +242,19 @@
   </xsl:template>
 
   <!-- get file extension from attribute @href or param 'filename' -->
-  <!-- currently handles three letter extension only -->
   <xsl:template name="getFiletype">
     <xsl:param name="filename" select="@href"/>
     <xsl:variable name="type" select="substring-after($filename,'.')"/>
     <xsl:choose>
-      <xsl:when test="string-length($type)>4">
+      <xsl:when test="$type">
       	<xsl:call-template name="getFiletype">
-      		<xsl:with-param name="getFilename" select="$type"/>
+      		<xsl:with-param name="filename" select="$type"/>
       	</xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
       	<xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
     	<xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
-      	<xsl:value-of select="translate($type,$ucletters,$lcletters)"/>
+      	<xsl:value-of select="translate($filename,$ucletters,$lcletters)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

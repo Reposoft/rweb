@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="navigation.xsl"?>
+<!DOCTYPE navigation SYSTEM "file:/C:/Documents%20and%20Settings/solsson/Mina%20dokument/Code/repos/www/navigation/navigation.dtd">
+<navigation>
+    <unit name="Personligt" type="personal" href="/testuser">
+        <unit name="repos" type="link" href="http://www.repos.se/"/>
+    </unit>
+	<unit name="projects" type="collection">
+		<unit name="coordinator 2.5" type="project" href="/coordinator"/>
+		<unit name="Infomonter" type="project" href="/infomonter">
+		    <unit name="underprojekt" type="project" href="/infomonter/underprojekt">
+		        <unit name="under underprojekt" type="project" href="/under underprojekt"/>
+		    </unit>
+		    <unit name="Nu du" type="project" href="/acompany/nowyou"/>
+		</unit>
+	</unit>
+	<unit name="networks" type="collection">
+	    <unit name="Optime" type="network" href="/optime"/>
+	</unit>
+	<unit name="finished projects" type="collection"/>
+	<unit name="com-onweb" type="company"/>
+</navigation>
