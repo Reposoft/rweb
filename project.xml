@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="http://maven.apache.org/xsd/maven-project-3.0.0.xsd">
   <pomVersion>3</pomVersion>
-  <artifactId>repos</artifactId>
+  <id>repos</id>
   <name>Repos</name>
   <groupId>optime</groupId>
   <currentVersion>0.1</currentVersion>
-  <package>se.optime.repos</package>
   <organization>
     <name>Optime data</name>
     <url>http://www.optime.se/</url>
     <logo>/logo/optime2004.png</logo>
   </organization>
-  <logo>/logo/repos4.png</logo>
   <inceptionYear>2004</inceptionYear>
-  <shortDescription>repos.se - version control for people</shortDescription>
+  <package>se.optime.repos</package>
+  <logo>/www/logo/repos4.png</logo>
   <description>
     Repos is a WebDAV and version control frontend. 
     The user has access to the exact same information that the system works with. 
     Everything is accessible from any WebDAV client, like Windows "Network folders" and Mozillas calendar application.
-    The frontend provides usability...
+    The frontend provides usability.
   </description>
+  <shortDescription>repos.se - version control for people</shortDescription>
   <url>http://www.repos.se/</url>
   <issueTrackingUrl>http://www.optime.se/issuetracker/repos/</issueTrackingUrl>
   <siteAddress>www.repos.se</siteAddress>
   <siteDirectory>/srv/www/htdocs/repos/development</siteDirectory>
   <distributionDirectory>/srv/www/htdocs/ordbehandlare/pm/dist</distributionDirectory>
   <repository>
-    <!-- <developerConnection>scm|svn|http://www.optime.se/repos/optime/repos/trunk</developerConnection> -->
+    <connection>scm|svn|http://www.optime.se/repos/optime/repos/trunk</connection>
+    <developerConnection>scm|svn|http://www.optime.se/repos/optime/repos/trunk</developerConnection>
     <url>http://www.optime.se/repos/optime/repos</url>
   </repository>
   <versions>
@@ -36,30 +38,13 @@
       <tag>HEAD</tag>
     </version>
   </versions>
-  <reports>
-    <report>maven-jdepend-plugin</report>
-    <report>maven-checkstyle-plugin</report>
-    <report>maven-pmd-plugin</report>
-    <report>maven-simian-plugin</report>
-    <report>maven-changes-plugin</report>
-    <report>maven-changelog-plugin</report>
-    <report>maven-file-activity-plugin</report>
-    <report>maven-developer-activity-plugin</report>
-    <report>maven-javadoc-plugin</report>
-    <report>maven-jxr-plugin</report>
-    <report>maven-junit-report-plugin</report>
-    <report>maven-tasklist-plugin</report>
-    <!--<report>maven-linkcheck-plugin</report>-->
-    <report>maven-jcoverage-plugin</report>
-    <report>maven-xhtml-plugin</report>
-  </reports>
   <developers>
     <developer>
       <name>Staffan Olsson</name>
       <id>solsson</id>
       <email>staffan.AT.optime.DOT.se</email>
       <organization>Optime</organization>
-      <timezone>GMT+1</timezone>
+      <timezone>1</timezone>
     </developer>
     <developer>
       <name>Kalle Henriksson</name>
@@ -293,6 +278,7 @@
     <nagEmailAddress>staffan@optime.se</nagEmailAddress>
     <sourceDirectory>src/java</sourceDirectory>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+    <integrationUnitTestSourceDirectory>src/iutest</integrationUnitTestSourceDirectory>
     <!-- Unit test cases -->
     <unitTest>
       <includes>
@@ -311,8 +297,23 @@
         </resource>
       </resources>
     </unitTest>
-    <!-- Integration unit test cases -->
-    <integrationUnitTest />
   </build>
+  <reports>
+    <report>maven-jdepend-plugin</report>
+    <report>maven-checkstyle-plugin</report>
+    <report>maven-pmd-plugin</report>
+    <report>maven-simian-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-changelog-plugin</report>
+    <report>maven-file-activity-plugin</report>
+    <report>maven-developer-activity-plugin</report>
+    <report>maven-javadoc-plugin</report>
+    <report>maven-jxr-plugin</report>
+    <report>maven-junit-report-plugin</report>
+    <report>maven-tasklist-plugin</report>
+    <!--<report>maven-linkcheck-plugin</report>-->
+    <report>maven-jcoverage-plugin</report>
+    <report>maven-xhtml-plugin</report>
+  </reports>
 </project>
 
