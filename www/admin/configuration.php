@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // svn propset svn:keywords "Rev" configuration.php
 $rev = strtr("$Rev$",'$',' ');
 // default configuration includes, the way they should be referenced in php files
@@ -20,8 +20,8 @@ $sections = array(
 	);
 
 // helper variables
-$reponame = getConfig( 'repo_name' );
 $repourl = getConfig( 'repo_url' );
+$reponame = $repourl; // getConfig( 'repo_name' ) no loger used, minimizing config dependence.
 $repodir = getConfig( 'local_path' );
 $reposweb = getConfig( 'repos_web' );
 $admindir = getConfig( 'admin_folder' );
@@ -92,6 +92,7 @@ if ( isset($_GET['download']) ) {
 }
 
 function repository() {
+    global $repodir;
 	$cmd = getCommand( 'svnadmin' );
 	// create command
 	showHeader("Create repository $dir accessible for system user $user","#" );
@@ -167,19 +168,19 @@ function apache2() {
 	# Tomcat connector
 	&lt;IfModule mod_jk2.c&gt;
 		# Jk2 worker lb must be properly set up, see installation docs
-		&lt;Location ~ "<?php echo $repouri ?>/.*\.jwa"&gt;
+		&lt;Location ~ ".*\.jwa"&gt;
 			JkUriSet group lb:lb
-			JkUriSet info "<?php echo $reponame ?>"
+			JkUriSet info "repos.se"
 		&lt;/Location&gt;
-		&lt;Location ~ "<?php echo $repouri ?>/.*\.jsp"&gt;
+		&lt;Location ~ ".*\.jsp"&gt;
 			JkUriSet group lb:lb
-			JkUriSet info "<?php echo $reponame ?>"
+			JkUriSet info "repos.se"
 		&lt;/Location&gt;
 	&lt;/IfModule&gt;
 	&lt;IfModule mod_jk.c&gt;
 		# Jk worker ajp13 must be properly set up
-		JkMount <?php echo $repouri ?>/*.jsp ajp13
-		JkMount <?php echo $repouri ?>/*.jwa ajp13
+		JkMount *.jsp ajp13
+		JkMount *.jwa ajp13
 	&lt;/IfModule&gt;
 	
 	<?php if ( $isBackup ) { ?>

@@ -5,7 +5,7 @@
 require_once( dirname(__FILE__) . "/repos.properties.php" );
 
 if (!isset($_SERVER['PHP_AUTH_USER']) || $_SERVER['PHP_AUTH_USER']=='void') {
-   header('WWW-Authenticate: Basic realm="' . getConfig('repo_name') . '"');
+   header('WWW-Authenticate: Basic realm="' . getRepositoryUrl() . '"');
    header('HTTP/1.0 401 Unauthorized');
    echo 'Please provide your Repos login';
    exit;

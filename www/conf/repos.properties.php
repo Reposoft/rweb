@@ -30,12 +30,52 @@ function getConfig($key) {
 	return false;
 }
 
-/**
- * @return true if script is running on windows OS, false for anything else
- */
-function isWindows() {
-	return ( substr(PHP_OS, 0, 3) == 'WIN' );
+// ------ url resolution functions -----
+
+function getReferer() {
+    if (isset($_SERVER['HTTP_REFERER'])) return $_SERVER['HTTP_REFERER'];
+    return false;
 }
+
+/**
+ * @return target in repository from query paramters WITH tailing slash if no file
+ */
+function getTarget() {
+    // invalid parameters -> empty string
+    if(!isset($_GET['path'])) return '';
+    $path = $_GET['path'];
+    // end with slash
+    $path = rtrim($path,'/').'/';
+    // append filename if specified
+    if(isset($_GET['file'])) $path .= $_GET['file'];
+    return $path;
+}
+
+/**
+ * Repository is resolved using HTTP Referrer with fallback to settings.
+ * To find out where root is, query paramter 'path' must be set.
+ * @return Root url of the repository for this request
+ */
+function getRepositoryUrl() {
+    $ref = getReferer();
+    if ($ref && isset($_GET['path'])) {
+        return substr($ref,0,strpos($ref,$_GET['path']));
+    }
+    return getConfig('repo_url');
+}
+
+/**
+ * Target url is resolved from query parameters
+ *  'repo' (fallback to getRepositoryUrl) = root url
+ *  'path' = path from repository root
+ *  'file' (omitted if not found) = filename inside path
+ * @return Full url of the file or directory this request targets
+ */
+function getTargetUrl() {
+    return getRepositoryUrl() . getTarget();
+}
+
+// ------ unit testing support -----
 
 /**
  * @return true if scripts should run self-test
@@ -43,6 +83,15 @@ function isWindows() {
 function isTestRun() {
 	global $argv;
 	return ( (isset($argv[1]) && $argv[1]=='unitTest') || isset($_GET['unitTest']) );
+}
+
+// ------ functions to keep scripts portable -----
+
+/**
+ * @return true if script is running on windows OS, false for anything else
+ */
+function isWindows() {
+	return ( substr(PHP_OS, 0, 3) == 'WIN' );
 }
 
 /**
@@ -59,8 +108,11 @@ function getNewline() {
  * @param pathWithSlashes for example /absolute/path or ../relative
  */
 function getLocalPath($pathWithSlashes) {
+    /* We don't know drive letter.
+     * Instead, in windows, the user should install apache2 on the same drive as the config files.
 	if ( isWindows() )
 		return 'C:' . $pathWithSlashes;
+	 */
 	return $pathWithSlashes;
 }
 
