@@ -3,9 +3,11 @@
 // Global Repos configuration entries for PHP iCalendar 2.0
 // gets the calendar url from query parameter 'src'
 
-include '../conf/repos.properties.php';
+parse_ini_file('../conf/repos.properties');
+$auth = getReposUser() + ':' + getReposPassword();
 
-$default_cal 			= $_GET['src'];
+$default_cal 			= substr_replace("://", "://$auth@", $_GET['src'], 1);
+
 $language 				= 'Swedish';		// Language support - 'English', 'Polish', 'German', 'French', 'Dutch', 'Danish', 'Italian', 'Japanese', 'Norwegian', 'Spanish', 'Swedish', 'Portuguese', 'Catalan', 'Traditional_Chinese', 'Esperanto', 'Korean'
 $week_start_day 		= 'Monday';			// Day of the week your week starts on
 $timezone 				= '';				// Set timezone. Read TIMEZONES file for more information
