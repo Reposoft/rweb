@@ -19,7 +19,7 @@ Needs the following model:
     <body>
 		<jsp:include page="../includes/top.inc.jsp"/>
 		<form action="save.jwa" method="POST">
-		<textarea rows="40" cols="60" style="height:100%; width:100%;"><c:out value="${url}"/></textarea><br/>
+		<textarea rows="40" cols="60" style="height:100%; width:100%;"><%= request.getAttribute("contents") %></textarea><br/>
 		<input type="submit" value="Save"/>
 		</form>
 		<jsp:include page="../includes/end.inc.jsp"/>

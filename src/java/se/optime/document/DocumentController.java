@@ -3,12 +3,15 @@
  */
 package se.optime.document;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
@@ -34,6 +37,12 @@ public class DocumentController implements Controller {
         
         Map model = new HashMap();
         model.put("url",uri);
+        Resource file = repository.getCurrentVersion(uri);
+        InputStreamReader isr = new InputStreamReader(file.getInputStream());
+        BufferedReader reader = new BufferedReader(isr);
+        
+        model.put("contents",reader.readLine());
+        
 
         return new ModelAndView("document/edit");
         

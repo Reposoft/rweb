@@ -20,7 +20,9 @@
 	</bean>
 	
 	<!-- ======== controllers ======== -->
-	<bean id="documentController" class="se.optime.document.DocumentController"/>
+	<bean id="documentController" class="se.optime.document.DocumentController">
+		<property name="repository"><ref bean="subversionRepository"/></property>
+	</bean>
 
 	<!-- ========= mappings ========== -->
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
