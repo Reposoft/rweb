@@ -38,10 +38,10 @@
                       Table Of Contents
     ################################################### -->   
 
-    <!-- Generate the TOCs for named components only -->
+    <!-- Generate the TOCs for named components only
     <xsl:param name="generate.toc">
         book   toc
-    </xsl:param>
+    </xsl:param> -->
     
     <!-- Show only Sections up to level 3 in the TOCs -->
     <xsl:param name="toc.section.depth">3</xsl:param>

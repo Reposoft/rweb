@@ -1,55 +1,60 @@
 <?xml version="1.0"?>
-<!-- DOCTYPE article
-          PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0CR3//EN"
-          "sdocbook.dtd" -->
+<?xml-stylesheet href="repos-docs.css" type="text/css"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1CR2//EN"
+                  "http://docbook.org/xml/simple/1.1CR2/sdocbook.dtd">
 <article>
-  <articleinfo>
-    <author>
-      <firstname>Staffan</firstname>
-      <surname>Olsson</surname>
-    </author>
-    <!-- add authors here -->
-    <title>Repos administration guide</title>
-  </articleinfo>
-  <section>
-      <title>Installation</title>
-      <section>
-        <title>System requirements</title>
+    <articleinfo>
+        <author>
+            <firstname>Staffan</firstname>
+            <surname>Olsson</surname>
+        </author>
+        <!-- add authors here -->
+        <title>Repos administration guide</title>
+    </articleinfo>
+    <section>
+        <title>Installation</title>
+        <section>
+            <title>System requirements</title>
+            <para> Computer with internet connection. </para>
+        </section>
+        <section>
+            <title>What Repos needs to compile</title>
+            <itemizedlist>
+                <listitem>Java 1.4+</listitem>
+                <listitem>Apache ant 1.6+</listitem>
+                <listitem>Maven 1.0+</listitem>
+            </itemizedlist>
+        </section>
+        <section>
+            <title>What Repos needs to run</title>
+            <itemizedlist>
+                <listitem>Windows / Linux / Mac OS X</listitem>
+                <listitem>Apache 2+ HTTP server</listitem>
+                <listitem>... with mod_dav and mod_jk2</listitem>
+                <listitem>PHP 4+</listitem>
+                <listitem>Subversion 1.2</listitem>
+                <listitem>Tomcat 5+ with connector from Apache</listitem>
+            </itemizedlist>
+        </section>
+    </section>
+    <section>
+        <title>User authentication</title>
         <para>
-          Computer with internet connection.
+            Authentication is configured a three different places:
         </para>
-      </section>
-      <section>
-         <title>What Repos needs to compile</title>
-         <ul>
-             <li>Java 1.4+</li>
-             <li>Apache ant 1.6+</li>
-             <li>Maven 1.0+</li>
-         </ul>          
-      </section>
-      <section>
-         <title>What Repos needs to run</title>
-         <ul>
-             <li>Windows / Linux / Mac OS X</li>
-             <li>Apache 2+ HTTP server</li>
-             <li>... with mod_dav and mod_jk2</li>
-             <li>PHP 4+</li>
-             <li>Subversion 1.2 *</li>
-             <li>Tomcat 5+ supporting mod_jk2</li>
-         </ul>
-      </section>
-  </section>
-  <section>
-      <title>User authentication</title>
-      <para>
-         <p>Authentication is configured a three different places:</p>
-         <ul>
-             <li>Apache configuration in the repository mapping</li>
-             <li>Webapp authentication module (Acegi)</li>
-             <li>PHP authentication scriptlet, in <code>conf/authenticationl.inc.php</code></li>
-         </ul>
-         <p>Only Apache actually verifies the login. Repos code only makes sure it has access to the credential, to be able to retrieve resources for the user.</p>
-         <p>They all need to be configured with BASIC authentication, realm '<b>repos</b>'</p>
-      </para>
-  </section>
+        <itemizedlist>
+            <listitem>Apache configuration in the repository mapping</listitem>
+            <listitem>Webapp authentication module (Acegi)</listitem>
+            <listitem>PHP authentication scriptlet, in <code>login.inc.php</code>
+            </listitem>
+        </itemizedlist>
+        <para>
+            Only Apache actually verifies the login. Repos code only makes sure it has access to
+            the credential, to be able to retrieve resources for the user.
+        </para>
+        <para>
+            They all need to be configured with BASIC authentication, realm = repository root
+            url
+        </para>
+    </section>
 </article>
