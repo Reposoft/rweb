@@ -97,12 +97,20 @@ function getRepoRoot($fullUrl,$pathFromRepoRoot) {
  *  'repo' (fallback to getRepositoryUrl) = root url
  *  'path' = path from repository root
  *  'file' (omitted if not found) = filename inside path
+ * Spaces are replaces with %20
  * @return Full url of the file or directory this request targets
  */
 function getTargetUrl() {
-    return getRepositoryUrl() . getTarget();
+    return getRepositoryUrl() . encodeUrlPath(getTarget());
 }
 
+function encodeUrlPath($uri) {
+	$parts = explode('/', $uri);
+	for ($i = 0; $i < count($parts); $i++) {
+		$parts[$i] = rawurlencode($parts[$i]);
+	}
+	return implode('/', $parts);
+}
 
 // *** Authentication ***
 
@@ -119,10 +127,10 @@ if (!isset($_SERVER['PHP_AUTH_USER']) || $_SERVER['PHP_AUTH_USER']=='void') {
 }
 // "PHP_AUTH variables will not be set if external authentication is enabled for that particular page and safe mode is enabled"
 // set credentials as constants, so that dependencies are not tied to the server variables
-$repos_authentication;
+$repos_authentication = array();
 $repos_authentication['user'] = $_SERVER['PHP_AUTH_USER'];
 $repos_authentication['pass'] = $_SERVER['PHP_AUTH_PW'];
-$repos_authentication['auth'] = substr($_SERVER['HTTP_AUTHORIZATION'], 6);
+if (isset($_SERVER['HTTP_AUTHORIZATION'])) $repos_authentication['auth'] = substr($_SERVER['HTTP_AUTHORIZATION'], 6);
 
 function getReposUser() {
 	global $repos_authentication;
