@@ -30,13 +30,20 @@
   	<delete file="${download.file}"/>
   </target>
 	
-  <!-- display license info -->	
+  <!-- License info and interpretation -->	
   <target name="license" depends="download">
   	<property name="license.file" value="${extracted.folder}/lgpl.txt"/>
   	<property name="License_type" value="LGPL"/>
+  	<!-- Can this package be redistributed with our application? -->
 	<property name="May_redistribute" value=""/>
+	<!-- Can this package be altered to fit our application? -->
   	<property name="May_alter" value=""/>
-  	<property name="Only_nonprofit" value=""/>
+  	<!-- Is this for corporate use, or only alloed for personal/non-profit installation? -->
+  	<property name="May_use_commercially" value=""/>
+  	<!-- Can this package be used where hosting our application commercially? -->
+  	<property name="May_host" value=""/>
+  	<!-- If we should display credits for using this, what should be displayed? -->
+  	<property name="Show_credits" value=""/>
   	<echo>no license summary entered</echo>
   </target>
 
