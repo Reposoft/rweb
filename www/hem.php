@@ -5,7 +5,7 @@ require( dirname(__FILE__) . "/conf/authentication.inc.php" );
  * Get a user's home directory of a repository
  */
 function getHomeDir($repository) {
-	return $repository . '/' . getReposUser();
+	return $repository . '/' . getReposUser() . '/trunk/';
 }
 
 /**

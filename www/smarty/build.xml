@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project name="HTAdmin" default="install" basedir=".">
+
+  <description>
+	HTAdmin is a very to-the-point htpasswd file editor.
+  	We use the 1.2.x version as logic for editing user accounts.
+  </description>	
+
+  <property name="repos-package" value="htadmin"/>
+  <property name="home" value="http://smarty.php.net"/>
+	
+  <!-- set global properties for this build -->
+  <property name="version" value="2.6.7"/>
+  <property name="archive" value="${home}/distributions/Smarty-${version}.tar.gz"/>
+  <property name="archive.type" value="tar.gz"/>
+  <property name="extracted.folder" value="${basedir}/Smarty-${version}"/>
+	
+  <!-- derived -->
+  <property name="download.file" value="${basedir}/downloaded-dependency.${archive.type}"/>
+	
+  <!-- Create the time stamp and basic directory structure -->
+  <target name="init">
+    <tstamp/>
+  </target>
+
+  <!-- Download and decompress dependency archive -->
+  <target name="download" depends="init" description="download depedency">
+  	<get src="${archive}" dest="${download.file}"/>
+  	<gunzip src="${download.file}" dest="${download.file}.tar"/>
+  	<untar src="${download.file}.tar" dest="${basedir}"/>
+  	<delete file="${download.file}"/>
+  	<delete file="${download.file}.tar"/>
+  </target>
+	
+  <!-- display license info -->	
+  <target name="license" depends="download">
+  	<property name="license.file" value="${extracted.folder}/COPYING.lib"/>
+  	<property name="License_type" value="LGPL"/>
+	<property name="May_redistribute" value=""/>
+  	<property name="May_alter" value=""/>
+  	<property name="Only_nonprofit" value=""/>
+  	<echo>no license summary entered</echo>
+  </target>
+
+  <!-- Customized installation steps for this dependency -->
+  <target name="install" depends="license" description="install" >
+  	<move todir="${basedir}/libs" overwrite="false">
+  	    <fileset dir="${extracted.folder}/libs"/>
+  	</move>
+  	<delete dir="${extracted.folder}"/>
+  	<mkdir dir="${basedir}/cache"/>
+  	<mkdir dir="${basedir}/cache/templates/"/>
+  	<chmod dir="${basedir}/cache/templates/" perm="ugo+rw"/>
+  	<mkdir dir="${basedir}/cache/templates_c/"/>
+  	<chmod dir="${basedir}/cache/templates_c/" perm="ugo+rw"/>
+  	<mkdir dir="${basedir}/cache/config/"/>
+  	<chmod dir="${basedir}/cache/config/" perm="ugo+rw"/>
+  	<mkdir dir="${basedir}/cache/cache/"/>
+  	<chmod dir="${basedir}/cache/cache/" perm="ugo+rw"/>
+  </target>
+
+  <!-- Remove dependency, leaving only repos sources. -->
+  <target name="clean" description="clean up" >
+  </target>
+</project>
