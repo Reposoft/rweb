@@ -161,9 +161,11 @@ function getSvnCommand() {
 /**
  * Errorhandling for SVN execute
  */
-function handleSvnError($cmd,$errorcode) {
-	echo "<error code=\"$errorcode\"/>";
-	// try executing "$cmd 2>&1" to get stderr
+function handleSvnError($executedcmd,$errorcode) {
+	echo "<error code=\"$errorcode\"/>\n";
+	echo "<![CDATA[\n";
+	passthru("$executedcmd 2>&1");
+	echo "]]>\n";
 }
 
 ?>

@@ -15,7 +15,7 @@ if(empty($rev)) {
 }
 $revisions = ' -r '.$revfrom.':'.$revto;
 
-$cmd = 'diff' . $revisions . " $url";
+$cmd = 'diff' . $revisions . ' '.$url;
 
 // passthrough with stylesheet
 header('Content-type: text/xml');

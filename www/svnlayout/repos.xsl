@@ -313,7 +313,7 @@
 	<xsl:param name="undo">Reverse the changes made from previous revision to this one</xsl:param>
 	<!-- layout -->
 	<xsl:template match="log">
-		<table class="info">
+		<table class="info" width="98%" align="center">
 			<tr>
 				<td id="titlebar" class="titlebar">
 					<xsl:call-template name="titlebar"/>
@@ -393,7 +393,7 @@
 	========= svn diff formatting ==========
 	-->
 	<xsl:template match="diff">
-		<table class="info">
+		<table class="info" width="98%" align="center">
 			<tr>
 				<td id="titlebar" class="titlebar">
 					<xsl:call-template name="titlebar"/>
@@ -440,7 +440,7 @@
 	    <xsl:choose>
 	        <xsl:when test="contains($text, '&#13;')">
 	            <xsl:value-of select="substring-before($text, '&#13;')"/>
-	            <br/>
+	            <br />
 	            <xsl:call-template name="linebreak">
 	                <xsl:with-param name="text" select="substring-after($text, '&#13;')"/>
 	            </xsl:call-template>

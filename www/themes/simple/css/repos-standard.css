@@ -31,8 +31,9 @@ h3 {
 	font-weight: normal;
 	margin-bottom: 3px;
 }
+/* allow transparency in .png in explorer */
 img { 
-	behavior: url("http://www.repos.se/css/pngbehavior.htc");
+	behavior: url("http://www.repos.se/themes/simple/css/pngbehavior.htc");
 }
 /* page layout themes */
 .info {
