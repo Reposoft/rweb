@@ -260,9 +260,11 @@
 			<xsl:call-template name="getReposLink">
 				<xsl:with-param name="text">open</xsl:with-param>
 			</xsl:call-template>
+			<span class="action">rename</span>
+			<span class="action">copy</span>
 			<span class="action">delete</span>
-			<span class="action">upload changes</span>
 			<span class="action">lock</span>
+			<span class="action">upload changes</span>
 		</p>
 	</xsl:template>
 	<!-- display link to open the resource in Repos -->
