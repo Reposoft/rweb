@@ -8,10 +8,10 @@
 		//insertlink_callback : "customInsertLink",
 		//insertimage_callback : "customInsertImage",
 		save_callback : "customSave",
-		content_css : "../tinymce/text.css",
+		// currently no user customized styles //content_css : "../tinymce/text.css",
 		extended_valid_elements : "a[href|target|name]",
 		//invalid_elements : "a",
-		theme_advanced_styles : "Header 1=header1;Header 2=header2;Header 3=header3", // Theme specific setting CSS classes
+		//theme_advanced_styles : "Header 1=header1;Header 2=header2;Header 3=header3", // Theme specific setting CSS classes
 		debug : false
 	});
 
@@ -56,7 +56,8 @@
 
 	// Custom save callback, gets called when the contents is to be submitted
 	function customSave(id, content) {
-		alert(id + "=" + content);
+		alert(document.forms[0].contents.value);
+		document.forms[0].submit();
 	}
 </script>
 <!-- /tinyMCE -->

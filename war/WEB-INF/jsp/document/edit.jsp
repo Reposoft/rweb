@@ -13,20 +13,20 @@ Needs the following model:
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Repos: ${resource.path}${resource.filename}</title>
-		<jsp:include page="../includes/head.inc.jsp"/>
-		<jsp:include page="tinymce.inc.jsp"/>
-    </head>
-    <body>
-		<jsp:include page="../includes/top.inc.jsp"/>
-		<form action="${resource.filename}.jwa?${resource.query}" method="POST">
-		<textarea name="contents" style="width:100%" rows="30"><repos:stream contents="${resource.inputStream}"/></textarea><br />
-		<input type="submit" value="Save"/>
-		</form>
-		<jsp:include page="../includes/end.inc.jsp"/>
-		<% /* <div id="autosaveDiv">
-			<iframe width="100%" height="20" src="autosave.jwa" style="position:absolute; left:0px; bottom:0px; width:100%; right:0px; background-color:#333333;"></iframe>
-		</div> */ %>
-    </body>
+<head>
+<title>Repos: ${resource.path}${resource.filename}</title>
+<jsp:include page="../includes/head.inc.jsp"/>
+<jsp:include page="tinymce.inc.jsp"/>
+</head>
+<body bgcolor="#CCCCCC">
+<jsp:include page="../includes/top.inc.jsp"/>
+<form action="${resource.filename}.jwa?${resource.query}" id="contentsForm" method="POST">
+<textarea name="contents" style="width:100%" rows="30"><repos:stream contents="${resource.inputStream}"/></textarea>
+<br /><input type="submit" value="Save"/>
+</form>
+<jsp:include page="../includes/end.inc.jsp"/>
+<% /* <div id="autosaveDiv">
+	<iframe width="100%" height="20" src="autosave.jwa" style="position:absolute; left:0px; bottom:0px; width:100%; right:0px; background-color:#333333;"></iframe>
+</div> */ %>
+</body>
 </html>
