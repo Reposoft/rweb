@@ -1,13 +1,14 @@
 <?php
+// Load this config file after the directives in default PHP icalendar contif.inc.php
 
-// Global Repos configuration entries for PHP iCalendar 2.0
-// gets the calendar url from query parameter 'src'
-require_once(dirname(__FILE__) . '/authentication.inc.php');
-require_once(dirname(__FILE__) . '/repos.properties.php');
+// repos.se authentication
+define('PARENT_DIR',substr(dirname(__FILE__), 0, strrpos(rtrim(strtr(dirname(__FILE__),'\\','/'),'/'),'/')));
+require( PARENT_DIR."/login.inc.php" );
+$username=getReposUser();
+$password=getReposPass();
+$invalid_login=false;
 
-$r_auth = getReposUser() . ':' . getReposPass() . '@';
-$default_cal 			= substr_replace($_GET['src'], "$r_auth", strpos($_GET['src'],'://')+3, 0);
-
+// repos.se custom settings
 $language 				= 'Swedish';		// Language support - 'English', 'Polish', 'German', 'French', 'Dutch', 'Danish', 'Italian', 'Japanese', 'Norwegian', 'Spanish', 'Swedish', 'Portuguese', 'Catalan', 'Traditional_Chinese', 'Esperanto', 'Korean'
 $week_start_day 		= 'Monday';			// Day of the week your week starts on
 $timezone 				= '';				// Set timezone. Read TIMEZONES file for more information

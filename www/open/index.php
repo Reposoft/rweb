@@ -13,13 +13,11 @@ $url = getTargetUrl();
 $type = substr($url, strrpos($url, '.') + 1);
 
 // iCalendar files
-if ($type=='.ics') {
+if ($type=='ics') {
 	/* PHP iCalendsr config must be changed to: 
 		$allow_webcals  = 'yes';
 		$allow_login = 'yes';
 	*/
-	$_SESSION['username'] = getReposUser();
-	$_SESSION['password'] = getReposPass();
 	header("Location: ../phpicalendar/?cal=$url");
 }
 
