@@ -39,6 +39,7 @@
 	<xsl:param name="views">.doc.html.ics.gan</xsl:param>
 	<!-- icon dimensions -->
 	<xsl:param name="iconSize">22</xsl:param>
+	<xsl:param name="miniIconSize">22</xsl:param>
 	<xsl:param name="iconVspace">1</xsl:param>
 	<xsl:param name="iconHspace">10</xsl:param>
 	<!-- more layout definitions -->
@@ -379,27 +380,42 @@
 	<xsl:template match="paths/path">
 		<xsl:param name="revfrom"/>
 		<p>
-			<xsl:if test="not(@action='M')">
-				<span class="action"><xsl:value-of select="@action"/></span>
-			</xsl:if>
-			<xsl:if test="@action='M'">
-				<a title="{$show-diff}" class="action" href="{$rurl}/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}"><xsl:value-of select="@action"/></a>
+			<xsl:if test="@action='A'">
+				<span class="action" title="{@action} - added">
+					<xsl:call-template name="logicon"><xsl:with-param name="name" select="'_a'"/></xsl:call-template>
+				</span>
+				<xsl:value-of select="."/>
 				<xsl:value-of select="$spacer"/>
+				<xsl:if test="@copyfrom-path">
+					<xsl:text>copied from </xsl:text>
+					<span class="path"><xsl:value-of select="@copyfrom-path"/>&#160;</span>
+					<span class="revision"><xsl:value-of select="@copyfrom-rev"/></span>
+				</xsl:if>
 			</xsl:if>
-			<xsl:value-of select="."/>
-			<xsl:value-of select="$spacer"/>
+			<xsl:if test="@action='D'">
+				<span class="action" title="{@action} - deleted">
+					<xsl:call-template name="logicon"><xsl:with-param name="name" select="'_d'"/></xsl:call-template>				
+				</span>
+				<xsl:value-of select="."/>
+			</xsl:if>
 			<xsl:if test="@action='M'">
+				<a title="{@action} - {$show-diff}" class="action" href="{$rurl}/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">
+					<xsl:call-template name="logicon"><xsl:with-param name="name" select="'_m'"/></xsl:call-template>
+				</a>
+				<xsl:value-of select="."/>
+				<xsl:value-of select="$spacer"/>
 				<a class="action" href="{$rurl}/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={$revfrom}">before</a>
 				<a class="action" href="{$rurl}/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>
 			</xsl:if>
 			<xsl:if test="@action='A'">
-				<xsl:if test="@copyfrom-path">
-					<xsl:text>copied from </xsl:text>
-					<span class="path"><xsl:value-of select="@copyfrom-path"/> </span>
-					<span class="revision"><xsl:value-of select="@copyfrom-rev"/></span>
-				</xsl:if>
+				
 			</xsl:if>
 		</p>
+	</xsl:template>
+	<xsl:template name="logicon">
+		<xsl:param name="name"/>
+		<img src="{$iconsUrl}/{$name}.png" border="0" align="absmiddle" width="{$miniIconSize}"
+			height="{$miniIconSize}" hspace="{$iconHspace}" vspace="{$iconVspace}"/>
 	</xsl:template>
 	<!--
 	========= svn diff formatting ==========

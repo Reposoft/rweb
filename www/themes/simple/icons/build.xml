@@ -17,6 +17,7 @@
   <property name="archive.type" value="tar.bz2"/>
   <property name="extracted.folder" value="${basedir}/Cezanne"/>
   <property name="icon.size.folder" value="/22x22"/>
+  <property name="icon.size.folder" value="/16x16"/>
 	
   <!-- derived -->
   <property name="download.file" value="${basedir}/downloaded-dependency.${archive.type}"/>
@@ -55,6 +56,7 @@
   <!-- Customized installation steps for this dependency -->
   <target name="install" depends="license" description="install" >
   	<property name="ifrom" value="${extracted.folder}/${icon.size.folder}"/>
+  	<property name="sfrom" value="${extracted.folder}/$miniicon.size.folder}"/>
   	<property name="ito" value="${basedir}"/>
     	<echo>Renaming icons to supported filetypes, deleting the rest</echo>
   	<!-- commandbar -->
@@ -100,6 +102,11 @@
   	<move file="${ifrom}/mimetypes/vcard.png" tofile="${ito}/vcf.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/video.png" tofile="${ito}/mpg.png" overwrite="false"/>
   	<move file="${ifrom}/mimetypes/ooo_sxw.png" tofile="${ito}/sxw.png" overwrite="false"/>
+    	<!-- mini icons-->
+  	<move file="${sfrom}/actions/2leftarrow.png" tofile="${ito}/_copiedfrom.png" overwrite="false"/>
+  	<move file="${sfrom}/actions/fileopen.png" tofile="${ito}/_m.png" overwrite="false"/>
+  	<move file="${sfrom}/actions/attach.png" tofile="${ito}/_a.png" overwrite="false"/>
+  	<move file="${sfrom}/apps/db.png" tofile="${ito}/_d.png" overwrite="false"/>
   </target>
 
   <!-- Remove dependency, leaving only repos sources. -->
