@@ -70,6 +70,8 @@ function getCommand($command) {
 			return ( isWindows() ? false : USRBIN . 'gzip' );
 		case 'gunzip':
 			return ( isWindows() ? false : USRBIN . 'gunzip' );
+		case 'whoami':
+			return 'whoami';
 	}
 	return "\"Error: Repos does not support command '$command'\"";
 }

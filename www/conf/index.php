@@ -43,7 +43,8 @@ $dependencies = array(
 	'svnlook' => '--version',
 	'svnadmin' => '--version',
 	'gzip' => '--version',
-	'gunzip' => '--version'
+	'gunzip' => '--version',
+	'whoami' => '--version'
 );
 $repository = array(
 	getCommand('svnlook') . ' youngest ' . getConfig('local_path') => "Local path contains repository revision: "
@@ -73,13 +74,13 @@ function sections() {
 	}
 }
 
-function html_start() {
+function html_start($title='Repos configuration info') {
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Repos Configuration Info</title>
+<title><?php echo $title ?></title>
 <link href="../css/repos-standard.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -139,7 +140,7 @@ function requiredConfig() {
 function requiredFiles() {
 	global $requiredFiles;
 	line_start("Running as user: ");
-	passthru( 'whoami' );
+	passthru( getCommand('whoami') );
 	line_end();
 	foreach ($requiredFiles as $key => $descr) {
 		$exists = file_exists($key);
