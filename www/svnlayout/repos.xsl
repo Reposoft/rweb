@@ -45,8 +45,7 @@
 	<!-- more layout definitions -->
 	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- thumbnail generators -->
-	<xsl:param name="thumbUrl">
-		<xsl:value-of select="$rurl"/>/phpThumb/phpThumbq.php?src=</xsl:param>
+	<xsl:param name="thumbUrl"><xsl:value-of select="$rurl"/>/phpthumb/phpThumbq.php?src=</xsl:param>
 	<!-- include  repos.se shared templates -->
 	<!-- <xsl:include href=""/> -->
 
@@ -207,9 +206,7 @@
 			</a>
 			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
-			<xsl:call-template name="getViewAction">
-				<xsl:with-param name="text">open</xsl:with-param>
-			</xsl:call-template>
+			<a class="action" title="this file can be opened in Repos" href="{$rurl}/open/?path={../@path}&amp;file={@href}"/>open</a>
 			<xsl:if test="$webdavUrl">
 				<span class="action">rename</span>
 				<span class="action">copy</span>
@@ -218,42 +215,6 @@
 				<span class="action">upload changes</span>
 			</xsl:if>
 		</p>
-	</xsl:template>
-	<!-- display link to open the resource in Repos -->
-	<xsl:template name="getViewAction">
-		<xsl:param name="name" select="@name"/>
-		<xsl:param name="path" select="../@path"/>
-		<xsl:param name="text" select="@name"/>
-		<xsl:param name="file" select="@href"/>
-		<xsl:param name="filetype">
-			<xsl:call-template name="getFiletype"/>
-		</xsl:param>
-		<xsl:choose>
-			<xsl:when test="contains($views,concat(.,$filetype))">
-				<xsl:element name="a">
-					<xsl:attribute name="class">
-						<xsl:value-of select="'action'"/>
-					</xsl:attribute>
-					<xsl:attribute name="href">
-						<xsl:value-of select="$rurl"/>
-						<xsl:value-of select="'/'"/>
-						<!-- ...file.type.jwa mapping to controller -->
-						<xsl:value-of select="$name"/>
-						<xsl:value-of select="'.jwa'"/>
-						<!-- path not ending with '/' -->
-						<xsl:value-of select="'&amp;path='"/>
-						<xsl:value-of select="$path"/>
-						<!-- filename -->
-						<xsl:value-of select="'&amp;file='"/>
-						<xsl:value-of select="$file"/>
-					</xsl:attribute>
-					<xsl:value-of select="$text"/>
-				</xsl:element>
-			</xsl:when>
-			<xsl:otherwise>
-				<span class="action"><xsl:value-of select="$text"/></span>
-			</xsl:otherwise>
-		</xsl:choose>
 	</xsl:template>
 	<!-- generate icon based on filetype and settings -->
 	<xsl:template name="getIcon">
