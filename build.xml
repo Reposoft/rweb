@@ -64,13 +64,13 @@
 
 		<mkdir dir="${dist.dir}"/>
 
-		<war warfile="${dist.dir}/${name}.war" webxml="${war.dir}/WEB-INF/web.xml">
+		<war warfile="${dist.dir}/${name}.war" webxml="${maven.war.src}/WEB-INF/web.xml">
 			
 			<!-- Include the JSPs and other documents -->
 			<fileset dir="war" excludes="WEB-INF/**"/>
 			
 			<!-- Bring in Spring-specific XML configuration files -->
-			<webinf dir="${war.dir}/WEB-INF">
+			<webinf dir="${maven.war.src}/WEB-INF">
 				<!-- We've already included this -->
 				<exclude name="web.xml"/>
 			</webinf>
