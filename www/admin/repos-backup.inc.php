@@ -72,9 +72,9 @@ function dump($backupPath, $repository, $fileprefix) {
 	$fromrev = 0;
 	if ( $files>0 )
 		$fromrev = $current[$files-1][2] + 1;
-	if ( $fromrev > $headrev )
-		fatal( "Backup has more revisions ($fromrev) than repository ($headrev)." );
-	if ( $fromrev == $headrev ) {
+	if ( $fromrev - 1 > $headrev )
+		fatal( "Serious error. Backup has more revisions ($fromrev) than repository ($headrev)." );
+	if ( $fromrev - 1 == $headrev ) {
 		debug( "No further backup needed. Both dumpfiles and repository are at revision $headrev." );
 		return;
 	}
@@ -121,8 +121,10 @@ function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) 
 	if ( isWindows() ) {
 		$success = gzipInternal($tmpfile,"$path.gz");
 		unlink($tmpfile);
-		return $success;
+		if ( ! $success ) return false;
 	}
+	createMD5("$path.gz");
+	return true;
 }
 
 /**
@@ -168,7 +170,10 @@ function load($backupPath, $repository, $fileprefix) {
 		$lastrev = $file[2];
 		loadDumpfile($backupPath . DIRECTORY_SEPARATOR . $file[0],LOADCOMMAND);
 	}
-	
+	$head = getHeadRevisionNumber($repository);
+	if ($head < $lastrev)
+		fatal("Not all backup revisions have been loaded. Repository is at rev $head while backup goes up to $lastrev");
+	info( "Successfuly loaded backup revisions up to $lastrev. Repository $repository is now at revision $head." );
 }
 
 /**
@@ -181,15 +186,65 @@ function verify($repository) {
 	$return = 0;
 	exec( VERIFYCOMMAND, $output, $return );
 	if ( $return == 0 )
-		debug( "$repository verified and seems OK." );
+		info( "Repository $repository verified and seems OK." );
 	else
 		error( VERIFFYCOMMAND . " returned code $return. Repository is not valid." );
 	return $return==0;
 }
 
-function verifyMD5($file) {
-	$sumsfile = dirname($file) . "/MD5SUMS";
-	// ...
+/**
+ * Verify md5-sum of file(s) against MD5SUMS file in the same folder.
+ * @param path Absolute path of the file to verify. If it is a directory, verify all files included in the MD5SUMS file.
+ * @return true if all files valid
+ */
+function verifyMD5($path) {
+	$sums = getMD5sums( $path );
+	$ok = true;
+	foreach ( $sums as $file => $md5 ) {
+		if ( ! file_exists( $path . DIRECTORY_SEPARATOR . $file ) ) {
+			error( "File $file listed in MD5SUMS file does not exist in $path" );
+			continue;
+		}
+		$sum = md5_file( $path . DIRECTORY_SEPARATOR . $file );
+		if ($sum != $md5) {
+			error( "MD5 sum for $name was $sum, but is supposed to be $md5" );
+			$ok = false;
+		}
+	}
+	if ($ok)
+		debug("All md5 sums match in dir $path");
+	return($ok);
+}
+
+/**
+ * @param path absolute path to file
+ * @return false if sums don't match
+ */
+function verifyFileMD5($path) {
+	if ( ! file_exists( $path ) )
+		fatal( "File $path does not exist so it can't be verified" );
+	$sums = getMD5sums(dirname($path));
+	$sum = md5_file( $path );
+	if ($sums[basename($path)] != $sum )
+		return false;
+}
+
+/**
+ * Get stored MD5 sums for directory as array
+ * @param dir PAth with no tailing slash.
+ * @return alla MD5 sums in file as array filename=>md5sum
+ */
+function getMD5sums($dir) {
+	$sumsfile = $dir . DIRECTORY_SEPARATOR . "MD5SUMS";
+	if ( ! file_exists( $sumsfile ) )
+		error( "There is no MD5SUMS file in directory $dir" );
+	$sums = file( $sumsfile );
+	$ret = array();
+	foreach ( $sums as $line ) {
+		list($md5, $filename) = explode("  ",trim($line)); // note that separator is two spaces
+		$ret[$filename] = $md5;
+	}
+	return $ret;
 }
 
 /**
@@ -216,6 +271,8 @@ function createMD5($file) {
  * @param loadcommand the svnadmin load command, excluding input pipe
  */
 function loadDumpfile($file,$loadcommand) {
+	if ( ! verifyFileMD5($file) )
+		error( "File $file has incorrect MD5 sum. Trying anyway." );
 	$command = '';
 	$tmpfile = tempnam(TEMP_DIR, "svn");
 	if ( isWindows() ) {
