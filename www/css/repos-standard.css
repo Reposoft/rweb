@@ -29,6 +29,9 @@ h2 {
 h2 {
 	font-weight: normal;
 }
+img { 
+	behavior: url("../icons/pngbehavior.htc");
+}
 a.filename {
 	margin-right: 10px;
 }
@@ -128,6 +131,7 @@ span.action {
 	margin: 0px;
 }
 .footer {
+	font-size: smaller;
 	padding-top: 3px;
 	padding-bottom: 3px;
 	border-top-width: 1px;
@@ -137,6 +141,5 @@ span.action {
 	border-top-color: #CCCCCC;
 	border-bottom-color: #CCCCCC;
 	clear: both;
-	font-size: smaller;
 	background-color: #FFFFCC;
 }
