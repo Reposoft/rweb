@@ -63,7 +63,7 @@ ssl-authority-files = ${certdir}/svn.optime.se.crt
   </target>
 
   <!-- Remove dependency, leaving only repos sources. -->
-  <target name="clean" description="clean up" >
+  <target name="clean" description="clean up"  depends="init-win,init">
   	<delete file="${serversfile}" verbose="yes"/>
   	<delete verbose="yes">
   		<fileset dir="${certdir}" includes="*.crt"/>
