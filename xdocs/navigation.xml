@@ -7,17 +7,13 @@
       <item name="repos.se" href="http://www.repos.se/"/>
     </links>
     <menu name="Overview">
-      <item name="News and Status" href="/status.html"/>
+      <item name="Status" href="/idex.html"/>
       <item name="User's Manual" href="/repos-manual.html"/>
       <item name="Administrators's Manual" href="/repos-admin.html"/>
-      <item name="Development" href="/dev/index.html" collapse="false">
-        <item name="Code and compile" href="/dev/coding.html"/>
-        <item name="Install" href="/dev/install.html"/>
-        <item name="Products" href="/dev/products.html"/>
-      </item>
-      <item name="Components" href="/components/index.html"/>
-      <item name="Dependencies" href="/dependencies">
-      </item>
+      <item name="Branches" href="/dev/products.html"/>
+      <item name="Join development" href="/dev/index.html"/>
+      <item name="Ideas and editors" href="/components/index.html"/>
+      <item name="Dependencies" href="/dependencies/index.html"/>
     </menu>
     <footer>
         <a href="http://www.coo.se/"> Coordinator</a>

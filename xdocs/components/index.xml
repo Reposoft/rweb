@@ -1,13 +1,12 @@
 <document>
 
    <properties>
-      <title>repos.se components</title>
+      <title>repos.se ideas</title>
    </properties>
 
    <body>
-       <p>Repos contains of shared content and security management components, pluggable filetype editors or viewers and open source dependencies.</p>
-       <section name="Repos components">
-           <subsection name="system">
+       <section name="Repos ideas">
+           <subsection name="Shared functionality doing magic">
                <table>
                   <tr>
                     <th scope="col">name</th>
@@ -25,18 +24,18 @@
                     <td>Create, get, save and delete. Assumes autoversioning.</td>
                   </tr>
                   <tr>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                  </tr>
-                  <tr>
                     <td><a href="repository-search.html">Search</a></td>
                     <td>idea</td>
                     <td>Repository search, as close to Google as possible, but with version support.</td>
                   </tr>
+                  <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                  </tr>
                </table>
            </subsection>
-           <subsection name="filetype editors">
+           <subsection name="Filetype editors">
                <table>
                   <tr>
                     <td>Document</td>
@@ -54,17 +53,6 @@
                     <td>&#160;</td>
                   </tr>
                </table>
-           </subsection>
-           <subsection name="development tools">
-               <table>
-                  <tr>
-                    <td>GnuWin32</td>
-                    <td>stable</td>
-                    <td>Linux command line tools often allow simple solutions. They can be considered cross-platform if found in <a href="http://gnuwin32.sourceforge.net/">GnuWin32</a>.
-                    Download to Windows and add C:\Program\GnuWin32\bin to path.<br />
-                    However, the commands are GPL and should be used for supporting development rather than in production deployment.</td>
-                  </tr>
-               </table>               
            </subsection>
        </section>
    </body>

@@ -2,12 +2,11 @@
 <document>
 
   <properties>
-    <title>Code and compile</title>
+    <title>Repos branches</title>
   </properties>
 
   <body>
-    <section name="Repos branches">
-      <p>Revision $Id$</p>
+    <section name="Repos products">
       <p>
          Repos.se is the concept and the product we could sell.
       </p>
