@@ -65,6 +65,7 @@
 				<meta name="robots" content="noarchive"/>
 				<!-- default stylesheet -->
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}/repos-standard.css"/>
+				<link rel="shortcut icon" href="http://www.repos.se/favicon.ico"/>
 			</head>
 			<body>
 				<!-- supported contents -->
