@@ -45,6 +45,14 @@
   	</move>
   	<delete dir="${extracted.folder}"/>
   </target>
+	
+  <!-- checkout latest version from cvs -->
+  <target name="checkout" depends="init" description="checkout HEAD revision">
+	<cvs cvsRoot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/phpicalendar"
+	       package="phpicalendar"
+	       dest="${basedir}"
+	  />
+  </target>
 
   <!-- Remove dependency, leaving only repos sources. -->
   <target name="clean" description="clean up" >

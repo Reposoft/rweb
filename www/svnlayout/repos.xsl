@@ -36,7 +36,7 @@
 	<!-- filetype for which there is a thumbnail generator -->
 	<xsl:param name="thumbs">.jpeg</xsl:param>
 	<!-- filetype for which there is an integrated viewer -->
-	<xsl:param name="views">.doc.html.ics.gan</xsl:param>
+	<xsl:param name="views">.html.ics</xsl:param>
 	<!-- icon dimensions -->
 	<xsl:param name="iconSize">22</xsl:param>
 	<xsl:param name="miniIconSize">16</xsl:param>

@@ -23,7 +23,7 @@
 	<classpathentry kind="var" path="MAVEN_REPO/xml-apis/jars/xml-apis-1.0.b2.jar"/>
 	<classpathentry kind="src" path="src/itest"/>
 	<classpathentry kind="var" path="MAVEN_REPO/servletapi/jars/jsp-api-2.4.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/optime/jars/optime-utils-1.0.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/optime/jars/optime-utils-SNAPSHOT.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/jical/jars/jical-OPTIME.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-mock-1.1.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/easymock/jars/easymock-1.1.jar"/>

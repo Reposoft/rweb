@@ -143,6 +143,7 @@ a.action {
 	margin-bottom: 0px;
 }
 span.action {
+	display: none;
 	background-color: #F0F0EE;
 	color: #BBBBBB;
 	padding: 0px 3px;
