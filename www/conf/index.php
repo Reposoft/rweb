@@ -11,6 +11,8 @@ echo("BASIC string = " + REPOS_AUTH);
 include('./repos.properties.php');
 echo("\n==== Configuration files are apparently accessible ===\n");
 print_r($repos_config);
+echo("\n==== Debug info: server variables ===\n");
+print_r($_SERVER);
 echo("</pre>\n");
 
 ?>
