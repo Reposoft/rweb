@@ -1,0 +1,35 @@
+
+h2 { font-size:120%; background:maroon; color:white; padding-left:1ex; }
+h4.summary { margin:0; font-weight:normal; }
+
+#content { width:80%; margin:1em auto; }
+
+#authors { text-indent:2em;  }
+#authors .summary { text-indent:3em; }
+#authors .name { color:maroon; }
+#authors .commits { list-style:none; }
+#authors .commits li { display:inline; }
+#authors .commits li:after { content:", "; }
+#authors .total:after,.first:after,.last:after { content:": "; }
+#authors .value { font-weight:bold; }
+
+#files { text-indent:2em; }
+#files .summary { text-indent:3em; }
+#files .name {  }
+#files .commits { list-style:none; text-indent:4em; }
+#files .commits li { display:inline; }
+#files .commits li:after { content:", "; }
+#files .total:after,.first:after,.last:after { content:": "; }
+#files .value { font-weight:bold; }
+
+#revisions { text-indent:2em; }
+#revisions .summary { text-indent:3em; }
+#revisions .revnr { padding-right: 1ex; color:maroon; }
+#revisions .revnr:after { content:": "; }
+#revisions .author:after { content: " - "; }
+#revisions .msg { text-indent: 3em; color:#444444; }
+#revisions .action { margin-right:1em;  font-weight:bold; color:maroon; }
+#revisions .paths { list-style:none; }
+#revisions .summary { color:black; font-weight:bold; border-bottom: solid 1px #999999; margin-bottom:1em; } 
+#revisions .author { color:maroon; }
+#revisions .date { color:black; }
