@@ -20,7 +20,7 @@
   <!-- repository URL, use path that works for user ('localhost' could break redirects) -->
   <xsl:param name="repoUrl">http://<xsl:value-of select="$repoName"/></xsl:param>
   <!-- repos webapp URL (root), does not end with slash -->
-  <xsl:param name="rurl">..</xsl:param>
+  <xsl:param name="rurl">http://www.repos.se</xsl:param>
   <!-- current theme, for example '/theme', empty for root theme -->
   <xsl:param name="theme"></xsl:param>
   <!-- static contents urls -->
