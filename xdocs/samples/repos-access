@@ -7,6 +7,10 @@ demo-projekt = svensson
 
 [/svensson]
 svensson = rw
+[/svensson/shared]
+* = r
 
 [/demo-projekt]
 @demo-projekt = rw
+[/demo-projekt/shared]
+* = r

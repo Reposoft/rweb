@@ -51,12 +51,14 @@ $repository = array(
 // checking urls needed for repository access
 $rurl = getConfig('repo_url');
 $aurl = str_replace("://","://" . getReposUser() . ":" .  getReposPass() . "@", getConfig('repo_url'));
+$uurl = $aurl.'/'.getReposUser();
 $lurl = ereg_replace("://[^/<>[:space:]]+[[:alnum:]]/","://localhost/", getConfig('repo_url'));
 if ( getConfig('repos_web'==$rurl) )
 	echo "Warning: repos_web and repos_url are the same - mixing static resources and repository";
 $requiredUrls = array( getConfig('repos_web') => 'Acces to static contents ' . getConfig('repos_web') );
 $requiredUrls[$rurl] = 'Anonymous acces to the repository ' . getConfig('repo_url');
 $requiredUrls[$aurl] = "Access to repository with current authenticatied user (" . getReposUser() . ")";
+$requiredUrls[$uurl] = "Access to user folder in repository (" . getReposUser() . ")";
 $requiredUrls[$lurl] = "Access to repository using localhost";
 
 

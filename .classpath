@@ -27,7 +27,8 @@
 	<classpathentry kind="var" path="MAVEN_REPO/jical/jars/jical-OPTIME.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-mock-1.1.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/easymock/jars/easymock-1.1.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/org.tmatesoft.svn/jars/javasvn-0.8.0.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/org.tmatesoft.svn/jars/javasvn-cli-0.8.0.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/org.tmatesoft.svn/jars/javasvn-0.8.1.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/org.tmatesoft.svn/jars/javasvn-cli-0.8.1.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/ch.ubique/jars/inieditor-20031220.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
