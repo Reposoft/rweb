@@ -5,7 +5,8 @@
 
 // default configuration includes, the way they should be referenced in php files
 function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
-require( upOne(dirname(__FILE__)) . '/login.inc.php' );
+require_once( dirname(__FILE__) . '/repos.properties.php' );
+require_once( upOne(dirname(__FILE__)) . '/login.inc.php' );
 
 // configuration index settings
 $sections = array(

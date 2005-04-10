@@ -14,9 +14,10 @@ $links = array(
 $sections = array(
 	'repository' => 'How to create the repository',
 	'administration' => 'Local files needed for administration of the repository',
-	'crontab' => 'Crontab or scheduler commands needed for backup',
 	'apache2' => 'Web server configuration directives',
-	'hooks' => 'Hook scripts for event-driven repository maintenance'
+	'crontab' => 'Crontab or scheduler commands needed for backup',
+	'hooks' => 'Hook scripts for event-driven repository maintenance',
+	'ie_png' => 'Enable 24-bit PNG transparency in IE for basic SVN layout theme'
 	);
 
 // helper variables
@@ -80,8 +81,14 @@ if ( isset($_GET['download']) ) {
 	
 	<body>
 	<?php
+	line( "<h2>Configuration sections</h2>" );
+	line( "<ul>");
 	foreach ( $sections as $name => $descr ) {
-		line( "<h2>$name</h2>" );
+		line( "<li><a href=\"#$name\">$descr</a></li>" );
+	}
+	line( "</ul>");
+	foreach ( $sections as $name => $descr ) {
+		line( "<h3><a name=\"$name\"/>$name</h3>" );
 		line( "<p>$descr</p>" );
 		line( "<a href=\"?download=$name\">download</a>" );
 		line( "<pre>" );
@@ -208,6 +215,21 @@ function hooks() {
 
 }
 
+function ie_png() {
+	?>
+	// Need absolute URL to png-behavior for Internet Explorer
+	// in themes/simple/css/repos-standard.css:
+	.. img { 
+		behavior: url("https://[your host here]/themes/simple/css/pngbehavior.htc");
+	} ..
+	// Need the host to match the SVN url to make IE feel secure
+	// in themes/simple/css/htbehavior.htc:
+	..
+	blankSrc = "https://[your host here]/themes/simple/css/" + blankSrc;
+	..
+	// Also, dont forget to go to themes/simple/icons and run "Ant" to download icons
+	<?
+}
 
 
 ?>
