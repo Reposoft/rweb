@@ -169,8 +169,8 @@
     </dependency>
     <dependency>
       <groupId>optime</groupId>
-      <artifactId>optime-utils</artifactId>
-      <version>SNAPSHOT</version>
+      <artifactId>repos-tools</artifactId>
+      <version>0.5</version>
       <type>jar</type>
       <properties>
         <war.bundle>true</war.bundle>
