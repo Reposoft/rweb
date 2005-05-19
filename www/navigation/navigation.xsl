@@ -193,10 +193,10 @@
         <xsl:apply-templates select="unit">
             <xsl:with-param name="indent">
                 <!-- add the old indentation tag + another level of escaped html tag -->
-                <xsl:value-of select="$indent"/>
-                <xsl:value-of select="'&lt;td class=&quot;'"/>
-                <xsl:value-of select="$indentClass"/>
-                <xsl:value-of select="'&quot;&gt; &lt;/td&gt;'"/>
+                <xsl:value-of select="$indent" disable-output-escaping="yes"/>
+                <xsl:value-of select="'&lt;td class=&quot;'" disable-output-escaping="yes"/>
+                <xsl:value-of select="$indentClass" disable-output-escaping="yes"/>
+                <xsl:value-of select="'&quot;&gt; &lt;/td&gt;'" disable-output-escaping="yes"/>
             </xsl:with-param>
             <xsl:with-param name="colspan">
                 <xsl:value-of select="$colspan - 1"/>

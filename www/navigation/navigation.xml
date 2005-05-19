@@ -19,5 +19,5 @@
 	    <unit name="Optime" type="network" href="/optime"/>
 	</unit>
 	<unit name="finished projects" type="menu"/>
-	<unit name="com-onweb" type="menu"/>
+	<unit name="com-onweb" type="company"/>
 </navigation>
