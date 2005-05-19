@@ -4,21 +4,21 @@
     xmlns="http://www.w3.org/1999/xhtml" version="1.0" xml:lang="en">
     
     <xsl:output method="xml" indent="no"
-                doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
     
-    <!-- svnlayout settings, copied -->
+    <!-- settings as in /svnlayout -->
+    <!-- webapp root URL for all static contents, no tailing slash -->
+    <xsl:param name="rurl">http://www.repos.se</xsl:param>
     <!-- display name of the repository -->
     <xsl:param name="repoName">www.repos.se/repos</xsl:param>
     <!-- repository URL, use path that works for user ('localhost' could break redirects) -->
     <xsl:param name="repoUrl">http://<xsl:value-of select="$repoName"/></xsl:param>
-    <!-- repos webapp URL (root), does not end with slash -->
-    <xsl:param name="rurl">http://www.repos.se</xsl:param>
-    <!-- current theme, for example '/theme', empty for root theme -->
-    <xsl:param name="theme"></xsl:param>
+    <!-- current theme, for example '/theme' -->
+    <xsl:param name="theme">/coordinator2</xsl:param>
     <!-- static contents urls -->
-    <xsl:param name="cssUrl"><xsl:value-of select="$rurl"/><xsl:value-of select="$theme"/>/css</xsl:param>
-    <xsl:param name="iconsUrl"><xsl:value-of select="$rurl"/><xsl:value-of select="$theme"/>/icons</xsl:param>
-    <xsl:param name="buttonsUrl"><xsl:value-of select="$rurl"/><xsl:value-of select="$theme"/>/buttons</xsl:param>
+    <xsl:param name="cssUrl"><xsl:value-of select="$rurl"/>/themes<xsl:value-of select="$theme"/>/css</xsl:param>
+    <xsl:param name="iconsUrl"><xsl:value-of select="$rurl"/>/themes<xsl:value-of select="$theme"/>/icons</xsl:param>
+    <xsl:param name="buttonsUrl"><xsl:value-of select="$rurl"/>/themes<xsl:value-of select="$theme"/>/buttons</xsl:param>
 
     <!-- layout parameters from coordinator -->
     <xsl:param name="imageUrl"><xsl:value-of select="$iconsUrl"/>/tree/</xsl:param>
