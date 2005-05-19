@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- repos.se tree menu XSL -->
-<!-- @author Staffan Olsson -->
 <xsl:stylesheet 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns="http://www.w3.org/1999/xhtml" version="1.0" xml:lang="en">
     
-    <xsl:output method="xml" indent="yes"
+    <xsl:output method="xml" indent="no"
                 doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
+    
+    <!-- repos.se tree menu XSL -->
+    <!-- @author Staffan Olsson -->
+    
+    <!-- requires support for 'disable-output-escaping' = does not work in Firefox -->
     
     <!-- settings as in /svnlayout -->
     <!-- webapp root URL for all static contents, no tailing slash -->
@@ -88,9 +91,6 @@
             </tr>
             <!-- units -->
             <xsl:apply-templates select="unit">
-                <xsl:with-param name="indent">
-                    <xsl:value-of select="0"/>
-                </xsl:with-param>                
                 <xsl:with-param name="colspan">
                     <xsl:value-of select="$columns - 2"/>
                 </xsl:with-param>
@@ -158,10 +158,7 @@
         <!-- new row -->
         <tr id="{$unitId}">
             <!-- indent -->
-            <xsl:call-template name="indent">
-                <xsl:with-param name="n" select="$indent"/>
-                <xsl:with-param name="class" select="$indentClass"/>
-            </xsl:call-template>
+            <xsl:value-of select="$indent" disable-output-escaping="yes"/>
             <!-- expand icon -->
             <td class="{$indentClass}">
                 <xsl:if test="$childUnits = 0">
@@ -198,26 +195,16 @@
         <!-- childrem, if any -->
         <xsl:apply-templates select="unit">
             <xsl:with-param name="indent">
-                <xsl:value-of select="$indent + 1"/>
+                <!-- add the old indentation tag + another level of escaped html tag -->
+                <xsl:value-of select="$indent" disable-output-escaping="yes"/>
+                <xsl:value-of select="'&lt;td class=&quot;'" disable-output-escaping="yes"/>
+                <xsl:value-of select="$indentClass" disable-output-escaping="yes"/>
+                <xsl:value-of select="'&quot;&gt; &lt;/td&gt;'" disable-output-escaping="yes"/>
             </xsl:with-param>
             <xsl:with-param name="colspan">
                 <xsl:value-of select="$colspan - 1"/>
             </xsl:with-param>
         </xsl:apply-templates>
-    </xsl:template>
-    <!-- indent, can not be done by concatenating strings because mozilla does not support disable-output-excaping -->
-    <xsl:template name="indent">
-        <xsl:param name="n"/>
-        <xsl:param name="class"/>
-        <xsl:if test="$n &gt; 0">
-            <xsl:element name="td">
-                <xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
-                <xsl:text>&#160;</xsl:text>
-            </xsl:element>
-            <xsl:call-template name="indent">
-                <xsl:with-param name="n"><xsl:value-of select="$n - 1"/></xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
     </xsl:template>
     <!-- image icons -->
     <xsl:template name="treeIcon">
