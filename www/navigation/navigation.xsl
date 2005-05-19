@@ -88,6 +88,9 @@
             </tr>
             <!-- units -->
             <xsl:apply-templates select="unit">
+                <xsl:with-param name="indent">
+                    <xsl:value-of select="0"/>
+                </xsl:with-param>                
                 <xsl:with-param name="colspan">
                     <xsl:value-of select="$columns - 2"/>
                 </xsl:with-param>
@@ -155,7 +158,10 @@
         <!-- new row -->
         <tr id="{$unitId}">
             <!-- indent -->
-            <xsl:value-of select="$indent" disable-output-escaping="yes"/>
+            <xsl:call-template name="indent">
+                <xsl:with-param name="n" select="$indent"/>
+                <xsl:with-param name="class" select="$indentClass"/>
+            </xsl:call-template>
             <!-- expand icon -->
             <td class="{$indentClass}">
                 <xsl:if test="$childUnits = 0">
@@ -192,16 +198,26 @@
         <!-- childrem, if any -->
         <xsl:apply-templates select="unit">
             <xsl:with-param name="indent">
-                <!-- add the old indentation tag + another level of escaped html tag -->
-                <xsl:value-of select="$indent" disable-output-escaping="yes"/>
-                <xsl:value-of select="'&lt;td class=&quot;'" disable-output-escaping="yes"/>
-                <xsl:value-of select="$indentClass" disable-output-escaping="yes"/>
-                <xsl:value-of select="'&quot;&gt; &lt;/td&gt;'" disable-output-escaping="yes"/>
+                <xsl:value-of select="$indent + 1"/>
             </xsl:with-param>
             <xsl:with-param name="colspan">
                 <xsl:value-of select="$colspan - 1"/>
             </xsl:with-param>
         </xsl:apply-templates>
+    </xsl:template>
+    <!-- indent, can not be done by concatenating strings because mozilla does not support disable-output-excaping -->
+    <xsl:template name="indent">
+        <xsl:param name="n"/>
+        <xsl:param name="class"/>
+        <xsl:if test="$n &gt; 0">
+            <xsl:element name="td">
+                <xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
+                <xsl:text>&#160;</xsl:text>
+            </xsl:element>
+            <xsl:call-template name="indent">
+                <xsl:with-param name="n"><xsl:value-of select="$n - 1"/></xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
     </xsl:template>
     <!-- image icons -->
     <xsl:template name="treeIcon">
