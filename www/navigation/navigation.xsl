@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- repos.se tree menu XSL -->
+<!-- @author Staffan Olsson -->
 <xsl:stylesheet 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns="http://www.w3.org/1999/xhtml" version="1.0" xml:lang="en">
@@ -32,6 +34,7 @@
         <html>
             <head>
                 <title>repos.se navigation</title>
+                <link href="{$cssUrl}/repos-standard.css" rel="stylesheet" type="text/css"/>
                 <link href="{$cssUrl}/navigation.css" rel="stylesheet" type="text/css"/>
                 <script language="JavaScript" type="text/javascript" src="{$jsUrl}everywhere.js">&#160;</script>
                 <script language="JavaScript" type="text/javascript" src="{$jsUrl}tree.js">&#160;</script>
@@ -77,7 +80,7 @@
             <!-- first unit -->
             <tr id="treeRoot">
                 <td class="treeIcon">
-                    <img height="14" width="18" src="{$imageUrl}collection.gif" alt=""/>
+                    <img height="14" width="18" src="{$imageUrl}menu.gif" alt=""/>
                 </td>
                 <td class="treeText" colspan="{$columns - 1}">
                     <xsl:text>Avdelningar</xsl:text>
@@ -127,8 +130,7 @@
             <xsl:value-of select="count(*)"/>
         </xsl:param>
         <xsl:param name="unitId">
-            <xsl:value-of select="'unit'"/>
-            <xsl:value-of select="@id"/>
+            <xsl:value-of select="@href"/>
         </xsl:param>
         <!-- numbers needed for calling tree script functions -->
         <xsl:param name="unitnumber">
@@ -164,7 +166,7 @@
                 <xsl:if test="$childUnits &gt; 0">
                     <xsl:call-template name="treeIcon">
                         <xsl:with-param name="image" select="'expanded.gif'"/>
-                        <xsl:with-param name="onclick">javascript:clickUnit(<xsl:value-of
+                        <xsl:with-param name="onclick">clickUnit(<xsl:value-of
                                 select="$unitRow"/>,<xsl:value-of select="$descendants"/>
                             <xsl:value-of select="',this);'"/>
                         </xsl:with-param>
@@ -180,8 +182,8 @@
             </td>
             <!-- unit name -->
             <td class="treeText" colspan="{$colspan}">
-                <a href="{$unitId}/bb/.jwa" target="main">
-                    <xsl:attribute name="onClick">javascript:setVisibleTools(<xsl:apply-templates select="." mode="visibleTools"/>)</xsl:attribute>
+                <a href="{$unitId}" target="main">
+                    <xsl:attribute name="onclick">setActive('<xsl:value-of select="$unitId"/>'); setVisibleTools(<xsl:apply-templates select="." mode="visibleTools"/>);</xsl:attribute>
                     <xsl:value-of select="@name"/>
                 </a>
             </td>
@@ -229,14 +231,10 @@
     </xsl:template>
     <!-- generate bitmask for which tools to show at the respective unit type -->
     <xsl:template match="unit" mode="visibleTools">
+        <xsl:variable name="admin-tools">128</xsl:variable>
         <xsl:variable name="binary">
             <xsl:choose>
-                <!-- all these must include tool 8 (128) because this number will be subtracted if user is not admin -->
-                <xsl:when test="@type=24">129</xsl:when>
-                <xsl:when test="@type=26">129</xsl:when>
-                <xsl:when test="@type=25">129</xsl:when>
-                <xsl:when test="@type=19">255</xsl:when>
-                <xsl:when test="@type=17">191</xsl:when>
+                <xsl:when test="@type='menu'">129</xsl:when>
                 <xsl:otherwise>255</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -244,7 +242,7 @@
             <xsl:value-of select="$binary"/>
         </xsl:if>
         <xsl:if test="not(@admin)">
-            <xsl:value-of select="$binary - 128"/>
+            <xsl:value-of select="$binary - $admin-tools"/>
         </xsl:if>
     </xsl:template>
 </xsl:stylesheet>

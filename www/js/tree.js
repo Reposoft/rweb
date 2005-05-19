@@ -11,8 +11,8 @@
 /** settings **/
 var FIRST_ROW = 3;				// row of the first unit that can be hidden (counting from 0)
 var COOKIE_PATH = '/';
-var COLLAPSED_ICON = 'images/tree/collapsed.gif';
-var EXPANDED_ICON = 'images/tree/expanded.gif';
+var COLLAPSED_ICON = '../themes/coordinator2/buttons/tree/collapsed.gif';
+var EXPANDED_ICON = '../themes/coordinator2/buttons/tree/expanded.gif';
 var UNIT_BGCOLOR = '#999999';
 var ACTIVE_BGCOLOR = '#CCCCCC';
 var cookieName = 'treeMask';	// concatenated with rowcount, so that mask is reset when tree is changed
@@ -46,9 +46,7 @@ function initNavigation() {
 	}
 	
 	// display active unit from start
-	//setActive( getActiveUnit() );
-	setActive( 'unit1' );
-	
+	setActive( 'treeRoot' );	
 }
 
 /**
@@ -57,6 +55,8 @@ function initNavigation() {
  * the way the real function is called is decided here
  */
 function setVisibleTools(mask) {
+    if (parent==null) return;
+    if (parent.frames['toolbar']==null) return;
 	parent.frames['toolbar'].setVisible(mask);
 }
 
