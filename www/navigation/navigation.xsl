@@ -3,7 +3,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns="http://www.w3.org/1999/xhtml" version="1.0" xml:lang="en">
     
-    <xsl:output method="xml" indent="no"
+    <xsl:output method="xml" indent="yes"
                 doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
     
     <!-- settings as in /svnlayout -->
@@ -15,17 +15,18 @@
     <xsl:param name="repoUrl">http://<xsl:value-of select="$repoName"/></xsl:param>
     <!-- current theme, for example '/theme' -->
     <xsl:param name="theme">/coordinator2</xsl:param>
-    <!-- static contents urls -->
+    <!-- static contents urls, global -->
+    <xsl:param name="jsUrl"><xsl:value-of select="$rurl"/>/js/</xsl:param>
+    <!-- static contents urls, theme-dependent -->
     <xsl:param name="cssUrl"><xsl:value-of select="$rurl"/>/themes<xsl:value-of select="$theme"/>/css</xsl:param>
     <xsl:param name="iconsUrl"><xsl:value-of select="$rurl"/>/themes<xsl:value-of select="$theme"/>/icons</xsl:param>
     <xsl:param name="buttonsUrl"><xsl:value-of select="$rurl"/>/themes<xsl:value-of select="$theme"/>/buttons</xsl:param>
 
-    <!-- layout parameters from coordinator -->
-    <xsl:param name="imageUrl"><xsl:value-of select="$iconsUrl"/>/tree/</xsl:param>
-    <xsl:param name="jsUrl"><xsl:value-of select="$rurl"/>/js/</xsl:param>
-    <!-- <xsl:param name="cssUrl" select="'css/'"/> -->
+    <!-- layout parameters for this document -->
+    <xsl:param name="imageUrl"><xsl:value-of select="$buttonsUrl"/>/tree/</xsl:param>
     <xsl:param name="iconwidth" select="'18'"/>
     <xsl:param name="iconheight" select="'14'"/>
+    
     <!-- root of navigation tree xml -->
     <xsl:template match="navigation">
         <html>
@@ -112,7 +113,7 @@
                 </td>
             </tr>
         </table>
-        <script type="text/javascript"><![CDATA[ initNavigation(); ]]></script>
+        <script type="text/javascript"><![CDATA[ FIRST_ROW=1; initNavigation(); ]]></script>
     </xsl:template>
     
     <!-- units recursively -->
