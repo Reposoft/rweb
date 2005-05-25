@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- command: svn list --xml URL -->
+<lists>
+	<list path="/coordinator/trunk/web/">
+		<entry kind="dir">
+			<name>META-INF</name>
+			<commit revision="472">
+				<author>solsson</author>
+				<date>2005-02-18T13:19:35.766847Z</date>
+			</commit>
+		</entry>
+		<entry kind="dir">
+			<name>WEB-INF</name>
+			<commit revision="624">
+				<author>solsson</author>
+				<date>2005-03-15T07:11:39.752914Z</date>
+			</commit>
+		</entry>
+		<entry kind="dir">
+			<name>css</name>
+			<commit revision="472">
+				<author>solsson</author>
+				<date>2005-02-18T13:19:35.766847Z</date>
+			</commit>
+		</entry>
+		<entry kind="dir">
+			<name>help</name>
+			<commit revision="472">
+				<author>solsson</author>
+				<date>2005-02-18T13:19:35.766847Z</date>
+			</commit>
+		</entry>
+		<entry kind="dir">
+			<name>images</name>
+			<commit revision="475">
+				<author>solsson</author>
+				<date>2005-02-18T13:45:57.024243Z</date>
+			</commit>
+		</entry>
+		<entry kind="file">
+			<name>index.html</name>
+			<size>398</size>
+			<commit revision="472">
+				<author>solsson</author>
+				<date>2005-02-18T13:19:35.766847Z</date>
+			</commit>
+		</entry>
+		<entry kind="dir">
+			<name>javalog</name>
+			<commit revision="472">
+				<author>solsson</author>
+				<date>2005-02-18T13:19:35.766847Z</date>
+			</commit>
+		</entry>
+		<entry kind="dir">
+			<name>js</name>
+			<commit revision="472">
+				<author>solsson</author>
+				<date>2005-02-18T13:19:35.766847Z</date>
+			</commit>
+		</entry>
+		<entry kind="file">
+			<name>login.jsp</name>
+			<size>5402</size>
+			<commit revision="472">
+				<author>solsson</author>
+				<date>2005-02-18T13:19:35.766847Z</date>
+			</commit>
+		</entry>
+		<entry kind="file">
+			<name>newpassword.jsp</name>
+			<size>3646</size>
+			<commit revision="472">
+				<author>solsson</author>
+				<date>2005-02-18T13:19:35.766847Z</date>
+			</commit>
+		</entry>
+		<entry kind="file">
+			<name>scriptstest.html</name>
+			<size>842</size>
+			<commit revision="472">
+				<author>solsson</author>
+				<date>2005-02-18T13:19:35.766847Z</date>
+			</commit>
+		</entry>
+		<entry kind="dir">
+			<name>tools</name>
+			<commit revision="472">
+				<author>solsson</author>
+				<date>2005-02-18T13:19:35.766847Z</date>
+			</commit>
+		</entry>
+		<entry kind="dir">
+			<name>xslt</name>
+			<commit revision="472">
+				<author>solsson</author>
+				<date>2005-02-18T13:19:35.766847Z</date>
+			</commit>
+		</entry>
+	</list>
+</lists>
