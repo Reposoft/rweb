@@ -170,7 +170,7 @@
     <dependency>
       <groupId>optime</groupId>
       <artifactId>repos-tools</artifactId>
-      <version>0.5</version>
+      <version>SNAPSHOT</version>
       <type>jar</type>
       <properties>
         <war.bundle>true</war.bundle>
