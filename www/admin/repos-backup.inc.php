@@ -207,7 +207,7 @@ function verifyMD5($path) {
 		}
 		$sum = md5_file( $path . DIRECTORY_SEPARATOR . $file );
 		if ($sum != $md5) {
-			error( "MD5 sum for $name was $sum, but is supposed to be $md5" );
+			error( "MD5 sum for $file was $sum, but is supposed to be $md5" );
 			$ok = false;
 		}
 	}
