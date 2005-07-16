@@ -2,44 +2,12 @@
 
 /**
  * Functions for reading and writing an ordered list of incremental SVN dumpfiles
- * 
- * If this file is not included from any script, it is assumed to be run in command line mode
  */
 
 require( dirname(__FILE__) . '/repos-admin.inc.php' );
 
 define('TEMP_DIR',"/tmp");
-
-// Command line mode, note that this file must be called using absolute path
-$args = count( $argv ) - 1;
-//if ( 0==strcasecmp($_SERVER['SCRIPT_FILENAME'],__FILE__) ) {
-if ( $args >= 0 ) {
-	$args = count( $argv ) - 1;
-	if ( $args == 0 || eregi("-*help",$argv[1])>0 ) {
-		echo "Usage: php " . __FILE__ . " command [parameters]\n";
-		echo "Supported commands are: dump, load, verify, verifyMD5\n";
-	} elseif ( $argv[1] == "dump" ) {
-		if ($args != 3 || eregi("-*help",$argv[2])>0 )
-			echo "Usage: dump repository-path backup-path\n";
-		else
-			dump($argv[2], $argv[3], getPrefix($argv[2]));
-	} elseif ( $argv[1] == "load" ) {
-		if ($args < 3 || eregi("-*help",$argv[2])>0 )
-			echo "Load all backup files into repository.\nUsage: load repository-path backup-path [prefix]\nDefault prefix is derived from repository path.\n";
-		else
-			load($argv[2], $argv[3], isset($argv[4]) ? $argv[4] : getPrefix($argv[2]));
-	} elseif ( $argv[1] == "verify" ) {
-		if ($args != 2 || eregi("-*help",$argv[2])>0 )
-			echo "Verify repository.\nUsage: verify repository-path\n";
-		else
-			verify($argv[2]);
-	} elseif ( $argv[1] == "verifyMD5" ) {
-		if ($args != 2 || eregi("-*help",$argv[2])>0 )
-			echo "Verify that each entry in MD5SUMS file has a matching file.\nUsage: verifyMD5 backup-path\n";
-		else
-			verifyMD5($argv[2]);
-	}
-}
+define('BACKUP_SCRIPT_VERSION',"$LastChangedRevision$");
 
 /**
  * Create a repository in the given local path
