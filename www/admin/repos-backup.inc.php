@@ -7,7 +7,7 @@
 require( dirname(__FILE__) . '/repos-admin.inc.php' );
 
 define('TEMP_DIR',"/tmp");
-define('BACKUP_SCRIPT_VERSION',"$LastChangedRevision$");
+define('BACKUP_SCRIPT_VERSION',"\$LastChangedRevision$");
 
 /**
  * Create a repository in the given local path

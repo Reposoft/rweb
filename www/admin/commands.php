@@ -9,7 +9,9 @@ require( dirname(__FILE__) . '/repos-backup.inc.php' );
 // Command line mode
 $args = count( $argv ) - 1;
 if ( $args == 0 || eregi("-*help",$argv[1])>0 ) {
+	echo "\n";
 	echo "Repos.se administration, backup script version " . BACKUP_SCRIPT_VERSION . "\n";
+	echo "\n";
 	echo "Usage: php " . __FILE__ . " command [parameters]\n";
 	echo "Supported commands are: dump, load, verify, verifyMD5\n";
 } elseif ( $argv[1] == "dump" ) {
