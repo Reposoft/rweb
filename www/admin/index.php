@@ -9,7 +9,7 @@ if ( !isRepository($repodir) )
 	fatal("repository '$repourl' is not available locally");
 $headrev = getHeadRevisionNumber($repodir);
 $backupdir = getConfig( 'backup_folder' );
-$backupprefix = getPrefix( $backupdir );
+$backupprefix = getPrefix( $repodir );
 $backup = getCurrentBackup($backupdir, $backupprefix);
 
 /**
