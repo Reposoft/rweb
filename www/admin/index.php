@@ -26,7 +26,7 @@ function getBackupInfoAsHtml($backupArray) {
 	echo "</span>";
 	echo "</p>";
 	// look for gaps
-	$lastrev = getHeadRevisionNumber($repository) - 1;
+	$lastrev = -1;
 	foreach ($backupArray as $file) {
 		if ( ! $file[1] == $lastrev + 1 )
 			warn("Backup gap. Revision " . $lastrev + 1 . " to " . $file[1] - 1 . " missing. ");
