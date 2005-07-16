@@ -3,7 +3,7 @@
 /**
  * Functions for reading and writing an ordered list of incremental SVN dumpfiles
  * 
- * If this file is not included from some script, it is assumed to be run in command line mode
+ * If this file is not included from any script, it is assumed to be run in command line mode
  */
 
 require( dirname(__FILE__) . '/repos-admin.inc.php' );
@@ -115,21 +115,9 @@ function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) 
 }
 
 /**
- * @return listing of the current backup files named fileprefix* in backupPath
- */
-function getCurrentBackup($backupPath, $fileprefix) {
-	// check arguments
-	if ( ! file_exists($backupPath) )
-		fatal("backupPath '$backupPath' does not exist");
-	// get backup files in directory
-	$files = getDirContents($backupPath,$fileprefix);
-	if ( count($files)==0 )
-		warn("Directory '$backupPath' contains no files named $fileprefix*.");
-	return getBackupInfo($files, $fileprefix);
-}
-
-/**
- * Load backup into repository using 'svnadmin load'
+ * Load backup into existing repository using 'svnadmin load'.
+ * Starts loading from the current revision number of the repository,
+ * assuming matching revision numbers of the backup files.
  * @param backupPath Absolute path to directory that contains the dump files. No tailing slash.
  * @param repository Absolute path of the repository to load to
  * @param fileprefix Filenames up to first revision number, for example "myrepo-" for myrepo-00?-to-0??.svndump.gz
@@ -145,14 +133,19 @@ function load($repository, $backupPath, $fileprefix) {
 
 	// check preconditions derived from input
 	debug("Reading backup files starting with '$fileprefix' in $backupPath");
-	if ( ! file_exists($repository) )
-		fatal("repository '$repository' does not exist");
+	if ( !isRepository($repository) )
+		fatal("repository '$repository' is not accessible");
 	
 	$backup = getCurrentBackup($backupPath, $fileprefix);
-	$lastrev = -1;
+	// start from current revision in repository
+	$lastrev = getHeadRevisionNumber($repository) - 1;
 	foreach ($backup as $file) {
+		if ( $file[2] <= $lastrev ) {
+			debug("Revision $file[1] to $file[2] already in repository, skipping $file[0]");
+			continue;
+		}
 		if ( ! $file[1] == $lastrev + 1 )
-			fatal("Revision number gap at $file[0] starting at revision $file[1], last revision was $lastrev");
+			fatal("Revision number gap at $file[0] starting at revision $file[1], repository is at revision $lastrev");
 		// read the files into repo
 		$lastrev = $file[2];
 		loadDumpfile($backupPath . DIRECTORY_SEPARATOR . $file[0],LOADCOMMAND);

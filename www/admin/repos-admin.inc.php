@@ -4,9 +4,24 @@ function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirna
 require( upOne(dirname(__FILE__)) . "/conf/repos.properties.php" );
 
 // --- output functions ---
+
+function getTheme() {
+	return "../themes/simple"; 
+}
+
 function html_start($title) {
-	echo "<html><head><title>$title</title></head><body>\n";
-	echo "<h1>$title</h1>\n";
+	?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Repos administration: <?php echo $title ?></title>
+<link href="<?php echo getTheme(); ?>/css/repos-standard.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<?php
 }
 
 // formatted date
@@ -118,13 +133,27 @@ function getHeadRevisionNumber($repository) {
 	return $rev;
 }
 
+/**
+ * @return listing of the current backup files named fileprefix* in backupPath
+ */
+function getCurrentBackup($backupPath, $fileprefix) {
+	// check arguments
+	if ( ! file_exists($backupPath) )
+		fatal("backupPath '$backupPath' does not exist");
+	// get backup files in directory
+	$files = getDirContents($backupPath,$fileprefix);
+	if ( count($files)==0 )
+		warn("Directory '$backupPath' contains no files named $fileprefix*.");
+	return getBackupInfo($files, $fileprefix);
+}
+
 // --- helper functions ---
 
 /**
  * Send message to the administrator whose address is specified in repos.properties
  */
 function notifyAdministrator($text) {
-	
+	$address = getConfig('administrator_email');
 }
 
 // --- backup support

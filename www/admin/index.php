@@ -1,19 +1,49 @@
 <?php
+require( dirname(__FILE__) . '/repos-admin.inc.php' );
+
+html_start("status");
+
+$repourl = getConfig( 'repo_url' );
+$repodir = getConfig( 'local_path' );
+if ( !isRepository($repodir) )
+	fatal("repository '$repourl' is not available locally");
+$headrev = getHeadRevisionNumber($repodir);
+$backupdir = getConfig( 'backup_folder' );
+$backupprefix = getPrefix( $backupdir );
+$backup = getCurrentBackup($backupdir, $backupprefix);
+
+/**
+ * @return backup file status as HTML, start, gaps and end
+ */
+function getBackupInfoAsHtml($backupArray) {
+	echo "<p>";
+	echo count($backupArray);
+	echo " backup files";
+	echo ", from revision <span class=\"revision\">";
+	echo $backupArray[0][1];
+	echo "</span> to <span class=\"revision\">";
+	echo $backupArray[count($backupArray) - 1][2];
+	echo "</span>";
+	echo "</p>";
+	// look for gaps
+	$lastrev = getHeadRevisionNumber($repository) - 1;
+	foreach ($backupArray as $file) {
+		if ( ! $file[1] == $lastrev + 1 )
+			warn("Backup gap. Revision " . $lastrev + 1 . " to " . $file[1] - 1 " missing. ");
+		$lastrev = $file[2];
+	}
+}
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Repos administration</title>
-<link href="../css/repos-standard.css" rel="stylesheet" type="text/css">
-</head>
-
-<body>
-<h2>Repos adminsitration </h2>
+<h2>Repos configuration</h2>
 <p><a href="../conf/index.php">Check configuration</a></p>
 <p><a href="configuration.php">Propose system configuration</a></p>
-<p><a href="../htadmin/">User adminstration</a></p>
-</body>
-</html>
+<h2>Administration</h2>
+<table id="repository_list">
+<tr>
+<th><?php echo $repourl; ?></th>
+<td>At revision <?php echo $headrev; ?></td>
+<td><?php getBackupInfoAsHtml($backup); ?></td>
+</tr>
+</table>
+<?php html_end() ?>
