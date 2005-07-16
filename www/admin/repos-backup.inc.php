@@ -112,7 +112,7 @@ function load($repository, $backupPath, $fileprefix) {
 			debug("Revision $file[1] to $file[2] already in repository, skipping $file[0]");
 			continue;
 		}
-		if ( $file[1] != $startrev + 1 )
+		if ( $head > 0 && $file[1] != $head + 1 )
 			fatal("Revision number gap at $file[0] starting at revision $file[1], repository is at revision " . $head);
 		// read the files into repo
 		$head = $file[2];
