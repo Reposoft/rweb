@@ -55,7 +55,7 @@ function create($repository) {
 	$output = array();
 	$return = 0;
 	$result = (int) exec($command, $output, $return);
-	$info ("$command said $result and outputted: " . $output);
+	info("$command said $result and outputted: " . $output);
 	return ( $return==0 );
 }
 
@@ -68,6 +68,7 @@ function create($repository) {
 function dump($repository, $backupPath, $fileprefix) {
 	$current = getCurrentBackup( $backupPath, $fileprefix );
 	$files = count($current);
+	// The same HEAD revision number must be used thorughout backup, or a concurrent transaction could cause invalid backup
 	$headrev = getHeadRevisionNumber( $repository );
 	$fromrev = 0;
 	if ( $files>0 )
@@ -82,20 +83,6 @@ function dump($repository, $backupPath, $fileprefix) {
 	if ( ! $success )
 		fatal(getTime()." Could not dump $repository revision $fromrev to $headrev to folder $backupPath");
 	info(getTime()." Dumped $repository revision $fromrev to $headrev to folder $backupPath");
-}
-
-/**
- * The same HEAD revision number must be used thorughout backup, or a concurrent transaction could cause invalid backup
- * @return revision number integer
- */
-function getHeadRevisionNumber($repository) {
-	$command = getCommand("svnlook") . " youngest $repository";
-	$output = array();
-	$return = 0;
-	$rev = (int) exec($command, $output, $return);
-	if ($return!=0)
-		fatal ("Could not get revision number using $command");
-	return $rev;
 }
 
 /**

@@ -87,6 +87,37 @@ function html_end($code = 0) {
 	exit( $code );
 }
 
+// --- basic repository examination ---
+
+/**
+ * @return true if path points to a repository accessible using svnlook
+ */
+function isRepository($localPath) {
+	if (!file_exists($localPath))
+		return false;
+	$command = getCommand("svnlook") . " uuid $localPath";
+	$output = array();
+	$return = 0;
+	$uuid = exec($command, $output, $return);
+	if ($return!=0)
+		return false;
+	return strlen($uuid) > 0;	
+}
+
+/**
+ * The same HEAD revision number must be used thorughout backup, or a concurrent transaction could cause invalid backup
+ * @return revision number integer
+ */
+function getHeadRevisionNumber($repository) {
+	$command = getCommand("svnlook") . " youngest $repository";
+	$output = array();
+	$return = 0;
+	$rev = (int) exec($command, $output, $return);
+	if ($return!=0)
+		fatal ("Could not get revision number using $command");
+	return $rev;
+}
+
 // --- helper functions ---
 
 /**
@@ -95,6 +126,8 @@ function html_end($code = 0) {
 function notifyAdministrator($text) {
 	
 }
+
+// --- backup support
 
 /**
  * @return valid filename representing an absolute repository path
