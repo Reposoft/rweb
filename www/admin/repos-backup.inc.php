@@ -144,7 +144,7 @@ function load($repository, $backupPath, $fileprefix) {
 			debug("Revision $file[1] to $file[2] already in repository, skipping $file[0]");
 			continue;
 		}
-		if ( ! $file[1] == $lastrev + 1 )
+		if ( $file[1] != $lastrev + 1 )
 			fatal("Revision number gap at $file[0] starting at revision $file[1], repository is at revision $lastrev");
 		// read the files into repo
 		$lastrev = $file[2];

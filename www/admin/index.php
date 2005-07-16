@@ -28,8 +28,8 @@ function getBackupInfoAsHtml($backupArray) {
 	// look for gaps
 	$lastrev = -1;
 	foreach ($backupArray as $file) {
-		if ( ! $file[1] == $lastrev + 1 )
-			warn("Backup gap. Revision " . $lastrev + 1 . " to " . $file[1] - 1 . " missing. ");
+		if ( $file[1] != $lastrev + 1 )
+			warn("Backup gap. Revision " . ($lastrev + 1) . " to " . ($file[1] - 1) . " missing. ");
 		$lastrev = $file[2];
 	}
 }
@@ -42,8 +42,9 @@ function getBackupInfoAsHtml($backupArray) {
 <table id="repository_list">
 <tr>
 <th><?php echo $repourl; ?></th>
-<td>At revision <?php echo $headrev; ?></td>
-<td><?php getBackupInfoAsHtml($backup); ?></td>
+<td>At revision <span class="revision"><?php echo $headrev; ?></span></td>
+</tr><tr>
+<td colspan="2"><?php getBackupInfoAsHtml($backup); ?></td>
 </tr>
 </table>
 <?php html_end() ?>
