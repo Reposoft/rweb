@@ -108,7 +108,7 @@ function load($repository, $backupPath, $fileprefix) {
 	// start from current revision in repository
 	$startrev = getHeadRevisionNumber($repository);
 	foreach ($backup as $file) {
-		if ( $file[2] < $startrev ) {
+		if ( $startrev > 0 && $file[2] <= $startrev ) {
 			debug("Revision $file[1] to $file[2] already in repository, skipping $file[0]");
 			continue;
 		}
@@ -121,7 +121,7 @@ function load($repository, $backupPath, $fileprefix) {
 	$head = getHeadRevisionNumber($repository);
 	if ($head < $lastrev)
 		fatal("Not all backup revisions have been loaded. Repository is at rev $head while backup goes up to $lastrev");
-	info( "Successfuly loaded backup revisions up to $lastrev. Repository $repository is now at revision $head." );
+	info( "Successfuly loaded backup revisions up to " . ($startrev - 1) . "Repository $repository is now at revision $head." );
 }
 
 /**
