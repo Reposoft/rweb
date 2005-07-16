@@ -108,7 +108,7 @@ function load($repository, $backupPath, $fileprefix) {
 	// start from current revision in repository
 	$startrev = getHeadRevisionNumber($repository);
 	foreach ($backup as $file) {
-		if ( $file[2] <= $startrev ) {
+		if ( $file[2] < $startrev ) {
 			debug("Revision $file[1] to $file[2] already in repository, skipping $file[0]");
 			continue;
 		}
