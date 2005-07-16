@@ -10,7 +10,7 @@ function getTheme() {
 }
 
 function html_start($title) {
-'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,8 +18,7 @@ function html_start($title) {
 <title>Repos administration: ' . $title '</title>
 <link href="' . getTheme() . '/css/repos-standard.css" rel="stylesheet" type="text/css">
 </head>
-
-<body>'
+<body>';
 }
 
 // formatted date
