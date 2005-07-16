@@ -12,26 +12,29 @@ if ( $args == 0 || eregi("-*help",$argv[1])>0 ) {
 	echo "\n";
 	echo "Repos.se administration, backup script version " . BACKUP_SCRIPT_VERSION . "\n";
 	echo "\n";
-	echo "Usage: php " . __FILE__ . " command [parameters]\n";
+	echo "Usage:\n"
+	echo "php " . __FILE__ . " command [parameters]\n";
 	echo "Supported commands are: dump, load, verify, verifyMD5\n";
+	echo "Just write the command name to get syntax help";
+	echo "\n";
 } elseif ( $argv[1] == "dump" ) {
 	if ($args != 3 || eregi("-*help",$argv[2])>0 )
-		echo "Usage: dump repository-path backup-path\n";
+		echo "Usage: dump repository-path backup-path\nPaths should have no tailing slash\n";
 	else
 		dump($argv[2], $argv[3], getPrefix($argv[2]));
 } elseif ( $argv[1] == "load" ) {
 	if ($args < 3 || eregi("-*help",$argv[2])>0 )
-		echo "Load backup files into existing repository.\nUsage: load repository-path backup-path [prefix]\nDefault prefix is derived from repository path.\n";
+		echo "Load backup files into existing repository.\nUsage: load repository-path backup-path [prefix]\nDefault prefix is derived from repository path.\nPaths should have no tailing slash\n";
 	else
 		load($argv[2], $argv[3], isset($argv[4]) ? $argv[4] : getPrefix($argv[2]));
 } elseif ( $argv[1] == "verify" ) {
 	if ($args != 2 || eregi("-*help",$argv[2])>0 )
-		echo "Verify repository.\nUsage: verify repository-path\n";
+		echo "Verify repository.\nUsage: verify repository-path\nPaths should have no tailing slash\n";
 	else
 		verify($argv[2]);
 } elseif ( $argv[1] == "verifyMD5" ) {
 	if ($args != 2 || eregi("-*help",$argv[2])>0 )
-		echo "Verify that each entry in MD5SUMS file has a matching file.\nUsage: verifyMD5 backup-path\n";
+		echo "Verify that each entry in MD5SUMS file has a matching file.\nUsage: verifyMD5 backup-path\nPaths should have no tailing slash\n";
 	else
 		verifyMD5($argv[2]);
 }

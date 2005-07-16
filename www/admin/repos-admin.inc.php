@@ -10,18 +10,16 @@ function getTheme() {
 }
 
 function html_start($title) {
-	?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Repos administration: <?php echo $title ?></title>
-<link href="<?php echo getTheme(); ?>/css/repos-standard.css" rel="stylesheet" type="text/css">
+<title>Repos administration: ' . $title '</title>
+<link href="' . getTheme() . '/css/repos-standard.css" rel="stylesheet" type="text/css">
 </head>
 
-<body>
-	<?php
+<body>'
 }
 
 // formatted date
@@ -143,7 +141,7 @@ function getCurrentBackup($backupPath, $fileprefix) {
 	// get backup files in directory
 	$files = getDirContents($backupPath,$fileprefix);
 	if ( count($files)==0 )
-		warn("Directory '$backupPath' contains no files named $fileprefix*.");
+		fatal("Directory '$backupPath' contains no files named $fileprefix*.");
 	return getBackupInfo($files, $fileprefix);
 }
 
