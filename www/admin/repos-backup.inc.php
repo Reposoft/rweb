@@ -106,22 +106,19 @@ function load($repository, $backupPath, $fileprefix) {
 	
 	$backup = getCurrentBackup($backupPath, $fileprefix);
 	// start from current revision in repository
-	$startrev = getHeadRevisionNumber($repository);
+	$head = getHeadRevisionNumber($repository);
 	foreach ($backup as $file) {
-		if ( $startrev > 0 && $file[2] <= $startrev ) {
+		if ( $head > 0 && $file[2] <= $head ) {
 			debug("Revision $file[1] to $file[2] already in repository, skipping $file[0]");
 			continue;
 		}
 		if ( $file[1] != $startrev )
 			fatal("Revision number gap at $file[0] starting at revision $file[1], repository is at revision " . ($startrev - 1));
 		// read the files into repo
-		$startrev = $file[2] + 1;
+		$head = $file[2];
 		loadDumpfile($backupPath . DIRECTORY_SEPARATOR . $file[0],LOADCOMMAND);
 	}
-	$head = getHeadRevisionNumber($repository);
-	if ($head < $lastrev)
-		fatal("Not all backup revisions have been loaded. Repository is at rev $head while backup goes up to $lastrev");
-	info( "Successfuly loaded backup revisions up to " . ($startrev - 1) . "Repository $repository is now at revision $head." );
+	info( "Successfuly loaded backup revisions up to " . $head . "into repository $repository." );
 }
 
 /**
