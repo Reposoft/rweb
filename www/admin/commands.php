@@ -12,7 +12,7 @@ if ( $args == 0 || eregi("-*help",$argv[1])>0 ) {
 	echo "\n";
 	echo "Repos.se administration, backup script version " . BACKUP_SCRIPT_VERSION . "\n";
 	echo "\n";
-	echo "Usage:\n"
+	echo "Usage:\n";
 	echo "php " . __FILE__ . " command [parameters]\n";
 	echo "Supported commands are: dump, load, verify, verifyMD5\n";
 	echo "Just write the command name to get syntax help";
