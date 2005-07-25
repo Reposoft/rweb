@@ -118,7 +118,7 @@ function load($repository, $backupPath, $fileprefix) {
 		$head = $file[2];
 		loadDumpfile($backupPath . DIRECTORY_SEPARATOR . $file[0],LOADCOMMAND);
 	}
-	info( "Successfuly loaded backup revisions up to " . $head . "into repository $repository." );
+	info( "Successfuly loaded backup revisions up to " . $head . " into repository $repository." );
 }
 
 /**
