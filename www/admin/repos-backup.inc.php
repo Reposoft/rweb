@@ -116,7 +116,10 @@ function load($repository, $backupPath, $fileprefix) {
 			fatal("Revision number gap at $file[0] starting at revision $file[1], repository is at revision " . $head);
 		// read the files into repo
 		$head = $file[2];
-		loadDumpfile($backupPath . DIRECTORY_SEPARATOR . $file[0],LOADCOMMAND);
+		$return = loadDumpfile($backupPath . DIRECTORY_SEPARATOR . $file[0],LOADCOMMAND);
+		if ($return > 0) {
+			fatal("Error loading backup file $file[0], returned $return. Aborting.");
+		}
 	}
 	info( "Successfuly loaded backup revisions up to " . $head . " into repository $repository." );
 }
