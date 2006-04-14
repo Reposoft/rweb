@@ -19,7 +19,17 @@ if ($type=='ics') {
 		$allow_login = 'yes';
 	*/
 	header("Location: ../phpicalendar/?cal=$url");
+} else {
+?>
+<html>
+<head>
+<title>Open file in online editor</title>
+</head>
+<body>
+<p>Support for file type &quot;<?php echo $type; ?>&quot; not added yet.</p>
+<p>Click the file name to download and open the file</p>
+<p><a href="#" onclick="history.back()">Back</a></p>
+</body>
+<?php
 }
-
-echo "Support for file type &quot;$type&quot; not added yet.";
 ?>

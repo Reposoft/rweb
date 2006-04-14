@@ -42,7 +42,7 @@
 	<xsl:param name="miniIconSize">16</xsl:param>
 	<xsl:param name="iconVspace">1</xsl:param>
 	<xsl:param name="iconHspace">10</xsl:param>
-	<!-- more layout definitions -->
+	<!-- html layout definitions -->
 	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- thumbnail generators -->
 	<xsl:param name="thumbUrl"><xsl:value-of select="$rurl"/>/phpthumb/phpThumbq.php?src=</xsl:param>
@@ -115,7 +115,7 @@
 		<xsl:value-of select="$spacer"/>
 		<xsl:if test="@rev">revision <span class="revision"><xsl:value-of select="@rev"/></span></xsl:if>
 	</xsl:template>
-	<!-- directory actions, stuff like that -->
+	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
 		<xsl:if test="/svn/index/updir">
 			<a class="command" href="../">
@@ -143,7 +143,8 @@
 			<xsl:call-template name="showicon">
 				<xsl:with-param name="filetype" select="'_windowsfolder'"/>
 			</xsl:call-template>open folder</a>
-		<a class="command" href="{$rurl}/tutorials/?show=checkout">
+		<!--<a class="command" href="{$rurl}/tutorials/?show=checkout">-->
+		<a class="command" href="http://tortoisesvn.sourceforge.net/docs/release/TortoiseSVN_en/ch05s03.html">
 			<xsl:call-template name="showicon">
 				<xsl:with-param name="filetype" select="'_tortoisefolder'"/>
 			</xsl:call-template>check out</a>
