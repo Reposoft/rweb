@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+    <id/>
+    <formats/>
+    <includeBaseDirectory/>
+    <fileSets>
+        <fileSet>
+            <directory/>
+            <lineEnding/>
+            <outputDirectory/>
+            <includes/>
+            <excludes/>
+            <fileMode/>
+            <directoryMode/>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <outputFileNameMapping/>
+            <unpack/>
+            <scope/>
+            <outputDirectory/>
+            <includes/>
+            <excludes/>
+            <fileMode/>
+            <directoryMode/>
+        </dependencySet>
+    </dependencySets>
+</assembly>

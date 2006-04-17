@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>se.repos</groupId>
+    <artifactId>repos-root</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>repos-svn-access</artifactId>
+  <name>Repos SVN access</name>
+  <url>http://www.repos.se</url>
+  <description>
+    The only repos component that directly handles the subversion API.
+    - Backend abstraction API tailored for repos components. 
+    - An exception hierarchy.
+    - Credentials representation that can read http-BASIC authentication tokens.
+    Note that this API is not intended to abstract away subversion.
+    We will always use subversion.
+  </description>
+  <dependencies>
+    <dependency>
+      <groupId>se.repos</groupId>
+      <artifactId>repos-validation</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>svnant</groupId>
+      <artifactId>svnant</artifactId>
+      <version>1</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/svnant.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>svnant</groupId>
+      <artifactId>svnant-ant</artifactId>
+      <version>1</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/ant.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>svnant</groupId>
+      <artifactId>svnant-ganymed</artifactId>
+      <version>1</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/ganymed.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>svnant</groupId>
+      <artifactId>svnant-javasvn</artifactId>
+      <version>1</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/javasvn.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>svnant</groupId>
+      <artifactId>svnant-svnClientAdapter</artifactId>
+      <version>1</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/svnClientAdapter.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>svnant</groupId>
+      <artifactId>svnant-javahl</artifactId>
+      <version>1</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/svnjavahl.jar</systemPath>
+    </dependency>    
+  </dependencies>
+</project>

@@ -1,0 +1,38 @@
+<projectDescription>
+  <name>repos-svn-access</name>
+  <comment>The only repos component that directly handles the subversion API.
+    - Backend abstraction API tailored for repos components. 
+    - An exception hierarchy.
+    - Credentials representation that can read http-BASIC authentication tokens.
+    Note that this API is not intended to abstract away subversion.
+    We will always use subversion.</comment>
+  <projects/>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.wst.common.project.facet.core.builder</name>
+      <arguments/>
+    </buildCommand>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+      <arguments/>
+    </buildCommand>
+    <buildCommand>
+      <name>org.eclipse.wst.validation.validationbuilder</name>
+      <arguments/>
+    </buildCommand>
+    <buildCommand>
+      <name>org.eclipse.wst.common.modulecore.ComponentStructuralBuilder</name>
+      <arguments/>
+    </buildCommand>
+    <buildCommand>
+      <name>org.eclipse.wst.common.modulecore.ComponentStructuralBuilderDependencyResolver</name>
+      <arguments/>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+    <nature>org.eclipse.wst.common.modulecore.ModuleCoreNature</nature>
+    <nature>org.eclipse.wst.common.project.facet.core.nature</nature>
+  </natures>
+</projectDescription>
