@@ -12,24 +12,25 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>1.0</version>
-      <scope>runtime</scope>
+      <scope>compile</scope>
     </dependency>
+    <!-- todo: put spring version number in property -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <version>2.0-m3</version>
+      <version>2.0-m4</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
-      <version>2.0-m3</version>
+      <version>2.0-m4</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>2.0-m3</version>
+      <version>2.0-m4</version>
       <scope>compile</scope>
     </dependency>
     <!-- *** unit tests *** -->
@@ -42,17 +43,11 @@
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
-      <version>2.0</version>
+      <version>2.2</version>
       <scope>test</scope>
     </dependency>
-    <!-- *** build metrics *** -->
-    <dependency>
-      <groupId>cobertura</groupId>
-      <artifactId>cobertura</artifactId>
-      <version>1.7</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies> 
+  </dependencies>
+  <!-- todo: add QALab reports, see http://qalab.sourceforge.net/maven2/faq.html -->
   <build>
     <plugins>
       <plugin>
@@ -70,92 +65,39 @@
           <downloadSources>true</downloadSources>
         </configuration>
       </plugin>
-      <!-- QALab configuration from http://qalab.sourceforge.net/maven2/faq.html -->
-      <!--
       <plugin>
-        <groupId>net.objectlab</groupId>
-        <artifactId>maven-qalab-plugin</artifactId>
-        <version>2.1</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clover-plugin</artifactId>
         <executions>
           <execution>
-            <id>checkstyle-merge</id>
-            <phase>verify</phase>
+            <phase>pre-site</phase>
             <goals>
-              <goal>merge</goal>
+              <goal>instrument</goal>
             </goals>
-            <configuration>
-              <handler>net.objectlab.qalab.parser.CheckstyleStatMerge</handler>
-              <inputFile>${project.build.directory}/checkstyle/checkstyle-result.xml</inputFile>
-            </configuration>
-          </execution>
-          <execution>
-            <id>findbugs-merge</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>merge</goal>
-            </goals>
-            <configuration>
-              <handler>net.objectlab.qalab.parser.FindBugsStatMerge</handler>
-              <inputFile>${project.build.directory}/findbugs/findbugs.xml</inputFile>
-            </configuration>
-          </execution>
-          <execution>
-            <id>pmd-merge</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>merge</goal>
-            </goals>
-            <configuration>
-              <handler>net.objectlab.qalab.parser.PMDStatMerge</handler>
-              <inputFile>${project.build.directory}/pmd/pmd.xml</inputFile>
-            </configuration>
-          </execution>
-          <execution>
-            <id>qalab-movers</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>movers</goal>
-            </goals>
-            <configuration>
-              <startTimeHoursOffset>480</startTimeHoursOffset>
-            </configuration>
-          </execution>
-          <execution>
-            <id>qalab-chart</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>chart</goal>
-            </goals>
-            <configuration>
-              <summaryOnly>false</summaryOnly>
-            </configuration>
           </execution>
         </executions>
-        <configuration>
-          <types>checkstyle,findbugs,pmd</types>
-        </configuration>
       </plugin>
-      -->
     </plugins>
   </build>
   <reporting>
     <plugins>
-      <!-- QALab configuration from http://qalab.sourceforge.net/maven2/faq.html --> 
-      <!-- 
       <plugin>
-        <groupId>net.objectlab</groupId>
-        <artifactId>maven-qalab-plugin</artifactId>
-        <version>2.1</version>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>report</report>
-              <report>movers-report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
       </plugin>
-      -->
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jxr-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-clover-plugin</artifactId>
+      </plugin>
     </plugins>
   </reporting>
 </project>
