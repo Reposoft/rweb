@@ -14,7 +14,7 @@
  */
 package se.repos.validation.strings;
 
-import se.repos.tools.text.InputUtils;
+import se.repos.text.InputUtils;
 
 /**
  * @author Staffan Olsson

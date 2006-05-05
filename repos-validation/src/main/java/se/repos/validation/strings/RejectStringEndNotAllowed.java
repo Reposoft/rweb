@@ -26,7 +26,7 @@ public class RejectStringEndNotAllowed extends
 	}
 
     @Override
-    public boolean rejects(String value) {
+    public boolean rejectsValue(String value) {
         return value.endsWith(getSubstring());
     }
     

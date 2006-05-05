@@ -48,7 +48,7 @@ public interface ValidationRule<V> {
     
     /**
      * @param value to be validated
-     * @return true if in valid
+     * @return true if invalid
      */
     boolean rejects(V value);
 }

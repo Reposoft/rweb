@@ -18,7 +18,7 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.StringDecoder;
 import org.springframework.context.MessageSourceResolvable;
 
-import se.repos.tools.text.CamelCase;
+import se.repos.text.convert.CamelCase;
 
 /**
  * Represents invalid input to a field or method.
