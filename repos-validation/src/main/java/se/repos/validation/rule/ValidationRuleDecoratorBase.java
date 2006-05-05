@@ -12,19 +12,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.repos.validation;
+package se.repos.validation.rule;
 
-public class FieldValidation extends ValidationRuleBase<Object> {
+import se.repos.validation.ValidationRule;
 
-	ValidationRule<Object> wrappedRule;
+public abstract class ValidationRuleDecoratorBase<V> extends ValidationRuleBase<V> {
+
+	ValidationRule<? super V> wrappedRule;
 	
-	public FieldValidation(String fieldName, ValidationRule<Object> wrappedRule) {
+	protected ValidationRuleDecoratorBase(ValidationRule<? super V> wrappedRule) {
 		this.wrappedRule = wrappedRule;
 	}
-
+	
+	/**
+	 * @param value that was valid according to the wrapped rule
+	 * @return true if the value should be rejected with this rule
+	 */
+	protected abstract boolean rejectsValue(V value);
+	
 	@Override
-	public boolean rejectsValue(Object value) {
-		return wrappedRule.rejects(value);
+	public final boolean rejects(V value) {
+		return value == null || wrappedRule.rejects(value) || rejectsValue(value);
 	}
 
 }

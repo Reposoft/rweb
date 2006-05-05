@@ -14,8 +14,8 @@
  */
 package se.repos.validation;
 
-import se.repos.validation.ValidationRule;
-import se.repos.validation.ValidationRuleBase;
+import se.repos.validation.rule.ValidationNullValueException;
+import se.repos.validation.rule.ValidationRuleBase;
 import junit.framework.TestCase;
 
 public class ValidationRuleBaseTest extends TestCase {

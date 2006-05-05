@@ -12,17 +12,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.repos.validation;
+package se.repos.validation.rule;
 
+import se.repos.validation.ValidationRule;
 
-/**
- * Throw if the object to be validated is null.
- *
- * @author Staffan Olsson
- * @since 2006-apr-16
- * @version $Id$
- */
-public class ValidationNullValueException extends
-		ValidationFailedException {
+public class ValidationFailedException extends IllegalArgumentException {
+
 	private static final long serialVersionUID = 1L;
+	
+	ValidationRule rule = null;
+	
+	public ValidationFailedException() {
+		
+	}
+	
+	public ValidationFailedException(Object value) {
+		super();
+		// TODO
+	}
+	
+	public ValidationFailedException(ValidationRule ruleInstance) {
+		super();
+		this.rule = ruleInstance;
+	}
 }

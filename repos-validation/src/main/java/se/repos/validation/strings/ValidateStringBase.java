@@ -14,7 +14,7 @@
  */
 package se.repos.validation.strings;
 
-import se.repos.validation.ValidationRuleBase;
+import se.repos.validation.rule.ValidationRuleBase;
 
 public abstract class ValidateStringBase extends
 		ValidationRuleBase<String> {

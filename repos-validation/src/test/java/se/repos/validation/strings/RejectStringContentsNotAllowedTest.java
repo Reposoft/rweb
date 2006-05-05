@@ -15,7 +15,7 @@
 package se.repos.validation.strings;
 
 import junit.framework.TestCase;
-import se.repos.validation.ValidationFailedException;
+import se.repos.validation.rule.ValidationFailedException;
 import se.repos.validation.strings.RejectStringContentsNotAllowed;
 
 import org.junit.Test;

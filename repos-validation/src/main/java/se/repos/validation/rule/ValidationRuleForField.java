@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.repos.validation;
+package se.repos.validation.rule;
 
 /**
  * Provides field name for validation errors.

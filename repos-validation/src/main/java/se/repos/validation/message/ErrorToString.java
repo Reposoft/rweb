@@ -14,7 +14,7 @@
  */
 package se.repos.validation.message;
 
-import se.repos.validation.ValidationFailedException;
+import se.repos.validation.rule.ValidationFailedException;
 
 /**
  * Text to use when an error is logged or displayed to user without a prepared translation.

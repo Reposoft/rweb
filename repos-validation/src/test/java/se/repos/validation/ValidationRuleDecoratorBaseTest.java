@@ -14,6 +14,8 @@
  */
 package se.repos.validation;
 
+import se.repos.validation.rule.ValidationRuleBase;
+import se.repos.validation.rule.ValidationRuleDecoratorBase;
 import junit.framework.TestCase;
 
 public class ValidationRuleDecoratorBaseTest extends TestCase {

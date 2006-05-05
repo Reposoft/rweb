@@ -16,7 +16,7 @@ package se.repos.validation.message;
 
 import org.springframework.context.MessageSourceResolvable;
 
-import se.repos.validation.ValidationFailedException;
+import se.repos.validation.rule.ValidationFailedException;
 
 public interface ErrorToMessage {
 

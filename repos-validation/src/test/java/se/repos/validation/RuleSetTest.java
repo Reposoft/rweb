@@ -14,8 +14,8 @@
  */
 package se.repos.validation;
 
-import se.repos.validation.RuleSet;
-import se.repos.validation.ValidationRuleBase;
+import se.repos.validation.rule.RuleSet;
+import se.repos.validation.rule.ValidationRuleBase;
 import junit.framework.TestCase;
 
 public class RuleSetTest extends TestCase {

@@ -12,25 +12,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.repos.validation;
+package se.repos.validation.rule;
 
-public abstract class ValidationRuleDecoratorBase<V> extends ValidationRuleBase<V> {
 
-	ValidationRule<? super V> wrappedRule;
-	
-	protected ValidationRuleDecoratorBase(ValidationRule<? super V> wrappedRule) {
-		this.wrappedRule = wrappedRule;
-	}
-	
-	/**
-	 * @param value that was valid according to the wrapped rule
-	 * @return true if the value should be rejected with this rule
-	 */
-	protected abstract boolean rejectsValue(V value);
-	
-	@Override
-	public final boolean rejects(V value) {
-		return value == null || wrappedRule.rejects(value) || rejectsValue(value);
-	}
-
+/**
+ * Throw if the object to be validated is null.
+ *
+ * @author Staffan Olsson
+ * @since 2006-apr-16
+ * @version $Id$
+ */
+public class ValidationNullValueException extends
+		ValidationFailedException {
+	private static final long serialVersionUID = 1L;
 }
