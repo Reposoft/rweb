@@ -17,6 +17,26 @@
     Note that this API is not intended to abstract away subversion.
     We will always use subversion.
   </description>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/jar-with-dependencies.xml</descriptor>
+              </descriptors>
+            </configuration>
+            <goals>
+              <goal>assembly</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
   <dependencies>
     <dependency>
       <groupId>se.repos</groupId>
@@ -31,25 +51,19 @@
       <systemPath>${basedir}/lib/svnant.jar</systemPath>
     </dependency>
     <dependency>
-      <groupId>svnant</groupId>
-      <artifactId>svnant-ant</artifactId>
-      <version>1</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/ant.jar</systemPath>
+      <groupId>ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.6.5</version>
     </dependency>
     <dependency>
-      <groupId>svnant</groupId>
-      <artifactId>svnant-ganymed</artifactId>
-      <version>1</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/ganymed.jar</systemPath>
+      <groupId>ch.ethz.ganymed</groupId>
+      <artifactId>ganymed-ssh2</artifactId>
+      <version>build209</version>
     </dependency>
     <dependency>
-      <groupId>svnant</groupId>
-      <artifactId>svnant-javasvn</artifactId>
-      <version>1</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/javasvn.jar</systemPath>
+      <groupId>org.tmate</groupId>
+      <artifactId>javasvn</artifactId>
+      <version>1.0.4</version>
     </dependency>
     <dependency>
       <groupId>svnant</groupId>

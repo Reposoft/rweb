@@ -197,7 +197,7 @@ public class PersonalWorkingCopy implements ReposWorkingCopy {
         fileSet.setupDirectoryScanner(directoryScanner, project);
         fileSet.setDir(getLocalRootDir());
         Add add = new Add();
-        add.add(fileSet);
+        add.addFileset(fileSet);
         execute(add, client);
     }
 

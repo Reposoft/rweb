@@ -14,10 +14,10 @@
  */
 package se.repos.svn.javasvn;
 
-import org.tigris.subversion.svnant.SvnTask;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory;
-import org.tigris.subversion.svnclientadapter.javahl.JavaSvnClientAdapterFactory;
+import org.tigris.subversion.svnclientadapter.SVNClientException;
+import org.tigris.subversion.svnclientadapter.javasvn.JavaSvnClientAdapterFactory;
 
 import se.repos.svn.ClientProvider;
 import se.repos.svn.UserCredentials;
@@ -32,13 +32,24 @@ import se.repos.svn.UserCredentials;
 public class TmateSvnClientProvider implements ClientProvider {
 
 	public ISVNClientAdapter getSvnClient() {
-		// check and initialize client
-        if (!SvnTask.isJavaSVNAvailable()) {
-            throw new RuntimeException("JavaSVN is not available");
-        }
+		
+		if (!SVNClientAdapterFactory.isSVNClientAvailable(JavaSvnClientAdapterFactory.JAVASVN_CLIENT)) {
+			try {
+	            JavaSvnClientAdapterFactory.setup();
+	        } catch (SVNClientException e) {
+	            // if an exception is thrown, JavaSVN is not available or 
+	            // already registered ...
+	        	e.printStackTrace();
+	        }
+		}
         
-        ISVNClientAdapter svnClient = SVNClientAdapterFactory.createSVNClient(
-        		JavaSvnClientAdapterFactory.JAVASVN_CLIENT);
+        ISVNClientAdapter svnClient;
+		svnClient = SVNClientAdapterFactory.createSVNClient(
+				JavaSvnClientAdapterFactory.JAVASVN_CLIENT);
+        
+        if (svnClient == null) {
+        	throw new RuntimeException("There is no SVN client available.");
+        }
         
         return svnClient;
 	}
