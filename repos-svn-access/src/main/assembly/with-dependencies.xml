@@ -3,23 +3,26 @@
     <id>with-dependencies</id>
     <formats>
         <format>zip</format>
-        <format>tar.gz</format>
+        <!-- <format>tar.gz</format> -->
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
         <fileSet>
-            <directory>target/classes</directory>
+            <directory>target</directory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
             <outputDirectory>/</outputDirectory>
         </fileSet>
         <!-- local dependencies -->
         <fileSet>
             <directory>lib</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>dependencies</outputDirectory>
         </fileSet>
     </fileSets>
     <dependencySets>
         <dependencySet>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>dependencies</outputDirectory>
             <unpack>false</unpack>
             <scope>runtime</scope>
         </dependencySet>
