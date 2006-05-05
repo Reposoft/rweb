@@ -12,8 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.repos.validation;
+package se.repos.validation.rule;
 
+import se.repos.validation.ValidationRule;
 import se.repos.validation.rule.ValidationRuleBase;
 import se.repos.validation.rule.ValidationRuleDecoratorBase;
 import junit.framework.TestCase;
