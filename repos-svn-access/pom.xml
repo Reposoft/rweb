@@ -26,7 +26,7 @@
             <phase>package</phase>
             <configuration>
               <descriptors>
-                <descriptor>src/main/assembly/jar-with-dependencies.xml</descriptor>
+                <descriptor>src/main/assembly/with-dependencies.xml</descriptor>
               </descriptors>
             </configuration>
             <goals>
