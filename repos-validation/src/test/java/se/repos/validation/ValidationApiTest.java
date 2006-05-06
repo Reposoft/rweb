@@ -1,92 +1,90 @@
 package se.repos.validation;
 
+import org.junit.Test;
+
 import se.repos.validation.annotations.Constraint;
-import junit.framework.TestCase;
+import junit.framework.JUnit4TestAdapter;
 
-public class ValidationApiTest extends TestCase {
+public class ValidationApiTest {
 
-	final ValidationRule<Integer> theRule = Validation.rule(new RejectNumberIsNotOne());
-	
-	public void testOneLineValidation() {
-		try {
-			theRule.validate(1);
-		} catch (IllegalArgumentException e) {
-			fail("Argument should be valid, but got exception: " + e);
-		}
-	}
-
-	public void testOneLineValidationFail() {
-		try {
-			// validation error
-			theRule.validate(2);
-			fail("Should have thrown a runtime exception for the invalid value");
-		} catch (IllegalArgumentException e) {
-			// default error message should be decoded from strategy class name
-			String defaultMessage = e.getMessage();
-			assertEquals("Number is not one", defaultMessage);
-		}
-	}	
-
-	public void testValidateNull() {
-		try {
-			// null should always be a validation error, except if ShouldBeNull is used as a rule
-			theRule.validate(null);
-			fail("Should have thrown a runtime exception for null value");
-		} catch (IllegalArgumentException e) {
-			// default error message should be decoded from strategy class name
-			String defaultMessage = e.getMessage();
-			assertEquals("Number is not one", defaultMessage);
-		}
+	public static junit.framework.Test suite() { 
+	    return new JUnit4TestAdapter(ValidationApiTest.class); 
 	}
 	
-	public void testCreateValidatorAsFirstLineOfMethod() {
-		Validation.rule(RejectNumberIsNotOne.class);
+	// this is how validation rules can be kept in a superclass, or created in the line that 
+	final ValidationRule<Integer> RULE = Validation.rule(new NumberShouldBePositive());
+	
+	// trows a runtime exception if validation fails
+	@Test public void checkArgumentBeforeProceeding() {
+			RULE.validate(1);
+			// proceed with logic
+	}
+
+	@Test(expected=IllegalArgumentException.class) public void checkArgumentBeforeProceedingFail() {
+			RULE.validate(-1);
+			// logic not reached
 	}
 	
-	public void testValidateUsingMethodAnnotation() {
-		try {
-			// validation error
-			annotatedMethodWithOneArgument(2);
-			fail("Should have thrown a runtime exception for the invalid value");
-		} catch (IllegalArgumentException e) {
-			// default error message should be decoded from strategy class name
-			String defaultMessage = e.getMessage();
-			assertEquals("Number is not one", defaultMessage);
-		}
+	@Test(expected=IllegalArgumentException.class) public void checkThatValidationOfNullAlwaysFails() {
+		RULE.validate(null);
+		// no one can do calculatinons with null value
+		// _if_ null means something, this method can probably not benefit from one line constraints
 	}
 	
-	@Constraint(RejectNumberIsNotOne.class)
+	@Test public void oneLineConstraintWhenYouNeedPrerequisitesForLogic() {
+		Validation.rule(NumberShouldBePositive.class).validate(1);
+	}
+	
+	/**
+	 * Does validation based on annotations before proceeding.
+	 * This means that the parameter requirements are self documented.
+	 * It requires {@link Validation#annotated()} to be called as the first
+	 * line of the method, unless the class is marked as autovalidate and has a validationproxy. 
+	 * @param field The input
+	 */
+	@Constraint(NumberShouldBePositive.class)
 	private void annotatedMethodWithOneArgument(Integer field) {
-		// call validation factory without arguments
 		Validation.annotated();
 		// proceed normal operations with the validated input
-		
+	}
+	
+	// calls a method that has annotated validation.
+	@Test(expected=IllegalArgumentException.class) public void testValidateUsingMethodAnnotation() {
+		annotatedMethodWithOneArgument(-1);
 	}
 
-	public void testValidateUsingParameterAnnotation() {
-		try {
-			// validation error
-			annotatedMethodWithTwoArguments(1, 2);
-			fail("Should have thrown a runtime exception for the second argument");
-		} catch (IllegalArgumentException e) {
-			// default error message should be decoded from strategy class name
-			String defaultMessage = e.getMessage();
-			assertEquals("Number is not one", defaultMessage);
+	/**
+	 * Does validation based on parameter annotations.
+	 * Same functionality as above, even more self documenting,
+	 * allows more than one argument, but is harder to read.
+	 * @param field1 The input
+	 * @param field2 The input
+	 */
+	private void annotatedMethodWithTwoArguments(
+			@Constraint(NumberShouldBePositive.class) Integer field1,
+			@Constraint(NumberShouldBePositive.class) Integer field2) {
+		Validation.annotated();
+		// proceed normal operations with the validated input
+	}
+	
+	// calls a method that has annotated validation
+	@Test(expected=IllegalArgumentException.class) public void testValidateUsingParameterAnnotation() {
+		annotatedMethodWithTwoArguments(1, 2);
+	}	
+	
+	/**
+	 * Constraint that accepts values that are non-negative
+	 */
+	class NumberShouldBePositive implements ValidationStrategy<Integer> {
+		public ValidationResult validate(Integer value) {
+			return value >= 0 ? ACCEPT : REJECT;
 		}
 	}
 	
-	private void annotatedMethodWithTwoArguments(
-			@Constraint(RejectNumberIsNotOne.class) Integer field1,
-			@Constraint(RejectNumberIsNotOne.class) Integer field2) {
-		// call validation factory without arguments
-		Validation.annotated();
-		// proceed normal operations with the validated input
-		
-	}	
-	
-	class RejectNumberIsNotOne implements ValidationStrategy<Integer> {
-		public ValidationResult validate(Integer value) {
-			return value.equals(1) ? ACCEPT : REJECT;
-		}
+	/**
+	 * Alternative way to program the constraint
+	 */
+	class RejectNumberIsNotPositive extends ValidationRejectStrategy<Integer> {
+		public boolean rejects(Integer value) { return value >= 0; }
 	}
 }

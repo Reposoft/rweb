@@ -1,0 +1,79 @@
+One-line logic constraints
+
+ All business logic has input constraints that must be satisfied to have reliable output.
+
+ This package helps to express these constraints in one line of code.
+ When you find yourself doing:
+ 
+---
+if (argument < 0) {
+	return; // or allow return false or null to mark failue
+}
+---
+
+  That code will cause problem in the calling method instead. You could improve that to:
+
+---
+if (argument < 0) {
+	throw new IllegalArgumentException("This calculation can only handle positive input. Got: " + argument);
+}
+---
+
+ This is a RuntimeException that won't be visible in the method signature, and the calling code won't catch it. Why is that good? Assuming that the calling method would catch it, what would it do? It can not come up with a new value and try again. This invalid input is always from a source that does not know that it is inavlid.
+
+ Bad input comes from a source that can't be controlled (sending system, inconsistent database, user interface) or from ill-behaving code.
+ In both cases, a runtime exception brings this problem to the surface. That surface should be the presentation or integration layer, where the simplest handling would be: 
+
+---
+catch (IllegalArgumentException e) {
+	Logger.error("Operation was aborted because of invalid argument", e);
+}
+---
+
+ The stacktrace will tell you where the error occured. This kind of handling can be done in for example a Spring MVC HandlerExceptionResolver.
+ If the code does behave well, you can assume that the error has to do with user input and should be displayed to the user as an explanation why the operation was not done.
+
+ Throwing IllegalArgumentException has some shortcomings
+ * The invalid value is appended in the default message string
+ * Javadoc does not say that the method throws such an error
+ * It is hard to localize the error message, if you want to display it
+ 
+ One solution is to dedicate a subclass of IllegalArgumentException to the specific error.
+ 
+---
+ /**
+  ...
+  * @throws NegativeValueException if argument is less than zero
+  */
+ public void myMethod(int argument) throws NegativeValueException {
+ 	if (argument < 0) {
+ 		throw new NegativeValueException("parameter 'argument' must be positive", argument);
+ 	}
+ }
+---
+ 
+ This solves the documenting and the display of the invalid value. A tree of this kind of exceptions may also enable reuse.
+ It is a good strategy for many processing exceptions, particularly checked ones.
+ But it takes a lot of typing, and might not be worthwhile if it is unlikely that the argument will be invalid.
+ 
+ It might solve the localization issue. You could use the exception class name, and in your resource file write:
+ 
+---
+ NegativeValueException=Talet {0} kan inte vara negativt
+---
+ 
+ So now we have a documented error situation, a stack trace, a default message for logging, the invalid value and a message code for localization.
+ 
+Code readability
+
+ If-statements and magic strings make code hard to read and hard to maintain.
+ If-statements should be used for conditional logic.
+ Strings in code draw a lot of attention to themselves, but provide no functionality. When looking at the code that throws the exception, it is obvious why the exception is thrown, so there it is counter-intuitive to write a good error message.
+ 
+ 
+
+ In that case you need a message code, so that the translation can be looked up.
+ A default message was provided when creating the exception. 
+ However that can not be used to look up translations, because the string is not visible
+ anywhere until the error occurs. It is only a magic string in code.
+ You could work with constants in the validating class.
