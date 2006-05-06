@@ -3,6 +3,7 @@ package se.repos.validation;
 import org.junit.Test;
 
 import se.repos.validation.annotations.Constraint;
+import se.repos.validation.annotations.ReposValidation;
 import junit.framework.JUnit4TestAdapter;
 
 public class ValidationApiTest {
@@ -33,6 +34,10 @@ public class ValidationApiTest {
 	
 	@Test public void oneLineConstraintWhenYouNeedPrerequisitesForLogic() {
 		Validation.rule(NumberShouldBePositive.class).validate(1);
+		// or
+		Validation.rule(RejectNumberIsNotPositive.class).validate(1);
+		// or
+		Validation.rule(new RejectNumberIsNotPositive()).validate(1);
 	}
 	
 	/**
@@ -86,5 +91,27 @@ public class ValidationApiTest {
 	 */
 	class RejectNumberIsNotPositive extends ValidationRejectStrategy<Integer> {
 		public boolean rejects(Integer value) { return value >= 0; }
+	}
+	
+	
+	@Test(expected=IllegalArgumentException.class) public void containerManagedValidationForAnnotations() {
+		AutoValidate av = getAutoValidateInstanceFromContainer();
+		av.interfaceMethod(2);
+	}
+	
+	private AutoValidate getAutoValidateInstanceFromContainer() {
+		// TODO: emulate container
+		return new AutoValidate();
+	}
+	
+	/**
+	 * Class expecting AOP-style validation
+	 */
+	@ReposValidation
+	class AutoValidate {
+		@Constraint(NumberShouldBePositive.class)
+		public void interfaceMethod(int argument) {
+			// no need to call Validation.annotaded()
+		}
 	}
 }
