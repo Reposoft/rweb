@@ -15,13 +15,13 @@ public class ValidationApiTest {
 	
 	// trows a runtime exception if validation fails
 	@Test public void checkArgumentBeforeProceeding() {
-			RULE.validate(1);
-			// proceed with logic
+		RULE.validate(1);
+		// proceed with logic
 	}
 
-	@Test(expected=IllegalArgumentException.class) public void checkArgumentBeforeProceedingFail() {
-			RULE.validate(-1);
-			// logic not reached
+	@Test(expected=IllegalArgumentException.class) public void checkArgumentBeforeProceeding_Fail() {
+		RULE.validate(-1);
+		// logic not reached
 	}
 	
 	@Test(expected=IllegalArgumentException.class) public void checkThatValidationOfNullAlwaysFails() {
@@ -39,7 +39,7 @@ public class ValidationApiTest {
 	}
 	
 	/**
-	 * Constraint that accepts values that are non-negative
+	 * Constraint that accepts values that are non-negative.
 	 */
 	class NumberShouldBePositive implements ValidationStrategy<Integer> {
 		public ValidationResult validate(Integer value) {
@@ -48,9 +48,9 @@ public class ValidationApiTest {
 	}
 	
 	/**
-	 * Alternative way to program the constraint
+	 * Alternative way to program the constraint if there's a simple boolean expression.
 	 */
 	class RejectNumberIsNotPositive extends ValidationRejectStrategy<Integer> {
-		public boolean rejects(Integer value) { return value >= 0; }
+		public boolean rejects(Integer value) { return value < 0; }
 	}
 }

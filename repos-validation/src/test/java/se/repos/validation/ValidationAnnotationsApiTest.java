@@ -12,6 +12,11 @@ public class ValidationAnnotationsApiTest {
 	    return new JUnit4TestAdapter(ValidationAnnotationsApiTest.class); 
 	}
 	
+	// calls a method that has annotated validation.
+	@Test(expected=IllegalArgumentException.class) public void testValidateUsingMethodAnnotation() {
+		annotatedMethodWithOneArgument(-1);
+	}
+	
 	/**
 	 * Does validation based on annotations before proceeding.
 	 * This means that the parameter requirements are self documented.
@@ -24,12 +29,12 @@ public class ValidationAnnotationsApiTest {
 		Validation.annotated();
 		// proceed normal operations with the validated input
 	}
-	
-	// calls a method that has annotated validation.
-	@Test(expected=IllegalArgumentException.class) public void testValidateUsingMethodAnnotation() {
-		annotatedMethodWithOneArgument(-1);
-	}
 
+	// calls a method that has annotated validation
+	@Test(expected=IllegalArgumentException.class) public void testValidateUsingParameterAnnotation() {
+		annotatedMethodWithTwoArguments(1, 2);
+	}	
+	
 	/**
 	 * Does validation based on parameter annotations.
 	 * Same functionality as above, even more self documenting,
@@ -44,20 +49,7 @@ public class ValidationAnnotationsApiTest {
 		// proceed normal operations with the validated input
 	}
 	
-	// calls a method that has annotated validation
-	@Test(expected=IllegalArgumentException.class) public void testValidateUsingParameterAnnotation() {
-		annotatedMethodWithTwoArguments(1, 2);
-	}	
-	
-	/**
-	 * Constraint that accepts values that are non-negative
-	 */
-	class NumberShouldBePositive implements ValidationStrategy<Integer> {
-		public ValidationResult validate(Integer value) {
-			return value >= 0 ? ACCEPT : REJECT;
-		}
-	}
-	
+	// call a method in an instance of an annotated class wrapped with a validation proxy
 	@Test(expected=IllegalArgumentException.class) public void containerManagedValidationForAnnotations() {
 		AutoValidate av = getAutoValidateInstanceFromContainer();
 		av.interfaceMethod(2);
@@ -69,13 +61,22 @@ public class ValidationAnnotationsApiTest {
 	}
 	
 	/**
-	 * Class expecting AOP-style validation
+	 * Class expecting AOP-style validation.
 	 */
 	@ReposValidation
 	class AutoValidate {
 		@Constraint(NumberShouldBePositive.class)
 		public void interfaceMethod(int argument) {
 			// no need to call Validation.annotaded()
+		}
+	}
+	
+	/**
+	 * Constraint that accepts values that are non-negative.
+	 */
+	class NumberShouldBePositive implements ValidationStrategy<Integer> {
+		public ValidationResult validate(Integer value) {
+			return value >= 0 ? ACCEPT : REJECT;
 		}
 	}
 }
