@@ -6,6 +6,8 @@ import junit.framework.JUnit4TestAdapter;
 
 public class ValidationApiTest {
 
+	// TODO: setter validation and field name resolution
+	
 	public static junit.framework.Test suite() { 
 	    return new JUnit4TestAdapter(ValidationApiTest.class); 
 	}

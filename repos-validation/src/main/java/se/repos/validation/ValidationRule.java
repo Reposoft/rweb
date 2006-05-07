@@ -26,6 +26,13 @@ package se.repos.validation;
  */
 public interface ValidationRule<V> {
 
+	/**
+	 * Decorate the validation rule with something that knows the parameter name to be validated
+	 * @param parameterName
+	 * @return
+	 */
+    // wait for test: ValidationRule param(String parameterName);
+	
     /**
      * @param value The value to validate
      * @throws IllegalArgumentException If the value is not valid
@@ -38,7 +45,7 @@ public interface ValidationRule<V> {
      * @throws IllegalArgumentException If the value is not valid
      * @deprecated This is not the way to handle field names, because the rule must be stateless
      */
-    void validate(V value, String fieldName) throws IllegalArgumentException;;
+    void validate(V value, String fieldName) throws IllegalArgumentException;
     
     /**
      * @param value value to be validated

@@ -92,3 +92,14 @@ Code readability
 {examples}
  
  {{{xref-test/se/repos/validation/ValidationApiTest.html}ValidationApiTest}}
+ 
+What is this not
+ 
+ * This is meant for error handling, not for semantic validation.
+	If a rule concerns the relations between fields, consider something more user oriented like Spring's Validator.
+	There are many approaches to maintaining business logic, and this is not one of them.
+	
+ * This is not an attempt do do declarative validation.
+ 	These rules are only meant to enforce the assumptions that logic or calculations rely on.
+ 	For declarative validation something like XML schemas should be the model.
+ 	For example business data, the mximum size of a column in the database could change, and then you'd prefer not to recompile the code.
