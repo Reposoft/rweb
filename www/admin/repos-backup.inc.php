@@ -118,7 +118,7 @@ function load($repository, $backupPath, $fileprefix) {
 		$head = $file[2];
 		$return = loadDumpfile($backupPath . DIRECTORY_SEPARATOR . $file[0],LOADCOMMAND);
 		if ($return != 0) {
-			fatal("Error loading backup file $file[0], returned $return. Aborting.");
+			fatal("Error loading backup file $file[0], returned $return. Repository loading stopped.");
 		}
 	}
 	info( "Successfuly loaded backup revisions up to " . $head . " into repository $repository." );
@@ -176,7 +176,8 @@ function verifyFileMD5($path) {
 	$sums = getMD5sums(dirname($path));
 	$sum = md5_file( $path );
 	//debug("MD5 for $path (stored): $sum, (".$sums[basename($path)].")");
-	return $sums[basename($path)] == $sum;
+	$filename = basename($path);
+	return $sums["$filename"] == $sum;
 }
 
 /**
