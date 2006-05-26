@@ -6,14 +6,14 @@ require( upOne(dirname(__FILE__)) . "/conf/repos.properties.php" );
 // --- output functions ---
 
 function getTheme() {
-	return "../themes/simple"; 
+	return "http://www.repos.se/themes/simple"; 
 }
 
 function html_start($title) {
 	$theme = getTheme();
 	echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"';
-	echo '"http://www.w3.org/TR/html4/loose.dtd">';
-	echo '<html>';
+	echo ' "http://www.w3.org/TR/html4/loose.dtd">';
+	echo "\n<html>";
 	echo '<head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
 	echo '<title>Repos administration: ' . $title . '</title>';

@@ -42,6 +42,9 @@ if ( $args == 0 || eregi("-*help",$argv[1])>0 ) {
 		echo "Verify that each entry in MD5SUMS file has a matching file.\nUsage: verifyMD5 backup-path\nPaths should have no tailing slash\n Exit code 0 <=> all checksums OK.";
 	else
 		$ok = verifyMD5($argv[2]);
+} elseif ( $argv[1] == "htmlStart" ) {
+	// admin feature. Print headers to show the command output as html file.
+	html_start(date("Y-m-d H:i:s"));
 }
 
 if ($ok)
