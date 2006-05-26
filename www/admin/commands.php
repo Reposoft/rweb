@@ -6,6 +6,11 @@
  
 require( dirname(__FILE__) . '/repos-backup.inc.php' );
 
+define("EXIT_OK", 0);
+define("EXIT_ABNORMAL", 1);
+// default return code is 0, used by the exit call after the commands 
+$ok = true;
+
 // Command line mode
 $args = count( $argv ) - 1;
 if ( $args == 0 || eregi("-*help",$argv[1])>0 ) {
@@ -34,9 +39,14 @@ if ( $args == 0 || eregi("-*help",$argv[1])>0 ) {
 		verify($argv[2]);
 } elseif ( $argv[1] == "verifyMD5" ) {
 	if ($args != 2 || eregi("-*help",$argv[2])>0 )
-		echo "Verify that each entry in MD5SUMS file has a matching file.\nUsage: verifyMD5 backup-path\nPaths should have no tailing slash\n";
+		echo "Verify that each entry in MD5SUMS file has a matching file.\nUsage: verifyMD5 backup-path\nPaths should have no tailing slash\n Exit code 0 <=> all checksums OK.";
 	else
-		verifyMD5($argv[2]);
+		$ok = verifyMD5($argv[2]);
 }
+
+if ($ok)
+	exit (EXIT_OK);
+else
+	exit (EXIT_ABNORMAL);
 
 ?>

@@ -117,7 +117,7 @@ function load($repository, $backupPath, $fileprefix) {
 		// read the files into repo
 		$head = $file[2];
 		$return = loadDumpfile($backupPath . DIRECTORY_SEPARATOR . $file[0],LOADCOMMAND);
-		if ($return > 0) {
+		if ($return != 0) {
 			fatal("Error loading backup file $file[0], returned $return. Aborting.");
 		}
 	}
@@ -216,13 +216,15 @@ function createMD5($file) {
 }
 
 /**
- * @return return value of the resulting command
+ * @return 1 if backup file is invalid, otherwise return value of the resulting command
  * @param file the compressed dumpfile to load
  * @param loadcommand the svnadmin load command, excluding input pipe
  */
 function loadDumpfile($file,$loadcommand) {
-	if ( ! verifyFileMD5($file) )
-		error( "File $file has incorrect MD5 sum. Trying anyway." );
+	if ( ! verifyFileMD5($file) ) {
+		error( "File $file has incorrect MD5 sum. Might cause corrupted repository. Aborting load." );
+		return 1;
+	}
 	$command = '';
 	$tmpfile = tempnam(TEMP_DIR, "svn");
 	if ( isWindows() ) {
@@ -234,7 +236,7 @@ function loadDumpfile($file,$loadcommand) {
 	$return = 0;
 	debug("Executing: $command");
 	exec( $command, $output, $return);
-	//unlink( $tmpfile );
+	unlink( $tmpfile );
 	return $return;
 }
 
