@@ -6,7 +6,7 @@ require( upOne(dirname(__FILE__)) . "/conf/repos.properties.php" );
 // --- output functions ---
 
 function getTheme() {
-	return "http://www.repos.se/themes/simple"; 
+	return "../themes/simple"; 
 }
 
 function html_start($title) {

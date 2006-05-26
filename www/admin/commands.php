@@ -6,6 +6,11 @@
  
 require( dirname(__FILE__) . '/repos-backup.inc.php' );
 
+// override theme function
+function getTheme() {
+	return "http://www.repos.se/themes/simple"; 
+}
+
 define("EXIT_OK", 0);
 define("EXIT_ABNORMAL", 1);
 // default return code is 0, used by the exit call after the commands 
