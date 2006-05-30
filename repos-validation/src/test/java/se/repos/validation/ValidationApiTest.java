@@ -2,6 +2,9 @@ package se.repos.validation;
 
 import org.junit.Test;
 
+import se.repos.validation.ValidationAnnotationsApiTest.NumberShouldBePositive;
+import se.repos.validation.teststrategies.RejectNumberIsNotPositive;
+
 import junit.framework.JUnit4TestAdapter;
 
 public class ValidationApiTest {
@@ -38,21 +41,5 @@ public class ValidationApiTest {
 		Validation.rule(RejectNumberIsNotPositive.class).validate(1);
 		// or
 		Validation.rule(new RejectNumberIsNotPositive()).validate(1);
-	}
-	
-	/**
-	 * Constraint that accepts values that are non-negative.
-	 */
-	class NumberShouldBePositive implements ValidationStrategy<Integer> {
-		public ValidationResult validate(Integer value) {
-			return value >= 0 ? ACCEPT : REJECT;
-		}
-	}
-	
-	/**
-	 * Alternative way to program the constraint if there's a simple boolean expression.
-	 */
-	class RejectNumberIsNotPositive extends ValidationRejectStrategy<Integer> {
-		public boolean rejects(Integer value) { return value < 0; }
 	}
 }

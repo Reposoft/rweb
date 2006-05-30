@@ -14,25 +14,22 @@
  */
 package se.repos.validation.impl;
 
-import se.repos.validation.ValidationRule;
+import se.repos.validation.ValidationStrategy;
 
 public class ValidationFailedException extends IllegalArgumentException {
 
 	private static final long serialVersionUID = 1L;
 	
-	ValidationRule rule = null;
-	
-	public ValidationFailedException() {
-		
+	ValidationStrategy strategy;
+	Object value;
+
+	protected ValidationFailedException() {
 	}
 	
-	public ValidationFailedException(Object value) {
-		super();
-		// TODO
-	}
-	
-	public ValidationFailedException(ValidationRule ruleInstance) {
-		super();
-		this.rule = ruleInstance;
+	ValidationFailedException(ValidationStrategy strategy, Object value) {
+		// TODO do localizable message
+		super(strategy.getClass().getSimpleName() + ": " + value);
+		this.strategy = strategy;
+		this.value = value;
 	}
 }

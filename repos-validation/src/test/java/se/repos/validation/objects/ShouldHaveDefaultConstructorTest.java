@@ -1,5 +1,7 @@
 package se.repos.validation.objects;
 
+import se.repos.validation.ValidationResult;
+import se.repos.validation.ValidationStrategy;
 import junit.framework.TestCase;
 
 public class ShouldHaveDefaultConstructorTest extends TestCase {
@@ -21,4 +23,5 @@ public class ShouldHaveDefaultConstructorTest extends TestCase {
 				new ShouldHaveDefaultConstructor()
 				.validate(Integer.class).passed());
 	}
+
 }

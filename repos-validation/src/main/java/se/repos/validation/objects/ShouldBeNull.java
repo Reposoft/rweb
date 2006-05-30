@@ -33,7 +33,7 @@ public class ShouldBeNull implements ValidationRule<Object> {
 		if (value == null) {
 			return;
 		}
-		throw new ValidationFailedException();
+		throw new IllegalArgumentException();
 	}
 
 	public boolean accepts(Object value) {

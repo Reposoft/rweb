@@ -55,7 +55,7 @@ public abstract class ValidationRuleBase<V>
     		throw new ValidationNullValueException();
     	}
     	if (rejectsValue(value)) {
-    		throw new ValidationFailedException(this);
+    		throw new ValidationFailedException();
     	}
     }
 
