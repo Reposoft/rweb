@@ -12,21 +12,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.repos.validation.rule;
+package se.repos.validation.impl;
 
 import se.repos.validation.ValidationRule;
 
-public class FieldValidation extends ValidationRuleBase<Object> {
+public class ValidationFailedException extends IllegalArgumentException {
 
-	ValidationRule<Object> wrappedRule;
+	private static final long serialVersionUID = 1L;
 	
-	public FieldValidation(String fieldName, ValidationRule<Object> wrappedRule) {
-		this.wrappedRule = wrappedRule;
+	ValidationRule rule = null;
+	
+	public ValidationFailedException() {
+		
 	}
-
-	@Override
-	public boolean rejectsValue(Object value) {
-		return wrappedRule.rejects(value);
+	
+	public ValidationFailedException(Object value) {
+		super();
+		// TODO
 	}
-
+	
+	public ValidationFailedException(ValidationRule ruleInstance) {
+		super();
+		this.rule = ruleInstance;
+	}
 }

@@ -15,7 +15,7 @@
 package se.repos.validation.objects;
 
 import se.repos.validation.ValidationRule;
-import se.repos.validation.rule.ValidationFailedException;
+import se.repos.validation.impl.ValidationFailedException;
 
 /**
  * Because all validation rules expect the object to be not-null, 

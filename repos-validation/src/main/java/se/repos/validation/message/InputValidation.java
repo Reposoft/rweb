@@ -18,7 +18,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import se.repos.validation.ValidationRule;
-import se.repos.validation.rule.ValidationRuleBase;
+import se.repos.validation.impl.ValidationRuleBase;
 
 /**
  * Self contained validation rule and error processing.
@@ -35,7 +35,7 @@ import se.repos.validation.rule.ValidationRuleBase;
  * @author Staffan Olsson
  * @since 2005-nov-14
  * @version $Id$
- * @see se.repos.validation.rule.ValidationRuleBase
+ * @see se.repos.validation.impl.ValidationRuleBase
  */
 public abstract class InputValidation extends InputException 
         implements ValidationRule<Object>, Validator {

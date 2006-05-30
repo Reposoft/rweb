@@ -16,7 +16,7 @@ package se.repos.validation.message;
 
 import org.springframework.context.MessageSourceResolvable;
 
-import se.repos.validation.rule.ValidationFailedException;
+import se.repos.validation.impl.ValidationFailedException;
 
 /**
  * Converts a trown validation exception to a message code that can be localized.

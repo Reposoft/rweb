@@ -14,7 +14,7 @@
  */
 package se.repos.validation.strings;
 
-import se.repos.validation.rule.ValidationRuleBase;
+import se.repos.validation.impl.ValidationRuleBase;
 
 /**
  * Validates on the existance or lack of a specified substring in input.
