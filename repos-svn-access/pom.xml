@@ -75,12 +75,27 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
             <phase>install</phase>
             <configuration>
               <descriptors>
+                <!-- make a zip file with dependencies and java code -->
+                <descriptor>src/main/assembly/distributable.xml</descriptor>
+                <!-- make a component jar that contains all dependencies -->
                 <descriptor>src/main/assembly/with-dependencies.xml</descriptor>
               </descriptors>
             </configuration>
