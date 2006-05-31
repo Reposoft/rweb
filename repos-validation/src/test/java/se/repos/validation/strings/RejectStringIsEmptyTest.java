@@ -15,21 +15,20 @@
 package se.repos.validation.strings;
 
 import junit.framework.TestCase;
-import se.repos.validation.ValidationRule;
+import se.repos.validation.ValidationStrategy;
 import se.repos.validation.strings.RejectStringIsEmpty;
 
 public class RejectStringIsEmptyTest extends TestCase {
 
     public void testRejectsString() {
-        ValidationRule<String> rule = new RejectStringIsEmpty();
-        assertTrue(rule.rejects("  "));
-        assertTrue(rule.rejects(""));
-        assertTrue(rule.rejects(null));
-        assertTrue(rule.rejects("\n"));
-        assertTrue(rule.rejects("\t"));
+        ValidationStrategy<String> rule = new RejectStringIsEmpty();
+        assertFalse(rule.validate("  ").passed());
+        assertFalse(rule.validate("").passed());
+        assertFalse(rule.validate("\n").passed());
+        assertFalse(rule.validate("\t").passed());
         
-        assertFalse(rule.rejects("_"));
-        assertFalse(rule.rejects(" o "));
+        assertTrue(rule.validate("_").passed());
+        assertTrue(rule.validate(" o ").passed());
     }
 
 }

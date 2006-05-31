@@ -15,7 +15,6 @@
 package se.repos.validation.strings;
 
 import junit.framework.TestCase;
-import se.repos.validation.impl.ValidationFailedException;
 import se.repos.validation.strings.RejectStringContentsNotAllowed;
 
 import org.junit.Test;
@@ -23,50 +22,26 @@ import org.junit.Test;
 public class RejectStringContentsNotAllowedTest extends TestCase {
 	
     @Test public void testRejectIfContainsNot() {
-        new RejectStringContentsNotAllowed('/').validate("name");
-        new RejectStringContentsNotAllowed('A').validate("name");
-        new RejectStringContentsNotAllowed('\n').validate("");
-        new RejectStringContentsNotAllowed('\n').validate(" ");
-        new RejectStringContentsNotAllowed('\t').validate(" \n");
-    }
-    
-    @Test public void testRejectsNull() {
-    	assertTrue("Should always reject null", new RejectStringContentsNotAllowed(' ').rejects(null));
+        assertTrue(new RejectStringContentsNotAllowed('/').validate("name").passed());
+        assertTrue(new RejectStringContentsNotAllowed('A').validate("name").passed());
+        assertTrue(new RejectStringContentsNotAllowed('\n').validate("").passed());
+        assertTrue(new RejectStringContentsNotAllowed('\n').validate(" ").passed());
+        assertTrue(new RejectStringContentsNotAllowed('\t').validate(" \n").passed());
     }
     
     @Test public void testRejectIfContains() {
-        try {
-            new RejectStringContentsNotAllowed('a').validate("name");
-            fail("Should reject");
-        } catch (ValidationFailedException e) {
-            // expected
-        }
-    }    
+        assertFalse(new RejectStringContentsNotAllowed('a').validate("name").passed());
+    }
 
     @Test public void testRejectIfContainsSlash() {
-        try {
-            new RejectStringContentsNotAllowed('/').validate("/");
-            fail("Should reject");
-        } catch (ValidationFailedException e) {
-            // expected
-        }
+        assertFalse(new RejectStringContentsNotAllowed('/').validate("/").passed());
     }
     
     @Test public void testRejectIfContainsSpace() {
-        try {
-            new RejectStringContentsNotAllowed(' ').validate("name ");
-            fail("Should reject");
-        } catch (ValidationFailedException e) {
-            // expected
-        }
+    	assertFalse(new RejectStringContentsNotAllowed(' ').validate("name ").passed());
     }
 
     @Test public void testRejectIfContainsNewline() {
-        try {
-            new RejectStringContentsNotAllowed('\n').validate("\nname ");
-            fail("Should reject");
-        } catch (ValidationFailedException e) {
-            // expected
-        }
+        assertFalse(new RejectStringContentsNotAllowed('\n').validate("\nname ").passed());
     }  
 }

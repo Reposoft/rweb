@@ -14,7 +14,8 @@
  */
 package se.repos.validation.strings;
 
-import se.repos.validation.impl.ValidationRuleBase;
+import se.repos.validation.ValidationResult;
+import se.repos.validation.ValidationStrategy;
 
 /**
  * Validates on the existance or lack of a specified substring in input.
@@ -22,8 +23,8 @@ import se.repos.validation.impl.ValidationRuleBase;
  * @since 2005-nov-18
  * @version $Id$
  */
-public abstract class ValidateStringContentsBase extends
-		ValidateStringBase {
+public abstract class ValidateStringContentsBase implements
+		ValidationStrategy<String> {
 
     private String substring;
     
@@ -50,4 +51,14 @@ public abstract class ValidateStringContentsBase extends
         return substring;
     }
 
+    public ValidationResult validate(String value) {
+    	return rejectsValue(value) ? ValidationResult.INVALID : ValidationResult.VALID;
+    }
+    
+    /**
+     * This method is named like this only to make all old subclasses still valid
+     * @param value
+     * @return
+     */
+    protected abstract boolean rejectsValue(String value);
 }

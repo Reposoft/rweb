@@ -15,21 +15,13 @@
 package se.repos.validation.strings;
 
 import junit.framework.TestCase;
-import se.repos.validation.impl.ValidationFailedException;
 import se.repos.validation.strings.RejectStringStartNotAllowed;
 
 public class RejectStringStartNotAllowedTest extends TestCase {
 
     public void testRejectsString() {
-        assertTrue(new RejectStringStartNotAllowed("").rejects(null));
-        assertFalse(new RejectStringStartNotAllowed("\n").rejects("a"));
-        
-        try {
-            new RejectStringStartNotAllowed('\n').validate("\na");
-            fail("Should have rejected");
-        } catch (ValidationFailedException e) {
-            // expected
-        }
+        assertTrue(new RejectStringStartNotAllowed("\n").validate("a").passed());
+        assertFalse(new RejectStringStartNotAllowed('\n').validate("\na").passed());
     }
 
 }

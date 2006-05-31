@@ -15,16 +15,18 @@
 package se.repos.validation.strings;
 
 import se.repos.text.InputUtils;
+import se.repos.validation.ValidationRejectStrategy;
 
 /**
+ * Rejects strings that are null, zero length or only space characters.
  * @author Staffan Olsson
  * @since 2005-nov-13
  * @version $Id$
  */
-public class RejectStringIsEmpty extends ValidateStringBase {
+public class RejectStringIsEmpty extends ValidationRejectStrategy<String> {
 
 	@Override
-	protected boolean rejectsValue(String value) {
+	public boolean rejects(String value) {
 		return InputUtils.trim(value) == null;
 	}
 

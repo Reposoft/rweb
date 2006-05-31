@@ -14,8 +14,7 @@
  */
 package se.repos.validation.strings;
 
-import se.repos.validation.ValidationRule;
-import se.repos.validation.impl.ValidationFailedException;
+import se.repos.validation.ValidationStrategy;
 import se.repos.validation.strings.RejectStringContentsMissing;
 
 import junit.framework.TestCase;
@@ -23,15 +22,9 @@ import junit.framework.TestCase;
 public class RejectStringContentsMissingTest extends TestCase {
 
 	public void testRejectsString() {
-        ValidationRule<String> rule = new RejectStringContentsMissing("//");
-        assertTrue(rule.rejects(null));
-        rule.validate("http://");
-        try {
-            rule.validate("/\\/");
-            fail("should have rejected");
-        } catch (ValidationFailedException e) {
-            // expected
-        }
+        ValidationStrategy<String> rule = new RejectStringContentsMissing("//");
+        assertTrue("string contains the required substring, should pass",rule.validate("http://").passed());
+        assertFalse("does not contain substring", rule.validate("/\\/").passed());
     } 
 
 }
