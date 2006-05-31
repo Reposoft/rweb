@@ -2,7 +2,7 @@ package se.repos.validation;
 
 import org.junit.Test;
 
-import se.repos.validation.ValidationAnnotationsApiTest.NumberShouldBePositive;
+import se.repos.validation.teststrategies.NumberShouldBePositive;
 import se.repos.validation.teststrategies.RejectNumberIsNotPositive;
 
 import junit.framework.JUnit4TestAdapter;
