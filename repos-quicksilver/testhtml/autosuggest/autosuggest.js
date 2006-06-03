@@ -18,30 +18,18 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 *******************************************************
-
-Please send any useful modifications or improvements via 
-email to joekepley at yahoo (dot) com
-
-*******************************************************/
+/** modified for repos.se by Staffan och Kalle **/
 
 /********************************************************
  The AutoSuggest class binds to a text input field
  and creates an automatic suggestion dropdown in the style
  of the "IntelliSense" and "AutoComplete" features of some
  desktop apps. 
+
  Parameters: 
  elem: A DOM element for an INPUT TYPE="text" form field
  suggestions: an array of strings to be used as suggestions
               when someone's typing.
-
- Example usage: 
- 
- Please enter the name of a fruit.
- <input type="text" id="fruit" name="fruit" />
- <script language="Javascript">
- var fruits=new Array("apple","orange","grape","kiwi","cumquat","banana");
- new AutoSuggest(document.getElementById("fruit",fruits));
- </script>
 
  Requirements: 
 
@@ -49,46 +37,7 @@ email to joekepley at yahoo (dot) com
  well with dynamically-created DIVs. So, somewhere in your 
  HTML, you'll need to add this: 
  <div id="autosuggest"><ul></ul></div>
-
- Here's a default set of style rules that you'll also want to 
- add to your CSS: 
-
- .suggestion_list
- {
- background: white;
- border: 1px solid;
- padding: 4px;
- }
-
- .suggestion_list ul
- {
- padding: 0;
- margin: 0;
- list-style-type: none;
- }
-
- .suggestion_list a
- {
- text-decoration: none;
- color: navy;
- }
-
- .suggestion_list .selected
- {
- background: navy;
- color: white;
- }
-
- .suggestion_list .selected a
- {
- color: white;
- }
-
- #autosuggest
- {
- display: none;
- }
-*********************************************************/
+********************************************************/
 function AutoSuggest(elem, suggestions)
 {
 
