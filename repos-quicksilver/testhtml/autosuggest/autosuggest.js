@@ -119,6 +119,7 @@ function AutoSuggest(elem, suggestions)
 	var ESC = 27;
 	var KEYUP = 38;
 	var KEYDN = 40;
+	var ENTER = 13;
 	
 
 	//The browsers' own autocomplete feature can be problematic, since it will 
@@ -148,6 +149,10 @@ function AutoSuggest(elem, suggestions)
 
 		switch(key)
 		{
+			case ENTER:
+			me.useSuggestion();
+			break;
+		
 			case TAB:
 			me.useSuggestion();
 			break;
@@ -170,6 +175,7 @@ function AutoSuggest(elem, suggestions)
 				me.highlighted++;
 			}
 			me.changeHighlight(key);
+			
 			break;
 		}
 	};
@@ -216,14 +222,28 @@ function AutoSuggest(elem, suggestions)
 	{
 		if (this.highlighted > -1)
 		{
+			// set input box value to the complete name
 			this.elem.value = this.eligible[this.highlighted];
+			// store the selected element to use that link
+			var selectedLink = this.eligible[this.highlighted];
+			// close quicksilver window
 			this.hideDiv();
 			//It's impossible to cancel the Tab key's default behavior. 
 			//So this undoes it by moving the focus back to our field right after
 			//the event completes.
 			setTimeout("document.getElementById('" + this.elem.id + "').focus()",0);
+			// follow the selected link
+			this.followLink(selectedLink);
 		}
 	};
+	
+	/******************************************************
+	Treat the selected element as a clicked link
+	******************************************************/
+	this.followLink = function(selectedLink)
+	{
+		window.location.href = "../clicked.html?i=" + selectedLink;
+	}
 
 	/********************************************************
 	Display the dropdown. Pretty straightforward.
@@ -375,6 +395,10 @@ function AutoSuggest(elem, suggestions)
 			{
 				this.eligible[this.eligible.length]=suggestion;
 			}
+		}
+		// by default select the first item
+		if (this.eligible.length > 0 && this.highlighted < 0) {
+			this.highlighted = 0;
 		}
 	};
 
