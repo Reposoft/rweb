@@ -1,0 +1,27 @@
+.qsWindow {
+	position:absolute;
+	width:350px;
+	height:200px;
+	top:200px;
+	left:200px;
+	z-index:1979;
+	
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	color: #000000;
+	text-decoration: none;
+	
+	background-color: #CCCCCC;
+	
+	border: 1px solid #999999;
+}
+.txtQSSearch{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10px;
+	font-weight: bold;
+	color: #333333;
+	text-decoration: none;
+	border: 1px solid #666666;
+	width: 100%;
+}

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Index page using repos-quicksilver</title>
+
+<script type="text/javascript">
+
+/*
+	This sourcecode is copyrighted... och nåt annat bra att säga...
+*/
+	document.write('<link href="css/quicksilver.css" rel="stylesheet" type="text/css" />');
+
+	/*global vars*/
+	var emod; /*the event model*/
+	var altDown = false;
+	var linkCache = new Array();
+	var Q_KEY = 81;
+
+	function document_onKeyDown(){
+		var e = window.event;
+		altDown = (e.altKey) ? true : false;
+		if(e.keyCode == 81 && altDown){
+			showQuickSilverWindow();
+		}
+		return false;
+	}
+	
+	function showQuickSilverWindow(){
+		var qsWin = null;
+//		var e = window.event;
+//		altDown = (e.altKey) ? true : false;
+//		if(e.keyCode == 81 && altDown){
+			qsWin = getQSWindow();
+			qsWin.innerHTML = "QS!!!";
+			qsWin.show;
+//		}
+	}
+	
+	function txtQSSearch_onChange(){
+		
+	}
+	
+	function linkObject(text, url){
+		this.text = text;
+		this.url = url;
+	}
+	
+	function getQSWindow(){
+		var qsWin = document.getElementById("qsWindow");
+		
+		if(!qsWin){
+			qsWin = document.createElement("div");
+			qsWin.className = "qsWindow";
+			qsWin.zIndex = 32767;
+			qsWin.id = 'qsWindow';
+			document.body.appendChild(qsWin);
+			qsWin = document.getElementById("qsWindow");
+		}
+		return qsWin;
+		
+		function show(){
+			document.getElementById("qsWindow").style.display = 'block';
+		}
+		
+		function hide(){
+			document.getElementById("qsWindow").style.display = 'none';
+		}
+	}
+	
+		
+	function indexLinks(s){
+		var as = document.body.getElementsByTagName("a");
+
+		for(ix in as){
+			if(as[ix].childNodes)linkCache.push(new linkObject(as[ix].childNodes[0].toString(), as[ix]));
+		}
+	}
+	
+	function document_onLoad(){		  
+		indexLinks();
+	}
+	
+	document.onkeydown = document_onKeyDown;
+	
+</script>
+
+
+</head>
+<body onload="document_onLoad();">
+<a href="#" onclick="javascript:showQuick()">quicksilver</a>
+<h1>Directory index</h1>
+<p><a href="clicked.html?i=up">..</a></p>
+<p><a href="clicked.html?i=up2">/up</a></p>
+<p><a href="clicked.html?i=docs">docs</a></p>
+<p><a href="clicked.html?i=sources">sources</a></p>
+<p><a href="clicked.html?i=.project">.project</a></p>
+<p><a href="clicked.html?i=document.html">document.html</a></p>
+<p><a href="clicked.html?i=s.doc">s.doc</a></p>
+<p><a href="clicked.html?i=s%20m.doc">s m.doc</a></p>
+<div id="debugger"></div>
+</body>
+</html>
+
