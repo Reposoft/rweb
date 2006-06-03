@@ -136,6 +136,28 @@ function AutoSuggest(elem, suggestions)
 		elem.id = id;
 	}
 
+	// Change this to customize the display text of a suggestiong 
+	this.getDisplayName = function(suggestion) {
+		// treat the item as a string
+		return "link: " + suggestion;
+	}
+	
+	// returns the text for an alternative, to be matched agains the search string
+	this.getIndexedText = function(suggestion) {
+		return suggestion.toLowerCase();
+	}
+	
+	// returns the search string used to filter indexed texts
+	this.getSearchText = function() {
+		return this.inputText.toLowerCase();
+	}
+
+	// Change this to customize the behaviour when an item is selected
+	this.followLink = function(selectedSuggestion)
+	{
+		// treat the item as a query parameter
+		window.location.href = "../clicked.html?i=" + selectedSuggestion;
+	}
 
 	/********************************************************
 	onkeydown event handler for the input elem.
@@ -236,14 +258,6 @@ function AutoSuggest(elem, suggestions)
 			this.followLink(selectedLink);
 		}
 	};
-	
-	/******************************************************
-	Treat the selected element as a clicked link
-	******************************************************/
-	this.followLink = function(selectedLink)
-	{
-		window.location.href = "../clicked.html?i=" + selectedLink;
-	}
 
 	/********************************************************
 	Display the dropdown. Pretty straightforward.
@@ -317,7 +331,7 @@ function AutoSuggest(elem, suggestions)
 		//Create an array of LI's for the words.
 		for (i in this.eligible)
 		{
-			var word = this.eligible[i];
+			var word = this.getDisplayName(this.eligible[i]);
 	
 			var li = document.createElement('li');
 			var a = document.createElement('a');
@@ -387,13 +401,13 @@ function AutoSuggest(elem, suggestions)
 	this.getEligible = function()
 	{
 		this.eligible = new Array();
+		var searchText = this.getSearchText();
 		for (i in this.suggestions) 
 		{
-			var suggestion = this.suggestions[i];
-			
-			if(suggestion.toLowerCase().indexOf(this.inputText.toLowerCase()) == "0")
+			var indexedText = this.getIndexedText(suggestions[i]);
+			if(indexedText.indexOf(searchText) == "0")
 			{
-				this.eligible[this.eligible.length]=suggestion;
+				this.eligible[this.eligible.length]=suggestions[i];
 			}
 		}
 		// by default select the first item
