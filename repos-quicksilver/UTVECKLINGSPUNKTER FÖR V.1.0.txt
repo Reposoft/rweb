@@ -1,6 +1,6 @@
 *
 [Kalle - 11:17 2006-06-05]
-[Status - På G. (Kalle)]
+[Status - Ej påbörjad.]
 PytteDIV:en som dyker upp när man söker på något som inte ger träff ska bort.
 
 
