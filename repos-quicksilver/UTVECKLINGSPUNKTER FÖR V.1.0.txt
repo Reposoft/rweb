@@ -2,7 +2,7 @@
 [Kalle - 11:17 2006-06-05]
 [Status - Ej påbörjad.]
 PytteDIV:en som dyker upp när man söker på något som inte ger träff ska bort.
-
+Någon sorts feedback behöver användaren att sökning görs men att det inte finns några träffar. Helst ej som text, så slipper man olika språkversioner.
 
 *
 [Kalle - 11:17 2006-06-05]
@@ -10,14 +10,24 @@ PytteDIV:en som dyker upp när man söker på något som inte ger träff ska bort.
 Det buggar när man skriver in en bokstav som inte ger träff, tar bort den och skriver in en giltig. Det föreslås ej träffar förrän man skriver in minst två tecken och backspace:ar bort ett tecken. Först DÅ kommer förslagen fram på resterande inmatade tecken.
 [Status - Ej påbörjad.]
 
-
 *
 [Kalle - 11:17 2006-06-05]
 [Status - Ej påbörjad.]
 Applikationen, så som den är byggd idag, tar ENDAST A-taggar som innehåller en href som i sin tur innehåller en sjysst url. Den tar inte t.ex... href="javascript:onClick=link_onClick('url eller annan funktionsparameter')". Ej heller kan den ta A-taggar som det ligger ett onClick-attribut på.
-
+Gör vi till 2.0? Första verran ska klara av fillistor typ svn-index. Men den kanske borde filtrera bort javascript-länkar och länkar med <img> i.
 
 *
 [Kalle - 11:20 2006-06-05]
 [Status - Ej påbörjad.]
 Alt + Q skall synliggöra en DIV med en textbox för sökning. Textboxen skall få fokus.
+[Staffan] Jepp, och snyggt ska det vara också.
+
+*
+[Staffan - 12:54 2006-06-05]
+[Status - ej påbörjad]
+Rensa upp i utvecklingskatalogen. Ta bort mapp testhtml och använd scripten i scripts från index.htm... eller nåt.
+
+*
+[Staffan - 12:56 2006-06-05]
+[Status - ej påbörjad]
+Om möjligt - gör så att man inte behöver lägga in något i sidans body.
