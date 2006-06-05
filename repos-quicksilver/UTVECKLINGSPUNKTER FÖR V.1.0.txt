@@ -1,6 +1,18 @@
-* [Kalle] PytteDIV:en som dyker upp när man söker på något som inte ger träff ska bort.
+*
+[Kalle - 11:17 2006-06-05]
+[Status - På G.]
+PytteDIV:en som dyker upp när man söker på något som inte ger träff ska bort.
 
-* [Kalle] Det buggar när man skriver in en bokstav som inte ger träff, tar bort den och skriver in en giltig. Det föreslås ej träffar förrän man skriver in minst två tecken och backspace:ar bort ett tecken. Först DÅ kommer förslagen fram på resterande inmatade tecken.
 
-* [Kalle] Applikationen, så som den är byggd idag, tar ENDAST A-taggar som innehåller en href som i sin tur innehåller en sjysst url. Den tar inte t.ex... href="javascript:onClick=link_onClick('url eller annan funktionsparameter')". Ej heller kan den ta A-taggar som det ligger ett onClick-attribut på.
+*
+[Kalle - 11:17 2006-06-05]
+[Status - Ej påbörjad.]
+Det buggar när man skriver in en bokstav som inte ger träff, tar bort den och skriver in en giltig. Det föreslås ej träffar förrän man skriver in minst två tecken och backspace:ar bort ett tecken. Först DÅ kommer förslagen fram på resterande inmatade tecken.
+[Status - Ej påbörjad.]
+
+
+*
+[Kalle - 11:17 2006-06-05]
+[Status - Ej påbörjad.]
+Applikationen, så som den är byggd idag, tar ENDAST A-taggar som innehåller en href som i sin tur innehåller en sjysst url. Den tar inte t.ex... href="javascript:onClick=link_onClick('url eller annan funktionsparameter')". Ej heller kan den ta A-taggar som det ligger ett onClick-attribut på.
 
