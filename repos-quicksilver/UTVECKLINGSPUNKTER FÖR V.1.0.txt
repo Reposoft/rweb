@@ -1,6 +1,6 @@
 *
 [Kalle - 11:17 2006-06-05]
-[Status - På G.]
+[Status - På G. (Kalle)]
 PytteDIV:en som dyker upp när man söker på något som inte ger träff ska bort.
 
 
@@ -16,3 +16,8 @@ Det buggar när man skriver in en bokstav som inte ger träff, tar bort den och sk
 [Status - Ej påbörjad.]
 Applikationen, så som den är byggd idag, tar ENDAST A-taggar som innehåller en href som i sin tur innehåller en sjysst url. Den tar inte t.ex... href="javascript:onClick=link_onClick('url eller annan funktionsparameter')". Ej heller kan den ta A-taggar som det ligger ett onClick-attribut på.
 
+
+*
+[Kalle - 11:20 2006-06-05]
+[Status - Ej påbörjad.]
+Alt + Q skall synliggöra en DIV med en textbox för sökning. Textboxen skall få fokus.
