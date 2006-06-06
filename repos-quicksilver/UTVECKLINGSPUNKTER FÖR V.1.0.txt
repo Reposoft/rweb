@@ -11,10 +11,11 @@ Det buggar när man skriver in en bokstav som inte ger träff, tar bort den och sk
 
 *
 [Kalle - 11:17 2006-06-05]
-[Status - Ej påbörjad.]
+[Status - Gjort framsteg. Pausat.]
 Applikationen, så som den är byggd idag, tar ENDAST A-taggar som innehåller en href som i sin tur innehåller en sjysst url. Den tar inte t.ex... href="javascript:onClick=link_onClick('url eller annan funktionsparameter')". Ej heller kan den ta A-taggar som det ligger ett onClick-attribut på.
 [Staffan] Gör vi till 2.0? Första verran ska klara av fillistor typ svn-index. Men den kanske borde filtrera bort javascript-länkar och länkar med <img> i.
 [Kalle] Japp... Det kan bli en 2.0 verra. Ja, img-taggar i länkar är ju ett litet tomtejobb. Svårigheten finns inte i att plocka href:en. Den finns ju i A-taggen som i en vanlig länk. Men man vill ju visa nåt bra i förslagslistan. I ett fall av img-tagg-förekomst så kan man ju rycka det "alt"-attribut som KAN vara satt. I den kan det ju stå en beskrivande text om bilden.
+[Staffan] Fixade så att man använder img-ens title om det är en img i a-taggen. Men, kan man fixa så att ett linkObject kan säga att det är olämpligt för indexering?
 
 *
 [Kalle - 11:20 2006-06-05]
@@ -24,7 +25,7 @@ Alt + Q skall synliggöra en DIV med en textbox för sökning. Textboxen skall få f
 
 *
 [Staffan - 12:54 2006-06-05]
-[Status - på G]
+[Status - halvklar. lämnar över till Kalle.]
 Rensa upp i utvecklingskatalogen. Ta bort mapp testhtml och använd scripten i scripts från index.htm... eller nåt.
 
 *
