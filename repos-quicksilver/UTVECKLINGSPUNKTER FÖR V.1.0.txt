@@ -24,7 +24,7 @@ Alt + Q skall synliggöra en DIV med en textbox för sökning. Textboxen skall få f
 
 *
 [Staffan - 12:54 2006-06-05]
-[Status - ej påbörjad]
+[Status - på G]
 Rensa upp i utvecklingskatalogen. Ta bort mapp testhtml och använd scripten i scripts från index.htm... eller nåt.
 
 *
@@ -47,7 +47,7 @@ Av pedagogiska skäl så bör man nog ha en kryssknapp som komplement till ESC-knap
 
 
 
-
+[VIP-lista]
 Staffan	:	solsson@gmail.com
 Kalle	:	kalle@flaish.se
 
