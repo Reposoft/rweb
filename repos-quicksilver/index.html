@@ -43,9 +43,15 @@
 		
 	}
 	
-	function linkObject(text, url){
+	function linkObject(anchorNode){
+		if (anchorNode.childNodes[0] instanceof HTMLImageElement) {
+			var text = anchorNode.childNodes[0].title;
+		} else {
+			// text node
+			var text = anchorNode.childNodes[0].data;
+		}
 		this.text = text.toString();
-		this.url = url.toString();
+		this.url = anchorNode.href.toString();
 	}
 	
 	function getQSWindow(){
@@ -87,7 +93,7 @@
 		var as = document.body.getElementsByTagName("a");
 		for(ix in as){
 			if(as[ix].childNodes){
-				linkCache.push(new linkObject(as[ix].childNodes[0].data, as[ix]));
+				linkCache.push(new linkObject(as[ix]));
 			}
 		}
 	}
@@ -104,7 +110,7 @@
 <body onload="document_onLoad();">
 Go [Alt-Q] for 
 <a href="#" onclick="javascript:showQuick()"><img src="rqlogo.png" width="16" height="16" alt="qs" title="repos-quicksilver"/></a>
- - <a href="about.html">about</a> repos-quicksilver.
+ : <a href="about.html">about</a> repos-quicksilver.
 <h1>Directory index</h1>
 <p><a href="clicked.html?i=up">..</a></p>
 <p><a href="clicked.html?i=up2">/up</a></p>
