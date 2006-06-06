@@ -102,16 +102,18 @@
 
 </head>
 <body onload="document_onLoad();">
-<a href="#" onclick="javascript:showQuick()">quicksilver</a>
+Go [Alt-Q] for 
+<a href="#" onclick="javascript:showQuick()"><img src="rqlogo.png" width="16" height="16" alt="qs" title="repos-quicksilver"/></a>
+ - <a href="about.html">about</a> repos-quicksilver.
 <h1>Directory index</h1>
-<p><a href="testhtml/clicked.html?i=up">..</a></p>
-<p><a href="testhtml/clicked.html?i=up2">/up</a></p>
-<p><a href="testhtml/clicked.html?i=docs">docs</a></p>
-<p><a href="testhtml/clicked.html?i=sources">sources</a></p>
-<p><a href="testhtml/clicked.html?i=.project">.project</a></p>
-<p><a href="testhtml/clicked.html?i=document.html">document.html</a></p>
-<p><a href="testhtml/clicked.html?i=s.doc">s.doc</a></p>
-<p><a href="testhtml/clicked.html?i=s%20m.doc">s m.doc</a></p>
+<p><a href="clicked.html?i=up">..</a></p>
+<p><a href="clicked.html?i=up2">/up</a></p>
+<p><a href="clicked.html?i=docs">docs</a></p>
+<p><a href="clicked.html?i=sources">sources</a></p>
+<p><a href="clicked.html?i=.project">.project</a></p>
+<p><a href="clicked.html?i=document.html">document.html</a></p>
+<p><a href="clicked.html?i=s.doc">s.doc</a></p>
+<p><a href="clicked.html?i=s%20m.doc">s m.doc</a></p>
 <div id="debugger"></div>
 
 
@@ -123,7 +125,7 @@
 		<legend>State</legend>
 		<p>(Up and down arrows highlight a suggestion. Tab key inserts the highlighted suggestion. Escape hides the list.)</p>
 		<label for="txtQuickSilverSearch">Please enter a State:</label>
-		<input type="text" name="txtQuickSilverSearch" id="txtQuickSilverSearch" />
+		<input accesskey="Q" type="text" name="txtQuickSilverSearch" id="txtQuickSilverSearch" />
 		<script language="Javascript">
 			new AutoSuggest(document.getElementById('txtQuickSilverSearch'), linkCache);
 		</script>

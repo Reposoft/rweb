@@ -46,6 +46,7 @@ function AutoSuggest(elem, suggestions)
 	var me = this;
 
 	//A reference to the element we're binding the list to.
+	//This element must have an ID attribute
 	this.elem = elem;
 
 	this.suggestions = suggestions;
@@ -76,24 +77,14 @@ function AutoSuggest(elem, suggestions)
 	//Setting this attribute should turn it off.
 	elem.setAttribute("autocomplete","off");
 
-	//We need to be able to reference the elem by id. If it doesn't have an id, set one.
-	if(!elem.id)
-	{
-		var id = "autosuggest" + idCounter;
-		idCounter++;
-
-		elem.id = id;
-	}
-
 	// Change this to customize the display text of a suggestiong 
 	this.getDisplayName = function(suggestion) {
-		// treat the item as a string
-		return "link: " + suggestion;
+		return "- " + suggestion.text + " -";
 	}
 	
 	// returns the text for an alternative, to be matched agains the search string
 	this.getIndexedText = function(suggestion) {
-		return suggestion.toLowerCase();
+		return suggestion.text.toLowerCase();
 	}
 	
 	// returns the search string used to filter indexed texts
@@ -101,11 +92,18 @@ function AutoSuggest(elem, suggestions)
 		return this.inputText.toLowerCase();
 	}
 
-	// Change this to customize the behaviour when an item is selected
-	this.followLink = function(selectedSuggestion)
-	{
-		// treat the item as a query parameter
-		window.location.href = "../clicked.html?i=" + selectedSuggestion;
+	// Behaviour when a selection has been made
+	this.onSelection = function(selectedSuggestion) {
+		//this.elem.value = this.eligible[this.highlighted]; // set the complete selection in the input box (default autosuggest behaviour)
+		this.elem.value = ""; // don't remember input
+		// close autoselect window
+		this.hideDiv();
+		//It's impossible to cancel the Tab key's default behavior. 
+		//So this undoes it by moving the focus back to our field right after
+		//the event completes.
+		setTimeout("document.getElementById('" + this.elem.id + "').focus()",0);
+		// go to the URL (hopefully the link has a plain href)
+		window.location.href = selectedSuggestion.url;
 	}
 
 	/********************************************************
@@ -193,18 +191,10 @@ function AutoSuggest(elem, suggestions)
 	{
 		if (this.highlighted > -1)
 		{
-			// set input box value to the complete name
-			this.elem.value = this.eligible[this.highlighted];
 			// store the selected element to use that link
 			var selectedLink = this.eligible[this.highlighted];
-			// close quicksilver window
-			this.hideDiv();
-			//It's impossible to cancel the Tab key's default behavior. 
-			//So this undoes it by moving the focus back to our field right after
-			//the event completes.
-			setTimeout("document.getElementById('" + this.elem.id + "').focus()",0);
-			// follow the selected link
-			this.followLink(selectedLink);
+			// action
+			this.onSelection(selectedLink);
 		}
 	};
 
