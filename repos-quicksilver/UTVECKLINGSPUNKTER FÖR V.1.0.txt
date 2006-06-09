@@ -44,6 +44,12 @@ Kanske inte användbart eller meningsfullt... Men finns det någon poäng med att "
 [Status - ej påbörjad]
 Av pedagogiska skäl så bör man nog ha en kryssknapp som komplement till ESC-knappen för att få bort QS-Divven. Inte minst om man använder sig av låsningen av markören till textboxen som beskrivs ovan. Kryssknappar upp till höger har jag sett ganska ofta i väl använda applikationer :o)
 
+*
+[Kalle - 14:55 2006-06-09]
+[Kommentar]
+Slängde in ett förslag på hur QuickSilverWindow (En DIV) skulle kunna bete sig och se ut.
+
+
 
 
 
