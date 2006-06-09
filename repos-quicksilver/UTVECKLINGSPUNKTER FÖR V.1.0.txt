@@ -2,7 +2,7 @@
 [Kalle - 11:17 2006-06-05]
 [Status - Ej påbörjad.]
 PytteDIV:en som dyker upp när man söker på något som inte ger träff ska bort.
-Någon sorts feedback behöver användaren att sökning görs men att det inte finns några träffar. Helst ej som text, så slipper man olika språkversioner.
+[Staffan] Någon sorts feedback behöver användaren att sökning görs men att det inte finns några träffar. Helst ej som text, så slipper man olika språkversioner.
 
 *
 [Kalle - 11:17 2006-06-05]
