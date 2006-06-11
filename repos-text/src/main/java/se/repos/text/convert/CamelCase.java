@@ -37,7 +37,7 @@ import static java.lang.Character.toLowerCase;
  * @author Staffan Olsson
  * @since 2005-nov-13
  * @version $Id$
- * @link http://en.wikipedia.org/wiki/CamelCase
+ * @see <a href="http://en.wikipedia.org/wiki/CamelCase">WikiPedia CamelCase</a>
  */
 public final class CamelCase
     implements StringEncoder, StringDecoder {
