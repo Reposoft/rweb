@@ -9,9 +9,9 @@
   <property name="home" value="http://phpicalendar.net/"/>
 	
   <!-- set global properties for this build -->
-  <property name="archive" value="http://heanet.dl.sourceforge.net/sourceforge/phpicalendar/phpicalendar-2.0b.zip"/>
+  <property name="archive" value="http://heanet.dl.sourceforge.net/sourceforge/phpicalendar/phpicalendar-2.22.zip"/>
   <property name="archive.type" value="zip"/>
-  <property name="extracted.folder" value="${basedir}/phpicalendar-2.0b"/>
+  <property name="extracted.folder" value="${basedir}/phpicalendar-2.22"/>
 	
   <!-- derived -->
   <property name="download.file" value="${basedir}/downloaded-dependency.${archive.type}"/>
