@@ -16,7 +16,6 @@ package se.repos.validation.message;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.StringDecoder;
-import org.springframework.context.MessageSourceResolvable;
 
 import se.repos.text.convert.CamelCase;
 
@@ -44,7 +43,7 @@ import se.repos.text.convert.CamelCase;
  * @version $Id$
  */
 public abstract class InputException extends IllegalArgumentException
-        implements MessageSourceResolvable {
+{//        implements MessageSourceResolvable {
 
     private static final long serialVersionUID = 1L;
 

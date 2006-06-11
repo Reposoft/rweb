@@ -6,11 +6,7 @@ import se.repos.validation.annotations.Constraint;
 import se.repos.validation.annotations.ReposValidation;
 import junit.framework.JUnit4TestAdapter;
 
-public class ValidationAnnotationsApiTest {
-
-	public static junit.framework.Test suite() { 
-	    return new JUnit4TestAdapter(ValidationAnnotationsApiTest.class); 
-	}
+public class ValidationAnnotationsApiTest4 {
 	
 	// calls a method that has annotated validation.
 	@Test(expected=IllegalArgumentException.class) public void testValidateUsingMethodAnnotation() {

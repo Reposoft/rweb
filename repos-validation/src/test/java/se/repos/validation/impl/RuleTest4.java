@@ -10,11 +10,7 @@ import junit.framework.JUnit4TestAdapter;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
-public class RuleTest {
-
-	public static junit.framework.Test suite() { 
-	    return new JUnit4TestAdapter(RuleTest.class); 
-	}	
+public class RuleTest4 {
 	
 	@Test public void testValid() {
 		Object o = new Object();

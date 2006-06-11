@@ -14,10 +14,6 @@
  */
 package se.repos.validation.message;
 
-import org.springframework.validation.BindException;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
-
 import se.repos.validation.message.InputValidation;
 
 import junit.framework.TestCase;
@@ -133,14 +129,14 @@ public class InputValidationTest extends TestCase {
         assertEquals("field name should not be set if field is valid", null, field);
     }
 
-    public void testValidateToErrors() {
-        Errors e = new BindException("target", "testField");
-        rule.validate("invalid value", e);
-        assertEquals("the validation error should be added", 1, e.getErrorCount());
-        assertEquals("has no field name so it must be a global error", 1, e.getGlobalErrorCount());
-        ObjectError error = e.getGlobalError();
-        assertEquals("LooksLikeOK", error.getCode());
-        assertEquals("Arguments should be copied", rule.getArguments()[0], error.getArguments()[0]);
-        assertEquals("Looks like OK", error.getDefaultMessage());
-    }
+//    public void testValidateToErrors() {
+//        Errors e = new BindException("target", "testField");
+//        rule.validate("invalid value", e);
+//        assertEquals("the validation error should be added", 1, e.getErrorCount());
+//        assertEquals("has no field name so it must be a global error", 1, e.getGlobalErrorCount());
+//        ObjectError error = e.getGlobalError();
+//        assertEquals("LooksLikeOK", error.getCode());
+//        assertEquals("Arguments should be copied", rule.getArguments()[0], error.getArguments()[0]);
+//        assertEquals("Looks like OK", error.getDefaultMessage());
+//    }
 }

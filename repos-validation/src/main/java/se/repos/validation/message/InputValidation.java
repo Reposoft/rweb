@@ -14,9 +14,6 @@
  */
 package se.repos.validation.message;
 
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
-
 import se.repos.validation.ValidationRule;
 import se.repos.validation.impl.ValidationRuleBase;
 
@@ -38,7 +35,7 @@ import se.repos.validation.impl.ValidationRuleBase;
  * @see se.repos.validation.impl.ValidationRuleBase
  */
 public abstract class InputValidation extends InputException 
-        implements ValidationRule<Object>, Validator {
+        implements ValidationRule<Object> {//, Validator {
 
     private String fieldName = null;
     private Object value = null;
@@ -94,23 +91,23 @@ public abstract class InputValidation extends InputException
         this.fieldName = null;
     }
     
-    public void validate(Object value, Errors errors) {
-        if (rejectsValue(value)) {
-            store(errors);
-        }
-    }
-
-    /**
-     * Stores this error in an Errors collection.
-     * @param errors to copy this error to, as a field error if fieldName is set.
-     */
-    public void store(Errors errors) {
-        if (fieldName != null) {
-            errors.rejectValue(fieldName, getMessageCode(), getArguments(), getMessage());
-        } else {
-            errors.reject(getMessageCode(), getArguments(), getMessage());
-        }
-    }
+//    public void validate(Object value, Errors errors) {
+//        if (rejectsValue(value)) {
+//            store(errors);
+//        }
+//    }
+//
+//    /**
+//     * Stores this error in an Errors collection.
+//     * @param errors to copy this error to, as a field error if fieldName is set.
+//     */
+//    public void store(Errors errors) {
+//        if (fieldName != null) {
+//            errors.rejectValue(fieldName, getMessageCode(), getArguments(), getMessage());
+//        } else {
+//            errors.reject(getMessageCode(), getArguments(), getMessage());
+//        }
+//    }
 
     /**
      * @return Returns the fieldName.

@@ -14,8 +14,6 @@
  */
 package se.repos.validation.message;
 
-import org.springframework.context.MessageSourceResolvable;
-
 import se.repos.validation.impl.ValidationFailedException;
 
 /**
@@ -38,6 +36,6 @@ public interface ErrorMessageResolver {
 	 * @param error
 	 * @return message code, arguments and (maybe) default message
 	 */
-	MessageSourceResolvable getMessage(IllegalArgumentException error);
+	//MessageSourceResolvable getMessage(IllegalArgumentException error);
 	
 }
