@@ -107,10 +107,10 @@ a.command {
 	background-color: #F0F0EE;
 	padding: 0px 3px;
 	font-size: smaller;
-	border-top: 1px solid #DDDDDD;
+	/* border-top: 1px solid #DDDDDD;
 	border-right: 1px solid #CCCCCC;
 	border-bottom: 1px solid #DDDDDD;
-	border-left: 1px solid #CCCCCC;
+	border-left: 1px solid #CCCCCC; */
 	margin-left: 2px;
 	margin-right: 2px;
 	margin-top: 0px;
@@ -121,10 +121,10 @@ span.command {
 	color: #BBBBBB;
 	padding: 0px 3px;
 	font-size: smaller;
-	border-top: 1px solid #DDDDDD;
+	/* border-top: 1px solid #DDDDDD;
 	border-right: 1px solid #CCCCCC;
 	border-bottom: 1px solid #DDDDDD;
-	border-left: 1px solid #CCCCCC;
+	border-left: 1px solid #CCCCCC; */
 	margin-left: 2px;
 	margin-right: 2px;
 }
