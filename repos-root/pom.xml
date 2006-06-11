@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>se.repos</groupId>
   <artifactId>repos-root</artifactId>
@@ -11,10 +11,11 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.0</version>
+      <version>1.0.1</version>
       <scope>compile</scope>
     </dependency>
     <!-- todo: put spring version number in property -->
+    <!-- 
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
@@ -33,6 +34,7 @@
       <version>2.0-m5</version>
       <scope>compile</scope>
     </dependency>
+     -->
     <!-- *** unit tests *** -->
 	<dependency>
       <groupId>junit</groupId>
