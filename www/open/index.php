@@ -18,7 +18,7 @@ if ($type=='ics') {
                 $allow_webcals  = 'yes';
                 $allow_login = 'yes';
         */
-        header("Location: ../phpicalendar/?cal=$url");
+        header("Location: ../phpicalendar/?src=$url");
 } else {
         header("Location: $url");
 }

@@ -23,4 +23,8 @@ $save_parsed_cals 		= 'no';				// Saves a copy of the cal in /tmp after it's bee
 $tmp_dir				= '/tmp';			// The temporary directory on your system (/tmp is fine for UNIXes including Mac OS X). Any php-writable folder works.
 $webcal_hours			= '24';				// Number of hours to cache webcals. Setting to '0' will always re-parse webcals.
 
+// The calendar to view
+$r_auth = getReposUser() . ':' . getReposPass() . '@';
+$default_cal = substr_replace($_GET['src'], "$r_auth", strpos($_GET['src'],'://')+3, 0);
+
 ?>
