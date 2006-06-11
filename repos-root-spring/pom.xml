@@ -9,12 +9,14 @@
 	<name>repos:root-spring</name>
 	<packaging>pom</packaging>
 	<dependencies>
+		<!-- using slf4j instead of commons logging (for spring log entries) -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl104-over-slf4j</artifactId>
 			<version>1.0</version>
 			<scope>compile</scope>
 		</dependency>
+		<!-- todo: don't allow the transitive dependency for commons-logging -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
