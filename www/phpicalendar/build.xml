@@ -44,6 +44,10 @@
   	    <fileset dir="${extracted.folder}"/>
   	</move>
   	<delete dir="${extracted.folder}"/>
+	<!-- delete the bundled calendars in the calendars folder -->
+	<delete>
+		<fileset dir="${basedir}/calendars" includes="**/*"/>
+	</delete>
   </target>
 	
   <!-- checkout latest version from cvs -->

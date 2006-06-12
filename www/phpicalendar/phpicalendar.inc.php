@@ -25,6 +25,6 @@ $webcal_hours			= '24';				// Number of hours to cache webcals. Setting to '0' w
 
 // The calendar to view
 $r_auth = getReposUser() . ':' . getReposPass() . '@';
-$default_cal = substr_replace($_GET['src'], "$r_auth", strpos($_GET['src'],'://')+3, 0);
+$list_webcals[0] = substr_replace($_GET['src'], "$r_auth", strpos($_GET['src'],'://')+3, 0);
 
 ?>
