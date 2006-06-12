@@ -14,11 +14,8 @@ $type = substr($url, strrpos($url, '.') + 1);
 
 // iCalendar files
 if ($type=='ics') {
-        /* PHP iCalendsr config must be changed to:
-                $allow_webcals  = 'yes';
-                $allow_login = 'yes';
-        */
-        header("Location: ../phpicalendar/?src=$url");
+		setcookie("repos-calendar", $url, time()+3600, '/');
+        header("Location: ../phpicalendar/");
 } else {
         header("Location: $url");
 }
