@@ -43,6 +43,8 @@ public abstract class Validation {
 	
 	/**
 	 * Runs validation from annotations on the calling method.
+	 * This is needed if the methods can not benefit from container managed validation (AOP-style).
+	 * @see se.repos.validation.annotations.ReposValidation
 	 * @see se.repos.validation.annotations.Constraint
 	 * @see se.repos.validation.annotations.ValidationStrategyAnnotation
 	 */
