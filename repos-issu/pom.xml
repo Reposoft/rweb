@@ -17,8 +17,27 @@
     <!-- hibernate -->
     <dependency>
       <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <version>2.0-rc1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-dao</artifactId>
+      <version>2.0-rc1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-hibernate3</artifactId>
       <version>2.0-rc1</version>
+    </dependency>
+    <!-- run this command from the downloaded hibernate-annotations jar's lib folder:
+      mvn install:install-file -Dfile=ejb3-persistence.jar -DgroupId=javax.persistence
+      -DartifactId=ejb -Dversion=3.0 -Dpackaging=jar
+      -->
+    <dependency>
+      <groupId>javax.persistence</groupId>
+      <artifactId>ejb</artifactId>
+      <version>3.0</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
@@ -29,6 +48,19 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-annotations</artifactId>
       <version>3.2.0.cr1</version>
+    </dependency>
+    <!-- testing -->
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>1.8.0.4</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
