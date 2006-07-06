@@ -31,10 +31,7 @@ public class IssueDaoImpl implements IssueDao {
 	}
 
 	public void create(Issue issue) {
-		Map classMetadata = sessionFactory.getAllClassMetadata();
-		for (Object o : classMetadata.keySet()) {
-			System.out.println(o + ": " + classMetadata.get(o)); 
-		}
+
 		
 		sessionFactory.getCurrentSession()
 			.save(issue);

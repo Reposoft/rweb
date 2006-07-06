@@ -1,56 +1,84 @@
 package se.repos.issu;
 
-import java.sql.ResultSet;
+import static org.junit.Assert.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.classic.Session;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jdbc.object.MappingSqlQuery;
-import org.springframework.jdbc.object.SqlOperation;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.object.SqlUpdate;
 
 import se.repos.issu.domain.Issue;
 import se.repos.issu.persistence.IssueDao;
-
-import junit.framework.TestCase;
 
 public class SomeTest {
 
 	static ApplicationContext ctx = null;
 	
 	@org.junit.Before
-	public void setUp() {
-		if (ctx == null) ctx = new ClassPathXmlApplicationContext("beans.xml");
+	public void setUp() throws IOException {
+		if (ctx == null) {
+			ctx = new ClassPathXmlApplicationContext("beans.xml");
+			
+			// set up database
+			Resource databaseSetup = ctx.getResource("database/setup.sql");
+			String setupSql = getSqlFromFile(databaseSetup);
+			DataSource dataSource = (DataSource) ctx.getBean("dataSource");
+			runSql(setupSql, dataSource);
+		}
+	}
+
+	private void runSql(String sqlStatements, DataSource dataSource) {
+		new SqlUpdate(dataSource,
+				sqlStatements)
+				.update();
+	}
+
+	private String getSqlFromFile(Resource databaseSetup) throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(databaseSetup.getInputStream()));
+		StringBuffer sb = new StringBuffer();
+		String line = in.readLine();
+		while (line != null) {
+			sb.append(line).append("\n");
+			line = in.readLine();
+		}
+		String setupSql = sb.toString();
+		return setupSql;
 	}
 	
 	@Test
 	public void testContextHibernate() {
 		SessionFactory sessionFactory = (SessionFactory) ctx.getBean("sessionFactory");
+		assertNotNull(sessionFactory);
+		assertTrue("Should be at leas one mapping configured in hibernate", 
+				0 < sessionFactory.getAllClassMetadata().size());
 		
+		// show the known mappings
+		Map classMetadata = sessionFactory.getAllClassMetadata();
+		Set mappedClasses = classMetadata.keySet();
+		System.out.println("--- O/R mappings ---");
+		for (Object o : mappedClasses) {
+			System.out.println(o + ": " + classMetadata.get(o)); 
+		}
+		System.out.println("--------------------");
+		
+		assertTrue("There should be a mapping for Issue", mappedClasses.contains(Issue.class.getName()));
 	}
 	
 	@Test
 	public void testDataSource() throws SQLException {
-		DataSource dataSource = (DataSource) ctx.getBean("dataSource");
-		dataSource.getConnection().setAutoCommit(true);
-		
-		new SqlUpdate(dataSource,
-				"CREATE TABLE issue (" +
-				"id int NOT NULL, " +
-				"name varchar(100) NOT NULL)"
-				).update();
-		
-		new SqlUpdate(dataSource,
-				"INSERT INTO issue (id, name)" +
-				"VALUES (1, 'testissu')")
-				.update();
-		
+				
 		IssueDao issueDao = (IssueDao) ctx.getBean("issueDao");
 		
 		Issue issue = new Issue();
@@ -59,14 +87,6 @@ public class SomeTest {
 		issueDao.create(issue);
 		
 		Collection<Issue> c = issueDao.getAll();
-		System.out.println("Hibernate now finds this many objects: " + c.size());
-		
-//		new MappingSqlQuery(dataSource, "select id, name from issue") {
-//			@Override
-//			protected Object mapRow(ResultSet rs, int rowNum) throws SQLException {
-//				System.out.println(rs.getLong(1) + ": " + rs.getString(2));
-//				return null;
-//			}
-//		}.execute();
+		assertTrue("One object should have been stored by hibernate", 1 == c.size());
 	}
 }
