@@ -29,7 +29,7 @@ public class SomeTest {
 	@org.junit.Before
 	public void setUp() throws IOException {
 		if (ctx == null) {
-			ctx = new ClassPathXmlApplicationContext("beans.xml");
+			ctx = new ClassPathXmlApplicationContext("test-context.xml");
 			
 			// set up database
 			Resource databaseSetup = ctx.getResource("database/setup.sql");
