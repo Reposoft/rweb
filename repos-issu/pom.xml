@@ -95,11 +95,5 @@
 		<version>1.1</version>
 		<scope>test</scope>
     </dependency>
-	<dependency>
-		<groupId>fitlibrary</groupId>
-		<artifactId>fitlibraryRunner</artifactId>
-		<version>20060116</version>
-		<scope>test</scope>
-    </dependency>
   </dependencies>
 </project>
