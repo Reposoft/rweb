@@ -2,12 +2,13 @@
  */
 package se.repos.mavenfit;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.io.FileWriter;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.net.URLClassLoader;
 import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -17,9 +18,13 @@ import org.codehaus.classworlds.ClassRealm;
 import org.codehaus.classworlds.ClassWorld;
 import org.codehaus.classworlds.DuplicateRealmException;
 
+import se.repos.mavenfit.run.DefaultTestListener;
+import se.repos.mavenfit.run.FitRunnerImpl;
+
 /**
+ * Runs a FIT test suite as if it was a JUnit test suite.
  * @goal fit
- * @description Run fit
+ * @description Runs a FIT test suite as if it was a JUnit test suite
  * @requiresDependencyResolution test
  * @execute phase=test-compile
  */
@@ -42,15 +47,6 @@ public class FolderRunnerMojo extends AbstractMojo {
 	private boolean testFailureIgnore;
 
 	/**
-	 * The base directory of the project being tested. This can be obtained in
-	 * your unit test by System.getProperty("basedir").
-	 * 
-	 * @parameter expression="${basedir}"
-	 * @required
-	 */
-	private File basedir;
-
-	/**
 	 * The classpath elements of the project being tested.
 	 * 
 	 * @parameter expression="${project.testClasspathElements}"
@@ -67,6 +63,13 @@ public class FolderRunnerMojo extends AbstractMojo {
 	private File reportsDirectory;
 
 	/**
+	 * The file to write FIT output (for example System.out) to.
+	 * 
+	 * @parameter expression="${project.build.directory}/fit-reports/output.txt"
+	 */
+	private File fitOutputTextfile;
+	
+	/**
 	 * The directory containing the FIT tests.
 	 * 
 	 * @parameter expression="${basedir}/src/test/fit"
@@ -74,89 +77,117 @@ public class FolderRunnerMojo extends AbstractMojo {
 	 */
 	private File fitSourceDirectory;
 
+	/**
+	 * Starts a new classloader and launches FitRunner in it.
+	 */
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		
 		if (skip) {
-			getLog().info("Tests are skipped.");
+			getLog().info("The 'skip' flag is set to true. FIT will not be run.");
 			return;
 		}
 		
 		// create classworld classloader
+		ClassLoader pluginClassLoader = this.getClass().getClassLoader();
 		ClassWorld classWorld = new ClassWorld();
-		ClassRealm classRealm;
+		ClassRealm fitRealm;
 		try {
-			classRealm = classWorld.newRealm("mavenfit.runner");
+			getLog().debug("This plugin's classloader is: " + pluginClassLoader);
+			fitRealm = classWorld.newRealm("mavenfit.runner");
+			getLog().debug("FIT will run with classloader: " + fitRealm + ", ID=" + fitRealm.getId());
 		} catch (DuplicateRealmException e2) {
-			getLog().error("Could not create classworld realm", e2);
+			getLog().error("Could not create classworld realm, so no runtime environment for FIT. The plugin will exit now.", e2);
 			return;
 		}
 		
-		List<URL> classpathUrls = new ArrayList<URL>(classpathElements.size());
+		// add the project's classpath to the new classloader
 		for (String url : classpathElements) {
-			getLog().debug("  " + url);
-			File f = new File(url);
 			try {
-				getLog().debug("Adding classpath entry: " + f);
-				classpathUrls.add(f.toURL());
-				classRealm.addConstituent(f.toURL());
-			} catch (MalformedURLException e) {
-				getLog().warn(
-						"Could not add classpath entry URL for file: " + f);
+				URL u = new File(url).toURL();
+				getLog().debug("Adding classpath entry: " + u);
+				fitRealm.addConstituent(u);
+			} catch (MalformedURLException e1) {
+				getLog().warn("Can not make URL from classpath element: " + url);
 			}
 		}
-
-		ClassLoader classLoader = classRealm.getClassLoader();
+		
+		// add the current environment so it does not have to be added as dependencies in the running project
+		URL[] pluginClasspath = getClasspath(pluginClassLoader);
+		for (URL url : pluginClasspath) {
+			getLog().debug("Adding classpath entry: " + url);
+			fitRealm.addConstituent(url);
+		}
+		
+		// initialize the classloader from the realm with complete classpath
+		ClassLoader classLoader = fitRealm.getClassLoader();
 		// Set this classloader in the thread
 		// This makes Spring's ClassPathXmlApplicationContext use the same classloader
 		Thread.currentThread().setContextClassLoader(classLoader);
 		
-		Class folderRunnerClass;
+		// start FitRunner using reflection (because it is in the new classloader)
+		final StringBuffer testLog = new StringBuffer();
 		try {
-			folderRunnerClass = classLoader.loadClass("fitlibrary.runner.FolderRunner");
+			Class fitRunnerClass = classLoader.loadClass(FitRunnerImpl.class.getName());
+			Object[] args = new Object[] {testLog, fitSourceDirectory.getAbsolutePath(), reportsDirectory.getAbsolutePath()};
+			Method runMethod = fitRunnerClass.getMethod("run", getArgTypes(args));
+			Object fitRunnerInstance = fitRunnerClass.newInstance();
+			runMethod.invoke(fitRunnerInstance, args);
+			getLog().info(testLog.toString());
 		} catch (ClassNotFoundException e1) {
-			getLog().error("FolderRunner class not found. Is fitlibraryRunner.jar in the classpath?", e1);
-			return;
+			getLog().error("FitRunner class not found in the new classloader", e1);
+		} catch (RuntimeException re) {
+			getLog().error("FitRunner execution ended with unhandled exception", re);
+		} catch (Exception e) {
+			throw new RuntimeException("Reflection error '" + e.getMessage() + "'. Can not start FitRunner.", e);
 		}
 		
-		String[] args = new String[] {fitSourceDirectory.getAbsolutePath(), reportsDirectory.getAbsolutePath()};
+		// create a file with the output. FolderRunner only creates test result pages.
+		printOutput(testLog, fitOutputTextfile);
 		
-		Constructor folderRunnerConstructor;
+		// fail build if there are test errors
+		if (!testFailureIgnore && testLog.indexOf(DefaultTestListener.OUTPUT_IN_CASE_OF_TESTFAILURES) > -1) {
+			throw new MojoFailureException("There were FIT test failures. See reports in\n" + reportsDirectory);
+		}
+	}
+	
+	private void printOutput(StringBuffer testLog, File file) {
 		try {
-			folderRunnerConstructor = folderRunnerClass.getDeclaredConstructor(args.getClass());
-		} catch (SecurityException e1) {
-			throw new RuntimeException("SecurityException handling missing", e1);
-		} catch (NoSuchMethodException e1) {
-			throw new RuntimeException("Can not find constructor that takes a String[]", e1);
+			FileWriter fw = new FileWriter(file);
+			BufferedWriter out = new BufferedWriter(fw);
+			out.write(testLog.toString());
+			out.close();
+			fw.close();
+		} catch (Exception e) {
+			getLog().error("Could not write output to file", e);
 		}
+		
+	}
 
-		Object folderRunner;
-		try {
-			folderRunner = folderRunnerConstructor.newInstance(new Object[] {args});
-		} catch (IllegalArgumentException e1) {
-			throw new RuntimeException("IllegalArgumentException handling missing", e1);
-		} catch (InstantiationException e1) {
-			throw new RuntimeException("InstantiationException handling missing", e1);
-		} catch (IllegalAccessException e1) {
-			throw new RuntimeException("IllegalAccessException handling missing", e1);
-		} catch (InvocationTargetException e1) {
-			throw new RuntimeException("InvocationTargetException handling missing", e1);
+	/**
+	 * Gets the classpath of a classloader if it is a URLClassLoader
+	 * @param classLoader
+	 * @return The classpath entries
+	 */
+	private URL[] getClasspath(ClassLoader classLoader) {
+		if (this.getClass().getClassLoader() instanceof URLClassLoader) {
+			return ((URLClassLoader) classLoader).getURLs();
 		}
-		
-		Object report;
-		try {
-			report = folderRunner.getClass().getMethod("run").invoke(folderRunner);
-			report.getClass().getMethod("exit").invoke(report);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException("IllegalArgumentException handling missing", e);
-		} catch (SecurityException e) {
-			throw new RuntimeException("SecurityException handling missing", e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException("IllegalAccessException handling missing", e);
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException("InvocationTargetException handling missing", e);
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException("NoSuchMethodException handling missing", e);
+		getLog().error("Plugin classloader is not an URLClassLoader. Can not get the classpath. " +
+				"FitRunner classpath will not include the current classloader's classpath entries.");
+		return new URL[] {};
+	}
+	
+	/**
+	 * Helper for reflection method resolution
+	 * @param args Non-null arguments that will be used to call the method
+	 * @return The argument types, needed to reflect using Class.getMethod
+	 */
+	private Class[] getArgTypes(Object[] args) {
+		Class[] types = new Class[args.length];
+		for (int i = 0; i < args.length; i++) {
+			types[i] = args[i].getClass();
 		}
+		return types;
 	}
 	
 }
