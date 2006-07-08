@@ -18,7 +18,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
-      <version>2.0-rc1</version>
+      <version>2.0-rc2</version>
     </dependency>
     <dependency>
       <groupId>aopalliance</groupId>
@@ -39,17 +39,17 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
-      <version>2.0-rc1</version>
+      <version>2.0-rc2</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-dao</artifactId>
-      <version>2.0-rc1</version>
+      <version>2.0-rc2</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-hibernate3</artifactId>
-      <version>2.0-rc1</version>
+      <version>2.0-rc2</version>
     </dependency>
     <!-- run this command from the downloaded hibernate-annotations jar's lib folder:
       mvn install:install-file -Dfile=ejb3-persistence.jar -DgroupId=javax.persistence
@@ -88,6 +88,18 @@
     	<artifactId>p6spy</artifactId>
     	<version>1.3</version>
     	<scope>test</scope>
+    </dependency>
+    <dependency>
+		<groupId>fit</groupId>
+		<artifactId>fit</artifactId>
+		<version>1.1</version>
+		<scope>test</scope>
+    </dependency>
+	<dependency>
+		<groupId>fitlibrary</groupId>
+		<artifactId>fitlibraryRunner</artifactId>
+		<version>20060116</version>
+		<scope>test</scope>
     </dependency>
   </dependencies>
 </project>

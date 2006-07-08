@@ -45,6 +45,11 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
+	<bean id="issueService"
+		class="se.repos.issu.services.IssueServiceHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
 	<!--  transaction stuff -->
 
 	<!--  <aop:aspectj-autoproxy /> -->
@@ -69,7 +74,7 @@
 		of an operation defined by the FooService interface -->
 	<aop:config>
 		<aop:pointcut id="serviceMethods"
-			expression="execution(* se.repos.issu.persistence.IssueDao.*(..))" />
+			expression="execution(* se.repos.issu.services.IssueService.*(..))" />
 		<aop:advisor advice-ref="txAdvice"
 			pointcut-ref="serviceMethods" />
 	</aop:config>
