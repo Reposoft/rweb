@@ -20,6 +20,8 @@ public class Issues extends Fixture {
 		
 		IssueService issueService = getIssueService();
 		issueService.create(issue);
+		System.out.println("ID of the new issue is " + issue.getId());
+		openIssue = issue;
 	}
 
 	private IssueService getIssueService() {

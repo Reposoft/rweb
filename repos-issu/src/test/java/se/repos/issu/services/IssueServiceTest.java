@@ -27,5 +27,20 @@ public class IssueServiceTest {
 		Issue persistentIssue = getIssueService().open(issue.getId());
 		assertEquals(issue.getName(), persistentIssue.getName());
 	}
+	
+	@Test
+	public void testSequenceIncrementIsOne() {
+		Issue i1 = new Issue();
+		i1.setName("new issue");
+		getIssueService().create(i1);
+		long id1 = i1.getId();
+		
+		Issue i2 = new Issue();
+		i2.setName("new issue");
+		getIssueService().create(i2);
+		long id2 = i2.getId();
+		
+		assertEquals("Issue ID should increase with 1 for each issue", id1+1, id2);
+	}
 
 }

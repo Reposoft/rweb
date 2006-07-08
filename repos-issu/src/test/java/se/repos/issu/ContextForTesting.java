@@ -2,17 +2,9 @@
  */
 package se.repos.issu;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import javax.sql.DataSource;
-
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.jdbc.object.SqlUpdate;
 
 public class ContextForTesting {
 
@@ -33,6 +25,7 @@ public class ContextForTesting {
 		return testContext;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static <T> T getBean(String nameInContext, Class<T> typecastTo) {
 		return (T) getInstance().getBean(nameInContext, typecastTo);
 	}
