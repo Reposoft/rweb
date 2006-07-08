@@ -4,21 +4,19 @@ package se.repos.mavenfit;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-
-import fitlibrary.runner.FolderRunner;
-import fitlibrary.runner.Report;
 
 /**
  * @goal fit
@@ -110,6 +108,10 @@ public class FolderRunnerMojo extends AbstractMojo {
 		}
 
 		IsolatedClassLoader classLoader = new IsolatedClassLoader(classpathUrls);
+		// Set this classloader in the thread
+		// This makes Spring's ClassPathXmlApplicationContext use the same classloader
+		Thread.currentThread().setContextClassLoader(classLoader);
+		
 		Class folderRunnerClass;
 		try {
 			folderRunnerClass = classLoader.loadClass("fitlibrary.runner.FolderRunner");
@@ -142,6 +144,10 @@ public class FolderRunnerMojo extends AbstractMojo {
 			throw new RuntimeException("InvocationTargetException handling missing", e1);
 		}
 		
+		// try to load test-context.xml
+		URL r = classLoader.findResource("test-context.xml");
+		getLog().info("Found test contest: " + r);
+		
 		Object report;
 		try {
 			report = folderRunner.getClass().getMethod("run").invoke(folderRunner);
@@ -167,6 +173,31 @@ public class FolderRunnerMojo extends AbstractMojo {
 		protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
 			return super.loadClass(name, resolve);
 		}
+		protected Class findClass(String arg0) throws ClassNotFoundException {
+			getLog().info("findClass " + arg0);
+			return super.findClass(arg0);
+		}
+		public URL findResource(String arg0) {
+			getLog().info("findResource " + arg0);
+			return super.findResource(arg0);
+		}
+		public Enumeration<URL> findResources(String arg0) throws IOException {
+			getLog().info("findResources " + arg0);
+			return super.findResources(arg0);
+		}
+		public URL getResource(String name) {
+			getLog().info("getResource " + name);
+			return super.getResource(name);
+		}
+		public InputStream getResourceAsStream(String name) {
+			getLog().info("getResourceAsStream " + name);
+			return super.getResourceAsStream(name);
+		}
+		public Enumeration<URL> getResources(String name) throws IOException {
+			getLog().info("getResources " + name);
+			return super.getResources(name);
+		}
+		
 	}
 
 }
