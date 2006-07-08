@@ -2,7 +2,8 @@
   <classpathentry kind="src" path="src/main/java"/>
   <classpathentry kind="output" path="target/classes"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="var" path="M2_REPO/fit/fit/1.1/fit-1.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/maven/maven-plugin-api/2.0.4/maven-plugin-api-2.0.4.jar"/>
   <classpathentry kind="var" path="M2_REPO/fitlibrary/fitlibraryRunner/20060116/fitlibraryRunner-20060116.jar"/>
-  <classpathentry kind="var" path="M2_REPO/fit/fit/1.1/fit-1.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/classworlds/classworlds/1.1/classworlds-1.1.jar"/>
 </classpath>

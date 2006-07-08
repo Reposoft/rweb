@@ -3,20 +3,19 @@
 package se.repos.mavenfit;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.classworlds.ClassRealm;
+import org.codehaus.classworlds.ClassWorld;
+import org.codehaus.classworlds.DuplicateRealmException;
 
 /**
  * @goal fit
@@ -52,23 +51,6 @@ public class FolderRunnerMojo extends AbstractMojo {
 	private File basedir;
 
 	/**
-	 * The directory containing generated classes of the project being tested.
-	 * 
-	 * @parameter expression="${project.build.outputDirectory}"
-	 * @required
-	 */
-	private File classesDirectory;
-
-	/**
-	 * The directory containing generated test classes of the project being
-	 * tested.
-	 * 
-	 * @parameter expression="${project.build.testOutputDirectory}"
-	 * @required
-	 */
-	private File fixtureClassesDirectory;
-
-	/**
 	 * The classpath elements of the project being tested.
 	 * 
 	 * @parameter expression="${project.testClasspathElements}"
@@ -94,6 +76,21 @@ public class FolderRunnerMojo extends AbstractMojo {
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		
+		if (skip) {
+			getLog().info("Tests are skipped.");
+			return;
+		}
+		
+		// create classworld classloader
+		ClassWorld classWorld = new ClassWorld();
+		ClassRealm classRealm;
+		try {
+			classRealm = classWorld.newRealm("mavenfit.runner");
+		} catch (DuplicateRealmException e2) {
+			getLog().error("Could not create classworld realm", e2);
+			return;
+		}
+		
 		List<URL> classpathUrls = new ArrayList<URL>(classpathElements.size());
 		for (String url : classpathElements) {
 			getLog().debug("  " + url);
@@ -101,13 +98,14 @@ public class FolderRunnerMojo extends AbstractMojo {
 			try {
 				getLog().debug("Adding classpath entry: " + f);
 				classpathUrls.add(f.toURL());
+				classRealm.addConstituent(f.toURL());
 			} catch (MalformedURLException e) {
 				getLog().warn(
 						"Could not add classpath entry URL for file: " + f);
 			}
 		}
 
-		IsolatedClassLoader classLoader = new IsolatedClassLoader(classpathUrls);
+		ClassLoader classLoader = classRealm.getClassLoader();
 		// Set this classloader in the thread
 		// This makes Spring's ClassPathXmlApplicationContext use the same classloader
 		Thread.currentThread().setContextClassLoader(classLoader);
@@ -144,10 +142,6 @@ public class FolderRunnerMojo extends AbstractMojo {
 			throw new RuntimeException("InvocationTargetException handling missing", e1);
 		}
 		
-		// try to load test-context.xml
-		URL r = classLoader.findResource("test-context.xml");
-		getLog().info("Found test contest: " + r);
-		
 		Object report;
 		try {
 			report = folderRunner.getClass().getMethod("run").invoke(folderRunner);
@@ -164,40 +158,5 @@ public class FolderRunnerMojo extends AbstractMojo {
 			throw new RuntimeException("NoSuchMethodException handling missing", e);
 		}
 	}
-
-	private class IsolatedClassLoader extends URLClassLoader {
-		public IsolatedClassLoader(List<URL> classpathUrls) {
-			super(classpathUrls.toArray(new URL[]{}), getSystemClassLoader());
-		}
-		// seems maven can not compile this if it is Java5-compliant
-		protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
-			return super.loadClass(name, resolve);
-		}
-		protected Class findClass(String arg0) throws ClassNotFoundException {
-			getLog().info("findClass " + arg0);
-			return super.findClass(arg0);
-		}
-		public URL findResource(String arg0) {
-			getLog().info("findResource " + arg0);
-			return super.findResource(arg0);
-		}
-		public Enumeration<URL> findResources(String arg0) throws IOException {
-			getLog().info("findResources " + arg0);
-			return super.findResources(arg0);
-		}
-		public URL getResource(String name) {
-			getLog().info("getResource " + name);
-			return super.getResource(name);
-		}
-		public InputStream getResourceAsStream(String name) {
-			getLog().info("getResourceAsStream " + name);
-			return super.getResourceAsStream(name);
-		}
-		public Enumeration<URL> getResources(String name) throws IOException {
-			getLog().info("getResources " + name);
-			return super.getResources(name);
-		}
-		
-	}
-
+	
 }
