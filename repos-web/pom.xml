@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>se.repos</groupId>
+	<artifactId>repos-webapp-root</artifactId>
+	<version>1.0</version>
+  </parent>
+  <artifactId>repos-web</artifactId>
+  <packaging>war</packaging>
+  <name>Repos CMS for WebDAV HTML</name>
+  <version>1.0-SNAPSHOT</version>
+  <properties>
+    <wicket-version>1.2</wicket-version>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>se.repos</groupId>
+      <artifactId>repos-validation</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+	<!-- wicket -->
+    <dependency>
+      <groupId>wicket</groupId>
+      <artifactId>wicket</artifactId>
+      <version>${wicket-version}</version>
+    </dependency>
+	<!--	
+    <dependency>
+      <groupId>wicket</groupId>
+      <artifactId>wicket-spring</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>wicket</groupId>
+      <artifactId>wicket-spring-annot</artifactId>
+      <version>1.2</version>
+    </dependency>
+	-->
+  </dependencies>
+</project>
