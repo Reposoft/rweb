@@ -28,7 +28,7 @@ public class LoggingResourceStreamLocator implements IResourceStreamLocator {
 	
 	public IResourceStream locate(Class clazz, String path, String style,
 			Locale locale, String extension) {
-		logger.info("ResourceStreamLocator.locat({}, {}, {}, {}, {})", new Object[]{clazz, path, style, locale, extension});
+		logger.info("ResourceStreamLocator.locate({}, {}, {}, {}, {})", new Object[]{clazz, path, style, locale, extension});
 		return resourceStreamLocator.locate(clazz, path, style, locale, extension);
 	}
 

@@ -6,13 +6,21 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import wicket.util.resource.IResourceStream;
 import wicket.util.resource.UrlResourceStream;
 import wicket.util.resource.locator.IResourceStreamLocator;
 
 public class RepositoryResourceStreamLocator implements IResourceStreamLocator {
 
-	String repositoryBaseUrl = "http://svn.collab.net/repos/svn/tags/1.3.2/www";
+	private final Logger logger = LoggerFactory.getLogger(RepositoryResourceStreamLocator.class);
+	
+	/**
+	 * The base URL to read resources from. No tailing slash.
+	 */
+	static String repositoryBaseUrl = "http://svn.optime.se/optime/web";
 	
 	IResourceStreamLocator parent;
 	
@@ -34,7 +42,12 @@ public class RepositoryResourceStreamLocator implements IResourceStreamLocator {
 		return new UrlResourceStream(getURL(style));
 	}
 
-	private URL getURL(String style) {
+	/**
+	 * Temporarily static to be reachable from SrcServlet
+	 * @param style
+	 * @return
+	 */
+	public static URL getURL(String style) {
 		String url = repositoryBaseUrl + style;
 		try {
 			return new URL(url);
