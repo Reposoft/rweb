@@ -39,12 +39,11 @@ public class FolderRunnerMojo extends AbstractMojo {
 	private boolean skip;
 
 	/**
-	 * Set this to true to ignore a failure during testing. Its use is NOT
-	 * RECOMMENDED, but quite convenient on occasion.
+	 * Set this to true to continue build even if there are FIT failures.
 	 * 
 	 * @parameter expression="${maven.test.failure.ignore}"
 	 */
-	private boolean testFailureIgnore;
+	private boolean fitTestFailureIgnore;
 
 	/**
 	 * The classpath elements of the project being tested.
@@ -145,7 +144,7 @@ public class FolderRunnerMojo extends AbstractMojo {
 		printOutput(testLog, fitOutputTextfile);
 		
 		// fail build if there are test errors
-		if (!testFailureIgnore && testLog.indexOf(DefaultTestListener.OUTPUT_IN_CASE_OF_TESTFAILURES) > -1) {
+		if (!fitTestFailureIgnore && testLog.indexOf(DefaultTestListener.OUTPUT_IN_CASE_OF_TESTFAILURES) > -1) {
 			throw new MojoFailureException("There were FIT test failures. See reports in\n" + reportsDirectory);
 		}
 	}

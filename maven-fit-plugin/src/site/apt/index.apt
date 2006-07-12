@@ -1,0 +1,19 @@
+Maven 2 FIT plugin
+  
+ Run all FIT tests from <<<src/test/fit/>>> and place the results in <<<target/fit-reports/>>>.
+  
+ Uses {{{http://fit.c2.com/}FIT 1.1}} and the FolderRunner from {{{http://fitlibrary.sourceforge.net/}FitLibrary}}. Download and do:
+ <<<mvn install:install-file -Dfile=fit.jar -DgroupId=fit -DartifactId=fit -Dversion=1.1 -Dpackaging=jar>>>
+ <<<mvn install:install-file -Dfile=fitlibraryRunner.jar -DgroupId=fitlibrary -DartifactId=fitlibraryRunner -Dversion=20060116 -Dpackaging=jar>>>
+  
+Installation
+
+ * Get the sources from the {{{source-repository.html}subversion repository}}. Istall to the local repository using:
+ <<<mvn install>>>
+ 
+ * To run your FIT tests, do: <<<mvn se.repos:maven-fit-plugin:1.0-SNAPSHOT:fit>>>
+ 
+TODO
+
+ Currently the reposrts will just go into the target/fit-reports/.
+ They will not be included in the generated site.
