@@ -8,11 +8,13 @@
   <name>Parent of all Repos components</name>
   <url>http://www.repos.se</url>
   <properties>
-	  <slf4j-version>1.0.1</slf4j-version>
+	  <slf4j-version>1.0.2</slf4j-version>
 	  <junit-version>4.1</junit-version>
 	  <easymock-version>2.2</easymock-version>
   </properties>
   <dependencies>
+  	<!-- *** logging abstraction *** -->
+  	<!-- child projects can override this with 'test' scope and use a different jar in runtime  -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
