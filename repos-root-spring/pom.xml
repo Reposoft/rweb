@@ -12,52 +12,26 @@
 		<spring-version>2.0-rc2</spring-version>
 	</properties>
 	<dependencies>
-		<!-- using slf4j instead of commons logging (for spring log entries) -->
+		<!-- using slf4j instead of commons logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl104-over-slf4j</artifactId>
 			<version>${slf4j-version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<!-- todo: don't allow the transitive dependency for commons-logging -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring-version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>${spring-version}</version>
-			<scope>compile</scope>
-		</dependency>
+		<!-- this one should do the job: it has transitive dependencies to core, beans and aop -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring-version}</version>
 			<scope>compile</scope>
+			<exclusions>
+		    	<exclusion>
+		        	<groupId>commons-logging</groupId>
+		        	<artifactId>commons-logging</artifactId>
+		        </exclusion>
+		    </exclusions>
 		</dependency>
-		<!-- aop -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-			<version>${spring-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>aopalliance</groupId>
-			<artifactId>aopalliance</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>1.5.0</version>
-		</dependency>
-		<dependency>
-			<groupId>aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>1.5.0</version>
-		</dependency>
+		<!-- aopalliance, aspectjweaver and aspectjrt should also be transitive -->
 	</dependencies>
 </project>
