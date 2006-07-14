@@ -5,9 +5,10 @@ require( upOne(dirname(__FILE__)) . "/conf/repos.properties.php" );
 
 // --- output functions ---
 
+/* defined in command.php
 function getTheme() {
 	return "../themes/simple"; 
-}
+} */
 
 function html_start($title) {
 	$theme = getTheme();
