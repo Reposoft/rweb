@@ -34,7 +34,7 @@
 //		altDown = (e.altKey) ? true : false;
 //		if(e.keyCode == 81 && altDown){
 			qsWin = getQSWindow();
-			document.getElementById("autosuggest").style.display = 'block';		
+			qsWin.style.display = 'block';		
 //			qsWin.show;
 //		}
 	}
@@ -55,8 +55,7 @@
 	}
 	
 	function getQSWindow(){
-		var qsWin = document.getElementById("qsWindow");
-//		var qsWin = document.getElementById("autosuggest");
+		var qsWin = document.getElementById("quay");
 		
 /*		if(!qsWin){
 			var txtQSSearch = document.createElement("input");
@@ -100,17 +99,30 @@
 	
 	function document_onLoad(){		  
 		indexLinks();
+		getQSWindow().style.display='none';
+	}
+	
+	function showQuay() {
+		showQuickSilverWindow();
+		document.getElementById('txtQuickSilverSearch').focus();
 	}
 	
 //	document.onkeydown = document_onKeyDown;
 	
 </script>
+<style type="text/css">
+div#quay {
+	border: solid;
+}
+</style>
 
 </head>
 <body onload="document_onLoad();">
+<!-- all HTML needed for repos-quay. remember to include the js-file -->
 Go [Alt-Q] for 
-<a href="#" onclick="javascript:showQuick()"><img src="rqlogo.png" width="16" height="16" alt="qs" title="repos-quicksilver"/></a>
- : <a href="about.html">about</a> repos-quicksilver.
+<a accesskey="Q" href="#" onclick="javascript:showQuay()"><img src="images/q1.png" width="19" height="18" border="0" alt="Q" title="repos-quay"/></a>
+ : <a href="about.html">about</a> repos-quay.
+<!-- end repos-quay html -->
 <h1>Directory index</h1>
 <p><a href="clicked.html?i=up">..</a></p>
 <p><a href="clicked.html?i=up2">/up</a></p>
@@ -125,17 +137,17 @@ Go [Alt-Q] for
 
 
 
-	<div id="autosuggest"><ul></ul></div>
+	<div id="quay">
+		<!-- the box that will showw matching links -->
+		<div id="autosuggest"><ul></ul></div>
 	<!-- using onkeypress="return event.keyCode!=13" to disable browser's form handling on enter key -->
-		<fieldset>
-		<legend>State</legend>
-		<p>(Up and down arrows highlight a suggestion. Tab key inserts the highlighted suggestion. Escape hides the list.)</p>
-		<label for="txtQuickSilverSearch">Please enter a State:</label>
-		<input accesskey="Q" type="text" name="txtQuickSilverSearch" id="txtQuickSilverSearch" />
+		<p><small>Up and down arrows highlight a suggestion. Tab key inserts the highlighted suggestion. Escape hides the list.</small></p>
+		<label for="txtQuickSilverSearch">Type link name:</label>
+		<input type="text" name="txtQuickSilverSearch" id="txtQuickSilverSearch" onfocus="showQuay()" />
 		<script language="Javascript">
 			new AutoSuggest(document.getElementById('txtQuickSilverSearch'), linkCache);
 		</script>
-		</fieldset>
+	</div>
 </body>
 </html>
 

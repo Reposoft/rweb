@@ -79,7 +79,7 @@ function AutoSuggest(elem, suggestions)
 
 	// Change this to customize the display text of a suggestiong 
 	this.getDisplayName = function(suggestion) {
-		return "- " + suggestion.text + " -";
+		return " " + suggestion.text + " ";
 	}
 	
 	// returns the text for an alternative, to be matched agains the search string
