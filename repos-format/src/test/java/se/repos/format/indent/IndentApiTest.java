@@ -35,7 +35,7 @@ public class IndentApiTest {
 	public void testFormatUL() {
 		String p = "<ul><li>A</li><li>B</li></ul>";
 		assertEquals(
-				"<ul>\n<li>A</li>\n<li>B</li>\n</ul>",
+				"<ul>\n  <li>A</li>\n  <li>B</li>\n</ul>",
 				formatBodyContents(p));
 	}	
 	

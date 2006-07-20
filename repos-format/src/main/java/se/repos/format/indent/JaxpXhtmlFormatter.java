@@ -27,6 +27,7 @@ public class JaxpXhtmlFormatter implements XhtmlFormatter {
 	public void format(Source validXhtml, Writer indentedXhtmlOutput) {
 
 		// Create an "identity" transformer - copies input to output
+		
 		Transformer t;
 		try {
 			t = TransformerFactory.newInstance().newTransformer();
@@ -45,8 +46,8 @@ public class JaxpXhtmlFormatter implements XhtmlFormatter {
 				"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd");
 		t.setOutputProperty(OutputKeys.ENCODING, OUTPUT_ENCODING);
 		t.setOutputProperty(OutputKeys.INDENT, "yes");
+		t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 		
-
 		// Serialize DOM tree
 		Result r = new StreamResult(indentedXhtmlOutput);
 		try {
