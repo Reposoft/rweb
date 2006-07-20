@@ -1,0 +1,416 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Untitled Document</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.0  (Win32)">
+	<META NAME="CREATED" CONTENT="20060720;10305425">
+	<META NAME="CHANGEDBY" CONTENT="Staffan">
+	<META NAME="CHANGED" CONTENT="20060720;12444949">
+</HEAD>
+<BODY LANG="sv-SE" DIR="LTR">
+<H1>Repos authentication requirements</H1>
+<P>Repos authentication is like any other authentication solution in
+that:</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Users authenticate with username
+	and password 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Users should be able to change
+	their password</P>
+	<LI><P>Users are associated with contact options, such as an e-mail
+	address</P>
+</UL>
+<P>It is <EM>uncommon</EM> in that it:</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Without modification, any WebDAV
+	or Subversion client should be able to authenticate to the file
+	repositories 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Repos consists of several web
+	applicaitons and open source tools. They should all login using the
+	same mechanism.</P>
+	<LI><P>Should be single sign on in a web browser 
+	</P>
+</UL>
+<H2>Example</H2>
+<P>User interation in <A HREF="http://fit.c2.com/">FIT</A> format</P>
+<TABLE BORDER=0 CELLPADDING=2 CELLSPACING=2>
+	<TR>
+		<TD>
+			<P><BR>
+			</P>
+		</TD>
+		<TD>
+			<P>&nbsp;</P>
+		</TD>
+		<TD>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>&nbsp;start</P>
+		</TD>
+		<TD>
+			<P>application one 
+			</P>
+		</TD>
+		<TD>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>&nbsp;check</P>
+		</TD>
+		<TD>
+			<P>login 
+			</P>
+		</TD>
+		<TD>
+			<P>not required 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>press</P>
+		</TD>
+		<TD>
+			<P>open</P>
+		</TD>
+		<TD>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>&nbsp;check 
+			</P>
+		</TD>
+		<TD>
+			<P>login</P>
+		</TD>
+		<TD>
+			<P>required 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>enter 
+			</P>
+		</TD>
+		<TD>
+			<P>username 
+			</P>
+		</TD>
+		<TD>
+			<P>svensson 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>enter</P>
+		</TD>
+		<TD>
+			<P>password 
+			</P>
+		</TD>
+		<TD>
+			<P>medel 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>press</P>
+		</TD>
+		<TD>
+			<P>login 
+			</P>
+		</TD>
+		<TD>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>&nbsp;check 
+			</P>
+		</TD>
+		<TD>
+			<P>login 
+			</P>
+		</TD>
+		<TD>
+			<P>successful 
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<P>Then the second application should see that user</P>
+<TABLE WIDTH=200 BORDER=1 CELLPADDING=2 CELLSPACING=2>
+	<TR>
+		<TD>
+			<P>&nbsp;</P>
+		</TD>
+		<TD>
+			<P>&nbsp;</P>
+		</TD>
+		<TD>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>start</P>
+		</TD>
+		<TD>
+			<P>appplication two 
+			</P>
+		</TD>
+		<TD>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>check</P>
+		</TD>
+		<TD>
+			<P>login</P>
+		</TD>
+		<TD>
+			<P>not required 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>press</P>
+		</TD>
+		<TD>
+			<P>open 
+			</P>
+		</TD>
+		<TD>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>check 
+			</P>
+		</TD>
+		<TD>
+			<P>login</P>
+		</TD>
+		<TD>
+			<P>successful</P>
+		</TD>
+	</TR>
+</TABLE>
+<P>Then the user wants to check out the resource using the SVN
+command line client or TortoiseSVN. This can not benefit from single
+sign-on because the svn client must be allowed to use HTTP BASIC
+authentication. 
+</P>
+<P>|start|svn|<BR>|enter|url|my resource|
+<BR>|press|checkout|<BR>|check|login|required|</P>
+<H2>Definitions</H2>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=3>
+	<COL WIDTH=128*>
+	<COL WIDTH=128*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=50%>
+			<P>Repository</P>
+		</TD>
+		<TD WIDTH=50%>
+			<P>The storage for users' and businesses' files</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=50%>
+			<P>Tool</P>
+		</TD>
+		<TD WIDTH=50%>
+			<P>An extension to the web-based repository browsing, written in
+			any language, used to visualize resources from the repository. For
+			example a text file formatter or a thumbnail generator.</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=50%>
+			<P>Application</P>
+		</TD>
+		<TD WIDTH=50%>
+			<P>Follows the Repos architecture and has write access to the
+			repository. Accessed using a URI (which could be web start for a
+			rich client). Represents business logic for a set of tasks.</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=50%>
+			<P><BR>
+			</P>
+		</TD>
+		<TD WIDTH=50%>
+			<P><BR>
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<H2>Technical assumptions (TA) 
+</H2>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">The resources are stored in a
+	Subversion repository accessed through mod_dav_svn in an Apache2
+	server. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Reading a resource can be done
+	throgh a simple HTTP GET to the repository url 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Users may have read+write WebDAV
+	connections to the repository, some using Windows web folders. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">A web tool like <A HREF="http://phpicalendar.net/">PHP
+	iCalendar</A> needs to be able to proxy browser login to access a
+	repository resource, acting as the user. 
+	</P>
+	<LI><P>A web application is written in java and runs in a servlet
+	container. The authentication API can be written in java. 
+	</P>
+</OL>
+<H2>Non-technical assumptions (NA) 
+</H2>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">Customers will want form-based
+	login because it is de-facto standard for web applications and it is
+	skinnable. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Users want to do explicit logout.
+	They don't want want to close the browser after a session. 
+	</P>
+	<LI><P>We can trust the server administrator(s), and the people that
+	write the authentication code. But web application code should not
+	handle passwords.</P>
+	<LI><P>Some customers want SSL for all resource access.</P>
+	<LI><P>Customers may want to authenticate user with an existing
+	directory, for example using LDAP.  In such cases, they will also
+	host the repositories and configure the supported client
+	applications. Repos applications will be expected to allow the
+	directory as authentication backend.</P>
+</OL>
+<H2>Immediate effects of the assumptions 
+</H2>
+<P>Given these assumptions, some authentication decisions have only
+one option, so design decisions are not needed.</P>
+<H3>HTTP Basic authentication</H3>
+<P>With the <A HREF="http://svnbook.red-bean.com/nightly/en/svn-book.html#svn.serverconfig.httpd.authn">Apache
+module</A>, the repositories can be accessed using HTTP Basic or
+Digest authentication (TA-1). However, the <A HREF="http://svnbook.red-bean.com/nightly/en/svn-book.html#svn.webdav.clients.file-explorer-extensions.windows">Windows
+Web Folders</A> client has a problem with the Digest scheme, so Basic
+must be used to preserve this drag-and-drop compatibility (TA-3).</P>
+<P><A HREF="http://en.wikipedia.org/wiki/Basic_authentication_scheme">Basic</A>
+authentication is cleartext, and credentials are sent with every
+request, so all non-local access to the repository must use SSL. This
+increases deployment complexity and may have an impact on
+performance, but it also creates customer confidence.</P>
+<P>According to the Subversion documentation, SSL certificates might
+be used for authentication. However most users are not familiar with
+this, so it can not be the default option.</P>
+<H3>Single sign-on</H3>
+<P>The Repos applications will probably live in separate JVMs, and
+will maybe be deployed on different servers. Therefore, some kind of
+single sign-on solution is nessecary.</P>
+<P>Given that the repository will use HTTP Basic authentication, but
+cutomers want form-based login (NA-1), some kind of authentication
+proxying is required when applications need to access repository
+resources on the current user's account.</P>
+<H3>Tool access requirements 
+</H3>
+<P>Detailed description on assumption TA-4. 
+</P>
+<P>Read-only access can be done using the following scheme:</P>
+<OL>
+	<LI><P>The tool is accessed with a query or session parameter that
+	states the resource URI.</P>
+	<LI><P>The tool attempts read-only access using a HTTP request to
+	the URI. If access i granted, go to last step.</P>
+	<LI><P>If the resource URI requires login, it is of HTTP BASIC
+	authentication, so it sends the header:<BR>HTTP/1.0 401
+	Unauthorised<BR>WWW-Authenticate: Basic realm=&quot;[repository root
+	uri]&quot;</P>
+	<LI><P>The tool sends the same header back to the browser (this
+	requires that nothing has been printed to the response stream before
+	resource access was attempted).</P>
+	<LI><P>The browser is probably already logged in to the realm
+	[repository root uri], and will send the same request with the
+	username and password:<BR>Authorization: Basic
+	QWxhZGRpbjpvcGVuIHNlc2FtZQ==</P>
+	<LI><P>The tool attempts resource access again with these
+	credentials. If it fails we're back at step 3.</P>
+</OL>
+<P>If the tool does not support this already, it must be modified.
+The resource URI must be stored so that it is preserved between
+requests (Step 1). The passwords should not be stored. For example
+the url http://my.repos.se/file.txt could be modified internally to
+use http://user:password@my.repos.se/file.txt, but this string should
+never be accessible for the tool (because then it might be presented
+to the user).</P>
+<P>User access to such tools is validated only when they try to the
+requested repository resource. This means that the tool URI is always
+available for anonymous access. It also means that tool
+sessions/users do not share any runtime information, because that
+could bypass repository access control. Any caching of resources is
+also a security risk.</P>
+<P>Tools do not have any other persistent data than the repository.</P>
+<H2>Web application authentication requirements</H2>
+<P>Like tool access, there must be some kind of credentials proxying
+for all applications that access resources. At the same time, the
+applications may store business data in a database, with same type of
+access control.</P>
+<P>Using a Single sign-on system like <A HREF="http://www.ja-sig.org/products/cas/">JA-SIG
+CAS</A>, all applications can share login form. All that is needed is
+a backend provider, which could be configured using <A HREF="http://www.acegisecurity.org/docbook/acegi.html#cas">Acegi</A>.
+This allows switching backends, like database or LDAP. Settings and
+classes could be bundled in a jar-file shared by user account related
+packages. With a naming convention for the acegi authentication
+context, switching backend could be a matter of replacing jar-files.</P>
+<P>The login service only provides a token that the user is
+authenticated. This can not be used to access resources from a
+standard Subversion+Apache setup. Tokens might be proxied, but the
+repository must also be accessible by subversion clients that expect
+HTTP authentication. Is it possible to use a single sign-on service
+as backend, but still authenticate Subversion and WebDAV clients
+using HTTP authentication?</P>
+<P>One strategy is to have two different URLs to access the
+repository:<BR>- One for browsers and clients, using HTTP
+authentication and SSL.<BR>- A different one for Repos applications,
+using Single sign-on proxying. If it is a local connection, SSL is
+not needed.</P>
+<P>A different strategy would be to use <A HREF="http://svnbook.red-bean.com/nightly/en/svn-book.html#svn.serverconfig.netmodel.credcache">Subversion
+client credential caching</A>. The Single sign-on backend could
+attempt a repository authentication. Using a subversion client, this
+would cache the credentials to a local directory. If the web
+applications also use a subversion client, the cretentials will be
+reused automatically. For example <A HREF="http://tmate.org/svn/kb/dev-guide-authentication.html">JavaSVN</A>
+can be <A HREF="http://tmate.org/svn/kb/javadoc/org/tmatesoft/svn/core/wc/SVNWCUtil.html">configured</A>
+to use any local File pointer as cache location.</P>
+<P>The trouble with credential caching is that it requires
+authentication to use the same file system that the web applications
+use.</P>
+<P>Yet another strategy is that the username+password is retreived by
+the repository authentication layer from the database, and used to
+access the resource. A drawback with this is that one-way encryption
+can not be used for passwords in the database.</P>
+<H2>Rich client authentication requirements</H2>
+<P>This will be specified when we design the first rich Repos client.</P>
+<P>&nbsp;</P>
+</BODY>
+</HTML>
