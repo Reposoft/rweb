@@ -53,6 +53,7 @@ Av pedagogiska skäl så bör man nog ha en kryssknapp som komplement till ESC-knap
 [Kommentar]
 Slängde in ett förslag på hur QuickSilverWindow (En DIV) skulle kunna bete sig och se ut.
 [Staffan] Men för bövlen, släng in i index.html dåe.
+[Staffan] Slängde in i index.html, med minimala förändringar. Input-boxen hete ..Input och inte ..Search. Tog inte med javascripten utan använde de existerande.
 
 
 
