@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>Index page using repos-quicksilver</title>
 
+<!-- all this should be in a single repos-quay.js file one day, to include from any page -->
 <script type="text/javascript" src="scripts/autosuggest.js" defer="true"></script>
 <script type="text/javascript">
 
@@ -163,21 +164,23 @@ Go [Alt-Q] for
 <p><a href="clicked.html?i=document.html">document.html</a></p>
 <p><a href="clicked.html?i=s.doc">s.doc</a></p>
 <p><a href="clicked.html?i=s%20m.doc">s m.doc</a></p>
+<!-- what's this doing here? is it used by the autosuggest.js script? -->
 <div id="debugger"></div>
 
 
 
-
+<!-- when the autosuggest.js bug has been fixed everything below should be printed by the javascript file -->
+<!-- the box that will show matching links -->
+	<div id="autosuggest" style="z-index:65001;"><ul></ul></div>
+<!-- the Quay popup -->
 	<div id="quay" style="z-index:65000; position:absolute; top:200px; left:200px; display:none;">
-		<!-- the box that will show matching links -->
-		<div id="autosuggest"><ul></ul></div>
 	<!-- using onkeypress="return event.keyCode!=13" to disable browser's form handling on enter key -->
 		<table width="300" border="0" cellpadding="0" cellspacing="0" class="quicksilver_window_style">
 			<tr>
 				<td>
 					<table width="300" height="26" class="top_bar_center_style" border="0" cellpadding="0" cellspacing="0">
 						<tr>
-							<td class="quicksilver_window_header">&nbsp;.: QuickSilver v.1.0 :.</td>
+							<td class="quicksilver_window_header">&nbsp;.: Repos Quay v.1.0 :.</td>
 							<td width="21"><a href="javascript:hideQuay();"><img src="pics/close_corner_button_normal.gif" border="0" /></a></td>
 						</tr>
 					</table>
