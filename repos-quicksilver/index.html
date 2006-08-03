@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>Index page using repos-quay</title>
+<title>Repos Quay demo and test page</title>
 
 <!-- all this should be in a single repos-quay.js file one day, to include from any page -->
 <script type="text/javascript" src="scripts/autosuggest.js" defer="true"></script>
@@ -24,25 +24,9 @@
 		var e = window.event;
 		altDown = (e.altKey) ? true : false;
 		if(e.keyCode == 81 && altDown){
-			showQuickSilverWindow();
+			showQuayWindow();
 		}
 		return false;
-	}
-	
-	function showQuickSilverWindow(){
-		var qsWin = null;
-//		var e = window.event;
-//		altDown = (e.altKey) ? true : false;
-//		if(e.keyCode == 81 && altDown){
-			qsWin = getQSWindow();
-			qsWin.style.display = 'block';		
-//			qsWin.show;
-//		}
-		qsWin.focus();
-	}
-	
-	function txtQSSearch_onChange(){
-		
 	}
 	
 	function linkObject(anchorNode){
@@ -56,7 +40,7 @@
 		this.url = anchorNode.href.toString();
 	}
 	
-	function getQSWindow(){
+	function getQuayWindow(){
 		var qsWin = document.getElementById("quay");
 		
 /*		if(!qsWin){
@@ -89,6 +73,9 @@
 		}*/
 	}
 	
+	function getQuayInputBox() {
+		return document.getElementById("txtQuaySearch");
+	}
 		
 	function indexLinks(s){
 		var as = document.body.getElementsByTagName("a");
@@ -111,12 +98,19 @@
 	}
 	
 	function showQuay() {
-		// still the old function names
-		showQuickSilverWindow();
+		var qsWin = null;
+//		var e = window.event;
+//		altDown = (e.altKey) ? true : false;
+//		if(e.keyCode == 81 && altDown){
+			qsWin = getQuayWindow();
+			qsWin.style.display = 'block';		
+//			qsWin.show;
+//		}
+		getQuayInputBox().focus();
 	}
 	
 	function hideQuay(){
-		qsWin = getQSWindow();
+		qsWin = getQuayWindow();
 		qsWin.style.display = 'none';
 	}
 	
@@ -155,19 +149,27 @@
 	color: #000000;
 	text-decoration: none;
 }
+
+/* test page font */
+body {
+	margin-left: 100px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.7em;
+}
 </style>
 
 </head>
 <body onload="document_onLoad();" onunload="document_onUnload();">
-<!-- all HTML needed for repos-quay. remember to include the js-file -->
-Go [Alt-Q] for 
-<a accesskey="Q" href="#" onclick="javascript:showQuay()"><img src="images/q1.png" width="19" height="18" border="0" alt="Q" title="repos-quay"/></a>
- : <a href="about.html">about</a> repos-quay.
+<!-- all HTML needed for repos-quay. Remember to include the js-file -->
+<a title="Go Alt+Q for Quay" accesskey="Q" href="#" onclick="javascript:showQuay()"><img src="images/q1.png" width="19" height="18" border="0" alt="Q"/></a>
+<!-- the box that will show matching links, printed by the javascript if supported by autosuggest.js -->
+<div id="autosuggest" style="z-index:65001;"><ul></ul></div>
 <!-- end repos-quay html -->
-<h1>Directory index</h1>
+<h1>Repos Quay demo</h1>
 <p><a href="clicked.html?i=up" title="Parent directory">..</a></p>
+<p><a href="clicked.html?i=upup" title="Parent parent">../../</a></p>
 <p><a href="clicked.html?i=up2">/up</a></p>
-<p><a href="clicked.html?i=docs">docs</a></p>
+<p><a href="clicked.html?i=docs">docs/</a></p>
 <p><a href="clicked.html?i=sources">sources</a></p>
 <p><a href="clicked.html?i=.project">.project</a></p>
 <p><a href="clicked.html?i=document.html">document.html</a></p>
@@ -175,15 +177,17 @@ Go [Alt-Q] for
 <p><a href="clicked.html?i=s%20m.doc">s m.doc</a></p>
 <p><a href="clicked.html?i=samename.txt(1)">samename.txt</a></p>
 <p><a href="clicked.html?i=samename.txt(2)">samename.txt</a></p>
+<p><a href="clicked.html?i=sameurl.txt">sameURL.txt(1)</a></p>
+<p><a href="clicked.html?i=sameurl.txt">sameURL.txt(2)</a></p>
+<p><a href="clicked.html?i=samenameandurl">samenameandurl</a></p>
+<p><a href="clicked.html?i=samenameandurl">samenameandurl</a></p>
+<p><a href="clicked.html?i=auml">&auml;uml</a></p>
 <!-- what's this doing here? is it used by the autosuggest.js script? -->
 <div id="debugger"></div>
 
 
 
-<!-- when the autosuggest.js bug has been fixed everything below should be printed by the javascript file -->
-<!-- the box that will show matching links -->
-	<div id="autosuggest" style="z-index:65001;"><ul></ul></div>
-<!-- the Quay popup -->
+<!-- the Quay popup, should be written by the script if supported by autosuggest.js -->
 	<div id="quay" style="z-index:65000; position:absolute; top:200px; left:200px; display:none;">
 	<!-- using onkeypress="return event.keyCode!=13" to disable browser's form handling on enter key -->
 		<table width="300" border="0" cellpadding="0" cellspacing="0" class="quicksilver_window_style">
@@ -191,18 +195,18 @@ Go [Alt-Q] for
 				<td>
 					<table width="300" height="26" class="top_bar_center_style" border="0" cellpadding="0" cellspacing="0">
 						<tr>
-							<td class="quicksilver_window_header">&nbsp;.: Repos Quay v.1.0 :.</td>
+							<td class="quicksilver_window_header">&nbsp;.: <a href="about.html">Repos Quay v.1.0</a> :.</td>
 							<td width="21"><a href="javascript:hideQuay();"><img src="pics/close_corner_button_normal.gif" border="0" /></a></td>
 						</tr>
 					</table>
 				</td>
 			</tr>
 			<tr>
-				<td class="quicksilver_window_mainarea" style="padding:10px;"><input id="txtQuickSilverSearch" name="textfield" type="text" class="txt_quicksilver_input" /></td>
+				<td class="quicksilver_window_mainarea" style="padding:10px;"><input id="txtQuaySearch" name="textfield" type="text" class="txt_quicksilver_input" /></td>
 			</tr>
 		</table>
 		<script language="Javascript">
-			new AutoSuggest(document.getElementById('txtQuickSilverSearch'), linkCache);
+			new AutoSuggest(getQuayInputBox(), linkCache);
 		</script>
 	</div>
 </body>

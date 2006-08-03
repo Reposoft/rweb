@@ -4,6 +4,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>Clicked a page</title>
+<style type="text/css">
+/* test page font */
+body {
+	margin-top: 100px;
+	margin-left: 100px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.7em;
+}
+</style>
 <script language="javascript">
 var qsParm = new Array();
 function qs() {
@@ -27,6 +36,6 @@ function showItem() {
 </head>
 <body onload="javascript:showItem()">
 <h1>Clicked link: '<span id="item">nothing</span>'</h1>
-<p><a href="index.html">back</a></p>
+<p><a accesskey="b" href="index.html">&lt; <strong>b</strong>ack</a></p>
 </body>
 </html>
