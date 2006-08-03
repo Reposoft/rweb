@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>Index page using repos-quicksilver</title>
+<title>Index page using repos-quay</title>
 
 <!-- all this should be in a single repos-quay.js file one day, to include from any page -->
 <script type="text/javascript" src="scripts/autosuggest.js" defer="true"></script>
@@ -38,6 +38,7 @@
 			qsWin.style.display = 'block';		
 //			qsWin.show;
 //		}
+		qsWin.focus();
 	}
 	
 	function txtQSSearch_onChange(){
@@ -98,14 +99,20 @@
 		}
 	}
 	
-	function document_onLoad(){		  
+	function document_onLoad() {
+		// run the indexing for autosuggest		  
 		indexLinks();
-		getQSWindow().style.display='none';
+		// make sure the Quay window is closed
+		hideQuay();
+	}
+	
+	function document_onUnload() {
+		hideQuay();
 	}
 	
 	function showQuay() {
+		// still the old function names
 		showQuickSilverWindow();
-		document.getElementById('txtQuickSilverSearch').focus();
 	}
 	
 	function hideQuay(){
@@ -113,10 +120,12 @@
 		qsWin.style.display = 'none';
 	}
 	
+// Keyboard events disbled. Using only Firefox accesskeys for now.
 //	document.onkeydown = document_onKeyDown;
 	
 </script>
 <style type="text/css">
+/* should be in the css file included from the javascript */
 .top_bar_center_style {
 	background-image: url(pics/top_bar_center_part.gif);
 	background-repeat: repeat-x;
@@ -149,14 +158,14 @@
 </style>
 
 </head>
-<body onload="document_onLoad();">
+<body onload="document_onLoad();" onunload="document_onUnload();">
 <!-- all HTML needed for repos-quay. remember to include the js-file -->
 Go [Alt-Q] for 
 <a accesskey="Q" href="#" onclick="javascript:showQuay()"><img src="images/q1.png" width="19" height="18" border="0" alt="Q" title="repos-quay"/></a>
  : <a href="about.html">about</a> repos-quay.
 <!-- end repos-quay html -->
 <h1>Directory index</h1>
-<p><a href="clicked.html?i=up">..</a></p>
+<p><a href="clicked.html?i=up" title="Parent directory">..</a></p>
 <p><a href="clicked.html?i=up2">/up</a></p>
 <p><a href="clicked.html?i=docs">docs</a></p>
 <p><a href="clicked.html?i=sources">sources</a></p>
@@ -164,6 +173,8 @@ Go [Alt-Q] for
 <p><a href="clicked.html?i=document.html">document.html</a></p>
 <p><a href="clicked.html?i=s.doc">s.doc</a></p>
 <p><a href="clicked.html?i=s%20m.doc">s m.doc</a></p>
+<p><a href="clicked.html?i=samename.txt(1)">samename.txt</a></p>
+<p><a href="clicked.html?i=samename.txt(2)">samename.txt</a></p>
 <!-- what's this doing here? is it used by the autosuggest.js script? -->
 <div id="debugger"></div>
 
