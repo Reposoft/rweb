@@ -161,7 +161,7 @@ body {
 </head>
 <body onload="document_onLoad();" onunload="document_onUnload();">
 <!-- all HTML needed for repos-quay. Remember to include the js-file -->
-<a title="Go Alt+Q for Quay" accesskey="Q" href="#" onclick="javascript:showQuay()"><img src="images/q1.png" width="19" height="18" border="0" alt="Q"/></a>
+<a id="quayIcon" title="Go Alt+Q for Quay" accesskey="Q" href="#" onclick="javascript:showQuay()"><img src="images/q1.png" width="19" height="18" border="0" alt="Q"/></a>
 <!-- the box that will show matching links, printed by the javascript if supported by autosuggest.js -->
 <div id="autosuggest" style="z-index:65001;"><ul></ul></div>
 <!-- end repos-quay html -->
@@ -182,6 +182,7 @@ body {
 <p><a href="clicked.html?i=samenameandurl">samenameandurl</a></p>
 <p><a href="clicked.html?i=samenameandurl">samenameandurl</a></p>
 <p><a href="clicked.html?i=auml">&auml;uml</a></p>
+<p><small>-- <a href="selenium/TestRunner.html">run Quay tests</a> --</small></p>
 <!-- what's this doing here? is it used by the autosuggest.js script? -->
 <div id="debugger"></div>
 
@@ -196,7 +197,7 @@ body {
 					<table width="300" height="26" class="top_bar_center_style" border="0" cellpadding="0" cellspacing="0">
 						<tr>
 							<td class="quicksilver_window_header">&nbsp;.: <a href="about.html">Repos Quay v.1.0</a> :.</td>
-							<td width="21"><a href="javascript:hideQuay();"><img src="pics/close_corner_button_normal.gif" border="0" /></a></td>
+							<td width="21"><a id="quayCloseIcon" href="javascript:hideQuay();"><img src="pics/close_corner_button_normal.gif" border="0" /></a></td>
 						</tr>
 					</table>
 				</td>
