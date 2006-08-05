@@ -165,23 +165,28 @@ body {
 <!-- the box that will show matching links, printed by the javascript if supported by autosuggest.js -->
 <div id="autosuggest" style="z-index:65001;"><ul></ul></div>
 <!-- end repos-quay html -->
+<div id="demoBox">
 <h1>Repos Quay demo</h1>
+<p>This is a sample index page, but the Quay works for <a href="clicked.html?i=inline">inline</a> links too.</p>
 <p><a href="clicked.html?i=up" title="Parent directory">..</a></p>
 <p><a href="clicked.html?i=upup" title="Parent parent">../../</a></p>
-<p><a href="clicked.html?i=up2">/up</a></p>
-<p><a href="clicked.html?i=docs">docs/</a></p>
-<p><a href="clicked.html?i=sources">sources</a></p>
+<p><a href="clicked.html?i=folder%2F">folder/</a></p>
 <p><a href="clicked.html?i=.project">.project</a></p>
 <p><a href="clicked.html?i=document.html">document.html</a></p>
-<p><a href="clicked.html?i=s.doc">s.doc</a></p>
-<p><a href="clicked.html?i=s%20m.doc">s m.doc</a></p>
-<p><a href="clicked.html?i=samename.txt(1)">samename.txt</a></p>
-<p><a href="clicked.html?i=samename.txt(2)">samename.txt</a></p>
+<p><a href="clicked.html?i=Document.html">Document.html</a></p>
+<p><a href="clicked.html?i=samename.txt(1)">samename.txt</a> (1)</p>
+<p><a href="clicked.html?i=samename.txt(2)">samename.txt</a> (2)</p>
 <p><a href="clicked.html?i=sameurl.txt">sameURL.txt(1)</a></p>
 <p><a href="clicked.html?i=sameurl.txt">sameURL.txt(2)</a></p>
 <p><a href="clicked.html?i=samenameandurl">samenameandurl</a></p>
 <p><a href="clicked.html?i=samenameandurl">samenameandurl</a></p>
-<p><a href="clicked.html?i=auml">&auml;uml</a></p>
+<p><a href="clicked.html?i=s%20pace.html">s pace.html</a></p>
+<p><a href="clicked.html?i=%E4uml">&auml;uml</a></p>
+<p><a href="clicked.html?i=%2Fslash">/slash</a></p>
+<p><input type="text" name="txtSomeOtherInput" size="40" value="An input box should not bother the Quay" /></p>
+<p><a href="clicked.html?i=image%20without%20title"><img alt="image with title" title="Image title"/></a></p>
+<p><a href="clicked.html?i=image%20without%20title"><img alt="image without title" /></a></p>
+</div>
 <div id="developmentBox">
 <h3>Repos Quay development</h3>
 <p><a href="tests/index.html">Automated test suite</a></p>
