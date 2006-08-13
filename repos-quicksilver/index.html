@@ -6,7 +6,7 @@
 <title>Repos Quay demo and test page</title>
 
 <!-- all this should be in a single repos-quay.js file one day, to include from any page -->
-<script type="text/javascript" src="scripts/autosuggest.js" defer="true"></script>
+<script type="text/javascript" src="scripts/autosuggest.js"></script>
 <script type="text/javascript">
 
 /*
@@ -19,58 +19,39 @@
 	var altDown = false;
 	var linkCache = new Array();
 	var Q_KEY = 81;
+	var ALT_KEY = 18;
 
-	function document_onKeyDown(){
-		var e = window.event;
-		altDown = (e.altKey) ? true : false;
-		if(e.keyCode == 81 && altDown){
-			showQuayWindow();
+	function document_onKeyDown(e){
+		var keyId = (window.event) ? event.keyCode : e.keyCode;
+
+		altDown = (ALT_KEY) ? true : false;
+		if(keyId == 81 && altDown){
+			showQuay();
 		}
-		return false;
 	}
 	
 	function linkObject(anchorNode){
-		if (anchorNode.childNodes[0] instanceof HTMLImageElement) {
-			var text = anchorNode.childNodes[0].title;
+		var t = "";
+
+		if (anchorNode.childNodes[0].tagName == "IMG") {
+			if(anchorNode.childNodes[0].title){
+				t = anchorNode.childNodes[0].title;
+			}
 		} else {
 			// text node
-			var text = anchorNode.childNodes[0].data;
+			if(anchorNode.childNodes[0].data){
+				t = anchorNode.childNodes[0].data;
+			}
 		}
-		this.text = text.toString();
+				
+		this.text = t.toString();
 		this.url = anchorNode.href.toString();
 	}
 	
 	function getQuayWindow(){
 		var qsWin = document.getElementById("quay");
 		
-/*		if(!qsWin){
-			var txtQSSearch = document.createElement("input");
-			txtQSSearch.id = 'txtQuickSilverSearch';
-			txtQSSearch.type = 'text';
-			qsWin = document.createElement("div");
-			qsWin.className = "qsWindow";
-			qsWin.zIndex = 32767;
-			qsWin.id = 'qsWindow';
-			qsWin.appendChild(txtQSSearch);
-			document.body.appendChild(qsWin);
-			qsWin = document.getElementById("qsWindow");
-		}
-		qsWin.prototype.show = function(){
-			document.getElementById("autosuggest").style.display = 'block';
-		}
-		
-		qsWin.prototype.hide = function (){
-			document.getElementById("autosuggest").style.display = 'none';
-		}*/
 		return qsWin;
-		
-/*		function show(){
-			document.getElementById("qsWindow").style.display = 'block';
-		}
-		
-		function hide(){
-			document.getElementById("qsWindow").style.display = 'none';
-		}*/
 	}
 	
 	function getQuayInputBox() {
@@ -98,24 +79,20 @@
 	}
 	
 	function showQuay() {
-		var qsWin = null;
-//		var e = window.event;
-//		altDown = (e.altKey) ? true : false;
-//		if(e.keyCode == 81 && altDown){
-			qsWin = getQuayWindow();
+		var qsWin = getQuayWindow();
 			qsWin.style.display = 'block';		
-//			qsWin.show;
-//		}
 		getQuayInputBox().focus();
 	}
 	
 	function hideQuay(){
 		qsWin = getQuayWindow();
+		var ASDiv = document.getElementById("autosuggest");
 		qsWin.style.display = 'none';
+		ASDiv.style.display = 'none';
 	}
 	
 // Keyboard events disbled. Using only Firefox accesskeys for now.
-//	document.onkeydown = document_onKeyDown;
+	document.onkeydown = document_onKeyDown;
 	
 </script>
 <style type="text/css">
