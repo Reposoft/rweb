@@ -15,17 +15,17 @@
 	document.write('<link href="css/quicksilver.css" rel="stylesheet" type="text/css" />');
 
 	/*global vars*/
-	var emod; /*the event model*/
-	var altDown = false;
 	var linkCache = new Array();
 	var Q_KEY = 81;
 	var ALT_KEY = 18;
 	var ESC_KEY = 27;
+	// the autosuggest object instance for the Quay
+	var quaySuggest;
 
 	function document_onKeyDown(e){
 		var keyId = (window.event) ? event.keyCode : e.keyCode;
-
-		altDown = (ALT_KEY) ? true : false;
+		var altDown = (ALT_KEY) ? true : false;
+		
 		if(keyId == Q_KEY && altDown){
 			showQuay();
 		}
@@ -36,16 +36,20 @@
 	}
 	
 	function linkObject(anchorNode){
+		// text will be an empty string if there is no matches, which means that the link can not be suggested
 		var t = "";
-
-		if (anchorNode.childNodes[0].tagName == "IMG") {
+		
+		// if the link has textual contents, use it as suggestion text
+		if (anchorNode.childNodes[0].data) {
+			t = anchorNode.childNodes[0].data;
+		}
+		// also allow images as links
+		else if (anchorNode.childNodes[0].tagName && anchorNode.childNodes[0].tagName == "IMG") {
 			if(anchorNode.childNodes[0].title){
 				t = anchorNode.childNodes[0].title;
 			}
-		} else {
-			// text node
-			if(anchorNode.childNodes[0].data){
-				t = anchorNode.childNodes[0].data;
+			else if(anchorNode.childNodes[0].alt){
+				t = anchorNode.childNodes[0].alt;
 			}
 		}
 				
@@ -54,9 +58,7 @@
 	}
 	
 	function getQuayWindow(){
-		var qsWin = document.getElementById("quay");
-		
-		return qsWin;
+		return document.getElementById("quay");
 	}
 	
 	function getQuayInputBox() {
@@ -75,6 +77,8 @@
 	function document_onLoad() {
 		// run the indexing for autosuggest		  
 		indexLinks();
+		// initiate autosuggest for the Quay inputbox
+		quaySuggest = new AutoSuggest(getQuayInputBox(), linkCache);
 		// make sure the Quay window is closed
 		hideQuay();
 	}
@@ -85,18 +89,17 @@
 	
 	function showQuay() {
 		var qsWin = getQuayWindow();
-			qsWin.style.display = 'block';		
+		qsWin.style.display = 'block';		
 		getQuayInputBox().focus();
 	}
 	
 	function hideQuay(){
-		qsWin = getQuayWindow();
-		var ASDiv = document.getElementById("autosuggest");
+		var qsWin = getQuayWindow();
 		qsWin.style.display = 'none';
-		ASDiv.style.display = 'none';
+		quaySuggest.hideDiv();
 	}
 	
-// Keyboard events disbled. Using only Firefox accesskeys for now.
+	// allow keyboard events to show and hide the quay. Clicking the quay icons works without this.
 	document.onkeydown = document_onKeyDown;
 	
 </script>
@@ -166,8 +169,8 @@ body {
 <p><a href="clicked.html?i=%E4uml">&auml;uml</a></p>
 <p><a href="clicked.html?i=%2Fslash">/slash</a></p>
 <p><input type="text" name="txtSomeOtherInput" size="40" value="An input box should not bother the Quay" /></p>
-<p><a href="clicked.html?i=image%20without%20title"><img alt="image with title" title="Image title"/></a></p>
-<p><a href="clicked.html?i=image%20without%20title"><img alt="image without title" /></a></p>
+<p><a href="clicked.html?i=image%20with%20title"><img alt="image with title" title="Image title"/></a></p>
+<p><a href="clicked.html?i=image%20with%20alt"><img alt="image with alt" /></a></p>
 </div>
 <div id="developmentBox">
 <h3>Repos Quay development</h3>
@@ -196,9 +199,6 @@ body {
 				<td class="quicksilver_window_mainarea" style="padding:10px;"><input id="txtQuaySearch" name="textfield" type="text" class="txt_quicksilver_input" /></td>
 			</tr>
 		</table>
-		<script language="Javascript">
-			new AutoSuggest(getQuayInputBox(), linkCache);
-		</script>
 	</div>
 </body>
 </html>
