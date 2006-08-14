@@ -8,6 +8,12 @@ div#quay {
 	top:200px;
 	left:200px;
 	display:none;
+	
+	width: 300px;
+/*	border: 1px solid #7f9db9;*/
+	border-left: 1px solid #c6c7c6;
+	border-bottom: 1px solid #c6c7c6;
+	border-right: 1px solid #c6c7c6;
 }
 
 /* AutoSuggest styles */
