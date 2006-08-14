@@ -12,7 +12,7 @@
 /*
 	This sourcecode is copyrighted... och nåt annat bra att säga...
 */
-	document.write('<link href="css/quicksilver.css" rel="stylesheet" type="text/css" />');
+	document.write('<link href="css/repos-quay.css" rel="stylesheet" type="text/css" />');
 
 	/*global vars*/
 	var linkCache = new Array();
@@ -64,6 +64,20 @@
 	function getQuayInputBox() {
 		return document.getElementById("txtQuaySearch");
 	}
+	
+	function printQuayDiv() {
+		// currently included in the original HTML
+	}
+	
+	// <!-- the box that will show matching links -->
+	// <div id="autosuggest" style="z-index:65001;"><ul></ul></div>
+	function printAutosuggestDiv() {
+		var d = document.createElement("div");
+		var u = document.createElement("ul");
+		d.id = 'autosuggest';
+		d.appendChild(u);
+		document.body.appendChild(d);
+	}
 		
 	function indexLinks(s){
 		var as = document.body.getElementsByTagName("a");
@@ -77,6 +91,9 @@
 	function document_onLoad() {
 		// run the indexing for autosuggest		  
 		indexLinks();
+		// print the quay HTML
+		printQuayDiv();
+		printAutosuggestDiv();
 		// initiate autosuggest for the Quay inputbox
 		quaySuggest = new AutoSuggest(getQuayInputBox(), linkCache);
 		// make sure the Quay window is closed
@@ -141,6 +158,18 @@
 	text-decoration: none;
 }
 
+div#quay {
+	z-index:32766;
+	position:absolute;
+	top:200px;
+	left:200px;
+	display:none;
+}
+
+div#autosuggest {
+	z-index:32767;
+}
+
 /* test page font */
 body {
 	margin-left: 100px;
@@ -153,8 +182,6 @@ body {
 <body onload="document_onLoad();" onunload="document_onUnload();">
 <!-- all HTML needed for repos-quay. Remember to include the js-file -->
 <a id="quayIcon" title="Go Alt+Q for Quay" accesskey="Q" href="#" onclick="javascript:showQuay()"><img src="images/q1.png" width="19" height="18" border="0" alt="Q"/></a>
-<!-- the box that will show matching links, printed by the javascript if supported by autosuggest.js -->
-<div id="autosuggest" style="z-index:65001;"><ul></ul></div>
 <!-- end repos-quay html -->
 <div id="demoBox">
 <h1>Repos Quay demo</h1>
@@ -188,7 +215,7 @@ body {
 
 
 <!-- the Quay popup, should be written by the script if supported by autosuggest.js -->
-	<div id="quay" style="z-index:65000; position:absolute; top:200px; left:200px; display:none;">
+	<div id="quay">
 	<!-- using onkeypress="return event.keyCode!=13" to disable browser's form handling on enter key -->
 		<table width="300" border="0" cellpadding="0" cellspacing="0" class="quicksilver_window_style">
 			<tr>
