@@ -69,9 +69,60 @@
 	function getQuayInputBox() {
 		return document.getElementById("txtQuaySearch");
 	}
-	
+
+	/* if it exists, layout the:
+	<a id="quayButton" title="Go Alt+Q for Quay" accesskey="Q" href="#" onclick="javascript:showQuay()"><img src="images/q1.png"/></a>
+	*/
+	function printQuayButton() {
+		var a = document.getElementById("quayButton");
+		if (a) {
+			a.title = "Go Alt+Q for Quay";
+			// a.accesskey = "Q"; // not needed if using keyboard events
+			a.href = "javascript:showQuay()";
+			var img = document.createElement("img");
+			img.src = "images/q1.png";
+			a.appendChild(img);
+		}
+	}
+
+	/*
+	<!-- the Quay popup, should be written by the script if supported by autosuggest.js -->
+<div id="quay">
+	<!-- using onkeypress="return event.keyCode!=13" to disable browser's form handling on enter key -->
+	<div id="quay_header">
+		<a id="quayHeaderLogo" href="about.html"></a>
+		<a id="quayCloseIcon" href="javascript:hideQuay();"></a>
+	</div>
+	<div id="quay_mainarea">
+		<input id="txtQuaySearch" name="textfield" type="text" />
+	</div>
+</div>
+	*/	
 	function printQuayDiv() {
-		// currently included in the original HTML
+		var d = document.createElement("div");
+		d.id = "quay";
+		var header = document.createElement("div");
+		header.id = "quay_header";
+		var mainarea = document.createElement("div");
+		mainarea.id = "quay_mainarea";
+		// create the header elements
+		var logo = document.createElement("a");
+		logo.id = "quayHeaderLogo";
+		logo.href = "about.html";
+		header.appendChild(logo);
+		var closeicon = document.createElement("a");
+		closeicon.id = "quayCloseIcon";
+		closeicon.href = "javascript:hideQuay()";
+		header.appendChild(closeicon);
+		// create the input box
+		var txt = document.createElement("input");
+		txt.id = "txtQuaySearch";
+		txt.name = "textfield";
+		txt.type = "text";
+		mainarea.appendChild(txt);
+		d.appendChild(header);
+		d.appendChild(mainarea);
+		document.body.appendChild(d);
 	}
 	
 	// <!-- the box that will show matching links -->
@@ -97,6 +148,7 @@
 		// run the indexing for autosuggest		  
 		indexLinks();
 		// print the quay HTML
+		printQuayButton();
 		printQuayDiv();
 		printAutosuggestDiv();
 		// initiate autosuggest for the Quay inputbox
@@ -169,6 +221,7 @@ a#quayHeaderLogo {
 	width: 277px;
 }
 
+/* The X in the quay header */
 a#quayCloseIcon {
 	position: absolute;
 	top: 2px;
@@ -179,13 +232,20 @@ a#quayCloseIcon {
 	background-position: center;
 	background-repeat: no-repeat;
 }
-
 a#quayCloseIcon:hover {
 	background-image: url(images/close_corner_button_over.gif);
 }
-
 a#quayCloseIcon img {
 	border: none;
+}
+
+/* format the Quay button if present */
+a#quayButton {
+	width:18px;
+	height:19px;
+}
+a#quayButton img {
+	border:none;
 }
 
 /* test page font */
@@ -198,9 +258,9 @@ body {
 
 </head>
 <body onload="document_onLoad();" onunload="document_onUnload();">
-<!-- all HTML needed for repos-quay. Remember to include the js-file -->
-<a id="quayIcon" title="Go Alt+Q for Quay" accesskey="Q" href="#" onclick="javascript:showQuay()"><img src="images/q1.png" width="19" height="18" border="0" alt="Q"/></a>
-<!-- end repos-quay html -->
+
+<!-- Optional tag to show that the page uses repos Quay --><a id="quayButton"></a>
+
 <div id="demoBox">
 <h1>Repos Quay demo</h1>
 <p>This is a sample index page, but the Quay works for <a href="clicked.html?i=inline">inline</a> links too.</p>
@@ -230,19 +290,6 @@ body {
 <!-- what's this doing here? is it used by the autosuggest.js script? -->
 <div id="debugger"></div>
 
-
-
-<!-- the Quay popup, should be written by the script if supported by autosuggest.js -->
-<div id="quay">
-	<!-- using onkeypress="return event.keyCode!=13" to disable browser's form handling on enter key -->
-	<div id="quay_header">
-		<a id="quayHeaderLogo" href="about.html"></a>
-		<a id="quayCloseIcon" href="javascript:hideQuay();"></a>
-	</div>
-	<div id="quay_mainarea">
-		<input id="txtQuaySearch" name="textfield" type="text" />
-	</div>
-</div>
 </body>
 </html>
 
