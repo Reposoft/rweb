@@ -4,14 +4,20 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>Repos Quay demo and test page</title>
+<style type="text/css">
+body {
+	margin-left: 100px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.7em;
+}
+</style>
 
-<!-- all this should be in a single repos-quay.js file one day, to include from any page -->
-<script type="text/javascript" src="scripts/autosuggest.js"></script>
+<!-- Install repos Quay for this page -->
 <script type="text/javascript" src="scripts/repos-quay.js"></script>
 
 </head>
 <!-- Quay still needs onLoad to be set here -->
-<body onload="document_onLoad();" onunload="document_onUnload();">
+<body onload="quay_load();" onunload="quay_unload();">
 
 <!-- Optional tag to show that the page uses repos Quay --><a id="quayButton"></a>
 
@@ -41,8 +47,6 @@
 <h3>Repos Quay development</h3>
 <p><a href="tests/index.html">Automated test suite</a></p>
 </div>
-<!-- what's this doing here? is it used by the autosuggest.js script? -->
-<div id="debugger"></div>
 
 </body>
 </html>

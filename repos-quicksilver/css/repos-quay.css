@@ -1,5 +1,5 @@
 /* Quay icon style */
-/* the icon is optionally included on pages using <a id="quayButton"></a> (IE needs an explicit end tag) */
+/* the icon is optional. Include on pages using <a id="quayButton"></a> (IE needs an explicit end tag). */
 a#quayButton {
 	width:19px;
 	height:18px;
@@ -23,7 +23,6 @@ div#quay {
 	border-right: 1px solid #c6c7c6;
 }
 
-/* should be in the css file included from the javascript */
 input#txtQuaySearch {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
@@ -76,13 +75,6 @@ a#quayCloseIcon:hover {
 }
 a#quayCloseIcon img {
 	border: none;
-}
-
-/* test page font */
-body {
-	margin-left: 100px;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 0.7em;
 }
 
 /* AutoSuggest styles */

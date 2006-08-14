@@ -6,11 +6,9 @@
 	Simply include this javascript file in the head of any HTML file.
 	Optionally add a Quay button using <a id="quayButton"></a> somewhere in the page.
 */
-	/* document.write('<script type="text/javascript" src="scripts/autosuggest.js"></script>'); */
+	document.write('<script type="text/javascript" src="scripts/autosuggest.js"></script>');
 	document.write('<link href="css/repos-quay.css" rel="stylesheet" type="text/css" />');
 
-	// home url for quay resources. absolute URL, or relative to this script.
-	var QUAY_HOME = "../";
 	// the indexed links
 	var linkCache = new Array();
 	// keys used in event handling
@@ -20,7 +18,7 @@
 	// the autosuggest object instance for the Quay
 	var quaySuggest;
 
-	function document_onKeyDown(e){
+	function quay_onKeyDown(e){
 		var keyId = (window.event) ? event.keyCode : e.keyCode;
 		var altDown = (ALT_KEY) ? true : false;
 		
@@ -33,27 +31,26 @@
 		}
 	}
 	
+	// class representing an indexed page link
 	function linkObject(anchorNode){
 		// text will be an empty string if there is no matches, which means that the link can not be suggested
 		var t = "";
 		
 		// index only link tags that have contents. we need a way for this function to say that an element should not be indexed.
 		if (anchorNode.childNodes[0]) {
-		
-		// if the link has textual contents, use it as suggestion text
-		if (anchorNode.childNodes[0].data) {
-			t = anchorNode.childNodes[0].data;
-		}
-		// also allow images as links
-		else if (anchorNode.childNodes[0].tagName && anchorNode.childNodes[0].tagName == "IMG") {
-			if(anchorNode.childNodes[0].title){
-				t = anchorNode.childNodes[0].title;
+			// if the link has textual contents, use it as suggestion text
+			if (anchorNode.childNodes[0].data) {
+				t = anchorNode.childNodes[0].data;
 			}
-			else if(anchorNode.childNodes[0].alt){
-				t = anchorNode.childNodes[0].alt;
+			// also allow images as links
+			else if (anchorNode.childNodes[0].tagName && anchorNode.childNodes[0].tagName == "IMG") {
+				if(anchorNode.childNodes[0].title){
+					t = anchorNode.childNodes[0].title;
+				}
+				else if(anchorNode.childNodes[0].alt){
+					t = anchorNode.childNodes[0].alt;
+				}
 			}
-		}
-		
 		}
 				
 		this.text = t.toString();
@@ -132,7 +129,7 @@
 		document.body.appendChild(d);
 	}
 		
-	function indexLinks(s){
+	function quay_indexLinks(s){
 		var as = document.body.getElementsByTagName("a");
 		for(ix in as){
 			if(as[ix].childNodes){
@@ -141,9 +138,10 @@
 		}
 	}
 	
-	function document_onLoad() {
+	// document_onLoad()
+	function quay_load() {
 		// run the indexing for autosuggest		  
-		indexLinks();
+		quay_indexLinks();
 		// print the quay HTML
 		printQuayButton();
 		printQuayDiv();
@@ -154,13 +152,14 @@
 		hideQuay();
 	}
 	
-	function document_onUnload() {
+	// document_onUnload()
+	function quay_unload() {
 		hideQuay();
 	}
 	
 	function showQuay() {
-		var qsWin = getQuayWindow();
-		qsWin.style.display = 'block';
+		var quayWin = getQuayWindow();
+		quayWin.style.display = 'block';
 		var inputBox = getQuayInputBox();		
 		inputBox.focus();
 	}
@@ -172,10 +171,6 @@
 		quaySuggest.hideDiv();
 	}
 	
-	// replace autosuggest onkeyup event handling (set event handling to false in autosuggest)
-	function quay_onKeyUp() {
-		quaySuggest.filter();
-	}
-	
 	// allow keyboard events to show and hide the quay. Clicking the quay icons works without this.
-	document.onkeydown = document_onKeyDown;
+	document.onkeydown = quay_onKeyDown;
+	
