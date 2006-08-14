@@ -128,7 +128,7 @@
 </script>
 <style type="text/css">
 /* should be in the css file included from the javascript */
-.txt_quicksilver_input {
+input#txtQuaySearch {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	font-weight: bold;
@@ -137,11 +137,11 @@
 	border: 1px solid #66667e;
 	width: 100%;
 }
-.quicksilver_window_mainarea {
+div#quay_mainarea {
 	background-color: #e0dfe3;
 	padding: 10px;
 }
-.quicksilver_window_header {
+div#quay_header {
 	background-image: url(images/top_bar_center_part.gif);
 	background-repeat: repeat-x;
 	
@@ -210,11 +210,11 @@ body {
 <!-- the Quay popup, should be written by the script if supported by autosuggest.js -->
 <div id="quay">
 	<!-- using onkeypress="return event.keyCode!=13" to disable browser's form handling on enter key -->
-	<div class="quicksilver_window_header">
+	<div id="quay_header">
 		&nbsp;.: <a href="about.html">Repos Quay v.1.0</a> :. <a id="quayCloseIcon" href="javascript:hideQuay();"><img src="images/close_corner_button_normal.gif" /></a>
 	</div>
-	<div class="quicksilver_window_mainarea">
-		<input id="txtQuaySearch" name="textfield" type="text" class="txt_quicksilver_input" />
+	<div id="quay_mainarea">
+		<input id="txtQuaySearch" name="textfield" type="text" />
 	</div>
 </div>
 </body>
