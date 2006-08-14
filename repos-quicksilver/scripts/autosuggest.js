@@ -97,7 +97,7 @@ function AutoSuggest(elem, suggestions)
 	// Behaviour when a selection has been made
 	this.onSelection = function(selectedSuggestion) {
 		//this.elem.value = this.eligible[this.highlighted]; // set the complete selection in the input box (default autosuggest behaviour)
-		this.elem.value = ""; // don't remember input
+		this.clearInput(); // don't remember input
 		// close autoselect window
 		this.hideDiv();
 		//It's impossible to cancel the Tab key's default behavior. 
@@ -240,6 +240,16 @@ function AutoSuggest(elem, suggestions)
 		this.div.style.display = 'none';
 		this.highlighted = -1;
 	};
+	
+	/********************************************************
+	Reset the input box's value
+	********************************************************/
+	this.clearInput = function()
+	{
+		this.elem.value = "";
+		// also reset the last value used for filtering
+		me.inputText = "";
+	}
 
 	/********************************************************
 	Modify the HTML in the dropdown to move the highlight.

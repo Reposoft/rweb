@@ -1,5 +1,12 @@
 /* Quay icon style */
-/* the icon is optionally included on pages using <a ... */
+/* the icon is optionally included on pages using <a id="quayButton"></a> (IE needs an explicit end tag) */
+a#quayButton {
+	width:19px;
+	height:18px;
+}
+a#quayButton img {
+	border:none;
+}
 
 /* Quay box styles */
 div#quay {
@@ -14,6 +21,68 @@ div#quay {
 	border-left: 1px solid #c6c7c6;
 	border-bottom: 1px solid #c6c7c6;
 	border-right: 1px solid #c6c7c6;
+}
+
+/* should be in the css file included from the javascript */
+input#txtQuaySearch {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #66667e;
+	text-decoration: none;
+	border: 1px solid #66667e;
+	width: 100%;
+}
+div#quay_mainarea {
+	background-color: #e0dfe3;
+	padding: 10px;
+}
+div#quay_header {
+	background-image: url(../images/top_bar_center_part.gif);
+	background-repeat: repeat-x;
+	
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #000000;
+	text-decoration: none;
+	height: 26px;
+}
+
+a#quayHeaderLogo {
+	background-image: url(../images/quay_header_logo.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	position: absolute;
+	top: 2px;
+	left: 5px;
+	height: 21px;
+	width: 277px;
+}
+
+/* The X in the quay header */
+a#quayCloseIcon {
+	position: absolute;
+	top: 2px;
+	right: 1px;
+	width: 21px;
+	height: 21px;
+	background-image: url(../images/close_corner_button_normal.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+a#quayCloseIcon:hover {
+	background-image: url(../images/close_corner_button_over.gif);
+}
+a#quayCloseIcon img {
+	border: none;
+}
+
+/* test page font */
+body {
+	margin-left: 100px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.7em;
 }
 
 /* AutoSuggest styles */
