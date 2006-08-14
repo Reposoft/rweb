@@ -100,12 +100,9 @@
 		quaySuggest.hideDiv();
 	}
 	
-	/* not used because AutoSuggest handles these events automatically
-	function quay_onKeyPress() {
-		alert('hepp');
+	function quay_onKeyUp() {
 		quaySuggest.filter();
 	}
-	*/
 	
 	// allow keyboard events to show and hide the quay. Clicking the quay icons works without this.
 	document.onkeydown = document_onKeyDown;
@@ -204,7 +201,7 @@ body {
 				</td>
 			</tr>
 			<tr>
-				<td class="quicksilver_window_mainarea" style="padding:10px;"><input id="txtQuaySearch" name="textfield" type="text" class="txt_quicksilver_input" /></td>
+				<td class="quicksilver_window_mainarea" style="padding:10px;"><input id="txtQuaySearch" onkeyup="quay_onKeyUp();" name="textfield" type="text" class="txt_quicksilver_input" /></td>
 			</tr>
 		</table>
 	</div>

@@ -156,6 +156,7 @@ function AutoSuggest(elem, suggestions)
 	If the text is of sufficient length, and has been changed, 
 	then display a list of eligible suggestions.
 	********************************************************/
+	/* (Using onkeyup="quaySuggest.filter();" on the element instead)
 	elem.onkeyup = function(ev) 
 	{
 		var key = me.getKeyCode(ev);
@@ -171,6 +172,7 @@ function AutoSuggest(elem, suggestions)
 			me.filter();
 		}
 	};
+	*/
 	
 	/**
 	Show matching suggestions based on input box value
