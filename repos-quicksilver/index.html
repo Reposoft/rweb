@@ -39,6 +39,9 @@
 		// text will be an empty string if there is no matches, which means that the link can not be suggested
 		var t = "";
 		
+		// index only link tags that have contents. we need a way for this function to say that an element should not be indexed.
+		if (anchorNode.childNodes[0]) {
+		
 		// if the link has textual contents, use it as suggestion text
 		if (anchorNode.childNodes[0].data) {
 			t = anchorNode.childNodes[0].data;
@@ -51,6 +54,8 @@
 			else if(anchorNode.childNodes[0].alt){
 				t = anchorNode.childNodes[0].alt;
 			}
+		}
+		
 		}
 				
 		this.text = t.toString();
@@ -153,10 +158,30 @@ div#quay_header {
 	height: 26px;
 }
 
+a#quayHeaderLogo {
+	background-image: url(images/quay_header_logo.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	position: absolute;
+	top: 2px;
+	left: 5px;
+	height: 21px;
+	width: 277px;
+}
+
 a#quayCloseIcon {
 	position: absolute;
-	top: 0px;
-	right: 0px;
+	top: 2px;
+	right: 1px;
+	width: 21px;
+	height: 21px;
+	background-image: url(images/close_corner_button_normal.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+a#quayCloseIcon:hover {
+	background-image: url(images/close_corner_button_over.gif);
 }
 
 a#quayCloseIcon img {
@@ -211,7 +236,8 @@ body {
 <div id="quay">
 	<!-- using onkeypress="return event.keyCode!=13" to disable browser's form handling on enter key -->
 	<div id="quay_header">
-		&nbsp;.: <a href="about.html">Repos Quay v.1.0</a> :. <a id="quayCloseIcon" href="javascript:hideQuay();"><img src="images/close_corner_button_normal.gif" /></a>
+		<a id="quayHeaderLogo" href="about.html"></a>
+		<a id="quayCloseIcon" href="javascript:hideQuay();"></a>
 	</div>
 	<div id="quay_mainarea">
 		<input id="txtQuaySearch" name="textfield" type="text" />
