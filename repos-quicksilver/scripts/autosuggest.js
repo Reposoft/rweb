@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 *******************************************************
 /** modified for repos.se by Staffan och Kalle **/
+/** This file is still LGPL **/
 
 /********************************************************
  The AutoSuggest class binds to a text input field

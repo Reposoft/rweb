@@ -20,13 +20,18 @@
 	var linkCache = new Array();
 	var Q_KEY = 81;
 	var ALT_KEY = 18;
+	var ESC_KEY = 27;
 
 	function document_onKeyDown(e){
 		var keyId = (window.event) ? event.keyCode : e.keyCode;
 
 		altDown = (ALT_KEY) ? true : false;
-		if(keyId == 81 && altDown){
+		if(keyId == Q_KEY && altDown){
 			showQuay();
+		}
+		
+		if(keyId == ESC_KEY) {
+			hideQuay();
 		}
 	}
 	
