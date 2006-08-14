@@ -108,6 +108,9 @@ function AutoSuggest(elem, suggestions)
 		window.location.href = selectedSuggestion.url;
 	}
 
+	// Allow use of custom 'onkeyup' and 'onkeydown' by disabling event handling here
+	var enableEventHandling = true;
+	if (enableEventHandling) {
 	/********************************************************
 	onkeydown event handler for the input elem.
 	Tab key = use the highlighted suggestion, if there is one.
@@ -133,20 +136,11 @@ function AutoSuggest(elem, suggestions)
 			break;
 
 			case KEYUP:
-			if (me.highlighted > 0)
-			{
-				me.highlighted--;
-			}
-			me.changeHighlight(key);
+			me.suggestPrevious();
 			break;
 
 			case KEYDN:
-			if (me.highlighted < (me.eligible.length - 1))
-			{
-				me.highlighted++;
-			}
-			me.changeHighlight(key);
-			
+			me.suggestNext();
 			break;
 		}
 	};
@@ -156,7 +150,6 @@ function AutoSuggest(elem, suggestions)
 	If the text is of sufficient length, and has been changed, 
 	then display a list of eligible suggestions.
 	********************************************************/
-	/* (Using onkeyup="quaySuggest.filter();" on the element instead)
 	elem.onkeyup = function(ev) 
 	{
 		var key = me.getKeyCode(ev);
@@ -172,7 +165,30 @@ function AutoSuggest(elem, suggestions)
 			me.filter();
 		}
 	};
+	} // end effect of option enableEventHandling
+	
+	/**
+	Select previous option in the suggestion box
 	*/
+	this.suggestPrevious = function()
+	{
+		if (me.highlighted > 0)
+		{
+			me.highlighted--;
+		}
+		me.changeHighlight();	
+	};
+	
+	/**
+	Select next option on the suggestion box
+	*/
+	this.suggestNext = function() {
+		if (me.highlighted < (me.eligible.length - 1))
+		{
+			me.highlighted++;
+		}
+		me.changeHighlight();	
+	};
 	
 	/**
 	Show matching suggestions based on input box value
