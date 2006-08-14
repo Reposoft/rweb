@@ -311,6 +311,11 @@ function AutoSuggest(elem, suggestions)
 	
 			ul.appendChild(li);
 		}
+		
+		if (this.eligible.length == 0) {
+			var nodeEmpty = document.createTextNode(' ? ');
+			ul.appendChild(nodeEmpty);
+		}
 	
 		this.div.replaceChild(ul,this.div.childNodes[0]);
 	
