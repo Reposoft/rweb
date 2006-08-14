@@ -48,6 +48,7 @@ function AutoSuggest(elem, suggestions)
 
 	//A reference to the element we're binding the list to.
 	//This element must have an ID attribute
+	// Note that elem's event handlers must reference the element as 'this' instead of 'elem'
 	this.elem = elem;
 
 	this.suggestions = suggestions;
@@ -167,22 +168,28 @@ function AutoSuggest(elem, suggestions)
 		case KEYDN:
 			return;
 		default:
-
-			if (this.value != me.inputText && this.value.length > 0)
-			{
-				me.inputText = this.value;
-				me.getEligible();
-				me.createDiv();
-				me.positionDiv();
-				me.showDiv();
-			}
-			else
-			{
-				me.hideDiv();
-			}
+			me.filter();
 		}
 	};
-
+	
+	/**
+	Show matching suggestions based on input box value
+	*/
+	this.filter = function()
+	{
+		if (elem.value != me.inputText && elem.value.length > 0)
+		{
+			me.inputText = elem.value;
+			me.getEligible();
+			me.createDiv();
+			me.positionDiv();
+			me.showDiv();
+		}
+		else
+		{
+			me.hideDiv();
+		}	
+	};
 
 	/********************************************************
 	Insert the highlighted suggestion into the input box, and 

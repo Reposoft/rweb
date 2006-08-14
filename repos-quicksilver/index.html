@@ -89,8 +89,9 @@
 	
 	function showQuay() {
 		var qsWin = getQuayWindow();
-		qsWin.style.display = 'block';		
-		getQuayInputBox().focus();
+		qsWin.style.display = 'block';
+		var inputBox = getQuayInputBox();		
+		inputBox.focus();
 	}
 	
 	function hideQuay(){
@@ -98,6 +99,13 @@
 		qsWin.style.display = 'none';
 		quaySuggest.hideDiv();
 	}
+	
+	/* not used because AutoSuggest handles these events automatically
+	function quay_onKeyPress() {
+		alert('hepp');
+		quaySuggest.filter();
+	}
+	*/
 	
 	// allow keyboard events to show and hide the quay. Clicking the quay icons works without this.
 	document.onkeydown = document_onKeyDown;
