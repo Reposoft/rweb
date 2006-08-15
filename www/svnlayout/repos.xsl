@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
 	<xsl:output method="xml" indent="no"/>
 	<!--
 	  ==== repos.se: Subversion directory listing layout ====
@@ -30,7 +29,7 @@
 		<xsl:value-of select="$rurl"/>
 		<xsl:value-of select="$theme"/>/buttons</xsl:param>
 	<!-- webdav operations url, empty if not available -->
-	<xsl:param name="webdavUrl"></xsl:param>
+	<xsl:param name="webdavUrl"/>
 	<!-- avaliable icons -->
 	<xsl:param name="icons">._folder._file.ai.bmp.xhm.doc.exe.gif.gz.htm.html.ics.jar.java.jpg.log.mpg.pdf.php.png.ps.psd.qt.sh.sit.sxw.tif.tmp.txt.vcf.xls.zip</xsl:param>
 	<!-- filetype for which there is a thumbnail generator -->
@@ -45,10 +44,10 @@
 	<!-- html layout definitions -->
 	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- thumbnail generators -->
-	<xsl:param name="thumbUrl"><xsl:value-of select="$rurl"/>/phpthumb/phpThumbq.php?src=</xsl:param>
+	<xsl:param name="thumbUrl">
+		<xsl:value-of select="$rurl"/>/phpthumb/phpThumbq.php?src=</xsl:param>
 	<!-- include  repos.se shared templates -->
 	<!-- <xsl:include href=""/> -->
-
 	<!-- document skeleton -->
 	<xsl:template match="/">
 		<html xmlns="http://www.w3.org/1999/xhtml">
@@ -66,6 +65,8 @@
 				<!-- default stylesheet -->
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}/repos-standard.css"/>
 				<link rel="shortcut icon" href="http://www.repos.se/favicon.ico"/>
+				<!-- install repos-quay, this row and an icon at the bottom -->
+				<script type="text/javascript" src="../quay/scripts/repos-quay.js"></script>
 			</head>
 			<body>
 				<!-- supported contents -->
@@ -110,10 +111,18 @@
 		<a href="http://www.repos.se/">
 			<img src="{$rurl}/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		</a>
-		<xsl:if test="@repo"><xsl:value-of select="@repo"/><xsl:value-of select="$spacer"/></xsl:if>
-		<span class="path"><xsl:value-of select="@path"/></span>
+		<xsl:if test="@repo">
+			<xsl:value-of select="@repo"/>
+			<xsl:value-of select="$spacer"/>
+		</xsl:if>
+		<span class="path">
+			<xsl:value-of select="@path"/>
+		</span>
 		<xsl:value-of select="$spacer"/>
-		<xsl:if test="@rev">revision <span class="revision"><xsl:value-of select="@rev"/></span></xsl:if>
+		<xsl:if test="@rev">revision <span class="revision">
+				<xsl:value-of select="@rev"/>
+			</span>
+		</xsl:if>
 	</xsl:template>
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
@@ -170,16 +179,14 @@
 	<xsl:template name="footer">
 		<xsl:text>Powered by </xsl:text>
 		<xsl:element name="a">
-			<xsl:attribute name="href">
-				<xsl:value-of select="../@href"/>
-			</xsl:attribute>
-			<xsl:attribute name="target">
-				<xsl:value-of select="'_blank'"/>
-			</xsl:attribute>
+			<xsl:attribute name="href"><xsl:value-of select="../@href"/></xsl:attribute>
+			<xsl:attribute name="target"><xsl:value-of select="'_blank'"/></xsl:attribute>
 			<xsl:text>Subversion</xsl:text>
 		</xsl:element>
 		<xsl:text>&#160;</xsl:text>
 		<xsl:value-of select="../@version"/>
+		<xsl:text>&#160;</xsl:text>
+		<a id="quayButton"></a>
 	</xsl:template>
 	<!-- generate directory -->
 	<xsl:template match="dir">
@@ -246,8 +253,7 @@
 		<xsl:param name="filetype">
 			<xsl:call-template name="getFiletype"/>
 		</xsl:param>
-		<img src="{$iconsUrl}/{$filetype}.png" border="0" align="absmiddle" width="{$iconSize}"
-			height="{$iconSize}" hspace="{$iconHspace}" vspace="{$iconVspace}"/>
+		<img src="{$iconsUrl}/{$filetype}.png" border="0" align="absmiddle" width="{$iconSize}" height="{$iconSize}" hspace="{$iconHspace}" vspace="{$iconVspace}"/>
 	</xsl:template>
 	<!-- display thumbnail as icon -->
 	<xsl:template name="thumbnail">
@@ -345,25 +351,38 @@
 		<p>
 			<xsl:if test="@action='A'">
 				<span title="{@action} - added">
-					<xsl:call-template name="logicon"><xsl:with-param name="name" select="'_a'"/></xsl:call-template>
+					<xsl:call-template name="logicon">
+						<xsl:with-param name="name" select="'_a'"/>
+					</xsl:call-template>
 				</span>
 				<xsl:value-of select="."/>
 				<xsl:value-of select="$spacer"/>
 				<xsl:if test="@copyfrom-path">
-					<span title="copied from"><xsl:call-template name="logicon"><xsl:with-param name="name" select="'_copiedfrom'"/></xsl:call-template></span>
-					<span class="path"><xsl:value-of select="@copyfrom-path"/>&#160;</span>
-					<span class="revision"><xsl:value-of select="@copyfrom-rev"/></span>
+					<span title="copied from">
+						<xsl:call-template name="logicon">
+							<xsl:with-param name="name" select="'_copiedfrom'"/>
+						</xsl:call-template>
+					</span>
+					<span class="path">
+						<xsl:value-of select="@copyfrom-path"/>&#160;</span>
+					<span class="revision">
+						<xsl:value-of select="@copyfrom-rev"/>
+					</span>
 				</xsl:if>
 			</xsl:if>
 			<xsl:if test="@action='D'">
 				<span title="{@action} - deleted">
-					<xsl:call-template name="logicon"><xsl:with-param name="name" select="'_d'"/></xsl:call-template>				
+					<xsl:call-template name="logicon">
+						<xsl:with-param name="name" select="'_d'"/>
+					</xsl:call-template>
 				</span>
 				<xsl:value-of select="."/>
 			</xsl:if>
 			<xsl:if test="@action='M'">
 				<a title="{@action} - {$show-diff}" href="{$rurl}/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">
-					<xsl:call-template name="logicon"><xsl:with-param name="name" select="'_m'"/></xsl:call-template>
+					<xsl:call-template name="logicon">
+						<xsl:with-param name="name" select="'_m'"/>
+					</xsl:call-template>
 				</a>
 				<xsl:value-of select="."/>
 				<xsl:value-of select="$spacer"/>
@@ -377,8 +396,7 @@
 	</xsl:template>
 	<xsl:template name="logicon">
 		<xsl:param name="name"/>
-		<img src="{$iconsUrl}/{$name}.png" border="0" align="absmiddle" width="{$miniIconSize}"
-			height="{$miniIconSize}" hspace="{$iconHspace}" vspace="{$iconVspace}"/>
+		<img src="{$iconsUrl}/{$name}.png" border="0" align="absmiddle" width="{$miniIconSize}" height="{$miniIconSize}" hspace="{$iconHspace}" vspace="{$iconVspace}"/>
 	</xsl:template>
 	<!--
 	========= svn diff formatting ==========
@@ -429,7 +447,7 @@
 	<xsl:template match="plaintext">
 		<pre>
 			<xsl:value-of select="."/>
-		</pre>	
+		</pre>
 	</xsl:template>
 	<!--
 	========= svn cat formatting ==========
@@ -461,7 +479,9 @@
 							<xsl:value-of select="@rev"/>
 						</span>
 					</h2>
-					<p><a class="action" href="{$rurl}/cat/?repo={@repo}&amp;target={@target}&amp;rev={@rev}&amp;open=1">open old file</a></p>
+					<p>
+						<a class="action" href="{$rurl}/cat/?repo={@repo}&amp;target={@target}&amp;rev={@rev}&amp;open=1">open old file</a>
+					</p>
 					<xsl:apply-templates select="*"/>
 				</td>
 			</tr>
@@ -482,22 +502,24 @@
 			<xsl:value-of select="$spacer"/>
 			<xsl:value-of select="$possible-cause"/>
 		</p>
-		<pre class="error"><xsl:value-of select="."/></pre>
+		<pre class="error">
+			<xsl:value-of select="."/>
+		</pre>
 	</xsl:template>
 	<!-- *** replace newline with <br> *** -->
 	<xsl:template name="linebreak">
-	    <xsl:param name="text"/>
-	    <xsl:choose>
-	        <xsl:when test="contains($text, '&#10;')">
-	            <xsl:value-of select="substring-before($text, '&#10;')"/>
-	            <br />
-	            <xsl:call-template name="linebreak">
-	                <xsl:with-param name="text" select="substring-after($text, '&#10;')"/>
-	            </xsl:call-template>
-	        </xsl:when>
-	        <xsl:otherwise>
-	            <xsl:value-of select="$text"/>
-	        </xsl:otherwise>
-	    </xsl:choose>
+		<xsl:param name="text"/>
+		<xsl:choose>
+			<xsl:when test="contains($text, '&#10;')">
+				<xsl:value-of select="substring-before($text, '&#10;')"/>
+				<br/>
+				<xsl:call-template name="linebreak">
+					<xsl:with-param name="text" select="substring-after($text, '&#10;')"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$text"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>
