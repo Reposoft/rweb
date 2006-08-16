@@ -66,7 +66,13 @@
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}/repos-standard.css"/>
 				<link rel="shortcut icon" href="http://www.repos.se/favicon.ico"/>
 				<!-- install repos-quay, this row and an icon at the bottom -->
-				<script type="text/javascript" src="/quay/repos-quay.js"></script>
+				<!-- can't see why the dynamic inclusion of the scripts does not work.
+				<script type="text/javascript" src="{$rurl}/quay/repos-quay.js"></script>
+					replacing the script with hard coded dependencies -->
+				<script type="text/javascript">var quayRoot="/quay/";</script>
+				<link href="{$rurl}/quay/css/repos-quay.css" rel="stylesheet" type="text/css" />
+				<script type="text/javascript" src="{$rurl}/quay/scripts/autosuggest.js"></script>
+				<script type="text/javascript" src="{$rurl}/quay/scripts/repos-quay-code.js"></script>
 			</head>
 			<body>
 				<!-- supported contents -->
