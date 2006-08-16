@@ -14,7 +14,7 @@
 	<!-- add parameter rurl=".." when testing offline -->
 	<!-- status images like 'locked' could be generated on the fly -->
 	<!-- repos webapp URL (root), does not end with slash -->
-	<xsl:param name="rurl">https://www.repos.se</xsl:param>
+	<xsl:param name="rurl"></xsl:param><!-- now using server root -->
 	<!--<xsl:param name="rurl">http://alto.optime.se/repos</xsl:param>-->
 	<!-- current theme, for example '/theme', empty for root theme -->
 	<xsl:param name="theme" select="'/themes/simple'"/>
@@ -65,14 +65,8 @@
 				<!-- default stylesheet -->
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}/repos-standard.css"/>
 				<link rel="shortcut icon" href="http://www.repos.se/favicon.ico"/>
-				<!-- install repos-quay, this row and an icon at the bottom -->
-				<!-- can't see why the dynamic inclusion of the scripts does not work.
+				<!-- install repos-quay, this row and an icon in the footer -->
 				<script type="text/javascript" src="{$rurl}/quay/repos-quay.js"></script>
-					replacing the script with hard coded dependencies -->
-				<script type="text/javascript">var quayRoot="/quay/";</script>
-				<link href="{$rurl}/quay/css/repos-quay.css" rel="stylesheet" type="text/css" />
-				<script type="text/javascript" src="{$rurl}/quay/scripts/autosuggest.js"></script>
-				<script type="text/javascript" src="{$rurl}/quay/scripts/repos-quay-code.js"></script>
 			</head>
 			<body>
 				<!-- supported contents -->
