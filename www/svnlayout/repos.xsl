@@ -177,6 +177,7 @@
 	</xsl:template>
 	<!-- extra info, links to top -->
 	<xsl:template name="footer">
+		<span>
 		<xsl:text>Powered by </xsl:text>
 		<xsl:element name="a">
 			<xsl:attribute name="href"><xsl:value-of select="../@href"/></xsl:attribute>
@@ -186,7 +187,11 @@
 		<xsl:text>&#160;</xsl:text>
 		<xsl:value-of select="../@version"/>
 		<xsl:text>&#160;</xsl:text>
-		<a id="quayButton"></a>
+		</span>
+		<span>
+			<xsl:text>&#160;</xsl:text>
+			<a id="quayButton"></a>
+		</span>
 	</xsl:template>
 	<!-- generate directory -->
 	<xsl:template match="dir">

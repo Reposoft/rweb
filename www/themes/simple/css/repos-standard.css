@@ -36,7 +36,7 @@ pre {
 }
 /* allow transparency in .png in explorer */
 img { 
-	behavior: url("https://www.repos.se/themes/simple/css/pngbehavior.htc");
+	behavior: url("/themes/simple/css/pngbehavior.htc");
 }
 /* page layout themes */
 .info {
