@@ -14,7 +14,7 @@
 	<!-- add parameter rurl=".." when testing offline -->
 	<!-- status images like 'locked' could be generated on the fly -->
 	<!-- repos webapp URL (root), does not end with slash -->
-	<xsl:param name="rurl"></xsl:param><!-- now using server root -->
+	<xsl:param name="rurl">/repos</xsl:param><!-- absolute from server root -->
 	<!--<xsl:param name="rurl">http://alto.optime.se/repos</xsl:param>-->
 	<!-- current theme, for example '/theme', empty for root theme -->
 	<xsl:param name="theme" select="'/themes/simple'"/>
