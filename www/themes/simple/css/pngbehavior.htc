@@ -31,7 +31,7 @@ var blankSrc = "blank.gif";
 if (window.location.href.substr(0,5)=="file:")
     blankSrc = "../css/" + blankSrc;
 else
-    blankSrc = "https://www.repos.se/themes/simple/css/" + blankSrc;
+    blankSrc = "/repos/themes/simple/css/" + blankSrc;
 var isPrinting = false;
 
 if (supported) fixImage();
