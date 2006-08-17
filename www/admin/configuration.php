@@ -160,11 +160,12 @@ function apache2() {
 	  SVNPath <?php echo $repodir ?> 
 	  Options Indexes
 	  #Only from the specified domain: SVNIndexXSLT "<?php echo $reposweb . "/svnlayout/repos.xsl" ?>"
-	  SVNIndexXSLT "<?php echo "/svnlayout/repos.xsl" ?>"
+	  SVNIndexXSLT "<?php echo "/repos/svnlayout/repos.xsl" ?>"
 	  # Allow edit from WebDAV folder
 	  SVNAutoversioning on
 	  
 	  AuthType Basic
+	  # AuthName should be the repository root URL (as a single-signon standard)
 	  AuthName "<?php echo $reponame ?>"
 	  AuthUserFile <?php echo $admindir . '/' . getConfig('users_file'); ?> 
 	  Require valid-user

@@ -66,7 +66,7 @@
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}/repos-standard.css"/>
 				<link rel="shortcut icon" href="http://www.repos.se/favicon.ico"/>
 				<!-- install repos-quay, this row and an icon in the footer -->
-				<script type="text/javascript" src="{$rurl}/quay/repos-quay.js"></script>
+				<script type="text/javascript" src="/quay/repos-quay.js"></script>
 			</head>
 			<body>
 				<!-- supported contents -->

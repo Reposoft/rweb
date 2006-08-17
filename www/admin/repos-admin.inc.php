@@ -3,6 +3,11 @@
 function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
 require( upOne(dirname(__FILE__)) . "/conf/repos.properties.php" );
 
+/**
+ * This file contains helper functions for backup administration (such as file name resolution).
+ * It also contains a small library to make HTML output from a batch job.
+ */
+
 // --- output functions ---
 
 // override theme function
@@ -153,6 +158,7 @@ function getCurrentBackup($backupPath, $fileprefix) {
  */
 function notifyAdministrator($text) {
 	$address = getConfig('administrator_email');
+	error("Did not notifyAdministrator. Method not implemented.");
 }
 
 // --- backup support

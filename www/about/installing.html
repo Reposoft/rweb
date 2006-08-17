@@ -13,6 +13,7 @@
   <li>Install the repos www folder in a <em>/repos</em> directory at your server root (same hostname and port as for direct repository access, because browsers don't like cross-domain references in scripts and stylesheets). </li>
   <li>Set up <a href="http://svnbook.red-bean.com/nightly/en/svn-book.html#svn.serverconfig.httpd">apache</a> and the user database. You can get some help from the repos <a href="../admin/">admin</a> section. First check that access works without the SVNIndexXSLT directive.</li>
   <li>Enable the repos stylesheet, and if the /repos folder is configured correctly the basic functionality works.</li>
+  <li>Some external resources can not be included in the distribution due to license matters. There is ant scripts to download those. Examples are /smarty and themes/simple/icons. Install <a href="http://ant.apache.org/">Apache Ant</a>, look for <em>build.xml</em> files and run the command <em>ant</em> in the sam folder. </li>
   <li>Optional components are the installed individually. For example, to enable <a href="http://www.repos.se/quay/">repos Quay</a>, install it into a /quay folder at the server root.</li>
 </ol>
 <h2>Att installera i organisationen</h2>

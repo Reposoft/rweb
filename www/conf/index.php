@@ -216,7 +216,7 @@ function debug() {
 	//echo $repos_authentication['user'];
 	echo getReposUser();
 	echo "\nPassword = ";
-	echo getReposPass();
+	echo str_repeat("*", strlen(getReposPass()));
 	//echo $repos_authentication['pass'];
 	echo "\nBASIC string = ";
 	echo getReposAuth();

@@ -36,7 +36,7 @@ pre {
 }
 /* allow transparency in .png in explorer */
 img { 
-	behavior: url("/themes/simple/css/pngbehavior.htc");
+	behavior: url("/repos/themes/simple/css/pngbehavior.htc");
 }
 /* page layout themes */
 .info {
