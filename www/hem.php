@@ -31,7 +31,7 @@ echo '<meta http-equiv="refresh" content="3;url='.$forwardTo.'">';
 function loginAndRedirectToHomeDir() {
 	$repo = getRepositoryUrl();
 	$realm = getAuthName($repo);
-	doLogin($repo, $realm);
+	askForCredentials($realm);
 	$home = getHomeDir($repo);
 	// now we can test if the login was ok (user does not have access to root)
 	if (verifyLogin($home)) {

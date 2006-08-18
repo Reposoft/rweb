@@ -10,7 +10,7 @@
  */
 function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
 $propertiesFile = upOne(upOne(__FILE__)) . '/repos.properties';
-if (!file_exists($propertiesFile) {
+if (!file_exists($propertiesFile)) {
 	$propertiesFile = dirname(__FILE__) . '/repos.properties';
 }
 $repos_config = parse_ini_file( $propertiesFile, false );
