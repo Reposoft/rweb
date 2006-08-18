@@ -47,4 +47,5 @@ function getBackupInfoAsHtml($backupArray) {
 <td colspan="2"><?php getBackupInfoAsHtml($backup); ?></td>
 </tr>
 </table>
+<p><a href="repos-backup-verify.php">Verify current backup files</a></p>
 <?php html_end() ?>

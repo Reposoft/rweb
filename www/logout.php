@@ -62,7 +62,7 @@ parent.location.href="http://www.repos.se/" //redirect after logged out
 
 // *** other browsers ***
 // first need to check the credentials for this realm
-require_once('login.inc.php');
+require_once('login.inc.php'); // is this used anymore?
 // a successful logout using forced username and redirect would get us here
 if ($_SERVER['PHP_AUTH_USER']=='void') {
 	showLogoutScreen("Basic auth username was set to 'void'");
