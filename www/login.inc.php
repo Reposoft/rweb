@@ -105,7 +105,8 @@ function getLoginUrl($urlWithoutLogin) {
  */
 function getAuthName($targetUrl) {
 	$headers = getHttpHeaders($targetUrl);
-	//print_r($headers);
+	echo("$targetUrl\n");
+	print_r($headers);
 	if (strpos($headers['status'], '401')===false) {
 		return false;
 	}
