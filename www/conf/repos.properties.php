@@ -1,9 +1,19 @@
 <?php
 
 /**
- * Repos properties as php variables. Should be accessed through getConfig('key')
+ * Repos properties as php variables. Should be accessed through getConfig('key').
+ *
+ * First tries to read ../../repos.properties
+ * (the parent directory of the repos installation).
+ * If that file is not found, it reads from the same foler
+ * the repos.properties that is included in the distribution.
  */
-$repos_config = parse_ini_file( dirname(__FILE__) . '/repos.properties', false );
+function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
+$propertiesFile = upOne(upOne(__FILE__)) . '/repos.properties';
+if (!file_exists($propertiesFile) {
+	$propertiesFile = dirname(__FILE__) . '/repos.properties';
+}
+$repos_config = parse_ini_file( $propertiesFile, false );
 
 /**
  * Config value getter
