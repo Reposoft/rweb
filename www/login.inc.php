@@ -83,9 +83,14 @@ function login($targetUrl) {
  * @return true if the current user can access the resource
  */
 function verifyLogin($targetUrl) {
-	$urlWithCredentials = getLoginUrl($targetUrl);
-	$authHeader = getAuthName($urlWithCredentials);
-	return($authHeader===false);
+	// $urlWithCredentials = getLoginUrl($targetUrl); // rarely works, even firefox dislikes it
+	$user = getReposUser();
+	if (!$user) {
+		echo("Error: can not verify credentials. Username not set.");
+		exit;
+	}
+	$headers = getHttpHeaders($targetUrl, $user, getReposPass());
+	return strpos($headers['status'], '401')===false;
 }
 
 /**
@@ -106,7 +111,7 @@ function getLoginUrl($urlWithoutLogin) {
 function getAuthName($targetUrl) {
 	$headers = getHttpHeaders($targetUrl);
 	echo("$targetUrl\n");
-	print_r($headers);
+	//print_r($headers);
 	if (strpos($headers['status'], '401')===false) {
 		return false;
 	}
@@ -119,8 +124,8 @@ function getAuthName($targetUrl) {
 }
 
 // abstraction for HTTP operation
-function getHttpHeaders($targetUrl) {
-	return my_get_headers($targetUrl);
+function getHttpHeaders($targetUrl, $user=null, $pass=null) {
+	return my_get_headers($targetUrl, $user, $pass);
 }
 
 // *** url resolution functions, based on query parameters ***
@@ -177,7 +182,7 @@ function getRepositoryUrl() {
 
 /**
  * @return repository url (to root) with no tailing slash.
- *   Returns false if url is empty or if if path is not part of url. 
+ *   Returns false if url is empty or if if path isthis type of url will not always work //  not part of url. 
  */
 function getRepoRoot($fullUrl,$pathFromRepoRoot) {
 	return substr($fullUrl, 0 , strpos($fullUrl, $pathFromRepoRoot));
@@ -206,7 +211,7 @@ function urlEncodeNames($url) {
 
 // *** Authentication ***
 // This only asks for username and pasword. When done, it expects the 
-// browser to attempt the connection again, with credentials.
+// browser to attempt the connecthttp://alto.optime.se/sweden/svensson/trunk/ion again, with credentials.
 // If credentials are set this function stores them so getReposUser() works.
 // Username 'void' is considered not-logged-in. This can be used to force logout/relogin.
 function askForCredentials($realm) {
@@ -278,9 +283,9 @@ function handleSvnError($executedcmd,$errorcode) {
 	echo "</error>\n";
 }
 
-// only PHP5 has a get_headers function
-
-function my_get_headers($url ) {
+// PHP5 get_headers function, but with authentication option
+// currently supports only basic auth
+function my_get_headers($url, $httpUsername, $httpPassword) {
    $url_info=parse_url($url);
    if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
 	   $port = 443;
@@ -292,7 +297,13 @@ function my_get_headers($url ) {
    if($fp) {
 	   stream_set_timeout($fp, 10);
 	   $head = "HEAD ".@$url_info['path']."?".@$url_info['query'];
-	   $head .= " HTTP/1.0\r\nHost: ".@$url_info['host']."\r\n\r\n";
+	   $head .= " HTTP/1.0\r\nHost: ".@$url_info['host']."\r\n";
+	   if ($httpUsername) {
+		$authString = 'Authorization: Basic '.base64_encode("$httpUsername:$httpPassword");
+		$head .= $authString."\r\n";
+	   }
+	   $head .= "\r\n";
+	// echo("$head\n");
 	   fputs($fp, $head);
 	   while(!feof($fp)) {
 		   if($header=trim(fgets($fp, 1024))) {
