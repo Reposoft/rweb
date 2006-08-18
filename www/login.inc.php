@@ -105,7 +105,7 @@ function getLoginUrl($urlWithoutLogin) {
  */
 function getAuthName($targetUrl) {
 	$headers = getHttpHeaders($targetUrl);
-	print_r($headers);
+	//print_r($headers);
 	if (strpos($headers['status'], '401')===false) {
 		return false;
 	}
@@ -207,42 +207,34 @@ function urlEncodeNames($url) {
 // This only asks for username and pasword. When done, it expects the 
 // browser to attempt the connection again, with credentials.
 // If credentials are set this function stores them so getReposUser() works.
+// Username 'void' is considered not-logged-in. This can be used to force logout/relogin.
 function askForCredentials($realm) {
-// does not support digest authentication yet.
-// Basic could be converted to digest before forwarding the credentials.
-if (!isset($_SERVER['PHP_AUTH_USER']) || $_SERVER['PHP_AUTH_USER']=='void') {
-   header('WWW-Authenticate: Basic realm="' . $realm . '"');
-   header('HTTP/1.0 401 Unauthorized');
-   echo 'Please provide your Repos login';
-   exit;
-} elseif (false) {
-   // There seems to be a number of reasons why you don't get these server variables. Alternative methods include
-   // - $_SERVER['REMOTE_USER'] = Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
-   // - list($user, $pw) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
-   // For HTTP Authentication to work with IIS, the PHP directive cgi.rfc2616_headers must be set to 0 (the default value).
+	// Always using Basic auth. The credentials can be used for Digest auth to the target resource too.
+	if (!isLoggedIn()) {
+		header('WWW-Authenticate: Basic realm="' . $realm . '"');
+		header('HTTP/1.0 401 Unauthorized');
+		// how should cancel be handled?
+		echo("<html><body>Login cancelled. Return to the <a href=\"./\">startpage</a></body></html>");
+		// there is no point in continuing, because the browser will send the request again with credentials
+		exit;
+	}
 }
-// "PHP_AUTH variables will not be set if external authentication is enabled for that particular page and safe mode is enabled"
-// set credentials as constants, so that dependencies are not tied to the server variables
-$repos_authentication = array();
-$repos_authentication['user'] = $_SERVER['PHP_AUTH_USER'];
-$repos_authentication['pass'] = $_SERVER['PHP_AUTH_PW'];
-if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
-	$repos_authentication['auth'] = substr($_SERVER['HTTP_AUTHORIZATION'], 6);
-}
-// end authentication function
+
+/**
+ * @return true if HTTP login credentials are present and username is not "void"
+ */
+function isLoggedIn() {
+	return isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER']!='void';
 }
 
 function getReposUser() {
-	global $repos_authentication;
-	return($repos_authentication['user']);
+	return $_SERVER['PHP_AUTH_USER'];
 }
 function getReposPass() {
-	global $repos_authentication;
-	return($repos_authentication['pass']);
+	return $_SERVER['PHP_AUTH_PW'];
 }
 function getReposAuth() {
-	global $repos_authentication;
-	return($repos_authentication['auth']);
+	return $_SERVER['HTTP_AUTHORIZATION'];
 }
 
 // *** Subversion client usage ***

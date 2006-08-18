@@ -9,7 +9,7 @@
  * the repos.properties that is included in the distribution.
  */
 function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
-$propertiesFile = upOne(upOne(__FILE__)) . '/repos.properties';
+$propertiesFile = upOne(upOne(dirname(__FILE__))) . '/repos.properties';
 if (!file_exists($propertiesFile)) {
 	$propertiesFile = dirname(__FILE__) . '/repos.properties';
 }

@@ -8,7 +8,7 @@ function showLogoutScreen($message) {
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="REFRESH" content="0; URL=http://www.repos.se/">
+<meta http-equiv="REFRESH" content="3; URL=./">
 <title>repos.se</title>
 <link href="../themes/simple/css/repos-standard.css" rel="stylesheet" type="text/css">
 </head>
@@ -17,8 +17,9 @@ function showLogoutScreen($message) {
   <tr>
 	<th class="info" width="25%">Logout</th>
 	<td class="info" colspan="3">
-		You have been logged out (hopefully, but this is still beta).<br />
-		<?php echo $message ?>
+		<p>You have been logged out (hopefully, but this is still beta).</p>
+		<p><?php echo $message ?></p>
+		<p>You will be redirected to the <a href="./">startpage</a> in three seconds</p>
 	</td>
   </tr>
 </table>

@@ -10,7 +10,7 @@ function getHomeDir($repository) {
 }
 
 function showLoginFailed() {
-	$forwardTo = basename(__FILE__);
+	$forwardTo = "logout.php"; // Going to the login page again will create an endless loop
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -22,7 +22,7 @@ echo '<meta http-equiv="refresh" content="3;url='.$forwardTo.'">';
 ?>
 </head>
 <body>
-<p>Login failed. You will be redirected to the login page again.</p>
+<p>Login failed. You will be redirected to the start page again.</p>
 </body>
 </html>
 <?php
@@ -30,14 +30,23 @@ echo '<meta http-equiv="refresh" content="3;url='.$forwardTo.'">';
 
 function loginAndRedirectToHomeDir() {
 	$repo = getRepositoryUrl();
-	$realm = getAuthName($repo);
-	askForCredentials($realm);
-	$home = getHomeDir($repo);
-	// now we can test if the login was ok (user does not have access to root)
-	if (verifyLogin($home)) {
-		header("Location: " . $home);
+	if (isLoggedIn()) {
+		$home = getHomeDir($repo);
+		// now we can test if the login was ok (user does not have access to root)
+		echo("Home: $home, User: ".getReposUser());
+		exit;
+		if (verifyLogin($home)) {
+			header("Location: " . $home);
+		} else {
+			showLoginFailed();
+		}
 	} else {
-		showLoginFailed();
+		$realm = getAuthName($repo);
+		if(!$realm) {
+			echo("Error: No login realm was found for repository $repo");
+			exit;
+		}
+		askForCredentials($realm);
 	}
 }
 
