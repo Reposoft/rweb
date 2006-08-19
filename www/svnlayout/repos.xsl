@@ -161,7 +161,7 @@
 			<xsl:call-template name="showicon">
 				<xsl:with-param name="filetype" select="'_log'"/>
 			</xsl:call-template>show log</a>
-		<a class="command" href="{$rurl}/logout.php">
+		<a class="command" href="{$rurl}/account/logout/">
 			<xsl:call-template name="showicon">
 				<xsl:with-param name="filetype" select="'_logout'"/>
 			</xsl:call-template>logout</a>
