@@ -5,6 +5,7 @@
  * This is quite tricky. Would be easier to keep server side state and return 401 header, but that's difficult for the repository browsing.
  */
 function showLogoutScreen($message) {
+	// if username is 'void', is there some way to get rid of it?
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -19,7 +20,7 @@ function showLogoutScreen($message) {
   <tr>
 	<th class="info" width="25%">Logout</th>
 	<td class="info" colspan="3">
-		<p>You have been logged out (hopefully, but this is still beta).</p>
+		<p>You have been logged out of repos.</p>
 		<p><?php echo $message ?></p>
 		<p>You will be redirected to the <a href="./">startpage</a> in three seconds</p>
 	</td>
@@ -60,9 +61,8 @@ parent.location.href="http://www.repos.se/" //redirect after logged out
 </body>
 </html>
 <?php
-	exit;
-}
-
+	
+} else {
 // *** other browsers ***
 // first need to check the credentials for this realm
 require_once('login.inc.php'); // is this used anymore?
@@ -81,4 +81,5 @@ if($_SERVER['SERVER_PORT']==443) $logout_url = $logout_url.'s';
 $logout_url = $logout_url . "://void:LoggedOut@" . $_SERVER['SERVER_NAME'] .  ':' . $_SERVER['SERVER_PORT'] . $_SERVER['SCRIPT_NAME'] . '?logout=1';
 // note that redirect including a password is illegal in IE
 header("Location: $logout_url");
+}
 ?>

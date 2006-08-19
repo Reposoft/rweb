@@ -19,12 +19,14 @@ function showLoginFailed($targetUrl) {
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>Repos login failed</title>
 <?php
-// echo '<meta http-equiv="refresh" content="5;url='.$forwardTo.'">';
+// <meta http-equiv="refresh" content="5;url='.$forwardTo.'">
 ?>
 </head>
 <body>
-<p>Login failed. A box to <a href="<?php echo($forwardTo); ?>">retry</a> appears automatically</a>.</p>
+<p>Login failed</p>
 <p>Could not access <?php echo($targetUrl) ?>. Invalid username or password.</p>
+<p><strong><a accesskey="r" href="<?php echo($forwardTo); ?>">retry</a></strong></p>
+<p>If the login box does not whow up when you click 'retry', you browser may have cached the invalid login. Do <a href="../logout/">logout</a> and try again. 
 <p><a href="./">Return to startpage</a></p>
 </body>
 </html>
