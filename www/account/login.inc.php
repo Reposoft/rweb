@@ -99,8 +99,7 @@ function login($targetUrl) {
 function verifyLogin($targetUrl) {
 	$user = getReposUser();
 	if (!$user) {
-		echo("Error: can not verify credentials. Username not set.");
-		exit;
+		return false;
 	}
 	$headers = getHttpHeaders($targetUrl, $user, getReposPass());
 	return strpos($headers[0], '401') == false;
@@ -252,7 +251,8 @@ function isLoggedIn() {
 }
 
 function getReposUser() {
-	return $_SERVER['PHP_AUTH_USER'];
+	// the username is used in urls, so it is urlencoded to prevent urlinjection
+	return urlencode($_SERVER['PHP_AUTH_USER']);
 }
 function getReposPass() {
 	return $_SERVER['PHP_AUTH_PW'];
