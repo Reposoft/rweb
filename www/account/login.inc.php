@@ -323,7 +323,7 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
 	   }
 	   $head .= "\r\n";
 	   fputs($fp, $head);
-	   echo("----- http headers sent -----\n$head\n-------------------------\n");
+	   //echo("----- http headers sent -----\n$head\n-------------------------\n");
 	   while(!feof($fp)) {
 		   if($header=trim(fgets($fp, 1024))) {
 				   $sc_pos = strpos( $header, ':' );

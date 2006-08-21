@@ -17,10 +17,10 @@ header("Pragma: no-cache");
 
 // ------- hard coded settings -------
 // Server startpage, browser will be redirected here when logout is done / not needed
-var $startpage = './repos/';
+$startpage = 'http://www.repos.se/repos/';
 // Realm to send to verify login befor logout
 // maybe this should be retreived from session or from repos.properties
-var $realm = 'Optime';
+$realm = 'Optime';
 
 // first the logout procedure on ?logout=
 if (isset($_GET['logout'])) {
@@ -46,10 +46,10 @@ if (isset($_GET['logout'])) {
 } else {
 	showStartPage();
 }
-exit;
+
 // go to home page
 function showStartPage() {
-	header('Location: '.);
+	header('Location: '.$startpage);
 }
 
 function doLogout() {
