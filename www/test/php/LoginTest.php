@@ -82,6 +82,11 @@ class LoginTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('http://my.repo/my/dir/file.txt', getTargetUrl());
 	}
 	
+	public function testTargetUrldecode() {
+		
+		"https%3A%2F%2Fwww.repos.se%2Fsweden%2Fsvensson%2Ftrunk%2F"
+	}
+	
 	// getTargetUrl should return false if target can not be automatically resolved
 	public function testGetTargetUrlFalse() {
 		$this->assertEquals(false, getTargetUrl());

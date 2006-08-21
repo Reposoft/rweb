@@ -1,3 +1,3 @@
 <?php
-header( "Location: http://tortoisesvn.tigris.org/docs/TortoiseSVN_en/ch04s04.html" );
+header( "Location: http://tortoisesvn.net/docs/release/TortoiseSVN_en/ch05s03.html" );
 ?>

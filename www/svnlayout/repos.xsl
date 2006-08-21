@@ -28,8 +28,9 @@
 	<xsl:param name="buttonsUrl">
 		<xsl:value-of select="$rurl"/>
 		<xsl:value-of select="$theme"/>/buttons</xsl:param>
-	<!-- webdav operations url, empty if not available -->
-	<xsl:param name="webdavUrl"/>
+	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
+	<xsl:param name="editUrl">
+		<xsl:value-of select="$rurl"/>/edit</xsl:param>
 	<!-- avaliable icons -->
 	<xsl:param name="icons">._folder._file.ai.bmp.xhm.doc.exe.gif.gz.htm.html.ics.jar.java.jpg.log.mpg.pdf.php.png.ps.psd.qt.sh.sit.sxw.tif.tmp.txt.vcf.xls.zip</xsl:param>
 	<!-- filetype for which there is a thumbnail generator -->
@@ -138,11 +139,11 @@
 					<xsl:with-param name="filetype" select="'_parent'"/>
 				</xsl:call-template>up</span>
 		</xsl:if>
-		<xsl:if test="$webdavUrl">
-			<span class="command">
+		<xsl:if test="$editUrl">
+			<a class="command" href="{$rurl}/edit/?show=createfolder&amp;path={@path}">
 				<xsl:call-template name="showicon">
 					<xsl:with-param name="filetype" select="'_newfolder'"/>
-				</xsl:call-template>new folder</span>
+				</xsl:call-template>new folder</a>
 			<span class="command">
 				<xsl:call-template name="showicon">
 					<xsl:with-param name="filetype" select="'_upload'"/>
@@ -153,7 +154,7 @@
 				<xsl:with-param name="filetype" select="'_windowsfolder'"/>
 			</xsl:call-template>open folder</a>
 		<!--<a class="command" href="{$rurl}/tutorials/?show=checkout">-->
-		<a class="command" href="http://tortoisesvn.sourceforge.net/docs/release/TortoiseSVN_en/ch05s03.html">
+		<a class="command" href="{$rurl}/tutorials/?show=checkout">
 			<xsl:call-template name="showicon">
 				<xsl:with-param name="filetype" select="'_tortoisefolder'"/>
 			</xsl:call-template>check out</a>
@@ -204,7 +205,7 @@
 			</a>
 			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
-			<xsl:if test="$webdavUrl">
+			<xsl:if test="$editUrl">
 				<span class="action">rename</span>
 				<span class="action">copy</span>
 				<span class="action">delete</span>
@@ -221,7 +222,7 @@
 			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
 			<a class="action" title="this file can be opened in Repos" href="{$rurl}/open/?path={../@path}&amp;file={@href}">open</a>
-			<xsl:if test="$webdavUrl">
+			<xsl:if test="$editUrl">
 				<span class="action">rename</span>
 				<span class="action">copy</span>
 				<span class="action">delete</span>

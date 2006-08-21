@@ -267,6 +267,7 @@ function getReposAuth() {
  * Execute svn command like the PHP passthru() function
  * @param cmd The command without the SVN part, for example 'log /url/to/repo'
  * @param cdata True if the result should be enclosed in CDATA tag
+ * WARNING the current error handling runs the command again, so this is only suitable for readonly commands
  */
 function svnPassthru($cmd, $cdata=false) {
 	$runthis = getSvnCommand().escapeshellcmd($cmd);
@@ -280,9 +281,10 @@ function svnPassthru($cmd, $cdata=false) {
  * @return Start of command line for executing svn operations, with tailing space
  */
 function getSvnCommand() {
-	define(SVN_CONFIG_DIR,DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'svn-config-dir');
+	define('SVN_CONFIG_DIR',DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'svn-config-dir');
 	$auth = '--username='.getReposUser().' --password='.getReposPass().' --no-auth-cache ';
-	$options = '--non-interactive --config-dir '.dirname(__FILE__).SVN_CONFIG_DIR.' ';
+	$repos_install_root = dirname(rtrim(dirname(__FILE__),DIRECTORY_SEPARATOR));
+	$options = '--non-interactive --config-dir '.$repos_install_root.SVN_CONFIG_DIR.' ';
 	return 'svn '.$auth.$options;
 }
 
