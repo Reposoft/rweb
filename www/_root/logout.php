@@ -4,6 +4,10 @@
  *
  * This is quite tricky. Would be easier to keep server side state and return 401 header, but that's difficult for the repository browsing.
  */
+header('HTTP/1.0 401 Unauthorized');
+header('Location: ./');
+exit;
+
 function showLogoutScreen($message) {
 	// if username is 'void', is there some way to get rid of it?
 ?>

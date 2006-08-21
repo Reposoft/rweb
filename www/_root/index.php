@@ -23,23 +23,23 @@ if (isset($_GET['logout'])) {
 } else {
 	showStartPage();
 }
-
+exit;
 // go to home page
-showStartPage() {
-	header('Location: ./');
+function showStartPage() {
+	header('Location: ./repos/');
 }
 
-doLogout() {
+function doLogout() {
 	header('HTTP/1.0 401 Unauthorized');
 	showLoggingOutPage();
 }
 
-doLogoutVoid() {
+function doLogoutVoid() {
 	header('HTTP/1.0 401 Unauthorized');
 	showStartPage();
 }
 
-requireAuth() {
+function requireAuth() {
 	$realm = 'Optime';
 	header('WWW-Authenticate: Basic realm="' . $realm . '"');
 	header('HTTP/1.0 401 Unauthorized');
@@ -47,7 +47,7 @@ requireAuth() {
 
 // --- logout pages ---
 
-showLoggingOutPage() {
+function showLoggingOutPage() {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -64,7 +64,7 @@ showLoggingOutPage() {
 <?php
 }
 
-showLoggedOutPage() {
+function showLoggedOutPage() {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -79,7 +79,7 @@ showLoggedOutPage() {
 <?php 
 }
 
-showCouldNotLogOutPage() {
+function showCouldNotLogOutPage() {
 	if (strstr ($_SERVER['HTTP_USER_AGENT'], "MSIE")) {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -98,7 +98,7 @@ parent.location.href="../../" //redirect after logged out
 </html>
 <?php
 	} else {
-		var $logout_url = 'http';
+		$logout_url = 'http';
 		if($_SERVER['SERVER_PORT']==443) $logout_url = $logout_url.'s';
 		$logout_url = $logout_url . "://void:LoggedOut@" . $_SERVER['SERVER_NAME'] .  ':' . $_SERVER['SERVER_PORT'] . $_SERVER['SCRIPT_NAME'] . '?logout=verify';
 		// note that redirect including a password is illegal in IE

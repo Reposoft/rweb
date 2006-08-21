@@ -1,7 +1,7 @@
 <?php
 function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
 require( upOne(upOne(dirname(__FILE__))) . "/conf/repos.properties.php" ); // default repository
-require( upOne(upOne(dirname(__FILE__))) . "/login.inc.php" );
+require( upOne(dirname(__FILE__)) . "/login.inc.php" );
 /**
  * Get a user's home directory of a repository
  */
@@ -56,3 +56,4 @@ function loginAndRedirectToHomeDir() {
 loginAndRedirectToHomeDir();
 
 ?>
+
