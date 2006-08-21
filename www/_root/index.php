@@ -1,4 +1,27 @@
 <?php
+/**
+ * Redirects to server start page
+ *
+ * if ?logout is set the script clears HTTP auth credentials before logout
+ * (but currently it does not know what realm it is logging out from)
+ *
+ * This script is intended to be placed in server root,
+ * for logout to be effective with all URLs on the server.
+ */
+
+// HTTP/1.1 disable caching
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+// HTTP/1.0 disable caching
+header("Pragma: no-cache");
+
+// ------- hard coded settings -------
+// Server startpage, browser will be redirected here when logout is done / not needed
+var $startpage = './repos/';
+// Realm to send to verify login befor logout
+// maybe this should be retreived from session or from repos.properties
+var $realm = 'Optime';
+
 // first the logout procedure on ?logout=
 if (isset($_GET['logout'])) {
 	if ($_GET['logout']=='verify') {
@@ -26,7 +49,7 @@ if (isset($_GET['logout'])) {
 exit;
 // go to home page
 function showStartPage() {
-	header('Location: ./repos/');
+	header('Location: '.);
 }
 
 function doLogout() {
@@ -40,9 +63,8 @@ function doLogoutVoid() {
 }
 
 function requireAuth() {
-	$realm = 'Optime';
 	header('WWW-Authenticate: Basic realm="' . $realm . '"');
-	header('HTTP/1.0 401 Unauthorized');
+	header('HTTP/1.1 401 Authorization Required');
 }
 
 // --- logout pages ---
@@ -57,7 +79,7 @@ function showLoggingOutPage() {
 <title>Logging out of repos.se</title>
 </head>
 <p>Logging out of repos.se<p>
-<p><small>You should be automatically redirected to the <a href="?logout=verify">verify</a> page</small></p>
+<p><small>You should be automatically redirected to the <a href="?logout=verify">startpage</a>.</small></p>
 <body>
 </body>
 </html>

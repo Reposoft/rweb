@@ -26,7 +26,7 @@ function showLoginFailed($targetUrl) {
 <p>Login failed</p>
 <p>Could not access <?php echo($targetUrl) ?>. Invalid username or password.</p>
 <p><strong><a accesskey="r" href="<?php echo($forwardTo); ?>">retry</a></strong></p>
-<p>If the login box does not whow up when you click 'retry', you browser may have cached the invalid login. Do <a href="../logout/">logout</a> and try again. 
+<p>If the login box does not show up when you click 'retry', you browser may have cached the invalid login. Do <a href="../logout/">logout</a> and try again. 
 <p><a href="../../">Return to startpage</a></p>
 </body>
 </html>
@@ -34,6 +34,7 @@ function showLoginFailed($targetUrl) {
 }
 
 function loginAndRedirectToHomeDir() {
+	enforceSSL();
 	$repo = getRepositoryUrl();
 	if (isLoggedIn()) {
 		$home = getHomeDir($repo);

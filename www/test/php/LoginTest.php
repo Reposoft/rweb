@@ -1,7 +1,7 @@
 <?php
 require_once 'PHPUnit/Framework/TestCase.php';
 
-require '../../login.inc.php';
+require '../../account/login.inc.php';
  
 class LoginTest extends PHPUnit_Framework_TestCase
 {
@@ -91,26 +91,23 @@ class LoginTest extends PHPUnit_Framework_TestCase
 	
 	// url manipulation for the logged in user
 	public function testGetLoginUrl() {
-		global $repos_authentication;
-		$repos_authentication['user'] = 'mE';
-		$repos_authentication['pass'] = 'm&p8ss';
+		$_SERVER['PHP_AUTH_USER'] = 'mE';
+		$_SERVER['PHP_AUTH_PW'] = 'm&p8ss';
 		$url = getLoginUrl('https://my.repo:88/home');
 		$this->assertEquals('https://mE:m&p8ss@my.repo:88/home', $url);
 	}
 	
 	public function testGetLoginUrlFalse() {
-		global $repos_authentication;
-		unset($repos_authentication['user']);
-		unset($repos_authentication['pass']);
+		unset($_SERVER['PHP_AUTH_USER']);
+		unset($_SERVER['PHP_AUTH_PW']);
 		$url = getLoginUrl('https://my.repo:88/home');
 		$this->assertEquals('https://my.repo:88/home', $url);
 	}
 	
 	public function testVerifyLogin() {
 		// test demo account authentication
-		global $repos_authentication;
-		$repos_authentication['user'] = 'svensson';
-		$repos_authentication['pass'] = 'medel';
+		$_SERVER['PHP_AUTH_USER'] = 'svensson';
+		$_SERVER['PHP_AUTH_PW'] = 'medel';
 		$url = 'https://www.repos.se/sweden/svensson/trunk';
 		verifyLogin($url);
 		$this->assertEquals(true, verifyLogin($url));
@@ -118,19 +115,28 @@ class LoginTest extends PHPUnit_Framework_TestCase
 	
 	public function testVerifyLoginFail() {
 		// test demo account authentication
-		global $repos_authentication;
-		$repos_authentication['user'] = 'svensson';
-		$repos_authentication['pass'] = 'medel';
+		$_SERVER['PHP_AUTH_USER'] = 'svensson';
+		$_SERVER['PHP_AUTH_PW'] = 'medel';
 		$url = 'https://www.repos.se/sweden';
 		$this->assertEquals(false, verifyLogin($url));
-	}	
-	
-	// test login with a given target
-	public function testLogin() {
-		$_GET['repo'] = 'https://svn.optime.se/optime';
-		$_GET['path'] = '/repos';
-		//need abstraction // targetLogin();
 	}
 	
+	public function testGetHttpHeaders() {
+		$headers = getHttpHeaders("http://www.google.se/");
+		$this->assertTrue(count($headers) > 0);
+		$this->assertEquals("HTTP/1.0 200 OK", $headers[0]);
+	}
+	
+	public function testGetHttpHeadersAuth() {
+		$headers = getHttpHeaders("https://www.repos.se/sweden");
+		$this->assertTrue(count($headers) > 0);
+		$this->assertEquals("HTTP/1.1 401 Authorization Required", $headers[0]);
+	}
+	
+	public function testGetHttpHeadersAuthFailed() {
+		$headers = my_get_headers("https://www.repos.se/sweden",'nouser','qwerty');
+		$this->assertTrue(count($headers) > 0);
+		$this->assertEquals("HTTP/1.1 401 Unauthorized", $headers[0]);
+	}	
 }
 ?>

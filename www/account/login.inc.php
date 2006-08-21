@@ -13,7 +13,7 @@
  *  - login($targetUrl);
  *
  * To do authentication without accessing a specific resource, do:
- *  - askForCredentials($realm);
+ *  - askForCredentialsAndExit($realm);
  *
  * Login functions return true if login was successful.
  * Login always requires a target URL. This URL is used to find
@@ -74,23 +74,28 @@ function targetLogin() {
  * @param The resource to login to
  */
 function login($targetUrl) {
-	$realm = getAuthName($targetUrl);
-	askForCredentials($realm);
-	verifyLogin($targetUrl);
+	if (isLoggedIn()) {
+		verifyLogin($targetUrl);
+	} else {
+		$realm = getAuthName($targetUrl);
+		if ($realm) {
+			askForCredentials($realm);
+			// causes a refresh
+		}
+	}	
 }
 
 /**
  * @return true if the current user can access the resource
  */
 function verifyLogin($targetUrl) {
-	// $urlWithCredentials = getLoginUrl($targetUrl); // rarely works, even firefox dislikes it
 	$user = getReposUser();
 	if (!$user) {
 		echo("Error: can not verify credentials. Username not set.");
 		exit;
 	}
 	$headers = getHttpHeaders($targetUrl, $user, getReposPass());
-	return strpos($headers['status'], '401')===false;
+	return strpos($headers[0], '401') == false;
 }
 
 /**
@@ -111,10 +116,10 @@ function getLoginUrl($urlWithoutLogin) {
 function getAuthName($targetUrl) {
 	$headers = getHttpHeaders($targetUrl);
 	//print_r($headers);
-	if (strpos($headers['status'], '401')===false) {
+	if (strpos($headers[0], '401') == false) {
 		return false;
 	}
-	$auth = $headers['www-authenticate'];
+	$auth = $headers['WWW-Authenticate'];
 	if(ereg('realm="([^"]*)"', $auth, $regs)) {
 		return $regs[1];
 	}
@@ -215,14 +220,18 @@ function urlEncodeNames($url) {
 // Username 'void' is considered not-logged-in. This can be used to force logout/relogin.
 function askForCredentials($realm) {
 	// Always using Basic auth. The credentials can be used for Digest auth to the target resource too.
-	if (!isLoggedIn()) {
-		header('WWW-Authenticate: Basic realm="' . $realm . '"');
-		header('HTTP/1.0 401 Unauthorized');
-		// how should cancel be handled?
-		echo("<html><body>Login cancelled. Return to the <a href=\"./\">startpage</a></body></html>");
-		// there is no point in continuing, because the browser will send the request again with credentials
-		exit;
-	}
+	header('WWW-Authenticate: Basic realm="' . $realm . '"');
+	header('HTTP/1.1 401 Authorization Required');
+	// how should cancel be handled?
+	echo("<html><body>Login cancelled. Return to the <a href=\"./\">startpage</a></body></html>");
+}
+
+/**
+ * Once you ask for credentials the browser will send the request again with credentials.
+ */
+function askForCredentialsAndExit($realm) {
+	askForCredentials($realm);
+	exit;
 }
 
 /**
@@ -282,11 +291,22 @@ function handleSvnError($executedcmd,$errorcode) {
 	echo "</error>\n";
 }
 
+/**
+ * @return true if the server's PHP installation has the SSL extension
+ */
+function hasSSLSupport() {
+	return function_exists('openssl_open');
+}
+
 // PHP5 get_headers function, but with authentication option
 // currently supports only basic auth
 function my_get_headers($url, $httpUsername, $httpPassword) {
    $url_info=parse_url($url);
    if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
+   	if (!hasSSLSupport()) {
+		echo ("Error: $url is a secure URL but this server does not have OpenSSL support in PHP");
+		exit;
+	}
 	   $port = 443;
 	   @$fp=fsockopen('ssl://'.$url_info['host'], $port, $errno, $errstr, 10);
    } else {
@@ -297,29 +317,30 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
 	   stream_set_timeout($fp, 10);
 	   $head = "HEAD ".@$url_info['path']."?".@$url_info['query'];
 	   $head .= " HTTP/1.0\r\nHost: ".@$url_info['host']."\r\n";
-	   if ($httpUsername) {
+	   if (strlen($httpUsername) > 0) {
 		$authString = 'Authorization: Basic '.base64_encode("$httpUsername:$httpPassword");
 		$head .= $authString."\r\n";
 	   }
 	   $head .= "\r\n";
-	// echo("$head\n");
 	   fputs($fp, $head);
+	   echo("----- http headers sent -----\n$head\n-------------------------\n");
 	   while(!feof($fp)) {
 		   if($header=trim(fgets($fp, 1024))) {
 				   $sc_pos = strpos( $header, ':' );
 				   if( $sc_pos === false ) {
-					   $headers['status'] = $header;
+					   $headers[0] = $header;
 				   } else {
 					   $label = substr( $header, 0, $sc_pos );
 					   $value = substr( $header, $sc_pos+1 );
-					   $headers[strtolower($label)] = trim($value);
+					   $headers[$label] = trim($value);
 				   }
 		   }
 	   }
 	   return $headers;
    }
    else {
-	   return false;
+   	echo ("Error: could not connect to target $url");
+	exit;
    }
 }
 
