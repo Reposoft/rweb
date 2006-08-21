@@ -4,6 +4,8 @@
  *	- Basic authentication
  *  - Enforces HTTPS protocol
  *
+ * Designed for transparent login. Does not print any HTML.
+ *
  * If 'target' resource can be resolved using getTarget(),
  * login will be done automatically using:
  *  - tagetLogin();
@@ -75,12 +77,18 @@ function targetLogin() {
  */
 function login($targetUrl) {
 	if (isLoggedIn()) {
-		verifyLogin($targetUrl);
+		if(verifyLogin($targetUrl)) {
+			// Do nothing. Parent script resumes operation.
+		} else {
+			header('HTTP/1.0 401 Unauthorized');
+		}
 	} else {
 		$realm = getAuthName($targetUrl);
 		if ($realm) {
 			askForCredentials($realm);
 			// causes a refresh
+		} else {
+			// target does not need login. Parent script resumes operation.
 		}
 	}	
 }
@@ -213,17 +221,18 @@ function urlEncodeNames($url) {
 	return implode('/', $parts);
 }
 
-// *** Authentication ***
-// This only asks for username and pasword. When done, it expects the 
-// browser to attempt the connecthttp://alto.optime.se/sweden/svensson/trunk/ion again, with credentials.
-// If credentials are set this function stores them so getReposUser() works.
-// Username 'void' is considered not-logged-in. This can be used to force logout/relogin.
+/**
+ * Sets the HTTP headers to ask for username and pasword.
+ *
+ * Caller may optionally print out HTML after this method is called,
+ * to display a message if the user hits cancel.
+ *
+ * Always using Basic auth. The credentials can be used 
+ * for Digest auth to the target resource anyway.
+ */
 function askForCredentials($realm) {
-	// Always using Basic auth. The credentials can be used for Digest auth to the target resource too.
 	header('WWW-Authenticate: Basic realm="' . $realm . '"');
 	header('HTTP/1.1 401 Authorization Required');
-	// how should cancel be handled?
-	echo("<html><body>Login cancelled. Return to the <a href=\"./\">startpage</a></body></html>");
 }
 
 /**
@@ -231,6 +240,7 @@ function askForCredentials($realm) {
  */
 function askForCredentialsAndExit($realm) {
 	askForCredentials($realm);
+	// does not show a message on cancel
 	exit;
 }
 
@@ -335,6 +345,10 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
 					   $headers[$label] = trim($value);
 				   }
 		   }
+	   }
+	   if (count($headers) < 1) {
+	   	echo ("Error: could not get authentication requirements from $url");
+		exit;
 	   }
 	   return $headers;
    }

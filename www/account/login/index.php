@@ -1,6 +1,6 @@
 <?php
 function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
-require( upOne(upOne(dirname(__FILE__))) . "/conf/repos.properties.php" ); // default repository
+require( upOne(upOne(dirname(__FILE__))) . "/conf/repos.properties.php" ); // used by login.inc.php to get repository name
 require( upOne(dirname(__FILE__)) . "/login.inc.php" );
 /**
  * Get a user's home directory of a repository
@@ -9,9 +9,13 @@ function getHomeDir($repository) {
 	return $repository . '/' . getReposUser() . '/trunk/';
 }
 
+function showLoginCancelled() {
+	echo("<html><body>Login cancelled. Return to the <a href=\"./\">startpage</a></body></html>");
+}
+
 function showLoginFailed($targetUrl) {
-	header('HTTP/1.0 401 Unauthorized');
-	$forwardTo = "./";
+	//header('HTTP/1.1 401 Unauthorized');
+	$forwardTo = "/?logout&go=".$_SERVER['REQUEST_URI'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -51,6 +55,8 @@ function loginAndRedirectToHomeDir() {
 			exit;
 		}
 		askForCredentials($realm);
+		// browser will refresh upon user input
+		showLoginCancelled();
 	}
 }
 
