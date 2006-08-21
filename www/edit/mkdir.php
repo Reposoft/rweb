@@ -18,7 +18,7 @@ if (isset($_GET['name'])) {
 }
 
 function createFolder($parentUri, $name, $message) {
-	$newfolder = rtrim($parentUri,'/').'/'.urlEncodeNames($name);
+	$newfolder = escapeshellcmd(rtrim($parentUri,'/').'/'.urlEncodeNames($name));
 	$dir = tmpdir(null, 'repos_');
 	$cmd = 'import -m "'.escapeshellcmd($message)."\" $dir $newfolder";
 	$result = exec(getSvnCommand() . $cmd);
@@ -32,7 +32,7 @@ function createFolder($parentUri, $name, $message) {
 	$smarty->assign('newfolder', $newfolder);
 	$smarty->assign('newfoldername', basename($newfolder));
 	$smarty->assign('target', $parentUri);
-	$smarty->display(DIR.getLocaleFile('createfolder_done'));
+	$smarty->display(DIR.getLocaleFile('mkdir_done'));
 }
 
 // Creates a directory with a unique name

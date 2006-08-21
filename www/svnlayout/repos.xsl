@@ -140,7 +140,7 @@
 				</xsl:call-template>up</span>
 		</xsl:if>
 		<xsl:if test="$editUrl">
-			<a class="command" href="{$rurl}/edit/?show=createfolder&amp;path={@path}">
+			<a class="command" href="{$rurl}/edit/?action=mkdir&amp;path={@path}">
 				<xsl:call-template name="showicon">
 					<xsl:with-param name="filetype" select="'_newfolder'"/>
 				</xsl:call-template>new folder</a>
@@ -208,7 +208,7 @@
 			<xsl:if test="$editUrl">
 				<span class="action">rename</span>
 				<span class="action">copy</span>
-				<span class="action">delete</span>
+				<a class="action" href="{$rurl}/edit/?action=delete&amp;path={../@path}">delete</a>
 			</xsl:if>
 		</p>
 	</xsl:template>
@@ -225,7 +225,7 @@
 			<xsl:if test="$editUrl">
 				<span class="action">rename</span>
 				<span class="action">copy</span>
-				<span class="action">delete</span>
+				<a class="action" href="{$rurl}/edit/?action=delete&amp;path={../@path}&amp;file={@href}">delete</a>
 				<span class="action">lock</span>
 				<span class="action">upload changes</span>
 			</xsl:if>
