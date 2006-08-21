@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Create a new repos folder</title>
+</head>
+
+<body>
+<p>Create a subfolder in {$targetname}</p>
+<form id="createFolder" name="createFolder" method="get" action="#">
+    <input name="target" type="hidden" id="target" value="{$target}" />
+	<input name="repo" type="hidden" id="repo" value="{$repo}" />
+  <p>
+    <label>name of new folder
+    <input name="name" type="text" id="name" />
+    </label>
+</p>
+  <p>
+    <label>comments
+    <textarea name="message" id="message"></textarea>
+    </label>
+  </p>
+  <p>
+    <label>Submit
+    <input type="submit" name="Submit" value="Submit" />
+    </label>
+  </p>
+</form>
+</body>
+</html>
