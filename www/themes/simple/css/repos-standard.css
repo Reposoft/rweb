@@ -155,3 +155,39 @@ span.action {
 	margin-left: 2px;
 	margin-right: 2px;
 }
+/* -------- forms ---------
+<form>
+<fieldset>
+  <legend>Upload to repos.se</legend>
+  <p>
+    <label for="name">file name</label>
+    <input type="text" name="name" />
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input type="submit" name="submit" value="Submit" />
+  </p>
+</fieldset>
+</form>
+
+*/
+fieldset {
+	border:2px solid #CCCC99;
+	border-collapse:collapse;
+	padding:2em;
+}
+legend {
+	background-color:#CCCC99;
+	letter-spacing:0.2em;
+	font-size:0.7em;
+	padding:0.1em;
+	color:#FFFFFF;
+}
+label {
+	float:left;
+	width:25%;
+	margin-right:0.5em;
+	padding-top:0.2em;
+	text-align:right;
+	font-weight:normal;
+}

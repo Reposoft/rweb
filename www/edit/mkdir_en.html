@@ -3,28 +3,28 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>Create a new repos folder</title>
+<!--{$head}-->
 </head>
 
 <body>
 <p>Create a subfolder in {=$targetname}</p>
 <form id="createFolder" name="createFolder" method="get" action="#">
+	<fieldset>
     <input name="target" type="hidden" id="target" value="{=$target}" />
 	<input name="repo" type="hidden" id="repo" value="{=$repo}" />
   <p>
-    <label>name of new folder
+    <label for="name">name of new folder</label>
     <input name="name" type="text" id="name" />
-    </label>
 </p>
   <p>
-    <label>comments
+    <label for="message">log message</label>
     <textarea name="message" id="message"></textarea>
-    </label>
   </p>
   <p>
-    <label>Submit
+    <label></label>
     <input type="submit" name="Submit" value="Submit" />
-    </label>
   </p>
+  </fieldset>
 </form>
 </body>
 </html>
