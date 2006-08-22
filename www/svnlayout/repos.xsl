@@ -208,7 +208,7 @@
 			<xsl:if test="$editUrl">
 				<span class="action">rename</span>
 				<span class="action">copy</span>
-				<a class="action" href="{$rurl}/edit/?action=delete&amp;path={../@path}">delete</a>
+				<a class="action" href="{$rurl}/edit/?action=delete&amp;path={../@path}/{@href}">delete</a>
 			</xsl:if>
 		</p>
 	</xsl:template>

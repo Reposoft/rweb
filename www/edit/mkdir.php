@@ -24,7 +24,7 @@ function createFolder($parentUri, $name, $message) {
 	$result = exec(getSvnCommand() . $cmd);
 	rmdir($dir);
 	if (strlen($result) < 1) {
-		echo ("Error. Could not create folder using: svn " . $cmd);
+		echo ("Error. Could not create folder using:\nsvn " . $cmd);
 		exit;
 	}
 	$smarty = getTemplateEngine();

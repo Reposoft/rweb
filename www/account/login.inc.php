@@ -182,7 +182,8 @@ function getRepositoryUrl() {
     $ref = getReferer();
 	$path = rtrim(getPath(),'/');
     if ($ref && $path) {
-		return getRepoRoot($ref,$path);
+		$repo = getRepoRoot($ref,$path);
+		if ($repo) return $repo;
     }
 	// 3: fallback to default repository
     if(function_exists('getConfig')) {
@@ -193,7 +194,7 @@ function getRepositoryUrl() {
 
 /**
  * @return repository url (to root) with no tailing slash.
- *   Returns false if url is empty or if if path isthis type of url will not always work //  not part of url. 
+ *   Returns false if url is empty or if path is not part of url. 
  */
 function getRepoRoot($fullUrl,$pathFromRepoRoot) {
 	return substr($fullUrl, 0 , strpos($fullUrl, $pathFromRepoRoot));
