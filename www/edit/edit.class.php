@@ -66,7 +66,7 @@ class Edit {
 	 * @return true if operation completed successfuly
 	 */
 	function isSuccessful() {
-		return $this->returnval == true;
+		return $this->returnval == 0;
 	}
 	
 	/**
@@ -80,9 +80,9 @@ class Edit {
 	 * @return the revision number that this operation created upon success
 	 */
 	function getCommittedRevision() {
-		if (isSuccessful()) {
-			ereg("^Committed revision ([0-9]+)\.", $this->result, $rev);
-			return $rev[0];
+		if ($this->isSuccessful()) {
+			$match = ereg('^[a-zA-Z ]+([0-9]+)', $this->result, $rev);
+			return $rev[1];
 		}
 		return null;
 	}
