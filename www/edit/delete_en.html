@@ -6,12 +6,12 @@
 </head>
 
 <body>
-<h1>Delete <em>{$targetname}</em>?</h1>
-<p>from folder {$parent}</p>
+<h1>Delete <em>{=$targetname}</em>?</h1>
+<p>from folder {=$parent}</p>
 <p>After deletion it will not be present in the latest revision, but can always be recovered from the the earlier revisions.</p>
 <form id="delete" name="delete" method="get" action="#">
-    <input name="target" type="hidden" id="target" value="{$target}" />
-	<input name="repo" type="hidden" id="repo" value="{$repo}" />
+    <input name="target" type="hidden" id="target" value="{=$target}" />
+	<input name="repo" type="hidden" id="repo" value="{=$repo}" />
   <p>
     <label>comments
     <textarea name="message" id="message"></textarea>

@@ -24,8 +24,8 @@ function getTemplateEngine() {
 	$template->config_dir = CACHE_DIR.'configs/';
 	$template->cache_dir = CACHE_DIR.'cache/';
 
-	//$template->left_delimiter = '<!--{';
-	//$template->right_delimiter = '}-->';
+	$template->left_delimiter = '{='; // to be able to mix with css and javascript
+	$template->right_delimiter = '}';
 	
 	// allow SMARTY_DEBUG query string parameter
 	$template->debugging_ctrl = 'URL';	
