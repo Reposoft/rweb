@@ -65,6 +65,6 @@ function useCommentedDelimiters($tpl_source, &$smarty)
  * @return tags to include in <head> at all pages
  */
 function getHead() {
-	echo ('<link href="../themes/simple/css/repos-standard.css" rel="stylesheet" type="text/css" />');
+	return '<link href="../themes/simple/css/repos-standard.css" rel="stylesheet" type="text/css" />';
 }
 ?>
