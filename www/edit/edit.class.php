@@ -95,7 +95,7 @@ class Edit {
 		$smarty->assign('nexturl','javascript:history.go(-2);');
 		$smarty->assign('operation',$this->operation);
 		$smarty->assign('result',$this->getResult());
-		$smarty->assign('revision',1);
+		$smarty->assign('revision',$this->getCommittedRevision());
 		$smarty->assign('successful',$this->isSuccessful());
 		$smarty->display(dirname(__FILE__) . '/edit_done.html');
 	}
