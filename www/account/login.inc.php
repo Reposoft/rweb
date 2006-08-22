@@ -39,6 +39,13 @@
  *  - getRepositoryUrl() repository root URL. If
  *     conf/repos.properties.php has been included before this
  *     script is called, then fallback to settings is enabled.
+ *
+ * Nomenclature throughout the repos PHP solution:
+ * 'path' absolute directory path from repository root
+ * 'file' filename
+ * 'target' absolute url from repository root to target resource
+ * 'targeturl' URI of the resource, permanent location as an HTTP url
+ * 'repo' repository root URI, uniquely defines a repository 
  */
 
 // *** Headers to disable caching, assumed to be needed on all pages ***
@@ -139,8 +146,7 @@ function getHttpHeaders($targetUrl, $user=null, $pass=null) {
 	return my_get_headers($targetUrl, $user, $pass);
 }
 
-// *** url resolution functions, based on query parameters ***
-
+// abstraction for referer resolution
 function getReferer() {
     if (isset($_SERVER['HTTP_REFERER'])) return $_SERVER['HTTP_REFERER'];
     return false;
@@ -157,6 +163,21 @@ function getPath() {
 }
 
 /**
+ * @return filename if defined, false if the target is not a file
+ */
+function getFile() {
+	if (isset($_GET['file'])) return $_GET['file'];
+	return false;
+}
+
+/**
+ * @return true if the target is a file, false if it is a folder or undefined
+ */
+function isTargetFile() {
+	return (getFile()!=false);
+}
+
+/**
  * Target is the absolute url of a repository resource, from repository root
  * (thus starting with '/')
  * @return target in repository from query paramters WITH tailing slash if it is a directory, false if none of 'target', 'file' and 'path' is defined
@@ -164,7 +185,7 @@ function getPath() {
 function getTarget() {
 	if(isset($_GET['target'])) return urlEncodeNames($_GET['target']);
     // append filename if specified
-    if(isset($_GET['file'])) return getPath() . rawurlencode($_GET['file']);
+    if(getFile()) return getPath() . rawurlencode(getFile());
     return getPath();
 }
 

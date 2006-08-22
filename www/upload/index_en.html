@@ -22,21 +22,27 @@ height:0px;
 <body>
 <h1>Upload file</h1>
 <!--{if $file}-->
-<p>As a new version of file {=$path}/{=$file}</p>
+<p>As a new version of file {=$path|htmlentities}/{=$file|htmlentities}</p>
 <!--{else}-->
-<p>As a new file in folder {=$path}</p>
+<p>As a new file in folder {=$path|htmlentities}</p>
 <!--{/if}-->
 <form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
 <fieldset>
   <legend>Upload to repos.se</legend>
-  <input type="hidden" name="targeturl" value="{=$targeturl}"/>
+  <input type="hidden" name="targeturl" value="{=$targeturl|rawurlencode}"/>
   <p>
-    <label for="file">upload</label>
-    <input type="file" name="file" />
+    <label for="userfile">upload</label>
+	<input type="hidden" name="MAX_FILE_SIZE" value="300000" />
+    <input type="file" name="userfile" />
   </p>
   <p>
     <label for="name">name in repository</label>
-    <input type="text" name="name" />
+	<!--{if $file}-->
+    <input type="text" name="name" disabled="disabled"/>
+	<!--{else}-->
+	<input type="text" name="name"/>
+	<input type="hidden" name="create" value="yes"/>
+	<!--{/if}-->
   </p>
   <p>
     <label for="message">message</label>

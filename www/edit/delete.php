@@ -14,7 +14,7 @@ if (isset($_GET['message'])) {
 	$smarty = getTemplateEngine();
 	$smarty->assign('target', $target);
 	$smarty->assign('targetname', basename($target));
-	$smarty->assign('parent', substr($target, 0, strrpos($target,'/')));
+	$smarty->assign('parent', dirname($target));
 	$smarty->assign('repo', getRepositoryUrl());
 	$smarty->display(DIR.getLocaleFile());
 }

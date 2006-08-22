@@ -144,10 +144,10 @@
 				<xsl:call-template name="showicon">
 					<xsl:with-param name="filetype" select="'_newfolder'"/>
 				</xsl:call-template>new folder</a>
-			<span class="command">
+			<a class="command" href="{$rurl}/upload/?path={@path}">
 				<xsl:call-template name="showicon">
 					<xsl:with-param name="filetype" select="'_upload'"/>
-				</xsl:call-template>upload</span>
+				</xsl:call-template>upload</a>
 		</xsl:if>
 		<a class="command" href="{$rurl}/tutorials/?show=networkfolder">
 			<xsl:call-template name="showicon">
