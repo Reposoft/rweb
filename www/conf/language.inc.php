@@ -11,6 +11,11 @@ $possibleLocales = array(
 	'de' => 'Deutsch'
 	);
 	
+// locales might require setting a cookie, which requires headers,
+//  which must be sent before anything else, 
+//  so we run the function directly when the file is included
+getLocale();
+	
 /**
  * Resolve locale code from: 1: GET, 2: SESSION, 3: browser
  * @return two letter language code, lower case

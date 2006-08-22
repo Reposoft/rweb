@@ -27,6 +27,24 @@ function getConfig($key) {
 	return false;
 }
 
+/**
+ * Handles the common temp dir for repos-php
+ * @param subdir (optional) subdir, will be created if it does not exist, no slashes
+ * @return avsolute path to the temp dir, ending with slash or backslash
+ */
+function getTempDir($subdir='') {
+	$parent = sys_get_temp_dir();
+	$tmpdir = rtrim($parent, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '/repos-php';
+	if (!file_exists($tmpdir) {
+		mkdir $repos;
+	}
+	$tmpdir .= $subdir;
+	if (!file_exists($tmpdir) {
+		mkdir $tmpdir;
+	}
+	return $tmpdir . DIRECTORY_SEPARATOR;
+}
+
 // ------ functions to keep scripts portable -----
 
 /**

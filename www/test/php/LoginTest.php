@@ -11,6 +11,18 @@ class LoginTest extends PHPUnit_Framework_TestCase
 		global $_GET, $_SERVER;
 	}
 
+	public function testGetHttpHeadersInsecure() {
+		$headers = getHttpHeaders("http://svn.optime.se/optime");
+		echo("---- test output: ----\n");
+		print_r($headers);
+	}
+
+	public function testGetHttpHeadersInsecureAuth() {
+		$headers = getHttpHeaders("http://svn.optime.se/optime",'nonexistinguser','qwerty');
+		echo("---- test output: ----\n");
+		print_r($headers);
+	}
+	
 	public function testGetAuthName() {
 		$url = "http://svn.optime.se/optime";
 		$realm = getAuthName($url);
@@ -84,7 +96,7 @@ class LoginTest extends PHPUnit_Framework_TestCase
 	
 	public function testTargetUrldecode() {
 		
-		"https%3A%2F%2Fwww.repos.se%2Fsweden%2Fsvensson%2Ftrunk%2F"
+		//"https%3A%2F%2Fwww.repos.se%2Fsweden%2Fsvensson%2Ftrunk%2F"
 	}
 	
 	// getTargetUrl should return false if target can not be automatically resolved
@@ -102,7 +114,7 @@ class LoginTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('https://mE:m&p8ss@my.repo:88/home', $url);
 	}
 	
-	public function testGetLoginUrlFalse() {
+	public function testGetLoginUrlNoUser() {
 		unset($_SERVER['PHP_AUTH_USER']);
 		unset($_SERVER['PHP_AUTH_PW']);
 		$url = getLoginUrl('https://my.repo:88/home');
@@ -110,20 +122,24 @@ class LoginTest extends PHPUnit_Framework_TestCase
 	}
 	
 	public function testVerifyLogin() {
-		// test demo account authentication
-		$_SERVER['PHP_AUTH_USER'] = 'svensson';
-		$_SERVER['PHP_AUTH_PW'] = 'medel';
-		$url = 'https://www.repos.se/sweden/svensson/trunk';
-		verifyLogin($url);
-		$this->assertEquals(true, verifyLogin($url));
+		if (isSSLSupported()) {
+			// test demo account authentication
+			$_SERVER['PHP_AUTH_USER'] = 'svensson';
+			$_SERVER['PHP_AUTH_PW'] = 'medel';
+			$url = 'https://www.repos.se/sweden/svensson/trunk';
+			verifyLogin($url);
+			$this->assertEquals(true, verifyLogin($url));
+		}
 	}
 	
 	public function testVerifyLoginFail() {
-		// test demo account authentication
-		$_SERVER['PHP_AUTH_USER'] = 'svensson';
-		$_SERVER['PHP_AUTH_PW'] = 'medel';
-		$url = 'https://www.repos.se/sweden';
-		$this->assertEquals(false, verifyLogin($url));
+		if (isSSLSupported()) {
+			// test demo account authentication
+			$_SERVER['PHP_AUTH_USER'] = 'svensson';
+			$_SERVER['PHP_AUTH_PW'] = 'medel';
+			$url = 'https://www.repos.se/sweden';
+			$this->assertEquals(false, verifyLogin($url));
+		}
 	}
 	
 	public function testGetHttpHeaders() {
@@ -133,15 +149,20 @@ class LoginTest extends PHPUnit_Framework_TestCase
 	}
 	
 	public function testGetHttpHeadersAuth() {
+	if (isSSLSupported()) {	
 		$headers = getHttpHeaders("https://www.repos.se/sweden");
 		$this->assertTrue(count($headers) > 0);
 		$this->assertEquals("HTTP/1.1 401 Authorization Required", $headers[0]);
 	}
+	}
 	
 	public function testGetHttpHeadersAuthFailed() {
-		$headers = my_get_headers("https://www.repos.se/sweden",'nouser','qwerty');
+	if (isSSLSupported()) {
+		$headers = my_get_headers("https://www.repos.se/sweden",'nonexistinguser','qwerty');
 		$this->assertTrue(count($headers) > 0);
 		$this->assertEquals("HTTP/1.1 401 Unauthorized", $headers[0]);
-	}	
+	}
+	}
+
 }
 ?>

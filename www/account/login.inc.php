@@ -328,7 +328,7 @@ function handleSvnError($executedcmd,$errorcode) {
 /**
  * @return true if the server's PHP installation has the SSL extension
  */
-function hasSSLSupport() {
+function isSSLSupported() {
 	return function_exists('openssl_open');
 }
 
@@ -337,7 +337,7 @@ function hasSSLSupport() {
 function my_get_headers($url, $httpUsername, $httpPassword) {
    $url_info=parse_url($url);
    if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
-   	if (!hasSSLSupport()) {
+   	if (!isSSLSupported()) {
 		echo ("Error: $url is a secure URL but this server does not have OpenSSL support in PHP");
 		exit;
 	}
