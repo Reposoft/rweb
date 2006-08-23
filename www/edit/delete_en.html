@@ -7,8 +7,8 @@
 </head>
 
 <body>
-<h1>Delete <em>{=$targetname}</em>?</h1>
-<p>Currently in folder {=$parent}</p>
+<h1>Delete <em>{=$target|basename}</em>?</h1>
+<p>Currently in folder {=$target|dirname}</p>
 <p>After deletion it will not be present in the latest revision, but can always be recovered from the the repository's history.</p>
 <form id="delete" name="delete" method="get" action="#">
 	<fieldset>
@@ -17,7 +17,7 @@
 	<input name="repo" type="hidden" id="repo" value="{=$repo}" />
   <p>
     <label for="name">delete</label>
-    <input id="name" name="name" type="text" value="{=$parent}/{=$targetname}" disabled="disabled" size="40"/>
+    <input id="name" name="name" type="text" value="{=$target}" disabled="disabled" size="40"/>
   </p>  
   <p>
     <label for="message">log message</label>
@@ -26,7 +26,7 @@
   <p>
     <label for="submit"></label>
     <input id="submit" type="submit" value="Yes" />
-	<input id="submitno" type="button" value="No" onclick="location.href={=$referer}"/>
+	<input id="submitno" type="button" value="No" onclick="location.href='{=$referer}'"/>
   </p>
   </fieldset>
 </form>

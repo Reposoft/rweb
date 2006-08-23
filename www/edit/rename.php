@@ -2,12 +2,11 @@
 require( dirname(dirname(__FILE__))."/conf/Presentation.class.php" );
 require( dirname(__FILE__)."/edit.class.php" );
 
-if (isset($_GET['message'])) {
-	delete($_GET['message']); 
+if (isset($_GET['newname'])) {
+	svnRename(); 
 } else {
-	$target = rtrim(getTarget(),'/'); //folder should also be without tailing slash
 	$template = new Presentation();
-	$template->assign('target', $target);
+	$template->assign('target', getTarget());
 	$template->assign('repo', getRepositoryUrl());
 	$template->display();
 }
@@ -16,10 +15,13 @@ if (isset($_GET['message'])) {
 // be done in common helper files (shared classes)
 // it is also allowed in templates for presentation, but not in field values
 
-function delete($message) {
-	$edit = new Edit('delete');
+function svnRename() {
+	$edit = new Edit('move');
+	$targetUrl = getTargetUrl();
+	$newUrl = str_replace(basename($_GET['target']), $_GET['newname'], $targetUrl);
 	$edit->setMessage($message);
-	$edit->addArgument(getTargetUrl());
+	$edit->addArgument($targetUrl);
+	$edit->addArgument($newUrl);
 	$edit->execute();
 	$edit->present(new Presentation(), dirname(rtrim(getTargetUrl(),'/')));
 }

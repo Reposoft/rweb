@@ -206,7 +206,7 @@
 			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
 			<xsl:if test="$editUrl">
-				<span class="action">rename</span>
+				<a class="action" href="{$rurl}/edit/?action=rename&amp;path={../@path}/{@href}">rename</a>
 				<span class="action">copy</span>
 				<a class="action" href="{$rurl}/edit/?action=delete&amp;path={../@path}/{@href}">delete</a>
 			</xsl:if>

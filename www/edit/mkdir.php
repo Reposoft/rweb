@@ -8,7 +8,6 @@ if (isset($_GET['name'])) {
 	$target = getTarget();
 	$template = new Presentation();
 	$template->assign('target', urlEncodeNames($target));
-	$template->assign('targetname', $target);
 	$template->assign('repo', getRepositoryUrl());
 	$template->display();
 }

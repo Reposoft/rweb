@@ -2,20 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Create a new repos folder</title>
+<title>Rename repos item</title>
 <!--{$head}-->
 </head>
 
 <body>
-<h1>Create subfolder</h1>
-<form id="createFolder" name="createFolder" method="get" action="#">
+<h1>Rename <span class="filename">{=$target|basename}</span></h1>
+<form id="rename" name="rename" method="get" action="#">
   <fieldset>
-	<legend>Create folder in {=$target}</legend>
+	<legend>rename {=$target}</legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
 	<input name="repo" type="hidden" id="repo" value="{=$repo}" />
   <p>
-    <label for="name">name of new folder</label>
-    <input name="name" type="text" id="name" size="40" />
+    <label for="name">current name</label>
+    <input id="name" name="name" type="text" size="40" disabled="disabled" value="{=$target|basename}" />
+  </p>
+  <p>
+    <label for="newname">new name</label>
+    <input name="newname" type="text" id="name" size="40" />
 </p>
   <p>
     <label for="message">log message</label>
