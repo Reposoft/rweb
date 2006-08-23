@@ -4,6 +4,9 @@
  *	- Basic authentication
  *  - Enforces HTTPS protocol
  *
+ * All scripts working with contents are expected to include
+ * this file. Other scripts can use repos.properties.php.
+ *
  * Designed for transparent login. Does not print any HTML.
  *
  * If 'target' resource can be resolved using getTarget(),
@@ -36,9 +39,8 @@
  *  - getReferer()   calling page
  *  - getTarget()    in-repository path for this operation
  *  - getTargetUrl() full url to resource if specified
- *  - getRepositoryUrl() repository root URL. If
- *     conf/repos.properties.php has been included before this
- *     script is called, then fallback to settings is enabled.
+ *  - getRepositoryUrl() repository root URL from query params,
+ *     with fallback to repos.properties
  *
  * Nomenclature throughout the repos PHP solution:
  * 'path' absolute directory path from repository root
@@ -47,8 +49,9 @@
  * 'targeturl' URI of the resource, permanent location as an HTTP url
  * 'repo' repository root URI, uniquely defines a repository 
  */
+require_once(dirname(dirname(__FILE__)) . '/conf/repos.properties.php');
 
-// *** Headers to disable caching, assumed to be needed on all pages ***
+// Headers to disable caching, assumed to be needed on all pages that deal with contents
 // HTTP/1.1
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);

@@ -7,9 +7,12 @@
  * (the parent directory of the repos installation).
  * If that file is not found, it reads from the same foler
  * the repos.properties that is included in the distribution.
+ *
+ * Also contains some generic functions needed everywhere.
  */
-function upOne2($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
-$propertiesFile = upOne2(upOne2(dirname(__FILE__))) . '/repos.properties';
+
+// pages that can be included from anywhere need to use __FILE__ to do their own includes
+$propertiesFile = dirname(dirname(dirname(__FILE__))) . '/repos.properties';
 if (!file_exists($propertiesFile)) {
 	$propertiesFile = dirname(__FILE__) . '/repos.properties';
 }
@@ -34,15 +37,41 @@ function getConfig($key) {
  */
 function getTempDir($subdir='') {
 	$parent = '/tmp';
-	$tmpdir = rtrim($parent, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '/repos-php';
+	$tmpdir = rtrim($parent, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'repos-php';
 	if (!file_exists($tmpdir)) {
 		mkdir($tmpdir);
 	}
-	$tmpdir .= $subdir;
+	$tmpdir .= DIRECTORY_SEPARATOR . $subdir;
 	if (!file_exists($tmpdir)) {
 		mkdir($tmpdir);
 	}
 	return $tmpdir . DIRECTORY_SEPARATOR;
+}
+
+/**
+ * @return the url that the browser used to get the current page,
+ *  _excluding_ query string
+ */
+function getSelfUrl() {
+	$url = 'http';
+	if($_SERVER['SERVER_PORT']==443) $url .= 's';
+	$url .= '://' . $_SERVER['SERVER_NAME'];
+	if($_SERVER['SERVER_PORT']==80 || $_SERVER['SERVER_PORT']==443) {
+		// do not append port number
+	} else {
+		$url .= ':'.$_SERVER['SERVER_PORT'];
+	}
+	$rq = parse_url($_SERVER['REQUEST_URI']);
+	$url .= $rq['path']; // $_SERVER['SCRIPT_NAME'] can not be used because it always contains the filename;
+	return $url;
+}
+
+/**
+ * @return the url that the browser used to get the current page,
+ *  including query string
+ */
+function getSelfUrlAndQuery() {
+	return getSelfUrl() . '?' . $_SERVER['QUERY_STRING'];
 }
 
 // ------ functions to keep scripts portable -----

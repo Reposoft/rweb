@@ -8,6 +8,10 @@ require( PARENT_DIR."/smarty/smarty.inc.php" );
 require( PARENT_DIR."/edit/edit.class.php" );
 
 if ($_SERVER['REQUEST_METHOD']=='GET') {
+	if (isset($_GET['result'])) {
+		header('Location: ' . str_replace("/upload/", "/edit/", getSelfUrlAndQuery()));
+		exit;
+	}
 	$smarty= getTemplateEngine();
 	$smarty->assign('path',getPath());
 	$smarty->assign('file',getFile());
