@@ -140,7 +140,7 @@
 				</xsl:call-template>up</span>
 		</xsl:if>
 		<xsl:if test="$editUrl">
-			<a class="command" href="{$rurl}/edit/?action=mkdir&amp;path={@path}">
+			<a class="command" href="{$editUrl}/?action=mkdir&amp;path={@path}">
 				<xsl:call-template name="showicon">
 					<xsl:with-param name="filetype" select="'_newfolder'"/>
 				</xsl:call-template>new folder</a>
@@ -206,9 +206,9 @@
 			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
 			<xsl:if test="$editUrl">
-				<a class="action" href="{$rurl}/edit/?action=rename&amp;path={../@path}/{@href}">rename</a>
+				<a class="action" href="{$editUrl}/?action=rename&amp;path={../@path}/{@href}">rename</a>
 				<span class="action">copy</span>
-				<a class="action" href="{$rurl}/edit/?action=delete&amp;path={../@path}/{@href}">delete</a>
+				<a class="action" href="{$editUrl}/?action=delete&amp;path={../@path}/{@href}">delete</a>
 			</xsl:if>
 		</p>
 	</xsl:template>
@@ -223,11 +223,11 @@
 			<span class="action">info</span>
 			<a class="action" title="this file can be opened in Repos" href="{$rurl}/open/?path={../@path}&amp;file={@href}">open</a>
 			<xsl:if test="$editUrl">
-				<span class="action">rename</span>
+				<a class="action" href="{$editUrl}/?action=rename&amp;path={../@path}&amp;file={@href}">rename</a>
 				<span class="action">copy</span>
-				<a class="action" href="{$rurl}/edit/?action=delete&amp;path={../@path}&amp;file={@href}">delete</a>
+				<a class="action" href="{$editUrl}/?action=delete&amp;path={../@path}&amp;file={@href}">delete</a>
 				<span class="action">lock</span>
-				<span class="action">upload changes</span>
+				<a class="action" href="{$rurl}/upload/?path={../@path}&amp;file={@href}">upload changes</a>
 			</xsl:if>
 		</p>
 	</xsl:template>

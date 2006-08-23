@@ -37,19 +37,6 @@ function createFolder($parentUri, $name, $message) {
 // Returns directory name on success, false otherwise
 function tmpdir()
 {
-       // Use PHP's tmpfile function to create a temporary
-       // directory name. Delete the file and keep the name.
-       $tempname = tempnam(getTempDir('emptyfolders',$prefix),'mkdir');
-       if (!$tempname)
-               return false;
-
-       if (!unlink($tempname))
-               return false;
-
-       // Create the temporary directory and returns its name.
-       if (mkdir($tempname))
-               return $tempname;
-
-       return false;
+	return getTempnamDir('emptyfolders');
 }
 ?>

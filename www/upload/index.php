@@ -19,34 +19,71 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template->assign('targeturl',getTargetUrl());
 	$template->display();
 } else {
-	$upload = new Upload();
-	$upload->processSubmit();
 	$presentation = new Presentation();
+	$upload = new Upload();
 	if ($upload->isCreate()) {
+		$upload->processSubmit();
 		$edit = new Edit('import');
 		$edit->addArgument($upload->getFilepath());
-		$edit->addArgument($upload->getTargeturl());	
+		$edit->addArgument($upload->getTargeturl());
+		$edit->setMessage($upload->getMessage());
+		$edit->execute();
 	} else {
-		$presentation->trigger_error("Upload of new version not supported yet");
-		exit;
+		$dir = getTempnamDir('upload'); // same tempdir as in Upload's default filepath
+		$repoFolder = dirname($upload->getTargetUrl());
+		// check out existing files
+		$checkout = new Edit('checkout');
+		$checkout->addArgument('--non-recursive');
+		$checkout->addArgument($repoFolder);
+		$checkout->addArgument($dir);
+		$checkout->execute();
+		// upload file to working copy
+		$file = $dir . '/' . $_REQUEST['file']; // should probably use the upload class
+		if(!file_exists($file)) {
+			$presentation->trigger_error('Could not upload new version. There is no file named "'.$file.'" in working copy "'.$repoFolder.'"');
+			exit;
+		}
+		$upload->setFilepath($file);
+		$upload->processSubmit();
+		// create the commit commant
+		$edit = new Edit('commit');
+		$edit->setMessage($upload->getMessage());
+		$edit->addArgument($dir);
+		$edit->execute();
+		// remove working copy
+		rmdir($dir);
 	}
-	$edit->setMessage($upload->getMessage());
-	// execute command
-	$edit->execute();
 	// clean up
 	$upload->cleanUp();
 	// show results
-	$edit->present($presentation, $_POST['targeturl']);
+	$edit->present($presentation, dirname($upload->getTargetUrl()));
 }
 
 class Upload {
 	var $filepath; // temp file location
 
+	/**
+	 * Set location where uploaded file should be placed
+	 */
+	function setFilepath($absolutePath) {
+		$this->filepath = $absolutePath;
+	}
+	
+	/**
+	 * @return current location of uploaded file, absolute path
+	 */
+	function getFilepath() {
+		if (isset($this->filepath)) {
+			return $this->filepath;
+		}
+		$this->filepath = tempnam(getTempDir('upload'), '');
+		return $this->filepath;
+	}
+
 	function processSubmit() {
-		$current = $this->getFilepath();
-		$tmpFile = tempnam(getTempDir('upload'), '');
-		if (move_uploaded_file($current, $tmpFile)) {
-			$this->filepath = $tmpFile;
+		$current = $_FILES['userfile']['tmp_name'];;
+		if (move_uploaded_file($current, $this->getFilepath())) {
+			// ok
 		} else {
 			echo("Could not access the uploaded file. Possible file upload attack!\n");exit;
 		}
@@ -54,6 +91,13 @@ class Upload {
 	
 	function cleanUp() {
 		unlink($this->getFilepath());
+	}
+	
+	/**
+	 * @return true if this is a new file, false if it should be created
+	 */
+	function isCreate() {
+		return isset($_POST['create']) && $_POST['create']=='yes';
 	}
 	
 	/**
@@ -65,13 +109,6 @@ class Upload {
 			return $_POST['name'];
 		}
 		return $this->getFilename();
-	}
-	
-	/**
-	 * @return true if this is a new file, false if it should be created
-	 */
-	function isCreate() {
-		return isset($_POST['create']) && $_POST['create']=='yes';
 	}
 	
 	/**
@@ -89,16 +126,6 @@ class Upload {
 			return $_POST['targeturl'] . rawurlencode($this->getName());
 		}
 		return $_POST['targeturl'];
-	}
-
-	/**
-	 * @return current location of uploaded file, absolute path
-	 */
-	function getFilepath() {
-		if (isset($this->filepath)) {
-			return $this->filepath;
-		}
-		return $_FILES['userfile']['tmp_name'];
 	}
 	
 	/**

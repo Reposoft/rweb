@@ -8,7 +8,7 @@ require_once( dirname(rtrim(dirname(__FILE__), DIRECTORY_SEPARATOR))."/account/l
 class Edit {
 	var $operation;
 	var $args = Array(); // command line arguments, not yet shellcmd-escaped
-	var $message = '';
+	var $message;
 	var $result;
 	var $output; // from exec
 	var $returnval; // from exec
@@ -51,9 +51,12 @@ class Edit {
 	 */
 	function getCommand() {
 		array_walk($this->args, 'escapeshellcmd');
-		return escapeshellcmd($this->operation)
-			.' -m "'.escapeshellcmd($this->message).'" '
-			.implode(' ', $this->args); // TODO escape shellcmd for args
+		$cmd = escapeshellcmd($this->operation) . ' ';
+		if ($this->message) {
+			$cmd .= '-m "'.escapeshellcmd($this->message).'" ';
+		}
+		$cmd .= implode(' ', $this->args); // TODO escape shellcmd for args
+		return $cmd;
 	}
 	
 	/**

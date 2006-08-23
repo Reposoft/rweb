@@ -39,7 +39,7 @@ function getConfig($key) {
 
 /**
  * Handles the common temp dir for repos-php
- * @param subdir (optional) subdir, will be created if it does not exist, no slashes
+ * @param subdir optional category within the temp folder, no slashes
  * @return avsolute path to the temp dir, ending with slash or backslash
  */
 function getTempDir($subdir='') {
@@ -53,6 +53,28 @@ function getTempDir($subdir='') {
 		mkdir($tmpdir);
 	}
 	return $tmpdir . DIRECTORY_SEPARATOR;
+}
+
+/**
+ * Like PHP's tempname() but creates a folder instead
+ * @param subdir optional parent dir name for the new dir, no slashes
+ * @return a newly created folder
+ */
+function getTempnamDir($subdir='') {
+       // Use PHP's tmpfile function to create a temporary
+       // directory name. Delete the file and keep the name.
+       $tempname = tempnam(getTempDir($subdir), '');
+       if (!$tempname)
+               return false;
+
+       if (!unlink($tempname))
+               return false;
+
+       // Create the temporary directory and returns its name.
+       if (mkdir($tempname))
+               return $tempname;
+
+       return false;
 }
 
 // ------ functions to calculate global constants ------
@@ -70,9 +92,13 @@ function _repos_getSelfRoot() {
 }
 
 function _repos_getSelfUrl() {
-	$rq = parse_url($_SERVER['REQUEST_URI']);
+	$uri = $_SERVER['REQUEST_URI'];
+	$q = strpos('?', $uri);
+	if ($q > 0) {
+		$uri = substr($uri, 0, $q);
+	}
 	// $_SERVER['SCRIPT_NAME'] can not be used because it always contains the filename;
-	define('SELF_URL', SELF_ROOT . $rq['path']);
+	define('SELF_URL', SELF_ROOT . $uri);
 }
 
 function _repos_getSelfQuery() {

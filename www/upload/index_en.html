@@ -17,23 +17,23 @@ width:0px;
 height:0px;
 }
 </style>
-<!--{if not $file}-->
 <script type="text/javascript">
 function autoFillFilename(path) {
+<!--{if not $file}-->
 	var pos = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
 	if (pos > 0) {
 		var filename = path.substring(pos + 1);
 		document.getElementsByName('name')[0].value = filename;
 	}
+<!--{/if}-->
 }
 </script>
-<!--{/if}-->
 </head>
 
 <body>
 <h1>Upload file</h1>
 <!--{if $file}-->
-<p>As a new version of file {=$path|htmlentities}/{=$file|htmlentities}</p>
+<p>As a new version of file {=$path|htmlentities}{=$file|htmlentities}</p>
 <!--{else}-->
 <p>As a new file in folder {=$path|htmlentities}</p>
 <!--{/if}-->
@@ -50,18 +50,19 @@ function autoFillFilename(path) {
     <label for="name">name in repository</label>
 	<!--{if $file}-->
     <input type="text" id="name" name="name" value="{=$file}" disabled="disabled" size="40"/>
+	<input type="hidden" id="file" name="file" value="{=$file}"/>
 	<!--{else}-->
-	<input type="text" name="name" size="40"/>
-	<input type="hidden" name="create" value="yes"/>
+	<input type="text" id="name" name="name" size="40"/>
+	<input type="hidden" id="create" name="create" value="yes"/>
 	<!--{/if}-->
   </p>
   <p>
     <label for="message">log message</label>
-    <textarea name="message" cols="40" rows="2"></textarea>
+    <textarea id="message" name="message" cols="40" rows="2"></textarea>
   </p>
   <p>
     <label for="submit"></label>
-    <input type="submit" name="Submit" value="Submit" onclick="this.disabled=true" />
+    <input id="submit" type="submit" name="Submit" value="Upload" onclick="this.disabled=true" />
   </p>
 </fieldset>
 </form>

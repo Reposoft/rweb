@@ -140,7 +140,7 @@ function getAuthName($targetUrl) {
 	if(ereg('realm="([^"]*)"', $auth, $regs)) {
 		return $regs[1];
 	}
-	echo("Error, realm not found in authentication string: $auth");
+	trigger_error("Repos error: realm not found in authentication string: $auth");
 	exit;
 }
 
@@ -341,7 +341,7 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
    $url_info=parse_url($url);
    if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
    	if (!isSSLSupported()) {
-		echo ("Error: $url is a secure URL but this server does not have OpenSSL support in PHP");
+		trigger_error("Repos error: $url is a secure URL but this server does not have OpenSSL support in PHP");
 		exit;
 	}
 	   $port = 443;
@@ -374,13 +374,13 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
 		   }
 	   }
 	   if (count($headers) < 1) {
-	   	echo ("Error: could not get authentication requirements from $url");
+	   	trigger_error("Repos error: could not get authentication requirements from $url");
 		exit;
 	   }
 	   return $headers;
    }
    else {
-   	echo ("Error: could not connect to target $url");
+   	trigger_error("Repos error: could not connect to target $url");
 	exit;
    }
 }
