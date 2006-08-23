@@ -1,6 +1,9 @@
 <?php
 require_once(dirname(__FILE__).'/language.inc.php');
 
+// TODO include a namespace-based library for client side validation in page head
+// should be able to run the application with validation tags i forms even if the library is not present
+
 // configure Smarty (http://smarty.php.net/) as template engine
 define("SMARTY_DIR",dirname(dirname(__FILE__)).'/smarty/libs/');
 require( SMARTY_DIR.'Smarty.class.php' );

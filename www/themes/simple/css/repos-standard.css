@@ -161,11 +161,11 @@ span.action {
   <legend>Upload to repos.se</legend>
   <p>
     <label for="name">file name</label>
-    <input type="text" name="name" />
+    <input id="name" type="text" name="name" />
   </p>
   <p>
     <label for="submit"></label>
-    <input type="submit" name="Submit" value="Submit" onclick="this.disabled=true" />
+    <input id="submit" type="submit" value="Submit" onclick="this.disabled=true" />
   </p>
 </fieldset>
 </form>

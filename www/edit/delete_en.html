@@ -16,17 +16,17 @@
     <input name="target" type="hidden" id="target" value="{=$target}" />
 	<input name="repo" type="hidden" id="repo" value="{=$repo}" />
   <p>
-    <label for="target">delete</label>
-    <input id="target" type="text" value="{=$parent}/{=$targetname}" disabled="disabled" size="40"/>
+    <label for="name">delete</label>
+    <input id="name" name="name" type="text" value="{=$parent}/{=$targetname}" disabled="disabled" size="40"/>
   </p>  
   <p>
     <label for="message">log message</label>
-    <textarea name="message" id="message" cols="30"></textarea>
+    <textarea id="message" name="message" cols="30" rows="2"></textarea>
   </p>
   <p>
-    <label for="Submit"></label>
-    <input type="submit" name="Submit" value="Yes" />
-	<input type="button" value="No" onclick="location.href={=$referer}"/>
+    <label for="submit"></label>
+    <input id="submit" type="submit" value="Yes" />
+	<input id="submitno" type="button" value="No" onclick="location.href={=$referer}"/>
   </p>
   </fieldset>
 </form>
