@@ -8,12 +8,10 @@
  * This script is intended to be placed in server root,
  * for logout to be effective with all URLs on the server.
  */
+require(dirname(__FILE__) . '/repos/conf/repos.properties.php');
 
 // show a result using redirect-after-post from conf/Presentation.class.php
 if(isset($_GET['result'])) {
-
-	require(dirname(__FILE__) . '/repos/conf/repos.properties.php');
-	
 	$resultFile = getTempDir('pages') . $_GET['result'];
 	$handle = fopen($resultFile, "r");
 	fpassthru($handle);
@@ -33,7 +31,7 @@ function getAfterLogoutPage() {
 	if (isset($_GET['go'])) {
 		return $_GET['go'];
 	}
-	return 'http://www.repos.se/repos/';
+	return getConfig('repos_web');
 }
 function getAfterLogoutPageAbsolute() {
 	$next = getAfterLogoutPage();

@@ -14,11 +14,11 @@
 	<input name="repo" type="hidden" id="repo" value="{=$repo}" />
   <p>
     <label for="name">name of new folder</label>
-    <input name="name" type="text" id="name" />
+    <input name="name" type="text" id="name" size="40" />
 </p>
   <p>
     <label for="message">log message</label>
-    <textarea name="message" id="message"></textarea>
+    <textarea name="message" id="message" cols="30"></textarea>
   </p>
   <p>
     <label></label>
@@ -26,5 +26,6 @@
   </p>
   </fieldset>
 </form>
+<p><a id="linkBack" class="action" href="{=$referer}">&lt; back</a></p>
 </body>
 </html>

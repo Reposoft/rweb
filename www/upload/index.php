@@ -12,12 +12,12 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		header('Location: ' . str_replace("/upload/", "/edit/", getSelfUrlAndQuery()));
 		exit;
 	}
-	$smarty= new Presentation();
-	$smarty->assign('maxfilesize',MAX_FILE_SIZE);
-	$smarty->assign('path',getPath());
-	$smarty->assign('file',getFile());
-	$smarty->assign('targeturl',getTargetUrl());
-	$smarty->show();
+	$template= new Presentation();
+	$template->assign('maxfilesize',MAX_FILE_SIZE);
+	$template->assign('path',getPath());
+	$template->assign('file',getFile());
+	$template->assign('targeturl',getTargetUrl());
+	$template->display();
 } else {
 	$upload = new Upload();
 	$upload->processSubmit();

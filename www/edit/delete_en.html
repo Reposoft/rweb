@@ -8,27 +8,28 @@
 
 <body>
 <h1>Delete <em>{=$targetname}</em>?</h1>
-<p>from folder {=$parent}</p>
-<p>After deletion it will not be present in the latest revision, but can always be recovered from the the earlier revisions.</p>
+<p>Currently in folder {=$parent}</p>
+<p>After deletion it will not be present in the latest revision, but can always be recovered from the the repository's history.</p>
 <form id="delete" name="delete" method="get" action="#">
 	<fieldset>
 	<legend>delete</legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
 	<input name="repo" type="hidden" id="repo" value="{=$repo}" />
   <p>
-    <label for="message">delete</label>
-    <input type="text" value="{=$parent}/{=$targetname}" disabled="disabled"/>
+    <label for="target">delete</label>
+    <input id="target" type="text" value="{=$parent}/{=$targetname}" disabled="disabled" size="40"/>
   </p>  
   <p>
     <label for="message">log message</label>
-    <textarea name="message" id="message"></textarea>
+    <textarea name="message" id="message" cols="30"></textarea>
   </p>
   <p>
     <label for="Submit"></label>
     <input type="submit" name="Submit" value="Yes" />
-	<input type="button" value="No" onclick="history.go(-1);"/>
+	<input type="button" value="No" onclick="location.href={=$referer}"/>
   </p>
   </fieldset>
 </form>
+<p><a id="linkBack" class="action" href="{=$referer}">&lt; back</a></p>
 </body>
 </html>

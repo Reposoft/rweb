@@ -93,9 +93,12 @@ class Edit {
 	/**
 	 * Write the results to a smarty template
 	 * @param smarty initialized template engine
-	 * @param nextUrl the url to go to after the operation. Should be a folder in the repository.
+	 * @param nextUrl the url to go to after the operation. Should be a folder in the repository. If null, referrer is used.
 	 */
-	function present($smarty, $nextUrl='javascript:history.go(-2);') {
+	function present($smarty, $nextUrl = null) {
+		if (!$nextUrl) {
+			$nextUrl = $smarty->get_template_vars('referer');
+		}
 		$smarty->assign('nexturl',$nextUrl);
 		$smarty->assign('operation',$this->operation);
 		$smarty->assign('result',$this->getResult());

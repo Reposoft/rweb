@@ -64,7 +64,16 @@ class Presentation extends Smarty {
 		echo ("\n-->\n");
 	}
 	
-	function display($resource_name, $cache_id = null, $compile_id = null) {
+	/**
+	 * Smarty's default behaviour and some additions:
+	 * + If enableRedirect() has been called, it does a redirect before display.
+	 * + $resource_name is not mandatory,
+	 * 	default template file name is [script minus .php]_[locale].html
+	 */
+	function display($resource_name = null, $cache_id = null, $compile_id = null) {
+		if (!$resource_name) {
+			$resource_name = $this->getDefaultTemplate();
+		}
 		if ($this->isRedirectBeforeDisplay()) {
 			$file = tempnam(getTempDir('pages'),'');
 			$handle = fopen($file, "w");
@@ -76,6 +85,11 @@ class Presentation extends Smarty {
 		} else {
 			parent::display($resource_name, $cache_id, $compile_id);
 		}
+	}
+	
+	function getDefaultTemplate() {
+		$dir = dirname($_SERVER['SCRIPT_FILENAME']) . '/';
+		return $dir . getLocaleFile();
 	}
 	
 	function enableRedirect($doRedirectBeforeDisplay=true) {
@@ -96,11 +110,10 @@ class Presentation extends Smarty {
 	
 	/**
 	 * "$this->display" but resolves template name automatically
-	 * Template name is [script minus .php]_[locale].html
+	 * 
 	 */
 	function show() {
-		$dir = dirname($_SERVER['SCRIPT_FILENAME']) . '/';
-		$template = $dir . getLocaleFile();
+		
 		$this->display($template);
 	}
 	
@@ -115,9 +128,16 @@ class Presentation extends Smarty {
 	 * @return the current request's referer
 	 */
 	function getReferer() {
+		// allow referer to be set explicitly, for example to 
+		//  have the same home button thoughout a wizard
+		if (isset($_REQUEST['referer'])) {
+			return $_REQUEST['referer'];
+		}
+		// get from requiest headers
 		if (isset($_SERVER['HTTP_REFERER'])) {
 			return $_SERVER['HTTP_REFERER'];
 		}
+		// if nothing else can be found
 		return "javascript:history.go(-1)";
 	}
 	
