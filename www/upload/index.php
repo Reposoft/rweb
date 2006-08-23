@@ -7,12 +7,15 @@ require( PARENT_DIR."/smarty/smarty.inc.php" );
 
 require( PARENT_DIR."/edit/edit.class.php" );
 
+define('MAX_FILE_SIZE', 1000000);
+
 if ($_SERVER['REQUEST_METHOD']=='GET') {
 	if (isset($_GET['result'])) {
 		header('Location: ' . str_replace("/upload/", "/edit/", getSelfUrlAndQuery()));
 		exit;
 	}
 	$smarty= getTemplateEngine();
+	$smarty->assign('maxfilesize',MAX_FILE_SIZE);
 	$smarty->assign('path',getPath());
 	$smarty->assign('file',getFile());
 	$smarty->assign('targeturl',getTargetUrl());
@@ -25,7 +28,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		$edit->addArgument($upload->getFilepath());
 		$edit->addArgument($upload->getTargeturl());	
 	} else {
-		echo("Upload of new version not supported yet");exit;
+		getTemplateEngine()->trigger_error("Upload of new version not supported yet");
+		exit;
 	}
 	$edit->setMessage($upload->getMessage());
 	// execute command

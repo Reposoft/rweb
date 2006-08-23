@@ -41,7 +41,7 @@ function autoFillFilename(path) {
   <input type="hidden" name="targeturl" value="{=$targeturl}"/>
   <p>
     <label for="userfile">local file</label>
-	<input type="hidden" name="MAX_FILE_SIZE" value="300000" />
+	<input type="hidden" name="MAX_FILE_SIZE" value="{=$maxfilesize}" />
     <input type="file" name="userfile" size="40" onchange="autoFillFilename(value)"/>
   </p>
   <p>
