@@ -1,10 +1,8 @@
 <?php
 define('DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
 define('PARENT_DIR', dirname(rtrim(DIR, DIRECTORY_SEPARATOR)));
-require( PARENT_DIR."/conf/repos.properties.php" );
-require( PARENT_DIR."/conf/language.inc.php" );
-require( PARENT_DIR."/smarty/smarty.inc.php" );
 
+require( PARENT_DIR."/conf/Presentation.class.php" );
 require( PARENT_DIR."/edit/edit.class.php" );
 
 define('MAX_FILE_SIZE', 1000000);
@@ -14,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		header('Location: ' . str_replace("/upload/", "/edit/", getSelfUrlAndQuery()));
 		exit;
 	}
-	$smarty= getTemplateEngine();
+	$smarty= new Presentation();
 	$smarty->assign('maxfilesize',MAX_FILE_SIZE);
 	$smarty->assign('path',getPath());
 	$smarty->assign('file',getFile());
@@ -28,7 +26,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		$edit->addArgument($upload->getFilepath());
 		$edit->addArgument($upload->getTargeturl());	
 	} else {
-		getTemplateEngine()->trigger_error("Upload of new version not supported yet");
+		$presentation = new Presentation();
+		$presentation->trigger_error("Upload of new version not supported yet");
 		exit;
 	}
 	$edit->setMessage($upload->getMessage());

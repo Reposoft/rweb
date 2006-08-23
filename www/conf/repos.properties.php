@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(E_ALL);
 /**
  * Repos properties as php variables. Should be accessed through getConfig('key').
  *

@@ -1,5 +1,6 @@
 <?php
-error_reporting(E_ALL);
+require_once(dirname(__FILE__).'/repos.properties.php');
+
 // key for setting selected language in coookie or query string
 define('LOCALE_KEY', 'lang');
 // name of this file, excluding .php
