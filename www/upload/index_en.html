@@ -17,6 +17,7 @@ width:0px;
 height:0px;
 }
 </style>
+<!--{if not $file}-->
 <script type="text/javascript">
 function autoFillFilename(path) {
 	var pos = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
@@ -26,6 +27,7 @@ function autoFillFilename(path) {
 	}
 }
 </script>
+<!--{/if}-->
 </head>
 
 <body>
@@ -47,7 +49,7 @@ function autoFillFilename(path) {
   <p>
     <label for="name">name in repository</label>
 	<!--{if $file}-->
-    <input type="text" name="name" disabled="disabled" size="20"/>
+    <input type="text" id="name" name="name" value="{=$file}" disabled="disabled" size="40"/>
 	<!--{else}-->
 	<input type="text" name="name" size="40"/>
 	<input type="hidden" name="create" value="yes"/>
@@ -63,6 +65,6 @@ function autoFillFilename(path) {
   </p>
 </fieldset>
 </form>
-<p><a class="action" href="{=$referer}">&lt; back</a></p>
+<p><a id="linkBack" class="action" href="{=$referer}">&lt; back</a></p>
 </body>
 </html>

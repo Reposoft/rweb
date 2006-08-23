@@ -17,16 +17,16 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$smarty->assign('path',getPath());
 	$smarty->assign('file',getFile());
 	$smarty->assign('targeturl',getTargetUrl());
-	$smarty->display(DIR . getLocaleFile());
+	$smarty->show();
 } else {
 	$upload = new Upload();
 	$upload->processSubmit();
+	$presentation = new Presentation();
 	if ($upload->isCreate()) {
 		$edit = new Edit('import');
 		$edit->addArgument($upload->getFilepath());
 		$edit->addArgument($upload->getTargeturl());	
 	} else {
-		$presentation = new Presentation();
 		$presentation->trigger_error("Upload of new version not supported yet");
 		exit;
 	}
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	// clean up
 	$upload->cleanUp();
 	// show results
-	$edit->present(getTemplateEngine(), $_POST['targeturl']);
+	$edit->present($presentation, $_POST['targeturl']);
 }
 
 class Upload {

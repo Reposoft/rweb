@@ -24,6 +24,8 @@ if ( ! file_exists(CACHE_DIR.'templates/') ) {
 // smarty factory
 class Presentation extends Smarty {
 
+	var $redirectBeforeDisplay = false;
+
 	// constructor
 	function Presentation() {
 		$this->caching = CACHING;
@@ -48,13 +50,65 @@ class Presentation extends Smarty {
 		// set common head tags
 		$this->assign('head', $this->getCommonHeadTags());
 		$this->assign('referer', $this->getReferer());
+		$this->assign('userhome', $this->getUserhome());
+	}
+	
+	/**
+	 * Customize smarty's trigger_error
+	 */
+	function trigger_error($error_msg) {
+		$this->showError($error_msg);
+		// if showError causes an internal trigger_error, we should end up here
+		echo ("<!-- PHP error message: \n\n");
+		parent::trigger_error($error_msg);
+		echo ("\n-->\n");
+	}
+	
+	function display($resource_name, $cache_id = null, $compile_id = null) {
+		if ($this->isRedirectBeforeDisplay()) {
+			$file = tempnam(getTempDir('pages'),'');
+			$handle = fopen($file, "w");
+			fwrite($handle, $this->fetch($resource_name, $cache_id, $compile_id));
+			fclose($handle);
+			// should be handled by the root page
+			$nexturl = SELF_ROOT . '/?result=' . basename($file);
+			header("Location: $nexturl");
+		} else {
+			parent::display($resource_name, $cache_id, $compile_id);
+		}
+	}
+	
+	function enableRedirect($doRedirectBeforeDisplay=true) {
+		$this->redirectBeforeDisplay = $doRedirectBeforeDisplay;
+	}
+	
+	function isRedirectBeforeDisplay() {
+		return $this->redirectBeforeDisplay;
+	}
+	
+	function showError($error_msg) {
+		// get template from this folder, not the importing script's folder
+		$template = getLocaleFile(dirname(__FILE__) . '/Error');
+		$this->enableRedirect();
+		$this->assign('error_msg', $error_msg);
+		$this->display($template);
+	}
+	
+	/**
+	 * "$this->display" but resolves template name automatically
+	 * Template name is [script minus .php]_[locale].html
+	 */
+	function show() {
+		$dir = dirname($_SERVER['SCRIPT_FILENAME']) . '/';
+		$template = $dir . getLocaleFile();
+		$this->display($template);
 	}
 	
 	/**
 	 * @return tags to include in <head> at all pages
 	 */
 	function getCommonHeadTags() {
-		return '<link href="../themes/simple/css/repos-standard.css" rel="stylesheet" type="text/css" />';
+		return '<link href="'.getConfig('repos_web').'/themes/simple/css/repos-standard.css" rel="stylesheet" type="text/css" />';
 	}
 	
 	/**
@@ -65,6 +119,13 @@ class Presentation extends Smarty {
 			return $_SERVER['HTTP_REFERER'];
 		}
 		return "javascript:history.go(-1)";
+	}
+	
+	/**
+	 * @return repos home page on this server
+	 */
+	function getUserhome() {
+		return getConfig('repos_web').'/account/login/';
 	}
 }
 

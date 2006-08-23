@@ -104,25 +104,12 @@ class Edit {
 		if (!$this->isSuccessful()) {
 			$smarty->assign('output',implode('<br />', $this->output));
 		}
-		$this->presentRedirected($smarty);
+		$smarty->enableRedirect();
+		$smarty->display($this->getDoneTemplate());
 	}
 	
 	function getDoneTemplate() {
 		return dirname(__FILE__) . '/edit_done.html';
-	}
-	
-	function presentNow($smarty) {
-		$smarty->display($this->getDoneTemplate());
-	}
-	
-	// redirect-after-post
-	function presentRedirected($smarty) {
-		$file = tempnam(getTempDir('results'),'');
-		$handle = fopen($file, "w");
-		fwrite($handle, $smarty->fetch($this->getDoneTemplate()));
-		fclose($handle);
-		$nexturl = getSelfUrl() . '?result=' . basename($file);
-		header("Location: $nexturl");
 	}
 
 }

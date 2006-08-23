@@ -11,6 +11,13 @@ error_reporting(E_ALL);
  * Also contains some generic functions needed everywhere.
  */
 
+// SELF_ROOT: Current server's root url, no tailing slash
+_repos_getSelfRoot();
+// SELF_URL: The url that the browser used to get the current page, _excluding_ query string
+_repos_getSelfUrl();
+// Complete self url = SELF_URL.'?'.SELF_QUERY
+_repos_getSelfQuery();
+
 // pages that can be included from anywhere need to use __FILE__ to do their own includes
 $propertiesFile = dirname(dirname(dirname(__FILE__))) . '/repos.properties';
 if (!file_exists($propertiesFile)) {
@@ -48,11 +55,9 @@ function getTempDir($subdir='') {
 	return $tmpdir . DIRECTORY_SEPARATOR;
 }
 
-/**
- * @return the url that the browser used to get the current page,
- *  _excluding_ query string
- */
-function getSelfUrl() {
+// ------ functions to calculate global constants ------
+
+function _repos_getSelfRoot() {
 	$url = 'http';
 	if($_SERVER['SERVER_PORT']==443) $url .= 's';
 	$url .= '://' . $_SERVER['SERVER_NAME'];
@@ -61,17 +66,17 @@ function getSelfUrl() {
 	} else {
 		$url .= ':'.$_SERVER['SERVER_PORT'];
 	}
-	$rq = parse_url($_SERVER['REQUEST_URI']);
-	$url .= $rq['path']; // $_SERVER['SCRIPT_NAME'] can not be used because it always contains the filename;
-	return $url;
+	define('SELF_ROOT', $url);
 }
 
-/**
- * @return the url that the browser used to get the current page,
- *  including query string
- */
-function getSelfUrlAndQuery() {
-	return getSelfUrl() . '?' . $_SERVER['QUERY_STRING'];
+function _repos_getSelfUrl() {
+	$rq = parse_url($_SERVER['REQUEST_URI']);
+	// $_SERVER['SCRIPT_NAME'] can not be used because it always contains the filename;
+	define('SELF_URL', SELF_ROOT . $rq['path']);
+}
+
+function _repos_getSelfQuery() {
+	define('SELF_QUERY', $_SERVER['QUERY_STRING']);
 }
 
 // ------ functions to keep scripts portable -----
