@@ -33,10 +33,10 @@ function getConfig($key) {
  * @return avsolute path to the temp dir, ending with slash or backslash
  */
 function getTempDir($subdir='') {
-	$parent = sys_get_temp_dir();
+	$parent = '/tmp';
 	$tmpdir = rtrim($parent, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '/repos-php';
 	if (!file_exists($tmpdir)) {
-		mkdir($repos);
+		mkdir($tmpdir);
 	}
 	$tmpdir .= $subdir;
 	if (!file_exists($tmpdir)) {

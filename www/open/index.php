@@ -1,6 +1,6 @@
 <?php
 define('PARENT_DIR',substr(dirname(__FILE__), 0, strrpos(rtrim(strtr(dirname(__FILE__),'\\','/'),'/'),'/')));
-require( PARENT_DIR."/login.inc.php" );
+require( PARENT_DIR."/account/login.inc.php" );
 
 // get file to open
 

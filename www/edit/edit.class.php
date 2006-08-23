@@ -39,7 +39,8 @@ class Edit {
 	
 	/**
 	 * Append an command line argument last in the current arguments list
-	 * @param
+	 * @param The argument, should be appropriately encoded
+	 *  (for example urlencoding for a new filename from input box)
 	 */
 	function addArgument($nextArgument) {
 		$this->args[count($this->args)] = $nextArgument;
@@ -60,7 +61,8 @@ class Edit {
 	 */
 	function execute() {
 		$cmd = getSvnCommand() . $this->getCommand();
-		$this->result = exec($cmd, $this->output, $this->returnval);
+		// execute with 2>&1 to get errors into the output array
+		$this->result = exec("$cmd 2>&1", $this->output, $this->returnval);
 	}
 	
 	/**
@@ -90,14 +92,18 @@ class Edit {
 	
 	/**
 	 * Write the results to a smarty template
-	 * @param initialized template engine
+	 * @param smarty initialized template engine
+	 * @param nextUrl the url to go to after the operation. Should be a folder in the repository.
 	 */
-	function present($smarty) {
-		$smarty->assign('nexturl','javascript:history.go(-2);');
+	function present($smarty, $nextUrl='javascript:history.go(-2);') {
+		$smarty->assign('nexturl',$nextUrl);
 		$smarty->assign('operation',$this->operation);
 		$smarty->assign('result',$this->getResult());
 		$smarty->assign('revision',$this->getCommittedRevision());
 		$smarty->assign('successful',$this->isSuccessful());
+		if (!$this->isSuccessful()) {
+			$smarty->assign('output',implode('<br />', $this->output));
+		}
 		$smarty->display(dirname(__FILE__) . '/edit_done.html');
 	}
 }

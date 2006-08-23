@@ -7,12 +7,16 @@
 </head>
 
 <body>
-<p>Return to <a href="{=$nexturl}">repository</a></p>
-<h1>Completed operation "{=$operation}"</h1>
-<p><em>{=$result}</em></p>
+<h1>Completed operation "<a target="_blank" href="http://svnbook.red-bean.com/nightly/en/svn.ref.svn.c.{=$operation}.html">{=$operation}</a>"</h1>
 <!--{if $successful}-->
-<p>This commit created a <a href="../log/?rev={=$revison}">changeset {=$revison}</a>, containing the difference from the previous revision. It is possible to <a href="../undo/?rev={=$revison}">undo change {=$revison}</a></p>
+<p><em>{=$result}</em></p>
+<!--{else}-->
+<p>An error occurred:<br/>
+<em>{=$output}</em></p>
 <!--{/if}-->
-<p>Return to <a href="{=$nexturl}">repository</a></p>
+<a href="{=$nexturl}" class="action">return to repository</a></p>
+<!--{if $successful}-->
+<p>This commit created a <a href="../log/?rev={=$revision}">changeset {=$revision}</a>, containing the difference from the previous revision. It is possible to <a href="../undo/?rev={=$revision}">undo change {=$revision}</a>.</p>
+<!--{/if}-->
 </body>
 </html>

@@ -83,7 +83,7 @@ th.info {
 	clear: both;
 	background-color: #FFFFCC;
 }
-/* layout of version contron concepts */
+/* layout of version control concepts, these are usually span tags */
 .path {
 
 }
@@ -165,7 +165,7 @@ span.action {
   </p>
   <p>
     <label for="submit"></label>
-    <input type="submit" name="submit" value="Submit" />
+    <input type="submit" name="Submit" value="Submit" onclick="this.disabled=true" />
   </p>
 </fieldset>
 </form>

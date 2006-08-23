@@ -1,6 +1,7 @@
 <?php
 define('DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
 define('PARENT_DIR', dirname(rtrim(DIR, DIRECTORY_SEPARATOR)));
+require( PARENT_DIR."/conf/repos.properties.php" );
 require( PARENT_DIR."/conf/language.inc.php" );
 require( PARENT_DIR."/smarty/smarty.inc.php" );
 
@@ -28,12 +29,20 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	// clean up
 	$upload->cleanUp();
 	// show results
-	$edit->present(getTemplateEngine());
+	$edit->present(getTemplateEngine(), $_POST['targeturl']);
 }
 
 class Upload {
+	var $filepath; // temp file location
+
 	function processSubmit() {
-		// do the file move recommended in the php manual, to protect local files
+		$current = $this->getFilepath();
+		$tmpFile = tempnam(getTempDir('upload'), '');
+		if (move_uploaded_file($current, $tmpFile)) {
+			$this->filepath = $tmpFile;
+		} else {
+			echo("Could not access the uploaded file. Possible file upload attack!\n");exit;
+		}
 	}
 	
 	function cleanUp() {
@@ -42,6 +51,7 @@ class Upload {
 	
 	/**
 	 * @return name given by the user, or original filename if it should not change
+	 *  not encoded
 	 */
 	function getName() {
 		if (isset($_POST['name'])) {
@@ -69,15 +79,18 @@ class Upload {
 	 */
 	function getTargetUrl() {
 		if ($this->isCreate()) {
-			return rawurldecode($_POST['targeturl'] . $this->getName());
+			return $_POST['targeturl'] . rawurlencode($this->getName());
 		}
-		return rawurldecode($_POST['targeturl']);
+		return $_POST['targeturl'];
 	}
 
 	/**
 	 * @return current location of uploaded file, absolute path
 	 */
 	function getFilepath() {
+		if (isset($this->filepath)) {
+			return $this->filepath;
+		}
 		return $_FILES['userfile']['tmp_name'];
 	}
 	

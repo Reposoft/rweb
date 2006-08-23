@@ -7,14 +7,22 @@ require_once( upOne(dirname(__FILE__)) . "/account/login.inc.php" );
 define('STYLESHEET','../svnlayout/repos.xsl');
 
 $url = getTargetUrl();
-$cmd = 'log -v --xml --incremental "'.$url.'"';
+$rev = '';
+if (isset($_GET['rev'])) {
+	$rev = '-r '.$_GET['rev'];
+}
+if (!getPath()) {
+	echo("Log withoug the 'path' parameter has not been implemented yet");exit;
+}
+
+$cmd = escapeshellcmd("log -v --xml --incremental $rev $url");
 
 // passthrough with stylesheet
 header('Content-type: text/xml');
 echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 echo '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
 echo "<!-- SVN log for $url -->\n";
-echo '<log repo="'.getRepositoryUrl().'" path="'.$_GET['path'].'">' . "\n";
+echo '<log repo="'.getRepositoryUrl().'" path="'.getPath().'">' . "\n";
 svnPassthru($cmd);
 echo '</log>';
 ?>
