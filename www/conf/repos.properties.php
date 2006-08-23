@@ -35,7 +35,7 @@ function getConfig($key) {
 function getTempDir($subdir='') {
 	$parent = sys_get_temp_dir();
 	$tmpdir = rtrim($parent, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '/repos-php';
-	if (!file_exists($tmpdir) {
+	if (!file_exists($tmpdir)) {
 		mkdir $repos;
 	}
 	$tmpdir .= $subdir;

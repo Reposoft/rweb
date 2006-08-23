@@ -49,7 +49,8 @@ class Edit {
 	 * @return the subversion operation command line (the portion after 'svn')
 	 */
 	function getCommand() {
-		return $this->operation
+		array_walk($this->args, 'escapeshellcmd');
+		return escapeshellcmd($this->operation)
 			.' -m "'.escapeshellcmd($this->message).'" '
 			.implode(' ', $this->args); // TODO escape shellcmd for args
 	}

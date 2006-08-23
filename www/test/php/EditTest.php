@@ -41,6 +41,27 @@ class EditTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('arg1', $edit->args[0]);
 		$this->assertEquals('arg_', $edit->args[1]);
 	}
+	
+	function testCommand() {
+		// actually we shouldnt care much about what the command looks like, but here's one test to help
+		$edit = new Edit('import');
+		$edit->setMessage('msg');
+		$edit->addArgument('file.txt');
+		$edit->addArgument('https://my.repo/file.txt');
+		$cmd = $edit->getCommand();
+		$this->assertEquals('import -m "msg" file.txt https://my.repo/file.txt', $cmd);
+	}
+	
+	function testCommandEscape() {
+		if (substr(PHP_OS, 0, 3) != 'WIN') {
+			$edit = new Edit('" $(ls)');
+			$edit->setMessage('msg " `ls`');
+			$edit->addArgument("'ls'");
+			$edit->addArgument('\" | rm');
+			$cmd = $edit->getCommand();
+			$this->assertEquals('\" \$\(ls\) -m "msg \" \`ls\`" \'ls\' \\\" \| rm', $cmd);
+		}
+	}
 
 }
 ?>
