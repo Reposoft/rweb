@@ -68,8 +68,9 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		// clean up
 		$upload->cleanUp();
 		// remove working copy
-		rmdir($dir); // TODO do recursively
+		removeTempDir($dir); // recursively
 		// commit returns nothing if there are no local changes
+		// Seems that there is a problem with svn 1.3.0 and 1.3.1 that it does not always see the update on a replaced file
 		if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
 			$presentation->trigger_error('The uploaded file '.$upload->getOriginalFilename()
 				.' is identical to the current file '.$upload->getName());
@@ -94,7 +95,7 @@ class Upload {
 
 	function processSubmit($destinationFile) {
 		$current = $_FILES[$this->file_id]['tmp_name'];;
-		if (rename($current, $destinationFile)) {
+		if (move_uploaded_file($current, $destinationFile)) {
 			// ok
 		} else {
 			trigger_error("Could not access the uploaded file ".$this->getOriginalFilename());
