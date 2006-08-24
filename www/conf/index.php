@@ -52,6 +52,8 @@ $repository = array(
 );
 // checking urls needed for repository access
 $rurl = getConfig('repo_url');
+$realm = getConfig('repo_realm');
+if (strlen($realm)<1) trigger_error('repo_realm not set in configuration');
 $aurl = str_replace("://","://" . getReposUser() . ":" .  getReposPass() . "@", getConfig('repo_url'));
 $uurl = $aurl.'/'.getReposUser();
 $lurl = ereg_replace("://[^/<>[:space:]]+[[:alnum:]]/","://localhost/", getConfig('repo_url'));

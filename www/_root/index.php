@@ -3,7 +3,7 @@
  * Redirects to server start page
  *
  * if ?logout is set the script clears HTTP auth credentials before logout
- * (but currently it does not know what realm it is logging out from)
+ *  (using the realm from the config file)
  *
  * This script is intended to be placed in server root,
  * for logout to be effective with all URLs on the server.
@@ -25,35 +25,24 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 // HTTP/1.0 disable caching
 header("Pragma: no-cache");
 
-// ------- hard coded settings -------
-// Server startpage, browser will be redirected here when logout is done / not needed
+// where to redirect browser when logout is done or not needed
 function getAfterLogoutPage() {
 	if (isset($_GET['go'])) {
-		return $_GET['go'];
+		return SELF_ROOT.rawurldecode($_GET['go']);
 	}
 	return getConfig('repos_web');
 }
-function getAfterLogoutPageAbsolute() {
-	$next = getAfterLogoutPage();
-	if (strpos($next,'://')>1) {
-		return $next;
-	}
-	$url = 'http';
-	if ($_SERVER['SERVER_PORT']==443) $url .= 's';
-	$url .= '://' . $_SERVER['SERVER_NAME'];
-	$url .= $next; // assuming $next starts with a '/'
-	return $url;
-}
+
 // Realm to send to verify login befor logout
 // maybe this should be retreived from session or from repos.properties
 function getRealm() {
-	return 'Optime';
+	return getConfig('repo_realm');
 }
 
 function getVerifyPage() {
 	$url = '?logout=verify';
 	if (isset($_GET['go'])) {
-		$url .= '&go='.$_GET['go'];
+		$url .= '&go='.rawurldecode($_GET['go']);
 	}
 	return $url;
 }
@@ -74,13 +63,24 @@ if (isset($_GET['logout'])) {
 		if (isset($_SERVER['PHP_AUTH_USER'])) {
 			doLogout();
 		} else {
-			// could be that the browser does not accept the logout if it has not sent credentials, or maybe this does nothing good and prevents reload
-			requireAuth();
+			trigger_error('User is not logged in, so the browser should not expect logout.');
 		}
 	}
 } else {
+	// note that logout has priority over login
+	if(isset($_GET['login'])) {
+		askForCredentials(getRealm());
+		$verifyUrl = getConfig('repos_web') . '/account/login/?user';
+		if (isset($_SERVER['PHP_AUTH_USER'])) {
+			header("Location: $verifyUrl");
+		} else {
+			echo("<html><body>Login cancelled. Return to the <a href=\"./\">startpage</a>.</body></html>");
+		}
+		exit;
+	}
 	showAfterLogoutPage();
 }
+
 
 function doLogout() {
 	header('HTTP/1.1 401 Unauthorized');
@@ -92,15 +92,15 @@ function doLogoutVoid() {
 	showAfterLogoutPage();
 }
 
-function requireAuth() {
-	header('WWW-Authenticate: Basic realm="' . getRealm() . '"');
+function askForCredentials($realm) {
+	header('WWW-Authenticate: Basic realm="' . $realm . '"');
 	header('HTTP/1.1 401 Authorization Required');
 }
 
 // --- logout pages ---
 
 function showAfterLogoutPage() {
-	$next = getAfterLogoutPageAbsolute();
+	$next = getAfterLogoutPage();
 	header("Location: $next");
 }
 

@@ -60,15 +60,17 @@ header("Pragma: no-cache");
 
 /**
  * Redirect to secure URL if current URL is not secure.
- * This should always be done for BAsic authentication
+ * This should always be done for BAsic authentication.
+ * This is skipped if query param SKIP_SSL is set to one 1
  */
 function enforceSSL() {
-	// *** Enforce HTTPS, unless SKIP_SSL query parameter = 1 ***
-	if( (isset($_GET['SKIP_SSL']) && $_GET['SKIP_SSL'] == 1) ||
-		isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) {
+	if (isset($_GET['SKIP_SSL']) && $_GET['SKIP_SSL'] == 1) {
+		return;
+	}
+	if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) {
 		// OK, this is secure, or SSL disabled
 	} else {
-		$secureUrl = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+		$secureUrl = str_replace('://','s://', SELF_URL.'?'.SELF_QUERY);
 		header("Location: $secureUrl");
 		exit;
 	}
@@ -126,11 +128,19 @@ function getLoginUrl($urlWithoutLogin) {
 }
 
 /**
- * Uses HTTP to check authentication headers for a resource.
  * @param targetUrl The absolute URI of the resource
- * @return realm (string) or false if login not required
+ * @return realm (string) authentication realm or false if login not required
  */
 function getAuthName($targetUrl) {
+	$conf = getConfig('repo_realm');
+	if ($conf && strpos($targetUrl, $conf)==0) {
+		return $conf;
+	}
+	return login_getAuthNameFromRepository($targetUrl);
+}
+
+// Uses HTTP to check authentication headers for a resource.
+function login_getAuthNameFromRepository($targetUrl) {
 	$headers = getHttpHeaders($targetUrl);
 	//print_r($headers);
 	if (strpos($headers[0], '401') == false) {
