@@ -20,20 +20,22 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template->display();
 } else {
 	$presentation = new Presentation();
-	$upload = new Upload();
+	$upload = new Upload('userfile');
 	if ($upload->isCreate()) {
-		$upload->processSubmit();
+		$newfile = tempnam(getTempDir('upload'), '');
+		$upload->processSubmit($newfile);
 		$edit = new Edit('import');
-		$edit->addArgPath($upload->getFilepath());
+		$edit->addArgPath($newfile);
 		$edit->addArgUrl($upload->getTargeturl());
 		$edit->setMessage($upload->getMessage());
 		$edit->execute();
 		// clean up
+		unlink($newfile);
 		$upload->cleanUp();
 		// show results
 		$edit->present($presentation, dirname($upload->getTargetUrl()));
 	} else {
-		$dir = getTempnamDir('upload'); // same tempdir as in Upload's default filepath
+		$dir = getTempnamDir('upload'); // same tempdir as create, but subfolder
 		$repoFolder = dirname($upload->getTargetUrl());
 		// check out existing files
 		$checkout = new Edit('checkout');
@@ -47,15 +49,14 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		}
 		// upload file to working copy
 		$filename = $upload->getName();
-		$file = $dir . '/' . $filename;
-		if(!file_exists($dir.'/.svn') || !file_exists($file)) {
+		$updatefile = $dir . '/' . $filename;
+		if(!file_exists($dir.'/.svn') || !file_exists($updatefile)) {
 			$presentation->trigger_error('Can not read current version of the file named "'
 				.$filename.'" from repository path "'.$repoFolder.'"');
 		}
-		unlink($file);
-		$upload->setFilepath($file);
-		$upload->processSubmit();
-		if(!file_exists($file)) {
+		unlink($updatefile);
+		$upload->processSubmit($updatefile);
+		if(!file_exists($updatefile)) {
 			$presentation->trigger_error('Could not read uploaded file "'
 				.$filename.'" for operation "'.basename($dir).'"');
 		}
@@ -81,37 +82,28 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 // TODO check allowed characters before file operations are performed
 // (in the getters probably, because they might be used before processSubmit)
 class Upload {
-	var $filepath; // temp file location
-
-	/**
-	 * Set location where uploaded file should be placed
-	 */
-	function setFilepath($absolutePath) {
-		$this->filepath = $absolutePath;
-	}
+	var $file_id;
 	
 	/**
-	 * @return current location of uploaded file, absolute path
+	 * Constructor
+	 * @param formFieldName the name of the form field that contains the file
 	 */
-	function getFilepath() {
-		if (isset($this->filepath)) {
-			return $this->filepath;
-		}
-		$this->filepath = tempnam(getTempDir('upload'), '');
-		return $this->filepath;
+	function Upload($formFieldName) {
+		$this->file_id = $formFieldName;
 	}
 
-	function processSubmit() {
-		$current = $_FILES['userfile']['tmp_name'];;
-		if (move_uploaded_file($current, $this->getFilepath())) {
+	function processSubmit($destinationFile) {
+		$current = $_FILES[$this->file_id]['tmp_name'];;
+		if (rename($current, $destinationFile)) {
 			// ok
 		} else {
-			trigger_error("Could not access the uploaded file ".$this->getOriginalFilename());exit;
+			trigger_error("Could not access the uploaded file ".$this->getOriginalFilename());
+			exit;
 		}
 	}
 	
 	function cleanUp() {
-		unlink($this->getFilepath());
+		// temp file has already been moved, so no cleanup needed
 	}
 	
 	/**
@@ -133,7 +125,7 @@ class Upload {
 	 * @return original file name on client
 	 */
 	function getOriginalFilename() {
-		return $_FILES['userfile']['name'];
+		return $_FILES[$this->file_id]['name'];
 	}
 	
 	/**
@@ -144,7 +136,7 @@ class Upload {
 	}
 	
 	/**
-	 * @return destination url for accessing the uploaded file
+	 * @return destination url when uploaded for user's access to the file
 	 */
 	function getTargetUrl() {
 		if ($this->isCreate()) {
@@ -157,21 +149,21 @@ class Upload {
 	 * @return mime type
 	 */
 	function getType() {
-		return $_FILES['userfile']['type'];
+		return $_FILES[$this->file_id]['type'];
 	}
 
 	/**
 	 * @return file size in bytes
 	 */
 	function getSize() {
-		return $_FILES['userfile']['size'];	
+		return $_FILES[$this->file_id]['size'];	
 	}
 
 	/**
 	 * @return upload error code, if any
 	 */
 	function getErrorCode() {
-		return $_FILES['userfile']['error'];
+		return $_FILES[$this->file_id]['error'];
 	}
 }
 ?>

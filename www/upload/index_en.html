@@ -33,7 +33,7 @@ function autoFillFilename(path) {
 <body>
 <h1>Upload file</h1>
 <!--{if $file}-->
-<p>As a new version of file {=$path|htmlentities}{=$file|htmlentities}</p>
+<p>As a new version of file <span class="path">{=$path|htmlentities}{=$file|htmlentities}</span> <a class="action" target="_blank" href="../open/?target={=$path}{=$file}">open</a></p>
 <!--{else}-->
 <p>As a new file in folder {=$path|htmlentities}</p>
 <!--{/if}-->
