@@ -287,6 +287,7 @@ function getReposAuth() {
 }
 
 // *** Subversion client usage ***
+define('SVN_CONFIG_DIR', DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'svn-config-dir');
 
 /**
  * Execute svn command like the PHP passthru() function
@@ -306,7 +307,6 @@ function svnPassthru($cmd, $cdata=false) {
  * @return Start of command line for executing svn operations, with tailing space
  */
 function getSvnCommand() {
-	define('SVN_CONFIG_DIR',DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'svn-config-dir');
 	$auth = '--username='.getReposUser().' --password='.getReposPass().' --no-auth-cache ';
 	$repos_install_root = dirname(rtrim(dirname(__FILE__),DIRECTORY_SEPARATOR));
 	$options = '--non-interactive --config-dir '.$repos_install_root.SVN_CONFIG_DIR.' ';

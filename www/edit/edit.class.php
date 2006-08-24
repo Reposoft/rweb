@@ -9,6 +9,7 @@ class Edit {
 	var $operation;
 	var $args = Array(); // command line arguments, not yet shellcmd-escaped
 	var $message;
+	var $messageSet = false; // allow for example checkout to run without a -m
 	var $result;
 	var $output; // from exec
 	var $returnval; // from exec
@@ -26,6 +27,50 @@ class Edit {
 	 */
 	function setMessage($commitMessage) {
 		$this->message = $commitMessage;
+		$this->messageSet = true;
+	}
+
+	// different addArgument functions to be able to adapt encoding
+
+	/**
+	 * @param pathElement filename or directory name
+	 * @param safe true if there is no way the value can be modified by the user
+	 */
+	function addArgFilename($pathElement, $safe=false) {
+		$this->_addArgument($pathElement);
+	}
+	
+	/**
+	 * @param name absolute or relative path with slashes
+	 * @param safe true if there is no way the value can be modified by the user
+	 */
+	function addArgPath($name, $safe=false) {
+		$this->_addArgument($name);
+	}
+
+	/**
+	 * @param url complete url
+	 * @param safe true if there is no way the value can be modified by the user
+	 */	
+	function addArgUrl($url, $safe=false) {
+		$this->_addArgument($url);
+	}
+	
+	/**
+	 * @param option command line switch
+	 * @param safe true if there is no way the value can be modified by the user
+	 */	
+	function addArgOption($option, $safe=false) {
+		$this->_addArgument($option);
+	}
+
+	/**
+	 * Append an command line argument last in the current arguments list
+	 * @param The argument, should be appropriately encoded
+	 *  (for example urlencoding for a new filename from input box)
+	 */
+	function _addArgument($nextArgument) {
+		$this->args[count($this->args)] = $nextArgument;
 	}
 
 	/**
@@ -33,17 +78,8 @@ class Edit {
 	 * Use addArgument instead if existing arguments should not be removed.
 	 * @param arrArgumentsInOrder The arguments to the command ordered according to the svn reference
 	 */
-	function setArguments($arrArgumentsInOrder) {
+	function _setArguments($arrArgumentsInOrder) {
 		$this->args = $arrArgumentsInOrder;
-	}
-	
-	/**
-	 * Append an command line argument last in the current arguments list
-	 * @param The argument, should be appropriately encoded
-	 *  (for example urlencoding for a new filename from input box)
-	 */
-	function addArgument($nextArgument) {
-		$this->args[count($this->args)] = $nextArgument;
 	}
 	
 	/**
@@ -52,7 +88,7 @@ class Edit {
 	function getCommand() {
 		array_walk($this->args, 'escapeshellcmd');
 		$cmd = escapeshellcmd($this->operation) . ' ';
-		if ($this->message) {
+		if ($this->messageSet) { // commands expecting a message need this even if it is empty
 			$cmd .= '-m "'.escapeshellcmd($this->message).'" ';
 		}
 		$cmd .= implode(' ', $this->args); // TODO escape shellcmd for args
@@ -102,9 +138,13 @@ class Edit {
 		if (!$nextUrl) {
 			$nextUrl = $smarty->get_template_vars('referer');
 		}
+		if (strlen($this->getResult()) > 0) {
+			$smarty->assign('result', $this->getResult());
+		} else {
+			$smarty->assign('result', 'Error. Could not read result for the command: ' . $this->getCommand());
+		}
 		$smarty->assign('nexturl',$nextUrl);
 		$smarty->assign('operation',$this->operation);
-		$smarty->assign('result',$this->getResult());
 		$smarty->assign('revision',$this->getCommittedRevision());
 		$smarty->assign('successful',$this->isSuccessful());
 		if (!$this->isSuccessful()) {

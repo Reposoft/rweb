@@ -25,8 +25,8 @@ function createFolder($parentUri, $name, $message) {
 	}
 	$edit = new Edit('import');
 	$edit->setMessage($message);
-	$edit->addArgument($dir);
-	$edit->addArgument($newfolder);
+	$edit->addArgPath($dir, true);
+	$edit->addArgUrl($newfolder);
 	$edit->execute();
 	rmdir($dir);
 	$edit->present($template, getTargetUrl());

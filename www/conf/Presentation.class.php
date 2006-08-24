@@ -65,6 +65,8 @@ class Presentation extends Smarty {
 		echo ("<!-- PHP error message: \n\n");
 		parent::trigger_error($error_msg);
 		echo ("\n-->\n");
+		// we never want to continue after error
+		exit;
 	}
 	
 	/**

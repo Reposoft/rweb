@@ -165,7 +165,7 @@ span.action {
   </p>
   <p>
     <label for="submit"></label>
-    <input id="submit" type="submit" value="Submit" onclick="this.disabled=true" />
+    <input id="submit" type="submit" value="Submit" />
   </p>
 </fieldset>
 </form>

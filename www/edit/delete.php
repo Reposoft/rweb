@@ -19,7 +19,7 @@ if (isset($_GET['message'])) {
 function delete($message) {
 	$edit = new Edit('delete');
 	$edit->setMessage($message);
-	$edit->addArgument(getTargetUrl());
+	$edit->addArgUrl(getTargetUrl());
 	$edit->execute();
 	$edit->present(new Presentation(), dirname(rtrim(getTargetUrl(),'/')));
 }

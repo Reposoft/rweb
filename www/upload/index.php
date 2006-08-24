@@ -24,39 +24,51 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	if ($upload->isCreate()) {
 		$upload->processSubmit();
 		$edit = new Edit('import');
-		$edit->addArgument($upload->getFilepath());
-		$edit->addArgument($upload->getTargeturl());
+		$edit->addArgPath($upload->getFilepath());
+		$edit->addArgUrl($upload->getTargeturl());
 		$edit->setMessage($upload->getMessage());
 		$edit->execute();
+		// clean up
+		$upload->cleanUp();
+		// show results
+		$edit->present($presentation, dirname($upload->getTargetUrl()));
 	} else {
 		$dir = getTempnamDir('upload'); // same tempdir as in Upload's default filepath
 		$repoFolder = dirname($upload->getTargetUrl());
 		// check out existing files
 		$checkout = new Edit('checkout');
-		$checkout->addArgument('--non-recursive');
-		$checkout->addArgument($repoFolder);
-		$checkout->addArgument($dir);
+		$checkout->addArgOption('--non-recursive');
+		$checkout->addArgUrl($repoFolder);
+		$checkout->addArgPath($dir);
 		$checkout->execute();
+		if (!$checkout->isSuccessful()) {
+			$presentation->trigger_error("Could not read current version of file "
+				.$upload->getTargetUrl().". ".$checkout->getResult());
+		}
 		// upload file to working copy
 		$file = $dir . '/' . $_REQUEST['file']; // should probably use the upload class
 		if(!file_exists($file)) {
-			$presentation->trigger_error('Could not upload new version. There is no file named "'.$file.'" in working copy "'.$repoFolder.'"');
-			exit;
+			$presentation->trigger_error('Could not upload new version. There is no file named "'
+				.$file.'" in working copy "'.$repoFolder.'"');
 		}
 		$upload->setFilepath($file);
 		$upload->processSubmit();
 		// create the commit commant
-		$edit = new Edit('commit');
-		$edit->setMessage($upload->getMessage());
-		$edit->addArgument($dir);
-		$edit->execute();
+		$commit = new Edit('commit');
+		$commit->setMessage($upload->getMessage());
+		$commit->addArgPath($dir);
+		$commit->execute();
+		// clean up
+		$upload->cleanUp();
 		// remove working copy
-		rmdir($dir);
+		rmdir($dir); // TODO do recursively
+		// commit returns nothing if there are no local changes
+		if ($commit->isSuccessful() && strlen($commit->getResult())<1) {
+			$presentation->trigger_error('The uploaded file '.$upload->getFilename().' is identical to the current file '.$upload->getName());
+		}
+		// show results
+		$commit->present($presentation, dirname($upload->getTargetUrl()));
 	}
-	// clean up
-	$upload->cleanUp();
-	// show results
-	$edit->present($presentation, dirname($upload->getTargetUrl()));
 }
 
 class Upload {
