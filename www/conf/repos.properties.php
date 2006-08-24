@@ -130,16 +130,13 @@ function removeTempDir($directory) {
 		// close the directory
 		closedir($handle);
 
-		// if the option to empty is not set to true
-		if($empty == FALSE)
+		// try to delete the now empty directory
+		if(!rmdir($directory))
 		{
-			// try to delete the now empty directory
-			if(!rmdir($directory))
-			{
-				// return false if not possible
-				return FALSE;
-			}
+			// return false if not possible
+			return FALSE;
 		}
+
 		// return success
 		return TRUE;
 	}
