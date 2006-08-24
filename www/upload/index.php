@@ -46,13 +46,19 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 				.$upload->getTargetUrl().". ".$checkout->getResult());
 		}
 		// upload file to working copy
-		$file = $dir . '/' . $_REQUEST['file']; // should probably use the upload class
-		if(!file_exists($file)) {
-			$presentation->trigger_error('Could not upload new version. There is no file named "'
-				.$file.'" in working copy "'.$repoFolder.'"');
+		$filename = $upload->getName();
+		$file = $dir . '/' . $filename;
+		if(!file_exists($dir.'/.svn') || !file_exists($file)) {
+			$presentation->trigger_error('Can not read current version of the file named "'
+				.$filename.'" from repository path "'.$repoFolder.'"');
 		}
+		unlink($file);
 		$upload->setFilepath($file);
 		$upload->processSubmit();
+		if(!file_exists($file)) {
+			$presentation->trigger_error('Could not read uploaded file "'
+				.$filename.'" for operation "'.basename($dir).'"');
+		}
 		// create the commit commant
 		$commit = new Edit('commit');
 		$commit->setMessage($upload->getMessage());
@@ -63,14 +69,17 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		// remove working copy
 		rmdir($dir); // TODO do recursively
 		// commit returns nothing if there are no local changes
-		if ($commit->isSuccessful() && strlen($commit->getResult())<1) {
-			$presentation->trigger_error('The uploaded file '.$upload->getFilename().' is identical to the current file '.$upload->getName());
+		if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
+			$presentation->trigger_error('The uploaded file '.$upload->getOriginalFilename()
+				.' is identical to the current file '.$upload->getName());
 		}
 		// show results
 		$commit->present($presentation, dirname($upload->getTargetUrl()));
 	}
 }
 
+// TODO check allowed characters before file operations are performed
+// (in the getters probably, because they might be used before processSubmit)
 class Upload {
 	var $filepath; // temp file location
 
@@ -97,7 +106,7 @@ class Upload {
 		if (move_uploaded_file($current, $this->getFilepath())) {
 			// ok
 		} else {
-			echo("Could not access the uploaded file. Possible file upload attack!\n");exit;
+			trigger_error("Could not access the uploaded file ".$this->getOriginalFilename());exit;
 		}
 	}
 	
@@ -117,10 +126,14 @@ class Upload {
 	 *  not encoded
 	 */
 	function getName() {
-		if (isset($_POST['name'])) {
-			return $_POST['name'];
-		}
-		return $this->getFilename();
+		return $_POST['name'];
+	}
+	
+	/**
+	 * @return original file name on client
+	 */
+	function getOriginalFilename() {
+		return $_FILES['userfile']['name'];
 	}
 	
 	/**
@@ -138,13 +151,6 @@ class Upload {
 			return $_POST['targeturl'] . rawurlencode($this->getName());
 		}
 		return $_POST['targeturl'];
-	}
-	
-	/**
-	 * @return original file name on client
-	 */
-	function getFilename() {
-		return $_FILES['userfile']['name'];
 	}
 	
 	/**

@@ -47,10 +47,10 @@ function autoFillFilename(path) {
     <input type="file" name="userfile" size="40" onchange="autoFillFilename(value)"/>
   </p>
   <p>
-    <label for="name">name in repository</label>
+    <label for="currentname">name in repository</label>
 	<!--{if $file}-->
-    <input type="text" id="name" name="name" value="{=$file}" disabled="disabled" size="40"/>
-	<input type="hidden" id="file" name="file" value="{=$file}"/>
+    <input type="text" id="currentname" name="currentname" value="{=$file}" disabled="disabled" size="40"/>
+	<input type="hidden" id="name" name="name" value="{=$file}"/>
 	<!--{else}-->
 	<input type="text" id="name" name="name" size="40"/>
 	<input type="hidden" id="create" name="create" value="yes"/>
