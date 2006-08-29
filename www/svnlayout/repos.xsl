@@ -35,8 +35,6 @@
 	<xsl:param name="icons">._folder._file.ai.bmp.xhm.doc.exe.gif.gz.htm.html.ics.jar.java.jpg.log.mpg.pdf.php.png.ps.psd.qt.sh.sit.sxw.tif.tmp.txt.vcf.xls.zip</xsl:param>
 	<!-- filetype for which there is a thumbnail generator -->
 	<xsl:param name="thumbs">.jpeg</xsl:param>
-	<!-- filetype for which there is an integrated viewer -->
-	<xsl:param name="views">.html.ics</xsl:param>
 	<!-- icon dimensions -->
 	<xsl:param name="iconSize">22</xsl:param>
 	<xsl:param name="miniIconSize">16</xsl:param>
@@ -208,6 +206,7 @@
 			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
 			<xsl:if test="$editUrl">
+				<a class="action" href="{@href}">open</a>
 				<a class="action" href="{$editUrl}/?action=rename&amp;path={../@path}/{@href}">rename</a>
 				<span class="action">copy</span>
 				<a class="action" href="{$editUrl}/?action=delete&amp;path={../@path}/{@href}">delete</a>
