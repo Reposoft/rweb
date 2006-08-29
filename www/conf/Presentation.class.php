@@ -86,7 +86,7 @@ class Presentation extends Smarty {
 			fwrite($handle, $this->fetch($resource_name, $cache_id, $compile_id));
 			fclose($handle);
 			// should be handled by the root page
-			$nexturl = SELF_ROOT . '/?result=' . basename($file);
+			$nexturl = repos_getWebappRoot() . '/view/?result=' . basename($file);
 			header("Location: $nexturl");
 		} else {
 			parent::display($resource_name, $cache_id, $compile_id);

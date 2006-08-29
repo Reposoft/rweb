@@ -9,8 +9,12 @@ function getHomeDir($repository) {
 	return $repository . '/' . getReposUser() . '/trunk/';
 }
 
+function isHttps($repository) {
+	return !(strpos($repository, 'https://')===false);
+}
+
 function showUserLogin() {
-	$nexturl = SELF_URL . "?user";
+	$nexturl = repos_getSelfUrl() . "?login=user";
 	$presentation = new Presentation();
 	$presentation->assign('nexturl', $nexturl);
 	$presentation->display(getLocaleFile(dirname(__FILE__).'/index'));
@@ -23,17 +27,19 @@ function showLoginCancelled() {
 
 function showLoginFailed($targetUrl) {
 	//header('HTTP/1.1 401 Unauthorized');
-	$nexturl = SELF_ROOT.'/?logout&go='.rawurlencode('?login');
+	$nexturl = repos_getSelfRoot().'/?logout&go='.rawurlencode('?login');
 	$presentation = new Presentation();
 	$presentation->assign('nexturl', $nexturl);
-	$presentation->assign('rooturl', SELF_ROOT);
+	$presentation->assign('rooturl', repos_getSelfRoot());
 	$presentation->assign('targeturl', $targetUrl);
 	$presentation->display(getLocaleFile(dirname(__FILE__).'/failed'));
 }
 
 function loginAndRedirectToHomeDir() {
-	enforceSSL();
 	$repo = getRepositoryUrl();
+	if (isHttps($repo)) {
+		enforceSSL();
+	}
 	if (isLoggedIn()) {
 		$home = getHomeDir($repo);
 		// now when we have the username we can test if the login was ok
@@ -43,14 +49,14 @@ function loginAndRedirectToHomeDir() {
 		} else {
 			showLoginFailed($home);
 		}
-	} elseif (isset($_GET['user'])) {
+	} elseif (isset($_GET['login']) && $_GET['login'] == 'user') {
 		$realm = getAuthName($repo);
 		if(!$realm) {
 			trigger_error("Error: No login realm was found for repository $repo");
 			exit;
 		}
 		askForCredentials($realm);
-		// browser will refresh upon user input
+		// browser will refresh upon user input, if there is still no credentials we end up here
 		showLoginCancelled();
 	} else {
 		showUserLogin();

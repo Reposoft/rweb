@@ -60,8 +60,8 @@ header("Pragma: no-cache");
 
 /**
  * Redirect to secure URL if current URL is not secure.
- * This should always be done for BAsic authentication.
- * This is skipped if query param SKIP_SSL is set to one 1
+ * This should always be done for BASIC authentication.
+ * This is skipped if query param SKIP_SL is set to one 1
  */
 function enforceSSL() {
 	if (isset($_GET['SKIP_SSL']) && $_GET['SKIP_SSL'] == 1) {
@@ -70,7 +70,7 @@ function enforceSSL() {
 	if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) {
 		// OK, this is secure, or SSL disabled
 	} else {
-		$secureUrl = str_replace('://','s://', SELF_URL.'?'.SELF_QUERY);
+		$secureUrl = str_replace('://','s://', repos_getSelfUrl().'?'.repos_getSelfQuery());
 		header("Location: $secureUrl");
 		exit;
 	}
@@ -286,7 +286,8 @@ function isLoggedIn() {
 }
 
 function getReposUser() {
-	// the username is used in urls, so it is urlencoded to prevent urlinjection
+	// the username is used in urls (like the repository home dir for the user)
+	//  so it is urlencoded to prevent urlinjection
 	return urlencode($_SERVER['PHP_AUTH_USER']);
 }
 function getReposPass() {

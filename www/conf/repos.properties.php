@@ -142,7 +142,11 @@ function removeTempDir($directory) {
 	}
 }
 
-// ------ functions to calculate global constants ------
+// --- helper functions for pages to refer to internal urls ---
+
+function repos_getWebappRoot() {
+	return getConf('repos_web');
+}
 
 function repos_getSelfRoot() {
 	$url = 'http';
