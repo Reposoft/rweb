@@ -88,12 +88,14 @@ class Edit {
 	 * @return the subversion operation command line (the portion after 'svn')
 	 */
 	function getCommand() {
-		array_walk($this->args, 'escapeshellcmd');
+		// command and message
 		$cmd = escapeshellcmd($this->operation) . ' ';
 		if ($this->commitWithMessage) { // commands expecting a message need this even if it is empty
 			$cmd .= '-m "'.escapeshellcmd($this->message).'" ';
 		}
-		$cmd .= implode(' ', $this->args); // TODO escape shellcmd for args
+		// arguments, enclosed in strings to allow spaces
+		array_walk($this->args, 'escapeshellcmd');
+		$cmd .= '"'.implode('" "', $this->args).'"';
 		return $cmd;
 	}
 	

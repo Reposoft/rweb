@@ -5,7 +5,7 @@ require_once( upOne(dirname(__FILE__)) . "/account/login.inc.php" );
 
 define('STYLESHEET','../svnlayout/repos.xsl');
 
-$url = getTargetUrl();
+$url = urlEncodeNames(getTargetUrl());
 $rev = '';
 if (isset($_GET['rev'])) {
 	$rev = '-r '.$_GET['rev'];

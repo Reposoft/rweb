@@ -41,6 +41,7 @@
  *  - getTargetUrl() full url to resource if specified
  *  - getRepositoryUrl() repository root URL from query params,
  *     with fallback to repos.properties
+ * Note that internally, URLs should never be urlencoded
  *
  * Nomenclature throughout the repos PHP solution:
  * 'path' absolute directory path from repository root
@@ -170,7 +171,7 @@ function getReferer() {
  */
 function getPath() {
 	if(!isset($_GET['path'])) return false;
-	$path = urlEncodeNames($_GET['path']);
+	$path = rawurldecode($_GET['path']);
     $path = rtrim($path,'/').'/';
 	return $path;
 }
@@ -179,7 +180,7 @@ function getPath() {
  * @return filename if defined, false if the target is not a file
  */
 function getFile() {
-	if (isset($_GET['file'])) return $_GET['file'];
+	if (isset($_GET['file'])) return rawurldecode($_GET['file']);
 	return false;
 }
 
@@ -196,9 +197,9 @@ function isTargetFile() {
  * @return target in repository from query paramters WITH tailing slash if it is a directory, false if none of 'target', 'file' and 'path' is defined
  */
 function getTarget() {
-	if(isset($_GET['target'])) return urlEncodeNames($_GET['target']);
+	if(isset($_GET['target'])) return rawurldecode($_GET['target']);
     // append filename if specified
-    if(getFile()) return getPath() . rawurlencode(getFile());
+    if(getFile()) return getPath() . getFile();
     return getPath();
 }
 
