@@ -146,7 +146,7 @@ function removeTempDir($directory) {
 
 function _repos_getSelfRoot() {
 	$url = 'http';
-	if($_SERVER['SERVER_PORT']==443) $url .= 's';
+	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') $url .= 's';
 	$url .= '://' . $_SERVER['SERVER_NAME'];
 	if($_SERVER['SERVER_PORT']==80 || $_SERVER['SERVER_PORT']==443) {
 		// do not append port number
