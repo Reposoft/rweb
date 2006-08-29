@@ -54,7 +54,8 @@ class Edit {
 	 * @param safe true if there is no way the value can be modified by the user
 	 */	
 	function addArgUrl($url, $safe=false) {
-		$this->_addArgument(urlEncodeNames($url));
+		// urlEncodeNames does not work
+		$this->_addArgument($url);
 	}
 	
 	/**

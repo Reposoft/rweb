@@ -37,28 +37,28 @@ function autoFillFilename(path) {
 <!--{else}-->
 <p>As a new file in folder {=$path|htmlentities}</p>
 <!--{/if}-->
-<form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
+<form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload" tmt:validate="true">
 <fieldset>
   <legend>Upload to repos.se</legend>
   <input type="hidden" name="targeturl" value="{=$targeturl}"/>
   <p>
     <label for="userfile">local file</label>
 	<input type="hidden" name="MAX_FILE_SIZE" value="{=$maxfilesize}" />
-    <input type="file" name="userfile" size="40" onchange="autoFillFilename(value)"/>
+    <input type="file" name="userfile" size="40" onchange="autoFillFilename(value)" tmt:required="true" tmt:message="Please select a file to upload"/>
   </p>
   <p>
     <label for="currentname">name in repository</label>
 	<!--{if $file}-->
-    <input type="text" id="currentname" name="currentname" value="{=$file}" disabled="disabled" size="40"/>
+    <input type="text" id="currentname" name="currentname" value="{=$file}" disabled="disabled" size="40" />
 	<input type="hidden" id="name" name="name" value="{=$file}"/>
 	<!--{else}-->
-	<input type="text" id="name" name="name" size="40"/>
+	<input type="text" id="name" name="name" size="40" tmt:required="true" tmt:pattern="reposFilename" tmt:message="Filename is not valid"/>
 	<input type="hidden" id="create" name="create" value="yes"/>
 	<!--{/if}-->
   </p>
   <p>
     <label for="message">log message</label>
-    <textarea id="message" name="message" cols="40" rows="2"></textarea>
+    <textarea id="message" name="message" cols="40" rows="2" tmt:pattern="reposLogmessage"></textarea>
   </p>
   <p>
     <label for="submit"></label>

@@ -17,7 +17,7 @@
 	<xsl:param name="rurl">/repos</xsl:param><!-- absolute from server root -->
 	<!--<xsl:param name="rurl">http://alto.optime.se/repos</xsl:param>-->
 	<!-- current theme, for example '/theme', empty for root theme -->
-	<xsl:param name="theme" select="'/themes/simple'"/>
+	<xsl:param name="theme" select="'/themes/pe'"/>
 	<!-- static contents urls -->
 	<xsl:param name="cssUrl">
 		<xsl:value-of select="$rurl"/>
@@ -32,13 +32,13 @@
 	<xsl:param name="editUrl">
 		<xsl:value-of select="$rurl"/>/edit</xsl:param>
 	<!-- avaliable icons -->
-	<xsl:param name="icons">._folder._file.ai.bmp.xhm.doc.exe.gif.gz.htm.html.ics.jar.java.jpg.log.mpg.pdf.php.png.ps.psd.qt.sh.sit.sxw.tif.tmp.txt.vcf.xls.zip</xsl:param>
+	<xsl:param name="icons">._folder._file.pdf</xsl:param>
 	<!-- filetype for which there is a thumbnail generator -->
 	<xsl:param name="thumbs">.jpeg</xsl:param>
-	<!-- filetype for which there is an integrated viewer -->
-	<xsl:param name="views">.html.ics</xsl:param>
 	<!-- icon dimensions -->
-	<xsl:param name="iconSize">22</xsl:param>
+	<xsl:param name="iconType">gif</xsl:param>
+	<xsl:param name="buttonSize">24</xsl:param>
+	<xsl:param name="iconSize">16</xsl:param>
 	<xsl:param name="miniIconSize">16</xsl:param>
 	<xsl:param name="iconVspace">1</xsl:param>
 	<xsl:param name="iconHspace">10</xsl:param>
@@ -130,42 +130,43 @@
 		<xsl:choose>
 			<xsl:when test="/svn/index/updir and not(substring-after(/svn/index/@path, '/trunk')='')">
 				<a class="command" href="../">
-					<xsl:call-template name="showicon">
+					<xsl:call-template name="showbutton">
 						<xsl:with-param name="filetype" select="'_parent'"/>
 					</xsl:call-template>up</a>
 			</xsl:when>
 			<xsl:otherwise>
 				<span class="command">
-					<xsl:call-template name="showicon">
+					<xsl:call-template name="showbutton">
 						<xsl:with-param name="filetype" select="'_parent'"/>
 					</xsl:call-template>up</span>
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:if test="$editUrl">
 			<a class="command" href="{$editUrl}/?action=mkdir&amp;path={@path}">
-				<xsl:call-template name="showicon">
+				<xsl:call-template name="showbutton">
 					<xsl:with-param name="filetype" select="'_newfolder'"/>
 				</xsl:call-template>new folder</a>
 			<a class="command" href="{$rurl}/upload/?path={@path}">
-				<xsl:call-template name="showicon">
+				<xsl:call-template name="showbutton">
 					<xsl:with-param name="filetype" select="'_upload'"/>
 				</xsl:call-template>upload</a>
 		</xsl:if>
+		<!--
 		<a class="command" href="{$rurl}/tutorials/?show=networkfolder">
-			<xsl:call-template name="showicon">
+			<xsl:call-template name="showbutton">
 				<xsl:with-param name="filetype" select="'_windowsfolder'"/>
 			</xsl:call-template>open folder</a>
-		<!--<a class="command" href="{$rurl}/tutorials/?show=checkout">-->
 		<a class="command" href="{$rurl}/tutorials/?show=checkout">
-			<xsl:call-template name="showicon">
+			<xsl:call-template name="showbutton">
 				<xsl:with-param name="filetype" select="'_tortoisefolder'"/>
 			</xsl:call-template>check out</a>
+		-->
 		<a class="command" href="{$rurl}/log/?path={@path}">
-			<xsl:call-template name="showicon">
+			<xsl:call-template name="showbutton">
 				<xsl:with-param name="filetype" select="'_log'"/>
 			</xsl:call-template>show log</a>
 		<a class="command" href="/?logout">
-			<xsl:call-template name="showicon">
+			<xsl:call-template name="showbutton">
 				<xsl:with-param name="filetype" select="'_logout'"/>
 			</xsl:call-template>logout</a>
 	</xsl:template>
@@ -208,6 +209,7 @@
 			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
 			<xsl:if test="$editUrl">
+				<a class="action" href="{@href}">open</a>
 				<a class="action" href="{$editUrl}/?action=rename&amp;path={../@path}/{@href}">rename</a>
 				<span class="action">copy</span>
 				<a class="action" href="{$editUrl}/?action=delete&amp;path={../@path}/{@href}">delete</a>
@@ -223,7 +225,7 @@
 			</a>
 			<xsl:value-of select="$spacer"/>
 			<span class="action">info</span>
-			<a class="action" title="this file can be opened in Repos" href="{$rurl}/open/?path={../@path}&amp;file={@href}">open</a>
+			<a class="action" href="{$rurl}/open/?path={../@path}&amp;file={@href}">open</a>
 			<xsl:if test="$editUrl">
 				<a class="action" href="{$editUrl}/?action=rename&amp;path={../@path}&amp;file={@href}">rename</a>
 				<span class="action">copy</span>
@@ -256,12 +258,19 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	<!-- show toolbar button -->
+	<xsl:template name="showbutton">
+		<xsl:param name="filetype"/>
+		<xsl:call-template name="showicon">
+			<xsl:with-param name="filetype" select="$filetype"/>
+			<xsl:with-param name="size" select="$buttonSize"/>
+		</xsl:call-template>
+	</xsl:template>
 	<!-- just display filetype icon, no check -->
 	<xsl:template name="showicon">
-		<xsl:param name="filetype">
-			<xsl:call-template name="getFiletype"/>
-		</xsl:param>
-		<img src="{$iconsUrl}/{$filetype}.png" border="0" align="absmiddle" width="{$iconSize}" height="{$iconSize}" hspace="{$iconHspace}" vspace="{$iconVspace}"/>
+		<xsl:param name="filetype">_filetype_not_set_</xsl:param>
+		<xsl:param name="size" select="$iconSize"/>
+		<img src="{$iconsUrl}/{$filetype}.{$iconType}" border="0" align="absmiddle" width="{$size}" height="{$size}" hspace="{$iconHspace}" vspace="{$iconVspace}"/>
 	</xsl:template>
 	<!-- display thumbnail as icon -->
 	<xsl:template name="thumbnail">
@@ -404,7 +413,7 @@
 	</xsl:template>
 	<xsl:template name="logicon">
 		<xsl:param name="name"/>
-		<img src="{$iconsUrl}/{$name}.png" border="0" align="absmiddle" width="{$miniIconSize}" height="{$miniIconSize}" hspace="{$iconHspace}" vspace="{$iconVspace}"/>
+		<img src="{$iconsUrl}/{$name}.{$iconType}" border="0" align="absmiddle" width="{$miniIconSize}" height="{$miniIconSize}" hspace="{$iconHspace}" vspace="{$iconVspace}"/>
 	</xsl:template>
 	<!--
 	========= svn diff formatting ==========
