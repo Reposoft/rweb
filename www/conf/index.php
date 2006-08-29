@@ -4,9 +4,8 @@
  */
 
 // default configuration includes, the way they should be referenced in php files
-function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
 require_once( dirname(__FILE__) . '/repos.properties.php' );
-require_once( upOne(dirname(__FILE__)) . '/login.inc.php' );
+require_once( dirname(dirname(__FILE__)) . '/account/login.inc.php' );
 
 // configuration index settings
 $sections = array(
@@ -16,6 +15,7 @@ $sections = array(
 	'dependencies' => 'Required command line tools',
 	'repository' => 'Checking local repository',
 	'requiredUrls' => 'Checking URLs',
+	'localeSettings' => 'Checking locales for the web server\'s command line',
 	'debug' => 'Debug info'
 	);
 // validating configuration
@@ -50,6 +50,8 @@ $dependencies = array(
 $repository = array(
 	getCommand('svnlook') . ' youngest ' . getConfig('local_path') => "Local path contains repository revision: "
 );
+
+
 // checking urls needed for repository access
 $rurl = getConfig('repo_url');
 $realm = getConfig('repo_realm');
@@ -59,13 +61,14 @@ $uurl = $aurl.'/'.getReposUser();
 $lurl = ereg_replace("://[^/<>[:space:]]+[[:alnum:]]/","://localhost/", getConfig('repo_url'));
 if ( getConfig('repos_web'==$rurl) )
 	echo "Warning: repos_web and repos_url are the same - mixing static resources and repository";
+	
 $requiredUrls = array( getConfig('repos_web') => 'Acces to static contents ' . getConfig('repos_web') );
 $requiredUrls[$rurl] = 'Anonymous acces to the repository ' . getConfig('repo_url');
 $requiredUrls[$aurl] = "Access to repository with current authenticatied user (" . getReposUser() . ")";
 $requiredUrls[$uurl] = "Access to user folder in repository (" . getReposUser() . ")";
 $requiredUrls[$lurl] = "Access to repository using localhost";
 
-
+// run the diagnostics page
 html_start();	
 sections();
 html_end();
@@ -207,6 +210,21 @@ function requiredUrls() {
 		} else {
 			sayFailed();
 		} line_end();
+	}
+}
+
+function localeSettings() {
+	exec('locale', $localeOutput);
+	$locales = Array();
+	foreach ($localeOutput as $locale) {
+		list($env, $val) = explode('=', $locale);
+		line_start($env);
+		if (strpos($val, "UTF-8")===false) {
+			sayFailed("$val (not UTF-8, so i18n not supported in svn commands)");
+		} else {
+			sayOK();
+		}
+		line_end();
 	}
 }
 

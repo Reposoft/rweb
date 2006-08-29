@@ -249,7 +249,8 @@ function getTargetUrl() {
 
 function urlEncodeNames($url) {
 	$parts = explode('/', $url);
-	for ($i = 0; $i < count($parts); $i++) {
+	// first part is the protocol, don't escape
+	for ($i = 1; $i < count($parts); $i++) {
 		$parts[$i] = rawurlencode($parts[$i]);
 	}
 	return implode('/', $parts);

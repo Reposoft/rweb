@@ -127,18 +127,20 @@
 	</xsl:template>
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
-		<xsl:if test="/svn/index/updir">
-			<a class="command" href="../">
-				<xsl:call-template name="showicon">
-					<xsl:with-param name="filetype" select="'_parent'"/>
-				</xsl:call-template>up</a>
-		</xsl:if>
-		<xsl:if test="not(/svn/index/updir)">
-			<span class="command">
-				<xsl:call-template name="showicon">
-					<xsl:with-param name="filetype" select="'_parent'"/>
-				</xsl:call-template>up</span>
-		</xsl:if>
+		<xsl:choose>
+			<xsl:when test="/svn/index/updir and not(substring-after(/svn/index/@path, '/trunk')='')">
+				<a class="command" href="../">
+					<xsl:call-template name="showicon">
+						<xsl:with-param name="filetype" select="'_parent'"/>
+					</xsl:call-template>up</a>
+			</xsl:when>
+			<xsl:otherwise>
+				<span class="command">
+					<xsl:call-template name="showicon">
+						<xsl:with-param name="filetype" select="'_parent'"/>
+					</xsl:call-template>up</span>
+			</xsl:otherwise>
+		</xsl:choose>
 		<xsl:if test="$editUrl">
 			<a class="command" href="{$editUrl}/?action=mkdir&amp;path={@path}">
 				<xsl:call-template name="showicon">

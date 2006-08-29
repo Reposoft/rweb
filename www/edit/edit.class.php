@@ -9,7 +9,7 @@ class Edit {
 	var $operation;
 	var $args = Array(); // command line arguments, not yet shellcmd-escaped
 	var $message;
-	var $messageSet = false; // allow for example checkout to run without a -m
+	var $commitWithMessage = false; // allow for example checkout to run without a -m
 	var $result;
 	var $output; // from exec
 	var $returnval; // from exec
@@ -27,7 +27,7 @@ class Edit {
 	 */
 	function setMessage($commitMessage) {
 		$this->message = $commitMessage;
-		$this->messageSet = true;
+		$this->commitWithMessage = true;
 	}
 
 	// different addArgument functions to be able to adapt encoding
@@ -37,6 +37,7 @@ class Edit {
 	 * @param safe true if there is no way the value can be modified by the user
 	 */
 	function addArgFilename($pathElement, $safe=false) {
+		// rawurlencode does not work with filenames containing едц
 		$this->_addArgument($pathElement);
 	}
 	
@@ -53,7 +54,7 @@ class Edit {
 	 * @param safe true if there is no way the value can be modified by the user
 	 */	
 	function addArgUrl($url, $safe=false) {
-		$this->_addArgument($url);
+		$this->_addArgument(urlEncodeNames($url));
 	}
 	
 	/**
@@ -88,7 +89,7 @@ class Edit {
 	function getCommand() {
 		array_walk($this->args, 'escapeshellcmd');
 		$cmd = escapeshellcmd($this->operation) . ' ';
-		if ($this->messageSet) { // commands expecting a message need this even if it is empty
+		if ($this->commitWithMessage) { // commands expecting a message need this even if it is empty
 			$cmd .= '-m "'.escapeshellcmd($this->message).'" ';
 		}
 		$cmd .= implode(' ', $this->args); // TODO escape shellcmd for args

@@ -145,7 +145,7 @@ function removeTempDir($directory) {
 // --- helper functions for pages to refer to internal urls ---
 
 function repos_getWebappRoot() {
-	return getConf('repos_web');
+	return getConfig('repos_web');
 }
 
 function repos_getSelfRoot() {

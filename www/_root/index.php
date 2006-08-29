@@ -38,5 +38,4 @@ if (isset($_GET['login'])) {
 }
 
 // simply show start page
-echo("Repos start page");
-//header("Location: start.html");
+header("Location: /start.html");
