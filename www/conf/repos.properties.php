@@ -162,7 +162,7 @@ function _repos_getSelfUrl() {
 	if ($q > 0) {
 		$uri = substr($uri, 0, $q);
 	}
-	// $_SERVER['SCRIPT_NAME'] can not be used because it always contains the filename;
+	// $_SERVER['SCRIPT_NAME'] can not be used because it always contains the filename
 	define('SELF_URL', SELF_ROOT . $uri);
 }
 
