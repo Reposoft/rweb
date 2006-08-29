@@ -8,18 +8,18 @@
 
 <body>
 <h1>Create subfolder</h1>
-<form id="createFolder" name="createFolder" method="get" action="#">
+<form id="createFolder" name="createFolder" method="get" action="#" tmt:validate="true">
   <fieldset>
 	<legend>Create folder in {=$target}</legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
 	<input name="repo" type="hidden" id="repo" value="{=$repo}" />
   <p>
     <label for="name">name of new folder</label>
-    <input name="name" type="text" id="name" size="40" />
+    <input name="name" type="text" id="name" size="40" tmt:required="true" tmt:pattern="reposFilename" tmt:message="Must be a valid folder name" />
 </p>
   <p>
     <label for="message">log message</label>
-    <textarea name="message" id="message" cols="30" rows="2"></textarea>
+    <textarea name="message" id="message" cols="30" rows="2" tmt:pattern="reposLogmessage" tmt:message="Contains invalid characters"></textarea>
   </p>
   <p>
     <label for="submit"></label>

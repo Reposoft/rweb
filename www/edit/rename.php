@@ -19,7 +19,9 @@ function svnRename() {
 	$edit = new Edit('move');
 	$targetUrl = getTargetUrl();
 	$newUrl = str_replace(basename($_GET['target']), $_GET['newname'], $targetUrl);
-	$edit->setMessage($message);
+	if (isset($_GET['message'])) {
+		$edit->setMessage($_GET['message']);
+	}
 	$edit->addArgUrl($targetUrl);
 	$edit->addArgUrl($newUrl);
 	$edit->execute();
