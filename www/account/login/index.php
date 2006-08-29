@@ -10,10 +10,10 @@ function getHomeDir($repository) {
 }
 
 function showUserLogin() {
-	$nexturl = SELF_ROOT."/?login";
+	$nexturl = SELF_URL . "?user";
 	$presentation = new Presentation();
 	$presentation->assign('nexturl', $nexturl);
-	$presentation->display();
+	$presentation->display(getLocaleFile(dirname(__FILE__).'/index'));
 }
 
 function showLoginCancelled() {
