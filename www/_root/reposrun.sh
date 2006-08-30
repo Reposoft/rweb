@@ -1,13 +1,17 @@
-# arguments
-#1: the command
-#2: all arguments
-if [ $# != 2 ]
+#!/bin/bash
+# Repos command line runner
+# First set up the environment, then run all the arguments as a command
+
+# The argument should be the complete command escaped with single quotes
+
+if [ $# -ne 1 ]
 then
-	echo "Invalid command, $# arguments"
+	echo "Invalid command. Should be one argument."
 	exit 1
 fi
 
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
-RESULT=$("$1 $2 2>&1")
-exit RESULT;
+
+eval "$1"
+exit $?
