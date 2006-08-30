@@ -317,6 +317,9 @@
 			</tr>
 			<tr>
 				<td id="workarea" class="workarea">
+					<h1>
+						<span>Log</span>
+					</h1>
 					<xsl:apply-templates select="error"/>
 					<xsl:apply-templates select="logentry"/>
 				</td>
@@ -345,11 +348,18 @@
 				<xsl:value-of select="$spacer"/>
 				<a title="{$undo}" class="action" href="{$rurl}/undo/?repo={../@repo}&amp;rev={@revision}">undo</a>
 			</h3>
-			<xsl:if test="msg">
+			<xsl:if test="string-length(msg) > 0">
 				<p>
-					<xsl:call-template name="linebreak">
-						<xsl:with-param name="text" select="msg"/>
-					</xsl:call-template>
+					<span title="log message">
+						<xsl:call-template name="logicon">
+							<xsl:with-param name="name" select="'_message'"/>
+						</xsl:call-template>
+					</span>
+					<span class="message">
+						<xsl:call-template name="linebreak">
+							<xsl:with-param name="text" select="msg"/>
+						</xsl:call-template>
+					</span>
 				</p>
 			</xsl:if>
 			<xsl:apply-templates select="paths">
@@ -372,7 +382,9 @@
 						<xsl:with-param name="name" select="'_a'"/>
 					</xsl:call-template>
 				</span>
-				<xsl:value-of select="."/>
+				<span class="path">
+					<xsl:value-of select="."/>
+				</span>
 				<xsl:value-of select="$spacer"/>
 				<xsl:if test="@copyfrom-path">
 					<span title="copied from">
@@ -393,7 +405,9 @@
 						<xsl:with-param name="name" select="'_d'"/>
 					</xsl:call-template>
 				</span>
-				<xsl:value-of select="."/>
+				<span class="path">
+					<xsl:value-of select="."/>
+				</span>
 			</xsl:if>
 			<xsl:if test="@action='M'">
 				<a title="{@action} - {$show-diff}" href="{$rurl}/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">
@@ -401,7 +415,9 @@
 						<xsl:with-param name="name" select="'_m'"/>
 					</xsl:call-template>
 				</a>
-				<xsl:value-of select="."/>
+				<span class="path">
+					<xsl:value-of select="."/>
+				</span>
 				<xsl:value-of select="$spacer"/>
 				<a class="action" href="{$rurl}/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={$revfrom}">before</a>
 				<a class="action" href="{$rurl}/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>

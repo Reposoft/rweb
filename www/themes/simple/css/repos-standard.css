@@ -85,16 +85,19 @@ th.info {
 }
 /* layout of version control concepts, these are usually span tags */
 .path {
-
+	color: #112200;
 }
 .filename {
-
+	color: #112200;
 }
 .revision {
 	color: #006600;
 }
 .username {
-
+	color: #663300;
+}
+.message {
+	font-style: italic;
 }
 .datetime {
 	color: #666666;
@@ -180,7 +183,8 @@ legend {
 	background-color:#CCCC99;
 	letter-spacing:0.2em;
 	font-size:0.7em;
-	padding:0.1em;
+	padding-left: 1em;
+	padding-right: 1em;
 	color:#FFFFFF;
 }
 label {

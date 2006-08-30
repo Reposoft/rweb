@@ -28,12 +28,16 @@ a:hover {
 }
 h1 {
     color: #D89210;
+	font-weight: normal;
 }
 h2 {
     color: #D37C0B;
+	font-weight: normal;
 }
 h3 {
     color: #D37C0B;
+	font-weight: normal;
+	margin-bottom: 3px;
 }
 pre {
 	font-size: 1.2em;
@@ -89,16 +93,19 @@ th.info {
 }
 /* layout of version control concepts, these are usually span tags */
 .path {
-	color: #081863;
+	color: #112200;
 }
 .filename {
-	color: #081863;
+	color: #112200;
 }
 .revision {
 	color: #006600;
 }
 .username {
 	color: #663300;
+}
+.message {
+	font-style: italic;
 }
 .datetime {
 	color: #666666;
@@ -135,6 +142,7 @@ a.action {
 	margin-right: 2px;
 	margin-top: 0px;
 	margin-bottom: 0px;
+	font-weight: normal;
 }
 span.action {
 	display: none;
@@ -148,6 +156,7 @@ span.action {
 	border-left: 1px solid #CCCCCC;
 	margin-left: 2px;
 	margin-right: 2px;
+	font-weight: normal;
 }
 /* -------- forms ---------
 <form>
@@ -173,7 +182,8 @@ fieldset {
 legend {
 	background-color:#aaaaaa;
 	font-size:0.7em;
-	padding:0.1em;
+	padding-left: 1em;
+	padding-right: 1em;
 	color:#FFFFFF;
 }
 label {
