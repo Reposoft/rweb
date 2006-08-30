@@ -59,6 +59,20 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 // HTTP/1.0
 header("Pragma: no-cache");
 
+// Set HTTP output character encoding to SJIS
+mb_http_output('UTF-8');
+// Start buffering and specify "mb_output_handler" as callback function
+ob_start('mb_output_handler');
+
+if (mb_http_input()==false) {
+	trigger_error("Server setup error. Multibyte string HTTP input encoding is not supported.");
+	exit;
+}
+if (mb_http_input()=="UTF-8") {
+	trigger_error("Character encoding is ".mb_http_input().", not UTF-8");
+	exit;
+} 
+
 /**
  * Redirect to secure URL if current URL is not secure.
  * This should always be done for BASIC authentication.

@@ -1,2 +1,2 @@
-tmt_globalPatterns.reposFilename = new RegExp("^[\\w][\\s\\w\\.-_]+[\\w]$");
-tmt_globalPatterns.reposLogmessage = new RegExp("^[\\s\\w\\.,-_\\(\\)"]+$");
+tmt_globalPatterns.reposFilename = new RegExp("^[\\wåäöÅÄÖ][\\s\\w\\.-_åäöÅÄÖ]+[\\wåäöÅÄÖ]$");
+tmt_globalPatterns.reposLogmessage = new RegExp("^.+$");
