@@ -1,0 +1,399 @@
+h1
+{
+    COLOR: #D89210;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 13pt;
+    FONT-WEIGHT: bold;
+    MARGIN: 0pt 0pt 0pt 0pt
+}
+h1.red
+{
+    COLOR: #FF0000;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 13pt;
+    FONT-WEIGHT: bold;
+    MARGIN: 0pt 0pt 0pt 0pt
+}
+h2
+{
+    COLOR: #D37C0B;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11pt;
+    FONT-WEIGHT: bold;
+    MARGIN: 0pt 0pt 0pt 0pt
+}
+h2.red
+{
+    COLOR: #FF0000;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11pt;
+    FONT-WEIGHT: bold;
+    MARGIN: 0pt 0pt 0pt 0pt
+}
+h3
+{
+    COLOR: #D37C0B;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11pt;
+    FONT-WEIGHT: bold;
+    MARGIN: 0pt 0pt 0pt 0pt
+}
+h3.red
+{
+    COLOR: #FF0000;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11pt;
+    FONT-WEIGHT: bold;
+    MARGIN: 0pt 0pt 0pt 0pt
+}
+h4
+{
+    COLOR: #D37C0B;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 8pt;
+    FONT-WEIGHT: bold;
+    MARGIN: 0pt 0pt 0pt 0pt
+}
+h4.red
+{
+    COLOR: #FF0000;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 8pt;
+    FONT-WEIGHT: bold;
+    MARGIN: 0pt 0pt 0pt 0pt
+}
+p
+{
+    COLOR: black;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 8pt;
+    MARGIN: 0pt 0pt 0pt 0pt
+}
+p.red
+{
+    COLOR: #FF0000;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 8pt;
+    FONT-WEIGHT: bold;
+    MARGIN: 0pt 0pt 0pt 0pt
+}
+a
+{
+	color: #000000;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 8pt;
+	TEXT-DECORATION: none;
+	margin: 0px;
+	padding: 0px;
+}
+a:hover
+{
+	color: #D81414;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 8pt;
+	TEXT-DECORATION: none;
+	margin: 0px;
+	padding: 0px;
+}
+form
+{
+ 	margin: 0px;
+	padding: 0px;
+}
+td
+{
+	COLOR: black;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 8pt;
+	vertical-align: top;
+	margin: 0px;
+	padding: 0px;
+}
+td.top
+{
+	BACKGROUND-COLOR: #FFFFFF;
+	BACKGROUND-IMAGE: url(media/menutile.gif);
+	COLOR: black;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 8pt;
+	FONT-WEIGHT: bold;
+	VERTICAL-ALIGN: middle;
+	margin: 0px;
+	padding: 0px;
+}
+td.middle
+{
+	COLOR: black;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 8pt;
+	vertical-align: middle;
+	margin: 0px;
+	padding: 0px;
+}
+table
+{
+	margin: 0px;
+	padding: 0px;
+}
+table.border
+{
+	BACKGROUND-COLOR: #FFFFFF;
+	border: 1px solid #000000;
+	margin: 0px;
+	padding: 0px;
+}
+li
+{
+	list-style-image: url(media/li.gif);
+	list-style-position: outside;
+	list-style-type: none;
+	COLOR: black;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 8pt;
+	MARGIN: 0px 0px 4px 20px;
+}
+tr
+{
+	vertical-align: top
+	margin: 0px;
+	padding: 0px;
+}
+tr.head
+{
+	BACKGROUND-COLOR: #FE9915;
+	margin: 0px;
+	padding: 0px;
+}
+tr.table
+{
+	BACKGROUND-COLOR: #FFFFFF;
+	margin: 0px;
+	padding: 0px;
+}
+b.background
+{
+	BACKGROUND-COLOR: #316AC5;
+	COLOR: white;
+	FONT-WEIGHT: normal;
+}
+
+div.top
+{
+	margin: 0px;
+	padding: 5px 10px 0px 10px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 880px;
+	height: 25px;
+	color: #ffffff;
+	background-color: #FDBC4B;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 11pt;
+	text-align: right;
+}
+
+div.image
+{
+	margin: 0px;
+	padding: 0px 0px 0px 0px;
+	position: absolute;
+	top: 30px;
+	left: 0px;
+	width: 900px;
+	height: 46px;
+	background-image: url("webicons/menubar.gif");
+	background-position: center top;
+	background-repeat: no-repeat;
+	background-color: #021361;
+}
+
+div.menutitle
+{
+	margin: 0px;
+	padding: 5px 10px 0px 10px;
+	position: absolute;
+	top: 76px;
+	left: 0px;
+	width: 880px;
+	height: 25px;
+	color: #ffffff;
+	background-color: #aaaaaa;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 11pt;
+	text-align: left;
+}
+
+div.menu
+{
+	margin: 0px;
+	padding: 10px 10px 10px 10px;
+	position: absolute;
+	top: 106px;
+	left: 0px;
+	width: 880px;
+	height: 32px;
+	color: #000000;
+	background-color: #eeeeee;
+	text-align: left;
+}
+
+div.menuleft
+{
+	margin: 0px;
+	padding: 10px 10px 10px 10px;
+	position: absolute;
+	top: 106px;
+	left: 0px;
+	width: 700px;
+	height: 32px;
+	color: #000000;
+	background-color: #eeeeee;
+	text-align: left;
+}
+
+div.menuright
+{
+	margin: 0px;
+	padding: 10px 10px 10px 10px;
+	position: absolute;
+	top: 106px;
+	left: 700px;
+	width: 180px;
+	height: 32px;
+	color: #000000;
+	background-color: #eeeeee;
+	text-align: left;
+}
+
+div.main
+{
+	margin: 0px;
+	padding: 10px 10px 10px 10px;
+	position: absolute;
+	top: 158px;
+	left: 0px;
+	width: 878px;
+	color: black;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	background-color: #eaeaea;
+	border: 1px solid #000000;
+}
+
+div.mainleft
+{
+	margin: 0px;
+	padding: 10px 10px 10px 10px;
+	position: absolute;
+	top: 158px;
+	left: 0px;
+	width: 448px;
+	color: black;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	background-color: #eaeaea;
+	border: 1px solid #000000;
+}
+
+div.mainright
+{
+	margin: 0px;
+	padding: 10px 10px 10px 10px;
+	position: absolute;
+	top: 158px;
+	left: 470px;
+	width: 408px;
+	color: black;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	background-color: #eaeaea;
+	border: 1px solid #000000;
+}
+
+div.topborder
+{
+	border: 1px solid;
+	border-color: #c6c6c6 #eaeaea #eaeaea #eaeaea
+}
+
+a.menu
+{
+    color: #000000;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 8pt;
+    MARGIN: 0pt;
+    TEXT-DECORATION: none;
+}
+
+a.menu:hover
+{
+    color: #ff0000;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 8pt;
+    MARGIN: 0pt;
+    TEXT-DECORATION: none;
+}
+
+img
+{
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+
+img.menu
+{
+	border: 0px;
+	margin: 0px;
+	padding: 1px 3px 1px 3px;
+}
+
+img.taskicon
+{
+	border: 0px;
+	margin: 0px;
+	padding: 0px 0px 0px 0px;
+	position: relative;
+	top: 2px;
+}
+
+img.border
+{
+	border: 1px solid #000000;
+	margin: 0px;
+	padding: 0px;
+}
+
+span.border
+{
+	margin: 0px;
+	padding: 5px;
+	border: 1px solid #000000;
+}
+input
+{
+    COLOR: black;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 8pt;
+	margin: 0px;
+	padding: 0px;
+}
+textarea
+{
+    COLOR: black;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 8pt;
+	margin: 0px;
+	padding: 0px;
+}
+select
+{
+    COLOR: black;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 8pt;
+	margin: 0px;
+	padding: 0px;
+}

@@ -127,8 +127,9 @@ class Presentation extends Smarty {
 	 * @return tags to include in <head> at all pages
 	 */
 	function getCommonHeadTags() {
+		$theme = '/themes/pe';
 		return 
-			'<link href="'.getConfig('repos_web').'/themes/simple/css/repos-standard.css" rel="stylesheet" type="text/css" />' .
+			'<link href="'.getConfig('repos_web').$theme.'/css/repos-standard.css" rel="stylesheet" type="text/css" />' .
 			'<script type="text/javascript" src="'.getConfig('repos_web').'/scripts/head.js" />';
 	}
 	

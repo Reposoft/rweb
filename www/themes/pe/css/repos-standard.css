@@ -1,0 +1,210 @@
+/* repository visualization, minimal number of classes */
+body {
+    COLOR: black;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 0.8em;
+}
+td {
+	COLOR: black;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 0.8em;
+	vertical-align: top;
+}
+th {
+    COLOR: black;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 0.8em;
+}
+code {
+	font-size: 1.1em;
+}
+a {
+	color: #000000;
+	text-decoration: none;
+}
+a:hover {
+	color: #D81414;
+	text-decoration: none;
+}
+h1 {
+    color: #D89210;
+}
+h2 {
+    color: #D37C0B;
+}
+h3 {
+    color: #D37C0B;
+}
+pre {
+	font-size: 1.2em;
+}
+/* allow transparency in .png in explorer */
+img { 
+	
+}
+/* page layout themes */
+.info {
+	border: 2px solid #aaaaaa;
+	border-collapse: collapse;
+	padding: 16px;
+}
+th.info {
+	font-weight: normal;
+	letter-spacing: 0.2em;
+	border: 2px solid aaaaaa;
+}
+/* repository view page (like index and log) layout */
+.titlebar {
+	padding: 3px;
+	padding-left: 10px;
+	background-color: #FDBC4B;
+	font-size: 1.0em;
+}
+.commandbar {
+	padding: 3px;
+	padding-left: 10px;
+	background-color: #eeeeee;
+	border: 1px solid #aaaaaa;
+}
+.workarea {
+	padding: 10px;
+}
+.workarea p {
+	margin: 1px;
+}
+.listhead {
+	background-color:#555555; 
+	border: 1px solid #FFFFFF;
+	padding-left:3px; 
+	padding-right:5px; 
+	white-space:nowrap;
+}
+.footer {
+	font-size: 0.7em;
+	padding: 3px;
+	padding-left: 10px;
+	border: 1px solid #aaaaaa;
+	clear: both;
+	background-color: #FDBC4B;
+}
+/* layout of version control concepts, these are usually span tags */
+.path {
+	color: #081863;
+}
+.filename {
+	color: #081863;
+}
+.revision {
+	color: #006600;
+}
+.username {
+	color: #663300;
+}
+.datetime {
+	color: #666666;
+}
+.error {
+	color: #CC3300;
+}
+/* commands = toolbarbuttons, <a> is  active, <span> is greyed out */
+a.command {
+	padding: 0px 3px;
+	font-size: smaller;
+	margin-left: 2px;
+	margin-right: 2px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+span.command {
+	color: #BBBBBB;
+	padding: 0px 3px;
+	font-size: smaller;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+/* action is for buttons inside listings, <a> is  active, <span> is greyed out */
+a.action {
+	background-color: #F0F0EE;
+	padding: 0px 3px;
+	font-size: smaller;
+	border-top: 1px solid #DDDDDD;
+	border-right: 1px solid #CCCCCC;
+	border-bottom: 1px solid #DDDDDD;
+	border-left: 1px solid #CCCCCC;
+	margin-left: 2px;
+	margin-right: 2px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+span.action {
+	display: none;
+	background-color: #F0F0EE;
+	color: #BBBBBB;
+	padding: 0px 3px;
+	font-size: smaller;
+	border-top: 1px solid #DDDDDD;
+	border-right: 1px solid #CCCCCC;
+	border-bottom: 1px solid #DDDDDD;
+	border-left: 1px solid #CCCCCC;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+/* -------- forms ---------
+<form>
+<fieldset>
+  <legend>Upload to repos.se</legend>
+  <p>
+    <label for="name">file name</label>
+    <input id="name" type="text" name="name" />
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" type="submit" value="Submit" />
+  </p>
+</fieldset>
+</form>
+
+*/
+fieldset {
+	border:2px solid #aaaaaa;
+	border-collapse:collapse;
+	padding:2em;
+}
+legend {
+	background-color:#aaaaaa;
+	font-size:0.7em;
+	padding:0.1em;
+	color:#FFFFFF;
+}
+label {
+	float:left;
+	width:25%;
+	margin-right:0.5em;
+	padding-top:0.2em;
+	text-align:right;
+	font-weight:normal;
+}
+input
+{
+    COLOR: black;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 8pt;
+	margin: 0px;
+	padding: 0px;
+}
+textarea
+{
+    COLOR: black;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 8pt;
+	margin: 0px;
+	padding: 0px;
+}
+select
+{
+    COLOR: black;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 8pt;
+	margin: 0px;
+	padding: 0px;
+}
