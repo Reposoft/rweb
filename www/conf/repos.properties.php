@@ -151,9 +151,9 @@ function repos_getSelfQuery() {
  * @returns stdout and stderr output from the command, one array element per row. 
  *   Last element is the return code (use array_pop to remove).
  */
-function repos_runCommand($commandName, $concatenatedArguments) {
-	echo(_repos_getFullCommand($commandName, $concatenatedArguments)); exit;
-	exec("$wrapper$command $args 2>&1", $output, $returnvalue);
+function repos_runCommand($commandName, $argumentsString) {
+	//echo _repos_getFullCommand($commandName, $argumentsString); exit;
+	exec(_repos_getFullCommand($commandName, $argumentsString), $output, $returnvalue);
 	$output[] = $returnvalue;
 	return $output;
 }
@@ -164,30 +164,32 @@ function repos_runCommand($commandName, $concatenatedArguments) {
  * @param everything that should be after the blankspace following the command
  * @returns the return code of the execution. Any messages have been passed through.
  */
-function repos_passthruCommand($commandName, $concatenatedArguments) {
-	$command = getCommand($commandName);
-	$wrapper = _repos_getScriptWrapper();
-	if (strlen($wrapper)>0) {
-		$command = ' '.$command;
-		$args = escapeshellarg($concatenatedArguments); //must be treated as one argument first
-	} else {
-		$args = $concatenatedArguments;
-	}
-	echo("$wrapper$command $args 2>&1"); exit;
-	passthru("$wrapper$command $args 2>&1", $returnvalue);
+function repos_passthruCommand($commandName, $argumentsString) {
+	passthru(_repos_getFullCommand($commandName, $argumentsString), $returnvalue);
 	return $returnvalue;
 }
 
-function _repos_getFullCommand($commandName, $concatenatedArguments) {
+function _repos_getFullCommand($commandName, $argumentsString) {
 	$command = getCommand($commandName);
 	$wrapper = _repos_getScriptWrapper();
 	if (strlen($wrapper)>0) {
 		$command = ' '.$command;
-		$args = escapeshellarg($concatenatedArguments); //must be treated as one argument first
-	} else {
-		$args = $concatenatedArguments;
+		$argumentsString = _repos_escapeForWrapper($argumentsString);
 	}
-	return "$wrapper$command $args 2>&1";
+	return "$wrapper$command $argumentsString 2>&1";
+}
+
+function _repos_escapeForWrapper($argumentsString) {
+	$a = explode('"', $argumentsString);
+	$anew = $a[0];
+	for ($i=1; $i<count($a); $i++) {
+		if ($i%2==1) {
+			$anew .= '"\"'.$a[$i];
+		} else {
+			$anew .= '\""'.$a[$i];
+		}
+	}
+	return $anew;
 }
 
 /**
