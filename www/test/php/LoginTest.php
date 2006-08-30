@@ -122,7 +122,7 @@ class LoginTest extends PHPUnit_Framework_TestCase
 	}
 	
 	public function testVerifyLogin() {
-		if (isSSLSupported()) {
+		if (login_isSSLSupported()) {
 			// test demo account authentication
 			$_SERVER['PHP_AUTH_USER'] = 'svensson';
 			$_SERVER['PHP_AUTH_PW'] = 'medel';
@@ -133,7 +133,7 @@ class LoginTest extends PHPUnit_Framework_TestCase
 	}
 	
 	public function testVerifyLoginFail() {
-		if (isSSLSupported()) {
+		if (login_isSSLSupported()) {
 			// test demo account authentication
 			$_SERVER['PHP_AUTH_USER'] = 'svensson';
 			$_SERVER['PHP_AUTH_PW'] = 'medel';
@@ -149,7 +149,7 @@ class LoginTest extends PHPUnit_Framework_TestCase
 	}
 	
 	public function testGetHttpHeadersAuth() {
-	if (isSSLSupported()) {	
+	if (login_isSSLSupported()) {	
 		$headers = getHttpHeaders("https://www.repos.se/sweden");
 		$this->assertTrue(count($headers) > 0);
 		$this->assertEquals("HTTP/1.1 401 Authorization Required", $headers[0]);
@@ -157,7 +157,7 @@ class LoginTest extends PHPUnit_Framework_TestCase
 	}
 	
 	public function testGetHttpHeadersAuthFailed() {
-	if (isSSLSupported()) {
+	if (login_isSSLSupported()) {
 		$headers = my_get_headers("https://www.repos.se/sweden",'nonexistinguser','qwerty');
 		$this->assertTrue(count($headers) > 0);
 		$this->assertEquals("HTTP/1.1 401 Unauthorized", $headers[0]);

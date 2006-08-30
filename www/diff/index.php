@@ -20,6 +20,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 echo '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
 echo "<!-- SVN diff for .$url. -->\n";
 echo '<diff repo="'.getRepositoryUrl().'" target="'.$_GET['target'].'" revfrom="'.$revfrom.'" revto="'.$revto.'"><plaintext>' . "\n";
-svnPassthru($cmd,true);
+echo "<![CDATA[\n";
+$returnvalue = login_svnPassthru($cmd);
+if ($returnvalue) login_handleSvnError($cmd, $returnvalue);
+echo "]]>\n";
 echo '</plaintext></diff>';
 ?>

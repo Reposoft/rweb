@@ -1,0 +1,11 @@
+* Only show if this is the top frame
+
+* show select language
+
+* show select theme
+
+* show home button
+
+* Entire html as ajax or generate in js?
+
+* set any images that depend on theme?

@@ -79,7 +79,8 @@ class Presentation extends Smarty {
 		if (!$resource_name) {
 			$resource_name = $this->getDefaultTemplate();
 		}
-		if ($this->isRedirectBeforeDisplay()) {
+		if (//debug// false && 
+		  $this->isRedirectBeforeDisplay()) {
 			// TODO how to get PHP errors and warnings into the result page instead of before the redirect
 			$file = tempnam(getTempDir('pages'),'');
 			$handle = fopen($file, "w");

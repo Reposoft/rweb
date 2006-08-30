@@ -248,6 +248,9 @@ function debug() {
 	print_r($repos_config);
 	echo "\n==== Server variables ===\n";
 	print_r($_SERVER);
+	echo "\n==== Command line environment ===\n";
+	$output = repos_runCommand('env','');
+	print_r($output);
 	echo "</pre>\n";
 }
 

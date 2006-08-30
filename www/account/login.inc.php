@@ -300,51 +300,51 @@ function getReposAuth() {
 }
 
 // *** Subversion client usage ***
-define('SVN_CONFIG_DIR', DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'svn-config-dir');
+define('SVN_CONFIG_DIR', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'svn-config-dir');
 
 /**
  * Execute svn command like the PHP passthru() function
  * @param cmd The command without the SVN part, for example 'log /url/to/repo'
  * @param cdata True if the result should be enclosed in CDATA tag
- * WARNING the current error handling runs the command again, so this is only suitable for readonly commands
+ * @return return value of the execution.
+ *   If returnval!=0, login_handleSvnError may be used to get error message compatible with the styleshett.
  */
-function svnPassthru($cmd, $cdata=false) {
-	$runthis = getSvnCommand().escapeshellcmd($cmd);
-	if($cdata) echo "<![CDATA[\n";
-	passthru($runthis,$returnval);
-	if($cdata) echo "]]>\n";
-	if($returnval) handleSvnError($runthis,$returnval);
+function login_svnPassthru($cmd) {
+	$operation = escapeshellcmd($cmd);
+	$svnCommand = login_getSvnSwitches().' '.$operation;
+	$returnval = repos_passthruCommand('svn', $svnCommand);
+	return $returnval;
 }
 
 /**
- * @return Start of command line for executing svn operations, with tailing space
+ * @return Mandatory arguments to the svn command
  */
-function getSvnCommand() {
-	$auth = '--username='.getReposUser().' --password='.getReposPass().' --no-auth-cache ';
-	$repos_install_root = dirname(rtrim(dirname(__FILE__),DIRECTORY_SEPARATOR));
-	$options = '--non-interactive --config-dir '.$repos_install_root.SVN_CONFIG_DIR.' ';
-	return 'svn '.$auth.$options;
+function login_getSvnSwitches() {
+	$auth = '--username='.getReposUser().' --password='.getReposPass().' --no-auth-cache';
+	$options = '--non-interactive --config-dir "'.SVN_CONFIG_DIR.'"';
+	return $auth.' '.$options;
 }
 
 /**
- * Errorhandling for SVN execute.
- * WARNING: runs the command agin, and is only suatable for read-only commands
- * (as is this entire PHP solution)
+ * Renders error message as XML if SVN command fails. Use trigger_error for normal error message.
  */
-function handleSvnError($executedcmd,$errorcode) {
+function login_handleSvnError($executedcmd, $errorcode, $output = Array()) {
 	echo "<error code=\"$errorcode\">\n";
-	if(isset($_GET['DEBUG'])) echo '<exec cmd="'.strtr($executedcmd,'"',"'").'"/>';
-	echo "<![CDATA[\n";
-	// show error message
-	passthru("$executedcmd 2>&1");
-	echo "]]>\n";
+	if (isset($_GET['DEBUG'])) {
+		echo '<exec cmd="'.strtr($executedcmd,'"',"'").'"/>';
+	}
+	if (is_array($output)) {
+		foreach ($output as $row) {
+			echo '<output line="'.$row.'"/>';
+		}
+	}
 	echo "</error>\n";
 }
 
 /**
  * @return true if the server's PHP installation has the SSL extension
  */
-function isSSLSupported() {
+function login_isSSLSupported() {
 	return function_exists('openssl_open');
 }
 
@@ -353,7 +353,7 @@ function isSSLSupported() {
 function my_get_headers($url, $httpUsername, $httpPassword) {
    $url_info=parse_url($url);
    if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
-   	if (!isSSLSupported()) {
+   	if (!login_isSSLSupported()) {
 		trigger_error("Repos error: $url is a secure URL but this server does not have OpenSSL support in PHP");
 		exit;
 	}

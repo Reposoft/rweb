@@ -113,10 +113,11 @@ class Edit {
 	/**
 	 * Runs the operation securely (no risk for shell command injection)
 	 */
-	function execute() {
-		$cmd = getSvnCommand() . $this->getCommand();
-		// execute with 2>&1 to get errors into the output array
-		$this->result = exec("$cmd 2>&1", $this->output, $this->returnval);
+	function execute() {	
+		$cmd = login_getSvnSwitches().' '.$this->getCommand();
+		$this->output = repos_runCommand('svn', $cmd);
+		$this->returnval = array_pop($this->output);
+		$this->result = $this->output[count($this->output)-1];
 	}
 	
 	/**

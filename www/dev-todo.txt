@@ -1,0 +1,4 @@
+* Move repos.properties and reposrun.sh to location that can not be accessed through the web.
+
+* Protect conf dir for web access.
+

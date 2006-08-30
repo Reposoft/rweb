@@ -11,13 +11,6 @@ error_reporting(E_ALL);
  * Also contains some generic functions needed everywhere.
  */
 
-// repos_getSelfRoot(): Current server's root url, no tailing slash
-
-// repos_getSelfUrl(): The url that the browser used to get the current page, _excluding_ query string
-
-// Complete self url = repos_getSelfUrl().'?'.repos_getSelfQuery();
-
-
 // pages that can be included from anywhere need to use __FILE__ to do their own includes
 $propertiesFile = dirname(dirname(dirname(__FILE__))) . '/repos.properties';
 if (!file_exists($propertiesFile)) {
@@ -79,87 +72,61 @@ function getTempnamDir($subdir='') {
        return false;
 }
 
+/**
+ * Removes a directory created using getTempDir or getTempnamDir
+ * @param directory absolute path
+ */
 function removeTempDir($directory) {
 	if (strpos($directory, getTempDir())===false) {
 		trigger_error("Can not remove non-temp dir $dir."); exit;
 	}
-	// if the path has a slash at the end we remove it here
 	rtrim($directory, DIRECTORY_SEPARATOR);
-
-	// if the path is not valid or is not a directory ...
-	if(!file_exists($directory) || !is_dir($directory))
-	{
-		// ... we return false and exit the function
-		return FALSE;
-
-	// ... if the path is not readable
-	}elseif(!is_readable($directory))
-	{
-		// ... we return false and exit the function
-		return FALSE;
-
-	// ... else if the path is readable
-	}else{
-
-		// we open the directory
+	if(!file_exists($directory) || !is_dir($directory)) {
+		return false;
+	} elseif(!is_readable($directory)) {
+		return false;
+	} else {
 		$handle = opendir($directory);
-
-		// and scan through the items inside
-		while (FALSE !== ($item = readdir($handle)))
-		{
-			// if the filepointer is not the current directory
-			// or the parent directory
-			if($item != '.' && $item != '..')
-			{
-				// we build the new path to delete
+		while (false !== ($item = readdir($handle))) {
+			if ($item != '.' && $item != '..') {
 				$path = $directory.'/'.$item;
-
-				// if the new path is a directory
-				if(is_dir($path)) 
-				{
-					// we call this function with the new path
+				if(is_dir($path)) {
 					removeTempDir($path);
-
-				// if the new path is a file
-				}else{
-					// we remove the file
+				} else {
 					unlink($path);
 				}
 			}
 		}
-		// close the directory
 		closedir($handle);
-
-		// try to delete the now empty directory
-		if(!rmdir($directory))
-		{
-			// return false if not possible
-			return FALSE;
+		if(!rmdir($directory)) {
+			return false;
 		}
-
-		// return success
-		return TRUE;
+		return true;
 	}
 }
 
 // --- helper functions for pages to refer to internal urls ---
 
+// repos_getSelfRoot(): Current server's root url, no tailing slash
 function repos_getWebappRoot() {
 	return getConfig('repos_web');
 }
 
+
+// repos_getSelfUrl(): The url that the browser used to get the current page, excluding query string
 function repos_getSelfRoot() {
 	$url = 'http';
 	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') $url .= 's';
 	$url .= '://' . $_SERVER['SERVER_NAME'];
 	if($_SERVER['SERVER_PORT']==80 || $_SERVER['SERVER_PORT']==443) {
-		// do not append port number
+		// standard port number, do not append
 	} else {
 		$url .= ':'.$_SERVER['SERVER_PORT'];
 	}
 	return $url;
 }
 
+// Complete self url = repos_getSelfUrl().'?'.repos_getSelfQuery();
 function repos_getSelfUrl() {
 	$uri = $_SERVER['REQUEST_URI'];
 	$q = strpos($uri, '?');
@@ -172,6 +139,67 @@ function repos_getSelfUrl() {
 
 function repos_getSelfQuery() {
 	return $_SERVER['QUERY_STRING'];
+}
+
+// ---- functions through which all command execution should go ---
+
+/**
+ * Executes a given comman on the command line.
+ * This function does not deal with security. Everything must be properly escaped.
+ * @param a command like 'whoami'
+ * @param everything that should be after the blankspace following the command,
+ * @returns stdout and stderr output from the command, one array element per row. 
+ *   Last element is the return code (use array_pop to remove).
+ */
+function repos_runCommand($commandName, $concatenatedArguments) {
+	echo(_repos_getFullCommand($commandName, $concatenatedArguments)); exit;
+	exec("$wrapper$command $args 2>&1", $output, $returnvalue);
+	$output[] = $returnvalue;
+	return $output;
+}
+
+/**
+ * Executes a given comman on the command line and does passthru on the output
+ * @param a command like 'whoami'
+ * @param everything that should be after the blankspace following the command
+ * @returns the return code of the execution. Any messages have been passed through.
+ */
+function repos_passthruCommand($commandName, $concatenatedArguments) {
+	$command = getCommand($commandName);
+	$wrapper = _repos_getScriptWrapper();
+	if (strlen($wrapper)>0) {
+		$command = ' '.$command;
+		$args = escapeshellarg($concatenatedArguments); //must be treated as one argument first
+	} else {
+		$args = $concatenatedArguments;
+	}
+	echo("$wrapper$command $args 2>&1"); exit;
+	passthru("$wrapper$command $args 2>&1", $returnvalue);
+	return $returnvalue;
+}
+
+function _repos_getFullCommand($commandName, $concatenatedArguments) {
+	$command = getCommand($commandName);
+	$wrapper = _repos_getScriptWrapper();
+	if (strlen($wrapper)>0) {
+		$command = ' '.$command;
+		$args = escapeshellarg($concatenatedArguments); //must be treated as one argument first
+	} else {
+		$args = $concatenatedArguments;
+	}
+	return "$wrapper$command $args 2>&1";
+}
+
+/**
+ * Might be nessecary to run all commands through a script that sets up a proper execution environment
+ * for example locale for subversion.
+ * @return wrapper script name if needed, or empty string if not needed
+ */
+function _repos_getScriptWrapper() {
+	if (isWindows()) {
+		return '';
+	}
+	return dirname(dirname(dirname(__FILE__))).'/reposrun.sh';
 }
 
 // ------ functions to keep scripts portable -----
@@ -226,6 +254,8 @@ function getCommand($command) {
 			return ( isWindows() ? false : USRBIN . 'gunzip' );
 		case 'whoami':
 			return 'whoami';
+		case 'env':
+			return ( isWindows() ? 'set' : USRBIN . 'env' );
 	}
 	return "\"Error: Repos does not support command '$command'\"";
 }
@@ -234,6 +264,7 @@ function getCommand($command) {
 
 /**
  * @return true if scripts should run self-test
+ * @deprecated use phpunit instead. remove when admin scripts no longer use this.
  */
 function isTestRun() {
 	global $argv;

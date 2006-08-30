@@ -477,10 +477,17 @@
 			</tr>
 		</table>
 	</xsl:template>
+	<!--
+	========= special contents ==========
+	-->
 	<xsl:template match="plaintext">
 		<pre>
 			<xsl:value-of select="."/>
 		</pre>
+	</xsl:template>
+	<xsl:template match="display">
+		<iframe src="{@src}" name="displayFrame" width="100%" height="100%" scrolling="auto">
+		</iframe>
 	</xsl:template>
 	<!--
 	========= svn cat formatting ==========
@@ -498,6 +505,7 @@
 						<xsl:call-template name="showicon">
 							<xsl:with-param name="filetype" select="'_parent'"/>
 						</xsl:call-template>back</a>
+					<a class="command" href="{$rurl}/cat/?repo={@repo}&amp;target={@target}&amp;rev={@rev}&amp;open=1">download this file</a>
 				</td>
 			</tr>
 			<tr>
@@ -508,13 +516,10 @@
 						</span>
 						<xsl:value-of select="$spacer"/>
 						<span class="revision">
-							<xsl:text>from revision </xsl:text>
+							<xsl:text>version </xsl:text>
 							<xsl:value-of select="@rev"/>
 						</span>
 					</h2>
-					<p>
-						<a class="action" href="{$rurl}/cat/?repo={@repo}&amp;target={@target}&amp;rev={@rev}&amp;open=1">open old file</a>
-					</p>
 					<xsl:apply-templates select="*"/>
 				</td>
 			</tr>
@@ -525,7 +530,7 @@
 			</tr>
 		</table>
 	</xsl:template>
-	<!-- ====== error node ======== -->
+	<!-- ====== error node, deprecated (remove when login.inc.php svnerror is not used anymore) ======== -->
 	<xsl:template match="error">
 		<xsl:param name="possible-cause"/>
 		<h2 class="error">An error has occured</h2>
@@ -535,9 +540,14 @@
 			<xsl:value-of select="$spacer"/>
 			<xsl:value-of select="$possible-cause"/>
 		</p>
-		<pre class="error">
-			<xsl:value-of select="."/>
+		<xsl:apply-templates select="*"/>
+		<!-- finally copy all text contents because there might have been unstructured output before the error occured -->
+		<pre>
+			<xsl:value-of select="/"/>
 		</pre>
+	</xsl:template>
+	<xsl:template match="output">
+		<p><xsl:value-of select="@line"/></p>
 	</xsl:template>
 	<!-- *** replace newline with <br> *** -->
 	<xsl:template name="linebreak">
