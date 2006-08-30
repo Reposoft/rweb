@@ -23,7 +23,7 @@ if ($justOpen) {
 	header('Content-type: text/xml');
 	echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 	echo '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
-	echo "<!-- SVN cat for .$url. -->\n";
+	echo "<!-- SVN cat for $url -->\n";
 	echo '<cat repo="'.getRepositoryUrl().'" target="'.getTarget().'" rev="'.$rev.'"><plaintext>' . "\n";
 	echo "<![CDATA[\n";
 }
