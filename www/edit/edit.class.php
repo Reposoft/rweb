@@ -2,7 +2,19 @@
 // common functionality in the edit tools
 require_once( dirname(rtrim(dirname(__FILE__), DIRECTORY_SEPARATOR))."/account/login.inc.php" );
 
-// TODO need a generic solution to avoid double POST on refresh
+// Set HTTP output character encoding to UTF-8
+mb_http_output('UTF-8');
+// Start buffering and specify "mb_output_handler" as callback function
+ob_start('mb_output_handler');
+
+if (mb_http_input()==false) {
+	trigger_error("Server setup error. Multibyte string HTTP input encoding is not supported.");
+	exit;
+}
+if (mb_http_input()=="UTF-8") {
+	trigger_error("Character encoding is ".mb_http_input().", not UTF-8");
+	exit;
+} 
 
 // the repository write operation class
 class Edit {
