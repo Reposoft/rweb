@@ -72,7 +72,7 @@ class Edit {
 	 *  (for example urlencoding for a new filename from input box)
 	 */
 	function _addArgument($nextArgument) {
-		$this->args[count($this->args)] = $nextArgument;
+		$this->args[] = $nextArgument;
 	}
 
 	/**
@@ -89,14 +89,25 @@ class Edit {
 	 */
 	function getCommand() {
 		// command and message
-		$cmd = escapeshellcmd($this->operation) . ' ';
+		$cmd = $this->escapeCommand($this->operation);
 		if ($this->commitWithMessage) { // commands expecting a message need this even if it is empty
-			$cmd .= '-m "'.escapeshellcmd($this->message).'" ';
+			$cmd .= ' -m '.$this->escapeArgument($this->message);
 		}
 		// arguments, enclosed in strings to allow spaces
-		array_walk($this->args, 'escapeshellcmd');
-		$cmd .= '"'.implode('" "', $this->args).'"';
+		foreach ($this->args as $arg) {
+			$cmd .= ' '.$this->escapeArgument($arg);
+		}
 		return $cmd;
+	}
+	
+	// Commands are the first element on the command line and can not be enclosed in quotes
+	function escapeCommand($command) {
+		return escapeshellcmd($command);
+	}
+	
+	// Encloses an argument in quotes and escapes any quotes within it
+	function escapeArgument($argument) {
+		return '"'.str_replace('"', '\\"', $argument).'"';
 	}
 	
 	/**
