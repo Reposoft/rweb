@@ -77,6 +77,10 @@ function geturl_makePopupFrame(left, width, titleText) {
 	o.id = 'repos-geturl';
 	geturl_setStyle(o, 0, '48%', left+'px', '60px', width+'px', '#eeeeee');
 	o.style.border = 'solid 1px #999999';
+	o.onkeypress = function(ev) { // hide on ESC
+		if(ev && ev.keyCode == 27) getUrlClose();
+		if(window.event && window.event.keyCode == 27) getUrlClose();
+	}
 	// make the titlebar
 	var title = geturl_createElement('div');
 	title.id = 'repos-geturl-title';
@@ -100,6 +104,7 @@ function geturl_makePopupFrame(left, width, titleText) {
 	var aClose = geturl_createElement('a');
 	aClose.id = 'repos-geturl-closelink';
 	aClose.href = '#';
+	aClose.title = 'Esc';
 	aClose.style.color = '#666666';
 	aClose.style.textDecoration = 'none';
 	aClose.style.fontFamily = 'Arial, Helvetica, sans-serif';
@@ -155,3 +160,15 @@ function geturl_createElement(tagname) {
 		return document.createElement(tagname);	
 	}
 }
+
+getKeyCode = function(ev)
+	{
+		if(ev)			//Moz
+		{
+			return ev.keyCode;
+		}
+		if(window.event)	//IE
+		{
+			return window.event.keyCode;
+		}
+	};
