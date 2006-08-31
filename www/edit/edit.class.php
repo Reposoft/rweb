@@ -114,8 +114,10 @@ class Edit {
 	
 	// Encloses an argument in quotes and escapes any quotes within it
 	function escapeArgument($argument) {
-		// assume that magic quotes is enables, escapeshellarg is not needed
-		return '"'.$argument.'"';
+		// Shell metacharacters are: & ; ` ' \ " | * ? ~ < > ^ ( ) [ ] { } $ \n \r (WWW Security FAQ [Stein 1999, Q37])
+		// assuming that magic quotes is enables, '"\ is already escaped
+		// double qoutes around the string escapes: *, ?, ~, ', &, <, >, |
+		return '"'.str_replace('`','\`',str_replace('$','\$',$argument)).'"';
 	}
 	
 	/**

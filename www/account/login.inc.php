@@ -166,12 +166,24 @@ function getReferer() {
     return false;
 }
 
+// ----- resource URL retreival functionality -----
+
+/**
+ * Decodes query string parameters that may be cleartext paths (as in svnindex)
+ * @param array the server variable, for example $_GET
+ * @param name the parameter name, for example 'path' as in ?path=/here/now/
+ * Returns the non-escaped URL or path or filename or whatever
+ */
+function login_decodeQueryParam($array, $name) {
+	return rawurldecode($array[$name]);
+}
+
 /**
  * @return path from repository root, ending with '/', non alphanumerical characters except '/' encoded
  */
 function getPath() {
 	if(!isset($_GET['path'])) return false;
-	$path = rawurldecode($_GET['path']);
+	$path = login_decodeQueryParam($_GET,'path');
     $path = rtrim($path,'/').'/';
 	return $path;
 }
@@ -180,7 +192,7 @@ function getPath() {
  * @return filename if defined, false if the target is not a file
  */
 function getFile() {
-	if (isset($_GET['file'])) return rawurldecode($_GET['file']);
+	if (isset($_GET['file'])) return login_decodeQueryParam($_GET,'file');
 	return false;
 }
 
@@ -197,7 +209,7 @@ function isTargetFile() {
  * @return target in repository from query paramters WITH tailing slash if it is a directory, false if none of 'target', 'file' and 'path' is defined
  */
 function getTarget() {
-	if(isset($_GET['target'])) return rawurldecode($_GET['target']);
+	if(isset($_GET['target'])) return login_decodeQueryParam($_GET,'target');
     // append filename if specified
     if(getFile()) return getPath() . getFile();
     return getPath();
