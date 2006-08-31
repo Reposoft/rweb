@@ -7,6 +7,12 @@ var _reposWeb = "/repos";
 // var _nocache = false;
 var _nocache = Math.random();
 
+// public flag to check if the page has loaded (is there no built in property for this?)
+var repos_page_loaded = false;
+function repos_setPageLoaded() { repos_page_loaded = true; }
+// assuming that nothing is in the onload before this
+window.onload = repos_setPageLoaded;
+
 function head_importStyles() {
 	
 }
