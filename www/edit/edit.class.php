@@ -11,8 +11,8 @@ if (mb_http_input()==false) {
 	trigger_error("Server setup error. Multibyte string HTTP input encoding is not supported.");
 	exit;
 }
-if (mb_http_input()=="UTF-8") {
-	trigger_error("Character encoding is ".mb_http_input().", not UTF-8");
+if (mb_http_input()!="UTF-8") {
+	trigger_error("Character encoding is '".mb_http_input()."', not 'UTF-8'");
 	exit;
 } 
 

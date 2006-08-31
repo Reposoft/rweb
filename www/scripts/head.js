@@ -4,6 +4,9 @@ var _headTag = document.getElementsByTagName("head")[0];
 var _namespace = "http://www.w3.org/1999/xhtml";
 var _reposWeb = "/repos";
 
+// var _nocache = false;
+var _nocache = Math.random();
+
 function head_importStyles() {
 	
 }
@@ -13,20 +16,23 @@ function head_importScripts() {
 }
 
 /**
+ * @param url URL (starting with slash) from repos www root folder
+ */
+function head_addReposScript(url) {
+	head_addServerScript(_reposWeb + url);
+}
+
+/**
  * @param url URL (starting with slash) from server root
  */
 function head_addServerScript(url) {
 	head_addScript(_headTag, url);
 }
 
-/**
- * @param url URL (starting with slash) from repos www root folder
- */
-function head_addReposScript(url) {
-	head_addScript(_headTag, _reposWeb + url);
-}
-
 function head_addScript(parentTag, absoluteUrl) {
+	if (_nocache) {
+		absoluteUrl += '?'+_nocache;	
+	}
 	var s = head_createElement("script");
 	s.type = "text/javascript";
 	s.src = absoluteUrl;

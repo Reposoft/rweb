@@ -172,11 +172,12 @@ function _repos_getFullCommand($commandName, $argumentsString) {
 	$run = getCommand($commandName);
 	$wrapper = _repos_getScriptWrapper();
 	if (strlen($wrapper)>0) {
+		// make one argument (to the wrapper) of the entire command
 		$run = ' '.escapeshellarg($run.' '.$argumentsString.' 2>&1');
 	} else {
-		$run += ' '.$argumentsString.' 2>&1';
+		$run += ' '.$argumentsString;
 	}
-	return "$wrapper$run";
+	return "$wrapper$run 2>&1";
 }
 
 /**

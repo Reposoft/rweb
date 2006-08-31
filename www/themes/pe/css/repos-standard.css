@@ -55,7 +55,7 @@ img {
 th.info {
 	font-weight: normal;
 	letter-spacing: 0.2em;
-	border: 2px solid aaaaaa;
+	border: 2px solid #aaaaaa;
 }
 /* repository view page (like index and log) layout */
 .titlebar {
