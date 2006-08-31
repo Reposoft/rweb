@@ -354,7 +354,7 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
    $url_info=parse_url($url);
    if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
    	if (!login_isSSLSupported()) {
-		trigger_error("Repos error: $url is a secure URL but this server does not have OpenSSL support in PHP");
+		trigger_error("Repos error: $url is a secure URL but this server does not have OpenSSL support in PHP.");
 		exit;
 	}
 	   $port = 443;
