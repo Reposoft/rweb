@@ -5,40 +5,15 @@
 <title>Repos getUrl demopage</title>
 <script type="text/javascript" src="geturl.js"></script>
 <link href="../../themes/simple/css/repos-standard.css" rel="stylesheet" type="text/css" />
-<style type="text/css">
-<!--
-.test {
-	font-weight:200;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 9px;
-	font-weight: normal;
-}
--->
-</style>
 </head>
 
-<body onload="document.getElementById('test-repos-geturl').style.display='none'">
+<body>
 <h1>repos getUrl</h1>
 <p><a accesskey="f" href="index.html#a" onclick="getUrl(this); return false;"><strong>F</strong>ile url</a></p>
 <p><a accesskey="d" href="dir/" onclick="getUrl(this); return false;"><strong>D</strong>ir url</a></p>
 <p><a accesskey="a" href="http://www.repos.se" onclick="getUrl(this); return false;"><strong>A</strong>bsolute url</a></p>
 <p><a accesskey="p" href="../" onclick="getUrl(this); return false;"><strong>P</strong>arent</a></p>
 <p><a accesskey="n" onclick="showUrl(' :// showUrl(explicit url)', 'using showUrl'); return false;"><strong>N</strong>o href</a></p>
-
-<hr />
-<h2>Popup design</h2>
-<p>Not dependent on external styles; all this is printed by the script</p>
-<p>This is currently not up to date. The latest styles are in the script.</p>
-<p><a onclick="document.getElementById('test-repos-geturl').style.display='inline'">show layout</a></p>
-<div id="test-repos-geturl" class="info" style="z-index:32000; position:absolute; top:48%; left:200px; width:400px; height:60px; border: solid thin #333333; background-color: #eeeeee;">
-	<div id="test-repos-geturl-title" style="z-index:32001; position:absolute; top:0px; left:0px; width:100%; height:22px; border-bottom: solid thin #333333;">
-		<span id="test-repos-geturl-caption">U&nbsp;R&nbsp;L</span>
-		<div id="test-repos-geturl-close" style="z-index:32002; position:absolute; top:2px; right:2px; width:16px; height:16px; border: solid thin #333333; text-align:center;">x</div>
-	</div>
-	<div id="test-repos-geturl-box" style="z-index:32001; position:absolute; top:22px; left:0px; width:100%; height:38px; text-align:center;">
-		<input id="test-repos-geturl-text" type="text" value="url" size="44" />
-	</div>
-</div>
 
 </body>
 
