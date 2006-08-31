@@ -1,12 +1,4 @@
-// don't want to link to an external stylesheet, because we wouldnt know the url
-var _geturl_style = 'z-index:32000; position:absolute; top:48%; height:60px; border: solid thin #333333; background-color: #f6f6f6;';
-var _geturltitle_style = 'z-index:32001; position:absolute; top:0px; left:0px; width:100%; height:22px; border-bottom: solid thin #333333; background-color: #dddddd;';
-var _geturlcaption_style = 'z-index:32002; position:absolute; top:4px; left:15px; color:#222222; font-family: Arial, Helvetica, sans-serif; font-size:11px;';
-var _geturlclose_style = 'z-index:32002; position:absolute; top:2px; right:2px; width:16px; height:16px; border: solid thin #333333; background-color: #eeeeee; text-align:center;';
-var _geturlcloselink_style = 'font-weight:bold; color:#222222; text-decoration:none; font-family: Arial, Helvetica, sans-serif; font-size:13px;';
-var _geturlbox_style = 'z-index:32001; position:absolute; top:22px; left:0px; width:100%; height:38px;';
-var _geturltext_style = 'position:absolute; top:10px; left:10px; border: 1px solid #666666; background:#eeeeee; font-family: Arial, Helvetica, sans-serif; font-size:10px;';
-var _geturl_title_prefix = 'URL: ';
+// repos getUrl (c) Staffan Olsson
 
 // the dom node to append the div to
 var objGetUrlParent;
@@ -14,6 +6,8 @@ var objGetUrlParent;
 var objGetUrl;
 // z-index for the frame
 var _geturlz = 32000;
+// popup titlebar
+var _geturl_title_prefix = 'URL: ';
 
 function getUrlClose() {
 	objGetUrl.style.display = 'none';

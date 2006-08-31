@@ -13,6 +13,7 @@ function head_importStyles() {
 
 function head_importScripts() {
 	head_addReposScript('/scripts/tmt-validator/setup.js');
+	head_addReposScript('/scripts/geturl/geturl.js');
 }
 
 /**

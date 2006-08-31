@@ -68,6 +68,8 @@
 				<link rel="shortcut icon" href="http://www.repos.se/favicon.ico"/>
 				<!-- install repos-quay, this row and an icon in the footer -->
 				<script type="text/javascript" src="/quay/repos-quay.js"></script>
+				<!-- install the repos script bundle -->
+				<script type="text/javascript" src="{$rurl}/scripts/head.js"></script>
 			</head>
 			<body>
 				<!-- supported contents -->
@@ -213,6 +215,7 @@
 				<a class="action" href="{$editUrl}/?action=rename&amp;path={../@path}/{@href}">rename</a>
 				<span class="action">copy</span>
 				<a class="action" href="{$editUrl}/?action=delete&amp;path={../@path}/{@href}">delete</a>
+				<a class="action" onclick="showUrl('{@href}', '{@name}')">show URL</a>
 			</xsl:if>
 		</p>
 	</xsl:template>
@@ -233,6 +236,7 @@
 				<span class="action">lock</span>
 				<a class="action" href="{$rurl}/upload/?path={../@path}&amp;file={@href}">upload changes</a>
 			</xsl:if>
+			<a class="action" onclick="showUrl('{@href}', '{@name}')">show URL</a>
 		</p>
 	</xsl:template>
 	<!-- generate icon based on filetype and settings -->
