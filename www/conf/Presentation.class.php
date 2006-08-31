@@ -130,8 +130,8 @@ class Presentation extends Smarty {
 	function getCommonHeadTags() {
 		$theme = '/themes/pe';
 		return 
-			'<link href="'.getConfig('repos_web').$theme.'/css/repos-standard.css" rel="stylesheet" type="text/css" />' .
-			'<script type="text/javascript" src="'.getConfig('repos_web').'/scripts/head.js" />';
+			'<link href="'.getConfig('repos_web').$theme.'/css/repos-standard.css" rel="stylesheet" type="text/css"></link>' .
+			'<script type="text/javascript" src="'.getConfig('repos_web').'/scripts/head.js"></script>';
 	}
 	
 	/**
