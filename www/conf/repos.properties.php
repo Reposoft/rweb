@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL);
 /**
  * Repos properties as php variables. Should be accessed through getConfig('key').
  *
@@ -10,6 +9,14 @@ error_reporting(E_ALL);
  *
  * Also contains some generic functions needed everywhere.
  */
+ 
+// --- global settings ---
+// during development, show all errors to the user
+error_reporting(E_ALL);
+// assume that magic quotes is enabled
+if (get_magic_quotes_gpc()!=1) {
+	trigger_error("This server does not have magic quotes enabled. Repos PHP requires that.");
+}
 
 // pages that can be included from anywhere need to use __FILE__ to do their own includes
 $propertiesFile = dirname(dirname(dirname(__FILE__))) . '/repos.properties';
@@ -152,6 +159,7 @@ function repos_getSelfQuery() {
  *   Last element is the return code (use array_pop to remove).
  */
 function repos_runCommand($commandName, $argumentsString) {
+	//echo (_repos_getFullCommand($commandName, $argumentsString)); exit;
 	exec(_repos_getFullCommand($commandName, $argumentsString), $output, $returnvalue);
 	$output[] = $returnvalue;
 	return $output;
@@ -173,7 +181,8 @@ function _repos_getFullCommand($commandName, $argumentsString) {
 	$wrapper = _repos_getScriptWrapper();
 	if (strlen($wrapper)>0) {
 		// make one argument (to the wrapper) of the entire command
-		$run = ' '.escapeshellarg($run.' '.$argumentsString.' 2>&1');
+		// using magic_quotes_gpc, existing single quotes are already escaped, but they must be adapted for shell
+		$run = " '".$run.' '.str_replace("\\'","'\\''",$argumentsString).' 2>&1'."'";
 	} else {
 		$run += ' '.$argumentsString;
 	}

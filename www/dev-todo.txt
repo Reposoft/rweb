@@ -2,3 +2,5 @@
 
 * Protect conf dir for web access.
 
+* Move some checks to the conf diagnostics, like magic quotes from repos.properties.php and multibyte from edit.class.php.
+

@@ -2,11 +2,6 @@
 // common functionality in the edit tools
 require_once( dirname(rtrim(dirname(__FILE__), DIRECTORY_SEPARATOR))."/account/login.inc.php" );
 
-// Set HTTP output character encoding to UTF-8
-mb_http_output('UTF-8');
-// Start buffering and specify "mb_output_handler" as callback function
-ob_start('mb_output_handler');
-
 if (mb_http_input()==false) {
 	trigger_error("Server setup error. Multibyte string HTTP input encoding is not supported.");
 	exit;
@@ -119,7 +114,8 @@ class Edit {
 	
 	// Encloses an argument in quotes and escapes any quotes within it
 	function escapeArgument($argument) {
-		return '"'.str_replace('"', '\\"', $argument).'"';
+		// assume that magic quotes is enables, escapeshellarg is not needed
+		return '"'.$argument.'"';
 	}
 	
 	/**
@@ -129,7 +125,9 @@ class Edit {
 		$cmd = login_getSvnSwitches().' '.$this->getCommand();
 		$this->output = repos_runCommand('svn', $cmd);
 		$this->returnval = array_pop($this->output);
-		$this->result = $this->output[count($this->output)-1];
+		if (count($this->output) > 0) {
+			$this->result = $this->output[count($this->output)-1];
+		}
 	}
 	
 	/**
