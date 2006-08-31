@@ -59,7 +59,7 @@ function showUrlPopup(absoluteUrl, titleText) {
 		objGetUrlParent = document.getElementsByTagName('body')[0];	
 	}
 	// figure out the size and position of the main div
-	var popupWidth = geturl_calculateWidth(absoluteUrl.length);
+	var popupWidth = geturl_calculateWidth(absoluteUrl);
 	var popupLeft = geturl_calculateLeft(popupWidth);
 	// create the popup div
 	objGetUrl = geturl_makePopupFrame(popupLeft, popupWidth, titleText);
@@ -145,12 +145,14 @@ function geturl_setStyle(objElem, zOffset, top, left, height, width, backgroundC
 }
 
 // estimate the width in pixels for the popup to fit the input box
-function geturl_calculateWidth(urlLength) {
+function geturl_calculateWidth(absoluteUrl) {
+	var urlLength = absoluteUrl.length;
+	// TODO take characters that will be urlescaped into account
 	return urlLength * 5 + 30;
 }
 
 function geturl_calculateLeft(width) {
-	return Math.floor((document.documentElement.clientWidth - width) / 2);
+	return Math.floor((geturl_getClientWidth() - width) / 2);
 }
 
 function geturl_createElement(tagname) {
@@ -159,6 +161,11 @@ function geturl_createElement(tagname) {
 	} else { // IE does not support createElementNS
 		return document.createElement(tagname);	
 	}
+}
+
+function geturl_getClientWidth() {
+	// document.documentElement.clientWidth does not work in IE xml+xslt
+	return Math.max(document.documentElement.clientWidth, document.body ? document.body.clientWidth : 0);
 }
 
 getKeyCode = function(ev)
