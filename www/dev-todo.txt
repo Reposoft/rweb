@@ -5,3 +5,9 @@
 * Move some checks to the conf diagnostics, like magic quotes from repos.properties.php and multibyte from edit.class.php.
 
 * Server side validation corresponding to the javascripts. This is not essential, because the svn client will do that, but it would give nicer error message in the rare cases where client side validation is bypassed.
+
+* 'Users online'
+
+* Messages for one user
+
+* Cookie with the username, for use in javascripts. Logout also on browser close? timeout?
