@@ -81,7 +81,7 @@ function showUrlPopup(absoluteUrl, titleText) {
 function geturl_makePopupFrame(left, width, titleText) {
 	o = geturl_createElement('div');
 	o.id = 'repos-geturl';
-	geturl_setStyle(o, 0, '48%', left+'px', '60px', width+'px', '#f6f6f6');
+	geturl_setStyle(o, 0, '48%', left+'px', '60px', width+'px', '#eeeeee');
 	o.style.border = 'solid 1px #999999';
 	// make the titlebar
 	var title = geturl_createElement('div');
@@ -90,7 +90,8 @@ function geturl_makePopupFrame(left, width, titleText) {
 	// title bar text
 	var caption = geturl_createElement('span');
 	caption.id = 'repos-geturl-caption';
-	geturl_setStyle(caption, 2, '4px', '15px', 'auto', 'auto', '#dddddd', 'none');
+	geturl_setStyle(caption, 2, '4px', '10px', 'auto', 'auto', '#dddddd', 'none');
+	caption.style.color = '#333333';
 	caption.style.fontFamily = 'Arial, Helvetica, sans-serif';
 	caption.style.fontSize = '11px';
 	caption.appendChild(document.createTextNode(titleText));
@@ -105,10 +106,11 @@ function geturl_makePopupFrame(left, width, titleText) {
 	var aClose = geturl_createElement('a');
 	aClose.id = 'repos-geturl-closelink';
 	aClose.href = '#';
-	aClose.style.color = '#222222';
+	aClose.style.color = '#666666';
 	aClose.style.textDecoration = 'none';
 	aClose.style.fontFamily = 'Arial, Helvetica, sans-serif';
 	aClose.style.fontSize = '13px';
+	aClose.style.fontWeight = 'bold';
 	aClose.onclick = function() { getUrlClose(); return false; };
 	aClose.appendChild(document.createTextNode('X'));
 	divClose.appendChild(aClose);
@@ -124,14 +126,16 @@ function geturl_makeText(size, value) {
 	text.type = 'text';
 	text.value = value;
 	text.size = size;
-	geturl_setStyle(text, 1, '30px', '10px', null, null, '#f0f0ee');
-	text.style.border = 'solid 1px #999999';
+	geturl_setStyle(text, 1, '32px', '10px', null, null, null);
+	text.style.border = 'none';
+	text.style.background = 'none';
 	text.style.fontFamily = 'Arial, Helvetica, sans-serif';
 	text.style.fontSize = '11px';
+	text.style.color = '#333333';
 	return text;
 }
 
-function geturl_setStyle(objElem, zOffset, top, left, height, width, backgroundColor, border) {
+function geturl_setStyle(objElem, zOffset, top, left, height, width, backgroundColor) {
 	objElem.style.zIndex = _geturlz + zOffset;
 	objElem.style.position = 'absolute';
 	objElem.style.top = top;
