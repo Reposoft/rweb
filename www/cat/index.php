@@ -50,8 +50,8 @@ if (isset($_GET['open'])) {
 }
 
 function doPassthru($targetUrl, $revision) {
-	$revisions = ' -r'.$revision;
-	$cmd = 'cat' . $revisions . ' "'.$targetUrl.'"';
+	//$cmd = 'cat' . ' -r'.$revision . ' "'.$targetUrl.'"';
+	$cmd = 'cat "'.$targetUrl.'@'.$revision.'"'; // using "peg" revision
 	$returnvalue = login_svnPassthru($cmd);
 	return $returnvalue;
 }
