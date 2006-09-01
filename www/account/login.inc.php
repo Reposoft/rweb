@@ -192,7 +192,16 @@ function getPath() {
  * @return filename if defined, false if the target is not a file
  */
 function getFile() {
-	if (isset($_GET['file'])) return login_decodeQueryParam($_GET,'file');
+	if (isset($_GET['file'])) {
+		return login_decodeQueryParam($_GET,'file');
+	}
+	// check if target has been set explicitly (this is in close cooperation with getTarget so we don't get a loop)
+	if (isset($_GET['target'])) {
+		$file = basename(login_decodeQueryParam($_GET,'target'));
+		if (strlen($file) > 0) {
+			return $file;
+		}
+	}
 	return false;
 }
 
@@ -209,7 +218,9 @@ function isTargetFile() {
  * @return target in repository from query paramters WITH tailing slash if it is a directory, false if none of 'target', 'file' and 'path' is defined
  */
 function getTarget() {
-	if(isset($_GET['target'])) return login_decodeQueryParam($_GET,'target');
+	if(isset($_GET['target'])) {
+		return login_decodeQueryParam($_GET,'target');
+	}
     // append filename if specified
     if(getFile()) return getPath() . getFile();
     return getPath();
@@ -315,9 +326,22 @@ function getReposAuth() {
 define('SVN_CONFIG_DIR', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'svn-config-dir');
 
 /**
+ * Execute svn command like the PHP exec() function
+ * @param cmd The command without the SVN part, for example 'log /url/to/repo'
+ * @return stdout and stderr output from the command, one array element per row. 
+ *   Last element is the return code (use array_pop to remove).
+ *   If returnval!=0, login_handleSvnError may be used to get error message compatible with the styleshett.
+ */
+function login_svnRun($cmd) {
+	$operation = escapeshellcmd($cmd);
+	$svnCommand = login_getSvnSwitches().' '.$operation;
+	$result = repos_runCommand('svn', $svnCommand);
+	return $result;
+}
+
+/**
  * Execute svn command like the PHP passthru() function
  * @param cmd The command without the SVN part, for example 'log /url/to/repo'
- * @param cdata True if the result should be enclosed in CDATA tag
  * @return return value of the execution.
  *   If returnval!=0, login_handleSvnError may be used to get error message compatible with the styleshett.
  */

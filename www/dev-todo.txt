@@ -11,3 +11,5 @@
 * Messages for one user
 
 * Cookie with the username, for use in javascripts. Logout also on browser close? timeout?
+
+* Search for TODO in code

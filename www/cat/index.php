@@ -4,24 +4,37 @@ require_once( dirname(dirname(__FILE__)) . "/account/login.inc.php" );
 
 define('STYLESHEET','../svnlayout/repos.xsl');
 
-$url = urlEncodeNames(getTargetUrl());
+$url = getTargetUrl();
+if(!isTargetFile()) {
+	trigger_error("Error: File not specified. Directories can not be shown here.");
+	exit;
+}
 if(!isset($_GET['rev'])) {
-	trigger_error("Error: parameter 'rev' not specified.");
+	trigger_error("Error: Version parameter (\"rev\") not specified.");
 	exit;
 }
 $rev = $_GET['rev'];
+if(!is_numeric($rev)) {
+	trigger_error("Error: Version number is '$rev', which is not a number.");
+}
+$filename = getFile();
 
 // passthrough with stylesheet
 if (isset($_GET['open'])) {
-	// header('Content-type: application/pdf');
-	// It will be called downloaded.pdf
-	header('Content-Disposition: attachment; filename="'.basename(getTarget()).'"');
-} else if (isset($_GET['display'])) {
-	$revisions = ' -r '.$rev;
-	$cmd = 'cat' . $revisions . ' "'.$url.'"';
-	$returnvalue = login_svnPassthru($cmd);
+	$mimetype = getMimetype($url, $rev);
+	if ($mimetype) {
+		header('Content-type: '.$mimetype);
+	}
+	header('Content-Disposition: attachment; filename="'.$filename.'"');
+	$returnvalue = doPassthru($url, $rev);
 	if ($returnvalue) {
-		trigger_error("Error, code $returnvalue: could not complete operation \n$cmd");
+		trigger_error("Error. Could not read '$url' version $rev.");
+	}
+} else if (isset($_GET['display'])) {
+	header('Content-type: text/plain; charset=utf-8');
+	$returnvalue = doPassthru($url, $rev);
+	if ($returnvalue) {
+		trigger_error("Error. Could not read '$url' version $rev.");
 	}
 } else {
 	$displayUrl = str_replace('&', '&amp;', repos_getSelfUrl().'?'.repos_getSelfQuery().'&display');
@@ -32,5 +45,25 @@ if (isset($_GET['open'])) {
 	echo '<cat repo="'.getRepositoryUrl().'" target="'.getTarget().'" rev="'.$rev.'">' . "\n";
 	echo '<display src="'.$displayUrl.'" />';
 	echo '</cat>';
+}
+
+function doPassthru($targetUrl, $revision) {
+	$revisions = ' -r'.$revision;
+	$cmd = 'cat' . $revisions . ' "'.$targetUrl.'"';
+	$returnvalue = login_svnPassthru($cmd);
+	return $returnvalue;
+}
+
+function getMimeType($targetUrl, $revision) {
+	$cmd = 'propget -r'.$revision.' svn:mime-type "'.$targetUrl.'"';
+	$result = login_svnRun($cmd);
+	$returnvalue = array_pop($result);
+	if ($returnvalue) {
+		trigger_error("Could not find the file '$targetUrl' in repository version $revision.");
+	}
+	if (count($result) == 0) {
+		return false; // svn:mime-type not set
+	}
+	return $result[0];
 }
 ?>
