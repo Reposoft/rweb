@@ -24,6 +24,8 @@ if (isset($_GET['open'])) {
 	$mimetype = getMimetype($url, $rev);
 	if ($mimetype) {
 		header('Content-type: '.$mimetype);
+	} else {
+		header('Content-type: text/plain; charset=utf-8');
 	}
 	header('Content-Disposition: attachment; filename="'.$filename.'"');
 	$returnvalue = doPassthru($url, $rev);
