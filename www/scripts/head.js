@@ -51,7 +51,7 @@ function ReposScriptSetup() {
 	
 	this.run = function() {
 		this.path = this._getPath();
-		this.require("shared/scriptaculous-1.6.2/prototype.js");
+		this.require("shared/prototype/prototype-1.4.0.js");
 		//this.require(path+"shared/scriptaculous-1.6.2/scriptaculous.js");
 		this.require("shared/repos.js");
 	}
