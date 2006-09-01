@@ -610,7 +610,7 @@ function tmt_filterDemoronizer(str){
 	str = str.replace(new RegExp(String.fromCharCode(8222), "g"), ",,");
 	str = str.replace(new RegExp(String.fromCharCode(8226), "g"), "*");
 	str = str.replace(new RegExp(String.fromCharCode(8230), "g"), "...");
-	str = str.replace(new RegExp(String.fromCharCode(8364), "g"), "€");
+	str = str.replace(new RegExp(String.fromCharCode(8364), "g"), "");
 	return str;
 }
 
@@ -681,30 +681,14 @@ function tmt_getNodesTable(formNode, type){
 	return boxHolder;
 }
 
-// The function below was developed by John Resig
-// For additional info see:
-// http://ejohn.org/projects/flexible-javascript-events
-// http://www.quirksmode.org/blog/archives/2005/10/_and_the_winner_1.html
-function addEvent(obj, type, fn){
-	if(obj.addEventListener){
-		obj.addEventListener(type, fn, false);
-	}
-	else if(obj.attachEvent){
-		obj["e" + type + fn] = fn;
-		obj[type + fn] = function(){
-				obj["e" + type + fn](window.event);
-			}
-		obj.attachEvent("on" +type, obj[type+fn]);
-	}
-}
-
 // it seems that in IE, even if the script is appended to <head>, it executes after onload
-if (repos_page_loaded) {
-	tmt_validatorInit();	
+if (head_isPageLoaded()) {
+	//alert('Page loaded already before validator script. Validator will be disabled.');
+	tmt_validatorInit();
 } else {
-addEvent(window, "load", tmt_validatorInit);
+	Event.observe(window, "load", tmt_validatorInit);
 }
 
 // TODO move to settings script and make it load correctly in IE
-tmt_globalPatterns.reposFilename = new RegExp("^[^&:\"'´<>£@¤#~¨\\?\\*\\$\\|\\(\\)\\[\\]\\t\\n\\/\\\\]+$");
+tmt_globalPatterns.reposFilename = new RegExp("^[^&:\"'<>@#~\\?\\*\\$\\|\\(\\)\\[\\]\\t\\n\\/\\\\]+$");
 tmt_globalPatterns.reposLogmessage = new RegExp("^[^\\f\\v\\0]+$");

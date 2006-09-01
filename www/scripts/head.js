@@ -12,8 +12,6 @@ function ReposScriptSetup() {
 	
 	this.defaultNamespace = "http://www.w3.org/1999/xhtml";
 	
-	this.pageLoaded = false;
-	
 	// plugins to load from the Repos class (shared/repos.js)
 	this.commonPlugins = new Array(
 		'tmt-validator/setup.js',
@@ -22,9 +20,6 @@ function ReposScriptSetup() {
 	this.path = "";
 	
 	this.require = function(scriptUrl) {
-		if (this.pageLoaded) {
-			alert("Script setup error. Can not require script when page has already loaded");	
-		}
 		if (nocache) {
 			scriptUrl += '?'+nocache;	
 		}
@@ -45,10 +40,6 @@ function ReposScriptSetup() {
 		}
 	}
 	
-	this.setPageLoaded = function() { 
-		repos_page_loaded = true; 
-	}
-	
 	this._getPath = function() {
 		var scripts = document.getElementsByTagName("script");
 		for (i=0; i<scripts.length; i++) {
@@ -66,6 +57,11 @@ function ReposScriptSetup() {
 	}
 }
 
-var reposScriptSetup = new ReposScriptSetup();
-window.onload = reposScriptSetup.setPageLoaded; // overwriting any existing event handler
+var reposScriptSetup = new ReposScriptSetup(); // global, no 'var'
 reposScriptSetup.run();
+
+// this is needed for the validator load problem
+var _head_pageLoaded = false;
+function head_setPageLoaded() { _head_pageLoaded = true; }
+function head_isPageLoaded() { return _head_pageLoaded; }
+window.onload = head_setPageLoaded; // overwriting any existing event handler

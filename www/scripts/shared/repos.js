@@ -1,5 +1,5 @@
 /**
- * Repos common script logic (c) Staffan Olssn http://www.repos.se
+ * Repos common script logic (c) Staffan Olsson http://www.repos.se
  * Mutually dependent to ../head.js that imports the Prototype library. 
  * This is a static class, accessible anywhere using Repos.[method]
  * @version $Id$
