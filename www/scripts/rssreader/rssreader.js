@@ -20,6 +20,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 // VERSION 0.1
+// Based on the RSS 2.0 specification: http://blogs.law.harvard.edu/tech/rss
 
 Ajax.RssReader = Class.create();
 Ajax.RssReader.prototype = Object.extend(new Ajax.Request(), {

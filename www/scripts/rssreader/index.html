@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Untitled Document</title>
-<script type="text/javascript" src="../prototype/prototype.js"></script>
+<script type="text/javascript" src="../prototype/prototype-1.4.0.js"></script>
 <script type="text/javascript" src="../rssreader/rssreader.js"></script>
 <script type="text/javascript">
 function myCallback( rss ) {
@@ -17,7 +17,7 @@ function errorHandler( rss ) {
    alert('An error has occured');
 }
 
-new Ajax.RssReader( 'test.xml', { onSuccess: myCallback, onFailure: errorHandler } );
+new Ajax.RssReader( 'rss.xml', { onSuccess: myCallback, onFailure: errorHandler } );
 </script>
 </head>
 
