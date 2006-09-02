@@ -20,8 +20,20 @@ var Repos = {
 	 */
 	create: function(tagName, elementId) {
 		var e = reposScriptSetup.createElement(tagName);
-		e.id = elementId;
+		if (elementId != undefined) {
+			e.id = elementId;
+		}
 		return e;
+	},
+	/**
+	  * Create a popup window
+	  * @param id element ID
+	  * @param options, as in http://prototype-window.xilinus.com/ but without className
+	  * @returns window object with the API from http://prototype-window.xilinus.com/ (but not nessecarily the same class)
+	  */
+	createWindow: function(id, options) {
+		var o = $H({className: "alphacube"}).merge(options);
+		return new Window(id, o);
 	}
 };
 

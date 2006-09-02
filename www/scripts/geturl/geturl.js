@@ -1,16 +1,12 @@
 // repos getUrl (c) Staffan Olsson
 //Repos.require('shared/repos-gui.js');
 
-// the reference to the displayed div, when displayed
-var objGetUrl;
 // popup titlebar
 var _geturl_title_prefix = 'URL: ';
+var _window_id = 'windowGetUrl';
 
 function getUrlClose() {
-	objGetUrl.style.display = 'none';
-	// remove from the dom
-	objGetUrlParent.removeChild(objGetUrl);
-	objGetUrl = undefined;
+	Windows.close(_window_id);
 }
 
 function getUrl(objLink) {
@@ -18,18 +14,7 @@ function getUrl(objLink) {
 }
 
 function getUrlText(objLink) {
-	var text = '';
-	var c = objLink.childNodes;
-	for (i=0; i<c.length; i++) {
-		if (c[i].data) {
-			text = text + c[i].data;	
-		} else {
-			for (j=0; j<c[i].childNodes.length; j++) {
-				text = text + c[i].childNodes[j].data;
-			}
-		}
-	}
-	return text;
+	return objLink.innerHTML.stripTags(); // using Prototype extension to String
 }
 
 function showUrl(relativeOrAbsoluteUrl, titleText) {
@@ -53,11 +38,17 @@ function showUrlPopup(absoluteUrl, titleText) {
 	var popupHeight = 50;
 	var popupLeft = geturl_calculateLeft(popupWidth);
 	// create the popup
-	win = new Window('window_id', {className: "alphacube", title: titleText, width:popupWidth, height: popupHeight});
-	objGetUrl = win.getContent();
+	win = Repos.createWindow(_window_id, {title: titleText, width:popupWidth, height: popupHeight});
+	// maybe Repos.createWindow should automatically set close key
+	/* Can't get the keypress observer to work
+	win.getContent().onkeypress = function(ev) { // hide on ESC
+		if(ev && ev.keyCode == 27) getUrlClose();
+		if(window.event && window.event.keyCode == 27) getUrlClose();
+	}*/
 	// create the input box that will contain the link
 	objText = geturl_makeText(Math.floor(absoluteUrl.length * 1.1), absoluteUrl);
-	objGetUrl.appendChild(objText);
+	win.getContent().appendChild(objText);
+	Element.setStyle(win.getContent(), {overflowX: 'hidden', overflowY: 'hidden'});
 	// show
 	win.setDestroyOnClose();
 	win.showCenter();
@@ -66,15 +57,11 @@ function showUrlPopup(absoluteUrl, titleText) {
 }
 
 function geturl_makeText(size, value) {
-	var text = geturl_createElement('input');
+	var text = Repos.create('input');
 	text.type = 'text';
 	text.value = value;
 	text.size = size;
-	text.style.border = 'none';
-	text.style.background = 'none';
-	text.style.fontFamily = 'Arial, Helvetica, sans-serif';
-	text.style.fontSize = '11px';
-	text.style.color = '#333333';
+	Element.setStyle(text, { border: 'none', paddingTop: '20px', fontFamily: 'Arial, Helvetica, sans-serif', fontSize: '11px', color: '#333333'});
 	return text;
 }
 
@@ -101,15 +88,3 @@ function geturl_getClientWidth() {
 	// document.documentElement.clientWidth does not work in IE xml+xslt
 	return Math.max(document.documentElement.clientWidth, document.body ? document.body.clientWidth : 0);
 }
-
-getKeyCode = function(ev)
-	{
-		if(ev)			//Moz
-		{
-			return ev.keyCode;
-		}
-		if(window.event)	//IE
-		{
-			return window.event.keyCode;
-		}
-	};
