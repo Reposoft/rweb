@@ -2,30 +2,6 @@
  * Repos common dynamic GUI classes (c) Staffan Olsson http://www.repos.se
  * @version $Id$
  */
- 
-var RFrame = Class.create();
-RFrame.prototype = {
-	initialize: function(elementId) {
-		this.div = Repos.create('div', elementId);
-		// set default colors so that the objects are visible
-		this.div.style.border = 'solid 1px #999999';
-		this.div.style.backgroundColor = '#eeeeee';
-	}
-};
-
-var RPopup = Class.create();
-Object.extend(RPopup, RFrame);
-Object.extend(RPopup.prototype, {
-	initialize: function(elementId, titleText) {
-		RFrame.prototype.initialize.call(this, elementId);
-		createTitleBar(titleText);
-	},
-	createTitleBar: function(titleText) {
-		this.div.titlebar = Repos.create('div', this.div.id + 'Titlebar');
-		
-	}
-});
-
 
 var HideWithEscDecorator = Class.create();
 HideWithEscDecorator.prototype = {
@@ -53,17 +29,18 @@ TitleBarDecorator.prototype = {
 		var title = Repos.create('div');
 		title.id = id + 'Titlebar';
 		Element.setStyle(title, {position: 'absolute'});
-		Element.setStyle(title, {zIndex: z + 1, top: '0px', left: '0px', height: '22px', width; '100%', backgroundColor: '#dddddd', border: 'none'});
+		Element.setStyle(title, {zIndex: z + 1, top: '0px', left: '0px', height: '22px', width: '100%', backgroundColor: '#dddddd', border: 'none'});
 		// title bar text
 		var caption = Repos.create('span');
 		caption.id = id + 'TitlebarText';
-		Element.setStyle(caption, {zIndex: z + 2, top: '4px', left: '10px', color: '#333333', fontFamily: 'Arial, Helvetica, sans-serif', fontSize = '11px'});
-		caption.appendChild(document.createTextNode(titleText));
+		Element.setStyle(caption, {top: '4px', left: '10px', color: '#333333', fontFamily: 'Arial, Helvetica, sans-serif', fontSize: '11px'});
+		caption.appendChild(document.createTextNode(titlebarText));
 		// close button
 		var divClose = geturl_createElement('div');
 		divClose.id = 'repos-geturl-close';
-		geturl_setStyle(divClose, 2, '2px', (width-20)+'px', '16px', '16px', '#eeeeee');
-		divClose.style.border = 'solid 1px #999999';
+		Element.setStyle(divClose, {position: 'absolute'});
+		Element.setStyle(divClose, {zIndex: z + 2, top: '2px', right: '2px', height: '16px', width: '16px', backgroundColor: '#eeeeee'});
+		Element.setStyle(divClose, {border: 'solid 1px #999999'});
 		divClose.style.textAlign = 'center';
 		divClose.onclick = function() { getUrlClose(); return false; };
 		// the X in the close button
@@ -82,6 +59,7 @@ TitleBarDecorator.prototype = {
 		// put it together
 		title.appendChild(caption);
 		title.appendChild(divClose);
+		elem.appendChild(title);
 	}
 }
 
@@ -95,12 +73,3 @@ function geturl_setStyle(objElem, zOffset, top, left, height, width, backgroundC
 	objElem.style.width = width;
 	objElem.style.backgroundColor = backgroundColor;
 }
-
-var f = new RFrame('testframe');
-f.div.top = '10px';
-f.div.left = '10px';
-f.div.width = '10px';
-f.div.height = '10px';
-f.div.positon = 'absolute';
-document.getElementsByTagName('body')[0].appendChild(f.div);
-Element.show('testframe');

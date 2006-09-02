@@ -1,4 +1,5 @@
 // repos getUrl (c) Staffan Olsson
+Repos.require('shared/repos-gui.js');
 
 // the dom node to append the div to
 var objGetUrlParent;
@@ -81,7 +82,7 @@ function geturl_makePopupFrame(left, width, titleText) {
 		if(ev && ev.keyCode == 27) getUrlClose();
 		if(window.event && window.event.keyCode == 27) getUrlClose();
 	}
-	new TitleBarDecorator(o);
+	new TitleBarDecorator(o, titleText);
 	return o;
 }
 
