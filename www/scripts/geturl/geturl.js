@@ -81,42 +81,7 @@ function geturl_makePopupFrame(left, width, titleText) {
 		if(ev && ev.keyCode == 27) getUrlClose();
 		if(window.event && window.event.keyCode == 27) getUrlClose();
 	}
-	// make the titlebar
-	var title = geturl_createElement('div');
-	title.id = 'repos-geturl-title';
-	geturl_setStyle(title, 1, '0px', '0px', '22px', '100%', '#dddddd', 'none');
-	// title bar text
-	var caption = geturl_createElement('span');
-	caption.id = 'repos-geturl-caption';
-	geturl_setStyle(caption, 2, '4px', '10px', 'auto', 'auto', '#dddddd', 'none');
-	caption.style.color = '#333333';
-	caption.style.fontFamily = 'Arial, Helvetica, sans-serif';
-	caption.style.fontSize = '11px';
-	caption.appendChild(document.createTextNode(titleText));
-	// close button
-	var divClose = geturl_createElement('div');
-	divClose.id = 'repos-geturl-close';
-	geturl_setStyle(divClose, 2, '2px', (width-20)+'px', '16px', '16px', '#eeeeee');
-	divClose.style.border = 'solid 1px #999999';
-	divClose.style.textAlign = 'center';
-	divClose.onclick = function() { getUrlClose(); return false; };
-	// the X in the close button
-	var aClose = geturl_createElement('a');
-	aClose.id = 'repos-geturl-closelink';
-	aClose.href = '#';
-	aClose.title = 'Esc';
-	aClose.style.color = '#666666';
-	aClose.style.textDecoration = 'none';
-	aClose.style.fontFamily = 'Arial, Helvetica, sans-serif';
-	aClose.style.fontSize = '13px';
-	aClose.style.fontWeight = 'bold';
-	aClose.onclick = function() { getUrlClose(); return false; };
-	aClose.appendChild(document.createTextNode('X'));
-	divClose.appendChild(aClose);
-	// put it together
-	title.appendChild(caption);
-	title.appendChild(divClose);
-	o.appendChild(title);
+	new TitleBarDecorator(o);
 	return o;
 }
 

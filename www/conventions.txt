@@ -1,0 +1,7 @@
+
+
+Identifiers in HTML
+===================
+
+Forms: *form*MyForm
+Internet Explorer gave me a few headaches. Javascript variables are not allowed the same name as the name given to a form. Even though the correct identifier of a form is document.formname, Interner Explorer's error correction allows developers to reference it also as formname thus clobbering any variable using that name.

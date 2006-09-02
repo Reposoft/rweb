@@ -11,6 +11,17 @@ var Repos = {
 	 */
 	require: function(scriptUrl) {
 		reposScriptSetup.require(scriptUrl);
+	},
+	/**
+	 * Creates a new DOM element
+	 * @param tagName name in XHTML namespace
+	 * @param elementId id attribute value
+	 * @returns the element reference
+	 */
+	create: function(tagName, elementId) {
+		var e = reposScriptSetup.createElement(tagName);
+		e.id = elementId;
+		return e;
 	}
 };
 
