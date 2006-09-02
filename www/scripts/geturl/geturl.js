@@ -61,7 +61,7 @@ function geturl_makeText(size, value) {
 	text.type = 'text';
 	text.value = value;
 	text.size = size;
-	Element.setStyle(text, { border: 'none', paddingTop: '20px', fontFamily: 'Arial, Helvetica, sans-serif', fontSize: '11px', color: '#333333'});
+	Element.setStyle(text, { border: 'none', fontFamily: 'Arial, Helvetica, sans-serif', fontSize: '11px', color: '#333333'});
 	return text;
 }
 
