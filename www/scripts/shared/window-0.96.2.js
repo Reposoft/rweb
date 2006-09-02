@@ -1040,6 +1040,9 @@ var WindowUtilities = {
         } else if (w.document.body) {
           T = body.scrollTop;
           L = body.scrollLeft;
+        } else if (w.document.documentElement) {
+          T = document.documentElement.scrollTop;
+          L = document.documentElement.scrollLeft;
         }
         if (w.innerWidth) {
           W = w.innerWidth;

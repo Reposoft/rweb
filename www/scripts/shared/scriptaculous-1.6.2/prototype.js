@@ -180,14 +180,14 @@ Object.extend(String.prototype, {
   },
 
   escapeHTML: function() {
-    var div = document.createElement('div');
+    var div = Repos.create('div');
     var text = document.createTextNode(this);
     div.appendChild(text);
     return div.innerHTML;
   },
 
   unescapeHTML: function() {
-    var div = document.createElement('div');
+    var div = Repos.create('div');
     div.innerHTML = this.stripTags();
     return div.childNodes[0] ? div.childNodes[0].nodeValue : '';
   },
@@ -1111,7 +1111,7 @@ var _nativeExtensions = false;
 
 if(!HTMLElement && /Konqueror|Safari|KHTML/.test(navigator.userAgent)) {
   var HTMLElement = {}
-  HTMLElement.prototype = document.createElement('div').__proto__;
+  HTMLElement.prototype = Repos.create('div').__proto__;
 }
 
 Element.addMethods = function(methods) {
@@ -1165,7 +1165,7 @@ Abstract.Insertion.prototype = {
   },
 
   contentFromAnonymousTable: function() {
-    var div = document.createElement('div');
+    var div = Repos.create('div');
     div.innerHTML = '<table><tbody>' + this.content + '</tbody></table>';
     return $A(div.childNodes[0].childNodes[0].childNodes);
   }
