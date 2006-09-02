@@ -12,13 +12,14 @@ function ReposScriptSetup() {
 	
 	this.defaultNamespace = "http://www.w3.org/1999/xhtml";
 	
+	this.path = "";
+	
 	// plugins to load from the Repos class (shared/repos.js)
 	this.commonPlugins = new Array(
 		'shared/repos-gui.js',
+		'shared/window-0.96.2.js',
 		'tmt-validator/setup.js',
 		'geturl/geturl.js');
-	
-	this.path = "";
 	
 	this.require = function(scriptUrl) {
 		if (nocache) {
@@ -52,8 +53,8 @@ function ReposScriptSetup() {
 	
 	this.run = function() {
 		this.path = this._getPath();
-		this.require("prototype/prototype-1.4.0.js");
-		//this.require(path+"shared/scriptaculous-1.6.2/scriptaculous.js");
+		//this.require("prototype/prototype-1.4.0.js");
+		this.require("shared/scriptaculous-1.6.2/prototype.js"); // Window needs this
 		this.require("shared/repos.js");
 	}
 }

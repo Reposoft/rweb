@@ -105,9 +105,6 @@ Array.prototype.call = function() {
 
 var Effect = {
   tagifyText: function(element) {
-    if(typeof Builder == 'undefined')
-      throw("Effect.tagifyText requires including script.aculo.us' builder.js library");
-      
     var tagifyStyle = 'position:relative';
     if(/MSIE/.test(navigator.userAgent)) tagifyStyle += ';zoom:1';
     element = $(element);
@@ -164,8 +161,9 @@ var Effect2 = Effect; // deprecated
 
 Effect.Transitions = {}
 
-Effect.Transitions.linear = Prototype.K;
-
+Effect.Transitions.linear = function(pos) {
+  return pos;
+}
 Effect.Transitions.sinoidal = function(pos) {
   return (-Math.cos(pos*Math.PI)/2) + 0.5;
 }
@@ -355,7 +353,7 @@ Object.extend(Object.extend(Effect.Opacity.prototype, Effect.Base.prototype), {
   initialize: function(element) {
     this.element = $(element);
     // make this work on IE on elements without 'layout'
-    if(/MSIE/.test(navigator.userAgent) && (!this.element.currentStyle.hasLayout))
+    if(/MSIE/.test(navigator.userAgent) && (!this.element.hasLayout))
       this.element.setStyle({zoom: 1});
     var options = Object.extend({
       from: this.element.getOpacity() || 0.0,
@@ -395,8 +393,8 @@ Object.extend(Object.extend(Effect.Move.prototype, Effect.Base.prototype), {
   },
   update: function(position) {
     this.element.setStyle({
-      left: Math.round(this.options.x  * position + this.originalLeft) + 'px',
-      top:  Math.round(this.options.y  * position + this.originalTop)  + 'px'
+      left: this.options.x  * position + this.originalLeft + 'px',
+      top:  this.options.y  * position + this.originalTop  + 'px'
     });
   }
 });
@@ -435,7 +433,7 @@ Object.extend(Object.extend(Effect.Scale.prototype, Effect.Base.prototype), {
     this.originalLeft = this.element.offsetLeft;
     
     var fontSize = this.element.getStyle('font-size') || '100%';
-    ['em','px','%','pt'].each( function(fontSizeType) {
+    ['em','px','%'].each( function(fontSizeType) {
       if(fontSize.indexOf(fontSizeType)>0) {
         this.fontSize     = parseFloat(fontSize);
         this.fontSizeType = fontSizeType;
@@ -464,8 +462,8 @@ Object.extend(Object.extend(Effect.Scale.prototype, Effect.Base.prototype), {
   },
   setDimensions: function(height, width) {
     var d = {};
-    if(this.options.scaleX) d.width = Math.round(width) + 'px';
-    if(this.options.scaleY) d.height = Math.round(height) + 'px';
+    if(this.options.scaleX) d.width = width + 'px';
+    if(this.options.scaleY) d.height = height + 'px';
     if(this.options.scaleFromCenter) {
       var topd  = (height - this.dims[0])/2;
       var leftd = (width  - this.dims[1])/2;
@@ -591,7 +589,7 @@ Effect.Puff = function(element) {
 Effect.BlindUp = function(element) {
   element = $(element);
   element.makeClipping();
-  return new Effect.Scale(element, 0,
+  return new Effect.Scale(element, 0, 
     Object.extend({ scaleContent: false, 
       scaleX: false, 
       restoreAfterFinish: true,
@@ -606,27 +604,28 @@ Effect.BlindUp = function(element) {
 Effect.BlindDown = function(element) {
   element = $(element);
   var elementDimensions = element.getDimensions();
-  return new Effect.Scale(element, 100, Object.extend({ 
-    scaleContent: false, 
-    scaleX: false,
-    scaleFrom: 0,
-    scaleMode: {originalHeight: elementDimensions.height, originalWidth: elementDimensions.width},
-    restoreAfterFinish: true,
-    afterSetup: function(effect) {
-      effect.element.makeClipping();
-      effect.element.setStyle({height: '0px'});
-      effect.element.show(); 
-    },  
-    afterFinishInternal: function(effect) {
-      effect.element.undoClipping();
-    }
-  }, arguments[1] || {}));
+  return new Effect.Scale(element, 100, 
+    Object.extend({ scaleContent: false, 
+      scaleX: false,
+      scaleFrom: 0,
+      scaleMode: {originalHeight: elementDimensions.height, originalWidth: elementDimensions.width},
+      restoreAfterFinish: true,
+      afterSetup: function(effect) {
+        effect.element.makeClipping();
+        effect.element.setStyle({height: '0px'});
+        effect.element.show(); 
+      },  
+      afterFinishInternal: function(effect) {
+        effect.element.undoClipping();
+      }
+    }, arguments[1] || {})
+  );
 }
 
 Effect.SwitchOff = function(element) {
   element = $(element);
   var oldOpacity = element.getInlineOpacity();
-  return new Effect.Appear(element, Object.extend({
+  return new Effect.Appear(element, { 
     duration: 0.4,
     from: 0,
     transition: Effect.Transitions.flicker,
@@ -646,7 +645,7 @@ Effect.SwitchOff = function(element) {
         }
       })
     }
-  }, arguments[1] || {}));
+  });
 }
 
 Effect.DropOut = function(element) {
@@ -730,7 +729,7 @@ Effect.SlideDown = function(element) {
     }, arguments[1] || {})
   );
 }
-
+  
 Effect.SlideUp = function(element) {
   element = $(element);
   element.cleanWhitespace();

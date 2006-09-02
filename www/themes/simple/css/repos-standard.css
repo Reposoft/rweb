@@ -1,4 +1,6 @@
 /* repository visualization, minimal number of classes */
+@import url("window-default.css");
+@import url("window-alphacube.css");
 body {
     font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
     font-size: 0.8em;
