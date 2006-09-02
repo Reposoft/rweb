@@ -14,13 +14,14 @@ var Repos = {
 	},
 	/**
 	 * Creates a new DOM element
+	 * Replace document.createElement in application/xhtml+xml pages
 	 * @param tagName name in XHTML namespace
 	 * @param elementId id attribute value
 	 * @returns the element reference
 	 */
 	create: function(tagName, elementId) {
 		var e = reposScriptSetup.createElement(tagName);
-		if (elementId != undefined) {
+		if (elementId) {
 			e.id = elementId;
 		}
 		return e;

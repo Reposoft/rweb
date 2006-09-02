@@ -28,7 +28,7 @@ Window.prototype = {
 	//                        hideEffect, showEffect, showEffectOptions, hideEffectOptions, effectOptions, url, draggable, closable, minimizable, maximizable, parent, onload
 	initialize: function(id) {
 	  if ($(id))
-	    alert("Window " + id + " is already register is the DOM!!, be sure to use setDestroyOnClose()")
+	    alert("Window " + id + " already exists, use setDestroyOnClose()")
 	    
 		this.hasEffectLib = String.prototype.parseColor != null;
 		this.options = Object.extend({
@@ -47,7 +47,7 @@ Window.prototype = {
       hideEffectOptions: {},
       effectOptions:     null,
       parent:            document.getElementsByTagName("body").item(0),
-      title:             "&nbsp;",
+      title:             "`",
       url:               null,
       onload:            Prototype.emptyFunction,
       width:             200,
@@ -298,8 +298,8 @@ Window.prototype = {
   	WindowUtilities.disableScreen('__invisible__', '__invisible__');
 
     // Stop selection while dragging
-    document.body.ondrag = function () { return false; };
-    document.body.onselectstart = function () { return false; };
+    document.documentElement.ondrag = function () { return false; };
+    document.documentElement.onselectstart = function () { return false; };
     
     Event.stop(event);
   },
@@ -365,8 +365,8 @@ Window.prototype = {
     Event.stop(event);
     
     // Restore selection
-    document.body.ondrag = null;
-    document.body.onselectstart = null;
+    document.documentElement.ondrag = null;
+    document.documentElement.onselectstart = null;
   },
 
 	_keyPress: function(event) {
@@ -376,7 +376,7 @@ Window.prototype = {
 	// Creates HTML window code
 	_createWindow: function(id) {
 	  var className = this.options.className;
-		var win = document.createElement("div");
+		var win = Repos.create("div");
 		win.setAttribute('id', id);
 		win.className = "dialog";
 
@@ -394,9 +394,9 @@ Window.prototype = {
     win.innerHTML = closeDiv + minDiv + maxDiv + "\
       <table id='"+ id +"_row1' class=\"top table_window\">\
         <tr>\
-          <td class='"+ className +"_nw'>&nbsp;</td>\
+          <td class='"+ className +"_nw'>`</td>\
           <td class='"+ className +"_n'><div id='"+ id +"_top' class='"+ className +"_title title_window'>"+ this.options.title +"</div></td>\
-          <td class='"+ className +"_ne'>&nbsp;</td>\
+          <td class='"+ className +"_ne'>`</td>\
         </tr>\
       </table>\
       <table id='"+ id +"_row2' class=\"mid table_window\">\
@@ -408,9 +408,9 @@ Window.prototype = {
       </table>\
         <table id='"+ id +"_row3' class=\"bot table_window\">\
         <tr>\
-          <td class='"+ className +"_sw'>&nbsp;</td>\
-            <td class='"+ className +"_s'><div id='"+ id +"_bottom' class='status_bar'>&nbsp;</div></td>\
-            <td " + seAttributes + ">&nbsp;</td>\
+          <td class='"+ className +"_sw'>`</td>\
+            <td class='"+ className +"_s'><div id='"+ id +"_bottom' class='status_bar'>`</div></td>\
+            <td " + seAttributes + ">`</td>\
         </tr>\
       </table>\
     ";
@@ -654,7 +654,7 @@ Window.prototype = {
 
   setTitle: function(newTitle) {
   	if (!newTitle || newTitle == "") 
-  	  newTitle = "&nbsp;";
+  	  newTitle = "`";
   	  
   	Element.update(this.element.id + '_top', newTitle);
   },
@@ -715,7 +715,7 @@ Window.prototype = {
  
   _createHiddenDiv: function(className) {
     var objBody = document.getElementsByTagName("body").item(0);
-    var win = document.createElement("div");
+    var win = Repos.create("div");
 		win.setAttribute('id', this.element.id+ "_tmp");
 		win.className = className;
 		win.style.display = 'none'
@@ -1067,12 +1067,12 @@ var WindowUtilities = {
   	if (window.innerHeight && window.scrollMaxY) {	
   		xScroll = document.body.scrollWidth;
   		yScroll = window.innerHeight + window.scrollMaxY;
-  	} else if (document.body.scrollHeight > document.body.offsetHeight){ // all but Explorer Mac
+  	} else if (document.body && document.body.scrollHeight > document.body.offsetHeight){ // all but Explorer Mac
   		xScroll = document.body.scrollWidth;
   		yScroll = document.body.scrollHeight;
   	} else { // Explorer Mac...would also work in Explorer 6 Strict, Mozilla and Safari
-  		xScroll = document.body.offsetWidth;
-  		yScroll = document.body.offsetHeight;
+  		xScroll = document.documentElement.offsetWidth;
+  		yScroll = document.documentElement.offsetHeight;
   	}
 
   	var windowWidth, windowHeight;
@@ -1155,7 +1155,7 @@ var WindowUtilities = {
 		// create overlay div and hardcode some functional styles (aesthetic styles are in CSS file)
 		else {
 			var objBody = document.getElementsByTagName("body").item(0);
-			var objOverlay = document.createElement("div");
+			var objOverlay = Repos.create("div");
 			objOverlay.setAttribute('id', id);
 			objOverlay.className = "overlay_" + className
 			objOverlay.style.display = 'none';
@@ -1198,7 +1198,7 @@ var WindowUtilities = {
       margin = 5;
 
     var objBody = document.getElementsByTagName("body").item(0);
-  	var tmpObj = document.createElement("div");
+  	var tmpObj = Repos.create("div");
   	tmpObj.setAttribute('id', id);
 	
   	if (height)
