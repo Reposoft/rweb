@@ -15,3 +15,5 @@
 * Search for TODO in code
 
 * Make AJAX buttons visible only if the scripts execute properly. For example showUrl button should be available only if the script is loaded. Could use a class 'showUrl' to indicate that an url wants such a button.
+
+* switch magic_quotes Off and adapt edit.class.php
