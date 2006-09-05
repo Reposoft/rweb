@@ -56,7 +56,7 @@ th.frame { /* only used in startpage, move there */
 	padding: 3px;
 	padding-left: 10px;
 	background-color: #F0F0EE;
-	border: 1px solid #CCCC99;
+	border-top: 1px solid #CCCC99;
 }
 /* layout of version control concepts, these are usually span tags */
 .path {
@@ -85,10 +85,6 @@ a.command {
 	background-color: #F0F0EE;
 	padding: 0px 3px;
 	font-size: smaller;
-	/* border-top: 1px solid #DDDDDD;
-	border-right: 1px solid #CCCCCC;
-	border-bottom: 1px solid #DDDDDD;
-	border-left: 1px solid #CCCCCC; */
 	margin-left: 2px;
 	margin-right: 2px;
 	margin-top: 0px;
@@ -99,10 +95,6 @@ span.command {
 	color: #BBBBBB;
 	padding: 0px 3px;
 	font-size: smaller;
-	/* border-top: 1px solid #DDDDDD;
-	border-right: 1px solid #CCCCCC;
-	border-bottom: 1px solid #DDDDDD;
-	border-left: 1px solid #CCCCCC; */
 	margin-left: 2px;
 	margin-right: 2px;
 }
@@ -111,10 +103,10 @@ a.action {
 	background-color: #F0F0EE;
 	padding: 0px 3px;
 	font-size: smaller;
-	border-top: 1px solid #DDDDDD;
-	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #F6F6F6;
+	border-left: 1px solid #F6F6F6;
 	border-bottom: 1px solid #DDDDDD;
-	border-left: 1px solid #CCCCCC;
+	border-right: 1px solid #DDDDDD;
 	margin-left: 2px;
 	margin-right: 2px;
 	margin-top: 0px;
@@ -126,10 +118,10 @@ span.action {
 	color: #BBBBBB;
 	padding: 0px 3px;
 	font-size: smaller;
-	border-top: 1px solid #DDDDDD;
-	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #F6F6F6;
+	border-left: 1px solid #F6F6F6;
 	border-bottom: 1px solid #DDDDDD;
-	border-left: 1px solid #CCCCCC;
+	border-right: 1px solid #DDDDDD;
 	margin-left: 2px;
 	margin-right: 2px;
 }

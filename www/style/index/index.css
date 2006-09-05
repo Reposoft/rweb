@@ -1,5 +1,5 @@
 @charset "utf-8";
-/* CSS Document */
+/* Layout for the file browser */
 
 .file {
 	background-image: url('file.png');
@@ -15,20 +15,25 @@
 }
 
 div.actions {
-	vertical-align:middle;
+	vertical-align: inherit;
 	display: inline;
 }
 
+.contents {
+	padding-bottom: 20px;
+}
 .footer {
+	border-top: 1px solid #CCCC99;
 	text-align: right;
 	color: #999999;
+	font-size: smaller;
 }
 
 /* icons */
 .command {
-	border: 1px hidden #F0F0EE; /* same color as commandbar */
+	border: 1px solid #F0F0EE; /* same color as commandbar */
 }
-a.command:hover {
+.command:hover {
 	border-top: 1px solid #666666;
 	border-left: 1px solid #666666;
 	border-bottom: 1px solid #FFFFFF;

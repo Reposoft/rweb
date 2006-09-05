@@ -49,7 +49,7 @@
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$rurl}/scripts/head.js"></script>
 			</head>
-			<body>
+			<body class="index">
 				<!-- supported contents -->
 				<xsl:apply-templates select="svn"/>
 				<xsl:apply-templates select="log"/>
@@ -63,27 +63,18 @@
 	</xsl:template>
 	<!-- body contents -->
 	<xsl:template match="index">
-		<!-- using table instead of divs now -->
-		<table class="info" width="98%" align="center">
-			<tr>
-				<td id="commandbar" class="commandbar">
-					<xsl:call-template name="commandbar"/>
-				</td>
-			</tr>
-			<tr>
-				<td id="workarea" class="workarea">
-					<xsl:call-template name="workarea"/>
-				</td>
-			</tr>
-			<tr>
-				<td id="footer" class="footer">
-					<xsl:call-template name="footer"/>
-				</td>
-			</tr>
-		</table>
+		<div class="workspace">
+			<xsl:call-template name="commandbar"/>
+			<xsl:call-template name="contents"/>
+			<xsl:call-template name="footer"/>
+		</div>
 	</xsl:template>
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
+		<div class="commandbar">
+		<a id="reposbutton" href="http://www.repos.se/">
+			<img src="{$rurl}/logo/repos1.png" border="0" align="right" width="72" height="18"/>
+		</a>
 		<xsl:choose>
 			<xsl:when test="/svn/index/updir and not(substring-after(/svn/index/@path, '/trunk')='')">
 				<a id="up" class="command up translate" href="../">up</a>
@@ -108,13 +99,12 @@
 		-->
 		<a id="showlog" class="command translate" href="{$rurl}/log/?path={@path}">show log</a>
 		<a id="logout" class="command translate" href="/?logout">logout</a>
+		</div>
 	</xsl:template>
 	<!-- directory listing -->
-	<xsl:template name="workarea">
+	<xsl:template name="contents">
+		<div class="contents">
 		<h1>
-			<a href="http://www.repos.se/">
-				<img src="{$rurl}/logo/repos1.png" border="0" align="right" width="72" height="18"/>
-			</a>
 			<xsl:if test="@repo">
 				<xsl:value-of select="@repo"/>
 				<xsl:value-of select="$spacer"/>
@@ -135,9 +125,11 @@
 		<xsl:apply-templates select="file">
 			<xsl:sort select="@name"/>
 		</xsl:apply-templates>
+		</div>
 	</xsl:template>
 	<!-- extra info, links to top -->
 	<xsl:template name="footer">
+		<div class="footer">
 		<span>
 		<xsl:text>Powered by </xsl:text>
 		<xsl:element name="a">
@@ -154,10 +146,11 @@
 			<xsl:text>&#160;</xsl:text>
 			<a id="quayButton"></a>
 		</span> -->
+		</div>
 	</xsl:template>
 	<!-- generate directory -->
 	<xsl:template match="dir">
-		<p>
+		<div>
 			<a class="folder" href="{@href}">
 				<xsl:value-of select="@name"/>
 			</a>
@@ -170,14 +163,14 @@
 					<a class="action" href="{$editUrl}/?action=delete&amp;path={../@path}/{@href}">delete</a>
 				</xsl:if>
 			</div>
-		</p>
+		</div>
 	</xsl:template>
 	<!-- generate file -->
 	<xsl:template match="file">
 		<xsl:param name="filetype">
 			<xsl:call-template name="getFiletype"/>
 		</xsl:param>
-		<p>
+		<div>
 			<a class="file file-{$filetype}" href="{@href}">
 				<xsl:value-of select="@name"/>
 			</a>
@@ -192,7 +185,7 @@
 					<a class="action" href="{$rurl}/upload/?path={../@path}&amp;file={@href}">upload changes</a>
 				</xsl:if>
 			</div>
-		</p>
+		</div>
 	</xsl:template>
 	<!-- get file extension from attribute @href or param 'filename' -->
 	<xsl:template name="getFiletype">
