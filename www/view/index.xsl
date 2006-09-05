@@ -83,6 +83,7 @@
 				<span id="up" class="command translate">up</span>
 			</xsl:otherwise>
 		</xsl:choose>
+		<a id="refresh" class="command translage" href="#" onclick="history.go()">refresh</a>
 		<xsl:if test="$editUrl">
 			<a id="newfolder" class="command translate" href="{$editUrl}/?action=mkdir&amp;path={@path}">new folder</a>
 			<a id="upload" class="command translate" href="{$rurl}/upload/?path={@path}">upload</a>
@@ -99,6 +100,8 @@
 		-->
 		<a id="showlog" class="command translate" href="{$rurl}/log/?path={@path}">show log</a>
 		<a id="logout" class="command translate" href="/?logout">logout</a>
+		<!-- print, possibly plugin -->
+		<!-- help, possibly plugin -->
 		</div>
 	</xsl:template>
 	<!-- directory listing -->
@@ -150,8 +153,11 @@
 	</xsl:template>
 	<!-- generate directory -->
 	<xsl:template match="dir">
-		<div>
-			<a class="folder" href="{@href}">
+		<xsl:param name="id">
+			<xsl:call-template name="getFileID"/>
+		</xsl:param>
+		<div class="row">
+			<a id="{$id}" class="folder" href="{@href}">
 				<xsl:value-of select="@name"/>
 			</a>
 			<xsl:value-of select="$spacer"/>
@@ -170,8 +176,11 @@
 		<xsl:param name="filetype">
 			<xsl:call-template name="getFiletype"/>
 		</xsl:param>
-		<div>
-			<a class="file file-{$filetype}" href="{@href}">
+		<xsl:param name="id">
+			<xsl:call-template name="getFileID"/>
+		</xsl:param>
+		<div class="row">
+			<a id="{$id}" class="file file-{$filetype}" href="{@href}">
 				<xsl:value-of select="@name"/>
 			</a>
 			<xsl:value-of select="$spacer"/>
@@ -203,6 +212,12 @@
 				<xsl:value-of select="translate($filename,$ucletters,$lcletters)"/>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+	<!-- make a valid HTML id (starting with character, then characters, digits or -_:. -->
+	<xsl:template name="getFileID">
+		<xsl:param name="filename" select="@href"/>
+		<xsl:value-of select="'f:'"/>
+		<xsl:value-of select="translate($filename,'%','_')"/>
 	</xsl:template>
 	<!--
 	========= svn log xml formatting ==========

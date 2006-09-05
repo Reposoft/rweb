@@ -1,6 +1,33 @@
 @charset "utf-8";
 /* Layout for the file browser */
-
+.actions {
+	vertical-align: inherit;
+	display: inline;
+}
+.contents {
+	padding-bottom: 20px;
+}
+.contents .row {
+	width: 100%;
+	padding: 2px;
+}
+.contents .row:hover {
+	background-color: #F7F7F6;
+}
+.footer {
+	border-top: 1px solid #CCCC99;
+	text-align: right;
+	color: #999999;
+	font-size: smaller;
+}
+/* resource links */
+a[href="../"], span#up {
+	background-image: url('up.png');
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	margin: 5px;
+}
 .file {
 	background-image: url('file.png');
 	background-position: left;
@@ -14,41 +41,7 @@
 	padding-left: 20px;
 }
 
-div.actions {
-	vertical-align: inherit;
-	display: inline;
-}
-
-.contents {
-	padding-bottom: 20px;
-}
-.footer {
-	border-top: 1px solid #CCCC99;
-	text-align: right;
-	color: #999999;
-	font-size: smaller;
-}
-
-/* icons */
-.command {
-	border: 1px solid #F0F0EE; /* same color as commandbar */
-}
-.command:hover {
-	border-top: 1px solid #666666;
-	border-left: 1px solid #666666;
-	border-bottom: 1px solid #FFFFFF;
-	border-right: 1px solid #FFFFFF;
-	text-decoration: none;
-}
-a[href="../"], span#up {
-	background-image: url('up.png');
-	background-position: left;
-	background-repeat: no-repeat;
-	padding-left: 20px;
-	margin: 5px;
-}
-
-/* below are from coordinator */
+/* -- from coordinator -- inspiration */
 div.commandbar div.command {
 	background-repeat: no-repeat;
 }

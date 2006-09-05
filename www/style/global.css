@@ -34,18 +34,12 @@ h3 {
 pre {
 	font-size: 1.2em;
 }
-/* page layout themes */
 .frame {
 	border: 2px solid #CCCC99;
 	border-collapse: collapse;
 	padding: 16px;
 }
-th.frame { /* only used in startpage, move there */
-	font-weight: normal;
-	letter-spacing: 0.2em;
-	border: 2px solid #CCCC99;
-}
-/* repository view page (like index and log) layout */
+/* common page elements, may also be layouted for each tool */
 .titlebar { /* deprecated */
 	padding: 3px;
 	padding-left: 10px;
@@ -58,6 +52,12 @@ th.frame { /* only used in startpage, move there */
 	background-color: #F0F0EE;
 	border-top: 1px solid #CCCC99;
 }
+.contents {
+}
+.contents .row {
+}
+.footer {
+}
 /* layout of version control concepts, these are usually span tags */
 .path {
 	color: #112200;
@@ -67,6 +67,8 @@ th.frame { /* only used in startpage, move there */
 }
 .revision {
 	color: #006600;
+	font-size-adjust: 0.4;
+	font-family: Arial, Helvetica, sans-serif;
 }
 .username {
 	color: #663300;
@@ -82,48 +84,44 @@ th.frame { /* only used in startpage, move there */
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 a.command {
+	border: 1px solid #F0F0EE;
 	background-color: #F0F0EE;
-	padding: 0px 3px;
+	padding: 2px;
 	font-size: smaller;
-	margin-left: 2px;
-	margin-right: 2px;
-	margin-top: 0px;
-	margin-bottom: 0px;
+	margin: 2px;
+}
+a.command:hover {
+	background: url('commandhover.png') center repeat-x;
+	text-decoration: none;
 }
 span.command {
+	border: 1px solid #F0F0EE;
 	background-color: #F0F0EE;
 	color: #BBBBBB;
-	padding: 0px 3px;
+	padding: 2px;
 	font-size: smaller;
-	margin-left: 2px;
-	margin-right: 2px;
+	margin: 2px;
 }
 /* action is for buttons inside listings, <a> is  active, <span> is greyed out */
 a.action {
+	color:#333333;
 	background-color: #F0F0EE;
-	padding: 0px 3px;
 	font-size: smaller;
-	border-top: 1px solid #F6F6F6;
-	border-left: 1px solid #F6F6F6;
-	border-bottom: 1px solid #DDDDDD;
-	border-right: 1px solid #DDDDDD;
-	margin-left: 2px;
-	margin-right: 2px;
-	margin-top: 0px;
-	margin-bottom: 0px;
+	border: 1px solid #F7F7F6;
+	margin: 2px;
+}
+a.action:hover {
+	background: url('commandhover.png') center repeat-x;
+	text-decoration: none;
 }
 span.action {
+	color:#333333;
 	display: none;
-	background-color: #F0F0EE;
+	background-color: #F7F7F6;
 	color: #BBBBBB;
-	padding: 0px 3px;
 	font-size: smaller;
-	border-top: 1px solid #F6F6F6;
-	border-left: 1px solid #F6F6F6;
-	border-bottom: 1px solid #DDDDDD;
-	border-right: 1px solid #DDDDDD;
-	margin-left: 2px;
-	margin-right: 2px;
+	border: 1px solid #E6E6E6;
+	margin: 2px;
 }
 /* -------- forms ---------
 <form>

@@ -15,7 +15,7 @@ var Repos = {
 	
 	requireAndWait: function(scriptUrl) {
 		alert('requires dependency and waits for it to be evaluated before return');
-	}
+	},
 	/**
 	 * Creates a new DOM element
 	 * Replace document.createElement in application/xhtml+xml pages
