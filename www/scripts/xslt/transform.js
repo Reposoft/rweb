@@ -2,6 +2,12 @@
 
 // TODO use Repos to require Sarissa dependency
 
+// exceptions
+function XsltException(message) {
+   this.message = message;
+   this.name = "XSLT error";
+}
+
 /**
  * Transform XML using an XSLT file.
  * Both files are loaded using synchronous XMLHttpRequest.
@@ -17,13 +23,14 @@ transform = function(xmlUrl, xslUrl) {
 	//alert(new XMLSerializer().serializeToString(xmlDocument));
 	
 	// Load the transformation styleshet
-    var xslt =   Sarissa.getDomDocument();
+    var xslt = Sarissa.getDomDocument();
     xslt.async = false; 
     xslt.load(xslUrl);
 	//alert(new XMLSerializer().serializeToString(xslt));
 	
 	// Transform
     var xsltProc  = new XSLTProcessor();
+	//xsltProc.setParameter("http://www.w3.org/1999/XSL/Transform", "contentsOnly", "true");
     xsltProc.importStylesheet(xslt); // makes the styleshet reusable 
     fragment = xsltProc.transformToDocument(xmlDocument);
     if (Sarissa.getParseErrorText(fragment) != Sarissa.PARSED_OK) {
@@ -38,4 +45,4 @@ transformToElement = function(xmlUrl, xslUrl, targetElement) {
 	// write the result into the target element
     targetElement.innerHTML = "";
     targetElement.innerHTML =  new XMLSerializer().serializeToString(fragment);
-};
+}

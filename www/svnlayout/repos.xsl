@@ -194,10 +194,11 @@
 		<xsl:value-of select="../@version"/>
 		<xsl:text>&#160;</xsl:text>
 		</span>
+		<!-- quay button not used right now
 		<span>
 			<xsl:text>&#160;</xsl:text>
 			<a id="quayButton"></a>
-		</span>
+		</span> -->
 	</xsl:template>
 	<!-- generate directory -->
 	<xsl:template match="dir">

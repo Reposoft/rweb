@@ -6,15 +6,65 @@
 <title>repos.se development</title>
 <link href="themes/simple/css/repos-standard.css" rel="stylesheet" type="text/css">
 <link rel="shortcut icon" href="favicon.ico">
+<script type="text/javascript" src="scripts/lib/sarissa/sarissa.js"></script>
+<script type="text/javascript" src="scripts/xslt/transform.js"></script>
+<script>
+function getWindowWidth() {
+	return Math.max(document.documentElement.clientWidth, document.body ? document.body.clientWidth : 0);
+}
+
+function showNews() {
+	var newsurl = "http://alto.optime.se/repos/view/external/?url=https://www.repos.se/sweden/staffan/messages.xml";
+	var w = getWindowWidth();
+	if (w >= 1000) {	
+		div = document.getElementById('news');
+		transformToElement(newsurl, "view/atom.xsl", div);
+		div.style.width = '' + (w - 790) + 'px';
+		div.style.display = 'inline';
+	}
+}
+</script>
+<style type="text/css">
+#page {
+	width:100%;
+}
+#intro {
+	display:inline;
+	width:760px;
+	float: left;
+}
+#news {
+	display: none;
+	float: left;
+	margin-left: 10px;
+}
+#news h1 {
+	font-size: 18px;
+}
+#news #headlines {
+	display:none;
+}
+#news h2 {
+	font-size: 14px;
+}
+#news h3 {
+	font-size: 11px;
+}
+#news p {
+	font-size: 0.8em;
+}
+</style>
 </head>
-<body>
+<body onLoad="showNews()">
+<div id="page">
+<div id="intro">
 <table width="760" align="center" class="info">
   <tr>
   	<td class="info" colspan="4">&nbsp;</td>
   </tr>
   <tr>
   	<td class="info" align="left" valign="middle" colspan="2"><img src="logo/repos4.png" width="288" height="72" border="0"></td>
-	<th class="info" align="right" valign="middle" colspan="2">Versionshantering &aring;t folket</td>
+	<th class="info" align="right" valign="middle" colspan="2">Versionshantering &aring;t folket</th>
   </tr>
   <tr align="center">
   	<td class="info" colspan="4" style="padding:16px; ">Repos &auml;r ett s&auml;tt att lagra, &auml;ndra och dela filer. Det fungerar som en vanlig mapp i datorn, men tar ocks&aring; vara p&aring; filernas historik. Via repos.se n&aring;r alla samma mappar i ett enkelt webbgränssnitt.</td>
@@ -41,6 +91,9 @@
 	<p>På G: Testar nu med layout för <a href="http://www.projectengine.nu/" target="_blank">Project Engine</a></p></td>
   </tr>
 </table>
-<p>&nbsp;</p>
+</div>
+<div id="news">
+</div>
+</div>
 </body>
 </html>
