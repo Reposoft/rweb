@@ -1,6 +1,4 @@
 /* repository visualization, minimal number of classes */
-@import url("window-default.css");
-@import url("window-alphacube.css");
 body {
     font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
     font-size: 0.8em;
@@ -36,23 +34,19 @@ h3 {
 pre {
 	font-size: 1.2em;
 }
-/* allow transparency in .png in explorer */
-img { 
-	behavior: url("/repos/themes/simple/css/pngbehavior.htc");
-}
 /* page layout themes */
-.info {
+.frame {
 	border: 2px solid #CCCC99;
 	border-collapse: collapse;
 	padding: 16px;
 }
-th.info {
+th.frame { /* only used in startpage, move there */
 	font-weight: normal;
 	letter-spacing: 0.2em;
 	border: 2px solid #CCCC99;
 }
 /* repository view page (like index and log) layout */
-.titlebar {
+.titlebar { /* deprecated */
 	padding: 3px;
 	padding-left: 10px;
 	background-color: #FFFFCC;
@@ -64,32 +58,11 @@ th.info {
 	background-color: #F0F0EE;
 	border: 1px solid #CCCC99;
 }
-.workarea {
-	padding: 10px;
-}
-.workarea p {
-	margin: 1px;
-}
-.listhead {
-	background-color:#555555; 
-	border: 1px solid #FFFFFF;
-	padding-left:3px; 
-	padding-right:5px; 
-	white-space:nowrap;
-}
-.footer {
-	font-size: 0.7em;
-	padding: 3px;
-	padding-left: 10px;
-	border: 1px solid #CCCC99;
-	clear: both;
-	background-color: #FFFFCC;
-}
 /* layout of version control concepts, these are usually span tags */
 .path {
 	color: #112200;
 }
-.filename {
+.filename { /* deprected, use 'path'. 'filename' is for forms etc. 'file' is for layout with icon */
 	color: #112200;
 }
 .revision {
@@ -107,7 +80,7 @@ th.info {
 .error {
 	color: #CC3300;
 }
-/* commands = toolbarbuttons, <a> is  active, <span> is greyed out */
+/* command = commandbar button, <a> is  active, <span> is greyed out */
 a.command {
 	background-color: #F0F0EE;
 	padding: 0px 3px;

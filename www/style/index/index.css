@@ -1,0 +1,78 @@
+@charset "utf-8";
+/* CSS Document */
+
+.file {
+	background-image: url('file.png');
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+.folder {
+	background-image: url('folder.png');
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+
+div.actions {
+	vertical-align:middle;
+	display: inline;
+}
+
+.footer {
+	text-align: right;
+	color: #999999;
+}
+
+/* icons */
+.command {
+	border: 1px hidden #F0F0EE; /* same color as commandbar */
+}
+a.command:hover {
+	border-top: 1px solid #666666;
+	border-left: 1px solid #666666;
+	border-bottom: 1px solid #FFFFFF;
+	border-right: 1px solid #FFFFFF;
+	text-decoration: none;
+}
+a[href="../"], span#up {
+	background-image: url('up.png');
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	margin: 5px;
+}
+
+/* below are from coordinator */
+div.commandbar div.command {
+	background-repeat: no-repeat;
+}
+div.commandbar div.command.add {
+	background-image: url('../images/coordinator3/commandicon_add.png');
+	background-position: 3px center;
+}
+div.commandbar div.command.add:hover {
+	background-position: 2px center;
+}
+div.commandbar div.command.common {
+	padding: 0;
+	width: 20px;
+	height: 2em;
+	display: block;
+	float: left;
+	background-position: center center;
+}
+div.commandbar div.command.logout {
+	background-image: url('../images/coordinator3/commandicon_logout.png');
+}
+div.commandbar div.command.reload {
+	background-image: url('../images/coordinator3/commandicon_reload.png');
+}
+div.commandbar div.command.print {
+	background-image: url('../images/coordinator3/commandicon_print.png');
+}
+div.commandbar div.command.help {
+	background-image: url('../images/coordinator3/commandicon_help.png');
+}
+
+
