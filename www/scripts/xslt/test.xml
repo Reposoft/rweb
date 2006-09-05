@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<routes>
+	<route type="trad">
+		<name>Bastille Crack</name>
+		<location>El Dorado Canyon</location>
+		<grade>5.7</grade>
+		<firstAscent>Stan Shepard, Allen Bergen</firstAscent>
+	</route>
+	<route type="sport">
+		<name>Animal Magnetism</name>
+		<grade>5.11c</grade>
+		<location>Boulder Canyon</location>
+		<firstAscent>Ken Trout, Rick Leitner, and Kirk Mill</firstAscent>
+	</route>
+	<route type="trad">
+		<name>Kor's Flake</name>
+		<grade>5.7</grade>
+		<location>Lumpy Ridge</location>
+		<firstAscent>Layton Kor</firstAscent>
+	</route>
+	
+</routes>

@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+<!--<script type="text/javascript" src="showfeed.js"></script>-->
+<script type="text/javascript" src="../prototype/prototype-1.4.0.js"></script>
+<script type="text/javascript">
+
+// Test transform without Sarissa lib, seems to have a problem with filetypes
+// the xsl file must be named .xml for it to work
+
+var xslAjax = new Ajax.Request(
+		"test.xsl",
+		{
+			method: 'get',
+			onComplete: setXsl
+		});
+var xmlAjax = new Ajax.Request(
+		"test.xml",
+		{
+			method: 'get',
+			onComplete: setXml
+		});
+
+var xslFile = null;
+var xmlFile = null;
+var loaded = false;
+
+function setPageLoaded() {
+	loaded = true;
+	alert('Page loaded');
+	if (loaded && xslFile != null && xmlFile != null) runTransform();
+}
+		
+function setXsl(originalRequest) {
+	alert('Got this XSL: ' + originalRequest.responseText);
+	xslFile = originalRequest.responseXML;
+	// seems responseXML doesnt work if filetype is not xml
+	// var xmlDoc = request.responseXML.xml; 
+	alert('XSL accepted: ' + xslFile.childNodes[0].tagName);
+	if (loaded && xslFile != null && xmlFile != null) runTransform();
+}
+
+function setXml(originalRequest) {
+	xmlFile = originalRequest.responseXML;
+	alert('XML loaded: ' + xmlFile.childNodes[0].tagName);
+	if (loaded && xslFile != null && xmlFile != null) runTransform();
+}
+
+function runTransform(){
+	
+
+	if(document.implementation && document.implementation.createDocument){
+		// Mozilla
+
+		var xsltProcessor = new XSLTProcessor();
+
+		// get the XML document
+		xsltProcessor.importStylesheet(xslFile);
+		
+		//transform
+		 var resultDocument = xsltProcessor.transformToFragment(xmlFile, document);
+		document.getElementById("example").appendChild(resultDocument);
+		
+	}else if(window.ActiveXObject){
+		// IE, currently the old Ajax
+		
+		// Load XML
+		xml = new ActiveXObject("MSXML2.DOMDocument");
+		xml.async = false
+		xml.load("test.xml")
+		
+		// Load XSL
+		xsl = new ActiveXObject("MSXML2.DOMDocument");
+		xsl.async = false
+		xsl.load("testtransform.xml")
+		
+	
+		// Transform
+		document.getElementById("example").innerHTML=xml.transformNode(xsl);
+	}else{
+		// Browser unknown
+		alert("Browser unknown");
+	}
+
+}
+
+function fill() {
+	var e = document.getElementById('example');
+	runTransform("test.xml", "test.xsl", e);
+}
+</script>
+<body onload="setPageLoaded()">
+	<p>The DIV below should get contents from the transform.</p>
+	<div id="example">
+	
+	</div>
+</body>
+
+</html>

@@ -35,7 +35,35 @@ var Repos = {
 	createWindow: function(id, options) {
 		var o = $H({className: "alphacube"}).merge(options);
 		return new Window(id, o);
+	},
+	
+	/**
+	 * Adds a before advice to an existing function
+	 * The advice is executed before the real function.
+	 * If the advice returns anything, the real function will not be called.
+	 * @see http://www.dotvoid.com/view.php?id=43
+	 */
+	addBefore: function(aspectFunction, object, objectFunction)
+	{
+	  var fType = typeof(objectFunction);
+	
+	  if (typeof(aspectFunction) != 'function')
+		throw(InvalidAspectFunction);
+	
+	
+		var oldFunctoin = obj.prototype[fName];
+		if (!oldFunction)
+		  throw InvalidMethod;
+	
+		obj.prototype[oldFunction] = function() {
+			var replacement = aspectFunction.apply(this, arguments);
+			if (replacement) {
+				return replacement;	
+			}
+		  	return oldFunction.apply(this, arguments);
+		}
 	}
+	
 };
 
 if (reposScriptSetup == undefined) {

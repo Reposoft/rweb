@@ -2,6 +2,30 @@
 // Copyright (c) 2006 Staffan Olsson (http://www.repos.se)
 // repos.se client side scripting platform
 
+/*
+This script loader should be refactored:
+There will be one static class Repos (placed in this file).
+It does not depend on any other scripts to be loaded in the page.
+
+
+* lib: included by Repos as needed, not referenced directly from scripts
+* plugins: modify the behaviour of a loaded page. Imported after page has loaded.
+
+Standard libraries:
+Prototype 1.5.0 rc1, some classes including Ajax and Selector.findChildElements
+AOP, decorate Event.observe with special handling of 
+	+ decorate document.createElement with createElementNS for xhtml+xml docs
+XSLT, for the transform function
+
+Repos.addBehaviour: http://www.ccs.neu.edu/home/dherman/javascript/behavior/
+Repos.Before: http://www.dotvoid.com/view.php?id=43
+
+For now:
+Scripts can refer to the Repos class, but not ReposScriptSetup
+
+
+*/
+
 function ReposScriptSetup() {
 	var version = '$Rev$';
 	
@@ -33,6 +57,8 @@ function ReposScriptSetup() {
 		s.src = scriptUrl;
 		parentTag.appendChild(s);
 	}
+	
+	this.requireAndWait
 	
 	this.createElement = function(tagname) {
 		if (document.createElementNS) {

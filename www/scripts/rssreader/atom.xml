@@ -16,4 +16,31 @@
 		<updated>2003-12-13T18:30:02Z</updated>
 		<summary>Some text.</summary>
 	</entry>
+	<entry>
+		<title>repos.se introduces atom compatibility</title>
+		<link href="http://www.repos.se"/>
+		<updated>2006-09-04T07:38:00Z</updated>
+		<summary>
+			There is now a standard location in the repository, /messages, for feeds.
+			Each feed declares the stylesheet /repos/view/atom.xsl.
+		</summary>
+		<author>
+			 <name>Staffan Olsson</name>
+			 <email>staffan@optime.se</email>
+		  </author>
+	</entry>
+	<entry>
+		<title>Another message</title>
+		<updated>2006-09-04T07:38:00Z</updated>
+		<summary>
+			Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nam tincidunt venenatis purus. Donec tellus. Cras erat lectus, varius in, interdum sed, scelerisque tristique, arcu. Donec sed metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur ut urna. Curabitur eu urna nec mi volutpat aliquet. Maecenas odio metus, ultrices sit amet, auctor et, facilisis eu, dolor. Nulla facilisi. Fusce nunc pede, vestibulum quis, condimentum ut, fringilla a, diam. Aenean molestie. Phasellus ac felis id elit elementum viverra. Vestibulum congue. Maecenas commodo. Ut scelerisque erat sed lacus.
+
+Mauris ante pede, laoreet sed, convallis gravida, faucibus a, elit. Fusce ligula felis, varius nec, bibendum in, lobortis sed, quam. Integer arcu. Cras ac tortor. Nullam metus risus, congue vel, facilisis quis, ullamcorper sed, turpis. Aliquam erat volutpat. Morbi ipsum. Donec libero quam, imperdiet eu, consequat vel, posuere vel, turpis. Aenean facilisis, sem id eleifend luctus, magna eros fringilla erat, eu placerat lorem metus quis sapien. Cras quis orci vitae lacus malesuada egestas. Phasellus ac leo in turpis ornare egestas. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque quis lectus non est mollis nonummy. Mauris cursus viverra velit.
+
+Donec bibendum nonummy ipsum. Aenean malesuada leo vitae nulla. Sed vestibulum, lacus nec eleifend aliquet, ante nunc egestas ligula, vel viverra turpis felis eu mauris. Vestibulum faucibus aliquam elit. Vivamus a odio. Morbi nulla turpis, feugiat sit amet, mollis at, rhoncus a, nulla. Vestibulum semper. Etiam et mauris vel nisl aliquam fermentum. Aenean rhoncus condimentum dolor. Sed porta, neque in commodo lobortis, risus dolor dictum dolor, id vehicula nisl orci sit amet lectus. 
+		</summary>
+		<author>
+			<name>Lorem Ipsum</name>
+		</author>
+	</entry>
 </feed>

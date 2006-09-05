@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>XSLT transformer test</title>
+</head>
+<!--<script type="text/javascript" src="showfeed.js"></script>-->
+<script type="text/javascript" src="../lib/sarissa/sarissa.js"></script>
+<script type="text/javascript" src="transform.js"></script>
+<script type="text/javascript">
+
+function showNews() {
+	transformToElement("test.xml", "test.xsl", document.getElementById('example'));
+}
+
+</script>
+<body onload="showNews()">
+	<p>The DIV below should get contents from the transform.</p>
+	<div id="example">
+	
+	</div>
+</body>
+
+</html>
