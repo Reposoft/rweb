@@ -30,8 +30,8 @@ transform = function(xmlUrl, xslUrl) {
 	
 	// Transform
     var xsltProc  = new XSLTProcessor();
-	//xsltProc.setParameter("http://www.w3.org/1999/XSL/Transform", "contentsOnly", "true");
     xsltProc.importStylesheet(xslt); // makes the styleshet reusable 
+	xsltProc.setParameter("", "contentsOnly", "true"); // no <html><head>, must be after importStylesheet to work in IE
     fragment = xsltProc.transformToDocument(xmlDocument);
     if (Sarissa.getParseErrorText(fragment) != Sarissa.PARSED_OK) {
         alert ("Transformer error: " +   Sarissa.getParseErrorText(fragment));

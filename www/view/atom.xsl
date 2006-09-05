@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:atom="http://www.w3.org/2005/Atom">
 	
@@ -45,7 +46,9 @@
 					<xsl:apply-templates select="atom:entry" mode="headline"/>
 				</ul>
 			</div>
-			<xsl:apply-templates select="atom:entry"/>
+			<xsl:apply-templates select="atom:entry">
+				<xsl:sort select="atom:updated" order="descending"/>
+			</xsl:apply-templates>
 		</div>
 	</xsl:template>
 	<xsl:template match="atom:entry" mode="headline">
