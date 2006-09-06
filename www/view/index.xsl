@@ -98,7 +98,7 @@
 				<xsl:with-param name="filetype" select="'_tortoisefolder'"/>
 			</xsl:call-template>check out</a>
 		-->
-		<a id="showlog" class="command translate" href="{$rurl}/log/?path={@path}">show log</a>
+		<a id="showlog" class="command translate" href="{$rurl}/open/log/?path={@path}">show log</a>
 		<a id="logout" class="command translate" href="/?logout">logout</a>
 		<!-- print, possibly plugin -->
 		<!-- help, possibly plugin -->
@@ -269,7 +269,7 @@
 					<xsl:value-of select="date"/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<a title="{$undo}" class="action" href="{$rurl}/undo/?repo={../@repo}&amp;rev={@revision}">undo</a>
+				<a title="{$undo}" class="action" href="{$rurl}/edit/undo/?repo={../@repo}&amp;rev={@revision}">undo</a>
 			</h3>
 			<xsl:if test="string-length(msg) > 0">
 				<p>
@@ -333,7 +333,7 @@
 				</span>
 			</xsl:if>
 			<xsl:if test="@action='M'">
-				<a title="{@action} - {$show-diff}" href="{$rurl}/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">
+				<a title="{@action} - {$show-diff}" href="{$rurl}/open/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">
 					<xsl:call-template name="logicon">
 						<xsl:with-param name="name" select="'_m'"/>
 					</xsl:call-template>
@@ -342,8 +342,8 @@
 					<xsl:value-of select="."/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<a class="action" href="{$rurl}/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={$revfrom}">before</a>
-				<a class="action" href="{$rurl}/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>
+				<a class="action" href="{$rurl}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={$revfrom}">before</a>
+				<a class="action" href="{$rurl}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>
 			</xsl:if>
 			<xsl:if test="@action='A'">
 				
