@@ -39,11 +39,13 @@ function ReposScriptSetup() {
 	this.path = "";
 	
 	// plugins to load from the Repos class (shared/repos.js)
-	this.commonPlugins = new Array(
+	/*this.commonPlugins = new Array(
 		'shared/repos-gui.js',
 		'dialog/_dialog.js',
 		'tmt-validator/setup.js',
-		'geturl/geturl.js');
+		'geturl/geturl.js');*/
+	this.commonPlugins = new Array(
+		'tmt-validator/setup.js');
 	
 	this.require = function(scriptUrl) {
 		if (nocache) {
@@ -78,8 +80,8 @@ function ReposScriptSetup() {
 	this.run = function() {
 		this.path = this._getPath();
 		//this.require("prototype/prototype-1.4.0.js");
-		this.require("shared/scriptaculous-1.6.2/prototype.js"); // Window needs this
-		this.require("shared/scriptaculous-1.6.2/scriptaculous.js");
+		//this.require("shared/scriptaculous-1.6.2/prototype.js"); // Window needs this
+		//this.require("shared/scriptaculous-1.6.2/scriptaculous.js");
 		this.require("shared/repos.js");
 	}
 }

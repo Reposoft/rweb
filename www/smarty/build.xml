@@ -10,7 +10,7 @@
   <property name="home" value="http://smarty.php.net"/>
 	
   <!-- set global properties for this build -->
-  <property name="version" value="2.6.7"/>
+  <property name="version" value="2.6.14"/>
   <property name="archive" value="${home}/distributions/Smarty-${version}.tar.gz"/>
   <property name="archive.type" value="tar.gz"/>
   <property name="extracted.folder" value="${basedir}/Smarty-${version}"/>
@@ -48,7 +48,8 @@
   	    <fileset dir="${extracted.folder}/libs"/>
   	</move>
   	<delete dir="${extracted.folder}"/>
-  	<mkdir dir="${basedir}/cache"/>
+  	<!-- caching in temp instead
+	<mkdir dir="${basedir}/cache"/>
   	<mkdir dir="${basedir}/cache/templates/"/>
   	<chmod dir="${basedir}/cache/templates/" perm="ugo+rw"/>
   	<mkdir dir="${basedir}/cache/templates_c/"/>
@@ -57,6 +58,7 @@
   	<chmod dir="${basedir}/cache/config/" perm="ugo+rw"/>
   	<mkdir dir="${basedir}/cache/cache/"/>
   	<chmod dir="${basedir}/cache/cache/" perm="ugo+rw"/>
+  	-->
   </target>
 
   <!-- Remove dependency, leaving only repos sources. -->

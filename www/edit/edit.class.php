@@ -9,7 +9,7 @@ if (mb_http_input()==false) {
 if (mb_http_input()!="UTF-8") {
 	trigger_error("Character encoding is '".mb_http_input()."', not 'UTF-8'");
 	exit;
-} 
+}
 
 // the repository write operation class
 class Edit {
@@ -96,28 +96,15 @@ class Edit {
 	 */
 	function getCommand() {
 		// command and message
-		$cmd = $this->escapeCommand($this->operation);
+		$cmd = escapeCommand($this->operation);
 		if ($this->commitWithMessage) { // commands expecting a message need this even if it is empty
-			$cmd .= ' -m '.$this->escapeArgument($this->message);
+			$cmd .= ' -m '.escapeArgument($this->message);
 		}
 		// arguments, enclosed in strings to allow spaces
 		foreach ($this->args as $arg) {
-			$cmd .= ' '.$this->escapeArgument($arg);
+			$cmd .= ' '.escapeArgument($arg);
 		}
 		return $cmd;
-	}
-	
-	// Commands are the first element on the command line and can not be enclosed in quotes
-	function escapeCommand($command) {
-		return escapeshellcmd($command);
-	}
-	
-	// Encloses an argument in quotes and escapes any quotes within it
-	function escapeArgument($argument) {
-		// Shell metacharacters are: & ; ` ' \ " | * ? ~ < > ^ ( ) [ ] { } $ \n \r (WWW Security FAQ [Stein 1999, Q37])
-		// assuming that magic quotes is enables, '"\ is already escaped
-		// double qoutes around the string escapes: *, ?, ~, ', &, <, >, |
-		return '"'.str_replace('`','\`',str_replace('$','\$',$argument)).'"';
 	}
 	
 	/**

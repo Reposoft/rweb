@@ -149,6 +149,48 @@ function repos_getSelfQuery() {
 }
 
 // ---- functions through which all command execution should go ---
+$hasencoded = false; // security check, set to true in the encoding functions and checked before 'run'
+
+// Make an url safe as both command argument and URL
+function urlEncodeNames($url) {
+	global $hasencoded; $hasencoded = true; // security check, set to true in the encoding functions and checked before 'run'
+	$parts = explode('/', $url);
+	// first part is the protocol, don't escape
+	for ($i = 1; $i < count($parts); $i++) {
+		$parts[$i] = rawurlencode($parts[$i]);
+	}
+	$encoded = implode('/', $parts);
+	if ('"'.$encoded.'"' != escapeArgument($encoded)) { // doucle check. remove if it's not worth the clock cycles.
+		trigger_error("Error. Could not safely encode the URL.");
+	}
+	return $encoded;
+}
+
+// Commands are the first element on the command line and can not be enclosed in quotes
+function escapeCommand($command) {
+	return escapeshellcmd($command);
+}
+
+// Encloses an argument in quotes and escapes any quotes within it
+function escapeArgument($argument) {
+	global $hasencoded; $hasencoded = true; // security check, set to true in the encoding functions and checked before 'run'
+	// Shell metacharacters are: & ; ` ' \ " | * ? ~ < > ^ ( ) [ ] { } $ \n \r (WWW Security FAQ [Stein 1999, Q37])
+	// Use escapeshellcmd to make argument safe for command line
+	// (double qoutes around the string escapes: *, ?, ~, ', &, <, >, |, (, )
+	$arg = preg_replace('/(\s+)/',' ',$argument);
+	$arg = str_replace("\\","\\\\", $arg);
+	$arg = str_replace("\x0A", " ", $arg);
+	$arg = str_replace("\xFF", " ", $arg);
+	$arg = str_replace('"','\"', $arg);
+	$arg = str_replace('$','\$', $arg);
+	$arg = str_replace('`','\`', $arg);
+	// windows uses % to get variable names. URLs _should_ not be encoded, but if they are we might have a problem.
+	if(isWindows()) {
+		$arg = str_replace('%','\%', $arg);
+	}
+	return '"'.$arg.'"';
+	// #&;`|*?~<>^()[]{}$\, \x0A  and \xFF. ' and "
+}
 
 /**
  * Executes a given comman on the command line.
@@ -159,6 +201,10 @@ function repos_getSelfQuery() {
  *   Last element is the return code (use array_pop to remove).
  */
 function repos_runCommand($commandName, $argumentsString) {
+ 	global $hasencoded; if (!$hasencoded) { // security check, set to true in the encoding functions and checked before 'run'. Not real protection.
+		trigger_error("Possible security risk. No argument has been encoded.");
+		exit;
+	}
 	//echo (_repos_getFullCommand($commandName, $argumentsString)); exit;
 	exec(_repos_getFullCommand($commandName, $argumentsString), $output, $returnvalue);
 	$output[] = $returnvalue;
@@ -172,6 +218,10 @@ function repos_runCommand($commandName, $argumentsString) {
  * @returns the return code of the execution. Any messages have been passed through.
  */
 function repos_passthruCommand($commandName, $argumentsString) {
+ 	global $hasencoded; if (!$hasencoded) { // security check, set to true in the encoding functions and checked before 'run'. Not real protection.
+		trigger_error("Possible security risk. No argument has been encoded.");
+		exit;
+	}
 	passthru(_repos_getFullCommand($commandName, $argumentsString), $returnvalue);
 	return $returnvalue;
 }
@@ -181,8 +231,9 @@ function _repos_getFullCommand($commandName, $argumentsString) {
 	$wrapper = _repos_getScriptWrapper();
 	if (strlen($wrapper)>0) {
 		// make one argument (to the wrapper) of the entire command
-		// using magic_quotes_gpc, existing single quotes are already escaped, but they must be adapted for shell
-		$run = " '".$run.' '.str_replace("\\'","'\\''",$argumentsString).' 2>&1'."'";
+		// the arguments in the argumentsString are already escaped and surrounded with quoutes where needed
+		// existing single quotes must be adapted for shell
+		$run = " '".$run.' '.str_replace("'","'\\''",$argumentsString).' 2>&1'."'";
 	} else {
 		$run += ' '.$argumentsString;
 	}

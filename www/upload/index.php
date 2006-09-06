@@ -8,10 +8,10 @@ require( PARENT_DIR."/edit/edit.class.php" );
 define('MAX_FILE_SIZE', 1000000);
 
 if ($_SERVER['REQUEST_METHOD']=='GET') {
-	if (isset($_GET['result'])) {
-		header('Location: ' . str_replace("/upload/", "/edit/", getSelfUrlAndQuery()));
-		exit;
-	}
+	//if (isset($_GET['result'])) {
+	//	header('Location: ' . str_replace("/upload/", "/edit/", getSelfUrlAndQuery()));
+	//	exit;
+	//}
 	$template= new Presentation();
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
 	$template->assign('path',getPath());

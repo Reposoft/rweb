@@ -9,13 +9,10 @@ if(!isTargetFile()) {
 	trigger_error("Error: File not specified. Directories can not be shown here.");
 	exit;
 }
-if(!isset($_GET['rev'])) {
+$rev = getRevision();
+if(!$rev) {
 	trigger_error("Error: Version parameter (\"rev\") not specified.");
 	exit;
-}
-$rev = $_GET['rev'];
-if(!is_numeric($rev)) {
-	trigger_error("Error: Version number is '$rev', which is not a number.");
 }
 $filename = getFile();
 
@@ -51,7 +48,7 @@ if (isset($_GET['open'])) {
 
 function doPassthru($targetUrl, $revision) {
 	//$cmd = 'cat' . ' -r'.$revision . ' "'.$targetUrl.'"';
-	$cmd = 'cat "'.$targetUrl.'@'.$revision.'"'; // using "peg" revision
+	$cmd = 'cat '.escapeArgument($targetUrl.'@'.$revision); // using "peg" revision
 	$returnvalue = login_svnPassthru($cmd);
 	return $returnvalue;
 }

@@ -6,15 +6,11 @@ require_once( upOne(dirname(__FILE__)) . "/account/login.inc.php" );
 define('STYLESHEET','../svnlayout/repos.xsl');
 
 $url = urlEncodeNames(getTargetUrl());
-$rev = '';
-if (isset($_GET['rev'])) {
-	$rev = '-r '.$_GET['rev'];
-}
 if (!getPath()) {
 	echo("Log withoug the 'path' parameter has not been implemented yet");exit;
 }
 
-$cmd = escapeshellcmd("log -v --xml --incremental $rev $url");
+$cmd = "log -v --xml --incremental ".$url;
 
 // start output
 

@@ -227,6 +227,25 @@ function getTarget() {
 }
 
 /**
+ * @return revision number from parameters (safe as command argument), false if not set
+ */
+function getRevision() {
+	if(!isset($_GET['rev'])) {
+		return false;
+	}
+	$rev = $_GET['rev'];
+	if (is_numeric($rev)) {
+		return $rev;
+	}
+	$accepted = array('HEAD');
+	if (in_array($rev, $accepted)) {
+		return $rev;
+	}
+	trigger_error("Error. Revision number '$rev' is not valid.");
+	exit;
+}
+
+/**
  * Repository is resolved using HTTP Referrer with fallback to settings.
  * To find out where root is, query paramter 'path' must be set.
  * @return Root url of the repository for this request, no tailing slash.
@@ -269,15 +288,6 @@ function getTargetUrl() {
 	$target = getTarget();
 	if (strlen($target)<1) return false;
     return getRepositoryUrl() . $target;
-}
-
-function urlEncodeNames($url) {
-	$parts = explode('/', $url);
-	// first part is the protocol, don't escape
-	for ($i = 1; $i < count($parts); $i++) {
-		$parts[$i] = rawurlencode($parts[$i]);
-	}
-	return implode('/', $parts);
 }
 
 /**
