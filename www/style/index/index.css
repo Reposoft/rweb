@@ -9,7 +9,7 @@
 }
 .contents .row {
 	width: 100%;
-	padding: 2px;
+	padding: 1px;
 	border-top: 1px solid #FFFFFF;
 	border-bottom: 1px solid #FFFFFF;
 }
@@ -31,24 +31,28 @@
 	right: 10px;
 }
 /* resource links */
-a[href="../"], span#up {
+a[href="../"] {
 	background-image: url('up.png');
 	background-position: left;
 	background-repeat: no-repeat;
-	padding-left: 20px;
-	margin: 5px;
+}
+#up {
+	padding-left: 30px;
+	margin-left: 10px;	
 }
 .file {
 	background-image: url('file.png');
 	background-position: left;
 	background-repeat: no-repeat;
-	padding-left: 20px;
+	padding-left: 30px;
+	margin-left: 10px;
 }
 .folder {
 	background-image: url('folder.png');
 	background-position: left;
 	background-repeat: no-repeat;
-	padding-left: 20px;
+	padding-left: 30px;
+	margin-left: 10px;
 }
 
 /* -- from coordinator -- inspiration */

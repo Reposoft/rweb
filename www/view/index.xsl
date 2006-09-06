@@ -14,15 +14,16 @@
 	<!-- start transform -->
 	<xsl:output method="xml" indent="no"/>
 	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
-	<xsl:param name="rurl"><xsl:value-of select="$web"/></xsl:param>
+	<xsl:param name="web"><xsl:value-of select="$repos_web"/></xsl:param>
+	<xsl:param name="repo"><xsl:value-of select="$repo_url"/></xsl:param>
 	<!-- static contents urls -->
-	<xsl:param name="cssUrl"><xsl:value-of select="$rurl"/><xsl:value-of select="$theme"/>/style</xsl:param>
+	<xsl:param name="cssUrl"><xsl:value-of select="$web"/><xsl:value-of select="$theme"/>/style</xsl:param>
 	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
-	<xsl:param name="editUrl"><xsl:value-of select="$rurl"/>/edit</xsl:param>
+	<xsl:param name="editUrl"><xsl:value-of select="$web"/>/edit</xsl:param>
 	<!-- when spacer space can't be avoided -->
 	<xsl:param name="spacer" select="' &#160; '"/>
-	<!-- include  repos.se shared templates -->
-	<!-- <xsl:include href=""/> -->
+	<!-- should the 'up' button be visible when the current folder is 'trunk' -->
+	<xsl:param name="disable-up-at-trunk">yes</xsl:param>
 	<!-- document skeleton -->
 	<xsl:template match="/">
 		<html xmlns="http://www.w3.org/1999/xhtml">
@@ -41,7 +42,7 @@
 				<!-- install repos-quay, this row and an icon in the footer -->
 				<script type="text/javascript" src="/quay/repos-quay.js"></script>
 				<!-- install the repos script bundle -->
-				<script type="text/javascript" src="{$rurl}/scripts/head.js"></script>
+				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
 			</head>
 			<body class="index">
 				<!-- supported contents -->
@@ -67,32 +68,24 @@
 	<xsl:template name="commandbar">
 		<div class="commandbar">
 		<a id="reposbutton" href="http://www.repos.se/" target="_blank">
-			<img src="{$rurl}/style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
+			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		</a>
-		<xsl:choose>
-			<xsl:when test="/svn/index/updir and not(substring-after(/svn/index/@path, '/trunk')='')">
-				<a id="up" class="command up translate" href="../">up</a>
-			</xsl:when>
-			<xsl:otherwise>
-				<span id="up" class="command translate">up</span>
-			</xsl:otherwise>
-		</xsl:choose>
 		<a id="refresh" class="command translage" href="#" onclick="history.go()">refresh</a>
 		<xsl:if test="$editUrl">
 			<a id="newfolder" class="command translate" href="{$editUrl}/?action=mkdir&amp;path={@path}">new folder</a>
-			<a id="upload" class="command translate" href="{$rurl}/upload/?path={@path}">upload</a>
+			<a id="upload" class="command translate" href="{$web}/upload/?path={@path}">upload</a>
 		</xsl:if>
 		<!--
-		<a class="command" href="{$rurl}/tutorials/?show=networkfolder">
+		<a class="command" href="{$web}/tutorials/?show=networkfolder">
 			<xsl:call-template name="showbutton">
 				<xsl:with-param name="filetype" select="'_windowsfolder'"/>
 			</xsl:call-template>open folder</a>
-		<a class="command" href="{$rurl}/tutorials/?show=checkout">
+		<a class="command" href="{$web}/tutorials/?show=checkout">
 			<xsl:call-template name="showbutton">
 				<xsl:with-param name="filetype" select="'_tortoisefolder'"/>
 			</xsl:call-template>check out</a>
 		-->
-		<a id="showlog" class="command translate" href="{$rurl}/open/log/?path={@path}">show log</a>
+		<a id="showlog" class="command translate" href="{$web}/open/log/?path={@path}">show log</a>
 		<a id="logout" class="command translate" href="/?logout">logout</a>
 		<!-- print, possibly plugin -->
 		<!-- help, possibly plugin -->
@@ -100,8 +93,17 @@
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="contents">
+		<xsl:param name="home">
+			<xsl:call-template name="getTrunkUrl"/>
+		</xsl:param>
 		<div class="contents">
 		<h2>
+			<a href="{$home}">
+				<span class="projectname">
+					<xsl:call-template name="getProjectName"/>
+				</span>
+			</a>
+			<xsl:value-of select="$spacer"/>
 			<xsl:call-template name="getFolderPath"/>
 			<xsl:value-of select="$spacer"/>
 			<xsl:if test="@rev">
@@ -110,36 +112,19 @@
 				</span>
 			</xsl:if>
 		</h2>
+		<xsl:if test="/svn/index/updir">
+			<xsl:if test="not($disable-up-at-trunk='yes' and substring-after(/svn/index/@path, '/trunk')='')">
+				<div class="row">
+					<a id="up" class="translate" href="../">up</a>
+				</div>
+			</xsl:if>
+		</xsl:if>
 		<xsl:apply-templates select="dir">
 			<xsl:sort select="@name"/>
 		</xsl:apply-templates>
 		<xsl:apply-templates select="file">
 			<xsl:sort select="@name"/>
 		</xsl:apply-templates>
-		</div>
-	</xsl:template>
-	<!-- extra info, links to top -->
-	<xsl:template name="footer">
-		<div class="footer">
-		<span class="path">
-			<xsl:call-template name="getTrunkUrl"/>
-		</span>
-		<span class="legal">
-		<xsl:text>Powered by </xsl:text>
-		<xsl:element name="a">
-			<xsl:attribute name="href"><xsl:value-of select="../@href"/></xsl:attribute>
-			<xsl:attribute name="target"><xsl:value-of select="'_blank'"/></xsl:attribute>
-			<xsl:text>Subversion</xsl:text>
-		</xsl:element>
-		<xsl:text>&#160;</xsl:text>
-		<xsl:value-of select="../@version"/>
-		<xsl:text>&#160;</xsl:text>
-		</span>
-		<!-- quay button not used right now
-		<span>
-			<xsl:text>&#160;</xsl:text>
-			<a id="quayButton"></a>
-		</span> -->
 		</div>
 	</xsl:template>
 	<!-- generate directory -->
@@ -176,21 +161,50 @@
 			</a>
 			<xsl:value-of select="$spacer"/>
 			<div class="actions">
-				<a class="action" title="this file can be opened in Repos" href="{$rurl}/open/?path={../@path}&amp;file={@href}">open</a>
+				<a class="action" title="this file can be opened in Repos" href="{$web}/open/?path={../@path}&amp;file={@href}">open</a>
 				<xsl:if test="$editUrl">
 					<a class="action" href="{$editUrl}/?action=rename&amp;path={../@path}&amp;file={@href}">rename</a>
 					<span class="action">copy</span>
 					<a class="action" href="{$editUrl}/?action=delete&amp;path={../@path}&amp;file={@href}">delete</a>
 					<span class="action">lock</span>
-					<a class="action" href="{$rurl}/upload/?path={../@path}&amp;file={@href}">upload changes</a>
+					<a class="action" href="{$web}/upload/?path={../@path}&amp;file={@href}">upload changes</a>
 				</xsl:if>
 			</div>
+		</div>
+	</xsl:template>
+	<!-- extra info and logos -->
+	<xsl:template name="footer">
+		<div class="footer">
+		<span class="path">
+			<xsl:call-template name="getTrunkUrl"/>
+		</span>
+		<span class="legal">
+		<xsl:text>Powered by </xsl:text>
+		<xsl:element name="a">
+			<xsl:attribute name="href"><xsl:value-of select="../@href"/></xsl:attribute>
+			<xsl:attribute name="target"><xsl:value-of select="'_blank'"/></xsl:attribute>
+			<xsl:text>Subversion</xsl:text>
+		</xsl:element>
+		<xsl:text>&#160;</xsl:text>
+		<xsl:value-of select="../@version"/>
+		<xsl:text>&#160;</xsl:text>
+		</span>
+		<!-- quay button not used right now
+		<span>
+			<xsl:text>&#160;</xsl:text>
+			<a id="quayButton"></a>
+		</span> -->
 		</div>
 	</xsl:template>
 	<!-- get the absolute URL for the project's file archove, using configuration -->
 	<xsl:template name="getTrunkUrl">
 		<xsl:value-of select="$repo"/>
 		<xsl:call-template name="getTrunkPath"/>
+	</xsl:template>
+	<!-- get the root folder name -->
+	<xsl:template name="getProjectName">
+		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
+		<xsl:value-of select="substring-before(substring($path,2),'/')"/>
 	</xsl:template>
 	<!-- get the folders as breadcrumbs (link each folder) -->
 	<xsl:template name="getFolderPath">
@@ -324,7 +338,7 @@
 					<xsl:value-of select="date"/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<a title="{$undo}" class="action" href="{$rurl}/edit/undo/?repo={../@repo}&amp;rev={@revision}">undo</a>
+				<a title="{$undo}" class="action" href="{$web}/edit/undo/?repo={../@repo}&amp;rev={@revision}">undo</a>
 			</h3>
 			<xsl:if test="string-length(msg) > 0">
 				<p>
@@ -388,7 +402,7 @@
 				</span>
 			</xsl:if>
 			<xsl:if test="@action='M'">
-				<a title="{@action} - {$show-diff}" href="{$rurl}/open/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">
+				<a title="{@action} - {$show-diff}" href="{$web}/open/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">
 					<xsl:call-template name="logicon">
 						<xsl:with-param name="name" select="'_m'"/>
 					</xsl:call-template>
@@ -397,8 +411,8 @@
 					<xsl:value-of select="."/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<a class="action" href="{$rurl}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={$revfrom}">before</a>
-				<a class="action" href="{$rurl}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>
+				<a class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={$revfrom}">before</a>
+				<a class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>
 			</xsl:if>
 			<xsl:if test="@action='A'">
 				
@@ -477,7 +491,7 @@
 			<tr>
 				<td id="commandbar" class="commandbar">
 					<a id="up" class="command" href="#" onclick="history.back()">back</a>
-					<a class="command" href="{$rurl}/cat/?repo={@repo}&amp;target={@target}&amp;rev={@rev}&amp;open=1">download this file</a>
+					<a class="command" href="{$web}/cat/?repo={@repo}&amp;target={@target}&amp;rev={@rev}&amp;open=1">download this file</a>
 				</td>
 			</tr>
 			<tr>
