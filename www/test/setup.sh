@@ -68,4 +68,5 @@ mkdir "$TST/wc/test/trunk"
 mkdir "$TST/wc/test/calendar"
 $SVN add "$TST/wc/svensson"
 $SVN add "$TST/wc/test"
+$SVN commit -m "Created users svensson and test" "$TST/wc/"
 
