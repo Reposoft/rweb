@@ -45,7 +45,11 @@
 				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
 			</head>
 			<body class="index">
+				<!-- supported contents -->
 				<xsl:apply-templates select="svn"/>
+				<xsl:apply-templates select="log"/>
+				<xsl:apply-templates select="diff"/>
+				<xsl:apply-templates select="cat"/>
 			</body>
 		</html>
 	</xsl:template>
@@ -179,11 +183,7 @@
 	<!-- extra info and logos -->
 	<xsl:template name="footer">
 		<div class="footer">
-		<span class="translate">
-			<xsl:text>File archive:</xsl:text>
-		</span>
-		<xsl:value-of select="$spacer"/>
-		<span>
+		<span class="path">
 			<xsl:call-template name="getTrunkUrl"/>
 		</span>
 		<span class="legal">
@@ -298,6 +298,253 @@
 		<xsl:param name="filename" select="@href"/>
 		<xsl:value-of select="'f:'"/>
 		<xsl:value-of select="translate($filename,'%','_')"/>
+	</xsl:template>
+	<!--
+	========= svn log xml formatting ==========
+	-->
+	<!-- text strings -->
+	<xsl:param name="show-diff">Show changes (differeces from previous revision)</xsl:param>
+	<xsl:param name="undo">Reverse the changes made from previous revision to this one</xsl:param>
+	<!-- layout -->
+	<xsl:template match="log">
+		<table class="info" width="98%" align="center">
+			<tr>
+				<td id="titlebar" class="titlebar">
+					<xsl:call-template name="titlebar"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="commandbar" class="commandbar">
+					<a id="up" class="command" href="{@repo}{@path}">up</a>
+				</td>
+			</tr>
+			<tr>
+				<td id="workarea" class="workarea">
+					<h1>
+						<span>Log</span>
+					</h1>
+					<xsl:apply-templates select="error"/>
+					<xsl:apply-templates select="logentry"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="footer" class="footer">
+					<xsl:value-of select="$spacer"/>
+				</td>
+			</tr>
+		</table>
+	</xsl:template>
+	<xsl:template match="logentry">
+		<div id="rev{@revision}">
+			<h3>
+				<span class="revision">
+					<xsl:value-of select="@revision"/>
+				</span>
+				<xsl:value-of select="$spacer"/>
+				<span class="username">
+					<xsl:value-of select="author"/>
+				</span>
+				<xsl:value-of select="$spacer"/>
+				<span class="datetime">
+					<xsl:value-of select="date"/>
+				</span>
+				<xsl:value-of select="$spacer"/>
+				<a title="{$undo}" class="action" href="{$web}/edit/undo/?repo={../@repo}&amp;rev={@revision}">undo</a>
+			</h3>
+			<xsl:if test="string-length(msg) > 0">
+				<p>
+					<span title="log message">
+						<xsl:call-template name="logicon">
+							<xsl:with-param name="name" select="'_message'"/>
+						</xsl:call-template>
+					</span>
+					<span class="message">
+						<xsl:call-template name="linebreak">
+							<xsl:with-param name="text" select="msg"/>
+						</xsl:call-template>
+					</span>
+				</p>
+			</xsl:if>
+			<xsl:apply-templates select="paths">
+				<xsl:with-param name="revfrom" select="following-sibling::*[1]/@revision"/>
+			</xsl:apply-templates>
+		</div>
+	</xsl:template>
+	<xsl:template match="paths">
+		<xsl:param name="revfrom"/>
+		<xsl:apply-templates select="path">
+			<xsl:with-param name="revfrom" select="$revfrom"/>
+		</xsl:apply-templates>
+	</xsl:template>
+	<xsl:template match="paths/path">
+		<xsl:param name="revfrom"/>
+		<p>
+			<xsl:if test="@action='A'">
+				<span title="{@action} - added">
+					<xsl:call-template name="logicon">
+						<xsl:with-param name="name" select="'_a'"/>
+					</xsl:call-template>
+				</span>
+				<span class="path">
+					<xsl:value-of select="."/>
+				</span>
+				<xsl:value-of select="$spacer"/>
+				<xsl:if test="@copyfrom-path">
+					<span title="copied from">
+						<xsl:call-template name="logicon">
+							<xsl:with-param name="name" select="'_copiedfrom'"/>
+						</xsl:call-template>
+					</span>
+					<span class="path">
+						<xsl:value-of select="@copyfrom-path"/>&#160;</span>
+					<span class="revision">
+						<xsl:value-of select="@copyfrom-rev"/>
+					</span>
+				</xsl:if>
+			</xsl:if>
+			<xsl:if test="@action='D'">
+				<span title="{@action} - deleted">
+					<xsl:call-template name="logicon">
+						<xsl:with-param name="name" select="'_d'"/>
+					</xsl:call-template>
+				</span>
+				<span class="path">
+					<xsl:value-of select="."/>
+				</span>
+			</xsl:if>
+			<xsl:if test="@action='M'">
+				<a title="{@action} - {$show-diff}" href="{$web}/open/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">
+					<xsl:call-template name="logicon">
+						<xsl:with-param name="name" select="'_m'"/>
+					</xsl:call-template>
+				</a>
+				<span class="path">
+					<xsl:value-of select="."/>
+				</span>
+				<xsl:value-of select="$spacer"/>
+				<a class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={$revfrom}">before</a>
+				<a class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>
+			</xsl:if>
+			<xsl:if test="@action='A'">
+				
+			</xsl:if>
+		</p>
+	</xsl:template>
+	<xsl:template name="logicon">
+		<xsl:param name="name"/>
+		<img src="{$iconsUrl}/{$name}.{$iconType}" border="0" align="absmiddle" width="{$miniIconSize}" height="{$miniIconSize}" hspace="{$iconHspace}" vspace="{$iconVspace}"/>
+	</xsl:template>
+	<!--
+	========= svn diff formatting ==========
+	-->
+	<xsl:template match="diff">
+		<table class="info" width="98%" align="center">
+			<tr>
+				<td id="titlebar" class="titlebar">
+					<xsl:call-template name="titlebar"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="commandbar" class="commandbar">
+					<a id="up" class="command" href="#" onclick="history.back()">back</a>
+				</td>
+			</tr>
+			<tr>
+				<td id="workarea" class="workarea">
+					<h2>
+						<span class="filename">
+							<xsl:value-of select="@target"/>
+						</span>
+						<xsl:value-of select="$spacer"/>
+						<span class="revision">
+							<xsl:value-of select="@revfrom"/>
+						</span>
+						<xsl:value-of select="':'"/>
+						<span class="revision">
+							<xsl:value-of select="@revto"/>
+						</span>
+					</h2>
+					<xsl:apply-templates select="error">
+						<xsl:with-param name="possible-cause">The file might have been moved from this location</xsl:with-param>
+					</xsl:apply-templates>
+					<xsl:apply-templates select="plaintext"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="footer" class="footer">
+					<xsl:value-of select="$spacer"/>
+				</td>
+			</tr>
+		</table>
+	</xsl:template>
+	<!--
+	========= special contents ==========
+	-->
+	<xsl:template match="plaintext">
+		<pre>
+			<xsl:value-of select="."/>
+		</pre>
+	</xsl:template>
+	<xsl:template match="display">
+		<iframe src="{@src}" name="displayFrame" width="100%" height="100%" scrolling="auto">
+		</iframe>
+	</xsl:template>
+	<!--
+	========= svn cat formatting ==========
+	-->
+	<xsl:template match="cat">
+		<table class="info" width="98%" align="center">
+			<tr>
+				<td id="titlebar" class="titlebar">
+					<xsl:call-template name="titlebar"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="commandbar" class="commandbar">
+					<a id="up" class="command" href="#" onclick="history.back()">back</a>
+					<a class="command" href="{$web}/cat/?repo={@repo}&amp;target={@target}&amp;rev={@rev}&amp;open=1">download this file</a>
+				</td>
+			</tr>
+			<tr>
+				<td id="workarea" class="workarea">
+					<h2>
+						<span class="filename">
+							<xsl:value-of select="@target"/>
+						</span>
+						<xsl:value-of select="$spacer"/>
+						<span class="revision">
+							<xsl:text>version </xsl:text>
+							<xsl:value-of select="@rev"/>
+						</span>
+					</h2>
+					<xsl:apply-templates select="*"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="footer" class="footer">
+					<xsl:value-of select="$spacer"/>
+				</td>
+			</tr>
+		</table>
+	</xsl:template>
+	<!-- ====== error node, deprecated (remove when login.inc.php svnerror is not used anymore) ======== -->
+	<xsl:template match="error">
+		<xsl:param name="possible-cause"/>
+		<h2 class="error">An error has occured</h2>
+		<p>
+			<xsl:text>Code </xsl:text>
+			<xsl:value-of select="@code"/>
+			<xsl:value-of select="$spacer"/>
+			<xsl:value-of select="$possible-cause"/>
+		</p>
+		<xsl:apply-templates select="*"/>
+		<!-- finally copy all text contents because there might have been unstructured output before the error occured -->
+		<pre>
+			<xsl:value-of select="/"/>
+		</pre>
+	</xsl:template>
+	<xsl:template match="output">
+		<p><xsl:value-of select="@line"/></p>
 	</xsl:template>
 	<!-- *** replace newline with <br> *** -->
 	<xsl:template name="linebreak">

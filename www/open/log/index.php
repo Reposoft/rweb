@@ -2,7 +2,7 @@
 
 require_once(dirname(dirname(dirname(__FILE__))) . "/account/login.inc.php" );
 
-define('STYLESHEET','../../svnlayout/repos.xsl');
+define('STYLESHEET','../../view/log.xsl');
 
 $url = urlEncodeNames(getTargetUrl());
 if (!getPath()) {
