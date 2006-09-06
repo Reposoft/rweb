@@ -3,10 +3,10 @@
 
 // popup titlebar
 var _geturl_title_prefix = 'URL: ';
-var _window_id = 'windowGetUrl';
+var win = null;
 
 function getUrlClose() {
-	Windows.close(_window_id);
+	win.close();
 }
 
 function getUrl(objLink) {
@@ -14,7 +14,7 @@ function getUrl(objLink) {
 }
 
 function getUrlText(objLink) {
-	return objLink.innerHTML.stripTags(); // using Prototype extension to String
+	return objLink.innerHTML; // using Prototype extension to String
 }
 
 function showUrl(relativeOrAbsoluteUrl, titleText) {
@@ -35,10 +35,10 @@ function showUrl(relativeOrAbsoluteUrl, titleText) {
 function showUrlPopup(absoluteUrl, titleText) {
 	// figure out the size and position of the main div
 	var popupWidth = geturl_calculateWidth(absoluteUrl);
-	var popupHeight = 50;
+	var popupHeight = 100;
 	var popupLeft = geturl_calculateLeft(popupWidth);
 	// create the popup
-	win = Repos.createWindow(_window_id, {title: titleText, width:popupWidth, height: popupHeight});
+	win = Repos.createWindow({title: titleText, width: popupWidth, height: popupHeight});
 	// maybe Repos.createWindow should automatically set close key
 	/* Can't get the keypress observer to work
 	win.getContent().onkeypress = function(ev) { // hide on ESC
@@ -47,11 +47,10 @@ function showUrlPopup(absoluteUrl, titleText) {
 	}*/
 	// create the input box that will contain the link
 	objText = geturl_makeText(Math.floor(absoluteUrl.length * 1.1), absoluteUrl);
-	win.getContent().appendChild(objText);
-	Element.setStyle(win.getContent(), {overflowX: 'hidden', overflowY: 'hidden'});
+	win.setContent(absoluteUrl);//objText);
+	//Element.setStyle(win.getContent(), {overflowX: 'hidden', overflowY: 'hidden'});
 	// show
-	win.setDestroyOnClose();
-	win.showCenter();
+	win.show();
 	// select the url so the user can do Ctrl+C
 	objText.select();
 }
@@ -87,4 +86,8 @@ function geturl_createElement(tagname) {
 function geturl_getClientWidth() {
 	// document.documentElement.clientWidth does not work in IE xml+xslt
 	return Math.max(document.documentElement.clientWidth, document.body ? document.body.clientWidth : 0);
+}
+
+function showDetails() {
+	// get details using AJAX
 }

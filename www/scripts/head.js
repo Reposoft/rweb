@@ -41,7 +41,7 @@ function ReposScriptSetup() {
 	// plugins to load from the Repos class (shared/repos.js)
 	this.commonPlugins = new Array(
 		'shared/repos-gui.js',
-		'shared/window-0.96.2.js',
+		'dialog/_dialog.js',
 		'tmt-validator/setup.js',
 		'geturl/geturl.js');
 	
@@ -57,8 +57,6 @@ function ReposScriptSetup() {
 		s.src = scriptUrl;
 		parentTag.appendChild(s);
 	}
-	
-	this.requireAndWait
 	
 	this.createElement = function(tagname) {
 		if (document.createElementNS) {
@@ -81,6 +79,7 @@ function ReposScriptSetup() {
 		this.path = this._getPath();
 		//this.require("prototype/prototype-1.4.0.js");
 		this.require("shared/scriptaculous-1.6.2/prototype.js"); // Window needs this
+		this.require("shared/scriptaculous-1.6.2/scriptaculous.js");
 		this.require("shared/repos.js");
 	}
 }

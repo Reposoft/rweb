@@ -1,0 +1,59 @@
+--------------------------------------------------------------------------------
+|
+|                           net4visions.com source code
+|
+|-------------------------------------------------------------------------------
+|
+| file:             changelog.txt - dialog window changes
+| category:         javascript
+|
+| last modified:    03/02/2006
+|
+| description:
+| this txt shows the changes to the dialog script
+|
+--------------------------------------------------------------------------------
+
+03/02/2006
+ - added two new methods, setTheme and getTheme (JV)
+ - rearranged the source to be "droppable" into other projects 
+ - added a "load" method to "Dialogs" that loads external css files (JV)
+ - added a "path" variable to "Dialogs" for linking images and for referencing css (set in the "load" method) (JV)
+ - added a call to Dialogs.load() to import external css (JV)
+
+02/18/2006
+ - rewritten _chkLimitPos function to deal with position limits
+
+02/17/2006
+ - fixed an issue when dialog is resized to minimum height
+
+02/16/2006
+- added 'limit' paramater to limit dragging and moving to dimensions of main container (client window)
+- put status messages into Dialogs variables
+
+02/15/2006
+ - addeded 'effects' parameter to enable/disable animations
+
+02/13/2006
+ - fixed a typo with moveable
+ - fixed an issue with the statusbar on existing dialog elements (className was not added)
+
+02/12/2006
+ - changed title buttons to input fields thus no dragging is initialized onmousedown
+ - added event observer to remove blur onfocus buttons (firefox)
+ - fixed a bug when dialog was minimized and then maximized
+ - fixed some issues with the status text effect
+ - fixed some html markup and css - dialog should now validate 
+
+--------------------------------------------------------------------------------
+NOTES:
+ - "dialog" folder contains all source related to the dialogs script
+ - "themeS" folder contains a "common" css with css rules that get applied to all dialogs
+ - "[themename]" folder contains additional css for a particular theme. The naming convention .[themename] [cssname] distinguishes multiple themes so they can be used at the same time
+
+--------------------------------------------------------------------------------
+TODO:
+ - further optimization of code
+ - combining move and resize function with MoveAndResize class
+ - adding parameter for using other main container than document.window
+

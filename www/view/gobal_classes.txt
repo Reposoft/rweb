@@ -1,0 +1,8 @@
+translate: localized string, in english
+file: link to a repository file
+file-[pdf/html/doc/..]: specific filetype
+folder: link to a repository folder
+path: pathname in repository
+filename: for example in a form, should match the filename pattern,
+required: form field that must have a value
+error: error message

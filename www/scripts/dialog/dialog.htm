@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>net4visions.com: Dialogs - Floating windows</title>
+<script type="text/javascript" language="javascript" src="../../scriptaculous/lib/prototype.js"></script>
+<script type="text/javascript" language="JavaScript" src="../../scriptaculous/src/scriptaculous.js"></script>
+<script type="text/javascript" language="JavaScript" src="_dialog.js"></script>
+</head>
+<body>
+<div id="dContainer" class="dContainer" style="display: none;">
+  <div class="dTitle"><span>Window</span>
+    <div class="dTitleBtn">
+      <input type="image" src="themes/default/spacer.gif" class="dBtnExpand" />
+      <input type="image" src="themes/default/spacer.gif" class="dBtnMaximize" />
+      <input type="image" src="themes/default/spacer.gif" class="dBtnClose" />
+    </div>
+  </div>
+  <div class="dContentWrap">
+    <div class="dContent">
+      <div>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis quis elit nec enim luctus ornare. Morbi mollis. Fusce luctus, nisl sed consequat posuere, dolor libero viverra augue, et tempus eros neque a lectus. Pellentesque vitae nisi sit amet nisi eleifend hendrerit. Nullam porttitor, libero eget vehicula dapibus, sapien erat elementum urna, at faucibus nisi lacus ut dolor. Nulla hendrerit lacus id nunc. Donec facilisis nunc in diam rhoncus ultrices. Suspendisse potenti. Nunc erat turpis, porta quis, fermentum vel, pellentesque eget, risus. Integer tempor risus at lectus. Proin suscipit, risus id mollis ultrices, risus odio tincidunt tellus, id ultrices magna pede a sapien. </p>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis quis elit nec enim luctus ornare. Morbi mollis. Fusce luctus, nisl sed consequat posuere, dolor libero viverra augue, et tempus eros neque a lectus. Pellentesque vitae nisi sit amet nisi eleifend hendrerit. Nullam porttitor, libero eget vehicula dapibus, sapien erat elementum urna, at faucibus nisi lacus ut dolor. Nulla hendrerit lacus id nunc. Donec facilisis nunc in diam rhoncus ultrices. Suspendisse potenti. Nunc erat turpis, porta quis, fermentum vel, pellentesque eget, risus. Integer tempor risus at lectus. Proin suscipit, risus id mollis ultrices, risus odio tincidunt tellus, id ultrices magna pede a sapien. </p>
+      </div>
+    </div>
+    <div class="dStatus"> <span>Status</span>
+      <div class="dBtnResize"></div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" language="JavaScript" >
+	var dlg0 = new Dialog('dContainer', {onMinimize: callback});
+	var dlg1 = new Dialog(null, {onClose: callback, modal: false, remove: false});
+	var dlg2 = new Dialog(null, {modal: false, remove: false});
+	var dlg3 = new Dialog(null, {modal: false, statusbar: false});
+	var dlg4 = new Dialog(null, {modal: false, show: false, minimizable: false, maximizable: false});
+	var dlg5 = new Dialog(null, {modal: true, show: false, title: 'my dialog', effects: true});
+	var html = '<select name="test"><option>Internet Explorer</option><option>Firefox</option><option>Opera</option></select>';
+	dlg3.setContent(html)
+	dlg2.show();	
+	dlg4.show();
+	setInterval(function(){ dlg4.getTheme() == 'blue' ? dlg4.setTheme('default') : dlg4.setTheme('blue'); }, 1000);
+	dlg5.show(true);
+	
+	function callback(eventArgs) {		
+		if (!eventArgs) return false;
+		var evt = eventArgs.eventName; 
+		var msg = eventArgs.message;
+		if (evt == 'onActivate') { 		
+		} else if (evt == 'onDeactivate') { 		
+		} else if (evt == 'onDragStart') {			
+		} else if (evt == 'onDrag') { 			
+		} else if (evt == 'onDragEnd') { 		
+		} else if (evt == 'onShow') { 			
+		} else if (evt == 'onClose') { 			
+		} else if (evt == 'onRemove') { 			
+		} else if (evt == 'onResize') { 			
+		} else if (evt == 'onMove') { 			
+		} else if (evt == 'onMaximize') {		
+		} else if (evt == 'onMinimize') { 		
+			this.setContent(msg);
+		} else if (evt == 'onBeforeContent') { 	
+		} else if (evt == 'onAfterContent') { 	
+		}
+	}
+</script>
+</body>
+</html>

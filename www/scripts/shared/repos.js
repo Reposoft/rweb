@@ -36,9 +36,9 @@ var Repos = {
 	  * @param options, as in http://prototype-window.xilinus.com/ but without className
 	  * @returns window object with the API from http://prototype-window.xilinus.com/ (but not nessecarily the same class)
 	  */
-	createWindow: function(id, options) {
-		var o = $H({className: "alphacube"}).merge(options);
-		return new Window(id, o);
+	createWindow: function(optionsHash) {
+		var o = $H({ }).merge(optionsHash);
+		return new Dialog(null, o);
 	},
 	
 	/**

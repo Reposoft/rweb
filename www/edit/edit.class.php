@@ -44,7 +44,7 @@ class Edit {
 	 * @param safe true if there is no way the value can be modified by the user
 	 */
 	function addArgFilename($pathElement, $safe=false) {
-		// rawurlencode does not work with filenames containing едц
+		// rawurlencode does not work with filenames containing 
 		$this->_addArgument($pathElement);
 	}
 	

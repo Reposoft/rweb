@@ -14,8 +14,8 @@
 // during development, show all errors to the user
 error_reporting(E_ALL);
 // assume that magic quotes is enabled
-if (get_magic_quotes_gpc()!=1) {
-	trigger_error("This server does not have magic quotes enabled. Repos PHP requires that.");
+if (get_magic_quotes_gpc()!=0) {
+	trigger_error("This server does not have magic quotes disabled. Repos PHP does not work with magic quotes.");
 }
 
 // pages that can be included from anywhere need to use __FILE__ to do their own includes
