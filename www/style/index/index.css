@@ -10,15 +10,25 @@
 .contents .row {
 	width: 100%;
 	padding: 2px;
+	border-top: 1px solid #FFFFFF;
+	border-bottom: 1px solid #FFFFFF;
 }
 .contents .row:hover {
-	background-color: #F7F7F6;
+	border-top: 1px dashed #CCCC99;
+	border-bottom: 1px dashed #CCCC99;
 }
 .footer {
 	border-top: 1px solid #CCCC99;
-	text-align: right;
 	color: #999999;
 	font-size: smaller;
+}
+.footer .path {
+	position: absolute;
+	left: 12px;
+}
+.footer .legal {
+	position: absolute;
+	right: 10px;
 }
 /* resource links */
 a[href="../"], span#up {

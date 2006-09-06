@@ -1,11 +1,13 @@
 <?php
-require_once(dirname(__FILE__).'/language.inc.php');
+require_once(dirname(__FILE__).'/repos.properties.php');
 
-// TODO include a namespace-based library for client side validation in page head
-// should be able to run the application with validation tags i forms even if the library is not present
+// don't know why the content type is not correct by default
+//use when the namespace-based validator lib has been replaced by a classbased: header('Content-type: application/xhtml+xml; charset=UTF-8');
+header('Content-type: text/html; charset=utf-8');
+// don't set the content type headers in the HTML, because then we can't change to xhtml+xml later
 
 // configure Smarty (http://smarty.php.net/) as template engine
-define("SMARTY_DIR",dirname(dirname(__FILE__)).'/smarty/libs/');
+define("SMARTY_DIR",dirname(dirname(__FILE__)).'/lib/smarty/libs/');
 require( SMARTY_DIR.'Smarty.class.php' );
 
 define('LEFT_DELIMITER', '{='); // to be able to mix with css and javascript
@@ -95,10 +97,37 @@ class Presentation extends Smarty {
 	}
 	
 	function getDefaultTemplate() {
-		$dir = dirname($_SERVER['SCRIPT_FILENAME']) . '/';
-		return $dir . getLocaleFile();
+		return $this->getLocaleFile(dirname($_SERVER['SCRIPT_FILENAME']).'/'.basename($_SERVER['SCRIPT_FILENAME'],".php"));
 	}
 	
+	/**
+	 * The one-stop-shop method to get the localized version of your template.
+	 * @return filename of the localized version for this page
+	 */
+	function getLocaleFile($name,$extension='.html') {
+		global $possibleLocales;
+		$locale = repos_getUserLocale();
+		$chosen = $this->getContentsFileInternal($locale,$name,$extension);
+		if (file_exists($chosen)) return $chosen;
+		foreach ($possibleLocales as $lo => $n) {
+			$chosen = $this->getContentsFileInternal($lo,$name,$extension);
+			if (file_exists($chosen)) return $chosen;
+		}
+		return "file_not_found $name $locale $extension";
+	}
+	
+	/**
+	 * Behavior can be overridden by iplementing getContentsFile($localeCode, $name, $extension)
+	 * @return the filename representing a specified locale
+	 */
+	function getContentsFileInternal($localeCode, $name, $extension) {
+		if (function_exists('getContentsFile')) return getContentsFile($localeCode, $extension);
+		return $name . '_' . $localeCode . $extension;
+	}
+
+	/**
+	 * Use redirect before page is displayed. Useful as redirect-after-post.
+	 */	
 	function enableRedirect($doRedirectBeforeDisplay=true) {
 		$this->redirectBeforeDisplay = $doRedirectBeforeDisplay;
 	}
@@ -109,7 +138,7 @@ class Presentation extends Smarty {
 	
 	function showError($error_msg) {
 		// get template from this folder, not the importing script's folder
-		$template = getLocaleFile(dirname(__FILE__) . '/Error');
+		$template = $this->getLocaleFile(dirname(__FILE__) . '/Error');
 		$this->enableRedirect();
 		$this->assign('error_msg', $error_msg);
 		$this->display($template);

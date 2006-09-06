@@ -1,31 +1,25 @@
 <?xml version="1.0"?>
+<!--
+  ==== repos.se: Subversion directory listing layout ====
+  To be set as SVNIndexXSLT in repository conf.
+  Used at all directory levels, so urls must be absolute.
+  (c) Staffan Olsson
+
+  Note that browser transformations only work if the
+  stylesheet is read from the same domain as the XML
+-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+	<!-- import configuration, since we can't set parameters in the browsers -->
+	<xsl:import href="/repos/view/conf.xsl"/>
+	<!-- start transform -->
 	<xsl:output method="xml" indent="no"/>
-	<!--
-	  ==== repos.se: Subversion directory listing layout ====
-	  To be set as SVNIndexXSLT in repository conf.
-	  Used at all directory levels, so urls must be absolute.
-	  (c) Staffan Olsson
-	
-	  Note that browser transformations only work if the
-	  stylesheet is read from the same domain as the XML
-   	-->
-	<!-- why not generate user-tailored xslt from a .jwa url in Svnindex? -->
-	<!-- add parameter rurl=".." when testing offline -->
-	<!-- status images like 'locked' could be generated on the fly -->
-	<!-- repos webapp URL (root), does not end with slash -->
-	<xsl:param name="rurl">/repos</xsl:param><!-- absolute from server root -->
-	<!--<xsl:param name="rurl">http://alto.optime.se/repos</xsl:param>-->
-	<!-- current theme, for example '/theme', empty for root theme -->
-	<xsl:param name="theme" select="''"/>
+	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
+	<xsl:param name="rurl"><xsl:value-of select="$web"/></xsl:param>
 	<!-- static contents urls -->
-	<xsl:param name="cssUrl">
-		<xsl:value-of select="$rurl"/>
-		<xsl:value-of select="$theme"/>/style</xsl:param>
+	<xsl:param name="cssUrl"><xsl:value-of select="$rurl"/><xsl:value-of select="$theme"/>/style</xsl:param>
 	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
-	<xsl:param name="editUrl">
-		<xsl:value-of select="$rurl"/>/edit</xsl:param>
-	<!-- html layout definitions -->
+	<xsl:param name="editUrl"><xsl:value-of select="$rurl"/>/edit</xsl:param>
+	<!-- when spacer space can't be avoided -->
 	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- include  repos.se shared templates -->
 	<!-- <xsl:include href=""/> -->
@@ -72,8 +66,8 @@
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
 		<div class="commandbar">
-		<a id="reposbutton" href="http://www.repos.se/">
-			<img src="{$rurl}/logo/repos1.png" border="0" align="right" width="72" height="18"/>
+		<a id="reposbutton" href="http://www.repos.se/" target="_blank">
+			<img src="{$rurl}/style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		</a>
 		<xsl:choose>
 			<xsl:when test="/svn/index/updir and not(substring-after(/svn/index/@path, '/trunk')='')">
@@ -107,21 +101,15 @@
 	<!-- directory listing -->
 	<xsl:template name="contents">
 		<div class="contents">
-		<h1>
-			<xsl:if test="@repo">
-				<xsl:value-of select="@repo"/>
-				<xsl:value-of select="$spacer"/>
-			</xsl:if>
-			<span class="path">
-				<xsl:value-of select="@path"/>
-			</span>
+		<h2>
+			<xsl:call-template name="getFolderPath"/>
 			<xsl:value-of select="$spacer"/>
 			<xsl:if test="@rev">
 				<span class="revision">
 					<xsl:value-of select="@rev"/>
 				</span>
 			</xsl:if>
-		</h1>
+		</h2>
 		<xsl:apply-templates select="dir">
 			<xsl:sort select="@name"/>
 		</xsl:apply-templates>
@@ -133,7 +121,10 @@
 	<!-- extra info, links to top -->
 	<xsl:template name="footer">
 		<div class="footer">
-		<span>
+		<span class="path">
+			<xsl:call-template name="getTrunkUrl"/>
+		</span>
+		<span class="legal">
 		<xsl:text>Powered by </xsl:text>
 		<xsl:element name="a">
 			<xsl:attribute name="href"><xsl:value-of select="../@href"/></xsl:attribute>
@@ -195,6 +186,70 @@
 				</xsl:if>
 			</div>
 		</div>
+	</xsl:template>
+	<!-- get the absolute URL for the project's file archove, using configuration -->
+	<xsl:template name="getTrunkUrl">
+		<xsl:value-of select="$repo"/>
+		<xsl:call-template name="getTrunkPath"/>
+	</xsl:template>
+	<!-- get the folders as breadcrumbs (link each folder) -->
+	<xsl:template name="getFolderPath">
+		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
+		<xsl:param name="basepath">
+			<xsl:call-template name="getTrunkPath">
+				<xsl:with-param name="path" select="$path"/>
+			</xsl:call-template>
+		</xsl:param>
+		<xsl:param name="p" select="substring-after($path, $basepath)"/>
+		<xsl:call-template name="getFolderPathLinks">
+			<xsl:with-param name="folders" select="$p"/>
+			<xsl:with-param name="url">
+				<xsl:call-template name="getTrunkUrl"/>
+			</xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+	<!-- divide a path into its elements and make one link for each, expects folders to end with '/' -->
+	<xsl:template name="getFolderPathLinks">
+		<xsl:param name="folders"/>
+		<xsl:param name="url"/>
+		<xsl:param name="f" select="substring-before($folders, '/')"/>
+		<xsl:param name="rest" select="substring-after($folders, concat($f,'/'))"/>
+		<xsl:if test="not(string-length($rest)>0)">
+			<xsl:value-of select="$f"/>
+			<xsl:value-of select="'/'"/>
+		</xsl:if>
+		<xsl:if test="string-length($rest)>0">
+			<a href="{$url}{$f}/">
+				<xsl:value-of select="$f"/>
+			</a>
+			<xsl:value-of select="'/'"/>
+			<xsl:call-template name="getFolderPathLinks">
+				<xsl:with-param name="folders" select="$rest"/>
+				<xsl:with-param name="url">
+					<xsl:value-of select="$url"/>
+					<xsl:value-of select="$f"/>
+					<xsl:value-of select="'/'"/>
+				</xsl:with-param>
+			</xsl:call-template>
+		</xsl:if>
+	</xsl:template>
+	<!-- get the mandatory part of the repository, like /project/trunk. Dos not support branches yet. -->
+	<xsl:template name="getTrunkPath">
+		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
+		<xsl:param name="this" select="substring-before($path, '/')"/>
+		<xsl:value-of select="$this"/>
+		<xsl:value-of select="'/'"/>
+		<xsl:choose>
+			<xsl:when test="contains($this, 'trunk')">
+			</xsl:when>
+			<xsl:when test="not(contains($path, '/'))">
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="getTrunkPath">
+					<xsl:with-param name="path" select="substring-after($path,'/')"/>
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	<!-- get file extension from attribute @href or param 'filename' -->
 	<xsl:template name="getFiletype">

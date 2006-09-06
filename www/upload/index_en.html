@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>Upload to repos</title>
 <script type="text/javascript">
 function autoFillFilename(path) {
@@ -20,9 +19,9 @@ function autoFillFilename(path) {
 <body>
 <h1>Upload file</h1>
 <!--{if $file}-->
-<p>As a new version of file <span class="path">{=$path|htmlentities}{=$file|htmlentities}</span> <a class="action" target="_blank" href="../open/?target={=$path}{=$file}">open</a></p>
+<p>As a new version of file <span class="path">{=$path}{=$file}</span> <a class="action" target="_blank" href="../open/?target={=$path}{=$file}">open</a></p>
 <!--{else}-->
-<p>As a new file in folder {=$path|htmlentities}</p>
+<p>As a new file in folder {=$path}</p>
 <!--{/if}-->
 <form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload" tmt:validate="true">
 <fieldset>

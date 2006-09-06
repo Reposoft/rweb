@@ -1,6 +1,5 @@
 <?php
-define('PARENT_DIR',substr(dirname(__FILE__), 0, strrpos(rtrim(strtr(dirname(__FILE__),'\\','/'),'/'),'/')));
-require( PARENT_DIR."/account/login.inc.php" );
+require( dirname(dirname(__FILE__))."/account/login.inc.php" );
 
 // get file to open
 
@@ -17,6 +16,6 @@ if ($type=='ics') {
 		setcookie("repos-calendar", $url, time()+3600, '/');
         header("Location: ".getConfig('repos_web')."/phpicalendar/");
 } else {
-        header("Location: $url");
+        header("Location: ".getConfig('repo_root')."$url");
 }
 ?>

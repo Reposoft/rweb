@@ -21,11 +21,11 @@
      href="http://subversion.tigris.org/">
   <index rev="191" path="/svensson/trunk">
     <updir />
-    <dir name="å" href="%c3%a5/" />
+    <dir name="afds" href="afds" />
     <file name="document.html" href="document.html" />
     <file name="en ny fil.txt" href="en%20ny%20fil.txt" />
     <dir name="katalog med mellanslag i" href="katalog%20med%20mellanslag%20i/" />
-    <dir name="nu går Å Ä Ö å ä ö och tyskt ü" href="nu%20g%c3%a5r%20%c3%85%20%c3%84%20%c3%96%20%c3%a5%20%c3%a4%20%c3%b6%20och%20tyskt%20%c3%bc/" />
+    <dir name="nu bc" href="ads" />
 
     <dir name="test" href="test/" />
   </index>

@@ -1,6 +1,6 @@
 <?php
 // TODO: Cat is no good as XML data. Could always contain illegal chars. Just make it plain html instead.
-require_once( dirname(dirname(__FILE__)) . "/account/login.inc.php" );
+require_once( dirname(dirname(dirname(__FILE__))) . "/account/login.inc.php" );
 
 define('STYLESHEET','../svnlayout/repos.xsl');
 

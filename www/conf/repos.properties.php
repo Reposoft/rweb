@@ -10,20 +10,13 @@
  * Also contains some generic functions needed everywhere.
  */
  
-// --- global settings ---
-// during development, show all errors to the user
-error_reporting(E_ALL);
-// assume that magic quotes is enabled
-if (get_magic_quotes_gpc()!=0) {
-	trigger_error("This server does not have magic quotes disabled. Repos PHP does not work with magic quotes.");
-}
+// ----- global settings -----
+
+_setGlobalSettings();
+_checkSystem();
 
 // pages that can be included from anywhere need to use __FILE__ to do their own includes
-$propertiesFile = dirname(dirname(dirname(__FILE__))) . '/repos.properties';
-if (!file_exists($propertiesFile)) {
-	$propertiesFile = dirname(__FILE__) . '/repos.properties';
-}
-$repos_config = parse_ini_file( $propertiesFile, false );
+$repos_config = parse_ini_file( _getPropertiesFile(), false );
 
 /**
  * Config value getter
@@ -36,6 +29,82 @@ function getConfig($key) {
 		return ($repos_config[$key] );
 	return false;
 }
+
+// ----- user settings -----
+
+$possibleLocales = array(
+	'sv' => 'Svenska',
+	'en' => 'English',
+	'de' => 'Deutsch'
+	);
+	
+// locales might require setting a cookie, which requires headers,
+//  which must be sent before anything else, 
+//  so we run the function directly when the file is included
+repos_getUserLocale();
+	
+/**
+ * Resolve locale code from: 1: GET, 2: SESSION, 3: browser
+ * @return two letter language code, lower case
+ */
+function repos_getUserLocale() {
+	global $possibleLocales;
+	$locale = 'en'; 
+	if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) $locale = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+	if(array_key_exists(LOCALE_KEY,$_COOKIE)) $locale = $_COOKIE[LOCALE_KEY];
+	if(array_key_exists(LOCALE_KEY,$_GET)) $locale = $_GET[LOCALE_KEY];
+	// validate that the locale exists
+	if( !isset($possibleLocales[$locale]) )
+		$locale = array_shift(array_keys($possibleLocales));
+	// save and return
+	if (!isset($_COOKIE[LOCALE_KEY]))  
+		setcookie(LOCALE_KEY,$locale);
+	else
+		$_COOKIE[LOCALE_KEY] = $locale;
+	return $locale;	
+}
+
+function repos_getUserTheme() {
+	return '';
+}
+
+// ----- helper functions for pages to refer to internal urls -----
+
+// repos_getSelfRoot(): Current server's root url, no tailing slash
+function repos_getWebappRoot() {
+	return getConfig('repos_web');
+}
+
+
+// repos_getSelfUrl(): The url that the browser used to get the current page, excluding query string
+function repos_getSelfRoot() {
+	$url = 'http';
+	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') $url .= 's';
+	$url .= '://' . $_SERVER['SERVER_NAME'];
+	if($_SERVER['SERVER_PORT']==80 || $_SERVER['SERVER_PORT']==443) {
+		// standard port number, do not append
+	} else {
+		$url .= ':'.$_SERVER['SERVER_PORT'];
+	}
+	return $url;
+}
+
+// Complete self url = repos_getSelfUrl().'?'.repos_getSelfQuery();
+function repos_getSelfUrl() {
+	$uri = $_SERVER['REQUEST_URI'];
+	$q = strpos($uri, '?');
+	if ($q > 0) {
+		$uri = substr($uri, 0, $q);
+	}
+	// $_SERVER['SCRIPT_NAME'] can not be used because it always contains the filename
+	return repos_getSelfRoot() . $uri;
+}
+
+function repos_getSelfQuery() {
+	return $_SERVER['QUERY_STRING'];
+}
+
+// ----- file system helper functions ------
 
 /**
  * Handles the common temp dir for repos-php
@@ -112,43 +181,8 @@ function removeTempDir($directory) {
 	}
 }
 
-// --- helper functions for pages to refer to internal urls ---
-
-// repos_getSelfRoot(): Current server's root url, no tailing slash
-function repos_getWebappRoot() {
-	return getConfig('repos_web');
-}
-
-
-// repos_getSelfUrl(): The url that the browser used to get the current page, excluding query string
-function repos_getSelfRoot() {
-	$url = 'http';
-	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') $url .= 's';
-	$url .= '://' . $_SERVER['SERVER_NAME'];
-	if($_SERVER['SERVER_PORT']==80 || $_SERVER['SERVER_PORT']==443) {
-		// standard port number, do not append
-	} else {
-		$url .= ':'.$_SERVER['SERVER_PORT'];
-	}
-	return $url;
-}
-
-// Complete self url = repos_getSelfUrl().'?'.repos_getSelfQuery();
-function repos_getSelfUrl() {
-	$uri = $_SERVER['REQUEST_URI'];
-	$q = strpos($uri, '?');
-	if ($q > 0) {
-		$uri = substr($uri, 0, $q);
-	}
-	// $_SERVER['SCRIPT_NAME'] can not be used because it always contains the filename
-	return repos_getSelfRoot() . $uri;
-}
-
-function repos_getSelfQuery() {
-	return $_SERVER['QUERY_STRING'];
-}
-
 // ---- functions through which all command execution should go ---
+
 $hasencoded = false; // security check, set to true in the encoding functions and checked before 'run'
 
 // Make an url safe as both command argument and URL
@@ -308,6 +342,30 @@ function getCommand($command) {
 			return ( isWindows() ? 'set' : USRBIN . 'env' );
 	}
 	return "\"Error: Repos does not support command '$command'\"";
+}
+
+// ----- indernal functions -----
+
+function _getPropertiesFile() {
+	return dirname(dirname(dirname(__FILE__))) . '/repos.properties';
+	if (!file_exists($propertiesFile)) {
+		return dirname(__FILE__) . '/repos.properties';
+	}
+}
+
+function _setGlobalSettings() {
+	// during development, show all errors to the user
+	error_reporting(E_ALL);
+	// cookie settings
+	define('LOCALE_KEY', 'lang');
+	define('THEME_KEY', 'theme');
+}
+
+function _checkSystem() {
+	// assume that magic quotes is enabled
+	if (get_magic_quotes_gpc()!=0) {
+		trigger_error("This server does not have magic quotes disabled. Repos PHP does not work with magic quotes.");
+	}
 }
 
 // ------ unit testing support -----
