@@ -63,16 +63,21 @@ pre {
 	border-collapse: collapse;
 	padding: 16px;
 }
+.workspace {
+}
 .commandbar {
 	background-color: #F0F0EE;
 	border-top: 1px solid #CCCC99;
 	height: 1.5em;
 }
 .contents {
+	/* overflow: -moz-scrollbars-vertical; */
 }
 .contents .row {
 }
 .footer {
+	bottom: 10px;
+	height: 20px;
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 .command {

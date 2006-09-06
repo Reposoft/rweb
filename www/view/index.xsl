@@ -137,10 +137,6 @@
 			<xsl:call-template name="getFileID"/>
 		</xsl:param>
 		<div class="row">
-			<a id="{$id}" class="folder" href="{@href}">
-				<xsl:value-of select="@name"/>
-			</a>
-			<xsl:value-of select="$spacer"/>
 			<div class="actions">
 				<a class="action" href="{@href}">open</a>
 				<xsl:if test="$editUrl">
@@ -149,6 +145,9 @@
 					<a class="action" href="{$editUrl}/?action=delete&amp;path={../@path}/{@href}">delete</a>
 				</xsl:if>
 			</div>
+			<a id="{$id}" class="folder" href="{@href}">
+				<xsl:value-of select="@name"/>
+			</a>
 		</div>
 	</xsl:template>
 	<!-- generate file -->
@@ -160,10 +159,6 @@
 			<xsl:call-template name="getFileID"/>
 		</xsl:param>
 		<div class="row">
-			<a id="{$id}" class="file file-{$filetype}" href="{@href}">
-				<xsl:value-of select="@name"/>
-			</a>
-			<xsl:value-of select="$spacer"/>
 			<div class="actions">
 				<a class="action" title="this file can be opened in Repos" href="{$web}/open/?path={../@path}&amp;file={@href}">open</a>
 				<xsl:if test="$editUrl">
@@ -174,6 +169,9 @@
 					<a class="action" href="{$web}/upload/?path={../@path}&amp;file={@href}">upload changes</a>
 				</xsl:if>
 			</div>
+			<a id="{$id}" class="file file-{$filetype}" href="{@href}">
+				<xsl:value-of select="@name"/>
+			</a>
 		</div>
 	</xsl:template>
 	<!-- extra info and logos -->

@@ -1,8 +1,6 @@
 <?php
-// TODO: Cat is no good as XML data. Could always contain illegal chars. Just make it plain html instead.
+require_once( dirname(dirname(dirname(__FILE__))) . "/conf/Presentation.class.php" );
 require_once( dirname(dirname(dirname(__FILE__))) . "/account/login.inc.php" );
-
-define('STYLESHEET','../svnlayout/repos.xsl');
 
 $url = getTargetUrl();
 if(!isTargetFile()) {
@@ -14,11 +12,20 @@ if(!$rev) {
 	trigger_error("Error: Version parameter (\"rev\") not specified.");
 	exit;
 }
-$filename = getFile();
 
-// passthrough with stylesheet
+$nextUrl = getReferer();
+if (!$nextUrl) {
+	$nextUrl = dirname($url);
+}
+
+$filename = getFile();
+$target = getTarget();
+$downloadUrl = repos_getSelfUrl().'?'.repos_getSelfQuery().'&open';
+
+$mimetype = getMimetype($url, $rev);
+
+// download
 if (isset($_GET['open'])) {
-	$mimetype = getMimetype($url, $rev);
 	if ($mimetype) {
 		header('Content-type: '.$mimetype);
 	} else {
@@ -29,21 +36,23 @@ if (isset($_GET['open'])) {
 	if ($returnvalue) {
 		trigger_error("Error. Could not read '$url' version $rev.");
 	}
-} else if (isset($_GET['display'])) {
-	header('Content-type: text/plain; charset=utf-8');
-	$returnvalue = doPassthru($url, $rev);
-	if ($returnvalue) {
-		trigger_error("Error. Could not read '$url' version $rev.");
-	}
+// show
 } else {
-	$displayUrl = str_replace('&', '&amp;', repos_getSelfUrl().'?'.repos_getSelfQuery().'&display');
-	header('Content-type: text/xml');
-	echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-	echo '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
-	echo "<!-- SVN cat for $url -->\n";
-	echo '<cat repo="'.getRepositoryUrl().'" target="'.getTarget().'" rev="'.$rev.'">' . "\n";
-	echo '<display src="'.$displayUrl.'" />';
-	echo '</cat>';
+	$p = new Presentation();
+	$p->assign('target', $target);
+	$p->assign('revision', $rev);
+	$p->assign('next', $nextUrl);
+	$p->assign('dowloandUrl', $downloadUrl);
+	$p->display();
+	doPassthru($url, $rev);
+	
+	?>
+	</pre></div>
+	<div class="footer"></div>
+	</div>
+	</body>
+	</html>
+	<?php
 }
 
 function doPassthru($targetUrl, $revision) {
@@ -54,7 +63,7 @@ function doPassthru($targetUrl, $revision) {
 }
 
 function getMimeType($targetUrl, $revision) {
-	$cmd = 'propget -r'.$revision.' svn:mime-type "'.$targetUrl.'"';
+	$cmd = 'propget -r'.$revision.' svn:mime-type '.escapeArgument($targetUrl);
 	$result = login_svnRun($cmd);
 	$returnvalue = array_pop($result);
 	if ($returnvalue) {

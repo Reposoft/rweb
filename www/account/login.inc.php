@@ -255,13 +255,15 @@ function getRepositoryUrl() {
 	if (isset($_GET['repo'])) {
 		return rtrim($_GET['repo'],'/');
 	}
-	// 2: referer AND query string param 'path'
+	// 2: referer without a query AND query string param 'path'
     $ref = getReferer();
-	$path = rtrim(getPath(),'/');
-    if ($ref && $path) {
-		$repo = getRepoRoot($ref,$path);
-		if ($repo) return $repo;
-    }
+	if (strpos($ref, '?')===false) {
+		$path = rtrim(getPath(),'/');
+		if ($ref && $path) {
+			$repo = getRepoRoot($ref,$path);
+			if ($repo) return $repo;
+		}
+	}
 	// 3: fallback to default repository
     if(function_exists('getConfig')) {
     	return getConfig('repo_url');
