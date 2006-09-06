@@ -79,7 +79,11 @@ pre {
 	background-color: #F0F0EE;
 	font-size: smaller;
 	padding: 3px;
-	margin: 5px;
+	margin-left: 15px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background-position: left;
+	background-repeat: no-repeat;
 }
 a.command {
 	color: #333333;

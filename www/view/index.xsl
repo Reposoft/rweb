@@ -66,11 +66,26 @@
 	</xsl:template>
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
+		<xsl:param name="disable-up">
+			<xsl:choose>
+				<xsl:when test="'set to no to always enable up'='no'">no</xsl:when>
+				<xsl:when test="contains(/svn/index/@path,'/trunk') and substring-after(/svn/index/@path, '/trunk')=''">yes</xsl:when>
+				<xsl:otherwise>no</xsl:otherwise>
+			</xsl:choose>
+		</xsl:param>
 		<div class="commandbar">
 		<a id="reposbutton" href="http://www.repos.se/" target="_blank">
 			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		</a>
-		<a id="refresh" class="command translage" href="#" onclick="history.go()">refresh</a>
+		<xsl:if test="/svn/index/updir">
+			<xsl:if test="not($disable-up='yes')">
+				<a id="up" class="command translate" href="../">up</a>
+			</xsl:if>
+			<xsl:if test="$disable-up='yes'">
+				<span id="up" class="command translate">up</span>
+			</xsl:if>
+		</xsl:if>
+		<a id="refresh" class="command translate" href="#" onclick="history.go()">refresh</a>
 		<xsl:if test="$editUrl">
 			<a id="newfolder" class="command translate" href="{$editUrl}/?action=mkdir&amp;path={@path}">new folder</a>
 			<a id="upload" class="command translate" href="{$web}/upload/?path={@path}">upload</a>
@@ -112,13 +127,6 @@
 				</span>
 			</xsl:if>
 		</h2>
-		<xsl:if test="/svn/index/updir">
-			<xsl:if test="not($disable-up-at-trunk='yes' and substring-after(/svn/index/@path, '/trunk')='')">
-				<div class="row">
-					<a id="up" class="translate" href="../">up</a>
-				</div>
-			</xsl:if>
-		</xsl:if>
 		<xsl:apply-templates select="dir">
 			<xsl:sort select="@name"/>
 		</xsl:apply-templates>
@@ -199,6 +207,7 @@
 	<!-- get the absolute URL for the project's file archove, using configuration -->
 	<xsl:template name="getTrunkUrl">
 		<xsl:value-of select="$repo"/>
+		<xsl:value-of select="'/'"/>
 		<xsl:call-template name="getTrunkPath"/>
 	</xsl:template>
 	<!-- get the root folder name -->
@@ -209,12 +218,12 @@
 	<!-- get the folders as breadcrumbs (link each folder) -->
 	<xsl:template name="getFolderPath">
 		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
-		<xsl:param name="basepath">
+		<xsl:param name="trunk">
 			<xsl:call-template name="getTrunkPath">
 				<xsl:with-param name="path" select="$path"/>
 			</xsl:call-template>
 		</xsl:param>
-		<xsl:param name="p" select="substring-after($path, $basepath)"/>
+		<xsl:param name="p" select="substring($path, string-length($trunk)+2)"/>
 		<xsl:call-template name="getFolderPathLinks">
 			<xsl:with-param name="folders" select="$p"/>
 			<xsl:with-param name="url">
@@ -223,6 +232,7 @@
 		</xsl:call-template>
 	</xsl:template>
 	<!-- divide a path into its elements and make one link for each, expects folders to end with '/' -->
+	<!-- TODO if this is done with relative url, concatenating '../', we don't need repo url from conf --> 
 	<xsl:template name="getFolderPathLinks">
 		<xsl:param name="folders"/>
 		<xsl:param name="url"/>
@@ -248,9 +258,10 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- get the mandatory part of the repository, like /project/trunk. Dos not support branches yet. -->
+	<!-- if 'trunk' is not a part of the path, return the first path element -->
 	<xsl:template name="getTrunkPath">
 		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
-		<xsl:param name="this" select="substring-before($path, '/')"/>
+		<xsl:param name="this" select="substring-before(substring($path, 2), '/')"/>
 		<xsl:value-of select="$this"/>
 		<xsl:value-of select="'/'"/>
 		<xsl:choose>
@@ -258,11 +269,11 @@
 			</xsl:when>
 			<xsl:when test="not(contains($path, '/'))">
 			</xsl:when>
-			<xsl:otherwise>
+			<xsl:when test="string-length($this)>0 and contains($path, '/trunk')">
 				<xsl:call-template name="getTrunkPath">
-					<xsl:with-param name="path" select="substring-after($path,'/')"/>
+					<xsl:with-param name="path" select="substring-after($path,$this)"/>
 				</xsl:call-template>
-			</xsl:otherwise>
+			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
 	<!-- get file extension from attribute @href or param 'filename' -->

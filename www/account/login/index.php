@@ -17,12 +17,12 @@ function showUserLogin() {
 	$nexturl = repos_getSelfUrl() . "?login=user";
 	$presentation = new Presentation();
 	$presentation->assign('nexturl', $nexturl);
-	$presentation->display(getLocaleFile(dirname(__FILE__).'/index'));
+	$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/index'));
 }
 
 function showLoginCancelled() {
 	$presentation = new Presentation();
-	$presentation->display(getLocaleFile(dirname(__FILE__).'/cancel'));
+	$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/cancel'));
 }
 
 function showLoginFailed($targetUrl) {
@@ -32,7 +32,7 @@ function showLoginFailed($targetUrl) {
 	$presentation->assign('nexturl', $nexturl);
 	$presentation->assign('rooturl', repos_getSelfRoot());
 	$presentation->assign('targeturl', $targetUrl);
-	$presentation->display(getLocaleFile(dirname(__FILE__).'/failed'));
+	$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/failed'));
 }
 
 function loginAndRedirectToHomeDir() {

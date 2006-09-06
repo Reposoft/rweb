@@ -31,14 +31,9 @@
 	right: 10px;
 }
 /* resource links */
-a[href="../"] {
+a[href="../"], span#up {
 	background-image: url('up.png');
-	background-position: left;
-	background-repeat: no-repeat;
-}
-#up {
-	padding-left: 30px;
-	margin-left: 10px;	
+	padding-left: 20px;
 }
 .file {
 	background-image: url('file.png');

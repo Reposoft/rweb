@@ -72,7 +72,7 @@ function showLoggingOutPage() {
 	$nexturl = getVerifyUrl();
 	$presentation = new Presentation();
 	$presentation->assign('nexturl', $nexturl);
-	$presentation->display(getLocaleFile(dirname(__FILE__).'/index'));
+	$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/index'));
 }
 
 function showCouldNotLogOutPage() {
@@ -80,7 +80,7 @@ function showCouldNotLogOutPage() {
 		// redirect including a password is illegal in IE
 		$presentation = new Presentation();
 		$presentation->assign('nexturl', getAfterLogoutUrl());
-		$presentation->display(getLocaleFile(dirname(__FILE__).'/logout-ie'));
+		$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/logout-ie'));
 	} else {
 		// redirecting to the exact same url with user 'void', expecting the next 401 header to make browser enough confused to clear auth cache
 		$logout_url = str_replace('://', '://void:LoggedOut@', getVerifyUrl());
