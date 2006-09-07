@@ -75,7 +75,7 @@ var Repos = {
 		try {
 			Repos.addBefore(Repos.beforeObserve, Event, 'observe');
 		} catch (err) {
-			Repos.handleException(err + " Can not add custom body.onload handling.");	
+			Repos.handleException(err + " Can not add custom window onload handling.");	
 		}
 		// start thep post-load-require cycle
 		setTimeout(Repos.decoratePage, 500);
@@ -96,10 +96,11 @@ var Repos = {
 	 * Interrupts Event.observe to check that window.onload is not set after page has loaded.
 	 */
 	beforeObserve: function(element, name, observer, useCapture) {
-		if (!isPageLoaded) return;
+		if (!Repos.isPageLoaded) return;
 		if (element != window) return;
 		if (name != 'load') return;
-		alert("Onload was set after page has been loaded");
+		_repos_loadqueue.push(observer); // page has loaded already, execute now instead
+		return true;
 	},
 	
 	/**

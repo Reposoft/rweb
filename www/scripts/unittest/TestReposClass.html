@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>head.js testcases</title>
-<link href="../../style/global.css" rel="stylesheet" type="text/css" />
+<!--<link href="../../style/global.css" rel="stylesheet" type="text/css" />-->
 <script type="text/javascript" src="../head.js"></script>
 <script type="text/javascript" src="../lib/scriptaculous/unittest.js"></script>
 </head>
@@ -28,6 +28,10 @@ ClassTwo.prototype = {
 	anAspect: function(myarg) {
 		anAspectCalled = myarg;
 		// don't return anything, because then the real function is not called
+	},
+	interruptingAspect: function(myarg) {
+		anAspectCalled = myarg;
+		return true;
 	}
 }
 
@@ -49,6 +53,8 @@ function afterLoad() {
 new Test.Unit.Runner({
 
 	setup: function() { with(this) {
+		aFunctionCalled = false;
+		anAspectCalled = false;
 		flag = false;
 	}},
 	
@@ -81,8 +87,17 @@ new Test.Unit.Runner({
 		var c2 = new ClassTwo();
 		Repos.addBefore(c2.anAspect, ClassOne, 'aFunction');
 		c1.aFunction('arg');
-		assertEqual('arg', aFunctionCalled, 'test logic error: fOne should have been called');
-		assertEqual('arg', anAspectCalled, 'AOP Before advice was not effective');
+		assertEqual('arg', aFunctionCalled, 'original method should have been called after the Before advice, because the advice did not return anything');
+		assertEqual('arg', anAspectCalled, 'AOP advice should have been called with the same argument');
+	}},
+	
+	testBeforeAdviceInterrupt: function() { with(this) {
+		var c1 = new ClassOne();
+		var c2 = new ClassTwo();
+		Repos.addBefore(c2.interruptingAspect, ClassOne, 'aFunction');
+		c1.aFunction('arg');
+		assertEqual(false, aFunctionCalled, 'original function should not have been called, because the aspect returned somethind');
+		assertEqual('arg', anAspectCalled, 'AOP advice should have been called with the same argument');
 	}},
 	
 	testBeforeReposFunction: function() { with(this) {
@@ -104,9 +119,18 @@ new Test.Unit.Runner({
 	
 	testEventObserveAspect: function() { with(this) {
 		assertEqual(true, Repos.isPageLoaded(), "Page should have loaded, or else this test does not prove anything");
-		var loaded = false;
-		Event.observe(window, 'load', function() {alert('runs after page load too')}, false);
-		//but there is a delay//assertEqual(true, loaded, "The onload from this script should be executed even if it is after page load");
+		Event.observe(window, 'load', flagTrue, false);
+		var toBeLoaded = _repos_loadqueue.pop();
+		assertEqual(flagTrue, toBeLoaded, "The onload method should have been added to the load queue");
+	}},
+	
+	// check that the AOP things don't affect the original Prototype behaviour
+	testAddAnyObserver: function() { with(this) {
+		assertEqual(false, flag, 'test logic error: flag should be false before test');
+		var e = document.getElementsByName('testelement')[0];
+		Event.observe(e, 'focus', flagTrue, false);
+		e.focus();
+		assertEqual(true, flag, 'onfocus observer for the testelement should have been called');
 	}},
 
 	// for copy-paste
@@ -121,6 +145,8 @@ new Test.Unit.Runner({
 Event.observe(window, 'load', afterLoad, false);
 
 </script>
-
+<form id="testform">
+<p><input id="testelement" name="testelement" type="text" value="testelement"/></p>
+</form>
 </body>
 </html>
