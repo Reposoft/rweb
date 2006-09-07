@@ -65,7 +65,7 @@ var Repos = {
 		this.defaultNamespace = "http://www.w3.org/1999/xhtml";
 		
 		// overwriting any existing event handler, from now on taking care of all window.onload
-		window.onload = Repos.handlePageLoaded;
+		window.onload = Repos._handlePageLoaded;
 		
 		// do the mandatory imports
 		// these scripts don't need to be required by any other scripts
@@ -76,7 +76,7 @@ var Repos = {
 	/**
 	 * Must be called when page has loaded (body onload). All custom initialization is done after page has loaded.
 	 */
-	handlePageLoaded: function() {
+	_handlePageLoaded: function() {
 		_repos_pageLoaded = true;
 		// check that Prototype is loaded
 		if (Prototype == undefined) {
@@ -84,7 +84,7 @@ var Repos = {
 		}
 		// add custom handling to Prototype Event.observe from now on
 		try {
-			Repos.addBefore(Repos.beforeObserve, Event, 'observe');
+			Repos.addBefore(Repos._beforeObserve, Event, 'observe');
 		} catch (err) {
 			Repos.handleException(err + " Can not add custom window onload handling.");	
 		}
@@ -97,7 +97,7 @@ var Repos = {
 	/**
 	 * Interrupts Event.observe to check that window.onload is not set after page has loaded.
 	 */
-	beforeObserve: function(element, name, observer, useCapture) {
+	_beforeObserve: function(element, name, observer, useCapture) {
 		if (!Repos.isPageLoaded) return;
 		if (element != window) return;
 		if (name != 'load') return;
@@ -153,10 +153,10 @@ var Repos = {
 	 */
 	require: function(scriptUrl) {
 		if (!Repos.isPageLoaded()) {
-			Repos.loadScript(scriptUrl);		
+			Repos._loadScript(scriptUrl);		
 		} else {
 			if (Repos.verifyRequireUrl(scriptUrl)) {
-				addToLoadqueue(scriptUrl);
+				Repos._addToLoadqueue(scriptUrl);
 			} else {
 				Repos.handleError("The required resource URL is invalid: " + scriptUrl);	
 			}
@@ -175,6 +175,9 @@ var Repos = {
 		Repos.require(scriptUrl);
 	},
 	
+	/**
+	 * Verify, using AJAX to get HTTP headers, that the resource exists (because browsers fail silently if not)
+	 */
 	verifyResourceUrl: function(resourceUrl) {
 		return true;
 		// todo check that url exists
@@ -183,7 +186,7 @@ var Repos = {
 	/**
 	 * Adds a script to the DOM
 	 */
-	loadScript: function(scriptUrl) {
+	_loadScript: function(scriptUrl) {
 		if (Repos.isLoaded(scriptUrl)) { // TODO now we wait another time interval before attempting next in queue
 			return;	
 		}
@@ -211,17 +214,17 @@ var Repos = {
 	/**
 	 * Add behaviours to the page after it has loaded.
 	 */
-	activateLoadqueue: function() {
+	_activateLoadqueue: function() {
 		if (!_repos_loading) {
 			_repos_loading = true;
-			setTimeout(Repos.loadNext, 500);
+			setTimeout(Repos._loadNext, 500);
 		}
 	},
 	
 	// who validates that a script exists
 	// who checks for duplocates in the load queue
 	
-	loadNext: function() {
+	_loadNext: function() {
 		if (_repos_loadqueue.length == 0) {
 			Repos.reportError("Load queue is empty but script is still loading.");
 		}
@@ -230,20 +233,20 @@ var Repos = {
 		if (t == 'function') {
 			functionOrScript.apply();			
 		} else if (t == 'string') {
-			loadScript(functionOrScript);
+			Repos._loadScript(functionOrScript);
 		}
 		if (_repos_loadqueue.length == 0) {
 			_repos_loading = false;	
 		} else {
-			setTimeout(Repos.loadNext, 500);	
+			setTimeout(Repos._loadNext, 500);	
 		}
 	},
 	
-	addToLoadqueue: function(functionOrScript) {
+	_addToLoadqueue: function(functionOrScript) {
 		var t = typeof(functionOrScript);
 		if (t == 'function' || t == 'string') {
 			_repos_loadqueue.push(functionOrScript);
-			Repos.activateLoadqueue();
+			Repos._activateLoadqueue();
 		} else {
 			Repos.reportError("Can not add object of type " + t + " to load queue");	
 		}
@@ -336,7 +339,7 @@ var Repos = {
 	},
 	
 	// ----- last line of the class -----
-	emptyFunction: function() {}
+	_emptyFunction: function() {}
 };
 
 // call constructor for the static class
