@@ -325,6 +325,46 @@ var Repos = {
 		throw "The object does not have a function " + objectFunction + ". It has:" + members;
 	},
 	
+	// ------------ Session settings ------------
+	
+	/**
+	 * @return user account name for the current user
+	 */
+	getUsername: function() {
+		
+	},
+	
+	/**
+	 * @return path to current theme, excluding /style, for example '/repos' or '/repos/themes/simple'
+	 */
+	getTheme: function() {
+		
+	},
+	
+	/**
+	 * @return two char language code, lowercase, for exmaple 'en', 'de' or 'sv'
+	 */
+	getLocale: function() {
+	
+	},
+	
+	// ------------ Cookie functions ------------
+	
+	setCookie: function(key, value) {
+	
+	},
+	
+	setPersistentCookie: function(key, value) {
+	
+	},
+	
+	/**
+	 * @return value of the cookie, string
+	 */
+	getCookie: function(key) {
+	
+	},
+	
 	// ------------ GUI commonality ------------
 	
 	/**

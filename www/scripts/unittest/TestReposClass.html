@@ -148,7 +148,7 @@ new Test.Unit.Runner({
 		Repos.requirePlugin('datetime');
 		var toBeLoaded = _repos_loadqueue.pop();
 		_repos_loadqueue.push(dummy); // replace with something so that the queue logic is not confused
-		assertEqual('plugins/datetime/datetime.js' + (Repos.dontCachePlugins ? '?'+Repos.dontCachePlugins : ''),
+		assertEqual('plugins/dateformat/dateformat.js' + (Repos.dontCachePlugins ? '?'+Repos.dontCachePlugins : ''),
 			toBeLoaded, "The script should have been added to the load queue");
 	}},
 	
