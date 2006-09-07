@@ -347,10 +347,11 @@ function getCommand($command) {
 // ----- indernal functions -----
 
 function _getPropertiesFile() {
-	return dirname(dirname(dirname(__FILE__))) . '/repos.properties';
+	$propertiesFile = dirname(dirname(dirname(__FILE__))) . '/repos.properties';
 	if (!file_exists($propertiesFile)) {
-		return dirname(__FILE__) . '/repos.properties';
+		$propertiesFile = dirname(__FILE__) . '/repos.properties';
 	}
+	return $propertiesFile;
 }
 
 function _setGlobalSettings() {
