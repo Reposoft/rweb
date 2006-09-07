@@ -218,9 +218,11 @@ function escapeArgument($argument) {
 	$arg = str_replace('"','\"', $arg);
 	$arg = str_replace('$','\$', $arg);
 	$arg = str_replace('`','\`', $arg);
+	// On SuSE ! is a metacharacter in strings
+	$arg = str_replace('!','\!', $arg);
 	// windows uses % to get variable names. URLs _should_ not be encoded, but if they are we might have a problem.
 	if(isWindows()) {
-		$arg = str_replace('%','\%', $arg);
+		$arg = str_replace('%','°/.', $arg);
 	}
 	return '"'.$arg.'"';
 	// #&;`|*?~<>^()[]{}$\, \x0A  and \xFF. ' and "
