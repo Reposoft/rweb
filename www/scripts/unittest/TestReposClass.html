@@ -145,7 +145,7 @@ new Test.Unit.Runner({
 	}},
 	
 	testRequirePlugin: function() { with(this) {
-		Repos.requirePlugin('datetime');
+		Repos.requirePlugin('dateformat');
 		var toBeLoaded = _repos_loadqueue.pop();
 		_repos_loadqueue.push(dummy); // replace with something so that the queue logic is not confused
 		assertEqual('plugins/dateformat/dateformat.js' + (Repos.dontCachePlugins ? '?'+Repos.dontCachePlugins : ''),
@@ -159,6 +159,21 @@ new Test.Unit.Runner({
 		var wasloaded = _repos_loadedlibs.pop();
 		assertEqual(true, flag, 'script should have been added to the dom');
 		assertEqual('lib/scriptaculous/unittest.js', wasloaded, 'script URL should have been saved in the loadedlibs stack');
+	}},
+	
+	testVerifyResourceUrl: function() { with(this) {
+		var yes = Repos.verifyResourceUrl('lib/scriptaculous/unittest.js');
+		assertEqual(true, yes, "Should see that resource lib/scriptaculous/unittest.js exists");
+	}},
+	
+	testVerifyResourceUrlFail: function() { with(this) {
+		var no = Repos.verifyResourceUrl('lib/resource/that/does/not/exist.js');
+		assertEqual(false, no, "Not an existing resource: lib/resource/that/does/not/exist.js");
+	}},	
+	
+	testVerifyResourceUrlPartent: function() { with(this) {
+		var yes = Repos.verifyResourceUrl('../style/global.css');
+		assertEqual(true, yes, "CSS resource in repos dir (../style/global.css) should also be ok.");
 	}},
 
 	// for copy-paste

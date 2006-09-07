@@ -58,6 +58,7 @@ var Repos = {
 		
 		// settings
 		this.dontCachePlugins = new Date().valueOf(); // for development, set to false for production
+		this.themeSettings = 'style/settings.js'; // relative to each theme's root
 		
 		// common page elements
 		//this.pageLoaded = false;
@@ -88,8 +89,22 @@ var Repos = {
 		} catch (err) {
 			Repos.handleException(err + " Can not add custom window onload handling.");	
 		}
+		Repos._loadThemeSettings();
 	},
 	
+	/**
+	 * Append the theme setup script to the load queue.
+	 */
+	_loadThemeSettings: function() {
+		var t = Repos.getTheme();
+		if (t) {
+			Repos.require('../' + t + this.themeSettings);
+		}	
+	},
+	
+	/**
+	 * @return true if body.onlod has happened
+	 */
 	isPageLoaded: function() {
 		return _repos_pageLoaded;
 	},
@@ -101,8 +116,8 @@ var Repos = {
 		if (!Repos.isPageLoaded) return;
 		if (element != window) return;
 		if (name != 'load') return;
-		_repos_loadqueue.push(observer); // page has loaded already, execute now instead
-		return true;
+		Repos._addToLoadqueue(observer); // page has loaded already, execute now instead
+		return true; // don't invoke the original method
 	},
 	
 	/**
@@ -158,7 +173,7 @@ var Repos = {
 			if (Repos.verifyResourceUrl(scriptUrl)) {
 				Repos._addToLoadqueue(scriptUrl);
 			} else {
-				Repos.handleError("The required resource URL is invalid: " + scriptUrl);	
+				Repos.reportError("The required resource URL is invalid: " + scriptUrl);	
 			}
 		}
 	},
@@ -179,8 +194,10 @@ var Repos = {
 	 * Verify, using AJAX to get HTTP headers, that the resource exists (because browsers fail silently if not)
 	 */
 	verifyResourceUrl: function(resourceUrl) {
+		// TODO a regex for valid resource strings
+		
+		//var req = new Ajax.Request(resourceUrl, {asynchronous:false, method:'head'});
 		return true;
-		// todo check that url exists
 	},
 	
 	/**
@@ -331,38 +348,51 @@ var Repos = {
 	 * @return user account name for the current user
 	 */
 	getUsername: function() {
-		
+		throw "getUsername is not implemented yet";
 	},
 	
 	/**
-	 * @return path to current theme, excluding /style, for example '/repos' or '/repos/themes/simple'
+	 * @return path to current theme, excluding /style, for example '' or 'themes/simple/'
+	 *	false if no theme should be loaded (meaning that no theme script setup will be required.
 	 */
 	getTheme: function() {
-		
+		return '';
 	},
 	
 	/**
 	 * @return two char language code, lowercase, for exmaple 'en', 'de' or 'sv'
 	 */
 	getLocale: function() {
+		return 'en';
+	},
 	
+	/* does anyone need this? getUserTimeZone: function() {
+		throw "getUserTimeZone is not implemented yet";
+	} */
+	
+	/**
+	 * @return the offset in _minutes_ from UTC, _including_ daylight savings time when used.
+	 * A positive value means later than UTC, meaning more to the east of the globe
+	 */
+	getUserUtcOffset: function() {
+		throw "getUserUtcOffset is not implemented yet. date.getTimezoneOffset works well enough so far.";
 	},
 	
 	// ------------ Cookie functions ------------
 	
 	setCookie: function(key, value) {
-	
+		throw "setCookie is not implemented yet";
 	},
 	
 	setPersistentCookie: function(key, value) {
-	
+		throw "setPersistentCookie is not implemented yet";
 	},
 	
 	/**
 	 * @return value of the cookie, string
 	 */
 	getCookie: function(key) {
-	
+		throw "getCookie is not implemented yet";
 	},
 	
 	// ------------ GUI commonality ------------

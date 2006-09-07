@@ -4,20 +4,78 @@
  * setting the time zone to the value in the usertimezone cookie.
  * See: http://www.atomenabled.org/developers/syndication/atom-format-spec.php#date.constructs
  * Nice page: http://www.xaprb.com/demos/rx-toolkit/
+ * $Id$
  */
- 
 Dateformat = Class.create();
 Dateformat.prototype = {
+	/**
+	 * Run all conversion on the page immediately
+	 */
 	initialize: function() {
-		this.classname = 'datetime';
-		this.timezoneCookie = 'usertimezone';
-		this.dateformatCookie = 'userdateformat';
-		
-		
+		// set user settings
+	},
+	
+	/**
+	 * Verify that a string is an ISO8601 date, with date+time or only date
+	 */
+	isDatetime: function(text) {
+		if (typeof(text) != 'string') return false;
+		if (text.length < 8) return false;
+		if (text.length > 32) return false;
+		// and some regexp
+		return true;
+	},
+
+	/**
+	 * Get all elements that have a given classname
+	 */
+	getElements: function(classname) {
+		return document.getElementsByClassName(classname);	
+	},
+	
+	/**
+	 * Loop through all elements that have the given classname and format them
+	 */
+	formatAll: function(classname) {
+		var n = this.getElements(classname);
+		for (i = 0; i<n.length; i++) {
+			this.formatElement(n[i]);
+		}
+	},
+	
+	/**
+	 * @param texttag element containing date time
+	 */
+	formatElement: function(texttag) {
+		var d = texttag.innerHTML;
+		if (!this.isDatetime(d)) {
+			throw "Invalid datetime string in tag " + (texttag.id ? texttag.id : texttag.tagName) + ": " + d;	
+		}
+		var f = this.format(d);
+		texttag.innerHTML = f;
+	},
+	
+	/**
+	 * @param xsd:dateTime/ISO 8601 date
+	 */
+	format: function(dateTime) {
+		if (!this.isDatetime(dateTime)) {
+			throw "Invalid datetime string: " + dateTime;	
+		}
+		var d = new Date();
+		d.setISO8601(dateTime);
+		return d;
 	}
 
-
 }
+
+function _dateformat_onPageLoad() {
+	new Dateformat().formatAll('datetime')	
+}
+
+Event.observe(window, 'load', _dateformat_onPageLoad, false);
+
+// --- extensions to the date class ---
 
 Date.prototype.setISO8601 = function (string) {
     var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" +
