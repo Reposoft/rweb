@@ -92,6 +92,16 @@ new Test.Unit.Runner({
 		assertEqual(true, flag, 'before advice should have been called for this repos function');
 	}},
 	
+	testBeforeNonexistingFunction: function() { with(this) {
+		try {
+			Repos.addBefore(flagTrue, ClassOne, 'methodThatDoseNotExist');
+		} catch(err) {
+			info("Correctly got the exception: " + err);
+			return;
+		}
+		fail('AOP method addBefore should throw exception if the original method does not exist');
+	}},
+	
 	testEventObserveAspect: function() { with(this) {
 		assertEqual(true, Repos.isPageLoaded(), "Page should have loaded, or else this test does not prove anything");
 		var loaded = false;

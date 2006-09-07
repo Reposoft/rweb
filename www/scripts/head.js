@@ -73,7 +73,7 @@ var Repos = {
 		}
 		// add custom handling to Prototype Event.observe from now on
 		try {
-			//Repos.addBefore(Repos.beforeObserve, Event, 'observe');
+			Repos.addBefore(Repos.beforeObserve, Event, 'observe');
 		} catch (err) {
 			Repos.handleException(err + " Can not add custom body.onload handling.");	
 		}
@@ -208,37 +208,38 @@ var Repos = {
 		if (typeof(objectFunction) != 'string')
 			throw("objectFunction for Before advice should be a string, was " + typeof(objectFunction));
 
-		if (object.prototype == undefined) { // object is a class without prototypes, for example Repos
-			var members = "";
-			for (member in object) {
-				members = members + " " + member;
-				if (member == objectFunction) {
-					var oldFunction = object[member];
-					object[member] = function() {
-						var replacement = aspectFunction.apply(this, arguments);
-						if (replacement) {
-							return replacement;	
-						}
-						return oldFunction.apply(this, arguments);
-					}
-					return; // mission completed
+		
+		var oldFunction = object[objectFunction];
+		if (oldFunction) {
+			object[objectFunction] = function() {
+				var replacement = aspectFunction.apply(this, arguments);
+				if (replacement) {
+					return replacement;	
 				}
+				return oldFunction.apply(this, arguments);
 			}
-			throw "The object does not have a function " + objectFunction + ". It has:" + members;
+			return;
 		}
-		
-		var oldFunction = object.prototype[objectFunction];
-		if (!oldFunction) {
-			throw "Could not identify original function '" + objectFunction + "'. Can not create before advice.";
-		}
-		
-		object.prototype[objectFunction] = function() {
-			var replacement = aspectFunction.apply(this, arguments);
-			if (replacement) {
-				return replacement;	
+		if (object.prototype) {
+			oldFunction = object.prototype[objectFunction];
+			if (oldFunction) {
+				object.prototype[objectFunction] = function() {
+					var replacement = aspectFunction.apply(this, arguments);
+					if (replacement) {
+						return replacement;	
+					}
+					return oldFunction.apply(this, arguments);
+				}
+				return;
 			}
-		  	return oldFunction.apply(this, arguments);
 		}
+
+		var members = "";
+		for (f in object) { members = members + " " + f }
+		if (object.prototype) {
+			for (f in object.prototype) { members = members + " prototype." + f }
+		}
+		throw "The object does not have a function " + objectFunction + ". It has:" + members;
 	},
 	
 	// ------------ GUI commonality ------------
