@@ -11,10 +11,30 @@
 <body>
 <h1>Test head.js, the Repos class.</h1>
 
+<p><small>Before page load:</small></p>
 <div id="testlog"></div>
+<p><small>After page load:</small></p>
+<div id="testlog2"></div>
 
 <script type="text/javascript">
 
+var aFunctionCalled = false;
+var	anAspectCalled = false;
+function ClassOne(){}
+ClassOne.prototype = {
+	aFunction: function(myarg) {
+		aFunctionCalled = myarg;
+	}
+}
+function ClassTwo(){}
+ClassTwo.prototype = {
+	anAspect: function(myarg) {
+		anAspectCalled = myarg;
+		// don't return anything, because then the real function is not called
+	}
+}
+
+// Tests to run during page loading
 new Test.Unit.Runner({
 
 	setup: function() { with(this) {
@@ -22,16 +42,54 @@ new Test.Unit.Runner({
 	}},
 	
 	testBeforeLoad: function() { with(this) {
-		assertEqual(true, Repos.isPageLoaded(), "Repos should know that page is not completely loaded yet");
+		assertEqual(false, Repos.isPageLoaded(), "Repos should know that page is not completely loaded yet");
 	}},
 	
 	testProtypeImported: function() { with(this) {
 		assertNotNull(Prototype, "The prototype library should be imported automatically");
 	}},
+	
+	testRequireBeforePageLoaded: function() { with(this) {
+		Repos.require('unittest/resources/mytestlib.js');
+		// afterLoad will assert that this has been included
+	}},
+	
+	// test that the AOP functionality works, becuase it is required for proper body.onload handling
+	testBeforeAdvice: function() { with(this) {
+		var c1 = new ClassOne();
+		var c2 = new ClassTwo();
+		Repos.addBefore(c2.anAspect, ClassOne, 'aFunction');
+		c1.aFunction('arg');
+		assertEqual('arg', aFunctionCalled, 'test logic error: fOne should have been called');
+		assertEqual('arg', anAspectCalled, 'AOP Before advice was not effective');
+	}},
 
-	teardown: function() { with(this) {}},
+	teardown: function() { with(this) {}}
+}, { });
 
-}, {  });
+// Test to run after page has loaded
+function afterLoad() {
+$('testlog').id = 'testlog_before';
+$('testlog2').id = 'testlog';
+new Test.Unit.Runner({
+
+	testAfterLoad: function() { with(this) {
+		assertEqual(true, Repos.isPageLoaded(), "Repos should know that page has loaded now");
+	}},
+
+	// check that the lib imported in head is present now
+	testRequireBeforePageLoaded: function() { with(this) {
+		assertEqual(false, MyTestlib == undefined, "Can not finde MyTestlib that was just included with require");
+		var myTest = new MyTestlib('arg');
+		assertEqual('arg', myTest.getInitarg(), "MyTestlib should have an instance varable value now");
+	}},
+
+	dummy: function() {}
+}, { });
+}
+
+// use prototype to set body.onload
+Event.observe(window, 'load', afterLoad, false);
 
 </script>
 

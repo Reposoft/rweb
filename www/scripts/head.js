@@ -50,6 +50,10 @@ var Repos = {
 		this.documentHead = document.getElementsByTagName("head")[0];
 		this.defaultNamespace = "http://www.w3.org/1999/xhtml";
 		
+		
+		// overwriting any existing event handler, from now on taking care of all window.onload
+		window.onload = 'Repos.handlePageLoaded';
+		
 		// do the mandatory imports
 		// these scripts don't need to be required by any other scripts
 		this.path = this._getPath();
@@ -95,14 +99,25 @@ var Repos = {
 	 * Methods in this class do try/catch when calling imported code.
 	 */
 	handleException: function(exceptionInstance) {
-		alert('Exception: ' + exceptionInstance);
+		this.reportError("(Exception) " + exceptionInstance);
 	},
 	
 	/**
 	 * Allow direct error reporting from plugin code
 	 */
 	reportError: function(errorMessage) {
-		alert('Error: ' + errorMessage);
+		var id = this.generateId();
+		alert("A script error has occured:\n" + errorMessage + 
+			  "\n\nThe error details have been reported to the repos.se developers." +
+			  "\n\nYou can contact supprt@repos.se about the error id \""+id+"\" to get status on this error." +
+			  "\n\nBecause of the error, this page may not function properly.");
+	},
+	
+	/**
+	 * Generate a random string of length 8
+	 */
+	generateId: function() {
+		return 'nonRndID';
 	},
 	
 	// ------------ dependency management ------------
@@ -155,21 +170,25 @@ var Repos = {
 	 * Adds a before advice to an existing function
 	 * The advice is executed before the real function.
 	 * If the advice returns anything, the real function will not be called.
+	 * This is immensely useful for unit testing.
 	 * @see http://www.dotvoid.com/view.php?id=43
 	 */
 	addBefore: function(aspectFunction, object, objectFunction)
 	{
-	  var fType = typeof(objectFunction);
+		if (typeof(object) != 'function')
+			throw "No target object given. Can not create Before advice.";
 	
-	  if (typeof(aspectFunction) != 'function')
-		throw(InvalidAspectFunction);
+		if (typeof(aspectFunction) != 'function')
+			throw("The aspectFunction '" + aspectFunction + "' is not valid. Can not create Before advice");
 	
+		if (typeof(objectFunction) != 'string')
+			throw("objectFunction for Before advice should be a string, was " + typeof(objectFunction));
 	
-		var oldFunctoin = obj.prototype[fName];
+		var oldFunction = object.prototype[objectFunction];
 		if (!oldFunction)
-		  throw InvalidMethod;
+		  throw "Could not identify function " + objectFunction + " for prototype.";
 	
-		obj.prototype[oldFunction] = function() {
+		object.prototype[objectFunction] = function() {
 			var replacement = aspectFunction.apply(this, arguments);
 			if (replacement) {
 				return replacement;	
@@ -197,5 +216,3 @@ var Repos = {
 
 // call constructor for the static class
 Repos.initialize();
-// overwriting any existing event handler, from now on taking care of all window.onload
-window.onload = Repos.handlePageLoaded();
