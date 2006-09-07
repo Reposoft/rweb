@@ -38,12 +38,18 @@ var _prototype = Prototype;
 // do require as a plugin wouls have done it: right when the script loads
 Repos.require('unittest/resources/mytestlib.js');
 
+// a flag that can be used form any testcase
+var flag = false;
+function flagTrue() {
+	flag = true;
+}
+
 // Test runner starts once the page has loaded (I think it does that anyway)
 function afterLoad() {
 new Test.Unit.Runner({
 
 	setup: function() { with(this) {
-		// no setup needed
+		flag = false;
 	}},
 	
 	testBeforeLoad: function() { with(this) {
@@ -52,20 +58,6 @@ new Test.Unit.Runner({
 	
 	testProtypeImported: function() { with(this) {
 		assertNotNull(_prototype, "The prototype library should be imported automatically");
-	}},
-	
-	testRequireBeforePageLoaded: function() { with(this) {
-		// check that the "require" before this test class was effective
-	}},
-	
-	// test that the AOP functionality works, becuase it is required for proper body.onload handling
-	testBeforeAdvice: function() { with(this) {
-		var c1 = new ClassOne();
-		var c2 = new ClassTwo();
-		Repos.addBefore(c2.anAspect, ClassOne, 'aFunction');
-		c1.aFunction('arg');
-		assertEqual('arg', aFunctionCalled, 'test logic error: fOne should have been called');
-		assertEqual('arg', anAspectCalled, 'AOP Before advice was not effective');
 	}},
 	
 	testWindowOnloadSet: function() { with(this) {
@@ -81,6 +73,30 @@ new Test.Unit.Runner({
 		assertEqual(false, MyTestlib == undefined, "Can not finde MyTestlib that was just included with require");
 		var myTest = new MyTestlib('arg');
 		assertEqual('arg', myTest.getInitarg(), "MyTestlib should have an instance varable value now");
+	}},
+	
+	// test that the AOP functionality works, becuase it is required for proper body.onload handling
+	testBeforeAdvice: function() { with(this) {
+		var c1 = new ClassOne();
+		var c2 = new ClassTwo();
+		Repos.addBefore(c2.anAspect, ClassOne, 'aFunction');
+		c1.aFunction('arg');
+		assertEqual('arg', aFunctionCalled, 'test logic error: fOne should have been called');
+		assertEqual('arg', anAspectCalled, 'AOP Before advice was not effective');
+	}},
+	
+	testBeforeReposFunction: function() { with(this) {
+		assertEqual(false, flag, 'test logic error: flag should be false before test');
+		Repos.addBefore(flagTrue, Repos, 'createElement');
+		Repos.createElement("div");
+		assertEqual(true, flag, 'before advice should have been called for this repos function');
+	}},
+	
+	testEventObserveAspect: function() { with(this) {
+		assertEqual(true, Repos.isPageLoaded(), "Page should have loaded, or else this test does not prove anything");
+		var loaded = false;
+		Event.observe(window, 'load', function() {alert('runs after page load too')}, false);
+		//but there is a delay//assertEqual(true, loaded, "The onload from this script should be executed even if it is after page load");
 	}},
 
 	// for copy-paste

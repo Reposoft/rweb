@@ -36,6 +36,8 @@ Scripts can refer to the Repos class, but not ReposScriptSetup
  * @version $Id$
  */
 var _repos_pageLoaded = false;
+var _repos_loadedlibs = new Array();
+var _repos_loadqueue = new Array();
 var Repos = {
 	version: '$Rev$',
 	// ------------ script initialization ------------
@@ -70,7 +72,11 @@ var Repos = {
 			reportError("Prototype library not loaded");	
 		}
 		// add custom handling to Prototype Event.observe from now on
-		Repos.addBefore(Repos.beforeObserve, Event, 'observe');
+		try {
+			//Repos.addBefore(Repos.beforeObserve, Event, 'observe');
+		} catch (err) {
+			Repos.handleException(err + " Can not add custom body.onload handling.");	
+		}
 		// start thep post-load-require cycle
 		setTimeout(Repos.decoratePage, 500);
 	},
@@ -124,8 +130,8 @@ var Repos = {
 	reportError: function(errorMessage) {
 		var id = this.generateId();
 		alert("The following internal script error has occured:\n" + errorMessage + 
-			  "\n\nThe error details have been reported to the repos.se developers." +
-			  "\n\nYou can contact supprt@repos.se about the error id \""+id+"\" to get status on this error." +
+			  "\n\nThe error details have been reported to the repos.se developers. " +
+			  "\nFeel free to contact support@repos.se about this error, ID \""+id+"\"." +
 			  "\n\nBecause of the error, this page may not function properly.");
 	},
 	
@@ -191,7 +197,9 @@ var Repos = {
 	 */
 	addBefore: function(aspectFunction, object, objectFunction)
 	{
-		if (typeof(object) != 'function')
+		var oType = typeof(object);
+		// 'Event' is a function is Firefox and an object in IE
+		if (typeof(object) != 'function' && oType != 'object')
 			throw "No target object given. Can not create Before advice.";
 	
 		if (typeof(aspectFunction) != 'function')
@@ -199,12 +207,31 @@ var Repos = {
 	
 		if (typeof(objectFunction) != 'string')
 			throw("objectFunction for Before advice should be a string, was " + typeof(objectFunction));
-	
+
+		if (object.prototype == undefined) { // object is a class without prototypes, for example Repos
+			var members = "";
+			for (member in object) {
+				members = members + " " + member;
+				if (member == objectFunction) {
+					var oldFunction = object[member];
+					object[member] = function() {
+						var replacement = aspectFunction.apply(this, arguments);
+						if (replacement) {
+							return replacement;	
+						}
+						return oldFunction.apply(this, arguments);
+					}
+					return; // mission completed
+				}
+			}
+			throw "The object does not have a function " + objectFunction + ". It has:" + members;
+		}
+		
 		var oldFunction = object.prototype[objectFunction];
 		if (!oldFunction) {
 			throw "Could not identify original function '" + objectFunction + "'. Can not create before advice.";
 		}
-	
+		
 		object.prototype[objectFunction] = function() {
 			var replacement = aspectFunction.apply(this, arguments);
 			if (replacement) {
