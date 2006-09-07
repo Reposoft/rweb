@@ -26,71 +26,176 @@ Scripts can refer to the Repos class, but not ReposScriptSetup
 
 */
 
-function ReposScriptSetup() {
-	var version = '$Rev$';
+// This is a complement to prototype.js, 
+// Scripts that use this library can be developed for prototype.js
+
+/**
+ * Repos common script logic (c) Staffan Olsson http://www.repos.se
+ * Mutually dependent to ../head.js that imports the Prototype library. 
+ * This is a static class, accessible anywhere using Repos.[method]
+ * @version $Id$
+ */
+var Repos = {
+	version: '$Rev$',
+
+	// ------------ script initialization ------------
 	
-	// var nocache = false; // for production
-	var nocache = new Date().valueOf(); // for development
+	initialize: function() {
+		// settings
+		this.dontCachePlugins = new Date().valueOf(); // for development, set to false for production
+		
+		// common page elements
+		this.pageLoaded = false;
+		this.documentBody = null;
+		this.documentHead = document.getElementsByTagName("head")[0];
+		this.defaultNamespace = "http://www.w3.org/1999/xhtml";
+		
+		// do the mandatory imports
+		// these scripts don't need to be required by any other scripts
+		this.path = this._getPath();
+		this.require("lib/scriptaculous/prototype.js");
+	},
 	
-	var parentTag = document.getElementsByTagName("head")[0];
+	/**
+	 * Must be called when page has loaded (body onload). All custom initialization is done after page has loaded.
+	 */
+	handlePageLoaded: function() {
+		this.pageLoaded = true;
+		this.documentBody = document.getElementsByTagName("body")[0];
+		setTimeout(Repos.decoratePage, 500);
+	},
 	
-	this.defaultNamespace = "http://www.w3.org/1999/xhtml";
+	/**
+	 * Add behaviours to the page after it has loaded.
+	 */
+	decoratePage: function() {
+		
+	},
 	
-	this.path = "";
+	isPageLoaded: function() {
+		return this.pageLoaded;
+	},
 	
-	// plugins to load from the Repos class (shared/repos.js)
-	/*this.commonPlugins = new Array(
-		'shared/repos-gui.js',
-		'dialog/_dialog.js',
-		'tmt-validator/setup.js',
-		'geturl/geturl.js');*/
-	this.commonPlugins = new Array(
-		'tmt-validator/setup.js');
-	
-	this.require = function(scriptUrl) {
-		if (nocache) {
-			scriptUrl += '?'+nocache;	
-		}
-		if (scriptUrl.indexOf('/')!=0) {
-			scriptUrl = this.path + scriptUrl;	
-		}
-		var s = this.createElement("script");
-		s.type = "text/javascript";
-		s.src = scriptUrl;
-		parentTag.appendChild(s);
-	}
-	
-	this.createElement = function(tagname) {
-		if (document.createElementNS) {
-			return document.createElementNS(this.defaultNamespace, tagname);
-		} else { // IE does not support createElementNS
-			return document.createElement(tagname);	
-		}
-	}
-	
-	this._getPath = function() {
+	/**
+	 * @return the path of this script file, from the page's script tag, for use in relative include urls
+	 */
+	_getPath: function() {
 		var scripts = document.getElementsByTagName("script");
 		for (i=0; i<scripts.length; i++) {
 			if (scripts[i].src && scripts[i].src.match(/head\.js(\?.*)?$/)) {
 				return scripts[i].src.replace(/head\.js(\?.*)?$/,'');
 			}
 		}
-	}
+	},
 	
-	this.run = function() {
-		this.path = this._getPath();
-		//this.require("prototype/prototype-1.4.0.js");
-		//this.require("shared/scriptaculous-1.6.2/prototype.js"); // Window needs this
-		//this.require("shared/scriptaculous-1.6.2/scriptaculous.js");
-		this.require("shared/repos.js");
-	}
-}
+	// ------------ exception handling ------------
+	
+	/**
+	 * Take care of a caught exception.
+	 * Methods in this class do try/catch when calling imported code.
+	 */
+	handleException: function(exceptionInstance) {
+		alert('Exception: ' + exceptionInstance);
+	},
+	
+	/**
+	 * Allow direct error reporting from plugin code
+	 */
+	reportError: function(errorMessage) {
+		alert('Error: ' + errorMessage);
+	},
+	
+	// ------------ dependency management ------------
+	
+	/**
+	 * Import a library so that it is immediately available to the calling script.
+	 * Adds a library to the DOM and makes sure it is executed.
+	 * @param url relative to this script (head.js) or absolute url from server root starting with '/'
+	 */
+	require: function(scriptUrl) {
+		if (scriptUrl.indexOf('/')!=0) {
+			scriptUrl = this.path + scriptUrl;	
+		}
+		var s = this.createElement("script");
+		s.type = "text/javascript";
+		s.src = scriptUrl;
+		this.documentHead.appendChild(s);
+	},
+	
+	/**
+	 * Import a plugin given a name
+	 * Script will be looked for in 'plugins/pluginName/pluginname.js'
+	 */
+	requirePlugin: function(pluginName) {
+		if (nocache) {
+			scriptUrl += '?'+nocache;	
+		}
+	},
+	
+	// ------------ DOM manipulation ------------
 
-var reposScriptSetup = new ReposScriptSetup(); // global, no 'var'
-reposScriptSetup.run();
+	/**
+	 * Creates a new DOM element
+	 * A replacement for document.createElement in application/xhtml+xml pages
+	 * @param tagName name in XHTML namespace
+	 * @param elementId id attribute value
+	 * @returns the element reference
+	 */
+	createElement: function(tagname) {
+		if (document.createElementNS) {
+			return document.createElementNS(this.defaultNamespace, tagname);
+		} else { // IE does not support createElementNS
+			return document.createElement(tagname);	
+		}
+	},
+	
+	// ------------ AOP concepts ------------
+	
+	/**
+	 * Adds a before advice to an existing function
+	 * The advice is executed before the real function.
+	 * If the advice returns anything, the real function will not be called.
+	 * @see http://www.dotvoid.com/view.php?id=43
+	 */
+	addBefore: function(aspectFunction, object, objectFunction)
+	{
+	  var fType = typeof(objectFunction);
+	
+	  if (typeof(aspectFunction) != 'function')
+		throw(InvalidAspectFunction);
+	
+	
+		var oldFunctoin = obj.prototype[fName];
+		if (!oldFunction)
+		  throw InvalidMethod;
+	
+		obj.prototype[oldFunction] = function() {
+			var replacement = aspectFunction.apply(this, arguments);
+			if (replacement) {
+				return replacement;	
+			}
+		  	return oldFunction.apply(this, arguments);
+		}
+	},
+	
+	// ------------ GUI commonality ------------
+	
+	/**
+	 * Create a popup window
+	 * @param id element ID
+	 * @param options, as in http://prototype-window.xilinus.com/ but without className
+	 * @returns window object with the API from http://prototype-window.xilinus.com/ (but not nessecarily the same class)
+	 */
+	createWindow: function(optionsHash) {
+		var o = $H({ }).merge(optionsHash);
+		return new Dialog(null, o);
+	},
+	
+	// ----- last line of the class -----
+	emptyFunction: function() {}
+};
 
-// this is needed for the validator load problem
-var _head_pageLoaded = false;
-function head_setPageLoaded() { _head_pageLoaded = true; }
-function head_isPageLoaded() { return _head_pageLoaded; }
-window.onload = head_setPageLoaded; // overwriting any existing event handler
+// call constructor for the static class
+Repos.initialize();
+// overwriting any existing event handler, from now on taking care of all window.onload
+window.onload = Repos.handlePageLoaded();
