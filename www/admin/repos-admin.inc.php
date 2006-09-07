@@ -16,21 +16,37 @@ function getTheme() {
 }
 
 function html_start($title) {
-	$theme = getTheme();
 	echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"';
 	echo ' "http://www.w3.org/TR/html4/loose.dtd">';
 	echo "\n<html>";
 	echo '<head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
 	echo '<title>Repos administration: ' . $title . '</title>';
-	echo '<link href="' . $theme . '/css/repos-standard.css" rel="stylesheet" type="text/css">';
-	echo '</head>';
-	echo '<body>';
+	echo '<link href="/repos/style/global.css" rel="stylesheet" type="text/css">';
+	?>
+<script>
+function hide(level) {
+	var p = document.getElementsByTagName('p');
+	for (i = 0; i < p.length; i++) {
+		if (p[i].getAttribute('class') == level) p[i].style.display = 'none';
+	}
+}
+function showAll() {
+	var p = document.getElementsByTagName('p');
+	for (i = 0; i < p.length; i++) {
+		p[i].style.display = '';
+	}	
+}
+</script>
+	<?php
+	echo "</head>\n";
+	echo "<body onLoad=\"hide('debug')\">\n";
+	echo "<p><a href=\"javascript:showAll()\">Show also debug level</a></p>";
 }
 
 // formatted date
 function getTime() {
-    return '<span class="timestamp">'.date("Y-m-d\TH:i:sO").'</span>';
+    return '<span class="datetime">'.date("Y-m-d\TH:i:sO").'</span>';
 }
 
 // internal
