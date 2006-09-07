@@ -155,7 +155,7 @@ var Repos = {
 		if (!Repos.isPageLoaded()) {
 			Repos._loadScript(scriptUrl);		
 		} else {
-			if (Repos.verifyRequireUrl(scriptUrl)) {
+			if (Repos.verifyResourceUrl(scriptUrl)) {
 				Repos._addToLoadqueue(scriptUrl);
 			} else {
 				Repos.handleError("The required resource URL is invalid: " + scriptUrl);	
@@ -170,7 +170,7 @@ var Repos = {
 	requirePlugin: function(pluginName) {
 		var scriptUrl = "plugins/" + pluginName + "/" + pluginName + ".js";
 		if (this.dontCachePlugins) {
-			scriptUrl += '?'+nocache;	
+			scriptUrl += '?'+this.dontCachePlugins;	
 		}
 		Repos.require(scriptUrl);
 	},
@@ -187,7 +187,7 @@ var Repos = {
 	 * Adds a script to the DOM
 	 */
 	_loadScript: function(scriptUrl) {
-		if (Repos.isLoaded(scriptUrl)) { // TODO now we wait another time interval before attempting next in queue
+		if (Repos.isScriptResourceLoaded(scriptUrl)) { // TODO now we wait another time interval before attempting next in queue
 			return;	
 		}
 		_repos_loadedlibs.push(scriptUrl);
@@ -204,7 +204,7 @@ var Repos = {
 		}
 	},
 	
-	isLoaded: function(resourceUrl) {
+	isScriptResourceLoaded: function(resourceUrl) {
 		for (lib in _repos_loadedlibs) {
 			if (lib == resourceUrl) return true;
 		}

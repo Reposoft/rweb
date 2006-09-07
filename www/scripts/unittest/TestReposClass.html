@@ -47,6 +47,8 @@ var flag = false;
 function flagTrue() {
 	flag = true;
 }
+function dummy() {
+}
 
 // Test runner starts once the page has loaded (I think it does that anyway)
 function afterLoad() {
@@ -122,6 +124,7 @@ new Test.Unit.Runner({
 		assertEqual(true, Repos.isPageLoaded(), "Page should have loaded, or else this test does not prove anything");
 		Event.observe(window, 'load', flagTrue, false);
 		var toBeLoaded = _repos_loadqueue.pop();
+		_repos_loadqueue.push(dummy); // replace with something so that the queue logic is not confused
 		assertEqual(flagTrue, toBeLoaded, "The onload method should have been added to the load queue");
 	}},
 	
@@ -132,6 +135,30 @@ new Test.Unit.Runner({
 		Event.observe(e, 'focus', flagTrue, false);
 		e.focus();
 		assertEqual(true, flag, 'onfocus observer for the testelement should have been called');
+	}},
+
+	testRequire: function() { with(this) {
+		Repos.require('lib/scriptaculous/unittest.js');
+		var toBeLoaded = _repos_loadqueue.pop();
+		_repos_loadqueue.push(dummy); // replace with something so that the queue logic is not confused
+		assertEqual('lib/scriptaculous/unittest.js', toBeLoaded, "The script should have been added to the load queue");
+	}},
+	
+	testRequirePlugin: function() { with(this) {
+		Repos.requirePlugin('datetime');
+		var toBeLoaded = _repos_loadqueue.pop();
+		_repos_loadqueue.push(dummy); // replace with something so that the queue logic is not confused
+		assertEqual('plugins/datetime/datetime.js' + (Repos.dontCachePlugins ? '?'+Repos.dontCachePlugins : ''),
+			toBeLoaded, "The script should have been added to the load queue");
+	}},
+	
+	testLoadScript: function() { with(this) {
+		// using addBefore to mock appendChild
+		Repos.addBefore(flagTrue, Repos.documentHead, 'appendChild');
+		Repos._loadScript('lib/scriptaculous/unittest.js');
+		var wasloaded = _repos_loadedlibs.pop();
+		assertEqual(true, flag, 'script should have been added to the dom');
+		assertEqual('lib/scriptaculous/unittest.js', wasloaded, 'script URL should have been saved in the loadedlibs stack');
 	}},
 
 	// for copy-paste
