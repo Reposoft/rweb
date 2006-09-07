@@ -112,6 +112,7 @@ new Test.Unit.Runner({
 			Repos.addBefore(flagTrue, ClassOne, 'methodThatDoseNotExist');
 		} catch(err) {
 			info("Correctly got the exception: " + err);
+			pass();
 			return;
 		}
 		fail('AOP method addBefore should throw exception if the original method does not exist');

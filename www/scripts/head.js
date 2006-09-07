@@ -30,6 +30,16 @@ Scripts can refer to the Repos class, but not ReposScriptSetup
 // Scripts that use this library can be developed for prototype.js
 
 /**
+Pattern for calling plugins:
+1. Do includes "Repos.require.."
+2. Create the plugin class, with initializer
+3. Use Prototype Event.observe to create a window.onload event that runs the initializer.
+4. If any other plugins are expected after the initializer is called, do Repos.requirePlugin in the class.
+When (1) comes before (3), Repos will load the dependencies before the initializer is run, which is good.
+
+*/
+
+/**
  * Repos common script logic (c) Staffan Olsson http://www.repos.se
  * Mutually dependent to ../head.js that imports the Prototype library. 
  * This is a static class, accessible anywhere using Repos.[method]
@@ -38,6 +48,7 @@ Scripts can refer to the Repos class, but not ReposScriptSetup
 var _repos_pageLoaded = false;
 var _repos_loadedlibs = new Array();
 var _repos_loadqueue = new Array();
+var _repos_loading = false;
 var Repos = {
 	version: '$Rev$',
 	// ------------ script initialization ------------
@@ -77,15 +88,6 @@ var Repos = {
 		} catch (err) {
 			Repos.handleException(err + " Can not add custom window onload handling.");	
 		}
-		// start thep post-load-require cycle
-		setTimeout(Repos.decoratePage, 500);
-	},
-	
-	/**
-	 * Add behaviours to the page after it has loaded.
-	 */
-	decoratePage: function() {
-		
 	},
 	
 	isPageLoaded: function() {
@@ -146,18 +148,19 @@ var Repos = {
 	// ------------ dependency management ------------
 	
 	/**
-	 * Import a library so that it is immediately available to the calling script.
-	 * Adds a library to the DOM and makes sure it is executed.
+	 * Import a library or css so that it is available to the calling script.
 	 * @param url relative to this script (head.js) or absolute url from server root starting with '/'
 	 */
 	require: function(scriptUrl) {
-		if (scriptUrl.indexOf('/')!=0) {
-			scriptUrl = this.path + scriptUrl;	
+		if (!Repos.isPageLoaded()) {
+			Repos.loadScript(scriptUrl);		
+		} else {
+			if (Repos.verifyRequireUrl(scriptUrl)) {
+				addToLoadqueue(scriptUrl);
+			} else {
+				Repos.handleError("The required resource URL is invalid: " + scriptUrl);	
+			}
 		}
-		var s = this.createElement("script");
-		s.type = "text/javascript";
-		s.src = scriptUrl;
-		this.documentHead.appendChild(s);
 	},
 	
 	/**
@@ -165,8 +168,84 @@ var Repos = {
 	 * Script will be looked for in 'plugins/pluginName/pluginname.js'
 	 */
 	requirePlugin: function(pluginName) {
-		if (nocache) {
+		var scriptUrl = "plugins/" + pluginName + "/" + pluginName + ".js";
+		if (this.dontCachePlugins) {
 			scriptUrl += '?'+nocache;	
+		}
+		Repos.require(scriptUrl);
+	},
+	
+	verifyResourceUrl: function(resourceUrl) {
+		return true;
+		// todo check that url exists
+	},
+	
+	/**
+	 * Adds a script to the DOM
+	 */
+	loadScript: function(scriptUrl) {
+		if (Repos.isLoaded(scriptUrl)) { // TODO now we wait another time interval before attempting next in queue
+			return;	
+		}
+		_repos_loadedlibs.push(scriptUrl);
+		try {
+			if (scriptUrl.indexOf('/')!=0) {
+				scriptUrl = this.path + scriptUrl;	
+			}
+			var s = this.createElement("script");
+			s.type = "text/javascript";
+			s.src = scriptUrl;
+			this.documentHead.appendChild(s);		
+		} catch (err) {
+			Repos.reportError("Error loading script " + scriptUrl+ ": " + err);
+		}
+	},
+	
+	isLoaded: function(resourceUrl) {
+		for (lib in _repos_loadedlibs) {
+			if (lib == resourceUrl) return true;
+		}
+		return false;
+	},
+	
+	/**
+	 * Add behaviours to the page after it has loaded.
+	 */
+	activateLoadqueue: function() {
+		if (!_repos_loading) {
+			_repos_loading = true;
+			setTimeout(Repos.loadNext, 500);
+		}
+	},
+	
+	// who validates that a script exists
+	// who checks for duplocates in the load queue
+	
+	loadNext: function() {
+		if (_repos_loadqueue.length == 0) {
+			Repos.reportError("Load queue is empty but script is still loading.");
+		}
+		functionOrScript = _repos_loadqueue.shift();
+		var t = typeof(functionOrScript);
+		if (t == 'function') {
+			functionOrScript.apply();			
+		} else if (t == 'string') {
+			loadScript(functionOrScript);
+		}
+		if (_repos_loadqueue.length == 0) {
+			_repos_loading = false;	
+		} else {
+			setTimeout(Repos.loadNext, 500);	
+		}
+	},
+	
+	addToLoadqueue: function(functionOrScript) {
+		var t = typeof(functionOrScript);
+		if (t == 'function' || t == 'string') {
+			_repos_loadqueue.push(functionOrScript);
+			Repos.activateLoadqueue();
+		} else {
+			Repos.reportError("Can not add object of type " + t + " to load queue");	
 		}
 	},
 	
