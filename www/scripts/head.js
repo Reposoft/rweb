@@ -35,24 +35,24 @@ Scripts can refer to the Repos class, but not ReposScriptSetup
  * This is a static class, accessible anywhere using Repos.[method]
  * @version $Id$
  */
+var _repos_pageLoaded = false;
 var Repos = {
 	version: '$Rev$',
-
 	// ------------ script initialization ------------
 	
 	initialize: function() {
+		// note that these are read-only fields. The Repos object is static and does not have state.
+		
 		// settings
 		this.dontCachePlugins = new Date().valueOf(); // for development, set to false for production
 		
 		// common page elements
-		this.pageLoaded = false;
-		this.documentBody = null;
+		//this.pageLoaded = false;
 		this.documentHead = document.getElementsByTagName("head")[0];
 		this.defaultNamespace = "http://www.w3.org/1999/xhtml";
 		
-		
 		// overwriting any existing event handler, from now on taking care of all window.onload
-		window.onload = 'Repos.handlePageLoaded';
+		window.onload = Repos.handlePageLoaded;
 		
 		// do the mandatory imports
 		// these scripts don't need to be required by any other scripts
@@ -64,8 +64,14 @@ var Repos = {
 	 * Must be called when page has loaded (body onload). All custom initialization is done after page has loaded.
 	 */
 	handlePageLoaded: function() {
-		this.pageLoaded = true;
-		this.documentBody = document.getElementsByTagName("body")[0];
+		_repos_pageLoaded = true;
+		// check that Prototype is loaded
+		if (Prototype == undefined) {
+			reportError("Prototype library not loaded");	
+		}
+		// add custom handling to Prototype Event.observe from now on
+		Repos.addBefore(Repos.beforeObserve, Event, 'observe');
+		// start thep post-load-require cycle
 		setTimeout(Repos.decoratePage, 500);
 	},
 	
@@ -77,7 +83,17 @@ var Repos = {
 	},
 	
 	isPageLoaded: function() {
-		return this.pageLoaded;
+		return _repos_pageLoaded;
+	},
+	
+	/**
+	 * Interrupts Event.observe to check that window.onload is not set after page has loaded.
+	 */
+	beforeObserve: function(element, name, observer, useCapture) {
+		if (!isPageLoaded) return;
+		if (element != window) return;
+		if (name != 'load') return;
+		alert("Onload was set after page has been loaded");
 	},
 	
 	/**
@@ -107,7 +123,7 @@ var Repos = {
 	 */
 	reportError: function(errorMessage) {
 		var id = this.generateId();
-		alert("A script error has occured:\n" + errorMessage + 
+		alert("The following internal script error has occured:\n" + errorMessage + 
 			  "\n\nThe error details have been reported to the repos.se developers." +
 			  "\n\nYou can contact supprt@repos.se about the error id \""+id+"\" to get status on this error." +
 			  "\n\nBecause of the error, this page may not function properly.");
@@ -185,8 +201,9 @@ var Repos = {
 			throw("objectFunction for Before advice should be a string, was " + typeof(objectFunction));
 	
 		var oldFunction = object.prototype[objectFunction];
-		if (!oldFunction)
-		  throw "Could not identify function " + objectFunction + " for prototype.";
+		if (!oldFunction) {
+			throw "Could not identify original function '" + objectFunction + "'. Can not create before advice.";
+		}
 	
 		object.prototype[objectFunction] = function() {
 			var replacement = aspectFunction.apply(this, arguments);

@@ -11,10 +11,7 @@
 <body>
 <h1>Test head.js, the Repos class.</h1>
 
-<p><small>Before page load:</small></p>
 <div id="testlog"></div>
-<p><small>After page load:</small></p>
-<div id="testlog2"></div>
 
 <script type="text/javascript">
 
@@ -34,7 +31,15 @@ ClassTwo.prototype = {
 	}
 }
 
-// Tests to run during page loading
+// save some of the page state as it is during page load
+var _loaded = Repos.isPageLoaded();
+var _prototype = Prototype;
+
+// do require as a plugin wouls have done it: right when the script loads
+Repos.require('unittest/resources/mytestlib.js');
+
+// Test runner starts once the page has loaded (I think it does that anyway)
+function afterLoad() {
 new Test.Unit.Runner({
 
 	setup: function() { with(this) {
@@ -42,16 +47,15 @@ new Test.Unit.Runner({
 	}},
 	
 	testBeforeLoad: function() { with(this) {
-		assertEqual(false, Repos.isPageLoaded(), "Repos should know that page is not completely loaded yet");
+		assertEqual(false, _loaded, "Repos should know that page is not completely loaded yet");
 	}},
 	
 	testProtypeImported: function() { with(this) {
-		assertNotNull(Prototype, "The prototype library should be imported automatically");
+		assertNotNull(_prototype, "The prototype library should be imported automatically");
 	}},
 	
 	testRequireBeforePageLoaded: function() { with(this) {
-		Repos.require('unittest/resources/mytestlib.js');
-		// afterLoad will assert that this has been included
+		// check that the "require" before this test class was effective
 	}},
 	
 	// test that the AOP functionality works, becuase it is required for proper body.onload handling
@@ -63,15 +67,10 @@ new Test.Unit.Runner({
 		assertEqual('arg', aFunctionCalled, 'test logic error: fOne should have been called');
 		assertEqual('arg', anAspectCalled, 'AOP Before advice was not effective');
 	}},
-
-	teardown: function() { with(this) {}}
-}, { });
-
-// Test to run after page has loaded
-function afterLoad() {
-$('testlog').id = 'testlog_before';
-$('testlog2').id = 'testlog';
-new Test.Unit.Runner({
+	
+	testWindowOnloadSet: function() { with(this) {
+		assertEqual('function', typeof(window.onload), 'Body onload should call the second Repos initializer');
+	}},
 
 	testAfterLoad: function() { with(this) {
 		assertEqual(true, Repos.isPageLoaded(), "Repos should know that page has loaded now");
@@ -84,7 +83,11 @@ new Test.Unit.Runner({
 		assertEqual('arg', myTest.getInitarg(), "MyTestlib should have an instance varable value now");
 	}},
 
-	dummy: function() {}
+	// for copy-paste
+	testTemplate: function() { with(this) {
+	}},
+
+	teardown: function() { with(this) {}}
 }, { });
 }
 
