@@ -1,6 +1,25 @@
 // repos getUrl (c) Staffan Olsson
 //Repos.require('shared/repos-gui.js');
 
+Repos.require('lib/dialog/dialog.js');
+
+Details = Class.create();
+Details.prototype = {
+	
+	initialize: function() {
+		
+	}
+	
+
+}
+
+function _details_decorate() {
+		
+}
+
+//Event.observe(window, 'load', _details_decorate, false);
+
+
 // popup titlebar
 var _geturl_title_prefix = 'URL: ';
 var win = null;

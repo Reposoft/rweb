@@ -1,6 +1,6 @@
 /* repository visualization, shared classes */
 /* make sure that different browser text size settings work */
-body, td, th, p {
+body, td, th {
     font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
     font-size: 0.8em;
 }
@@ -58,7 +58,7 @@ pre {
 	color: #CC3300;
 }
 /* common page elements, may also be layouted for each tool */
-.frame {
+.frame { /* this is not really a contextual name, maybe deprecated */
 	border: 2px solid #CCCC99;
 	border-collapse: collapse;
 	padding: 16px;

@@ -4,10 +4,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>repos.se development</title>
-<link href="themes/simple/css/repos-standard.css" rel="stylesheet" type="text/css">
-<link rel="shortcut icon" href="favicon.ico">
+<link href="style/global.css" rel="stylesheet" type="text/css">
+<link rel="shortcut icon" href="/favicon.ico">
 <script type="text/javascript" src="scripts/head.js"></script>
-<script>
+<script type="text/javascript">
 Repos.requirePlugin('transform');
 
 function getWindowWidth() {
@@ -29,10 +29,14 @@ function showNews() {
 Repos.observePluginLoad('transform', showNews);
 </script>
 <style type="text/css">
-th.frame {
+.info {
+	border: 2px solid #CCCC99;
+	border-collapse: collapse;
+	padding: 16px;
+}
+th.info {
 	font-weight: normal;
 	letter-spacing: 0.2em;
-	border: 2px solid #CCCC99;
 }
 #page {
 	width:100%;
@@ -72,7 +76,7 @@ th.frame {
   	<td class="info" colspan="4">&nbsp;</td>
   </tr>
   <tr>
-  	<td class="info" align="left" valign="middle" colspan="2"><img src="style/logo/repos4.png" width="288" height="72" border="0"></td>
+  	<td class="info" align="left" valign="middle" colspan="2"><img alt="repos.se" src="style/logo/repos4.png" width="288" height="72" border="0"></td>
 	<th class="info" align="right" valign="middle" colspan="2">Versionshantering &aring;t folket</th>
   </tr>
   <tr align="center">
