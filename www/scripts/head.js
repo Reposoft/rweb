@@ -124,7 +124,7 @@ var Repos = {
 	_loadThemeSettings: function() {
 		var t = Repos.getTheme();
 		// relative paths with ../ not handled yet. Note that the absolute url will not work offline.
-		Repos.require('/repos/' + t + this.themeSettings);	
+		Repos.require('/repos/' + t + Repos.themeSettings);	
 	},
 	
 	/**
@@ -176,6 +176,8 @@ var Repos = {
 			// document.createElement must be replaced with document.createElementNS (except in IE)
 			Repos.addBefore(Repos.createElement, document, 'createElement');
 		}
+		// override document.write, it is not compatible with this script in normal pages either
+		Repos.addBefore(Repos.documentWrite, document, 'write');
 	},
 	
 	// ------------ exception handling ------------
@@ -185,14 +187,14 @@ var Repos = {
 	 * Methods in this class do try/catch when calling imported code.
 	 */
 	handleException: function(exceptionInstance) {
-		this.reportError("(Exception) " + exceptionInstance);
+		Repos.reportError("(Exception) " + exceptionInstance);
 	},
 	
 	/**
 	 * Allow direct error reporting from plugin code
 	 */
 	reportError: function(errorMessage) {
-		var id = this.generateId();
+		var id = Repos.generateId();
 		alert("The following internal script error has occured:\n" + errorMessage + 
 			  "\n\nThe error details have been reported to the repos.se developers. " +
 			  "\nFeel free to contact support@repos.se about this error, ID \""+id+"\"." +
@@ -340,17 +342,16 @@ var Repos = {
 		if (Repos.isScriptResourceLoaded(scriptUrl)) {
 			return false;	
 		}
-		alert('loading ' + scriptUrl);
 		_repos_loadedlibs.push(scriptUrl);
 		try {
 			if (scriptUrl.indexOf('/')!=0) {
-				scriptUrl = this.path + scriptUrl;	
+				scriptUrl = Repos.path + scriptUrl;	
 			}
-			scriptUrl += this.scriptUrlSuffix;
-			var s = this.createElement("script");
+			scriptUrl += Repos.scriptUrlSuffix;
+			var s = Repos.createElement("script");
 			s.type = "text/javascript";
 			s.src = scriptUrl;
-			this.documentHead.appendChild(s);		
+			Repos.documentHead.appendChild(s);		
 		} catch (err) {
 			Repos.reportError("Error loading script " + scriptUrl+ ": " + err);
 		}
@@ -390,6 +391,15 @@ var Repos = {
 		} else { // IE does not support createElementNS
 			return document.createElement(tagname);	
 		}
+	},
+	
+	/**
+	 * Custom document.write, because the original is not allowed in xml documents
+	 */
+	documentWrite: function(html) {
+		Repos.reportError("document.write is not allowed. Detected attempt to write " + html);
+		// abort the real call
+		return true;
 	},
 	
 	// ------------ AOP concepts ------------
