@@ -215,6 +215,12 @@ var Repos = {
 	 * Verifies that the URL is valid.
 	 * Repos.require can be done during any phase of page load, but everything will queue up,
 	 * and processing of the queue will start only when the page has loaded.
+	 *
+	 * Limitation:
+	 * If a script has a dependency, and that dependency also does Repos.require, and the script 
+	 * needs one of those dependencies at load time, they will not have loaded yet.
+	 * For example when details plugin includes scriptaculous.
+	 *
 	 * @param url relative to this script (head.js) or absolute url from server root starting with '/'
 	 */
 	require: function(scriptUrl) {
