@@ -1,6 +1,7 @@
 // repos getUrl (c) Staffan Olsson
 //Repos.require('shared/repos-gui.js');
 
+Repos.require('lib/scriptaculous/scriptaculous.js');
 Repos.require('lib/dialog/dialog.js');
 
 Details = Class.create();

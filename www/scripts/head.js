@@ -90,9 +90,7 @@ var Repos = {
 	 * Must be called when page has loaded (body onload). All custom initialization is done after page has loaded.
 	 */
 	_handlePageLoaded: function() {
-		_repos_pageLoaded = true;
-		// check or flow errors
-		if (_repos_loading) Repos.reportError("Script logic error. Queue processing started before page load completed.");
+		// check required dependencies
 		if (typeof(Prototype) == 'undefined') {
 			Repos.reportError("Prototype library not loaded. All scripts deactivated.");
 			return;
@@ -105,6 +103,10 @@ var Repos = {
 		}
 		Repos._setUpXhtmlXmlCompatibility();
 		Repos._loadThemeSettings();
+		// check for flow errors
+		if (_repos_loading) Repos.reportError("Script logic error. Queue processing started before page load completed.");
+		// ok, page is loaded, go process the load queue
+		_repos_pageLoaded = true;
 		setTimeout(Repos._activateLoadqueue, 500);  // set the initial delay in milliseconds here
 	},
 	
@@ -250,7 +252,7 @@ var Repos = {
 		
 		// simple solution - first let all plugins load, then run all callback functions
 		if (Repos.isPageLoaded() && Repos.isScriptResourceLoaded(Repos._getPluginUrl(pluginName))) {
-			alert(pluginName + "plugin already loaded. applying callback directly");
+			alert(pluginName + "plugin already loaded. applying callback directly"); // debug. remove the first time you see it appear.
 			callbackFunction.apply();
 		}
 		_repos_pluginLoadCallback.push(callbackFunction);
@@ -338,6 +340,7 @@ var Repos = {
 		if (Repos.isScriptResourceLoaded(scriptUrl)) {
 			return false;	
 		}
+		alert('loading ' + scriptUrl);
 		_repos_loadedlibs.push(scriptUrl);
 		try {
 			if (scriptUrl.indexOf('/')!=0) {

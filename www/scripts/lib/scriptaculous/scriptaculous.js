@@ -25,7 +25,10 @@ var Scriptaculous = {
   Version: '1.6.4',
   require: function(libraryName) {
     // inserting via DOM fails in Safari 2.0, so brute force approach
-    document.write('<script type="text/javascript" src="'+libraryName+'"></script>');
+    /* don't gimme that shit (repos.se)
+	document.write('<script type="text/javascript" src="'+libraryName+'"></script>');
+	*/
+	Repos.require(libraryName);
   },
   load: function() {
     if((typeof Prototype=='undefined') || 
