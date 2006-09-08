@@ -2,7 +2,7 @@
 //Repos.require('shared/repos-gui.js');
 
 Repos.require('lib/scriptaculous/scriptaculous.js');
-Repos.require('lib/dialog/dialog.js');
+Repos.require('lib/dialog/dialog.js'); // Problem is that now this loads before scriptaculous/effects.js, which it depends on
 
 Details = Class.create();
 Details.prototype = {
