@@ -39,8 +39,6 @@
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}/global.css"/>
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}/index/index.css"/>
 				<link rel="shortcut icon" href="http://www.repos.se/favicon.ico"/>
-				<!-- install repos-quay, this row and an icon in the footer -->
-				<script type="text/javascript" src="/quay/repos-quay.js"></script>
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
 			</head>

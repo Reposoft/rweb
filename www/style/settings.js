@@ -1,3 +1,3 @@
 // plugin settings file
 
-Repos.requirePlugn('dateformat');
+Repos.requirePlugin('dateformat');

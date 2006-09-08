@@ -37,6 +37,9 @@ Pattern for calling plugins:
 4. If any other plugins are expected after the initializer is called, do Repos.requirePlugin in the class.
 When (1) comes before (3), Repos will load the dependencies before the initializer is run, which is good.
 
+Plugins may use Repos.require to require libs, or Repos.requirePlugin to import other plugins.
+Theme settings may only use Repos.requirePlugin.
+
 */
 
 /**
@@ -79,9 +82,8 @@ var Repos = {
 	 */
 	_handlePageLoaded: function() {
 		_repos_pageLoaded = true;
-		// check that Prototype is loaded
-		if (Prototype == undefined) {
-			reportError("Prototype library not loaded");	
+		if (typeof(Prototype) == 'undefined') {
+			Repos.reportError("Prototype library not loaded.");	
 		}
 		// add custom handling to Prototype Event.observe from now on
 		try {
@@ -89,6 +91,7 @@ var Repos = {
 		} catch (err) {
 			Repos.handleException(err + " Can not add custom window onload handling.");	
 		}
+		Repos._setUpXhtmlXmlCompatibility();
 		Repos._loadThemeSettings();
 	},
 	
@@ -97,9 +100,8 @@ var Repos = {
 	 */
 	_loadThemeSettings: function() {
 		var t = Repos.getTheme();
-		if (t) {
-			Repos.require('../' + t + this.themeSettings);
-		}	
+		// relative paths with ../ not handled yet
+		Repos.require('/repos/' + t + this.themeSettings);	
 	},
 	
 	/**
@@ -130,6 +132,20 @@ var Repos = {
 				return scripts[i].src.replace(/head\.js(\?.*)?$/,'');
 			}
 		}
+	},
+	
+	/**
+	 * Prototype and such livraries are not tested with application/xhtml+xml pages, so some customization is needed
+	 */
+	_setUpXhtmlXmlCompatibility: function() {
+		// how to check if this is an XML page?
+		
+		// document.body in firefox
+		if (document.body == undefined) {
+			document.body = document.getElementsByTagName("body")[0];	
+		}
+		
+		// document.createElement must be replaced with document.createElementNS
 	},
 	
 	// ------------ exception handling ------------
@@ -184,19 +200,18 @@ var Repos = {
 	 */
 	requirePlugin: function(pluginName) {
 		var scriptUrl = "plugins/" + pluginName + "/" + pluginName + ".js";
-		if (this.dontCachePlugins) {
-			scriptUrl += '?'+this.dontCachePlugins;	
-		}
 		Repos.require(scriptUrl);
 	},
 	
 	/**
-	 * Verify, using AJAX to get HTTP headers, that the resource exists (because browsers fail silently if not)
+	 * Verify that the resource exists (because browsers fail silently if not)
 	 */
 	verifyResourceUrl: function(resourceUrl) {
 		// TODO a regex for valid resource strings
 		
 		//var req = new Ajax.Request(resourceUrl, {asynchronous:false, method:'head'});
+		// Son't want to use synchronous ajax, because it blocks everything.
+		// maybe it's better to allow the settings file to verify after all scripts have loaded
 		return true;
 	},
 	
@@ -208,6 +223,9 @@ var Repos = {
 			return;	
 		}
 		_repos_loadedlibs.push(scriptUrl);
+		if (this.dontCachePlugins) {
+			scriptUrl += '?'+this.dontCachePlugins;	
+		}
 		try {
 			if (scriptUrl.indexOf('/')!=0) {
 				scriptUrl = this.path + scriptUrl;	
