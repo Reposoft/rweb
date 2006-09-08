@@ -7,7 +7,6 @@
 <link href="themes/simple/css/repos-standard.css" rel="stylesheet" type="text/css">
 <link rel="shortcut icon" href="favicon.ico">
 <script type="text/javascript" src="scripts/lib/sarissa/sarissa.js"></script>
-<script type="text/javascript" src="scripts/xslt/transform.js"></script>
 <script>
 function getWindowWidth() {
 	return Math.max(document.documentElement.clientWidth, document.body ? document.body.clientWidth : 0);
@@ -23,6 +22,8 @@ function showNews() {
 		div.style.display = 'inline';
 	}
 }
+
+Repos.onPluginLoad('transform', showNews);
 </script>
 <style type="text/css">
 th.frame {

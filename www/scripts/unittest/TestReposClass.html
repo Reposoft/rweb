@@ -179,6 +179,12 @@ new Test.Unit.Runner({
 		var ns = Repos.defaultNamespace;
 		assertEqual(null, ns, "This page is not loaded as text/xml or application/xhtml+xml, so it should not be treated with namespace.");
 	}},
+	
+	testRaisePluginsLoaded: function() { with(this) {
+		_repos_pluginLoadCallback.push(flagTrue);
+		Repos._raisePluginsLoaded();
+		assertEqual(true, flag, 'The pluginsLoaded callbacks should have been called');
+	}},
 
 	// for copy-paste
 	testTemplate: function() { with(this) {

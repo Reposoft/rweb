@@ -52,6 +52,7 @@ var _repos_pageLoaded = false;
 var _repos_loadedlibs = new Array();
 var _repos_loadqueue = new Array();
 var _repos_loading = false;
+var _repos_pluginLoadCallback = new Array();
 var Repos = {
 	version: '$Rev$',
 	// ------------ script initialization ------------
@@ -225,6 +226,22 @@ var Repos = {
 	},
 	
 	/**
+	 * Set up event handler for when a plugin has loaded.
+	 * @param pluginName for example 'dateformat'
+	 * @param the callback function taking zero parameters
+	 */
+	onPluginLoad: function(pluginName, callbackFunction) {
+		// TODO verify that the plugin will be loaded
+		
+		// simple solution - first let all plugins load, then run all callback functions
+		if (_repos_loading) {
+			_repos_pluginLoadCallback.push(callbackFunction);
+		} else {
+			callbackFunction.apply();	
+		}
+	},
+	
+	/**
 	 * Verify that the resource exists (because browsers fail silently if not)
 	 */
 	verifyResourceUrl: function(resourceUrl) {
@@ -240,7 +257,7 @@ var Repos = {
 	 * Adds a script to the DOM
 	 */
 	_loadScript: function(scriptUrl) {
-		if (Repos.isScriptResourceLoaded(scriptUrl)) { // TODO now we wait another time interval before attempting next in queue
+		if (Repos.isScriptResourceLoaded(scriptUrl)) { // TODO now we wait another time interval before attempting next in queue, does it call for optimization?
 			return;	
 		}
 		_repos_loadedlibs.push(scriptUrl);
@@ -275,7 +292,7 @@ var Repos = {
 		}
 	},
 	
-	// TODO who checks for duplicates in the load queue
+	// TODO who checks for duplicates in the load queue?
 	_loadNext: function() {
 		if (_repos_loadqueue.length == 0) {
 			Repos.reportError("Load queue is empty but script is still loading.");
@@ -288,7 +305,8 @@ var Repos = {
 			Repos._loadScript(functionOrScript);
 		}
 		if (_repos_loadqueue.length == 0) {
-			_repos_loading = false;	
+			_repos_loading = false;
+			Repos._raisePluginsLoaded();
 		} else {
 			setTimeout(Repos._loadNext, 500);	
 		}
@@ -301,6 +319,16 @@ var Repos = {
 			Repos._activateLoadqueue();
 		} else {
 			Repos.reportError("Can not add object of type " + t + " to load queue");	
+		}
+	},
+	
+	_raisePluginsLoaded: function() {
+		// TODO implement a real event model
+		
+		// simple solution - first let all plugins load, then run all callback functions
+		while (_repos_pluginLoadCallback.length > 0) {
+			var f = _repos_pluginLoadCallback.shift();
+			f.apply();
 		}
 	},
 	
