@@ -60,13 +60,13 @@ var Repos = {
 		// note that these are read-only fields. The Repos object is static and does not have state.
 		
 		// settings
-		this.dontCachePlugins = new Date().valueOf(); // for development, set to false for production
 		this.themeSettings = 'style/settings.js'; // relative to each theme's root
+		this.allowCachePlugins = false; // set to true in production to allow browsers to cache plugins
 		
 		// common page elements
 		//this.pageLoaded = false;
 		this.documentHead = document.getElementsByTagName("head")[0];
-		this.defaultNamespace = "http://www.w3.org/1999/xhtml";
+		this.defaultNamespace = this._getNamespace();
 		
 		// overwriting any existing event handler, from now on taking care of all window.onload
 		window.onload = Repos._handlePageLoaded;
@@ -74,6 +74,13 @@ var Repos = {
 		// do the mandatory imports
 		// these scripts don't need to be required by any other scripts
 		this.path = this._getPath();
+		
+		if (this.allowCachePlugins || (this.path.length > 5 && this.path.substr(0, 5) == 'file:')) {
+			this.scriptUrlSuffix = '';
+		} else {
+			this.scriptUrlSuffix = '?' + new Date().valueOf();	
+		}
+		
 		this.require("lib/scriptaculous/prototype.js");
 	},
 	
@@ -83,7 +90,8 @@ var Repos = {
 	_handlePageLoaded: function() {
 		_repos_pageLoaded = true;
 		if (typeof(Prototype) == 'undefined') {
-			Repos.reportError("Prototype library not loaded.");	
+			Repos.reportError("Prototype library not loaded. All scripts deactivated.");
+			return;
 		}
 		// add custom handling to Prototype Event.observe from now on
 		try {
@@ -100,7 +108,7 @@ var Repos = {
 	 */
 	_loadThemeSettings: function() {
 		var t = Repos.getTheme();
-		// relative paths with ../ not handled yet
+		// relative paths with ../ not handled yet. Note that the absolute url will not work offline.
 		Repos.require('/repos/' + t + this.themeSettings);	
 	},
 	
@@ -135,17 +143,30 @@ var Repos = {
 	},
 	
 	/**
-	 * Prototype and such livraries are not tested with application/xhtml+xml pages, so some customization is needed
+	 * @return the namespace for this document, for createElementNS, or null if not required
+	 */
+	_getNamespace: function() {
+		if (document.documentElement) {
+			if (document.documentElement.namespaceURI) {
+				return document.documentElement.namespaceURI;
+			}
+		}
+		return null;
+	},
+	
+	/**
+	 * Prototype and such livraries are not tested with application/xhtml+xml and text/xml pages, so some customization is needed
 	 */
 	_setUpXhtmlXmlCompatibility: function() {
-		// how to check if this is an XML page?
-		
-		// document.body in firefox
-		if (document.body == undefined) {
-			document.body = document.getElementsByTagName("body")[0];	
+		// only needed if this is an XML page
+		if (Repos.defaultNamespace) {
+			// document.body in firefox
+			if (document.body == undefined) {
+				document.body = document.getElementsByTagName("body")[0];	
+			}
+			// document.createElement must be replaced with document.createElementNS (except in IE)
+			Repos.addBefore(Repos.createElement, document, 'createElement');
 		}
-		
-		// document.createElement must be replaced with document.createElementNS
 	},
 	
 	// ------------ exception handling ------------
@@ -223,13 +244,11 @@ var Repos = {
 			return;	
 		}
 		_repos_loadedlibs.push(scriptUrl);
-		if (this.dontCachePlugins) {
-			scriptUrl += '?'+this.dontCachePlugins;	
-		}
 		try {
 			if (scriptUrl.indexOf('/')!=0) {
 				scriptUrl = this.path + scriptUrl;	
 			}
+			scriptUrl += this.scriptUrlSuffix;
 			var s = this.createElement("script");
 			s.type = "text/javascript";
 			s.src = scriptUrl;
@@ -256,9 +275,7 @@ var Repos = {
 		}
 	},
 	
-	// who validates that a script exists
-	// who checks for duplocates in the load queue
-	
+	// TODO who checks for duplicates in the load queue
 	_loadNext: function() {
 		if (_repos_loadqueue.length == 0) {
 			Repos.reportError("Load queue is empty but script is still loading.");
@@ -291,14 +308,14 @@ var Repos = {
 
 	/**
 	 * Creates a new DOM element
-	 * A replacement for document.createElement in application/xhtml+xml pages
+	 * A replacement for document.createElement in application/xhtml+xml and text/xml pages
 	 * @param tagName name in XHTML namespace
 	 * @param elementId id attribute value
 	 * @returns the element reference
 	 */
 	createElement: function(tagname) {
-		if (document.createElementNS) {
-			return document.createElementNS(this.defaultNamespace, tagname);
+		if (Repos.defaultNamespace && document.createElementNS) {
+			return document.createElementNS(Repos.defaultNamespace, tagname);
 		} else { // IE does not support createElementNS
 			return document.createElement(tagname);	
 		}

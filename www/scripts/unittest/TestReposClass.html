@@ -148,8 +148,7 @@ new Test.Unit.Runner({
 		Repos.requirePlugin('dateformat');
 		var toBeLoaded = _repos_loadqueue.pop();
 		_repos_loadqueue.push(dummy); // replace with something so that the queue logic is not confused
-		assertEqual('plugins/dateformat/dateformat.js' + (Repos.dontCachePlugins ? '?'+Repos.dontCachePlugins : ''),
-			toBeLoaded, "The script should have been added to the load queue");
+		assertEqual('plugins/dateformat/dateformat.js',	toBeLoaded, "The script should have been added to the load queue");
 	}},
 	
 	testLoadScript: function() { with(this) {
@@ -171,9 +170,14 @@ new Test.Unit.Runner({
 		assertEqual(false, no, "Not an existing resource: lib/resource/that/does/not/exist.js");
 	}},	
 	
-	testVerifyResourceUrlPartent: function() { with(this) {
+	testVerifyResourceUrlParent: function() { with(this) {
 		var yes = Repos.verifyResourceUrl('../style/global.css');
 		assertEqual(true, yes, "CSS resource in repos dir (../style/global.css) should also be ok.");
+	}},
+	
+	testNamespaceURI: function() { with(this) {
+		var ns = Repos.defaultNamespace;
+		assertEqual(null, ns, "This page is not loaded as text/xml or application/xhtml+xml, so it should not be treated with namespace.");
 	}},
 
 	// for copy-paste
