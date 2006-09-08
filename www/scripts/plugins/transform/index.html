@@ -5,13 +5,17 @@
 <title>XSLT transformer test</title>
 </head>
 <!--<script type="text/javascript" src="showfeed.js"></script>-->
-<script type="text/javascript" src="../lib/sarissa/sarissa.js"></script>
+<script type="text/javascript" src="../../head.js"></script>
 <script type="text/javascript" src="transform.js"></script>
 <script type="text/javascript">
 
 function showNews() {
-	transformToElement("test.xml", "test.xsl", document.getElementById('example'));
+	var t = new Transform("test.xsl");
+	var e = document.getElementById('example');
+	t.urlToElement("test.xml", e);
 }
+
+Repos.onPluginLoad('transform', showNews);
 
 </script>
 <body onload="showNews()">

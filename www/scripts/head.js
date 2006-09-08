@@ -234,7 +234,7 @@ var Repos = {
 		// TODO verify that the plugin will be loaded
 		
 		// simple solution - first let all plugins load, then run all callback functions
-		if (_repos_loading) {
+		if (_repos_loading || !Repos.isPageLoaded()) {
 			_repos_pluginLoadCallback.push(callbackFunction);
 		} else {
 			callbackFunction.apply();	

@@ -6,8 +6,10 @@
 <title>repos.se development</title>
 <link href="themes/simple/css/repos-standard.css" rel="stylesheet" type="text/css">
 <link rel="shortcut icon" href="favicon.ico">
-<script type="text/javascript" src="scripts/lib/sarissa/sarissa.js"></script>
+<script type="text/javascript" src="scripts/head.js"></script>
 <script>
+Repos.requirePlugin('transform');
+
 function getWindowWidth() {
 	return Math.max(document.documentElement.clientWidth, document.body ? document.body.clientWidth : 0);
 }
@@ -17,7 +19,8 @@ function showNews() {
 	var w = getWindowWidth();
 	if (w >= 1000) {	
 		div = document.getElementById('news');
-		transformToElement(newsurl, "view/atom.xsl", div);
+		var t = new Transform("view/atom.xsl");
+		t.urlToElement(newsurl, div);
 		div.style.width = '' + (w - 790) + 'px';
 		div.style.display = 'inline';
 	}
