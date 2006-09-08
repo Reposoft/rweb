@@ -28,7 +28,7 @@
 new Test.Unit.Runner({
 
 	testRequirePrototype: function() { with(this) {
-		fail("The Prototype require does not work so it is not manually included");
+		fail("The Prototype require does not work in this page, for some reason, so currently it is included as a script tag in head");
 	}},
 	
 	testDefaultNamespace: function() { with(this) {

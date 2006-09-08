@@ -26,7 +26,7 @@ function showNews() {
 	}
 }
 
-Repos.onPluginLoad('transform', showNews);
+Repos.observePluginLoad('transform', showNews);
 </script>
 <style type="text/css">
 th.frame {
@@ -64,7 +64,7 @@ th.frame {
 }
 </style>
 </head>
-<body onLoad="showNews()">
+<body>
 <div id="page">
 <div id="intro">
 <table width="760" align="center" class="info">

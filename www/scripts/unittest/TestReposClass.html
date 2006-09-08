@@ -74,11 +74,14 @@ new Test.Unit.Runner({
 
 	testAfterLoad: function() { with(this) {
 		assertEqual(true, Repos.isPageLoaded(), "Repos should know that page has loaded now");
+		if (_repos_loading) {
+			info("Note, for the tests running now, that the load queue is still processing");
+		}
 	}},
 
 	// check that the lib imported in head is present now
 	testRequireBeforePageLoaded: function() { with(this) {
-		assertEqual(false, MyTestlib == undefined, "Can not finde MyTestlib that was just included with require");
+		assertEqual(false, MyTestlib == undefined, "Can not finde MyTestlib that was required before the test");
 		var myTest = new MyTestlib('arg');
 		assertEqual('arg', myTest.getInitarg(), "MyTestlib should have an instance varable value now");
 	}},
@@ -180,9 +183,9 @@ new Test.Unit.Runner({
 		assertEqual(null, ns, "This page is not loaded as text/xml or application/xhtml+xml, so it should not be treated with namespace.");
 	}},
 	
-	testRaisePluginsLoaded: function() { with(this) {
-		_repos_pluginLoadCallback.push(flagTrue);
-		Repos._raisePluginsLoaded();
+	testHandleScriptLoaded: function() { with(this) {
+		_repos_pluginLoadCallback.push(flagTrue); // until there is an associative array
+		Repos._handleScriptLoaded('plugins/dateformat/dateformat.js');
 		assertEqual(true, flag, 'The pluginsLoaded callbacks should have been called');
 	}},
 

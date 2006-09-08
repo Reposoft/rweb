@@ -82,7 +82,8 @@ var Repos = {
 			this.scriptUrlSuffix = '?' + new Date().valueOf();	
 		}
 		
-		this.require("lib/scriptaculous/prototype.js");
+		// Prototype is needed for _handlePageLoaded, so bypass the load queue
+		this._loadScript("lib/scriptaculous/prototype.js");
 	},
 	
 	/**
@@ -90,6 +91,8 @@ var Repos = {
 	 */
 	_handlePageLoaded: function() {
 		_repos_pageLoaded = true;
+		// check or flow errors
+		if (_repos_loading) Repos.reportError("Script logic error. Queue processing started before page load completed.");
 		if (typeof(Prototype) == 'undefined') {
 			Repos.reportError("Prototype library not loaded. All scripts deactivated.");
 			return;
@@ -102,7 +105,16 @@ var Repos = {
 		}
 		Repos._setUpXhtmlXmlCompatibility();
 		Repos._loadThemeSettings();
+		setTimeout(Repos._activateLoadqueue, 500);  // set the initial delay in milliseconds here
 	},
+	
+	/**
+	 * @return true if body.onlod has happened
+	 *   note that even then, load queue might still be processing
+	 */
+	isPageLoaded: function() {
+		return _repos_pageLoaded;
+	},	
 	
 	/**
 	 * Append the theme setup script to the load queue.
@@ -114,20 +126,14 @@ var Repos = {
 	},
 	
 	/**
-	 * @return true if body.onlod has happened
-	 */
-	isPageLoaded: function() {
-		return _repos_pageLoaded;
-	},
-	
-	/**
 	 * Interrupts Event.observe to check that window.onload is not set after page has loaded.
 	 */
 	_beforeObserve: function(element, name, observer, useCapture) {
 		if (!Repos.isPageLoaded) return;
 		if (element != window) return;
 		if (name != 'load') return;
-		Repos._addToLoadqueue(observer); // page has loaded already, execute now instead
+		// page has loaded already, execute now instead
+		Repos._addToLoadqueue(observer);
 		return true; // don't invoke the original method
 	},
 	
@@ -202,17 +208,19 @@ var Repos = {
 	
 	/**
 	 * Import a library or css so that it is available to the calling script.
+	 * Verifies that the URL is valid.
+	 * Repos.require can be done during any phase of page load, but everything will queue up,
+	 * and processing of the queue will start only when the page has loaded.
 	 * @param url relative to this script (head.js) or absolute url from server root starting with '/'
 	 */
 	require: function(scriptUrl) {
-		if (!Repos.isPageLoaded()) {
-			Repos._loadScript(scriptUrl);		
+		if (Repos.verifyResourceUrl(scriptUrl)) {
+			Repos._addToLoadqueue(scriptUrl);
 		} else {
-			if (Repos.verifyResourceUrl(scriptUrl)) {
-				Repos._addToLoadqueue(scriptUrl);
-			} else {
-				Repos.reportError("The required resource URL is invalid: " + scriptUrl);	
-			}
+			Repos.reportError("The required resource URL is invalid: " + scriptUrl);	
+		}
+		if (Repos.isPageLoaded()) {
+			Repos._activateLoadqueue();
 		}
 	},
 	
@@ -221,8 +229,15 @@ var Repos = {
 	 * Script will be looked for in 'plugins/pluginName/pluginname.js'
 	 */
 	requirePlugin: function(pluginName) {
-		var scriptUrl = "plugins/" + pluginName + "/" + pluginName + ".js";
+		var scriptUrl = Repos._getPluginUrl(pluginName);
 		Repos.require(scriptUrl);
+	},
+	
+	/**
+	 * @return plugin js file url relative to script directory
+	 */
+	_getPluginUrl: function(pluginName) {
+		return "plugins/" + pluginName + "/" + pluginName + ".js"
 	},
 	
 	/**
@@ -230,15 +245,15 @@ var Repos = {
 	 * @param pluginName for example 'dateformat'
 	 * @param the callback function taking zero parameters
 	 */
-	onPluginLoad: function(pluginName, callbackFunction) {
+	observePluginLoad: function(pluginName, callbackFunction) {
 		// TODO verify that the plugin will be loaded
 		
 		// simple solution - first let all plugins load, then run all callback functions
-		if (_repos_loading || !Repos.isPageLoaded()) {
-			_repos_pluginLoadCallback.push(callbackFunction);
-		} else {
-			callbackFunction.apply();	
+		if (Repos.isPageLoaded() && Repos.isScriptResourceLoaded(Repos._getPluginUrl(pluginName))) {
+			alert(pluginName + "plugin already loaded. applying callback directly");
+			callbackFunction.apply();
 		}
+		_repos_pluginLoadCallback.push(callbackFunction);
 	},
 	
 	/**
@@ -253,12 +268,75 @@ var Repos = {
 		return true;
 	},
 	
+	isScriptResourceLoaded: function(resourceUrl) {
+		for (lib in _repos_loadedlibs) {
+			if (lib == resourceUrl) return true;
+		}
+		return false;
+	},
+	
+	
 	/**
-	 * Adds a script to the DOM
+	 * Load a function or a script into the page.
+	 * This can be done during any phase of the page load.
+	 * This function does not activate the load queue. That is done in Repos.require and Repos._handlePageLoaded.
+	 */
+	_addToLoadqueue: function(functionOrScript) {
+		var t = typeof(functionOrScript);
+		if (t == 'function' || t == 'string') {
+			_repos_loadqueue.push(functionOrScript);
+		} else {
+			Repos.reportError("Can not add object of type " + t + " to load queue");	
+		}
+	},
+	
+	/**
+	 * Start processing of the load queue. If it is started already, do nothing.
+	 * Calls _loadNext directly, so that there is no delay.
+	 */
+	_activateLoadqueue: function() {
+		if (!Repos.isPageLoaded()) Repos.reportError("Script logic error. Should not activate load queue when page is still loading");
+		if (!_repos_loading) {
+			_repos_loading = true;
+			Repos._loadNext();
+		}
+	},
+	
+	/**
+	 * Gets the first script or function from the queue, and runs it.
+	 * Then makes a timeout call to itself.
+	 */
+	// TODO who checks for duplicates in the load queue?
+	_loadNext: function() {
+		if (_repos_loadqueue.length == 0) {
+			_repos_loading = false;
+			return;
+		}
+		functionOrScript = _repos_loadqueue.shift();
+		var t = typeof(functionOrScript);
+		if (t == 'function') {
+			functionOrScript.apply();			
+		} else if (t == 'string') {
+			var ok = Repos._loadScript(functionOrScript);
+			if (ok) {
+				Repos._handleScriptLoaded(functionOrScript);
+			} else {
+				// script was not loaded. Run the next in queue immediately.
+				Repos._loadNext();	
+			}
+		}
+		setTimeout(Repos._loadNext, 500); // set the delay between loads here (note that each load is syncronous, so this row is reached after the previously loaded script has benn processed
+	},
+	
+	/**
+	 * Adds a script to the DOM.
+	 * Saves the script url in the loadedlibs array.
+	 * If isScriptResrouceLoaded already, it returns false.
+	 * If load is successful, returns true.
 	 */
 	_loadScript: function(scriptUrl) {
-		if (Repos.isScriptResourceLoaded(scriptUrl)) { // TODO now we wait another time interval before attempting next in queue, does it call for optimization?
-			return;	
+		if (Repos.isScriptResourceLoaded(scriptUrl)) {
+			return false;	
 		}
 		_repos_loadedlibs.push(scriptUrl);
 		try {
@@ -273,63 +351,25 @@ var Repos = {
 		} catch (err) {
 			Repos.reportError("Error loading script " + scriptUrl+ ": " + err);
 		}
-	},
-	
-	isScriptResourceLoaded: function(resourceUrl) {
-		for (lib in _repos_loadedlibs) {
-			if (lib == resourceUrl) return true;
-		}
-		return false;
+		return true;
 	},
 	
 	/**
-	 * Add behaviours to the page after it has loaded.
+	 * Since scripts are loaded asynchronously
 	 */
-	_activateLoadqueue: function() {
-		if (!_repos_loading) {
-			_repos_loading = true;
-			setTimeout(Repos._loadNext, 500);
-		}
-	},
-	
-	// TODO who checks for duplicates in the load queue?
-	_loadNext: function() {
-		if (_repos_loadqueue.length == 0) {
-			Repos.reportError("Load queue is empty but script is still loading.");
-		}
-		functionOrScript = _repos_loadqueue.shift();
-		var t = typeof(functionOrScript);
-		if (t == 'function') {
-			functionOrScript.apply();			
-		} else if (t == 'string') {
-			Repos._loadScript(functionOrScript);
-		}
-		if (_repos_loadqueue.length == 0) {
-			_repos_loading = false;
-			Repos._raisePluginsLoaded();
-		} else {
-			setTimeout(Repos._loadNext, 500);	
-		}
-	},
-	
-	_addToLoadqueue: function(functionOrScript) {
-		var t = typeof(functionOrScript);
-		if (t == 'function' || t == 'string') {
-			_repos_loadqueue.push(functionOrScript);
-			Repos._activateLoadqueue();
-		} else {
-			Repos.reportError("Can not add object of type " + t + " to load queue");	
-		}
-	},
-	
-	_raisePluginsLoaded: function() {
+	_handleScriptLoaded: function(scriptUrl) {
 		// TODO implement a real event model
-		
+		if (Repos.isPageLoaded() && _repos_loadqueue.length == 0) { // this is a stupid solution because it may occur multiple times if there are delayed require calls. need an associative array for callbacks, and identify the loaded plugin here
 		// simple solution - first let all plugins load, then run all callback functions
 		while (_repos_pluginLoadCallback.length > 0) {
 			var f = _repos_pluginLoadCallback.shift();
-			f.apply();
+			try {
+				f.apply();
+			} catch (err) {
+				Repos.reportError("Custom callback function failed for loaded script " + scriptUrl + ": " + err); 
+			}
 		}
+		} // end stupid solution
 	},
 	
 	// ------------ DOM manipulation ------------

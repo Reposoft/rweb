@@ -15,10 +15,10 @@ function showNews() {
 	t.urlToElement("test.xml", e);
 }
 
-Repos.onPluginLoad('transform', showNews);
+Repos.observePluginLoad('transform', showNews);
 
 </script>
-<body onload="showNews()">
+<body>
 	<p>The DIV below should get contents from the transform.</p>
 	<div id="example">
 	
