@@ -66,7 +66,7 @@
 		</xsl:param>
 		<div class="commandbar">
 		<a id="reposbutton" href="http://www.repos.se/" target="_blank">
-			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet version $Rev$"/>
+			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
 		</a>
 		<xsl:if test="/svn/index/updir">
 			<xsl:if test="not($disable-up='yes')">
@@ -100,7 +100,9 @@
 	<!-- directory listing -->
 	<xsl:template name="contents">
 		<xsl:param name="home">
-			<xsl:call-template name="getTrunkUrl"/>
+			<xsl:call-template name="getReverseUrl">
+				<xsl:with-param name="url" select="substring(/svn/index/@path, 2)"/>
+			</xsl:call-template>
 		</xsl:param>
 		<div class="contents">
 		<h2>
@@ -217,34 +219,29 @@
 		<xsl:param name="p" select="substring($path, string-length($trunk)+2)"/>
 		<xsl:call-template name="getFolderPathLinks">
 			<xsl:with-param name="folders" select="$p"/>
-			<xsl:with-param name="url">
-				<xsl:call-template name="getTrunkUrl"/>
-			</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 	<!-- divide a path into its elements and make one link for each, expects folders to end with '/' -->
-	<!-- TODO if this is done with relative url, concatenating '../', we don't need repo url from conf --> 
 	<xsl:template name="getFolderPathLinks">
 		<xsl:param name="folders"/>
-		<xsl:param name="url"/>
 		<xsl:param name="f" select="substring-before($folders, '/')"/>
 		<xsl:param name="rest" select="substring-after($folders, concat($f,'/'))"/>
+		<xsl:param name="return">
+			<xsl:call-template name="getReverseUrl">
+				<xsl:with-param name="url" select="$rest"/>
+			</xsl:call-template>
+		</xsl:param>
 		<xsl:if test="not(string-length($rest)>0)">
 			<xsl:value-of select="$f"/>
 			<xsl:value-of select="'/'"/>
 		</xsl:if>
 		<xsl:if test="string-length($rest)>0">
-			<a href="{$url}{$f}/">
+			<a href="{$return}">
 				<xsl:value-of select="$f"/>
 			</a>
 			<xsl:value-of select="'/'"/>
 			<xsl:call-template name="getFolderPathLinks">
 				<xsl:with-param name="folders" select="$rest"/>
-				<xsl:with-param name="url">
-					<xsl:value-of select="$url"/>
-					<xsl:value-of select="$f"/>
-					<xsl:value-of select="'/'"/>
-				</xsl:with-param>
 			</xsl:call-template>
 		</xsl:if>
 	</xsl:template>
@@ -266,6 +263,16 @@
 				</xsl:call-template>
 			</xsl:when>
 		</xsl:choose>
+	</xsl:template>
+	<!-- get the path back, as multiple "../", to get to the path that uses 'url' to get to the current path -->
+	<xsl:template name="getReverseUrl">
+		<xsl:param name="url"/>
+		<xsl:if test="contains($url,'/')">
+			<xsl:value-of select="'../'"/>
+			<xsl:call-template name="getReverseUrl">
+				<xsl:with-param name="url" select="substring-after($url,'/')"/>
+			</xsl:call-template>
+		</xsl:if>
 	</xsl:template>
 	<!-- get file extension from attribute @href or param 'filename' -->
 	<xsl:template name="getFiletype">

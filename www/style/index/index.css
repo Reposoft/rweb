@@ -35,7 +35,7 @@
 	right: 10px;
 }
 /* resource links */
-a[href="../"], span#up {
+.commandbar a[href="../"], span#up {
 	background-image: url('up.png');
 	padding-left: 20px;
 }

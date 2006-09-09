@@ -81,7 +81,6 @@ pre {
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 .command {
-	background-color: #F0F0EE;
 	font-size: smaller;
 	padding: 3px;
 	margin-left: 15px;
