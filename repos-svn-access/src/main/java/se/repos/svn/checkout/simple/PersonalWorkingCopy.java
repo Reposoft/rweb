@@ -30,6 +30,7 @@ import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.file.RejectPathDoesNotExist;
 import se.repos.svn.javasvn.TmateSvnClientProvider;
+import se.repos.validation.Validation;
 import se.repos.validation.ValidationRule;
 
 /**
@@ -57,7 +58,7 @@ public class PersonalWorkingCopy implements ReposWorkingCopy {
     private ClientProvider clientProvider = new TmateSvnClientProvider();
   
     private static final ValidationRule<CheckoutSettings> CHECKOUT_SETTINGS_VALIDATOR = 
-    	new CheckoutSettingsValidator();
+    	Validation.rule(CheckoutSettingsValidator.class);
     
     /**
      * Working copy configuration.

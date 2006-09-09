@@ -16,12 +16,12 @@ package se.repos.svn.file;
 
 import java.io.File;
 
-import se.repos.validation.ValidationRuleBase;
+import se.repos.validation.ValidationRejectStrategy;
 
-public class RejectPathDoesNotExist extends ValidationRuleBase<File> {
+public class RejectPathDoesNotExist extends ValidationRejectStrategy<File> {
 
 	@Override
-	public boolean rejectsValue(File fileOrDirectory) {
+	public boolean rejects(File fileOrDirectory) {
 		return !fileOrDirectory.exists();
 	}
 	

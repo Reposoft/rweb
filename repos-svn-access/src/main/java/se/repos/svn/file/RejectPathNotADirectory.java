@@ -16,17 +16,13 @@ package se.repos.svn.file;
 
 import java.io.File;
 
-import se.repos.validation.ValidationRuleDecoratorBase;
+import se.repos.validation.ValidationRejectStrategy;
 
-public class RejectPathNotADirectory extends ValidationRuleDecoratorBase<File> {
-
-	public RejectPathNotADirectory() {
-		super(new RejectPathDoesNotExist());
-	}
+public class RejectPathNotADirectory extends ValidationRejectStrategy<File> {
 
 	@Override
-	protected boolean rejectsValue(File file) {
-		return !file.isDirectory();
+	public boolean rejects(File file) {
+		return !file.exists() || !file.isDirectory();
 	}
 	
 }

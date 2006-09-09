@@ -22,8 +22,9 @@ import org.tigris.subversion.svnclientadapter.SVNUrl;
 import se.repos.svn.RepositoryUrl;
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
+import se.repos.svn.project.RejectInvalidProjectName;
+import se.repos.validation.Validation;
 import se.repos.validation.ValidationRule;
-import se.repos.validation.strings.RejectStringContentsNotAllowed;
 
 /**
  * Default implementation, assuming standard project reporsitory layout.
@@ -64,7 +65,7 @@ public class CheckoutSettingsForProject implements CheckoutSettings {
 	/**
 	 * Validation rule for project name, so it will work as a directory name
 	 */
-	public static final ValidationRule<String> PROJECT_NAME_RULE = new RejectStringContentsNotAllowed('/');
+	public static final ValidationRule<String> PROJECT_NAME_RULE = Validation.rule(RejectInvalidProjectName.class);
 	
 	private SharedUserCredentials credentials = new SharedUserCredentials(USERNAME, PASSWORD);
 	private File workingCopyDirectory;

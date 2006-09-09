@@ -19,7 +19,8 @@ import org.slf4j.LoggerFactory;
 
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.file.RejectPathNotADirectory;
-import se.repos.validation.ValidationRuleBase;
+import se.repos.validation.Validation;
+import se.repos.validation.ValidationRejectStrategy;
 import se.repos.validation.strings.RejectStringContentsMissing;
 import se.repos.validation.strings.RejectStringIsEmpty;
 
@@ -31,16 +32,16 @@ import se.repos.validation.strings.RejectStringIsEmpty;
  * @version $Id$
  * @todo better design for validate & rejects with multiple rules and multiple fields
  */
-public class CheckoutSettingsValidator extends ValidationRuleBase<CheckoutSettings> {
+public class CheckoutSettingsValidator extends ValidationRejectStrategy<CheckoutSettings> {
 	
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Override
-	protected boolean rejectsValue(CheckoutSettings settings) {
-		new RejectPathNotADirectory().rejects(settings.getWorkingCopyDirectory());
-		new RejectStringContentsMissing("://").validate(settings.getCheckoutUrl().toString());
-		new RejectStringIsEmpty().validate(settings.getLogin().getUsername());
-		new RejectStringIsEmpty().validate(settings.getLogin().getPassword());
+	public boolean rejects(CheckoutSettings settings) {
+		Validation.rule(RejectPathNotADirectory.class).validate(settings.getWorkingCopyDirectory());
+		Validation.rule(new RejectStringContentsMissing("://")).validate(settings.getCheckoutUrl().toString());
+		Validation.rule(RejectStringIsEmpty.class).validate(settings.getLogin().getUsername());
+		Validation.rule(RejectStringIsEmpty.class).validate(settings.getLogin().getPassword());
 		return false;
 	}
 

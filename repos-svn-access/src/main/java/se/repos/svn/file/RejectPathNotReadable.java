@@ -16,16 +16,12 @@ package se.repos.svn.file;
 
 import java.io.File;
 
-import se.repos.validation.ValidationRuleDecoratorBase;
+import se.repos.validation.ValidationRejectStrategy;
 
-public class RejectPathNotReadable extends ValidationRuleDecoratorBase<File> {
-
-	protected RejectPathNotReadable() {
-		super(new RejectPathDoesNotExist());
-	}
+public class RejectPathNotReadable extends ValidationRejectStrategy<File> {
 
 	@Override
-	protected boolean rejectsValue(File path) {
-		return !path.canRead();
+	public boolean rejects(File path) {
+		return !path.exists() || !path.canRead();
 	}
 }

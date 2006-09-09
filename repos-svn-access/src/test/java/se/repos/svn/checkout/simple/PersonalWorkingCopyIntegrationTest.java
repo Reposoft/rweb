@@ -37,6 +37,8 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 	
 	public void testWorkflow() throws IOException {
 		// first instantiate in new folder
+		// Note that currently the username and password for ProjectEngine
+		//  is hard coded into CheckoutSettingsForProject 
 		CheckoutSettings settings = 
 			new CheckoutSettingsForProject(TEST_PROJECT_NAME, tmpFolder);
 		ReposWorkingCopy workingCopy = new PersonalWorkingCopy(settings);
