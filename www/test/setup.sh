@@ -55,6 +55,7 @@ echo "Require valid-user" >> $CONF
 echo "AuthzSVNAccessFile $ACL" >> $CONF
 
 echo "Apache should do \"Include $CONF\" at some <Location >"
+echo "Note that apache must be restarted if there are chances in this file."
 echo ""
 
 # check out working copy and create base structure

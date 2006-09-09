@@ -1,4 +1,8 @@
 <?php
+/**
+DEPRECATED This concept is not used, because imports are not supported by Safari (2.0.3).
+*/
+
 header('Content-type: text/xml; charset=UTF-8');
 require(dirname(dirname(dirname(__FILE__))).'/conf/repos.properties.php');
 ?>

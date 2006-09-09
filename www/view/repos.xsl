@@ -9,15 +9,12 @@
   stylesheet is read from the same domain as the XML
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
-	<!-- import configuration, since we can't set parameters in the browsers -->
-	<xsl:import href="/repos/view/conf.xsl"/>
 	<!-- start transform -->
 	<xsl:output method="xml" indent="no"/>
 	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
-	<xsl:param name="web"><xsl:value-of select="$repos_web"/></xsl:param>
-	<xsl:param name="repo"><xsl:value-of select="$repo_url"/></xsl:param>
+	<xsl:param name="web">/repos</xsl:param>
 	<!-- static contents urls -->
-	<xsl:param name="cssUrl"><xsl:value-of select="$web"/><xsl:value-of select="$theme"/>/style</xsl:param>
+	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/style</xsl:param>
 	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
 	<xsl:param name="editUrl"><xsl:value-of select="$web"/>/edit</xsl:param>
 	<!-- when spacer space can't be avoided -->
@@ -38,7 +35,7 @@
 				<!-- default stylesheet -->
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}/global.css"/>
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}/index/index.css"/>
-				<link rel="shortcut icon" href="http://www.repos.se/favicon.ico"/>
+				<link rel="shortcut icon" href="/favicon.ico"/>
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
 			</head>
@@ -69,7 +66,7 @@
 		</xsl:param>
 		<div class="commandbar">
 		<a id="reposbutton" href="http://www.repos.se/" target="_blank">
-			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
+			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet version $Rev$"/>
 		</a>
 		<xsl:if test="/svn/index/updir">
 			<xsl:if test="not($disable-up='yes')">
@@ -200,10 +197,8 @@
 		</span> -->
 		</div>
 	</xsl:template>
-	<!-- get the absolute URL for the project's file archove, using configuration -->
+	<!-- get the relative URL to the root of the project (the trunk folder) -->
 	<xsl:template name="getTrunkUrl">
-		<xsl:value-of select="$repo"/>
-		<xsl:value-of select="'/'"/>
 		<xsl:call-template name="getTrunkPath"/>
 	</xsl:template>
 	<!-- get the root folder name -->
