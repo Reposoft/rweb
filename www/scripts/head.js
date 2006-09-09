@@ -195,10 +195,16 @@ var Repos = {
 	 */
 	reportError: function(errorMessage) {
 		var id = Repos.generateId();
-		alert("The following internal script error has occured:\n" + errorMessage + 
-			  "\n\nThe error details have been reported to the repos.se developers. " +
+		var msg = "Repos has run into a script error:\n" + errorMessage + 
+			  "\n\nThe details have been logged so we can fix the issue. " +
 			  "\nFeel free to contact support@repos.se about this error, ID \""+id+"\"." +
-			  "\n\nBecause of the error, this page may not function properly.");
+			  "\n\nBecause of the error, this page may not function properly.";
+		// before safari starts do 'defaults write com.apple.Safari IncludeDebugMenu 1'
+		if(window.console) {
+			window.console.log(msg);
+		} else {
+			alert(msg);
+		}	
 	},
 	
 	/**

@@ -46,7 +46,7 @@ echo "test = rw" >> $ACL
 CONF="$TST/admin/testrepo.conf"
 touch $CONF
 echo "DAV svn" >> $CONF
-echo "SVNIndexXSLT \"/repos/view/index.xsl\"" >> $CONF
+echo "SVNIndexXSLT \"/repos/view/repos.xsl\"" >> $CONF
 echo "SVNPath $TST/repo/" >> $CONF
 echo "SVNAutoversioning on" >> $CONF
 echo "AuthType Basic" >> $CONF

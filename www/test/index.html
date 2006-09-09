@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Untitled Document</title>
+<link href="../style/global.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<h1><img src="../style/logo/repos2.png" alt="repos.se" width="144" height="36" align="absmiddle" /> Integration Testing</h1>
+<p>This is the startpage for automated and manual tests of repos.</p>
+<p>Repos components are as separated as possible. The unit tests for components are usually in the same folder as the code. See the <a href="php/">php unit tests</a> and the <a href="../scripts/unittests/">javascripts unit tests</a>. </p>
+<h2>Automated test suite</h2>
+<p>Complete test suite for Selenium. A global javascript function called setUp(), from the suite HTML file, is executed at the top of each test to get to the startpage with a user logged in. Then relative URLs are used to go directly to the target for each test case. </p>
+<p>Basic test suite written in java wih jWebUnit, to test the functionality without javascripts.  </p>
+<h2>Test reports</h2>
+<p>The complete test suite is run on each supported browser.</p>
+<h2>Set up</h2>
+<p><a href="reset.php">Reset the test repository </a></p>
+</body>
+
+
+</html>
