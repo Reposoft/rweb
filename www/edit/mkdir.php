@@ -6,6 +6,9 @@ if (isset($_GET['name'])) {
 	createFolder(getTargetUrl(),$_GET['name'],$_GET['message']); 
 } else {
 	$target = getTarget();
+	if (strlen($target) < 1) {
+		trigger_error("Path parameter not set."); exit;
+	}
 	$template = new Presentation();
 	$template->assign('target', $target);
 	$template->assign('repo', getRepositoryUrl());

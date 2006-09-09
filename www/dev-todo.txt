@@ -1,3 +1,7 @@
+* Safari can not handle &amp; for query parameters in XSLT the way they are written now. Suuuuuucky. Need to declaer an entity?
+
+* Fix log.xsl without conf.xsl, for safari.
+
 * Move repos.properties and reposrun.sh to location that can not be accessed through the web.
 
 * Protect conf dir for web access.

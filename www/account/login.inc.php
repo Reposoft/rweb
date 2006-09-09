@@ -162,7 +162,9 @@ function getHttpHeaders($targetUrl, $user=null, $pass=null) {
 
 // abstraction for referer resolution
 function getReferer() {
-    if (isset($_SERVER['HTTP_REFERER'])) return $_SERVER['HTTP_REFERER'];
+    if (isset($_SERVER['HTTP_REFERER']) && strlen($_SERVER['HTTP_REFERER']) > 5) {
+		return $_SERVER['HTTP_REFERER'];
+	}
     return false;
 }
 
