@@ -197,8 +197,13 @@ new Test.Unit.Runner({
 }, { });
 }
 
+// need an event from the Repos class when everything has loaded, this is a temporary solution
+function afterLoad2() {
+	window.setTimeout('afterLoad()', 1000); // with () works in Safari too
+}
+
 // use prototype to set body.onload
-Event.observe(window, 'load', afterLoad, false);
+Event.observe(window, 'load', afterLoad2, false);
 
 </script>
 <form id="testform">

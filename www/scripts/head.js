@@ -107,7 +107,7 @@ var Repos = {
 		if (_repos_loading) Repos.reportError("Script logic error. Queue processing started before page load completed.");
 		// ok, page is loaded, go process the load queue
 		_repos_pageLoaded = true;
-		setTimeout(Repos._activateLoadqueue, 500);  // set the initial delay in milliseconds here
+		window.setTimeout('Repos._activateLoadqueue()', 500);  // set the initial delay in milliseconds here
 	},
 	
 	/**
@@ -240,6 +240,8 @@ var Repos = {
 		}
 	},
 	
+	// TODO requireLib
+	
 	/**
 	 * Import a plugin given a name
 	 * Script will be looked for in 'plugins/pluginName/pluginname.js'
@@ -341,7 +343,7 @@ var Repos = {
 				Repos._loadNext();	
 			}
 		}
-		setTimeout(Repos._loadNext, 500); // set the delay between loads here (note that each load is syncronous, so this row is reached after the previously loaded script has benn processed
+		window.setTimeout('Repos._loadNext()', 500); // set the delay between loads here (note that each load is syncronous, so this row is reached after the previously loaded script has benn processed
 	},
 	
 	/**

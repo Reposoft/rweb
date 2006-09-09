@@ -174,13 +174,6 @@
 	<!-- extra info and logos -->
 	<xsl:template name="footer">
 		<div class="footer">
-		<span class="translate">
-			<xsl:text>File archive:</xsl:text>
-		</span>
-		<xsl:value-of select="$spacer"/>
-		<span>
-			<xsl:call-template name="getTrunkUrl"/>
-		</span>
 		<span class="legal">
 		<xsl:text>Powered by </xsl:text>
 		<xsl:element name="a">
