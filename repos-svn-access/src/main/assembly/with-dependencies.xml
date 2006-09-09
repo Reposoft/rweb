@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- makes an "uberjar"
+But currently there is a limitation:
+ the local libraries in lib/ don't get unpacked.
+-->
 <assembly>
     <id>with-dependencies</id>
     <formats>
