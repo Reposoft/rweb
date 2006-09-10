@@ -486,7 +486,9 @@ var Repos = {
 	 *	false if no theme should be loaded (meaning that no theme script setup will be required.
 	 */
 	getTheme: function() {
-		return '';
+		if (array('test', 'staffan', 'annika', 'arvid', 'hanna').contains(Repos.getUsername())) 
+			return '';
+		return 'themes/pe'; // slashes?
 	},
 	
 	/**

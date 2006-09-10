@@ -1,0 +1,89 @@
+repos.se releases
+
+1.0
+----------------
+The 1.0 branch is designed as an addon to an existing Subversion+Apache repository installation. 
+
+Features:
+- Login to personal folder
+- Logout (clear browser's credentials)
+- File browsing with action buttons and links for the visited path.
+- Log viewer
+- Plaintext contents viewer (open any version of a file from the logs)
+- Plaintext diff viewer
+- Folder tree structure (showing all the folders the user can access) opened in separate page
+- Create, rename and delete folders
+- File upload, upload new version and delete file
+- File upload (new or changed) for text files by pasting test in textarea form field
+Features that require javascript:
+- Javascript plugin framework for transparently adding behaviour to pages
+- Date formatting with browser's time zone
+- File and folder details (full URL, size, revision, author, locks) as popup
+- Client side validation of form fields (filename and log message), using tmt-validator
+- Automatically fill in file name at upload of new file
+- Error id for javascript errors
+- Chose language (english is the only language)
+Administration features:
+- Text-editor-like edit of Access Control List
+- Add user to HTTP users file with BASIC encrypted password
+- Write access to repository root directory, for creating new accounts (/username/trunk folder)
+- A standard set of css classes that annotate context (for CSS and behaviours)
+- Stateless server-side application except for redirect-after-post pages which use the local file system
+- Backup and verify scripts (with a file structure that is easily mirrored)
+- MD5 hash to verify backup file integrity
+- Automated test suite for everything except multipart file upload
+
+NOT implemented:
+- User's preferences
+- Change password screen
+- E-mailing capabilities
+- Tree navigation in the file browser
+- Locking and unlocking of files
+- Server side validation of input. All operations will be attempted, reporting an SVN client error if unsuccessful (But proper escaping of all input is in place).
+- Handling of read-only folders (user will see a subversion error message after a write operation is attempted)
+- iCalendar integration (although those who know where to look can test integration with phpicalendar and a client such as Sunbird or Mac  ICal).
+- Cookies or sessions
+- Help for SVN client checkout of files or WebDAV access (but connecting to the account as a windows network folder, for drag and drop, is possible)
+
+Requirements:
+- Subversion 1.2.3 or 1.3.2+
+- Subversion client on webserver's command line
+- Repos and Subversion runs on the same machine (repos has access to the file system location of the auth files)
+- Webserver account write access to the user file and ACL 
+- PHP 4.3.0+ with mbstring support (command line must also support UTF-8)
+- Text file user accounts and ACL backend (standard BASIC httpasswd file and SVNAuthFile).
+- Hard coded account names for admin and account manager. 
+- Tested in Firefox 1.5+, IE6, and Camino. Usable but not fully functional in Safari 2.0+ and Opera 8+.
+- Manually set CSS theme path in config file, central javascript file and XSLT file
+
+
+1.1
+----------------
+- Access control files in adiminstration account's repository folder (and something like a post-commit hook to get the file into the file system, with this repos can run on a different server than the repository).
+- Undo functionality for delete
+- Display changeset given only a revision number (requires admin access to see in what folder the change occurred and if the user has access to that folder)
+- Error logging from javascript
+- Error logging from edit operations
+- Web based access to maintenance operations (backup)
+- Post URL support for: Test suite results, error reports (javascript and edit operations), maintenance logs
+- Login functionality can integrate with 3rd party PHP that reads resource urls, such as phpthumb
+- Image thumbnails plugin using phpthumb
+- Standardized event model in the javascript framework
+- Class based form field validation with own framework
+
+
+1.2
+----------------
+- Dialog framework for popup windows
+- Users online plugin
+- Tree sidebar plugin
+- Messages functionality using in-repository Atom XML and edit using merge (messages accessed through tree)
+- Log to feed conversion (transform log XML to Atom XML)
+- Translation to swedish
+
+
+1.3
+----------------
+- Main menu plugin
+- Calendar support
+- Rich text editor support (TinyMCE) for message editing

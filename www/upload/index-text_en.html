@@ -4,34 +4,29 @@
 <title>Upload to repos</title>
 <script type="text/javascript">
 function autoFillFilename(path) {
-<!--{if not $file}-->
-	var pos = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
-	if (pos > 0) {
-		var filename = path.substring(pos + 1);
-		document.getElementsByName('name')[0].value = filename;
-	}
-<!--{/if}-->
+
 }
 </script>
 <!--{$head}-->
 </head>
 
 <body>
-<h1>Upload file</h1>
+<h1>Paste contents of file</h1>
 <!--{if $file}-->
-<p>As a new version of file <span class="path">{=$path}{=$file}</span>. <a class="action" target="_blank" href="../open/?target={=$path}{=$file}">open current file</a></p>
+<p>As a new version of file <span class="path">{=$path}{=$file}</span> <a class="action" target="_blank" href="../open/?target={=$path}{=$file}">open</a></p>
 <!--{else}-->
 <p>As a new file in folder {=$path}</p>
 <!--{/if}-->
-<p>If it is a text file, it is also possible to <a class="action" href="./?paste=1">copy-paste contents to this form</a></p>
-<form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload" tmt:validate="true">
+<p><a class="action" href="./">switch to normal file upload</a></p>
+<form action="./" method="post" enctype="text/plain" name="formUpload" id="formUpload" tmt:validate="true">
 <fieldset>
   <legend>Upload to repos.se</legend>
   <input type="hidden" name="targeturl" value="{=$targeturl}"/>
+  <input type="hidden" name="paste" value="1"/>
   <p>
-    <label for="userfile">local file</label>
-	<input type="hidden" name="MAX_FILE_SIZE" value="{=$maxfilesize}" />
-    <input type="file" name="userfile" size="40" onchange="autoFillFilename(value)" tmt:required="true" tmt:message="Please select a file to upload"/>
+    <label for="usertext">file contents</label><br />
+    <textarea name="usertext" id="usertext" cols="100" rows="30" tmt:required="true"></textarea>
+    <label for="userfile"></label>
   </p>
   <p>
     <label for="currentname">name in repository</label>
