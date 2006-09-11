@@ -31,9 +31,9 @@ pre {
 	font-size: 1.2em;
 }
 hr {
+	border: none 0;
+	border-top: 1px dashed #CCCC99;
 	height: 1px;
-	color: #CCCC99;
-	border-style: dashed;
 }
 /* layout of version control concepts, these are usually span tags */
 .path {
