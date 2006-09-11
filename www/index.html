@@ -4,7 +4,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>repos.se development</title>
-<link href="style/global.css" rel="stylesheet" type="text/css">
 <link rel="shortcut icon" href="/favicon.ico">
 <script type="text/javascript" src="scripts/head.js"></script>
 <script type="text/javascript">
@@ -28,6 +27,8 @@ function showNews() {
 
 Repos.observePluginLoad('transform', showNews);
 </script>
+<!-- the CSS must be placed after the head script so it is not updated according to theme settings -->
+<link href="style/global.css" rel="stylesheet" type="text/css">
 <style type="text/css">
 .info {
 	border: 2px solid #CCCC99;

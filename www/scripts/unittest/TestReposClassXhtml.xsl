@@ -11,11 +11,10 @@
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 <title>head.js testcases</title>
-<!--<link href="../../style/global.css" rel="stylesheet" type="text/css" />-->
-<script type="text/javascript" src="../head.js"></script>
-<!-- Error: can't get the dynamic import of Prototype from head.js to work -->
 <script type="text/javascript" src="../lib/scriptaculous/prototype.js"></script>
 <script type="text/javascript" src="../lib/scriptaculous/unittest.js"></script>
+<script type="text/javascript" src="../head.js"></script>
+<link href="../../style/global.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>

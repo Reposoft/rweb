@@ -72,16 +72,14 @@ var Repos = {
 		// overwriting any existing event handler, from now on taking care of all window.onload
 		window.onload = Repos._handlePageLoaded;
 		
-		// do the mandatory imports
-		// these scripts don't need to be required by any other scripts
-		this.path = this._getPath();
-		
+		// prepare for the mandatory imports
+		this.path = this._handleExistingHeadTags();
+		// disable caching if needed, TODO the suffix should probably be generated per session instead. caching is not a problem for development, only for releases.
 		if (this.allowCachePlugins || (this.path.length > 5 && this.path.substr(0, 5) == 'file:')) {
 			this.scriptUrlSuffix = '';
 		} else {
 			this.scriptUrlSuffix = '?' + new Date().valueOf();	
 		}
-		
 		// Prototype is needed for _handlePageLoaded, so bypass the load queue
 		this._loadScript("lib/scriptaculous/prototype.js");
 	},
@@ -111,6 +109,68 @@ var Repos = {
 	},
 	
 	/**
+	 * Pages may have linked to some libs, like Prototype, statically already,
+	 *  in which case they should not be loaded again.
+	 * Pages may also have linked to stylesheets from the default theme,
+	 *  which should be changed if the current user has a different theme.
+	 * (Pages that always want the default theme should include the CSS after head.js)
+	 * @return path of this script (head.js) so it can be used in other script includes
+	 */
+	_handleExistingHeadTags: function() {
+		var tags = this.documentHead.childNodes;
+		var me = /head\.js(\?.*)?$/;
+		var path = '';
+		var scriptUrls = new Array();
+		
+		for (i = 0; i < tags.length; i++) {
+			var t = tags[i];
+			if (!t.tagName) continue;
+			var n = t.tagName.toLowerCase();
+			if (n == 'script' && t.src && t.src.match(me)) // located head.js, save path for future use
+				path = t.src.replace(me, '');
+			if (n == 'script' && t.src)
+				scriptUrls.push(t.src)
+			if (n == 'link' && t.href && t.type && t.type == 'text/css')
+				Repos._handleExistingCss(t);
+		}
+		
+		if (path.length < 1) {
+			throw "Error: This script (head.js) file should be included in <head>"; 
+		}
+		
+		while (s = scriptUrls.shift()) {
+			Repos._handleExistingScript(s, path);
+		}
+		
+		return path;
+	},
+	
+	/**
+	 * @param src the url of the script
+	 * @param headPath the relative url to the root of scripts that Repos will handle
+	 *  in IE, where the relative url such as ../ is the path, src must begin with headPath
+	 */
+	_handleExistingScript: function(src, headPath) {
+		_repos_loadedlibs.push(src.substr(headPath.length));
+	},
+	
+	/**
+	 * Modify a css link so it uses the current theme.
+	 * If the href contains /style/ it will be updated with the theme name, if a theme is set
+	 * @linkTag the element, child of <head>, with an href attribute
+	 */
+	_handleExistingCss: function(linkTag) {
+		var themePath = new RegExp('/style/');
+		if (!themePath.test(linkTag.href)) return;
+		var theme = Repos.getTheme();
+		if (!theme) return;
+		var n = linkTag.cloneNode(true);
+		var href = linkTag.href.replace(themePath, '/' + theme + 'style/');
+		n.href = href;
+		this.documentHead.replaceChild(n, linkTag);
+	},
+	
+	/**
 	 * @return true if body.onlod has happened
 	 *   note that even then, load queue might still be processing
 	 */
@@ -137,18 +197,6 @@ var Repos = {
 		// page has loaded already, execute now instead
 		Repos._addToLoadqueue(observer);
 		return true; // don't invoke the original method
-	},
-	
-	/**
-	 * @return the path of this script file, from the page's script tag, for use in relative include urls
-	 */
-	_getPath: function() {
-		var scripts = document.getElementsByTagName("script");
-		for (i=0; i<scripts.length; i++) {
-			if (scripts[i].src && scripts[i].src.match(/head\.js(\?.*)?$/)) {
-				return scripts[i].src.replace(/head\.js(\?.*)?$/,'');
-			}
-		}
 	},
 	
 	/**
@@ -341,12 +389,11 @@ var Repos = {
 	},
 	
 	isScriptResourceLoaded: function(resourceUrl) {
-		for (lib in _repos_loadedlibs) {
-			if (lib == resourceUrl) return true;
+		for (i = 0; i < _repos_loadedlibs.length; i++) {
+			if (_repos_loadedlibs[i] == resourceUrl) return true;
 		}
 		return false;
 	},
-	
 	
 	/**
 	 * Load a function or a script into the page.
@@ -529,7 +576,7 @@ var Repos = {
 	// ------------ Session settings ------------
 	
 	/**
-	 * @return user account name for the current user
+	 * @return user account name for the current user, or false if not logged in
 	 */
 	getUsername: function() {
 		throw "getUsername is not implemented yet";
@@ -540,9 +587,10 @@ var Repos = {
 	 *	false if no theme should be loaded (meaning that no theme script setup will be required.
 	 */
 	getTheme: function() {
-		//if (['test', 'staffan', 'annika', 'arvid', 'hanna'].contains(Repos.getUsername())) 
-			return '';
-		//return 'themes/pe/';
+		//var user = Repos.getUsername();
+		//if (!user || ['test', 'staffan', 'annika', 'arvid', 'hanna'].contains(Repos.getUsername())) 
+		//	return '';
+		return '';
 	},
 	
 	/**

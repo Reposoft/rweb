@@ -3,9 +3,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>head.js testcases</title>
-<!--<link href="../../style/global.css" rel="stylesheet" type="text/css" />-->
-<script type="text/javascript" src="../head.js"></script>
+<script type="text/javascript" src="../lib/scriptaculous/prototype.js"></script>
 <script type="text/javascript" src="../lib/scriptaculous/unittest.js"></script>
+<script type="text/javascript" src="../head.js"></script>
+<!-- import after head.js so it is not updated with theme url -->
+<link href="../../style/global.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -37,7 +39,6 @@ ClassTwo.prototype = {
 
 // save some of the page state as it is during page load
 var _loaded = Repos.isPageLoaded();
-var _prototype = Prototype;
 
 // do require as a plugin wouls have done it: right when the script loads
 Repos.require('unittest/resources/mytestlib.js');
@@ -61,11 +62,11 @@ new Test.Unit.Runner({
 	}},
 	
 	testBeforeLoad: function() { with(this) {
-		assertEqual(false, _loaded, "Repos should know that page is not completely loaded yet");
+		assertEqual(false, _loaded, "Until window.onload, Repos.isPageLoaded() should return true");
 	}},
 	
-	testProtypeImported: function() { with(this) {
-		assertNotNull(_prototype, "The prototype library should be imported automatically");
+	testAfterLoad: function() { with(this) {
+		assertEqual(true, Repos.isPageLoaded(), "The page should have loaded now, and repos should know it");
 	}},
 	
 	testWindowOnloadSet: function() { with(this) {
@@ -79,9 +80,25 @@ new Test.Unit.Runner({
 		}
 	}},
 
+	testStaticScriptNotImported: function() { with(this) {
+		var n = document.getElementsByTagName('head')[0].childNodes;
+		var foundOnce = false;
+		var p = /prototype.js/;
+		for (i = 0; i < n.length; i++) {
+			if (n[i].src && p.test(n[i].src)) {
+				if (foundOnce) {
+					fail("prototype.js has been imported, but it was already in the static head");
+					return;
+				}
+				foundOnce = true;
+			}
+		}
+		pass();
+	}},
+
 	// check that the lib imported in head is present now
 	testRequireBeforePageLoaded: function() { with(this) {
-		assertEqual(false, MyTestlib == undefined, "Can not finde MyTestlib that was required before the test");
+		assertEqual(false, typeof(MyTestlib) == 'undefined', "Can not finde MyTestlib that was required before the test");
 		var myTest = new MyTestlib('arg');
 		assertEqual('arg', myTest.getInitarg(), "MyTestlib should have an instance varable value now");
 	}},
@@ -154,13 +171,20 @@ new Test.Unit.Runner({
 		assertEqual('plugins/dateformat/dateformat.js',	toBeLoaded, "The script should have been added to the load queue");
 	}},
 	
+	testIsScriptResourceLoaded: function() { with(this) {
+		_repos_loadedlibs.push('qwerty');
+		assertEqual(true, Repos.isScriptResourceLoaded('qwerty'),
+			"Should find the script url in the stack of loaded libs");
+		_repos_loadedlibs.pop();
+	}},
+	
 	testLoadScript: function() { with(this) {
 		// using addBefore to mock appendChild
 		Repos.addBefore(flagTrue, Repos.documentHead, 'appendChild');
-		Repos._loadScript('lib/scriptaculous/unittest.js');
+		Repos._loadScript('lib/qwerty.js');
 		var wasloaded = _repos_loadedlibs.pop();
 		assertEqual(true, flag, 'script should have been added to the dom');
-		assertEqual('lib/scriptaculous/unittest.js', wasloaded, 'script URL should have been saved in the loadedlibs stack');
+		assertEqual('lib/qwerty.js', wasloaded, 'script URL should have been saved in the loadedlibs stack');
 	}},
 	
 	testVerifyResourceUrl: function() { with(this) {
@@ -191,11 +215,11 @@ new Test.Unit.Runner({
 	
 	testHandleException: function() { with(this) {
 		try {
-			throw new Error("Test error");
+			throw new Error("This is expected. Testing error handling.");
 		} catch (err) {
 			Repos.handleException(err);
 		}
-		assertEqual(true, flag, 'reportERror should have been called from exception handler');
+		info('An error log entry should now have been added to /repos/errorlog');
 		// TODO assert that script and line number is in it (on firefox)
 	}},
 
@@ -207,13 +231,8 @@ new Test.Unit.Runner({
 }, { });
 }
 
-// need an event from the Repos class when everything has loaded, this is a temporary solution
-function afterLoad2() {
-	window.setTimeout('afterLoad()', 1000); // with () works in Safari too
-}
-
 // use prototype to set body.onload
-Event.observe(window, 'load', afterLoad2, false);
+Event.observe(window, 'load', afterLoad, false);
 
 </script>
 <form id="testform">

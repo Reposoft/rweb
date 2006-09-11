@@ -32,7 +32,7 @@
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 				<!-- if google may index the repository (googlebot.com has access), contents should not be cached -->
 				<meta name="robots" content="noarchive"/>
-				<!-- default stylesheet -->
+				<!-- default stylesheets, path that contains /style/ will be updated with current theme by the head script -->
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}/global.css"/>
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}/index/index.css"/>
 				<link rel="shortcut icon" href="/favicon.ico"/>
