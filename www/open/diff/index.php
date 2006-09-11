@@ -21,11 +21,12 @@ $p->assign('target', $url);
 $p->assign('revfrom', $revfrom);
 $p->assign('revto', $revto);
 $referer = getReferer();
-if (!empty($referer)) {
-	if (strpos($referer, '/open/log/'))
-		$p->assign('logurl', $referer);
-	else
-		$p->assign('referer', $referer);
+if (empty($referer)) {
+	$p->assign('../log/?taget='.dirname($url));
+} else if (strpos($referer, '/open/log/')) {
+	$p->assign('logurl', $referer);
+} else {
+	$p->assign('referer', $referer);
 }
 $p->display();
 

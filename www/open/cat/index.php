@@ -13,10 +13,7 @@ if(!$rev) {
 	exit;
 }
 
-$nextUrl = getReferer();
-if (!$nextUrl) {
-	$nextUrl = dirname($url);
-}
+$referer = getReferer();
 
 $filename = getFile();
 $target = getTarget();
@@ -41,7 +38,16 @@ if (isset($_GET['open'])) {
 	$p = new Presentation();
 	$p->assign('target', $target);
 	$p->assign('revision', $rev);
-	$p->assign('next', $nextUrl);
+	// TODO sort out the mess with references between browse/log/diff/cat/edit
+	if (empty($referer)) {
+		$p->assign('logurl', '../log/?repo='.getConfig('repo_url').'&path='.dirname($target));
+	} else if (false && strpos($referer, '/open/log/')) {
+		$p->assign('logurl', $referer);
+	} else {
+		$p->assign('back', $referer);
+		// TODO what if the target folder does not exist anymore
+		$p->assign('repo', dirname($target));
+	}
 	$p->assign('dowloandUrl', $downloadUrl);
 	$p->display();
 	doPassthru($url, $rev);

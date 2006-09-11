@@ -30,6 +30,11 @@ h3 {
 pre {
 	font-size: 1.2em;
 }
+hr {
+	height: 1px;
+	color: #CCCC99;
+	border-style: dashed;
+}
 /* layout of version control concepts, these are usually span tags */
 .path {
 	color: #112200;

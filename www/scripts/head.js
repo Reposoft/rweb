@@ -53,7 +53,7 @@ var _repos_loadedlibs = new Array();
 var _repos_loadqueue = new Array();
 var _repos_loading = false;
 var _repos_pluginLoadCallback = new Array();
-var _repos_retries = 5;
+var _repos_retries = 50;
 var Repos = {
 	version: '$Rev$',
 	// ------------ script initialization ------------
