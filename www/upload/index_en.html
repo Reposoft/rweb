@@ -19,11 +19,16 @@ function autoFillFilename(path) {
 <body>
 <h1>Upload file</h1>
 <!--{if $file}-->
-<p>As a new version of file <span class="path">{=$path}{=$file}</span>. <a class="action" target="_blank" href="../open/?target={=$path}{=$file}">open current file</a></p>
+<p>As a new version of file <span class="path">{=$path}{=$file}</span>. <a class="action" target="_blank" href="../open/?target={=$path}{=$file}">open current version</a></p>
 <!--{else}-->
 <p>As a new file in folder {=$path}</p>
 <!--{/if}-->
-<p>If it is a text file, it is also possible to <a class="action" href="./?paste=1">copy-paste contents to this form</a></p>
+<!--{if $file && !$binary}-->
+<p>The current verison is a text file, so it is also possible to <a class="action" href="./?path={=$path}&file={=$file}&text">copy-paste contents to this form</a></p>
+<!--{/if}-->
+<!--{if !$file}-->
+<p>It is also possible to <a class="action" href="./?path={=$path}&text">copy-paste contents to this form</a></p>
+<!--{/if}-->
 <form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload" tmt:validate="true">
 <fieldset>
   <legend>Upload to repos.se</legend>
@@ -39,7 +44,7 @@ function autoFillFilename(path) {
     <input type="text" id="currentname" name="currentname" value="{=$file}" disabled="disabled" size="40" />
 	<input type="hidden" id="name" name="name" value="{=$file}"/>
 	<!--{else}-->
-	<input type="text" id="name" name="name" size="40" tmt:required="true" tmt:pattern="reposFilename" tmt:message="Filename is required and may not contain ^, :, &amp;, <, >, &pound;, @, ¤, #, ~, ?, *, $, |, (, ), [, ], /, \, commas or quotes"/>
+	<input type="text" id="name" name="name" size="40" tmt:required="true" tmt:pattern="reposFilename" tmt:message="Filename is required and may not contain ^, :, &amp;, <, >, &pound;, @, , #, ~, ?, *, $, |, (, ), [, ], /, \, commas or quotes"/>
 	<input type="hidden" id="create" name="create" value="yes"/>
 	<!--{/if}-->
   </p>
@@ -53,6 +58,10 @@ function autoFillFilename(path) {
   </p>
 </fieldset>
 </form>
-<p><a id="linkBack" class="action" href="{=$referer}">&lt; back</a></p>
+<!--{if $file}-->
+<p><a id="linkBack" class="action" href="{=$targeturl|dirname}">&lt; back</a></p>
+<!--{else}-->
+<p><a id="linkBack" class="action" href="{=$targeturl}">&lt; back</a></p>
+<!--{/if}-->
 </body>
 </html>

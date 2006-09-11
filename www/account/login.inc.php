@@ -237,11 +237,13 @@ function getTarget() {
 /**
  * @return revision number from parameters (safe as command argument), false if not set
  */
-function getRevision() {
-	if(!isset($_GET['rev'])) {
-		return false;
+function getRevision($rev = false) {
+	if (!$rev) {
+		if(!isset($_GET['rev'])) {
+			return false;
+		}
+		$rev = $_GET['rev'];
 	}
-	$rev = $_GET['rev'];
 	if (is_numeric($rev)) {
 		return $rev;
 	}

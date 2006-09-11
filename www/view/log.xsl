@@ -9,21 +9,14 @@
   stylesheet is read from the same domain as the XML
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
-	<!-- import configuration, since we can't set parameters in the browsers -->
-	<xsl:import href="/repos/view/conf.xsl"/>
 	<!-- start transform -->
 	<xsl:output method="xml" indent="no"/>
-	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
-	<xsl:param name="web"><xsl:value-of select="$repos_web"/></xsl:param>
-	<xsl:param name="repo"><xsl:value-of select="$repo_url"/></xsl:param>
+	<!-- root url for webapp resources -->
+	<xsl:param name="web">/repos</xsl:param>
 	<!-- static contents urls -->
-	<xsl:param name="cssUrl"><xsl:value-of select="$web"/><xsl:value-of select="$theme"/>/style</xsl:param>
-	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
-	<xsl:param name="editUrl"><xsl:value-of select="$web"/>/edit</xsl:param>
+	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/style</xsl:param>
 	<!-- when spacer space can't be avoided -->
 	<xsl:param name="spacer" select="' &#160; '"/>
-	<!-- should the 'up' button be visible when the current folder is 'trunk' -->
-	<xsl:param name="disable-up-at-trunk">yes</xsl:param>
 	<!-- document skeleton -->
 	<xsl:template match="/">
 		<html xmlns="http://www.w3.org/1999/xhtml">
@@ -41,7 +34,7 @@
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
 			</head>
-			<body class="index">
+			<body class="log">
 				<xsl:apply-templates select="log"/>
 			</body>
 		</html>
@@ -63,7 +56,7 @@
 		<a id="reposbutton" href="http://www.repos.se/" target="_blank">
 			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		</a>
-			<a id="up" class="command" href="{@repo}{@path}">up</a>
+		<a id="up" class="command" href="{@repo}{@path}">return to repository</a>
 		</div>
 	</xsl:template>
 	<!-- directory listing -->
@@ -100,7 +93,7 @@
 					<xsl:value-of select="date"/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<a title="{$undo}" class="action" href="{$web}/edit/undo/?repo={../@repo}&amp;rev={@revision}">undo</a>
+				<!-- TODO <a title="{$undo}" class="action" href="{$web}/edit/undo/?repo={../@repo}&amp;rev={@revision}">undo</a> -->
 			</h3>
 			<xsl:if test="string-length(msg) > 0">
 				<p>
@@ -148,13 +141,14 @@
 				</span>
 			</xsl:if>
 			<xsl:if test="@action='M'">
-				<a title="{@action} - {$show-diff}" href="{$web}/open/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">modified:</a>
+				<span title="{@action} - modified">modified: </span>
 				<span class="path">
 					<xsl:value-of select="."/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<a class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={$revfrom}">before</a>
-				<a class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>
+				<a title="the file as it was before the change" class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={$revfrom}">before</a>
+				<a title="the file after the change" class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>
+				<a title="the difference this change made" class="action" href="{$web}/open/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">show diff</a>
 			</xsl:if>
 			<xsl:if test="@action='A'">
 				

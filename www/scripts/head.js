@@ -53,6 +53,7 @@ var _repos_loadedlibs = new Array();
 var _repos_loadqueue = new Array();
 var _repos_loading = false;
 var _repos_pluginLoadCallback = new Array();
+var _repos_retries = 5;
 var Repos = {
 	version: '$Rev$',
 	// ------------ script initialization ------------
@@ -90,6 +91,11 @@ var Repos = {
 	_handlePageLoaded: function() {
 		// check required dependencies
 		if (typeof(Prototype) == 'undefined') {
+			// in IE after forced refresh onload might come before lib is loaded
+			if (_repos_retries-- > 0) {
+				window.setTimeout('Repos._handlePageLoaded()', 100);
+				return;
+			}
 			Repos.reportError("Prototype library not loaded. All scripts deactivated.");
 			return;
 		}
@@ -272,7 +278,11 @@ var Repos = {
 		var logurl = "/repos/errorlog/";
 		var info = Repos._getBrowserInfo();
 		info += '&id=' + id + '&message=' + errorMessage;
-		var report = new Ajax.Request(logurl, {method: 'post', parameters: info});
+		if (typeof(Ajax) != 'undefined') {
+			var report = new Ajax.Request(logurl, {method: 'post', parameters: info});
+		} else {
+			alert(errorMessage); // Find out a way to send an error report anyway	
+		}
 		// show to user
 		var msg = "Repos has run into a script error:\n" + errorMessage + 
 			  "\n\nThe details of this error have been logged so we can fix the issue. " +
@@ -284,7 +294,7 @@ var Repos = {
 		} else if (window.console) { // Safari 'defaults write com.apple.Safari IncludeDebugMenu 1'
 			window.console.log(msg);
 		} else { // browser's default handling
-			throw(msg);
+			//throw(msg);
 			window.status = "Due to a script error, the page is not fully functional. Contact support@repos.se for info, error id: " + id;
 		}	
 	},

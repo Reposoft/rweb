@@ -10,6 +10,10 @@ if (mb_http_input()!="UTF-8") {
 	trigger_error("Character encoding is '".mb_http_input()."', not 'UTF-8'");
 	exit;
 }
+if (getReposUser() == 'svensson' && getConfig('repo_url')=='https://www.repos.se/sweden') {
+	$p = new Presentation();
+	$p->trigger_error("Svensson is a read-only user.");
+}
 
 // the repository write operation class
 class Edit {

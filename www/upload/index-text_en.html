@@ -13,19 +13,20 @@ function autoFillFilename(path) {
 <body>
 <h1>Paste contents of file</h1>
 <!--{if $file}-->
-<p>As a new version of file <span class="path">{=$path}{=$file}</span> <a class="action" target="_blank" href="../open/?target={=$path}{=$file}">open</a></p>
+<p>As a new version of file <span class="path">{=$path}{=$file}</span> <a class="action" target="_blank" href="../open/?target={=$path}{=$file}">open current version</a></p>
+<p><a class="action" href="./?path={=$path}&file={=$file}">switch to normal file upload</a></p>
 <!--{else}-->
 <p>As a new file in folder {=$path}</p>
+<p><a class="action" href="./?path={=$path}">switch to normal file upload</a></p>
 <!--{/if}-->
-<p><a class="action" href="./">switch to normal file upload</a></p>
-<form action="./" method="post" enctype="text/plain" name="formUpload" id="formUpload" tmt:validate="true">
+<form action="./" method="post" name="formUpload" id="formUpload" tmt:validate="true">
 <fieldset>
   <legend>Upload to repos.se</legend>
   <input type="hidden" name="targeturl" value="{=$targeturl}"/>
   <input type="hidden" name="paste" value="1"/>
   <p>
     <label for="usertext">file contents</label><br />
-    <textarea name="usertext" id="usertext" cols="100" rows="30" tmt:required="true"></textarea>
+    <textarea name="usertext" id="usertext" cols="100" rows="20" tmt:required="true"></textarea>
     <label for="userfile"></label>
   </p>
   <p>
@@ -34,7 +35,7 @@ function autoFillFilename(path) {
     <input type="text" id="currentname" name="currentname" value="{=$file}" disabled="disabled" size="40" />
 	<input type="hidden" id="name" name="name" value="{=$file}"/>
 	<!--{else}-->
-	<input type="text" id="name" name="name" size="40" tmt:required="true" tmt:pattern="reposFilename" tmt:message="Filename is required and may not contain ^, :, &amp;, <, >, &pound;, @, ¤, #, ~, ?, *, $, |, (, ), [, ], /, \, commas or quotes"/>
+	<input type="text" id="name" name="name" size="40" tmt:required="true" tmt:pattern="reposFilename" tmt:message="Filename is required and may not contain ^, :, &amp;, <, >, &pound;, @, , #, ~, ?, *, $, |, (, ), [, ], /, \, commas or quotes"/>
 	<input type="hidden" id="create" name="create" value="yes"/>
 	<!--{/if}-->
   </p>
@@ -48,6 +49,10 @@ function autoFillFilename(path) {
   </p>
 </fieldset>
 </form>
-<p><a id="linkBack" class="action" href="{=$referer}">&lt; back</a></p>
+<!--{if $file}-->
+<p><a id="linkBack" class="action" href="{=$targeturl|dirname}">&lt; back</a></p>
+<!--{else}-->
+<p><a id="linkBack" class="action" href="{=$targeturl}">&lt; back</a></p>
+<!--{/if}-->
 </body>
 </html>

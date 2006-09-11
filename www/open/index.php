@@ -3,11 +3,6 @@ require( dirname(dirname(__FILE__))."/account/login.inc.php" );
 
 // get file to open
 
-// #debug#
-$path = $_GET['path'];
-$file = $_GET['file'];
-// #######
-
 $url = getTargetUrl();
 $type = substr($url, strrpos($url, '.') + 1);
 

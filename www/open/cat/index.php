@@ -47,7 +47,9 @@ if (isset($_GET['open'])) {
 	doPassthru($url, $rev);
 	
 	?>
-	</pre></div>
+	</pre>
+	<hr />
+	</div>
 	<div class="footer"></div>
 	</div>
 	</body>

@@ -32,7 +32,7 @@ function storeLogEntry() {
 	$entry = implode_with_key($_POST)."\n";
 	$fp = fopen($logfile, 'a');
 	if ($fp) {
-		fwrite($fp, date('Y-m-dTH:m:sP').' ');
+		fwrite($fp, date('Y-m-d\TH:m:sO').' ');
 		fwrite($fp, $entry);
 		fclose($fp);
 	} else {

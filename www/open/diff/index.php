@@ -1,29 +1,41 @@
 <?php
 // TODO convert to the same concept as 'cat'
+require_once(dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require_once(dirname(dirname(dirname(__FILE__)))."/account/login.inc.php" );
 
-define('STYLESHEET','../svnlayout/repos.xsl');
-
 $url = getTargetUrl();
-$revfrom = $_GET['revfrom'];
-$revto = $_GET['revto'];
-if(empty($revfrom) || empty($revto)) {
-	echo "Argument error: 'revfrom' and 'revto' not specified.";
+if(empty($url) || !isset($_GET['revfrom']) || !isset($_GET['revto'])) {
+	trigger_error("Argument error: target, 'revfrom' and 'revto' must be specified.");
 	exit;
 }
+$revfrom = getRevision($_GET['revfrom']);
+$revto = getRevision($_GET['revto']);
+
 $revisions = ' -r '.$revfrom.':'.$revto;
 
-$cmd = 'diff' . $revisions . ' "'.$url.'"';
+$cmd = 'diff' . $revisions . ' '.escapeArgument($url);
 
-// passthrough with stylesheet
-header('Content-type: text/xml');
-echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-echo '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
-echo "<!-- SVN diff for .$url. -->\n";
-echo '<diff repo="'.getRepositoryUrl().'" target="'.$_GET['target'].'" revfrom="'.$revfrom.'" revto="'.$revto.'"><plaintext>' . "\n";
-echo "<![CDATA[\n";
+
+$p = new Presentation();
+$p->assign('target', $url);
+$p->assign('revfrom', $revfrom);
+$p->assign('revto', $revto);
+$referer = getReferer();
+if (!empty($referer)) {
+	if (strpos($referer, '/open/log/'))
+		$p->assign('logurl', $referer);
+	else
+		$p->assign('referer', $referer);
+}
+$p->display();
+
 $returnvalue = login_svnPassthru($cmd);
 if ($returnvalue) login_handleSvnError($cmd, $returnvalue);
-echo "]]>\n";
-echo '</plaintext></diff>';
 ?>
+</pre>
+<hr />
+</div>
+<div class="footer"></div>
+</div>
+</body>
+</html>

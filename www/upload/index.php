@@ -8,16 +8,25 @@ require( PARENT_DIR."/edit/edit.class.php" );
 define('MAX_FILE_SIZE', 1000000);
 
 if ($_SERVER['REQUEST_METHOD']=='GET') {
-	//if (isset($_GET['result'])) {
-	//	header('Location: ' . str_replace("/upload/", "/edit/", getSelfUrlAndQuery()));
-	//	exit;
-	//}
-	$template= new Presentation();
+	$template = new Presentation();
+	$target = getTargetUrl();
+	$file = getFile();
+	if (strlen($file) > 0) {
+		$mimetype = getMimeType($target);
+		if ($mimetype && strpos($mimetype, 'application/') == 0) {
+			$template->assign('binary', true);
+		}
+	}
+	
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
 	$template->assign('path',getPath());
 	$template->assign('file',getFile());
-	$template->assign('targeturl',getTargetUrl());
-	$template->display();
+	$template->assign('targeturl',$target);
+	if (isset($_GET['text'])) {
+		$template->display($template->getLocaleFile(dirname(__FILE__).'/index-text'));
+	} else {
+		$template->display();
+	}
 } else {
 	$presentation = new Presentation();
 	$upload = new Upload('userfile');
@@ -94,12 +103,28 @@ class Upload {
 	}
 
 	function processSubmit($destinationFile) {
+		if (isset($_POST['usertext'])) {
+			$this->processPastedContents($destinationFile);
+			return;
+		}
 		$current = $_FILES[$this->file_id]['tmp_name'];;
 		if (move_uploaded_file($current, $destinationFile)) {
 			// ok
 		} else {
 			trigger_error("Could not access the uploaded file ".$this->getOriginalFilename());
 			exit;
+		}
+	}
+	
+	// handle request that is not a file upload, but the contents of a big textarea named 'userfile'
+	function processPastedContents($destinationFile) {
+		$contents = $_POST['usertext'];
+		$fp = fopen($destinationFile, 'w+');
+		if ($fp) {
+			fwrite($fp, $contents);
+			fclose($fp);
+		} else {
+			trigger_error("Could write file contents from the submitted text.");
 		}
 	}
 	
@@ -166,5 +191,18 @@ class Upload {
 	function getErrorCode() {
 		return $_FILES[$this->file_id]['error'];
 	}
+}
+
+function getMimeType($targetUrl) {
+	$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl);
+	$result = login_svnRun($cmd);
+	$returnvalue = array_pop($result);
+	if ($returnvalue) {
+		trigger_error("Could not find the file '$targetUrl' in repository version $revision.");
+	}
+	if (count($result) == 0) {
+		return false; // svn:mime-type not set
+	}
+	return $result[0];
 }
 ?>
