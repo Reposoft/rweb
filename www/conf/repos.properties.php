@@ -113,7 +113,8 @@ function repos_getSelfQuery() {
  */
 function getTempDir($subdir=null) {
 	$parent = '/tmp'; // don't know how to get PHPs system temp dir
-	$tmpdir = rtrim($parent, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'repos-php';
+	$appname = str_replace('%', '_', rawurlencode(substr(getConfig('repos_web'), 7)));
+	$tmpdir = rtrim($parent, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $appname;
 	if (!file_exists($tmpdir)) {
 		mkdir($tmpdir);
 	}

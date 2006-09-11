@@ -10,15 +10,6 @@
  */
 define('REPOS_WEB_LOCAL', dirname(__FILE__) . '/repos');
 
-// show a result using redirect-after-post from conf/Presentation.class.php
-if(isset($_GET['result'])) {
-	$resultFile = getTempDir('pages') . $_GET['result'];
-	$handle = fopen($resultFile, "r");
-	fpassthru($handle);
-	fclose($handle);
-	exit;
-}
-
 // HTTP/1.1 disable caching
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -38,4 +29,8 @@ if (isset($_GET['login'])) {
 }
 
 // simply show start page
-header("Location: /start.html");
+if (file_exists(dirname(__FILE__).'/start.html')) {
+	header("Location: /start.html");
+} else {
+	header("Location: /start-default.html");
+}

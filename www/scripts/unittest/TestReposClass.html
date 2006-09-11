@@ -188,6 +188,16 @@ new Test.Unit.Runner({
 		Repos._handleScriptLoaded('plugins/dateformat/dateformat.js');
 		assertEqual(true, flag, 'The pluginsLoaded callbacks should have been called');
 	}},
+	
+	testHandleException: function() { with(this) {
+		try {
+			throw new Error("Test error");
+		} catch (err) {
+			Repos.handleException(err);
+		}
+		assertEqual(true, flag, 'reportERror should have been called from exception handler');
+		// TODO assert that script and line number is in it (on firefox)
+	}},
 
 	// for copy-paste
 	testTemplate: function() { with(this) {

@@ -174,10 +174,22 @@ var Repos = {
 				document.body = document.getElementsByTagName("body")[0];	
 			}
 			// document.createElement must be replaced with document.createElementNS (except in IE)
-			Repos.addBefore(Repos.createElement, document, 'createElement');
+			try {
+				Repos.addBefore(Repos.createElement, document, 'createElement');
+			} catch (err) {
+				Repos.handleException(err);	
+			}
 		}
 		// override document.write, it is not compatible with this script in normal pages either
-		Repos.addBefore(Repos.documentWrite, document, 'write');
+		try {
+			if (document.write) {
+				Repos.addBefore(Repos.documentWrite, document, 'write');
+			} else {
+				document.write = function(markup) { Repos.documentWrite(markup) };	
+			}
+		} catch (err) {
+			Repos.handleException(err);	
+		}
 	},
 	
 	// ------------ exception handling ------------
@@ -187,7 +199,20 @@ var Repos = {
 	 * Methods in this class do try/catch when calling imported code.
 	 */
 	handleException: function(exceptionInstance) {
-		Repos.reportError("(Exception) " + exceptionInstance);
+		// if stacktraces are supported, add the info from it
+		var msg = '(Exception';
+		if (exceptionInstance.fileName) {
+			msg += ' at ' + exceptionInstance.fileName;
+		}
+		if (exceptionInstance.lineNumber) {
+			msg += ' row ' + exceptionInstance.lineNumber;
+		}
+		if (exceptionInstance.message) {
+			msg += ') ' + exceptionInstance.message;
+		} else {
+			msg += ') ' + exceptionInstance;
+		}
+		Repos.reportError(msg);
 	},
 	
 	/**
@@ -195,23 +220,52 @@ var Repos = {
 	 */
 	reportError: function(errorMessage) {
 		var id = Repos.generateId();
+		// send to errorlog
+		var logurl = "/repos/errorlog/";
+		var info = Repos._getBrowserInfo();
+		info += '&id=' + id + '&message=' + errorMessage;
+		var report = new Ajax.Request(logurl, {method: 'post', parameters: info});
+		// show to user
 		var msg = "Repos has run into a script error:\n" + errorMessage + 
-			  "\n\nThe details have been logged so we can fix the issue. " +
+			  "\n\nThe details of this error have been logged so we can fix the issue. " +
 			  "\nFeel free to contact support@repos.se about this error, ID \""+id+"\"." +
 			  "\n\nBecause of the error, this page may not function properly.";
-		// before safari starts do 'defaults write com.apple.Safari IncludeDebugMenu 1'
-		if(window.console) {
+		
+		if (typeof(console) != 'undefined') { // FireBug console
+			console.log(msg);
+		} else if (window.console) { // Safari 'defaults write com.apple.Safari IncludeDebugMenu 1'
 			window.console.log(msg);
-		} else {
-			alert(msg);
+		} else { // browser's default handling
+			throw(msg);
+			window.status = "Due to a script error, the page is not fully functional. Contact support@repos.se for info, error id: " + id;
 		}	
 	},
 	
 	/**
-	 * Generate a random string of length 8
+	 * collect debug info about the user's environment
+	 * @return as query string
+	 */
+	_getBrowserInfo: function() {
+		var query,ref,page,date;
+		page=window.location.href; // assuming that script errors occur in tools
+		ref=window.referrer;
+		query = 'url='+escape(page)+'&ref='+escape(ref)+'&os='+escape(navigator.userAgent)+'&browsername='+escape(navigator.appName)
+			+'&browserversion='+escape(navigator.appVersion)+'&lang='+escape(navigator.language)+'&syslang='+escape(navigator.systemLanguage);
+		return query;
+	},
+	
+	/**
+	 * Generate a random character sequence of length 8
 	 */
 	generateId: function() {
-		return 'nonRndID';
+		var chars = "ABCDEFGHIJKLMNOPQRSTUVWXTZ";
+		var string_length = 8;
+		var randomstring = '';
+		for (var i=0; i<string_length; i++) {
+			var rnum = Math.floor(Math.random() * chars.length);
+			randomstring += chars.charAt(rnum);
+		}
+		return randomstring;
 	},
 	
 	// ------------ dependency management ------------
@@ -465,9 +519,9 @@ var Repos = {
 		}
 
 		var members = "";
-		for (f in object) { members = members + " " + f }
+		for (f in object) { members += " " + f; if(members.length>40){members+=' ...'; break;} }
 		if (object.prototype) {
-			for (f in object.prototype) { members = members + " prototype." + f }
+			for (f in object.prototype) { members += " prototype." + f; if(members.length>80){members+=' ...';break;} }
 		}
 		throw "The object does not have a function " + objectFunction + ". It has:" + members;
 	},
@@ -486,9 +540,9 @@ var Repos = {
 	 *	false if no theme should be loaded (meaning that no theme script setup will be required.
 	 */
 	getTheme: function() {
-		if (array('test', 'staffan', 'annika', 'arvid', 'hanna').contains(Repos.getUsername())) 
+		//if (['test', 'staffan', 'annika', 'arvid', 'hanna'].contains(Repos.getUsername())) 
 			return '';
-		return 'themes/pe'; // slashes?
+		//return 'themes/pe/';
 	},
 	
 	/**
