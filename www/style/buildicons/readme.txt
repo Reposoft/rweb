@@ -1,0 +1,14 @@
+This theme uses icons from the Cezanne icon theme
+http://www.kde-look.org/content/show.php?content=16479
+by Christopher Townson http://christopher.townson.biz 
+
+Creative Commons (Some Rights Reserved)
+see: http://creativecommons.org/licenses/by-sa/2.0/
+
+In this folder is a midified version of the script 'buildset'
+from the unbuild Cezanne archive.
+
+Just deflate the archive to this folder, and run 
+buildset-[color].sh instead of buildset to get
+the webbified icons
+
