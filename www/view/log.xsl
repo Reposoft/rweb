@@ -57,12 +57,12 @@
 		<a id="reposbutton">
 			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		</a>
-		<a id="up" class="command" href="{@repo}{@path}">return to repository</a>
+		<a id="return" class="command" href="{@repo}{@path}">return to repository</a>
 		</div>
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="contents">
-		<div class="">
+		<div class="contents">
 			<xsl:apply-templates select="error"/>
 			<xsl:apply-templates select="logentry"/>
 		</div>
@@ -80,7 +80,7 @@
 	<xsl:param name="undo">Reverse the changes made from previous revision to this one</xsl:param>
 	<!-- layout -->
 	<xsl:template match="logentry">
-		<div id="rev{@revision}">
+		<div class="logentry" id="rev{@revision}">
 			<h3>
 				<span class="revision">
 					<xsl:value-of select="@revision"/>
@@ -97,14 +97,11 @@
 				<!-- TODO <a title="{$undo}" class="action" href="{$web}/edit/undo/?repo={../@repo}&amp;rev={@revision}">undo</a> -->
 			</h3>
 			<xsl:if test="string-length(msg) > 0">
-				<p>
-					<span title="log message">message: </span>
-					<span class="message">
+				<div class="message">
 						<xsl:call-template name="linebreak">
 							<xsl:with-param name="text" select="msg"/>
 						</xsl:call-template>
-					</span>
-				</p>
+				</div>
 			</xsl:if>
 			<xsl:apply-templates select="paths">
 				<xsl:with-param name="revfrom" select="following-sibling::*[1]/@revision"/>
@@ -119,9 +116,8 @@
 	</xsl:template>
 	<xsl:template match="paths/path">
 		<xsl:param name="revfrom"/>
-		<p>
+		<div class="row log-{@action}">
 			<xsl:if test="@action='A'">
-				<span title="{@action} - added">added:</span>
 				<span class="path">
 					<xsl:value-of select="."/>
 				</span>
@@ -136,13 +132,13 @@
 				</xsl:if>
 			</xsl:if>
 			<xsl:if test="@action='D'">
-				<span title="{@action} - deleted">deleted: </span>
+				<span class="log-d" title="{@action} - deleted">deleted: </span>
 				<span class="path">
 					<xsl:value-of select="."/>
 				</span>
 			</xsl:if>
 			<xsl:if test="@action='M'">
-				<span title="{@action} - modified">modified: </span>
+				<span class="log-m" title="{@action} - modified">modified: </span>
 				<span class="path">
 					<xsl:value-of select="."/>
 				</span>
@@ -151,10 +147,7 @@
 				<a title="the file after the change" class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>
 				<a title="the difference this change made" class="action" href="{$web}/open/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">show diff</a>
 			</xsl:if>
-			<xsl:if test="@action='A'">
-				
-			</xsl:if>
-		</p>
+		</div>
 	</xsl:template>
 	<!-- ====== error node, deprecated (remove when login.inc.php svnerror is not used anymore) ======== -->
 	<xsl:template match="error">

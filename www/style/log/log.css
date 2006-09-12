@@ -1,0 +1,20 @@
+.logentry > div {
+	padding-left: 24px;
+	background-position: left;
+	background-repeat: no-repeat;
+}
+.message {
+	background-image: url(_message.png);
+}
+.log-A {
+	background-image: url(_a.png);
+}
+.log-M {
+	background-image: url(_m.png);
+}
+.log-D {
+	background-image: url(_d.png);
+}
+#return {
+	background-image: url(../commands/_parent.png);
+}

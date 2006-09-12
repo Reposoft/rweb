@@ -166,7 +166,7 @@
 					<a class="action" href="{$web}/upload/?path={../@path}&amp;file={@href}">upload changes</a>
 				</xsl:if>
 			</div>
-			<a id="{$id}" class="file file-{$filetype}" href="{@href}">
+			<a id="{$id}" class="file-{$filetype} file" href="{@href}">
 				<xsl:value-of select="@name"/>
 			</a>
 		</div>

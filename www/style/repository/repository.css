@@ -53,3 +53,5 @@
 	padding-left: 30px;
 	margin-left: 10px;
 }
+.file-ai { background-image: url('filetypes/ai.png');}
+.file-bmp { background-image: url('filetypes/bmp.png');}
