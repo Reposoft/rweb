@@ -4,17 +4,17 @@
 	background-repeat: no-repeat;
 }
 .message {
-	background-image: url(_message.png);
+	background-image: url(16x16/message.png);
 }
 .log-A {
-	background-image: url(_a.png);
+	background-image: url(16x16/a.png);
 }
 .log-M {
-	background-image: url(_m.png);
+	background-image: url(16x16/m.png);
 }
 .log-D {
-	background-image: url(_d.png);
+	background-image: url(16x16/d.png);
 }
 #return {
-	background-image: url(../commands/_parent.png);
+	background-image: url(../commands/16x16/parent.png);
 }

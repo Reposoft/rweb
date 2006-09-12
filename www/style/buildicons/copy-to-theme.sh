@@ -1,24 +1,28 @@
 #!/bin/bash
 
-FROM="16x16"
+SIZE="16x16"
+FROM=$SIZE
 
 # copy selected icons to where they are needed for the webapp
 # commandbar
-TO="../commands"
-cp "$FROM/actions/up.png" "$TO/_parent.png"
-cp "$FROM/actions/attach.png" "$TO/_upload.png"
-cp "$FROM/actions/messagebox_info.png" "$TO/_log.png"
-cp "$FROM/filesystems/folder_whitelinen_open.png" "$TO/_newfolder.png"
-cp "$FROM/filesystems/folder_sharkskin_open.png" "$TO/_windowsfolder.png"
-cp "$FROM/filesystems/folder_applegreen_open.png" "$TO/_tortoisefolder.png"
-cp "$FROM/filesystems/folder_banana.png" "$TO/_folder.png"
-cp "$FROM/mimetypes/mime.png" "$TO/_file.png"
-cp "$FROM/actions/stop.png" "$TO/_logout.png"
-cp "$FROM/actions/stop.png" "$TO/_logout.png"
-cp "$FROM/actions/leftjust.png" "$TO/_simple.png"
-cp "$FROM/actions/textblock.png" "$TO/_detailed.png"
+TO="../commands/$SIZE"
+mkdir $TO
+cp "$FROM/actions/up.png" "$TO/parent.png"
+cp "$FROM/actions/attach.png" "$TO/attach.png"
+cp "$FROM/actions/messagebox_info.png" "$TO/showlog.png"
+cp "$FROM/filesystems/folder_whitelinen_open.png" "$TO/createfolder.png"
+cp "$FROM/actions/stop.png" "$TO/logout.png"
+cp "$FROM/actions/back.png" "$TO/back.png"
+cp "$FROM/actions/gohome.png" "$TO/home.png"
+cp "$FROM/actions/reload.png" "$TO/refresh.png"
+#  repository
+TO="../repository/$SIZE"
+mkdir $TO
+cp "$FROM/filesystems/folder_banana.png" "$TO/folder.png"
+cp "$FROM/mimetypes/mime.png" "$TO/file.png"
 #  filetypes
-TO="../repository/filetypes"
+TO="../repository/filetypes/$SIZE"
+mkdir $TO
 cp "$FROM/mimetypes/archive_zip.png" "$TO/zip.png"
 cp "$FROM/mimetypes/archive_gz.png" "$TO/gz.png"
 cp "$FROM/mimetypes/archive_sit.png" "$TO/sit.png"
@@ -49,10 +53,11 @@ cp "$FROM/mimetypes/vcard.png" "$TO/vcf.png"
 cp "$FROM/mimetypes/video.png" "$TO/mpg.png"
 cp "$FROM/mimetypes/ooo_sxw.png" "$TO/sxw.png"
 #    log
-TO="../log"
-cp "$FROM/actions/2leftarrow.png" "$TO/_copiedfrom.png"
-cp "$FROM/actions/fileopen.png" "$TO/_m.png"
-cp "$FROM/actions/attach.png" "$TO/_a.png"
-cp "$FROM/actions/textblock.png" "$TO/_message.png"
-cp "$FROM/apps/db.png" "$TO/_d.png"
+TO="../log/$SIZE"
+mkdir $TO
+cp "$FROM/actions/2leftarrow.png" "$TO/copiedfrom.png"
+cp "$FROM/actions/fileopen.png" "$TO/m.png"
+cp "$FROM/actions/attach.png" "$TO/a.png"
+cp "$FROM/actions/textblock.png" "$TO/message.png"
+cp "$FROM/apps/db.png" "$TO/d.png"
 

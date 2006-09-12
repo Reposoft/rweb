@@ -1,6 +1,6 @@
 /* repository visualization, shared classes */
 /* make sure that different browser text size settings work */
-body, td, th {
+body, td, th, body>div {
     font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
     font-size: 0.8em;
 }

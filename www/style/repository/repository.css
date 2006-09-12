@@ -7,6 +7,46 @@
 .contents {
 	padding-bottom: 20px;
 }
+.footer {
+	border-top: 1px solid #CCCC99;
+	color: #999999;
+	font-size: smaller;
+}
+.footer .path {
+	position: absolute;
+	left: 12px;
+}
+.footer .legal {
+	position: absolute;
+	right: 10px;
+}
+/* commands */
+.commandbar a {
+	padding-left: 20px;
+}
+.commandbar span {
+	padding-left: 20px;
+}
+.commandbar #parent {
+	background-image: url('../commands/16x16/parent.png');
+}
+.commandbar #showlog {
+	background-image: url('../commands/16x16/showlog.png');
+}
+.commandbar #upload {
+	background-image: url('../commands/16x16/attach.png');
+}
+.commandbar #createfolder {
+	background-image: url('../commands/16x16/createfolder.png');
+}
+/* should be common commands */
+.commandbar #refresh {
+	background-image: url('../commands/16x16/refresh.png');
+}
+.commandbar #logout {
+	background-image: url('../commands/16x16/logout.png');
+}
+/* directory listing */
 .contents .row {
 	width: 100%;
 	padding: 1px;
@@ -21,37 +61,20 @@
 	position: absolute;
 	left: 70%;
 }
-.footer {
-	border-top: 1px solid #CCCC99;
-	color: #999999;
-	font-size: smaller;
-}
-.footer .path {
-	position: absolute;
-	left: 12px;
-}
-.footer .legal {
-	position: absolute;
-	right: 10px;
-}
-/* resource links */
-.commandbar a[href="../"], span#up {
-	background-image: url('up.png');
-	padding-left: 20px;
-}
 .file {
-	background-image: url('file.png');
+	background-image: url('16x16/file.png');
 	background-position: left;
 	background-repeat: no-repeat;
 	padding-left: 30px;
 	margin-left: 10px;
 }
 .folder {
-	background-image: url('folder.png');
+	background-image: url('16x16/folder.png');
 	background-position: left;
 	background-repeat: no-repeat;
 	padding-left: 30px;
 	margin-left: 10px;
 }
-.file-ai { background-image: url('filetypes/ai.png');}
-.file-bmp { background-image: url('filetypes/bmp.png');}
+/* filetype icons */
+.file-ai { background-image: url('filetypes/16x16/ai.png');}
+.file-bmp { background-image: url('filetypes/16x16/bmp.png');}

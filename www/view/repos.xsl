@@ -70,15 +70,14 @@
 		</a>
 		<xsl:if test="/svn/index/updir">
 			<xsl:if test="not($disable-up='yes')">
-				<a id="up" class="command translate" href="../">up</a>
+				<a id="parent" class="command translate" href="../">up</a>
 			</xsl:if>
 			<xsl:if test="$disable-up='yes'">
-				<span id="up" class="command translate">up</span>
+				<span id="parent" class="command translate">up</span>
 			</xsl:if>
 		</xsl:if>
-		<a id="refresh" class="command translate" href="#" onclick="history.go()">refresh</a>
 		<xsl:if test="$editUrl">
-			<a id="newfolder" class="command translate" href="{$editUrl}/?action=mkdir&amp;path={@path}">new folder</a>
+			<a id="createfolder" class="command translate" href="{$editUrl}/?action=mkdir&amp;path={@path}">new folder</a>
 			<a id="upload" class="command translate" href="{$web}/upload/?path={@path}">upload</a>
 		</xsl:if>
 		<!--
@@ -92,6 +91,7 @@
 			</xsl:call-template>check out</a>
 		-->
 		<a id="showlog" class="command translate" href="{$web}/open/log/?path={@path}">show log</a>
+		<a id="refresh" class="command translate" href="#" onclick="history.go()">refresh</a>
 		<a id="logout" class="command translate" href="/?logout">logout</a>
 		<!-- print, possibly plugin -->
 		<!-- help, possibly plugin -->
