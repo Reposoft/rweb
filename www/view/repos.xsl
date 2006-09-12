@@ -34,7 +34,7 @@
 				<meta name="robots" content="noarchive"/>
 				<!-- default stylesheets -->
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
-				<link rel="stylesheet" type="text/css" href="{$cssUrl}repository/index.css"/>
+				<link rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>
 				<link rel="shortcut icon" href="/favicon.ico"/>
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$web}/scripts/head.js"></script>

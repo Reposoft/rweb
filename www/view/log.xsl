@@ -54,7 +54,7 @@
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
 		<div class="commandbar">
-		<a id="reposbutton" href="http://www.repos.se/" target="_blank">
+		<a id="reposbutton">
 			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		</a>
 		<a id="up" class="command" href="{@repo}{@path}">return to repository</a>
