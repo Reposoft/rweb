@@ -1,12 +1,32 @@
 /* repository visualization, shared classes */
 /* make sure that different browser text size settings work */
-body, td, th, body>div {
-    font-family: Verdana, Geneva, Arial, helvetica, sans-serif;
-    font-size: 0.8em;
+body {
+	font-family: Verdana, Helvetica, Arial, sans-serif;
 }
-code {
-	font-size: 1.1em;
+/* using trick from http://www.alistapart.com/articles/relafont/ to get same font all over the page in both IE and firefox */
+body,
+body div,
+body p,
+body th,
+body td,
+body li,
+body dd	{
+  font-size: xx-small;
+  voice-family: "\"}\"";
+  voice-family: inherit;
+  font-size: x-small
 }
+
+html>body,
+html>body div,
+html>body p,
+html>body th,
+html>body td,
+html>body li,
+html>body dd {
+  font-size: small
+}
+/* resume with em font sizes relative to the above */
 a {
 	color: #000066;
 	text-decoration: none;
@@ -38,6 +58,9 @@ h3 {
 pre {
 	font-size: 1.2em;
 }
+code {
+	font-size: 1.1em;
+}
 hr {
 	border: none 0;
 	border-top: 1px dashed #CCCC99;
@@ -45,9 +68,6 @@ hr {
 }
 /* layout of version control concepts, these are usually span tags */
 .path {
-	color: #112200;
-}
-.filename { /* deprected, use 'path'. 'filename' is for forms etc. 'file' is for layout with icon */
 	color: #112200;
 }
 .revision {
@@ -71,11 +91,6 @@ hr {
 	color: #CC3300;
 }
 /* common page elements, may also be layouted for each tool */
-.frame { /* this is not really a contextual name, maybe deprecated */
-	border: 2px solid #CCCC99;
-	border-collapse: collapse;
-	padding: 16px;
-}
 .workspace {
 }
 .commandbar {
@@ -94,11 +109,6 @@ hr {
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 .command {
-	font-size: smaller;
-	padding: 3px;
-	margin-left: 15px;
-	margin-top: 5px;
-	margin-bottom: 5px;
 	background-position: left;
 	background-repeat: no-repeat;
 }
@@ -115,10 +125,8 @@ span.command {
 /* action is for buttons inside listings, <a> is  active, <span> is greyed out */
 .action {
 	background-color: #F0F0EE;
-	font-size: smaller;
-	border: 1px solid #F7F7F6;
-	padding: 1px;
-	margin: 1px;
+	margin: 0.2em;
+	padding: 0.2 em;
 }
 a.action {
 	color: #333333;

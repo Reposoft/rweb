@@ -14,7 +14,7 @@
 	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
 	<xsl:param name="web">/repos</xsl:param>
 	<!-- static contents urls, set to {$web}/style/ for default theme -->
-	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/themes/any/?u=</xsl:param>
+	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/style/</xsl:param>
 	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
 	<xsl:param name="editUrl"><xsl:value-of select="$web"/>/edit</xsl:param>
 	<!-- when spacer space can't be avoided -->

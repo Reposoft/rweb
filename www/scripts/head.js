@@ -127,7 +127,7 @@ var Repos = {
 		var me = /head\.js(\?.*)?$/;
 		var path = '';
 		var scriptUrls = new Array();
-		var theme = ''; // the dynamic theme selection works, but not the cookie //var theme = Repos.getTheme();
+		var theme = Repos.getTheme();
 		
 		for (i = 0; i < tags.length; i++) {
 			var t = tags[i];
@@ -137,8 +137,8 @@ var Repos = {
 				path = t.src.replace(me, '');
 			if (n == 'script' && t.src)
 				scriptUrls.push(t.src)
-			if (theme && n == 'link' && t.href && t.type && t.type == 'text/css')
-				throw "error"; // Repos._handleExistingCss(t, theme);
+			if (n == 'link' && t.href && t.type && t.type == 'text/css')
+				Repos._handleExistingCss(t, theme);
 		}
 		
 		if (path.length < 1) {
@@ -168,11 +168,18 @@ var Repos = {
 	 * @param theme the current user's theme selection, for example 'themes/simple/'
 	 */
 	_handleExistingCss: function(linkTag, theme) {
-		if (theme.length < 1) throw "Theme is empty, CSS should not be updated";
+		var newpath;
+		if (theme===false) {
+			// cookies don't work in firefox 1.5 in XML pages, so we use theme redirector
+			newpath = '/themes/any/?u=';
+		} else {
+			// on the other hand relative urls in CSS after redirect don't work in other browsers
+			newpath = '/' + theme + 'style/';
+		}
 		var themePath = new RegExp('/style/'); // default theme
 		if (!themePath.test(linkTag.href)) return;
 		var n = linkTag.cloneNode(true);
-		var href = linkTag.href.replace(themePath, '/' + theme + 'style/');
+		var href = linkTag.href.replace(themePath, newpath);
 		n.href = href;
 		this.documentHead.replaceChild(n, linkTag);
 	},
@@ -601,6 +608,7 @@ var Repos = {
 	 *	false if no theme should be loaded (meaning that no theme script setup will be required.
 	 */
 	getTheme: function() {
+		if (typeof(document.cookie)=='undefined') return false;
 		var user = Repos.getUsername();
 		if (!user || ['test', 'staffan', 'annika', 'arvid', 'hanna'].indexOf(user)>=0) 
 			return '';
