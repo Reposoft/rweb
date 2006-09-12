@@ -150,6 +150,22 @@ span.action {
 	color: #BBBBBB;
 	display: none;
 }
+/* common commands */
+.commandbar #back {
+	background-image: url('commands/16x16/back.png');
+}
+.commandbar #parent {
+	background-image: url('commands/16x16/parent.png');
+}
+.commandbar #download {
+	background-image: url('commands/16x16/download.png');
+}
+.commandbar #refresh {
+	background-image: url('commands/16x16/refresh.png');
+}
+.commandbar #logout {
+	background-image: url('commands/16x16/logout.png');
+}
 /* -------- forms ---------
 <form>
 <fieldset>

@@ -9,12 +9,12 @@
 <div class="workspace">
 <div class="commandbar">
 <!--{if $logurl}-->
-<a class="command" href="{=$logurl}">return to log</a>
+<a id="back" class="command" href="{=$logurl}">return to log</a>
 <!--{else}-->
-<a class="command" href="{=$back}">&lt; back</a>
-<a class="command" href="{=$repo}">return to repository</a>
+<a id="back" class="command" href="{=$back}">back</a>
+<a id="parent" class="command" href="{=$repo}">return to repository</a>
 <!--{/if}-->
-<a class="command" href="{=$dowloandUrl}">download</a>
+<a id="download" class="command" href="{=$dowloandUrl}">download</a>
 </div>
 <div class="contents cat">
 <h1><span class="path">{=$target}</span> version <span class="revision">{=$revision}</span></h1>

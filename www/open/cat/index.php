@@ -46,7 +46,7 @@ if (isset($_GET['open'])) {
 	} else {
 		$p->assign('back', $referer);
 		// TODO what if the target folder does not exist anymore
-		$p->assign('repo', dirname($target));
+		$p->assign('repo', dirname($url));
 	}
 	$p->assign('dowloandUrl', $downloadUrl);
 	$p->display();

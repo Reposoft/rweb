@@ -345,7 +345,7 @@ function getReposPass() {
 	return $_SERVER['PHP_AUTH_PW'];
 }
 function getReposAuth() {
-	return "This function is deprecated. Will be removed in 1.0" // $_SERVER['HTTP_AUTHORIZATION'];
+	return "This function is deprecated. Will be removed in 1.0"; // $_SERVER['HTTP_AUTHORIZATION'];
 }
 
 // *** Subversion client usage ***

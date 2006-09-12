@@ -21,9 +21,6 @@
 	right: 10px;
 }
 /* commands */
-.commandbar #parent {
-	background-image: url('../commands/16x16/parent.png');
-}
 .commandbar #showlog {
 	background-image: url('../commands/16x16/showlog.png');
 }
@@ -32,13 +29,6 @@
 }
 .commandbar #createfolder {
 	background-image: url('../commands/16x16/createfolder.png');
-}
-/* should be common commands */
-.commandbar #refresh {
-	background-image: url('../commands/16x16/refresh.png');
-}
-.commandbar #logout {
-	background-image: url('../commands/16x16/logout.png');
 }
 /* directory listing */
 .contents .row {

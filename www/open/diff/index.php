@@ -13,7 +13,7 @@ $revto = getRevision($_GET['revto']);
 
 $revisions = ' -r '.$revfrom.':'.$revto;
 
-$cmd = 'diff' . $revisions . ' '.escapeArgument($url);
+$cmd = 'diff '.escapeArgument($url.'@'.$revfrom).' '.escapeArgument($url.'@'.$revto);
 
 
 $p = new Presentation();
