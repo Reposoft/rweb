@@ -70,6 +70,8 @@ Requirements:
 - Image thumbnails plugin using phpthumb
 - Standardized event model in the javascript framework
 - Class based form field validation with own framework
+- Custom 404 page in apache
+- Override PHP's trigger_error to make real error page
 
 
 1.2

@@ -1,7 +1,5 @@
 * Safari can not handle &amp; for query parameters in XSLT the way they are written now. Suuuuuucky. Need to declaer an entity?
 
-* Fix log.xsl without conf.xsl, for safari.
-
 * Move repos.properties and reposrun.sh to location that can not be accessed through the web.
 
 * Protect conf dir for web access.
@@ -10,14 +8,10 @@
 
 * Server side validation corresponding to the javascripts. This is not essential, because the svn client will do that, but it would give nicer error message in the rare cases where client side validation is bypassed.
 
-* 'Users online'
-
-* Messages for one user
-
-* Cookie with the username, for use in javascripts. Logout also on browser close? timeout?
+* Fix cookie with the username in Firefox/xhtml+xml, for use in javascripts. Logout also on browser close? timeout?
 
 * Search for TODO in code
 
 * Make AJAX buttons visible only if the scripts execute properly. For example showUrl button should be available only if the script is loaded. Could use a class 'showUrl' to indicate that an url wants such a button.
 
-* switch magic_quotes Off and adapt edit.class.php
+* Add error to getReposUser if not logged in. Use isLoggedIn or something like that instead.

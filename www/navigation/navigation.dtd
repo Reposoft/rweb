@@ -1,5 +1,0 @@
-<!ELEMENT navigation (#PCDATA | unit )*>
-<!ELEMENT unit (#PCDATA | unit)*>
-<!ATTLIST unit name CDATA #REQUIRED>
-<!ATTLIST unit href CDATA #IMPLIED>
-<!ATTLIST unit type (user|project|network|company|link|menu) #IMPLIED>

@@ -62,7 +62,7 @@ var Repos = {
 		// note that these are read-only fields. The Repos object is static and does not have state.
 		
 		// settings
-		this.themeSettings = 'style/settings.js'; // relative to each theme's root
+		this.themeSettings = 'settings.js'; // relative to each theme's root
 		this.allowCachePlugins = false; // set to true in production to allow browsers to cache plugins
 		
 		// common page elements
@@ -91,7 +91,7 @@ var Repos = {
 	_handlePageLoaded: function() {
 		// check required dependencies
 		if (typeof(Prototype) == 'undefined') {
-			// in IE after forced refresh onload might come before lib is loaded
+			// in IE, after forced refresh, onload might come before lib is loaded
 			if (_repos_retries-- > 0) {
 				window.setTimeout('Repos._handlePageLoaded()', 100);
 				return;
@@ -127,6 +127,7 @@ var Repos = {
 		var me = /head\.js(\?.*)?$/;
 		var path = '';
 		var scriptUrls = new Array();
+		var theme = ''; // the dynamic theme selection works, but not the cookie //var theme = Repos.getTheme();
 		
 		for (i = 0; i < tags.length; i++) {
 			var t = tags[i];
@@ -136,8 +137,8 @@ var Repos = {
 				path = t.src.replace(me, '');
 			if (n == 'script' && t.src)
 				scriptUrls.push(t.src)
-			if (n == 'link' && t.href && t.type && t.type == 'text/css')
-				Repos._handleExistingCss(t);
+			if (theme && n == 'link' && t.href && t.type && t.type == 'text/css')
+				throw "error"; // Repos._handleExistingCss(t, theme);
 		}
 		
 		if (path.length < 1) {
@@ -162,14 +163,14 @@ var Repos = {
 	
 	/**
 	 * Modify a css link so it uses the current theme.
-	 * If the href contains /style/ it will be updated with the theme name, if a theme is set
-	 * @linkTag the element, child of <head>, with an href attribute
+	 * If the href contains /style/ it will be updated with the theme name
+	 * @param linkTag the element, child of <head>, with an href attribute
+	 * @param theme the current user's theme selection, for example 'themes/simple/'
 	 */
-	_handleExistingCss: function(linkTag) {
-		var themePath = new RegExp('/style/');
+	_handleExistingCss: function(linkTag, theme) {
+		if (theme.length < 1) throw "Theme is empty, CSS should not be updated";
+		var themePath = new RegExp('/style/'); // default theme
 		if (!themePath.test(linkTag.href)) return;
-		var theme = Repos.getTheme();
-		if (!theme) return;
 		var n = linkTag.cloneNode(true);
 		var href = linkTag.href.replace(themePath, '/' + theme + 'style/');
 		n.href = href;
@@ -188,7 +189,9 @@ var Repos = {
 	 * Append the theme setup script to the load queue.
 	 */
 	_loadThemeSettings: function() {
-		var t = Repos.getTheme();
+		// the dynamic js inclusion works, but not the cookie in firefox XML docs
+		// var t = Repos.getTheme();
+		var t = 'themes/any/?u=';
 		// relative paths with ../ not handled yet. Note that the absolute url will not work offline.
 		Repos.require('/repos/' + t + Repos.themeSettings);	
 	},
@@ -218,7 +221,7 @@ var Repos = {
 	},
 	
 	/**
-	 * Prototype and such livraries are not tested with application/xhtml+xml and text/xml pages, so some customization is needed
+	 * Prototype and such libraries are not tested with application/xhtml+xml and text/xml pages, so some customization is needed
 	 */
 	_setUpXhtmlXmlCompatibility: function() {
 		// only needed if this is an XML page
@@ -454,7 +457,7 @@ var Repos = {
 				Repos._loadNext();	
 			}
 		}
-		window.setTimeout('Repos._loadNext()', 500); // set the delay between loads here (note that each load is syncronous, so this row is reached after the previously loaded script has benn processed
+		window.setTimeout('Repos._loadNext()', 500); // set the delay between loads here (note that each load is syncronous (at least in most browsers), so this row is reached after the previously loaded script has been processed
 	},
 	
 	/**
@@ -589,7 +592,8 @@ var Repos = {
 	 * @return user account name for the current user, or false if not logged in
 	 */
 	getUsername: function() {
-		throw "getUsername is not implemented yet";
+		var user = Repos.getCookie('username');
+		return user;
 	},
 	
 	/**
@@ -597,10 +601,10 @@ var Repos = {
 	 *	false if no theme should be loaded (meaning that no theme script setup will be required.
 	 */
 	getTheme: function() {
-		//var user = Repos.getUsername();
-		//if (!user || ['test', 'staffan', 'annika', 'arvid', 'hanna'].contains(Repos.getUsername())) 
-		//	return '';
-		return '';
+		var user = Repos.getUsername();
+		if (!user || ['test', 'staffan', 'annika', 'arvid', 'hanna'].indexOf(user)>=0) 
+			return '';
+		return 'themes/pe/';
 	},
 	
 	/**
@@ -624,21 +628,53 @@ var Repos = {
 	
 	// ------------ Cookie functions ------------
 	
-	setCookie: function(key, value) {
-		throw "setCookie is not implemented yet";
-	},
-	
-	setPersistentCookie: function(key, value) {
-		throw "setPersistentCookie is not implemented yet";
+	/**
+	 * setCookie(name, value, [days])
+	 * @param days optional, if 0 or missing, the cookie expires when the browser is closed
+	 */
+	setCookie: function(name, value, days) {
+		var c = name+"="+escape(value);
+		if (days) c += "; expires="+Repos._getexpirydate(days);
+		document.cookie=c;
 	},
 	
 	/**
-	 * @return value of the cookie, string
+	 * Read a cookie value
+ 	 * @param name Name of the desired cookie.
+     * Returns a string containing value of specified cookie,
+ 	 *   or null if cookie does not exist.
 	 */
-	getCookie: function(key) {
-		throw "getCookie is not implemented yet";
+	getCookie: function(name) {
+		if (typeof(document.cookie)=='undefined') {
+			throw new Error("document.cookie has no properties");
+			return null;
+		}
+		var nameEQ = name + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0;i < ca.length;i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1,c.length);
+			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+		}
+		return null;
 	},
 	
+	/**
+	 * Clear the value of a cookie.
+	 */
+	deleteCookie: function(name) {
+		Repos.setCookie(name,"",-1);	
+	},
+	
+	_getexpirydate: function(days) {
+		var UTCstring;
+		Today = new Date();
+		now=Date.parse(Today);
+		Today.setTime(now+days*24*60*60*1000);
+		UTCstring = Today.toUTCString();
+		return UTCstring;
+	},
+
 	// ------------ GUI commonality ------------
 	
 	/**

@@ -55,6 +55,12 @@ new Test.Unit.Runner({
 		var b = document.getElementsByTagName('body')[0];
 		assertEqual(b, document.body, "Repos should set 'document.body' because it is used in many scripts");
 	}},
+	
+	testCookies: function() { with(this) {
+		Repos.setCookie('testcookie', 'value');
+		var v = Repos.getCookie('testcookie');
+		assertEqual('value', v, "set+getCookie should communicate through cookies");
+	}},
 
 	// for copy-paste
 	testTemplate: function() { with(this) {

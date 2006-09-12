@@ -54,18 +54,26 @@ function repos_getUserLocale() {
 	if(array_key_exists(LOCALE_KEY,$_COOKIE)) $locale = $_COOKIE[LOCALE_KEY];
 	if(array_key_exists(LOCALE_KEY,$_GET)) $locale = $_GET[LOCALE_KEY];
 	// validate that the locale exists
-	if( !isset($possibleLocales[$locale]) )
+	if( !isset($possibleLocales[$locale]) ) {
 		$locale = array_shift(array_keys($possibleLocales));
+	}
 	// save and return
-	if (!isset($_COOKIE[LOCALE_KEY]))  
-		setcookie(LOCALE_KEY,$locale);
-	else
+	if (!isset($_COOKIE[LOCALE_KEY])) {
+		setcookie(LOCALE_KEY,$locale,0,'/');
+	} else {
 		$_COOKIE[LOCALE_KEY] = $locale;
+	}
 	return $locale;	
 }
 
-function repos_getUserTheme() {
-	return '';
+// same function as in head.js
+function repos_getUserTheme($user = '') {
+	if ($user=='') {
+		$user = getReposUser();
+	}
+	if (empty($user)) return '';
+	if (in_array($user, array('test', 'staffan', 'annika', 'arvid', 'hanna'))) return '';
+	return 'themes/pe/';
 }
 
 // ----- helper functions for pages to refer to internal urls -----
@@ -363,6 +371,7 @@ function _setGlobalSettings() {
 	// cookie settings
 	define('LOCALE_KEY', 'lang');
 	define('THEME_KEY', 'theme');
+	define('USERNAME_KEY', 'username');
 }
 
 function _checkSystem() {

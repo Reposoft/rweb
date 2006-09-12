@@ -45,6 +45,7 @@ function loginAndRedirectToHomeDir() {
 		// now when we have the username we can test if the login was ok
 		// (user does not have access to repository root)
 		if (verifyLogin($home)) {
+			login_setUsernameCookie();
 			header("Location: " . $home);
 		} else {
 			showLoginFailed($home);

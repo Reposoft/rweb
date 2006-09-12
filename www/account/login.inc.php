@@ -456,6 +456,20 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
    }
 }
 
+// set a cookie to tell javascripts which user this is
+// this is set in cleartext under the USERNAME_KEY because it is never used for authentication
+function login_setUsernameCookie() {
+	$user = getReposUser();
+	if (empty($user)) {
+		trigger_error('User not logged in. Can not store username.');
+	}
+	setcookie(USERNAME_KEY, $user, 0, '/');
+}
+
+function login_clearUsernameCookie() {
+	setcookie(USERNAME_KEY, '', time()-1, '/');
+}
+
 // automatic login if a target is specified the standard way
 if (getTargetUrl()) {
 	targetLogin();

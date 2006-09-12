@@ -64,6 +64,7 @@ function getVerifyUrl() {
 }
 
 function showAfterLogoutPage() {
+	login_clearUsernameCookie();
 	$next = getAfterLogoutUrl();
 	header("Location: $next");
 }

@@ -13,8 +13,8 @@
 	<xsl:output method="xml" indent="no"/>
 	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
 	<xsl:param name="web">/repos</xsl:param>
-	<!-- static contents urls -->
-	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/style</xsl:param>
+	<!-- static contents urls, set to {$web}/style/ for default theme -->
+	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/themes/any/?u=</xsl:param>
 	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
 	<xsl:param name="editUrl"><xsl:value-of select="$web"/>/edit</xsl:param>
 	<!-- when spacer space can't be avoided -->
@@ -30,11 +30,11 @@
 					<xsl:value-of select="index/@path"/>
 				</title>
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-				<!-- if google may index the repository (googlebot.com has access), contents should not be cached -->
+				<!-- if search crawlers has access, contents should not be cached -->
 				<meta name="robots" content="noarchive"/>
-				<!-- default stylesheets, path that contains /style/ will be updated with current theme by the head script -->
-				<link rel="stylesheet" type="text/css" href="{$cssUrl}/global.css"/>
-				<link rel="stylesheet" type="text/css" href="{$cssUrl}/index/index.css"/>
+				<!-- default stylesheets -->
+				<link rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
+				<link rel="stylesheet" type="text/css" href="{$cssUrl}index/index.css"/>
 				<link rel="shortcut icon" href="/favicon.ico"/>
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$web}/scripts/head.js"></script>

@@ -2,6 +2,8 @@
 
 Repos.require('lib/sarissa/sarissa.js');
 
+// There is another script at http://www.xslt.com/html/xsl-list/2005-09/msg00180.html
+
 /**
  * Transform XML using an XSLT file.
  * Both files are currently loaded using synchronous XMLHttpRequest.

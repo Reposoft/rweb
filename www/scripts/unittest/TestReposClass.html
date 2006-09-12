@@ -223,6 +223,18 @@ new Test.Unit.Runner({
 		// TODO assert that script and line number is in it (on firefox)
 	}},
 
+	testCookies: function() { with(this) {
+		Repos.setCookie('testcookie', 'value');
+		var v = Repos.getCookie('testcookie');
+		assertEqual('value', v, "set+getCookie should communicate through cookies");
+		Repos.setCookie('test2', 'value2');
+		v = Repos.getCookie('testcookie');
+		assertEqual('value', v, "should be able to handle different cookies");
+		Repos.deleteCookie('testcookie');
+		v = Repos.getCookie('testcookie');
+		assertNull(v, "should be able to clear cookie");
+	}},
+
 	// for copy-paste
 	testTemplate: function() { with(this) {
 	}},
