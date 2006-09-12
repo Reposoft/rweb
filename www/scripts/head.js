@@ -621,7 +621,8 @@ var Repos = {
 	getTheme: function() {
 		if (typeof(document.cookie)=='undefined') return false;
 		var user = Repos.getUsername();
-		if (!user || ['test', 'staffan', 'annika', 'arvid', 'hanna'].indexOf(user)>=0) 
+		// settings are currently hard coded because no user preferences system is in operation
+		if (!user||user=='test'||user=='annika'||user=='arvid'||user=='hanna') 
 			return '';
 		return 'themes/pe/';
 	},

@@ -681,14 +681,9 @@ function tmt_getNodesTable(formNode, type){
 	return boxHolder;
 }
 
-// it seems that in IE, even if the script is appended to <head>, it executes after onload
-if (head_isPageLoaded()) {
-	//alert('Page loaded already before validator script. Validator will be disabled.');
-	tmt_validatorInit();
-} else {
-	Event.observe(window, "load", tmt_validatorInit);
-}
-
 // TODO move to settings script and make it load correctly in IE
 tmt_globalPatterns.reposFilename = new RegExp("^[^&:\"'<>@#~\\?\\*\\$\\|\\(\\)\\[\\]\\t\\n\\/\\\\]+$");
 tmt_globalPatterns.reposLogmessage = new RegExp("^[^\\f\\v\\0]+$");
+
+// always loads after onload now with Repos
+tmt_validatorInit();

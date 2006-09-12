@@ -77,7 +77,7 @@
 			</xsl:if>
 		</xsl:if>
 		<xsl:if test="$editUrl">
-			<a id="createfolder" class="command translate" href="{$editUrl}/?action=mkdir&amp;path={@path}">new folder</a>
+			<a id="createfolder" class="command translate" href="{$editUrl}/mkdir/?path={@path}">new folder</a>
 			<a id="upload" class="command translate" href="{$web}/upload/?path={@path}">upload</a>
 		</xsl:if>
 		<!--
@@ -137,9 +137,9 @@
 			<div class="actions">
 				<a class="action" href="{@href}">open</a>
 				<xsl:if test="$editUrl">
-					<a class="action" href="{$editUrl}/?action=rename&amp;path={../@path}/{@href}">rename</a>
+					<a class="action" href="{$editUrl}/rename/?path={../@path}/{@href}">rename</a>
 					<span class="action">copy</span>
-					<a class="action" href="{$editUrl}/?action=delete&amp;path={../@path}/{@href}">delete</a>
+					<a class="action" href="{$editUrl}/delete/?path={../@path}/{@href}">delete</a>
 				</xsl:if>
 			</div>
 			<a id="{$id}" class="folder" href="{@href}">
@@ -159,11 +159,11 @@
 			<div class="actions">
 				<a class="action" title="this file can be opened in Repos" href="{$web}/open/?path={../@path}&amp;file={@href}">open</a>
 				<xsl:if test="$editUrl">
-					<a class="action" href="{$editUrl}/?action=rename&amp;path={../@path}&amp;file={@href}">rename</a>
+					<a class="action" href="{$editUrl}/rename/?target={../@path}/{@href}">rename</a>
 					<span class="action">copy</span>
-					<a class="action" href="{$editUrl}/?action=delete&amp;path={../@path}&amp;file={@href}">delete</a>
+					<a class="action" href="{$editUrl}/delete/?target={../@path}/{@href}">delete</a>
 					<span class="action">lock</span>
-					<a class="action" href="{$web}/upload/?path={../@path}&amp;file={@href}">upload changes</a>
+					<a class="action" href="{$web}/upload/?target={../@path}/{@href}">upload changes</a>
 				</xsl:if>
 			</div>
 			<a id="{$id}" class="file-{$filetype} file" href="{@href}">

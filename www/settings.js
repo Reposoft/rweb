@@ -4,3 +4,4 @@
 // This script customizes the page behaviour for a theme. It is required by head.js.
 
 Repos.requirePlugin('dateformat');
+Repos.requirePlugin('tmt-validator');

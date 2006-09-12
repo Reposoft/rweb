@@ -1,6 +1,6 @@
 <?php
-require( dirname(dirname(__FILE__))."/conf/Presentation.class.php" );
-require( dirname(__FILE__)."/edit.class.php" );
+require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
+require( dirname(dirname(__FILE__))."/edit.class.php" );
 
 if (isset($_GET['message'])) {
 	delete($_GET['message']); 
