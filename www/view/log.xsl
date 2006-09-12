@@ -13,8 +13,8 @@
 	<xsl:output method="xml" indent="no"/>
 	<!-- root url for webapp resources -->
 	<xsl:param name="web">/repos</xsl:param>
-	<!-- static contents urls -->
-	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/style</xsl:param>
+	<!-- static contents urls, set to {$web}/style/ for default theme -->
+	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/themes/any/?u=</xsl:param>
 	<!-- when spacer space can't be avoided -->
 	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- document skeleton -->
@@ -26,11 +26,12 @@
 					<xsl:value-of select="index/@path"/>
 				</title>
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-				<!-- if google may index the repository (googlebot.com has access), contents should not be cached -->
+				<!-- if search crawlers has access, contents should not be cached -->
 				<meta name="robots" content="noarchive"/>
 				<!-- default stylesheet -->
-				<link rel="stylesheet" type="text/css" href="{$cssUrl}/global.css"/>
-				<link rel="shortcut icon" href="http://www.repos.se/favicon.ico"/>
+				<link rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
+				<link rel="stylesheet" type="text/css" href="{$cssUrl}log/log.css"/>
+				<link rel="shortcut icon" href="/favicon.ico"/>
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
 			</head>

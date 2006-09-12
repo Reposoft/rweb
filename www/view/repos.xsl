@@ -34,7 +34,7 @@
 				<meta name="robots" content="noarchive"/>
 				<!-- default stylesheets -->
 				<link rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
-				<link rel="stylesheet" type="text/css" href="{$cssUrl}index/index.css"/>
+				<link rel="stylesheet" type="text/css" href="{$cssUrl}repository/index.css"/>
 				<link rel="shortcut icon" href="/favicon.ico"/>
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
@@ -65,7 +65,7 @@
 			</xsl:choose>
 		</xsl:param>
 		<div class="commandbar">
-		<a id="reposbutton" href="http://www.repos.se/" target="_blank">
+		<a id="reposbutton">
 			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
 		</a>
 		<xsl:if test="/svn/index/updir">
@@ -174,6 +174,8 @@
 	<!-- extra info and logos -->
 	<xsl:template name="footer">
 		<div class="footer">
+		<span id="badges">
+		</span>
 		<span class="legal">
 		<xsl:text>Powered by </xsl:text>
 		<xsl:element name="a">

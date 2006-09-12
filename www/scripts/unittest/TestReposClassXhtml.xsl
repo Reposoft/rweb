@@ -19,7 +19,7 @@
 
 <body>
 <h1>Test head.js, the Repos class, in an XML page.</h1>
-
+<p><a class="action" href="../">return to javascript test page</a></p>
 <div id="testlog"></div>
 
 <script type="text/javascript">

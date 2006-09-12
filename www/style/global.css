@@ -11,8 +11,16 @@ a {
 	color: #000066;
 	text-decoration: none;
 }
+p > a {
+	border-bottom: 1px dotted #000066;
+}
+a[target="_blank"] {
+	padding-right: 16px;
+	background: url(newwindow.png) right center no-repeat;
+}
 a:hover {
 	text-decoration: underline;
+	border-bottom: none;
 }
 h1 {
 	font-weight: normal;
