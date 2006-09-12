@@ -10,6 +10,13 @@
 #Changes: 	Mandrake kmenu Icon creation code added, Error Messages were updated,
 #		Kmenu icon creation message was updated, index.desktop update comment was added	 
 
+if [ -n "$1" ]
+then
+CONVERTOPTIONS="$1"
+else
+CONVERTOPTIONS=""
+fi
+
 # PACKAGENAME is the final tarred, compressed, iconset.
 PACKAGENAME="Cezanne"
 REQUIRED_SIZES="32x32 22x22 16x16"
@@ -24,7 +31,7 @@ REQUIRED_SIZES="32x32 22x22 16x16"
 #	access the additional icons. I've added the non-standard 56x56 category 
 #	as an example.
  
-SIZES="128x128 96x96 72x72 64x64 56x56 48x48 $REQUIRED_SIZES"
+SIZES="128x128 64x64 48x48 $REQUIRED_SIZES"
 DIRS="apps devices filesystems mimetypes" # no actions directory needed, its hardcoded
 
 CONVERT_PATH=
@@ -89,17 +96,7 @@ echo
 checkCompressor
 checkNeeded
 printFound
-echo
-echo -ne "You get your choice of kmenu icons. If your distribution uses a special naming "
-echo -ne "convention for the kmenu icon (i.e. Mandrake) you should add the special name for the "
-echo -ne "kmenu icon to the build script and submit the updated script to nbargnesi@den-4.com, "
-echo -ne "u_nbargnesi@umassd.edu, or guppetto@msn.com. Hopefully in the future this script will be  "
-echo -ne "able to create the correct Kmenu icon for every distribution (I can dream cant I). Check "
-echo -ne "the 128x128/apps/ directory for alternate icons that can be selected as the kmenu icon \n"
-echo -ne "\nSelect a kmenu icon from the following choices: \n"
-echo -ne "\n\txeyes, tux, suse, and enter it now (case sensitive): "
-read KMENU_ICON
-echo -ne "\nUsing the $KMENU_ICON.png icon as your kmenu icon.\n"
+KMENU_ICON="tux"
 
 # Add your distributions kmenu specific icon name below. 
 # The line cp -f 128x128/apps/$KMENU_ICON.png 128x128/apps/menuk-mdk.png
@@ -141,7 +138,7 @@ do
 		# Loop the specified sizes
 		for size in $SIZES
 		do
-			convert "$icon" -resize $size ../../$size/$dir/"$icon"
+			convert "$icon" -resize $size $CONVERTOPTIONS ../../$size/$dir/"$icon"
 		done
 	done
 	# Move from 128x128/$directory to toplevel
@@ -152,40 +149,12 @@ done
 cd 32x32/actions
 for icon in *
 do
-	convert "$icon" -resize 32x32 ../../32x32/actions/"$icon"
-	convert "$icon" -resize 22x22 ../../22x22/actions/"$icon"
-	convert "$icon" -resize 16x16 ../../16x16/actions/"$icon"
+	convert "$icon" -resize 32x32 $CONVERTOPTIONS ../../32x32/actions/"$icon"
+	convert "$icon" -resize 22x22 $CONVERTOPTIONS ../../22x22/actions/"$icon"
+	convert "$icon" -resize 16x16 $CONVERTOPTIONS ../../16x16/actions/"$icon"
 done
 
 # Move to top directory
 cd ../../
 
-mkdir $PACKAGENAME
-cp -R 128x128 $PACKAGENAME
-cp -R 32x32 $PACKAGENAME
-cp index.desktop $PACKAGENAME
-cp README $PACKAGENAME
-cp buildset $PACKAGENAME
-
-# Move/Remove the created directories so the user can rebuild if needed.
-rm -fr 32x32/apps 32x32/devices 32x32/mimetypes 32x32/filesystems
-for size in $SIZES
-do
-	if [ "$size" != "32x32" ]; then # Already did the 32x32 size above
-		mv $size $PACKAGENAME
-	fi
-done
-
-echo -ne "\nDone with conversions.\n"
-echo -ne "Tarring and compressing.\n"
-if test -f $COMPRESSOR
-	then
-		tar cf $PACKAGENAME.tar $PACKAGENAME && $COMPRESSOR $PACKAGENAME.tar
-		echo -ne "\nThe $PACKAGENAME icon set has been built.  Use kcontrol to install the icon set.\n"
-		echo && ls -sh $PACKAGENAME.tar* && echo
-fi
-echo -ne "Removing all temporary directories...\n"
-rm -fr $PACKAGENAME
-
 echo -ne "\nAll done. ;)\n"
-

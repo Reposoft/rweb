@@ -9,6 +9,8 @@ In this folder is a midified version of the script 'buildset'
 from the unbuild Cezanne archive.
 
 Just deflate the archive to this folder, and run 
-buildset-[color].sh instead of buildset to get
+buildset.sh instead of buildset to get
 the webbified icons
 
+Use one parameter string with the parameters to modify the ImageMagick conversion
+./buildset.sh "-type Palette -colors 32 -background #F0F0EE"
