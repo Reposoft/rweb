@@ -13,8 +13,8 @@
 	<xsl:output method="xml" indent="no"/>
 	<!-- root url for webapp resources -->
 	<xsl:param name="web">/repos</xsl:param>
-	<!-- static contents urls, set to {$web}/style/ for default theme -->
-	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/themes/any/?u=</xsl:param>
+	<!-- static contents urls, set to /themes/any/?u= for automatic theme selection -->
+	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/style/</xsl:param>
 	<!-- when spacer space can't be avoided -->
 	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- document skeleton -->
@@ -62,6 +62,7 @@
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="contents">
+		<h1>Log for <span class="path"><xsl:value-of select="@path"/></span></h1>
 		<div class="contents">
 			<xsl:apply-templates select="error"/>
 			<xsl:apply-templates select="logentry"/>
@@ -82,22 +83,22 @@
 	<xsl:template match="logentry">
 		<div class="logentry" id="rev{@revision}">
 			<h3>
-				<span class="revision">
+				<span class="revision" title="the change number or version number">
 					<xsl:value-of select="@revision"/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<span class="username">
+				<span class="username" title="author">
 					<xsl:value-of select="author"/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<span class="datetime">
+				<span class="datetime" title="date and time of the commit">
 					<xsl:value-of select="date"/>
 				</span>
 				<xsl:value-of select="$spacer"/>
 				<!-- TODO <a title="{$undo}" class="action" href="{$web}/edit/undo/?repo={../@repo}&amp;rev={@revision}">undo</a> -->
 			</h3>
 			<xsl:if test="string-length(msg) > 0">
-				<div class="message">
+				<div class="message" title="Log message">
 						<xsl:call-template name="linebreak">
 							<xsl:with-param name="text" select="msg"/>
 						</xsl:call-template>
@@ -118,34 +119,34 @@
 		<xsl:param name="revfrom"/>
 		<div class="row log-{@action}">
 			<xsl:if test="@action='A'">
-				<span class="path">
+				<span class="path" title="Added {.}">
 					<xsl:value-of select="."/>
 				</span>
 				<xsl:value-of select="$spacer"/>
 				<xsl:if test="@copyfrom-path">
-					<span title="copied from">copied from: </span>
-					<span class="path">
-						<xsl:value-of select="@copyfrom-path"/>&#160;</span>
-					<span class="revision">
-						<xsl:value-of select="@copyfrom-rev"/>
+					<span class="copied" title="Copied from {@copyfrom-path} version {@copyfrom-rev}">
+						<span class="path">
+							<xsl:value-of select="@copyfrom-path"/>&#160;</span>
+						<span class="revision">
+							<xsl:value-of select="@copyfrom-rev"/>
+						</span>
 					</span>
 				</xsl:if>
 			</xsl:if>
 			<xsl:if test="@action='D'">
-				<span class="log-d" title="{@action} - deleted">deleted: </span>
-				<span class="path">
+				<span class="path" title="Deleted {.}">
 					<xsl:value-of select="."/>
 				</span>
 			</xsl:if>
 			<xsl:if test="@action='M'">
-				<span class="log-m" title="{@action} - modified">modified: </span>
-				<span class="path">
+				<span class="path" title="Modified {.}">
 					<xsl:value-of select="."/>
 				</span>
-				<xsl:value-of select="$spacer"/>
-				<a title="the file as it was before the change" class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={$revfrom}">before</a>
-				<a title="the file after the change" class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>
-				<a title="the difference this change made" class="action" href="{$web}/open/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">show diff</a>
+				<div class="actions">
+					<a title="the file as it was before the change" class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={$revfrom}">before</a>
+					<a title="the file after the change" class="action" href="{$web}/open/cat/?repo={../../../@repo}&amp;target={.}&amp;rev={../../@revision}">after</a>
+					<a title="the difference this change made" class="action" href="{$web}/open/diff/?repo={../../../@repo}&amp;target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">show diff</a>
+				</div>
 			</xsl:if>
 		</div>
 	</xsl:template>

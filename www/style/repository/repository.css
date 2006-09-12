@@ -21,12 +21,6 @@
 	right: 10px;
 }
 /* commands */
-.commandbar a {
-	padding-left: 20px;
-}
-.commandbar span {
-	padding-left: 20px;
-}
 .commandbar #parent {
 	background-image: url('../commands/16x16/parent.png');
 }
@@ -58,6 +52,7 @@
 	border-bottom: 1px dashed #CCCC99;
 }
 .contents .row div.actions {
+	display: inline;
 	position: absolute;
 	left: 70%;
 }
