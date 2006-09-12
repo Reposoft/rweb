@@ -332,7 +332,11 @@ function isLoggedIn() {
 	return isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER']!='void';
 }
 
+/**
+ * @return logged in username, urlencoded, or false if no user (but use isLoggedIn to check)
+ */
 function getReposUser() {
+	if (!isLoggedIn()) return false;
 	// the username is used in urls (like the repository home dir for the user)
 	//  so it is urlencoded to prevent urlinjection
 	return urlencode($_SERVER['PHP_AUTH_USER']);
@@ -341,7 +345,7 @@ function getReposPass() {
 	return $_SERVER['PHP_AUTH_PW'];
 }
 function getReposAuth() {
-	return $_SERVER['HTTP_AUTHORIZATION'];
+	return "This function is deprecated. Will be removed in 1.0" // $_SERVER['HTTP_AUTHORIZATION'];
 }
 
 // *** Subversion client usage ***

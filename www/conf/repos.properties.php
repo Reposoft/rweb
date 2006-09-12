@@ -72,7 +72,7 @@ function repos_getUserTheme($user = '') {
 		$user = getReposUser();
 	}
 	if (empty($user)) return '';
-	if (in_array($user, array('test', 'staffan', 'annika', 'arvid', 'hanna'))) return '';
+	if ($user=='test'||$user=='annika'||$user=='arvid'||$user=='hanna') return '';
 	return 'themes/pe/';
 }
 

@@ -71,11 +71,11 @@ function doPassthru($targetUrl, $revision) {
 }
 
 function getMimeType($targetUrl, $revision) {
-	$cmd = 'propget -r'.$revision.' svn:mime-type '.escapeArgument($targetUrl);
+	$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl.'@'.$revision);
 	$result = login_svnRun($cmd);
 	$returnvalue = array_pop($result);
 	if ($returnvalue) {
-		trigger_error("Could not find the file '$targetUrl' in repository version $revision.");
+		trigger_error("Could not find the file '$targetUrl' in repository version $revision." );
 	}
 	if (count($result) == 0) {
 		return false; // svn:mime-type not set

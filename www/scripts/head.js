@@ -479,18 +479,29 @@ var Repos = {
 		}
 		_repos_loadedlibs.push(scriptUrl);
 		try {
-			if (scriptUrl.indexOf('/')!=0) {
-				scriptUrl = Repos.path + scriptUrl;	
-			}
-			scriptUrl += Repos.scriptUrlSuffix;
 			var s = Repos.createElement("script");
 			s.type = "text/javascript";
-			s.src = scriptUrl;
+			s.src = Repos._prepareScriptUrl(scriptUrl);
 			Repos.documentHead.appendChild(s);		
 		} catch (err) {
 			Repos.reportError("Error loading script " + scriptUrl+ ": " + err);
 		}
 		return true;
+	},
+	
+	/**
+	 * Add prefix and suffix to script url
+	 */
+	_prepareScriptUrl: function(scriptUrl) {
+		if (scriptUrl.indexOf('/')!=0) {
+			scriptUrl = Repos.path + scriptUrl;	
+		}
+		// 
+		if (scriptUrl.indexOf('?')>=0) {
+			return scriptUrl + Repos.scriptUrlSuffix.replace(/\?/,'&');
+		} else {
+			return scriptUrl + Repos.scriptUrlSuffix;
+		}
 	},
 	
 	/**

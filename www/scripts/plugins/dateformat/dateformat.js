@@ -57,6 +57,7 @@ Dateformat.prototype = {
 	
 	/**
 	 * @param xsd:dateTime/ISO 8601 date
+	 * @return string with the formatted datetime
 	 */
 	format: function(dateTime) {
 		if (!this.isDatetime(dateTime)) {
@@ -64,7 +65,7 @@ Dateformat.prototype = {
 		}
 		var d = new Date();
 		d.setISO8601(dateTime);
-		return d;
+		return d.toLocaleString();
 	}
 
 }
