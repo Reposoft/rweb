@@ -81,9 +81,10 @@
 	<xsl:param name="undo">Reverse the changes made from previous revision to this one</xsl:param>
 	<!-- layout -->
 	<xsl:template match="logentry">
-		<div class="logentry" id="rev{@revision}">
+		<xsl:param name="n" select="position() - 1"/>
+		<div id="rev{@revision}" class="logentry n{$n mod 4}">
 			<h3>
-				<span class="revision" title="the change number or version number">
+				<span class="revision" title="the changeset number (version number)">
 					<xsl:value-of select="@revision"/>
 				</span>
 				<xsl:value-of select="$spacer"/>

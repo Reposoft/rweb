@@ -20,29 +20,27 @@ html>body dd {
 }
 /* resume with em font sizes relative to the above */
 a {
-	color: #000066;
+	color: #000000;
 	text-decoration: none;
 }
 p > a {
 	border-bottom: 1px dotted #000066;
 }
-a[target="_blank"] {
-	padding-right: 16px;
-	background: url(newwindow.gif) right center no-repeat;
-}
 a:hover {
-	text-decoration: underline;
-	border-bottom: none;
+	color: #D81414;
 }
 h1 {
+	color: #D89210;
 	font-weight: normal;
 	font-size: 1.8em;
 }
 h2 {
+	color: #D37C0B;
 	font-weight: normal;
 	font-size: 1.4em;
 }
 h3 {
+	color: #D37C0B;
 	font-weight: normal;
 	margin-bottom: 3px;
 	font-size: 1.1em;
@@ -55,7 +53,7 @@ code {
 }
 hr {
 	border: none 0;
-	border-top: 1px dashed #CCCC99;
+	border-top: 1px solid #D89210;
 	height: 1px;
 }
 /* layout of version control concepts, these are usually span tags */
@@ -129,16 +127,16 @@ hr {
 a.command {
 	color: #333333;
 }
-a.command:hover {
-	background-color: #CCCC99;
-	text-decoration: none;
-}
 span.command {
 	color: #BBBBBB;
 }
 /* action is for buttons inside listings, <a> is  active, <span> is greyed out */
 .action {
 	background-color: #F0F0EE;
+	border-top: 1px solid #DDDDDD;
+	border-right: 1px solid #CCCCCC;
+	border-bottom: 1px solid #DDDDDD;
+	border-left: 1px solid #CCCCCC;
 	font-size: 82.5%;
 	margin: 0.2em;
 	padding-left: 0.2em;
@@ -147,12 +145,7 @@ span.command {
 a.action {
 	color: #333333;
 }
-a.action:hover {
-	background-color: #CCCC99;
-	text-decoration: none;
-}
 span.action {
-	color: #BBBBBB;
 	display: none;
 }
 /* common commands */
