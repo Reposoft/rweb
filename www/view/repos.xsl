@@ -133,7 +133,8 @@
 		<xsl:param name="id">
 			<xsl:call-template name="getFileID"/>
 		</xsl:param>
-		<div id="row:{$id}" class="row">
+		<xsl:param name="n" select="position() - 1"/>
+		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
 				<a id="open:{$id}" class="action" href="{@href}">open</a>
 				<xsl:if test="$editUrl">
@@ -155,7 +156,8 @@
 		<xsl:param name="id">
 			<xsl:call-template name="getFileID"/>
 		</xsl:param>
-		<div id="row:{$id}" class="row">
+		<xsl:param name="n" select="count(/svn/index/dir) + position() - 1"/>
+		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
 				<a id="open:{$id}" class="action" title="this file can be opened in Repos" href="{$web}/open/?path={../@path}&amp;file={@href}">open</a>
 				<xsl:if test="$editUrl">

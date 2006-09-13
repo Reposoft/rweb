@@ -28,7 +28,7 @@ p > a {
 }
 a[target="_blank"] {
 	padding-right: 16px;
-	background: url(newwindow.png) right center no-repeat;
+	background: url(newwindow.gif) right center no-repeat;
 }
 a:hover {
 	text-decoration: underline;
@@ -88,30 +88,38 @@ hr {
 .workspace {
 }
 .commandbar {
-	background-color: #F0F0EE;
-	border-top: 1px solid #CCCC99;
-	height: 1.4em;
+	background-color: #eeeeee;
+	border-top: 5px solid #FDBC4B;
+	border-bottom: 1px solid #FDBC4B;
+	height: 26px;
 }
 .contents {
 	/* overflow: -moz-scrollbars-vertical; */
 }
 .contents .row {
+
+}
+.n0, .n2 {
+	background-color: #F7F7F6;
+}
+.n1, .n3 {
+	background-color: #F0F0EE;	
 }
 .footer {
+	border-top: 1px solid #FDBC4B;
 	bottom: 10px;
 	height: 20px;
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 .command {
+	position: relative;
 	background-position: left center;
 	background-repeat: no-repeat;
 	font-size: 82.5%;
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-top: 0px;
-	margin-bottom: 0px;
-	padding: 0.2em;
-	padding-left: 20px; /* assuming that all commands have an icon */
+	height: 26px;
+	margin: 1px;
+	padding: 5px;
+	padding-left: 28px; /* assuming that all commands have an icon */
 }
 a.command {
 	color: #333333;
@@ -144,19 +152,19 @@ span.action {
 }
 /* common commands */
 .commandbar #back {
-	background-image: url('commands/16x16/back.png');
+	background-image: url('back.gif');
 }
 .commandbar #parent {
-	background-image: url('commands/16x16/parent.png');
+	background-image: url('parent.gif');
 }
 .commandbar #download {
-	background-image: url('commands/16x16/download.png');
+	background-image: url('download.gif');
 }
 .commandbar #refresh {
-	background-image: url('commands/16x16/refresh.png');
+	background-image: url('refresh.gif');
 }
 .commandbar #logout {
-	background-image: url('commands/16x16/logout.png');
+	background-image: url('logout.gif');
 }
 /* -------- forms ---------
 <form>

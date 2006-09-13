@@ -22,13 +22,13 @@
 }
 /* commands */
 .commandbar #showlog {
-	background-image: url('../commands/16x16/showlog.png');
+	background-image: url('showlog.gif');
 }
 .commandbar #upload {
-	background-image: url('../commands/16x16/attach.png');
+	background-image: url('upload.gif');
 }
 .commandbar #createfolder {
-	background-image: url('../commands/16x16/createfolder.png');
+	background-image: url('createfolder.gif');
 }
 /* directory listing */
 .contents .row {
@@ -47,19 +47,19 @@
 	left: 70%;
 }
 .file {
-	background-image: url('16x16/file.png');
+	background-image: url('16x16/file.gif');
 	background-position: left;
 	background-repeat: no-repeat;
 	padding-left: 30px;
 	margin-left: 10px;
 }
 .folder {
-	background-image: url('16x16/folder.png');
+	background-image: url('16x16/folder.gif');
 	background-position: left;
 	background-repeat: no-repeat;
 	padding-left: 30px;
 	margin-left: 10px;
 }
 /* filetype icons */
-.file-ai { background-image: url('filetypes/16x16/ai.png');}
-.file-bmp { background-image: url('filetypes/16x16/bmp.png');}
+.file-ai { background-image: url('filetypes/16x16/ai.gif');}
+.file-bmp { background-image: url('filetypes/16x16/bmp.gif');}
