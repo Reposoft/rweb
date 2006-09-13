@@ -6,6 +6,7 @@
 </head>
 
 <body>
+<div id="contents">
 <h1>Create subfolder</h1>
 <form id="createFolder" name="createFolder" method="get" action="#" tmt:validate="true">
   <fieldset>
@@ -14,7 +15,7 @@
 	<input name="repo" type="hidden" id="repo" value="{=$repo}" />
   <p>
     <label for="name">name of new folder</label>
-    <input name="name" type="text" id="name" size="40" tmt:required="true" tmt:pattern="reposFilename" tmt:message="Folder name is required and may not contain ^, :, &amp;, <, >, &pound;, @, ¤, #, ~, ?, *, $, |, (, ), [, ], /, \, commas or quotes" />
+    <input name="name" type="text" id="name" size="40" tmt:required="true" tmt:pattern="reposFilename" tmt:message="Folder name is required and may not contain ^, :, &amp;, <, >, &pound;, @, , #, ~, ?, *, $, |, (, ), [, ], /, \, commas or quotes" />
 </p>
   <p>
     <label for="message">log message</label>
@@ -26,6 +27,7 @@
   </p>
   </fieldset>
 </form>
-<p><a id="linkBack" class="action" href="{=$referer}">&lt; back</a></p>
+<p><a id="back" class="action" href="{=$referer}">&lt; back</a></p>
+</div>
 </body>
 </html>

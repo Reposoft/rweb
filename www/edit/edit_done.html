@@ -6,6 +6,7 @@
 </head>
 
 <body>
+<div id="contents">
 <h1>Completed operation <a target="_blank" href="http://svnbook.red-bean.com/nightly/en/svn.ref.svn.c.{=$operation}.html">{=$operation}</a></h1>
 <!--{if $successful}-->
 <p><em>{=$result}</em></p>
@@ -13,11 +14,12 @@
 <p>An error occurred:<br/>
 <em>{=$output}</em></p>
 <!--{/if}-->
-<a href="{=$nexturl}" class="action">&lt; return to repository</a></p>
+<a id="parent" href="{=$nexturl}" class="action">return to repository</a></p>
 <!--{if $revision}-->
 <!-- not supported in release 1.0:
 <p>This commit created a <a href="../log/?rev={=$revision}">changeset {=$revision}</a>, containing the difference from the previous version. It is possible to <a href="../undo/?rev={=$revision}">undo change {=$revision}</a>.</p>
 -->
 <!--{/if}-->
+</div>
 </body>
 </html>

@@ -2,21 +2,13 @@
 /* make sure that different browser text size settings work */
 body {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
+	font-size: small;
 }
-/* using trick from http://www.alistapart.com/articles/relafont/ to get same font all over the page in both IE and firefox */
-body,
-body div,
-body p,
-body th,
-body td,
-body li,
-body dd	{
-  font-size: xx-small;
-  voice-family: "\"}\"";
-  voice-family: inherit;
-  font-size: x-small
+/* seems that IE treats XML pages differently */
+body.xml {
+	font-size: x-small;
 }
-
+/* things that IE does not understand */
 html>body,
 html>body div,
 html>body p,
@@ -24,7 +16,7 @@ html>body th,
 html>body td,
 html>body li,
 html>body dd {
-  font-size: small
+	font-size: small;
 }
 /* resume with em font sizes relative to the above */
 a {

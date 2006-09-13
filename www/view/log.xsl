@@ -35,7 +35,7 @@
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
 			</head>
-			<body class="log">
+			<body class="log xml">
 				<xsl:apply-templates select="log"/>
 			</body>
 		</html>

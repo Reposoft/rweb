@@ -18,7 +18,6 @@ Features:
 Features that require javascript:
 - Javascript plugin framework for transparently adding behaviour to pages
 - Date formatting with browser's time zone
-- File and folder details (full URL, size, revision, author, locks) as popup
 - Client side validation of form fields (filename and log message), using tmt-validator
 - Automatically fill in file name at upload of new file
 - Error id for javascript errors
@@ -59,6 +58,8 @@ Requirements:
 
 1.1
 ----------------
+- Use jQuery + plugins instad of Prototype. Make minimal js file for scriptaculous unittest.js (or check ecmaunit)
+- File and folder details (full URL, size, revision, author, locks) as popup
 - Access control files in adiminstration account's repository folder (and something like a post-commit hook to get the file into the file system, with this repos can run on a different server than the repository).
 - Undo functionality for delete
 - Display changeset given only a revision number (requires admin access to see in what folder the change occurred and if the user has access to that folder)

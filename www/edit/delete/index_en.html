@@ -6,6 +6,7 @@
 </head>
 
 <body>
+<div id="contents">
 <h1>Delete <span class="filename">{=$target|basename}</span>?</h1>
 <p>After deletion it will not be present in the latest revision, but can always be recovered from the the history for the parent folder <span class="path">{=$target|dirname}</span>.</p>
 <form id="delete" name="delete" method="get" action="#" tmt:validate="true">
@@ -28,6 +29,7 @@
   </p>
   </fieldset>
 </form>
-<p><a id="linkBack" class="action" href="{=$referer}">&lt; back</a></p>
+<p><a id="back" class="action" href="{=$referer}">&lt; back</a></p>
+</div>
 </body>
 </html>

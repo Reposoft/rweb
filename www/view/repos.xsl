@@ -39,7 +39,7 @@
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
 			</head>
-			<body class="index">
+			<body class="repository xml">
 				<xsl:apply-templates select="svn"/>
 			</body>
 		</html>

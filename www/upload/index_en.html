@@ -17,6 +17,7 @@ function autoFillFilename(path) {
 </head>
 
 <body>
+<div id="contents">
 <h1>Upload file</h1>
 <!--{if $file}-->
 <p>As a new version of file <span class="path">{=$path}{=$file}</span>. <a class="action" target="_blank" href="../open/?target={=$path}{=$file}">open current version</a></p>
@@ -63,5 +64,6 @@ function autoFillFilename(path) {
 <!--{else}-->
 <p><a id="linkBack" class="action" href="{=$targeturl}">&lt; back</a></p>
 <!--{/if}-->
+</div>
 </body>
 </html>
