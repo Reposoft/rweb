@@ -25,10 +25,10 @@ function autoFillFilename(path) {
 <p>As a new file in folder {=$path}</p>
 <!--{/if}-->
 <!--{if $file && !$binary}-->
-<p>The current verison is a text file, so it is also possible to <a class="action" href="./?path={=$path}&file={=$file}&text">copy-paste contents to this form</a></p>
+<p>The current verison is a text file, so it is also possible to <a class="action" href="./?path={=$path}&file={=$file}&text">copy-paste your local file's contents</a></p>
 <!--{/if}-->
 <!--{if !$file}-->
-<p>It is also possible to <a class="action" href="./?path={=$path}&text">copy-paste contents to this form</a></p>
+<p>It is also possible to <a class="action" href="./?path={=$path}&text">copy-paste your local file's contents</a></p>
 <!--{/if}-->
 <form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload" tmt:validate="true">
 <fieldset>

@@ -45,33 +45,30 @@ class Edit {
 
 	/**
 	 * @param pathElement filename or directory name
-	 * @param safe true if there is no way the value can be modified by the user
 	 */
-	function addArgFilename($pathElement, $safe=false) {
-		// rawurlencode does not work with filenames containing 
+	function addArgFilename($pathElement) {
+		// rawurlencode does not work with filenames because there might be UTF-8 characters in it like umlauts
+		// manually escape the characters that are allowed in filenames but not for retreival
 		$this->_addArgument($pathElement);
 	}
 	
 	/**
 	 * @param name absolute or relative path with slashes
-	 * @param safe true if there is no way the value can be modified by the user
 	 */
-	function addArgPath($name, $safe=false) {
+	function addArgPath($name) {
 		$this->_addArgument($name);
 	}
 
 	/**
 	 * @param url complete url
-	 * @param safe true if there is no way the value can be modified by the user
 	 */	
-	function addArgUrl($url, $safe=false) {
-		// urlEncodeNames does not work
+	function addArgUrl($url) {
+		// urlEncodeNames does not work for write operation because there might be UTF-8 characters like umlauts
 		$this->_addArgument($url);
 	}
 	
 	/**
 	 * @param option command line switch
-	 * @param safe true if there is no way the value can be modified by the user
 	 */	
 	function addArgOption($option, $safe=false) {
 		$this->_addArgument($option);

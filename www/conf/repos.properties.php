@@ -194,7 +194,9 @@ function removeTempDir($directory) {
 
 $hasencoded = false; // security check, set to true in the encoding functions and checked before 'run'
 
-// Make an url safe as both command argument and URL
+// Make an url safe as both command argument and URL (full url starting with protocol://)
+// This meathod is only suitable for URLs that refer to existing resources.
+// If the URL is used for write operations, international characters such as umlauts will not be correct in the repository
 function urlEncodeNames($url) {
 	global $hasencoded; $hasencoded = true; // security check, set to true in the encoding functions and checked before 'run'
 	$parts = explode('/', $url);

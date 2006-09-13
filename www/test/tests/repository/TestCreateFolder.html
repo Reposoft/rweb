@@ -9,13 +9,18 @@
 <tr><td rowspan="1" colspan="3">TestCreateFolder</td></tr>
 </thead><tbody>
 <tr>
-	<td>open</td>
-	<td>../../../testrepo/test/trunk/</td>
+	<td>assertEval</td>
+	<td>top.setUp(this)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementNotPresent</td>
+	<td>link=folder1</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=new folder</td>
+	<td>createfolder</td>
 	<td></td>
 </tr>
 <tr>
@@ -30,47 +35,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//input[@id='submit']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Committed revision</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=return to repository</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=folder1</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>folder1/</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=new folder</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>name</td>
-	<td>new folder</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>message</td>
-	<td>folder with space in the name</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>//input[@id='submit']</td>
+	<td>submit</td>
 	<td></td>
 </tr>
 <tr>
@@ -85,7 +50,57 @@
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>link=new folder</td>
+	<td>link=folder1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>f:folder1_</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=folder1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>folder1/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>createfolder</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>subfolder1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>message</td>
+	<td>test step 2</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Committed revision</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=return to repository</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>link=subfolder1</td>
 	<td></td>
 </tr>
 <tr>
@@ -101,16 +116,21 @@
 <tr>
 	<td>type</td>
 	<td>message</td>
-	<td>was test</td>
+	<td>removed folders created in step 1 and 2</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//input[@id='submit']</td>
+	<td>submit</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>parent</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementNotPresent</td>
+	<td>link=folder1</td>
 	<td></td>
 </tr>
 </tbody></table>
