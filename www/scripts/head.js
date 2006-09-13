@@ -163,21 +163,21 @@ var Repos = {
 	
 	/**
 	 * Modify a css link so it uses the current theme.
-	 * If the href contains /style/ it will be updated with the theme name
+	 * If the href contains /repos/style/ it will be updated with the theme name
 	 * @param linkTag the element, child of <head>, with an href attribute
 	 * @param theme the current user's theme selection, for example 'themes/simple/'
 	 */
 	_handleExistingCss: function(linkTag, theme) {
+		var themePath = new RegExp('/repos/style/'); // default theme
+		if (!themePath.test(linkTag.href)) return;
 		var newpath;
 		if (theme===false) {
 			// cookies don't work in firefox 1.5 in XML pages, so we use theme redirector
-			newpath = '/themes/any/?u=';
+			newpath = '/repos/themes/any/?u=';
 		} else {
 			// on the other hand relative urls in CSS after redirect don't work in other browsers
-			newpath = '/' + theme + 'style/';
+			newpath = '/repos/' + theme + 'style/';
 		}
-		var themePath = new RegExp('/style/'); // default theme
-		if (!themePath.test(linkTag.href)) return;
 		var n = linkTag.cloneNode(true);
 		var href = linkTag.href.replace(themePath, newpath);
 		n.href = href;

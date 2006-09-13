@@ -53,7 +53,7 @@ code {
 }
 hr {
 	border: none 0;
-	border-top: 1px solid #D89210;
+	border-top: 1px solid #FEDEA5;
 	height: 1px;
 }
 /* layout of version control concepts, these are usually span tags */
@@ -88,7 +88,7 @@ hr {
 .commandbar {
 	background-color: #eeeeee;
 	border-top: 5px solid #FDBC4B;
-	border-bottom: 1px solid #FDBC4B;
+	border-bottom: 1px solid #dddddd;
 	height: 26px;
 }
 .contents {
