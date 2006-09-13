@@ -133,16 +133,16 @@
 		<xsl:param name="id">
 			<xsl:call-template name="getFileID"/>
 		</xsl:param>
-		<div class="row">
+		<div id="row:{$id}" class="row">
 			<div class="actions">
-				<a class="action" href="{@href}">open</a>
+				<a id="open:{$id}" class="action" href="{@href}">open</a>
 				<xsl:if test="$editUrl">
-					<a class="action" href="{$editUrl}/rename/?path={../@path}/{@href}">rename</a>
+					<a id="rename:{$id}" class="action" href="{$editUrl}/rename/?path={../@path}/{@href}">rename</a>
 					<span class="action">copy</span>
-					<a class="action" href="{$editUrl}/delete/?path={../@path}/{@href}">delete</a>
+					<a id="delete:{$id}" class="action" href="{$editUrl}/delete/?path={../@path}/{@href}">delete</a>
 				</xsl:if>
 			</div>
-			<a id="{$id}" class="folder" href="{@href}">
+			<a id="f:{$id}" class="folder" href="{@href}">
 				<xsl:value-of select="@name"/>
 			</a>
 		</div>
@@ -155,18 +155,18 @@
 		<xsl:param name="id">
 			<xsl:call-template name="getFileID"/>
 		</xsl:param>
-		<div class="row">
+		<div id="row:{$id}" class="row">
 			<div class="actions">
-				<a class="action" title="this file can be opened in Repos" href="{$web}/open/?path={../@path}&amp;file={@href}">open</a>
+				<a id="open:{$id}" class="action" title="this file can be opened in Repos" href="{$web}/open/?path={../@path}&amp;file={@href}">open</a>
 				<xsl:if test="$editUrl">
-					<a class="action" href="{$editUrl}/rename/?target={../@path}/{@href}">rename</a>
+					<a id="rename:{$id}" class="action" href="{$editUrl}/rename/?target={../@path}/{@href}">rename</a>
 					<span class="action">copy</span>
-					<a class="action" href="{$editUrl}/delete/?target={../@path}/{@href}">delete</a>
+					<a id="delete:{$id}" class="action" href="{$editUrl}/delete/?target={../@path}/{@href}">delete</a>
 					<span class="action">lock</span>
-					<a class="action" href="{$web}/upload/?target={../@path}/{@href}">upload changes</a>
+					<a id="upload:{$id}" class="action" href="{$web}/upload/?target={../@path}/{@href}">upload changes</a>
 				</xsl:if>
 			</div>
-			<a id="{$id}" class="file-{$filetype} file" href="{@href}">
+			<a id="f:{$id}" class="file-{$filetype} file" href="{@href}">
 				<xsl:value-of select="@name"/>
 			</a>
 		</div>
@@ -286,11 +286,11 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- make a valid HTML id (starting with character, then characters, digits or -_:. -->
+	<!-- make valid HTML id for file or folder, containing [A-Za-z0-9] and [-_.]  -->
+	<!-- ids should always start with letters, so a prefix like 'f:' is needed -->
 	<xsl:template name="getFileID">
 		<xsl:param name="filename" select="@href"/>
-		<xsl:value-of select="'f:'"/>
-		<xsl:value-of select="translate($filename,'%','_')"/>
+		<xsl:value-of select="translate($filename,'%/','__')"/>
 	</xsl:template>
 	<!-- *** replace newline with <br> *** -->
 	<xsl:template name="linebreak">
