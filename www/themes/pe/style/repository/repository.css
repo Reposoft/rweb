@@ -1,0 +1,65 @@
+@charset "utf-8";
+/* Layout for the file browser */
+.actions {
+	vertical-align: inherit;
+	display: inline;
+}
+.contents {
+	padding-bottom: 20px;
+}
+.footer {
+	border-top: 1px solid #CCCC99;
+	color: #999999;
+	font-size: smaller;
+}
+.footer .path {
+	position: absolute;
+	left: 12px;
+}
+.footer .legal {
+	position: absolute;
+	right: 10px;
+}
+/* commands */
+.commandbar #showlog {
+	background-image: url('../commands/16x16/showlog.png');
+}
+.commandbar #upload {
+	background-image: url('../commands/16x16/attach.png');
+}
+.commandbar #createfolder {
+	background-image: url('../commands/16x16/createfolder.png');
+}
+/* directory listing */
+.contents .row {
+	width: 100%;
+	padding: 1px;
+	border-top: 1px solid #FFFFFF;
+	border-bottom: 1px solid #FFFFFF;
+}
+.contents .row:hover {
+	border-top: 1px dashed #CCCC99;
+	border-bottom: 1px dashed #CCCC99;
+}
+.contents .row div.actions {
+	display: inline;
+	position: absolute;
+	left: 70%;
+}
+.file {
+	background-image: url('16x16/file.png');
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 30px;
+	margin-left: 10px;
+}
+.folder {
+	background-image: url('16x16/folder.png');
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 30px;
+	margin-left: 10px;
+}
+/* filetype icons */
+.file-ai { background-image: url('filetypes/16x16/ai.png');}
+.file-bmp { background-image: url('filetypes/16x16/bmp.png');}
