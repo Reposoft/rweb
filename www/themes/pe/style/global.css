@@ -109,6 +109,11 @@ hr {
 	border-top: 1px solid #FDBC4B;
 	bottom: 10px;
 	height: 20px;
+	font-size: smaller;
+}
+.footer .legal {
+	position: absolute;
+	right: 10px;
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 .command {
