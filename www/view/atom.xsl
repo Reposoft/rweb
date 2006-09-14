@@ -32,7 +32,7 @@
 	</xsl:template>
 	<!-- renders the HTML body contents, all with one common root div -->
 	<xsl:template match="/atom:feed">
-		<div class="info"><!-- sould be class: frame -->
+		<div class="contents">
 			<div>
 				<h1>
 					<xsl:value-of select="atom:author/atom:name"/>

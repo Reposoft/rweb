@@ -5,24 +5,65 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>repos.se development</title>
 <link rel="shortcut icon" href="/favicon.ico">
-<script type="text/javascript" src="scripts/head.js"></script>
 <script type="text/javascript">
-Repos.requirePlugin('transform');
 
 function getWindowWidth() {
 	return Math.max(document.documentElement.clientWidth, document.body ? document.body.clientWidth : 0);
 }
 
+function getWindowHeight() {
+	return Math.max(document.documentElement.clientHeight, document.body ? document.body.clientHeight : 0);
+}
+
+var winw;
+var winh;
+
 function showNews() {
-	var newsurl = "http://alto.optime.se/repos/view/external/?url=https://www.repos.se/sweden/staffan/messages.xml";
-	var w = getWindowWidth();
-	if (w >= 1000) {	
-		div = document.getElementById('news');
-		var t = new Transform("view/atom.xsl");
-		t.urlToElement(newsurl, div);
-		div.style.width = '' + (w - 790) + 'px';
-		div.style.display = 'inline';
+	winw = getWindowWidth();
+	winh = getWindowHeight();
+	if (winw >= 1000) {	
+		frame = document.getElementById('feed');
+		unhideNews();
 	}
+}
+
+function unhideNews() {
+	var w = winw - 780;
+	var h = winh - 30;
+	frame = document.getElementById('feed');
+	frame.width = w;
+	frame.height = h;
+	if (setNewsStyles()) {
+		frame.style.display = '';
+	}
+	frame.style.display = '';
+}
+
+function setNewsStyles() {
+	var doc = window.frames['feed'].document
+	if (doc.getElementsByTagName('div').length < 1) {
+		console.info ('cant find a document');
+		return false; // probably the browser does not like xml+xslt
+	}
+	// copy this docment's styles to the feed iframe
+	var style = document.getElementsByTagName('style')[0];
+	var head = doc.getElementsByTagName('head')[0];
+	if (typeof(doc.importNode) != 'undefined') {
+		var s2 = doc.importNode(style, true);
+		head.appendChild(s2);
+	} else {
+		var styletext = style.innerHTML;
+		var s2 = doc.createElement('style');
+		s2.setAttribute('type', 'text/css');
+		if (s2.styleSheet) {
+			s2.styleSheet.cssText = styletext;
+		} else {
+			text = doc.createTextNode(styletext);
+			s2.appendChild(text);
+		}
+		head.appendChild(s2);
+	}
+	return true;
 }
 
 // currenlty disabled //Repos.observePluginLoad('transform', showNews);
@@ -39,11 +80,54 @@ function showNews() {
 	background-position:right;
 	background-repeat:no-repeat;
 }
+/* news */
+#workspace {
+	display: table-row;
+}
+#contents {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 760px;
+	display: table-cell;
+	float: left;
+}
+#news {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	display: table-cell;
+	float: right;
+}
+#feed {
+	border: none;
+}
+/* new contents */
+.messages h1 {
+	font-size: 18px;
+}
+.messages #headlines {
+	display:none;
+}
+.messages h2 {
+	font-size: 14px;
+}
+.messages h3 {
+	font-size: 11px;
+}
+.messages p {
+	font-size: 0.8em;
+}
+.messages .username {
+	display:none;
+}
+.messages .url {
+	display:none;
+}
 </style>
 </head>
-<body>
-<div id="page">
-<div id="intro">
+<body onLoad="showNews()">
+<div id="contents">
 <table width="760" align="center" class="columns" border="0" cellspacing="0">
   <tr>
   	<th id="banner" align="left" valign="middle" colspan="4">
@@ -77,8 +161,8 @@ function showNews() {
 </table>
 </div>
 <div id="news">
+<iframe src="/repos/view/external/?url=https://www.repos.se/sweden/staffan/messages.xml" id="feed" name="feed" style="display:none" frameborder="0"></iframe>
 </div>
-</div>
-<div id="releaseversion" class="showversion" style="">repos.se version $Id$</div>
+<div id="releaseversion" class="showversion" style="">repos.se version $URL$ $Rev$</div>
 </body>
 </html>

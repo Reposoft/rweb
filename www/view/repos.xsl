@@ -176,7 +176,7 @@
 	<!-- extra info and logos -->
 	<xsl:template name="footer">
 		<div class="footer">
-		<span id="resourceversion" class="showversion">repos.se stylesheet version $Id$</span>
+		<span id="resourceversion" class="showversion">repos.se stylesheet version $Id: repos.xsl 1601 2006-09-14 09:09:50Z solsson $</span>
 		<span id="badges">
 		</span>
 		<span class="legal">

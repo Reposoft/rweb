@@ -714,3 +714,6 @@ var Repos = {
 
 // call constructor for the static class
 Repos.initialize();
+
+ReposResourceId
+'repos.se version $Id$'

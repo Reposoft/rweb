@@ -234,6 +234,11 @@ new Test.Unit.Runner({
 		v = Repos.getCookie('testcookie');
 		assertNull(v, "should be able to clear cookie");
 	}},
+	
+	testResourceId: function() { with(this) {
+		var testid = 'version $Id: index.html 1601 2006-09-14 09:09:50Z solsson $';
+		var rid = new ResourceId(testid);
+	}}, 
 
 	// for copy-paste
 	testTemplate: function() { with(this) {
