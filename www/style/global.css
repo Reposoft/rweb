@@ -26,6 +26,10 @@ a {
 p > a {
 	border-bottom: 1px dotted #000066;
 }
+table p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
 a[target="_blank"] {
 	padding-right: 16px;
 	background: url(newwindow.png) right center no-repeat;
@@ -46,10 +50,6 @@ h3 {
 	font-weight: normal;
 	margin-bottom: 3px;
 	font-size: 1.1em;
-}
-table p {
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
 }
 pre {
 	font-size: 1.2em;
@@ -198,4 +198,14 @@ label {
 	padding-top:0.2em;
 	text-align:right;
 	font-weight:normal;
+}
+/* visible version numbers */
+.showversion {
+	font-size:9px;
+	color:#cccccc;
+}
+div.showversion {
+	position:absolute;
+	bottom:1px;
+	right:1px;
 }

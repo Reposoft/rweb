@@ -5,15 +5,21 @@ table {
 }
 table th {
 	color: #666633;
-	text-align: center;
+	margin: 0px;
+	padding: 8px;
+	padding-right: 16px;
 }
 table td {
 	margin: 0px;
-	padding: 5px;
+	padding: 8px;
 }
 table.columns td {
 	border-left: 1px solid #CCCC99;
 	border-right: 1px solid #CCCC99;
+	font-size: 82.5%;
+}
+table.columns td > p {
+	font-size: inherit;
 }
 table.rows td {
 	border-top: 1px solid #CCCC99;	
