@@ -724,13 +724,18 @@ var Repos = {
 	},
 	
 	showVersion: function() {
-		var release = $('releaseversion');
-		if (release) {
-			release.innerHTML = Repos._getReleaseVersion(release.innerHTML);
-		}
-		var revision = $('resourceversion');
-		if (revision) {
-			revision.innerHTML = Repos._getResourceVersion(revision.innerHTML);
+		try {
+			var release = $('releaseversion');
+			if (release) {
+				release.innerHTML = Repos._getReleaseVersion(release.innerHTML);
+			}
+			var revision = $('resourceversion');
+			if (revision) {
+				revision.innerHTML = Repos._getResourceVersion(revision.innerHTML);
+			}
+		} catch (err) {
+			//Repos.reportError(err);
+			throw err;
 		}
 	},
 	
@@ -744,10 +749,10 @@ Repos.initialize();
 function ReposResourceId(text) {
 	this.text = text;
 	this.getRelease = function() {
-		if (/\/trunk\//.test(text)) return 'dev';
-		var b = /\/branches\/[^\/\d]+(\d[^\/]+)/(text);
+		if (/\/trunk\//.test(this.text)) return 'dev';
+		var b = /\/branches\/[^\/\d]+(\d[^\/]+)/.exec(this.text);
 		if (b) return b[1] + ' dev';
-		var t = /\/tags\/[^\/\d]+(\d[\d\.]+)/(text);
+		var t = /\/tags\/[^\/\d]+(\d[\d\.]+)/.exec(this.text);
 		if (t) {
 			this.isTag = true;
 			return t[1];
@@ -755,16 +760,16 @@ function ReposResourceId(text) {
 		return '';
 	}
 	this.getRevision = function() {
-		var rev = /Rev:\s(\d+)/(text);
+		var rev = /Rev:\s(\d+)/.exec(this.text);
 		if (rev) return rev[1];
-		rev = /Id:\s\S+\s(\d+)/(text);
+		rev = /Id:\s\S+\s(\d+)/.exec(this.text);
 		if (rev) return rev[1];
 		return '';
 	}
 	this.getTextBefore = function() {
-		return /(^[^\$]*)/(text)[1];
+		return /(^[^\$]*)/.exec(this.text)[1];
 	}
 	this.getTextAfter = function() {
-		return /([^\$]*$)/(text)[1];
+		return /([^\$]*$)/.exec(this.text)[1];
 	}
 }
