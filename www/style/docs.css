@@ -1,0 +1,21 @@
+@charset "utf-8";
+/* CSS Document */
+table {
+	border-collapse: collapse;
+}
+table th {
+	color: #666633;
+	text-align: center;
+}
+table td {
+	margin: 0px;
+	padding: 5px;
+}
+table.columns td {
+	border-left: 1px solid #CCCC99;
+	border-right: 1px solid #CCCC99;
+}
+table.rows td {
+	border-top: 1px solid #CCCC99;	
+	border-bottom: 1px solid #CCCC99;	
+}
