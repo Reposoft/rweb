@@ -114,11 +114,11 @@
 			<xsl:value-of select="$spacer"/>
 			<xsl:call-template name="getFolderPath"/>
 			<xsl:value-of select="$spacer"/>
-			<xsl:if test="@rev">
+			<!-- not asked for by users <xsl:if test="@rev">
 				<span class="revision">
 					<xsl:value-of select="@rev"/>
 				</span>
-			</xsl:if>
+			</xsl:if> -->
 		</h2>
 		<xsl:apply-templates select="dir">
 			<xsl:sort select="@name"/>

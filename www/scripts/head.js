@@ -105,7 +105,7 @@ var Repos = {
 		} catch (err) {
 			Repos.handleException(err + " Can not add custom window onload handling.");	
 		}
-		Repos.showVersion();
+		//does not work so well//Repos.showVersion();
 		Repos._setUpXhtmlXmlCompatibility();
 		Repos._loadThemeSettings();
 		// check for flow errors
