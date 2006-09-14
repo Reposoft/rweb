@@ -105,6 +105,7 @@ var Repos = {
 		} catch (err) {
 			Repos.handleException(err + " Can not add custom window onload handling.");	
 		}
+		Repos.showVersion();
 		Repos._setUpXhtmlXmlCompatibility();
 		Repos._loadThemeSettings();
 		// check for flow errors
@@ -702,10 +703,35 @@ var Repos = {
 	 * @param id element ID
 	 * @param options, as in http://prototype-window.xilinus.com/ but without className
 	 * @returns window object with the API from http://prototype-window.xilinus.com/ (but not nessecarily the same class)
+	 * @deprecated use separate plugins, like jQuery textbox plugi
 	 */
 	createWindow: function(optionsHash) {
 		var o = $H({ }).merge(optionsHash);
 		return new Dialog(null, o);
+	},
+	
+	// ----- marking screens -----
+	_getReleaseVersion: function(versionText) {
+		var rid = new ReposResourceId(versionText);
+		return rid.getTextBefore() + rid.getRelease() + rid.getTextAfter();
+	},
+	
+	_getResourceVersion: function(versionText) {
+		var rid = new ReposResourceId(versionText);
+		var release = rid.getRelease();
+		if (rid.isTag) return rid.getTextBefore() + release + rid.getTextAfter();
+		return rid.getTextBefore() + release + ' ' + rid.getRevision() + rid.getTextAfter();
+	},
+	
+	showVersion: function() {
+		var release = $('releaseversion');
+		if (release) {
+			release.innerHTML = Repos._getReleaseVersion(release.innerHTML);
+		}
+		var revision = $('resourceversion');
+		if (revision) {
+			revision.innerHTML = Repos._getResourceVersion(revision.innerHTML);
+		}
 	},
 	
 	// ----- last line of the class -----
@@ -715,5 +741,30 @@ var Repos = {
 // call constructor for the static class
 Repos.initialize();
 
-ReposResourceId
-'repos.se version $Id$'
+function ReposResourceId(text) {
+	this.text = text;
+	this.getRelease = function() {
+		if (/\/trunk\//.test(text)) return 'dev';
+		var b = /\/branches\/[^\/\d]+(\d[^\/]+)/(text);
+		if (b) return b[1] + ' dev';
+		var t = /\/tags\/[^\/\d]+(\d[\d\.]+)/(text);
+		if (t) {
+			this.isTag = true;
+			return t[1];
+		}
+		return '';
+	}
+	this.getRevision = function() {
+		var rev = /Rev:\s(\d+)/(text);
+		if (rev) return rev[1];
+		rev = /Id:\s\S+\s(\d+)/(text);
+		if (rev) return rev[1];
+		return '';
+	}
+	this.getTextBefore = function() {
+		return /(^[^\$]*)/(text)[1];
+	}
+	this.getTextAfter = function() {
+		return /([^\$]*$)/(text)[1];
+	}
+}

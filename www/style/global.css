@@ -199,7 +199,7 @@ label {
 	text-align:right;
 	font-weight:normal;
 }
-/* visible version numbers */
+/* visible version numbers, #releaseversion or #resourceversion */
 .showversion {
 	font-size:9px;
 	color:#cccccc;

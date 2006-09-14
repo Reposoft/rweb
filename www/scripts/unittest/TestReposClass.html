@@ -236,10 +236,64 @@ new Test.Unit.Runner({
 	}},
 	
 	testResourceId: function() { with(this) {
-		var testid = 'version $Id: index.html 1601 2006-09-14 09:09:50Z solsson $';
-		var rid = new ResourceId(testid);
+		var testid = 'version $URL: https://svn.optime.se/optime/repos/trunk/www/index.html $ $Rev: 1602 $';
+		var rid = new ReposResourceId(testid);
+		assertEqual('dev', rid.getRelease(), "It is trunk so release should be 'dev'");
+		assertEqual('1602', rid.getRevision(), "Should return the revision from Rev");
 	}}, 
-
+	
+	testResourceIdBranch: function() { with(this) {
+		var testid = 'version $URL: https://svn.optime.se/optime/repos/branches/www-1.2/index.html $ $Rev: 100 $';
+		var rid = new ReposResourceId(testid);
+		assertEqual('1.2 dev', rid.getRelease(), "Should find the release version in the URL");
+		assertEqual('100', rid.getRevision(), "Should return the revision from Rev");
+	}}, 
+	
+	testResourceIdTag: function() { with(this) {
+		var testid = 'version $URL: https://svn.optime.se/optime/repos/tags/www-1.2.1/index.html $ $Rev: 1602 $';
+		var rid = new ReposResourceId(testid);
+		assertEqual('1.2.1', rid.getRelease(), "URL is a tag so version number should be final");
+	}},
+	
+	testResourceIdOnlyURL: function() { with(this) {
+		var testid = '$URL: https://svn.optime.se/optime/repos/branches/www-1.2/index.html $';
+		var rid = new ReposResourceId(testid);
+		assertEqual('1.2 dev', rid.getRelease(), "URL is a branch so should be version + dev");
+		assertEqual('', rid.getRevision(), "There is no Rev");
+	}},
+	
+	testResourceIdOnlyRev: function() { with(this) {
+		var testid = '$Rev: 1602 $ only';
+		var rid = new ReposResourceId(testid);
+		assertEqual('', rid.getRelease(), "No URL so release should be empty");
+		assertEqual('1602', rid.getRevision(), "Should return the revision from Rev");
+	}},
+	
+	testResouceIdId: function() { with(this) {
+		var testid = 'repos.se stylesheet version $Id: repos.xsl 1601 2006-09-14 09:09:50Z solsson $';
+		var rid = new ReposResourceId(testid);
+		assertEqual('1601', rid.getRevision(),'"Should be able to get revision number from $Id$ keyword too');
+		assertEqual('', rid.getRelease(), 'There is no branch info in $Id$');
+	}},
+	
+	testGetResourceversion: function() { with(this) {
+		var testid = 'version $URL: https://svn.optime.se/optime/repos/tags/www-1.2.1/index.html $ $Rev: 1602 $';
+		var v = Repos._getResourceVersion(testid);
+		assertEqual('1.2.1', v, "Should not give revision number because this is a tag");
+	}},
+	
+	testGetReleaseversion: function() { with(this) {
+		var testid = 'version $URL: https://svn.optime.se/optime/repos/branches/trunk/index.html $ $Rev: 1602 $';
+		var v = Repos._getReleaseVersion(testid);
+		assertEqual('version dev', v, "Should not show revision in 'releaseversion'");
+	}},
+	
+	testGetResourceversion: function() { with(this) {
+		var testid = '$URL: https://svn.optime.se/optime/repos/branches/www-1.2/index.html $ $Rev: 1602 $ now'
+		var v = Repos._getResourceVersion(testid);
+		assertEqual('1.2 dev 1602 now', v, "Should return both release and revision for branch");
+	}},
+	
 	// for copy-paste
 	testTemplate: function() { with(this) {
 	}},

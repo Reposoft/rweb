@@ -17,6 +17,7 @@ function getWindowHeight() {
 
 var winw;
 var winh;
+var maxw = 1200; // maximal widht of the page after addition of dynamic content
 
 function showNews() {
 	winw = getWindowWidth();
@@ -28,7 +29,7 @@ function showNews() {
 }
 
 function unhideNews() {
-	var w = winw - 780;
+	var w = Math.min(winw, maxw) - 780;
 	var h = winh - 30;
 	frame = document.getElementById('feed');
 	frame.width = w;
