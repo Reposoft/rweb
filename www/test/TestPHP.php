@@ -3,10 +3,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>repos.se php unittests</title>
+<link href="../style/global.css" rel="stylesheet" type="text/css" />
+<link href="../style/docs.css" rel="stylesheet" type="text/css" />
+<style>
+#suiteTable td {
+	margin: 0px;
+	padding: 0px;
+}
+</style>
 </head>
 
 <body>
-<table id="suiteTable" class="rows" width="100%" border="1">
+<table id="suiteTable" class="rows" width="100%" border="0">
 	<tbody>
 <?
 $testfiles = array(
@@ -47,5 +55,10 @@ foreach ($testfiles as $file) {
 ?>
 	</tbody>
 </table>
+<?php
+if (!isset($_GET['file'])) {
+echo('<p><a class="action" id="back" href="./" target="_top">&lt back</a></p>');
+}
+?>
 </body>
 </html>

@@ -81,7 +81,7 @@ div.check_failed {
 </head>
 <body onload="checkJavascript()">
 <h1>repos.se browser check</h1>
-<p><a class="action" href="../../">return to startpage</a></p> 
+<p><a id="startpage" class="action" href="../../">return to startpage</a></p> 
 <hr />
 <div id="xslt" class="check_ok">Your browser supports XSLT transforms</div>
 <div id="script" class="check_failed">Your browser does not support javascript</div>
