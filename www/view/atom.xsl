@@ -86,7 +86,7 @@
 				</span>
 				</p>
 			</div>
-			<a name="{atom:updated}"/>
+			<a name="{atom:updated}"><!-- --></a>
 		</div>
 	</xsl:template>
 

@@ -107,7 +107,11 @@ hr {
 	border-top: 1px solid #FDBC4B;
 	bottom: 10px;
 	height: 20px;
+	color: #cccccc;
 	font-size: smaller;
+}
+.footer a {
+	color: #cccccc;
 }
 .footer .legal {
 	position: absolute;
@@ -203,4 +207,14 @@ label {
 	padding-top:0.2em;
 	text-align:right;
 	font-weight:normal;
+}
+/* visible version numbers, #releaseversion or #resourceversion */
+.versiondisplay {
+	font-size:9px;
+	color:#cccccc;
+}
+div.versiondisplay {
+	position:absolute;
+	bottom:1px;
+	right:1px;
 }
