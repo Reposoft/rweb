@@ -1,24 +1,19 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>TestCreateFolder</title>
+<title>repos.se automated test</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
   <thead>
     <tr>
-      <td rowspan="1" colspan="3">Test åäöü in folder names</td>
+      <td rowspan="1" colspan="3">Test % § ½ in folder names</td>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>assertEval</td>
       <td>top.setUp(this)</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>verifyElementNotPresent</td>
-      <td>link=Ånüdå </td>
       <td></td>
     </tr>
     <tr>
@@ -29,62 +24,7 @@
     <tr>
       <td>type</td>
       <td>name</td>
-      <td>Ånüdå</td>
-    </tr>
-    <tr>
-      <td>type</td>
-      <td>message</td>
-      <td>name with umlauts </td>
-    </tr>
-    <tr>
-      <td>clickAndWait</td>
-      <td>submit</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>verifyTextPresent</td>
-      <td>Committed revision</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>clickAndWait</td>
-      <td>link=return to repository</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>assertElementPresent</td>
-      <td>link=Ånüdå</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>assertElementPresent</td>
-      <td>f:_c3_85n_c3_bcd_c3_a5_</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>clickAndWait</td>
-      <td>link=Ånüdå</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>verifyTextPresent</td>
-      <td>Ånüdå/</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>clickAndWait</td>
-      <td>parent</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>clickAndWait</td>
-      <td>delete:_c3_85n_c3_bcd_c3_a5_</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>type</td>
-      <td>message</td>
-      <td>remove folder with umlauts </td>
+      <td>a§</td>
     </tr>
     <tr>
       <td>clickAndWait</td>
@@ -93,12 +33,87 @@
     </tr>
     <tr>
       <td>clickAndWait</td>
-      <td>parent</td>
+      <td>repository</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>assertElementPresent</td>
+      <td>link=a§</td>
+      <td></td>
+    </tr>
+	<tr>
+      <td>assertElementPresent</td>
+      <td>f:a_c2_a7_</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>clickAndWait</td>
+      <td>createfolder</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>type</td>
+      <td>name</td>
+      <td>a½</td>
+    </tr>
+    <tr>
+      <td>clickAndWait</td>
+      <td>submit</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>clickAndWait</td>
+      <td>repository</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>assertElementPresent</td>
+      <td>link=a½</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>clickAndWait</td>
+      <td>createfolder</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>type</td>
+      <td>name</td>
+      <td>a%</td>
+    </tr>
+    <tr>
+      <td>clickAndWait</td>
+      <td>submit</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>clickAndWait</td>
+      <td>repository</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>assertElementPresent</td>
+      <td>link=a%</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>clickAndWait</td>
+      <td>delete:a_</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>clickAndWait</td>
+      <td>submit</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>clickAndWait</td>
+      <td>repository</td>
       <td></td>
     </tr>
     <tr>
       <td>verifyElementNotPresent</td>
-      <td>link=Ånüdå</td>
+      <td>link=a$</td>
       <td></td>
     </tr>
   </tbody>

@@ -101,6 +101,9 @@ hr {
 }
 .contents .row {
 }
+.n0, .n1, .n2, .n3 {
+	background: url(rowbackground.png) top repeat-x;
+}
 .footer {
 	bottom: 10px;
 	height: 20px;
@@ -153,13 +156,13 @@ span.action {
 .commandbar #parent {
 	background-image: url('commands/16x16/parent.png');
 }
+.commandbar #repository {
+	background-image: url('commands/16x16/repository.png');
+}
 .commandbar #download {
 	background-image: url('commands/16x16/download.png');
 }
 .commandbar #refresh {
-	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=scale src='commands/16x16/refresh.png');
-}
-#refresh[class] {
 	background-image: url('commands/16x16/refresh.png');
 }
 .commandbar #logout {
