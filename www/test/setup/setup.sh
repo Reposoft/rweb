@@ -1,4 +1,5 @@
 #!/bin/bash
+# name the temp dir where the repository will be. This dir will be removed recursively.
 TST="/tmp/test.repos.se"
 HERE=$(pwd)
 
@@ -12,7 +13,16 @@ export LC_ALL="en_US.UTF-8"
 SVN="/usr/bin/svn --config-dir $HERE/test-svn-config-dir"
 
 # create test repository
-rm -Rf "$TST"
+if [ -d "$TST/repo" ]
+then
+	rm -Rf "$TST"
+else
+	if [ -d "$TST" ]
+	then
+		echo "Is $TST really the right test dir? It already exists but does not contain the testrepository"
+		exit 1
+	fi
+fi
 mkdir "$TST"
 mkdir "$TST/repo/"
 mkdir "$TST/admin/"
@@ -71,3 +81,14 @@ $SVN add "$TST/wc/svensson"
 $SVN add "$TST/wc/test"
 $SVN commit -m "Created users svensson and test" "$TST/wc/"
 
+# create a base structure
+FOLDERS="a b c d e f g h i j k l m n o p q r s t u v x y z"
+TESTFOLDER="$TST/wc/test/trunk"
+for dir in $FOLDERS
+do
+	TESTFOLDER="$TESTFOLDER/f$dir"
+	mkdir "$TESTFOLDER"
+	echo "$dir" > "$TESTFOLDER/$dir.txt"
+done
+$SVN add "$TST/wc/test/trunk/fa"
+$SVN commit -m "Created a test folder structure for user test" "$TST/wc/"
