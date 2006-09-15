@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project name="HTAdmin" default="install" basedir=".">
+
+  <description>
+	PHP unit testing framework
+  </description>	
+
+  <property name="repos-package" value="simpletest"/>
+  <property name="home" value="simpletest.sourceforge.net"/>
+	
+  <!-- set global properties for this build -->
+  <property name="version" value="1.0"/>
+  <property name="archive" value="http://heanet.dl.sourceforge.net/sourceforge/simpletest/simpletest_${version}.tar.gz"/>
+  <property name="archive.type" value="tar.gz"/>
+  <property name="extracted.folder" value="${basedir}/simpletest-${version}"/>
+	
+  <!-- derived -->
+  <property name="download.file" value="${basedir}/downloaded-dependency.${archive.type}"/>
+	
+  <!-- Create the time stamp and basic directory structure -->
+  <target name="init">
+    <tstamp/>
+  </target>
+
+  <!-- Download and decompress dependency archive -->
+  <target name="download" depends="init" description="download depedency">
+  	<get src="${archive}" dest="${download.file}"/>
+  	<gunzip src="${download.file}" dest="${download.file}.tar"/>
+  	<untar src="${download.file}.tar" dest="${basedir}"/>
+  	<delete file="${download.file}"/>
+  	<delete file="${download.file}.tar"/>
+  </target>
+	
+  <!-- display license info -->	
+  <target name="license" depends="download">
+  	<property name="license.file" value="${extracted.folder}/COPYING.lib"/>
+  	<property name="License_type" value="LGPL"/>
+	<property name="May_redistribute" value=""/>
+  	<property name="May_alter" value=""/>
+  	<property name="Only_nonprofit" value=""/>
+  	<echo>no license summary entered</echo>
+  </target>
+
+  <!-- Customized installation steps for this dependency -->
+  <target name="install" depends="license" description="install" >
+
+  </target>
+
+  <!-- Remove dependency, leaving only repos sources. -->
+  <target name="clean" description="clean up" >
+  </target>
+</project>
