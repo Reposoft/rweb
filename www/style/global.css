@@ -68,6 +68,8 @@ hr {
 }
 .revision {
 	color: #006600;
+	padding: 1px;
+	border: 1px dotted #cccc99;
 	font-size-adjust: 0.4;
 	font-family: Arial, Helvetica, sans-serif;
 }
@@ -100,6 +102,17 @@ hr {
 	/* overflow: -moz-scrollbars-vertical; */
 }
 .contents .row {
+	width: 100%;
+	padding: 1px;
+	border-bottom: 1px solid #FFFFFF;
+}
+.contents .row:hover {
+	border-bottom: 1px dashed #CCCC99;
+}
+.contents .row div.actions {
+	display: inline;
+	position: absolute;
+	left: 70%;
 }
 .n0, .n1, .n2, .n3 {
 	background: url(rowbackground.png) top repeat-x;
@@ -107,6 +120,13 @@ hr {
 .footer {
 	bottom: 10px;
 	height: 20px;
+	border-top: 1px solid #CCCC99;
+	color: #999999;
+	font-size: smaller;
+}
+.footer .legal {
+	position: absolute;
+	right: 10px;
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 .command {
@@ -157,11 +177,11 @@ span.action {
 .commandbar #back {
 	background-image: url('commands/16x16/back.png');
 }
-.commandbar #parent {
-	background-image: url('commands/16x16/parent.png');
-}
 .commandbar #repository {
 	background-image: url('commands/16x16/repository.png');
+}
+.commandbar #history {
+	background-image: url('commands/16x16/history.png');
 }
 .commandbar #download {
 	background-image: url('commands/16x16/download.png');

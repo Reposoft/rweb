@@ -7,26 +7,20 @@
 }
 .message {
 	background-image: url(16x16/message.png);
-	padding-left: 22px;
+	padding-left: 30px;
+	margin-left: 10px;
 	background-position: left top;
 	background-repeat: no-repeat;
 }
 .contents .row {
-	width: 100%;
-	border-top: 1px solid #FFFFFF;
-	border-bottom: 1px solid #FFFFFF;
-	padding-left: 22px;
+	padding-left: 30px;
+	margin-left: 10px;
 	background-position: left center;
 	background-repeat: no-repeat;
 }
-.contents .row:hover {
-	border-top: 1px dashed #CCCC99;
-	border-bottom: 1px dashed #CCCC99;
-}
-.contents .row div.actions {
-	display: inline;
-	position: absolute;
-	left: 70%;
+.revision {
+	margin-left: 10px;
+	margin-right: 10px;
 }
 .log-A {
 	background-image: url(16x16/a.png);

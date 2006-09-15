@@ -63,5 +63,5 @@ cp "$FROM/actions/2leftarrow.png" "$TO/copiedfrom.png"
 cp "$FROM/actions/button_ok.png" "$TO/m.png"
 cp "$FROM/actions/attach.png" "$TO/a.png"
 cp "$FROM/actions/messagebox_info.png" "$TO/message.png"
-cp "$FROM/apps/bottom.png" "$TO/d.png"
+cp "$FROM/actions/bottom.png" "$TO/d.png"
 

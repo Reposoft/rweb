@@ -90,7 +90,6 @@
 				<span class="revision" title="the changeset number (version number)">
 					<xsl:value-of select="@revision"/>
 				</span>
-				<xsl:value-of select="$spacer"/>
 				<span class="username" title="author">
 					<xsl:value-of select="author"/>
 				</span>
@@ -138,7 +137,7 @@
 				</xsl:if>
 			</xsl:if>
 			<xsl:if test="@action='D'">
-				<span class="path" title="Deleted {.}">
+				<span class="path" title="Deleted {.}, so it only exists in versions prior to {../../@revision}.">
 					<xsl:value-of select="."/>
 				</span>
 			</xsl:if>

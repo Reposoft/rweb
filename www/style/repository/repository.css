@@ -7,22 +7,9 @@
 .contents {
 	padding-bottom: 20px;
 }
-.footer {
-	border-top: 1px solid #CCCC99;
-	color: #999999;
-	font-size: smaller;
-}
-.footer .path {
-	position: absolute;
-	left: 12px;
-}
-.footer .legal {
-	position: absolute;
-	right: 10px;
-}
 /* commands */
-.commandbar #history {
-	background-image: url('../commands/16x16/history.png');
+.commandbar #parent {
+	background-image: url('../commands/16x16/parent.png');
 }
 .commandbar #upload {
 	background-image: url('../commands/16x16/attach.png');
@@ -31,19 +18,6 @@
 	background-image: url('../commands/16x16/createfolder.png');
 }
 /* directory listing */
-.contents .row {
-	width: 100%;
-	padding: 1px;
-	border-bottom: 1px solid #FFFFFF;
-}
-.contents .row:hover {
-	border-bottom: 1px dashed #CCCC99;
-}
-.contents .row div.actions {
-	display: inline;
-	position: absolute;
-	left: 70%;
-}
 .file {
 	background-image: url('16x16/file.png');
 	background-position: left;
