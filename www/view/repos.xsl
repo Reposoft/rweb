@@ -21,6 +21,16 @@
 	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- should the 'up' button be visible when the current folder is 'trunk' -->
 	<xsl:param name="disable-up-at-trunk">yes</xsl:param>
+	<!--  obeyConversions: maintain repository conversions, meaning that 
+	- 'trunk',' branches', 'tags' can not be renamed or removed
+	- actually nothing in the same dir as 'trunk' can be renamed or removed
+	- there is no button to go to parent folder in trunk
+	- the subdirectories of 'branches' and 'tags' are treated as 'trunk' (no remove, no go up)
+	- These rules are void if there is a 'trunk', 'branches' or 'tags' in the parent path of the folder
+	- (meaning that it is legal to make a folder 'tags' inside a project)
+	- Of course these rules only apply to this web client
+	-->
+	<!-- obeyConversions-->
 	<!-- document skeleton -->
 	<xsl:template match="/">
 		<html xmlns="http://www.w3.org/1999/xhtml">
