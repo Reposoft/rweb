@@ -18,7 +18,7 @@
 	<tbody>
 <?
 $testfiles = array(
-'open/tree/RepositoryTree.test.php'
+'open/start/RepositoryTree.test.php'
 );
 
 if (isset($_GET['file'])) {
