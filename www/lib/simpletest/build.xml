@@ -9,7 +9,7 @@
   <property name="home" value="simpletest.sourceforge.net"/>
 	
   <!-- set global properties for this build -->
-  <property name="version" value="1.0"/>
+  <property name="version" value="1.0.1alpha3"/>
   <property name="archive" value="http://heanet.dl.sourceforge.net/sourceforge/simpletest/simpletest_${version}.tar.gz"/>
   <property name="archive.type" value="tar.gz"/>
   <property name="extracted.folder" value="${basedir}/simpletest-${version}"/>

@@ -7,7 +7,7 @@ class TestNisse extends UnitTestCase {
 		$this->UnitTestCase();
 	}
 	function testCreatingNewFile() {
-		$this->assertEquals('bosse', 'bosse');
+		$this->assertEqual('osse', 'bosse');
 	}
 }
     
