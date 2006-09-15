@@ -8,8 +8,8 @@
 	padding-bottom: 20px;
 }
 /* commands */
-.commandbar #showlog {
-	background-image: url('showlog.gif');
+.commandbar #history {
+	background-image: url('history.gif');
 }
 .commandbar #upload {
 	background-image: url('upload.gif');

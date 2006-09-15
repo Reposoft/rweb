@@ -155,6 +155,9 @@ span.action {
 .commandbar #parent {
 	background-image: url('parent.gif');
 }
+.commandbar #repository {
+	background-image: url('repository.gif');
+}
 .commandbar #download {
 	background-image: url('download.gif');
 }

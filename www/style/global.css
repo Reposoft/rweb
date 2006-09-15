@@ -157,6 +157,9 @@ span.action {
 	background-image: url('commands/16x16/download.png');
 }
 .commandbar #refresh {
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=scale src='commands/16x16/refresh.png');
+}
+#refresh[class] {
 	background-image: url('commands/16x16/refresh.png');
 }
 .commandbar #logout {

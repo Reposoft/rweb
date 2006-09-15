@@ -10,7 +10,7 @@ mkdir $TO
 cp "$FROM/actions/up.png" "$TO/parent.png"
 cp "$FROM/actions/attach.png" "$TO/attach.png"
 cp "$FROM/actions/down.png" "$TO/download.png"
-cp "$FROM/actions/messagebox_info.png" "$TO/showlog.png"
+cp "$FROM/actions/messagebox_info.png" "$TO/history.png"
 cp "$FROM/filesystems/folder_whitelinen_open.png" "$TO/createfolder.png"
 cp "$FROM/actions/stop.png" "$TO/logout.png"
 cp "$FROM/actions/back.png" "$TO/back.png"

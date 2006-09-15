@@ -3,6 +3,8 @@
 
 //if (typeof(top.setUp)!='undefined') alert ("Warning: top.setUp() already exists. Overwriting:\n" + top.setUp);
 
+// TODO now if the browser is logged in as someone else, there will be a 403 error
+
 function prepareTests() {
 	top.setUp = function(test) {
 		//test.browserbot.getCurrentWindow().location.href = 'http://test:test@test.repos.se/testrepo/test/trunk/';

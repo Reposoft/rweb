@@ -9,11 +9,11 @@
 <div class="workspace">
 <div class="commandbar">
 <!--{if $logurl}-->
-<a id="back" class="command" href="{=$logurl}">return to log</a>
+<a id="history" class="command" href="{=$logurl}">return to folder history</a>
 <!--{else if $referer}-->
 <a id="back" class="command" href="{=$referer}">back</a>
 <!--{/if}-->
-<a id="parent" class="command" href="{=$target|dirname}">return to repository</a>
+<a id="repository" class="command" href="{=$target|dirname}">return to repository</a>
 </div>
 <div class="contents diff">
 <h1>Compare versions</h1>

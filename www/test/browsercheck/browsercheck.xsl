@@ -12,6 +12,7 @@
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 <title>repos.se browser check</title>
 <link href="../../style/global.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="ie-png-alpha.js"></script>
 <script type="text/javascript">
 
 function checkJavascript() {
@@ -85,7 +86,7 @@ div.check_failed {
 <hr />
 <div id="xslt" class="check_ok">Your browser supports XSLT transforms</div>
 <div id="script" class="check_failed">Your browser does not support javascript</div>
-
+<div id="alpha" style="background-image:url(attach.png)">This image should have transparent background. Internet Exploerer sometimes has troubles with this.</div>
 </body>
 </html>
 

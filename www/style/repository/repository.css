@@ -21,8 +21,8 @@
 	right: 10px;
 }
 /* commands */
-.commandbar #showlog {
-	background-image: url('../commands/16x16/showlog.png');
+.commandbar #history {
+	background-image: url('../commands/16x16/history.png');
 }
 .commandbar #upload {
 	background-image: url('../commands/16x16/attach.png');

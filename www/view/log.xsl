@@ -57,12 +57,12 @@
 		<a id="reposbutton">
 			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		</a>
-		<a id="return" class="command" href="{@repo}{@path}">return to repository</a>
+		<a id="repository" class="command" href="{@repo}{@path}">return to repository</a>
 		</div>
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="contents">
-		<h1>Log for <span class="path"><xsl:value-of select="@path"/></span></h1>
+		<h1>History of <span class="path"><xsl:value-of select="@path"/></span></h1>
 		<div class="contents">
 			<xsl:apply-templates select="error"/>
 			<xsl:apply-templates select="logentry"/>

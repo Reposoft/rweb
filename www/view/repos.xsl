@@ -90,7 +90,7 @@
 				<xsl:with-param name="filetype" select="'_tortoisefolder'"/>
 			</xsl:call-template>check out</a>
 		-->
-		<a id="showlog" class="command translate" href="{$web}/open/log/?path={@path}">show log</a>
+		<a id="history" class="command translate" href="{$web}/open/log/?path={@path}">folder history</a>
 		<a id="refresh" class="command translate" href="#" onclick="history.go()">refresh</a>
 		<a id="logout" class="command translate" href="/?logout">logout</a>
 		<!-- print, possibly plugin -->
