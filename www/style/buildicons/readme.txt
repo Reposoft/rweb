@@ -14,3 +14,4 @@ the webbified icons
 
 Use one parameter string with the parameters to modify the ImageMagick conversion
 ./buildset.sh "-type Palette -colors 32 -background #F0F0EE"
+which never worked, but use: "-background white -flatten +matte"
