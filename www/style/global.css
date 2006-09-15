@@ -123,13 +123,13 @@ hr {
 a.command {
 	color: #333333;
 	text-decoration: none;
-	border-left: 2px solid #f0f0ee;
-	border-right: 2px solid #f0f0ee;
+	border-left: 1px solid #f0f0ee;
+	border-right: 1px solid #f0f0ee;
 }
 a.command:hover {
-	text-decoration: none;
-	border-left: 2px solid #cccc99;
-	border-right: 2px solid #cccc99;
+	text-decoration: underline;
+	border-left: 1px solid #cccc99;
+	border-right: 1px solid #cccc99;
 }
 span.command {
 	color: #BBBBBB;
@@ -210,11 +210,11 @@ label {
 	font-weight:normal;
 }
 /* visible version numbers, #releaseversion or #resourceversion */
-.showversion {
+.versiondisplay {
 	font-size:9px;
 	color:#cccccc;
 }
-div.showversion {
+div.versiondisplay {
 	position:absolute;
 	bottom:1px;
 	right:1px;

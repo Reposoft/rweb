@@ -105,7 +105,7 @@ var Repos = {
 		} catch (err) {
 			Repos.handleException(err + " Can not add custom window onload handling.");	
 		}
-		//does not work so well//Repos.showVersion();
+		Repos.showVersion();
 		Repos._setUpXhtmlXmlCompatibility();
 		Repos._loadThemeSettings();
 		// check for flow errors
@@ -728,14 +728,15 @@ var Repos = {
 			var release = $('releaseversion');
 			if (release) {
 				release.innerHTML = Repos._getReleaseVersion(release.innerHTML);
+				release.style.display = '';
 			}
 			var revision = $('resourceversion');
 			if (revision) {
 				revision.innerHTML = Repos._getResourceVersion(revision.innerHTML);
+				revision.style.display = '';
 			}
 		} catch (err) {
-			//Repos.reportError(err);
-			throw err;
+			Repos.reportError(err);
 		}
 	},
 	

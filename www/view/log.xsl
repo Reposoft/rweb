@@ -71,6 +71,9 @@
 	<!-- extra info and logos -->
 	<xsl:template name="footer">
 		<div class="footer">
+		<span id="resourceversion" class="versiondisplay" style="display:none">repos.se log stylesheet $URL$ $Rev$</span>
+		<span id="badges">
+		</span>
 		</div>
 	</xsl:template>
 	<!--

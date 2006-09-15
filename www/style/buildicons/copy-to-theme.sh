@@ -60,8 +60,8 @@ cp "$FROM/mimetypes/ooo_sxw.png" "$TO/sxw.png"
 TO="../log/$SIZE"
 mkdir $TO
 cp "$FROM/actions/2leftarrow.png" "$TO/copiedfrom.png"
-cp "$FROM/actions/fileopen.png" "$TO/m.png"
+cp "$FROM/actions/button_ok.png" "$TO/m.png"
 cp "$FROM/actions/attach.png" "$TO/a.png"
-cp "$FROM/actions/textblock.png" "$TO/message.png"
-cp "$FROM/apps/db.png" "$TO/d.png"
+cp "$FROM/actions/messagebox_info.png" "$TO/message.png"
+cp "$FROM/apps/bottom.png" "$TO/d.png"
 
