@@ -65,6 +65,7 @@
 	<xsl:template match="atom:entry">
 		<div id="{atom:updated}">
 			<h2>
+				<a name="{atom:updated}"></a>
 				<xsl:value-of select="atom:title"/>
 			</h2>
 			<div>
@@ -86,7 +87,6 @@
 				</span>
 				</p>
 			</div>
-			<a name="{atom:updated}"><!-- --></a>
 		</div>
 	</xsl:template>
 
