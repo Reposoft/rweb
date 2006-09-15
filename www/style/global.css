@@ -122,10 +122,14 @@ hr {
 }
 a.command {
 	color: #333333;
+	text-decoration: none;
+	border-left: 2px solid #f0f0ee;
+	border-right: 2px solid #f0f0ee;
 }
 a.command:hover {
-	background-color: #CCCC99;
 	text-decoration: none;
+	border-left: 2px solid #cccc99;
+	border-right: 2px solid #cccc99;
 }
 span.command {
 	color: #BBBBBB;

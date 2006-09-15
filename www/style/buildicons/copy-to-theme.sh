@@ -11,7 +11,7 @@ cp "$FROM/actions/up.png" "$TO/parent.png"
 cp "$FROM/actions/attach.png" "$TO/attach.png"
 cp "$FROM/actions/down.png" "$TO/download.png"
 cp "$FROM/actions/refresh.png" "$TO/history.png"
-cp "$FROM/filesystems/folder_whitelinen_open.png" "$TO/createfolder.png"
+cp "$FROM/filesystems/folder_banana_open.png" "$TO/createfolder.png"
 cp "$FROM/actions/stop.png" "$TO/logout.png"
 cp "$FROM/actions/back.png" "$TO/back.png"
 cp "$FROM/actions/gohome.png" "$TO/home.png"
@@ -22,6 +22,7 @@ TO="../repository/$SIZE"
 mkdir $TO
 cp "$FROM/filesystems/folder_banana.png" "$TO/folder.png"
 cp "$FROM/mimetypes/mime.png" "$TO/file.png"
+cp "$FROM/mimetypes/binary.png" "$TO/binary.png"
 #  filetypes
 TO="../repository/filetypes/$SIZE"
 mkdir $TO
@@ -54,6 +55,7 @@ cp "$FROM/mimetypes/vcalendar.png" "$TO/ics.png"
 cp "$FROM/mimetypes/vcard.png" "$TO/vcf.png"
 cp "$FROM/mimetypes/video.png" "$TO/mpg.png"
 cp "$FROM/mimetypes/ooo_sxw.png" "$TO/sxw.png"
+
 #    log
 TO="../log/$SIZE"
 mkdir $TO
