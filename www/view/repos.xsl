@@ -17,20 +17,22 @@
 	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/style/</xsl:param>
 	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
 	<xsl:param name="editUrl"><xsl:value-of select="$web"/>/edit</xsl:param>
-	<!-- when spacer space can't be avoided -->
+	<!-- we don't want to force the CSS to set margins everywhere -->
 	<xsl:param name="spacer" select="' &#160; '"/>
-	<!-- should the 'up' button be visible when the current folder is 'trunk' -->
-	<xsl:param name="disable-up-at-trunk">yes</xsl:param>
-	<!--  obeyConversions: maintain repository conversions, meaning that 
+	<!-- starpage to use as parent directory of 'trunk' -->
+	<xsl:param name="startpage"><xsl:value-of select="$web"/>/open/start/</xsl:param>
+	<!-- TODO followConversions: maintain repository conversions, meaning that:
 	- 'trunk',' branches', 'tags' can not be renamed or removed
-	- actually nothing in the same dir as 'trunk' can be renamed or removed
-	- there is no button to go to parent folder in trunk
-	- the subdirectories of 'branches' and 'tags' are treated as 'trunk' (no remove, no go up)
+	-  (actually nothing in the same dir as 'trunk' can be renamed or removed).
+	- There is no button to go to parent folder in trunk.
+	- If there is such a button it leads to a start page where the folders that the user has access to are listed.
+	- The subdirectories of 'branches' and 'tags' are treated as 'trunk' (no remove, no go up).
 	- These rules are void if there is a 'trunk', 'branches' or 'tags' in the parent path of the folder
-	- (meaning that it is legal to make a folder 'tags' inside a project)
-	- Of course these rules only apply to this web client
+	-  (so that it is legal to make a folder named 'tags' inside a project).
+	- Of course these rules only apply to this web client, they are not enforced in the repository.
+	- Implementing this affects the choise of $parentpath and the places where we check for $editUrl.
 	-->
-	<!-- obeyConversions-->
+	<!-- followConversions-->
 	<!-- document skeleton -->
 	<xsl:template match="/">
 		<html xmlns="http://www.w3.org/1999/xhtml">
@@ -67,11 +69,13 @@
 	</xsl:template>
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
-		<xsl:param name="disable-up">
+		<xsl:param name="parentpath">
 			<xsl:choose>
-				<xsl:when test="'set to no to always enable up'='no'">no</xsl:when>
-				<xsl:when test="contains(/svn/index/@path,'/trunk') and substring-after(/svn/index/@path, '/trunk')=''">yes</xsl:when>
-				<xsl:otherwise>no</xsl:otherwise>
+				<xsl:when test="'if parentpath is empty the up button will be disabled'='no'"></xsl:when>
+				<xsl:when test="string-length($startpage)>0 and contains(/svn/index/@path,'/trunk') and substring-after(/svn/index/@path, '/trunk')=''">
+					<xsl:value-of select="$startpage"/>
+				</xsl:when>
+				<xsl:otherwise>../</xsl:otherwise>
 			</xsl:choose>
 		</xsl:param>
 		<div class="commandbar">
@@ -79,10 +83,10 @@
 			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
 		</a>
 		<xsl:if test="/svn/index/updir">
-			<xsl:if test="not($disable-up='yes')">
-				<a id="parent" class="command translate" href="../">up</a>
+			<xsl:if test="string-length($parentpath)>0">
+				<a id="parent" class="command translate" href="{$parentpath}">up</a>
 			</xsl:if>
-			<xsl:if test="$disable-up='yes'">
+			<xsl:if test="string-length($parentpath)=0">
 				<span id="parent" class="command translate">up</span>
 			</xsl:if>
 		</xsl:if>
@@ -111,7 +115,8 @@
 	<xsl:template name="contents">
 		<xsl:param name="home">
 			<xsl:call-template name="getReverseUrl">
-				<xsl:with-param name="url" select="substring(/svn/index/@path, 2)"/>
+				<!-- home should be the 'trunk' folder, above that some kind of startpage is needed -->
+				<xsl:with-param name="url" select="substring-after(substring(/svn/index/@path, 2),'/')"/>
 			</xsl:call-template>
 		</xsl:param>
 		<div class="contents">

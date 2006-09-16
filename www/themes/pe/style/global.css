@@ -89,7 +89,7 @@ hr {
 	background-color: #eeeeee;
 	border-top: 5px solid #FDBC4B;
 	border-bottom: 1px solid #dddddd;
-	height: 26px;
+	height: 25px;
 }
 .contents {
 	/* overflow: -moz-scrollbars-vertical; */
@@ -188,13 +188,12 @@ span.action {
 
 */
 fieldset {
-	border:2px solid #CCCC99;
+	border:2px solid #aaaaaa;
 	border-collapse:collapse;
 	padding:2em;
 }
 legend {
-	background-color:#CCCC99;
-	letter-spacing:0.2em;
+	background-color:#aaaaaa;
 	font-size:0.7em;
 	padding-left: 1em;
 	padding-right: 1em;
@@ -207,6 +206,24 @@ label {
 	padding-top:0.2em;
 	text-align:right;
 	font-weight:normal;
+}
+input
+{
+    color: black;
+	margin: 0px;
+	padding: 0px;
+}
+textarea
+{
+    color: black;
+	margin: 0px;
+	padding: 0px;
+}
+select
+{
+    coloe: black;
+	margin: 0px;
+	padding: 0px;
 }
 /* visible version numbers, #releaseversion or #resourceversion */
 .versiondisplay {
