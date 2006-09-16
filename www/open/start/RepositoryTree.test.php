@@ -69,6 +69,11 @@ class TestRepositoryTree extends UnitTestCase {
 		$this->assertEqual(0, count($t->getEntryPoints()));
 	}
 	
+	function testDisplayname() {
+		$e = $this->tree->getEntryPoints();
+		$this->assertEqual('svensson', $e[0]->getDisplayname());
+	}
+	
 	function test_getEntryPointsForUserOrGroup() {
 		$acl = array();
 		$acl['/'] = array('admin' => 'rw');

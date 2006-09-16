@@ -43,6 +43,7 @@ echo "test:n8F28qRYJJ4Q6" >> $USERS
 ACL="$TST/admin/repos-access";
 touch $ACL
 echo "[groups]" >> $ACL
+echo "demoproject = svensson, test" >> $ACL
 echo "" >> $ACL
 echo "[/]" >> $ACL
 echo "" >> $ACL
@@ -51,6 +52,16 @@ echo "svensson = rw" >> $ACL
 echo "" >> $ACL
 echo "[/test]" >> $ACL
 echo "test = rw" >> $ACL
+echo "" >> $ACL
+echo "[/demoproject]" >> $ACL
+echo "@demoproject = rw" >> $ACL
+echo "" >> $ACL
+echo "[/demoproject/trunk/readonly]" >> $ACL
+echo "@demoproject = r" >> $ACL
+echo "" >> $ACL
+echo "[/demoproject/trunk/noaccess]" >> $ACL
+echo "@demoproject = " >> $ACL
+echo "" >> $ACL
 
 # create apache 2.2 config
 CONF="$TST/admin/testrepo.conf"
@@ -65,7 +76,7 @@ echo "Require valid-user" >> $CONF
 echo "AuthzSVNAccessFile $ACL" >> $CONF
 
 echo "Apache should do \"Include $CONF\" at some <Location >"
-echo "Note that apache must be restarted if there are chances in this file."
+echo "Note that apache must be restarted if there are changes in this file."
 echo ""
 
 # check out working copy and create base structure
@@ -77,9 +88,14 @@ mkdir "$TST/wc/svensson/calendar"
 mkdir "$TST/wc/test"
 mkdir "$TST/wc/test/trunk"
 mkdir "$TST/wc/test/calendar"
+mkdir "$TST/wc/demoproject"
+mkdir "$TST/wc/demoproject/trunk"
+mkdir "$TST/wc/demoproject/trunk/noaccess"
+mkdir "$TST/wc/demoproject/trunk/readonly"
 $SVN add "$TST/wc/svensson"
 $SVN add "$TST/wc/test"
-$SVN commit -m "Created users svensson and test" "$TST/wc/"
+$SVN add "$TST/wc/demoproject"
+$SVN commit -m "Created users svensson and test, and a shared project" "$TST/wc/"
 
 # create a base structure
 FOLDERS="a b c d e f g h i j k l m n o p q r s t u v x y z"
