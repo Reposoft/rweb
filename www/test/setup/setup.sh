@@ -107,4 +107,10 @@ do
 	echo "$dir" > "$TESTFOLDER/$dir.txt"
 done
 $SVN add "$TST/wc/test/trunk/fa"
-$SVN commit -m "Created a test folder structure for user test" "$TST/wc/"
+$SVN commit -m "Created a sample folder structure for user test" "$TST/wc/"
+
+# other repos projects that need to do integration testing have a folder each below
+mkdir "$TST/wc/test/trunk/repos-svn-access"
+echo "0" > "$TST/wc/test/trunk/repos-svn-access/automated-test-increment.txt"
+$SVN add "$TST/wc/test/trunk/repos-svn-access"
+$SVN commit -m "Added integration testing folders for other repos projects" "$TST/wc/"

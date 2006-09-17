@@ -1,0 +1,21 @@
+repos.se 1.0 has no access to the user database.
+It only users the authentication from the repository.
+There is no admin account.
+
+This version of repos is simply installed as an addon to an existing subversion repository running with apache authentication.
+It needs read access to the AuthzSVNAccessFile to produce the start page, where the different paths that the user can access are listed.
+
+If Apache is configured to use a basic password file, and command line administration is not sufficient, we recommend HTAdmin:
+http://www.hido.net/projects/htadmin/HTAdmin-1.2.6.tar.gz
+
+A sample diff for the HTadmin config.inc.php is:
+19c19
+< $cfghtpasswdEXE = 'C:\Program Files\Apache Group\Apache\bin\htpasswd.exe';
+---
+> $cfghtpasswdEXE = '/usr/sbin/htpasswd2';
+21,22c21,22
+< $cfgHTPasswd[0]['N'] = '/your/protected/web/directory/full/path/.htpasswd'; # Full path and filename
+< $cfgHTPasswd[0]['D'] = 'Sample htpasswd file #1'; # Description
+---
+> $cfgHTPasswd[0]['N'] = '/tmp/test.repos.se/admin/repos-users'; # Full path and filename
+> $cfgHTPasswd[0]['D'] = 'test.repos.se user accounts'; # Description
