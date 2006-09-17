@@ -29,7 +29,7 @@ import junit.framework.TestCase;
 
 public class PersonalWorkingCopyIntegrationTest extends TestCase {
 	
-	private static final String TEST_FILE = "repos-svn-access/automated-test-increment.txt";
+	private static final String TEST_FILE = "automated-test-increment.txt";
 	
 	private File tmpFolder = getEmptyTemporaryDirectory();
 	
@@ -38,7 +38,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		// Note that currently the username and password for ProjectEngine
 		//  is hard coded into CheckoutSettingsForProject 
 		CheckoutSettings settings = 
-			new CheckoutSettingsForProject(tmpFolder);
+			new CheckoutSettingsForTest(tmpFolder);
 		ReposWorkingCopy workingCopy = new PersonalWorkingCopy(settings);
 		
 		// this should cause a checkout right here

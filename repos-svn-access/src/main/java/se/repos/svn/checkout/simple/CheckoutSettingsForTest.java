@@ -35,17 +35,22 @@ import se.repos.validation.ValidationRule;
  * @since 2006-apr-15
  * @version $Id$
  */
-public class CheckoutSettingsForProject implements CheckoutSettings {
+public class CheckoutSettingsForTest implements CheckoutSettings {
 
 	/**
 	 * Root url for the test repository, ends with '/'
 	 */
-	public static final String ROOT_URL = "http://alto.optime.se/testrepo/";
+	public static final String ROOT_URL = "http://test.repos.se/testrepo/";
 	
 	/**
 	 * The project, same as the folder name under repository root, no slashes
 	 */
 	public static final String PROJECT_NAME = "test"; 
+	
+	/**
+	 * Use a subfolder of the test account, so that everything is not checked out.
+	 */
+	private static final String TEST_FOLDER = "repos-svn-access/";
 	
 	/**
 	 * Temporary projectengine account.
@@ -71,7 +76,7 @@ public class CheckoutSettingsForProject implements CheckoutSettings {
 	 * @param projectName identifier for project, will be used as folder name
 	 * @param workingCopyDirectory the root for the working copy, corresponding to {@link #getCheckoutUrl()}
 	 */
-	public CheckoutSettingsForProject(File workingCopyDirectory) {
+	public CheckoutSettingsForTest(File workingCopyDirectory) {
 		PROJECT_NAME_RULE.validate(PROJECT_NAME);
 		this.repositoryUrl = new ProjectRepositoryUrl(PROJECT_NAME);
 		this.workingCopyDirectory = workingCopyDirectory;
@@ -123,7 +128,7 @@ public class CheckoutSettingsForProject implements CheckoutSettings {
 		private SVNUrl url;	
 		ProjectRepositoryUrl(String projectName) {
 			try {
-				this.url = new SVNUrl(ROOT_URL + projectName + "/trunk/");
+				this.url = new SVNUrl(ROOT_URL + projectName + "/trunk/" + TEST_FOLDER);
 			} catch (MalformedURLException e) {
 				throw new RuntimeException("MalformedURLException handling missing", e);
 			}
