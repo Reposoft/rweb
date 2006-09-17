@@ -24,11 +24,9 @@
       <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>svnant</groupId>
+      <groupId>org.tigris.subclipse</groupId>
       <artifactId>svnant</artifactId>
-      <version>1</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/svnant.jar</systemPath>
+      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>ant</groupId>
@@ -46,19 +44,15 @@
       <version>1.0.4</version>
     </dependency>
     <dependency>
-      <groupId>svnant</groupId>
-      <artifactId>svnant-svnClientAdapter</artifactId>
-      <version>1</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/svnClientAdapter.jar</systemPath>
+      <groupId>org.tigris.subclipse</groupId>
+      <artifactId>svnant-svnclientadapter</artifactId>
+      <version>1.0</version>
     </dependency>
     <dependency>
-      <groupId>svnant</groupId>
-      <artifactId>svnant-javahl</artifactId>
-      <version>1</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/svnjavahl.jar</systemPath>
-    </dependency>    
+      <groupId>org.tigris.subclipse</groupId>
+      <artifactId>svnant-svnjavahl</artifactId>
+      <version>1.0</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
