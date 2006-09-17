@@ -1,4 +1,18 @@
 <?php
+/**
+ * Represents the generation of a web page.
+ * Extends smarty framework, so use the same syntax as any smarty teplate
+ *
+ * Does the following assigns for every page:
+ * head = all shared head tags, place a <!--{head}--> in the <head> of the template
+ * referer = the HRRP referer url, if there is one
+ * userhome = sa place where the current user always can go
+ *
+ * Allows two different markup delimiters:
+ * <!--{ ... }-->
+ * {= ... }
+ */
+
 require_once(dirname(__FILE__).'/repos.properties.php');
 
 // don't know why the content type is not correct by default
@@ -30,6 +44,7 @@ if ( ! file_exists(CACHE_DIR.'templates/') ) {
 class Presentation extends Smarty {
 
 	var $redirectBeforeDisplay = false;
+	var $extraStylesheets = array();
 
 	// constructor
 	function Presentation() {
@@ -50,12 +65,7 @@ class Presentation extends Smarty {
 		
 		// register the prefilter
 		$this->register_prefilter('Presentation_useCommentedDelimiters');
-		$this->load_filter('pre', 'Presentation_useCommentedDelimiters');	
-		
-		// set common head tags
-		$this->assign('head', $this->getCommonHeadTags());
-		$this->assign('referer', $this->getReferer());
-		$this->assign('userhome', $this->getUserhome());
+		$this->load_filter('pre', 'Presentation_useCommentedDelimiters');
 	}
 	
 	/**
@@ -78,6 +88,11 @@ class Presentation extends Smarty {
 	 * 	default template file name is [script minus .php]_[locale].html
 	 */
 	function display($resource_name = null, $cache_id = null, $compile_id = null) {
+		// set common head tags
+		$this->assign('head', $this->_getThemeHeadTags());
+		$this->assign('referer', $this->getReferer());
+		$this->assign('userhome', $this->getUserhome());
+		// display
 		if (!$resource_name) {
 			$resource_name = $this->getDefaultTemplate();
 		}
@@ -146,7 +161,7 @@ class Presentation extends Smarty {
 	
 	/**
 	 * "$this->display" but resolves template name automatically
-	 * 
+	 * @deprecated display with no parameter works the same way
 	 */
 	function show() {
 		
@@ -154,14 +169,39 @@ class Presentation extends Smarty {
 	}
 	
 	/**
-	 * @return tags to include in <head> at all pages
+	 * @param the stylesheet path, given without starting '/' from the style/ path in any theme
 	 */
-	function getCommonHeadTags() {
+	function addStylesheet($urlRelativeToTheme) {
+		$this->extraStylesheets[] = $urlRelativeToTheme;
+	}
+	
+	function _getThemeHeadTags() {
 		$theme = repos_getUserTheme();
 		$style = getConfig('repos_web').'/'.$theme.'style/';
-		return 
-			'<link href="'.$style.'global.css" rel="stylesheet" type="text/css"></link>' .
+		return $this->_getAllHeadTags($style);
+	}
+	
+	/**
+	 * @param stylePath the path to the current theme's 'style/' directory
+	 */
+	function _getAllHeadTags($stylePath) {
+		$head = $this->_getMandatoryHeadTags($stylePath);
+		foreach ($this->extraStylesheets as $css) {
+			$head = $head . $this->_getLinkCssTag($stylePath.$css);
+		}
+		return $head;
+	}
+	
+	/**
+	 * @return tags to include in <head> at all pages
+	 */
+	function _getMandatoryHeadTags($stylePath) {
+		return $this->_getLinkCssTag($stylePath.'global.css') .
 			'<script type="text/javascript" src="'.getConfig('repos_web').'/scripts/head.js"></script>';
+	}
+	
+	function _getLinkCssTag($href) {
+		return '<link href="'.$href.'" rel="stylesheet" type="text/css"></link>';
 	}
 	
 	/**

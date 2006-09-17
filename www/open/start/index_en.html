@@ -7,18 +7,32 @@
 </head>
 
 <body>
-<h1>{=$userfullname}</h1>
-<div id="contents">
+<div class="workspace">
+<div class="commandbar">
+<a id="reposbutton">
+	<img src="../../style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="repos.se content management"/>
+</a>
+<a class="command" href="/?logout" id="logout">log out</a>
+</div>
+<div class="contents">
+<h1><span class="username">{=$userfullname}</span> start</h1>
 <!--{foreach from=$entrypoints item=entry}-->
-<div class="row">
+<div class="row n{=cycle values=0,1,2,3}">
 <!--{if $entry->isReadOnly()}-->
 <a class="folder readonly" href="{=$repo}{=$entry->getPath()}/trunk">{=$entry->getDisplayname()}</a>
 <!--{else}-->
 <a class="folder" href="{=$repo}{=$entry->getPath()}/trunk">{=$entry->getDisplayname()}</a>
 <!--{/if}-->
 <!-- todo: class groupaccess -->
+<div class="actions">
+<a class="action" href="{=$repo}{=$entry->getPath()}/trunk">open</a>
+</div>
 </div>
 <!--{/foreach}-->
+</div>
+<div class="footer">
+<span id="releaseversion" class="versiondisplay">$URL$ $Rev$</span>
+</div>
 </div>
 </body>
 </html>

@@ -292,7 +292,8 @@ var Repos = {
 		if (typeof(Ajax) != 'undefined') {
 			var report = new Ajax.Request(logurl, {method: 'post', parameters: info});
 		} else {
-			alert(errorMessage); // Find out a way to send an error report anyway	
+			window.status = errorMessage; // Find out a way to send an error report anyway	
+			return;
 		}
 		// show to user
 		var msg = "Repos has run into a script error:\n" + errorMessage + 

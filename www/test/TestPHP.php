@@ -18,6 +18,7 @@
 	<tbody>
 <?
 $testfiles = array(
+'conf/Presentation.test.php',
 'open/start/RepositoryTree.test.php'
 );
 
@@ -39,6 +40,11 @@ if (!in_array($file, $testfiles)) {
 <tr>
 	<td>assertTextPresent</td>
 	<td>0 fails</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>0 exceptions</td>
 	<td></td>
 </tr>
 <?php
