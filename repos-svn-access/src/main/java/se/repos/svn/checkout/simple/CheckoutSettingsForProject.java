@@ -38,29 +38,25 @@ import se.repos.validation.ValidationRule;
 public class CheckoutSettingsForProject implements CheckoutSettings {
 
 	/**
-	 * Root url for the projectengine repository
+	 * Root url for the test repository, ends with '/'
 	 */
-	public static final String ROOT_URL = "https://www.repos.se/sweden/pe/";
+	public static final String ROOT_URL = "http://alto.optime.se/testrepo/";
 	
 	/**
-	 * The repository is assumed to use the standard folders 
-	 * {@link http://svnbook.red-bean.com/nightly/en/svn.intro.quickstart.html}
-	 * so if repository is given as <code>http://server/repository/myproject</code>
-	 * the latest contents will be checked out from <code>http://server/repository/myproject/trunk</code>.
-	 * This is to allow switching between tasks (in a future version).
+	 * The project, same as the folder name under repository root, no slashes
 	 */
-	public static final String FOLDER_NAME = "trunk"; 
+	public static final String PROJECT_NAME = "test"; 
 	
 	/**
 	 * Temporary projectengine account.
 	 * All users need their own account to get a nice history / commit log.
 	 */
-	public static final String USERNAME = "projectengine";
+	public static final String USERNAME = "test";
 	
 	/**
 	 * Temporary password for this account
 	 */
-	public static final String PASSWORD = "FiqwR34F"; 
+	public static final String PASSWORD = "test"; 
 	
 	/**
 	 * Validation rule for project name, so it will work as a directory name
@@ -75,9 +71,9 @@ public class CheckoutSettingsForProject implements CheckoutSettings {
 	 * @param projectName identifier for project, will be used as folder name
 	 * @param workingCopyDirectory the root for the working copy, corresponding to {@link #getCheckoutUrl()}
 	 */
-	public CheckoutSettingsForProject(String projectName, File workingCopyDirectory) {
-		PROJECT_NAME_RULE.validate(projectName);
-		this.repositoryUrl = new ProjectRepositoryUrl(projectName);
+	public CheckoutSettingsForProject(File workingCopyDirectory) {
+		PROJECT_NAME_RULE.validate(PROJECT_NAME);
+		this.repositoryUrl = new ProjectRepositoryUrl(PROJECT_NAME);
 		this.workingCopyDirectory = workingCopyDirectory;
 	}
 	
@@ -93,6 +89,11 @@ public class CheckoutSettingsForProject implements CheckoutSettings {
 		return credentials;
 	}
 	
+	/**
+	 * The most basic user credentials implementation imaginable.
+	 * Immutable, to be passed freely around the application for authenticating the current user.
+	 * @version $Id$
+	 */
 	private class SharedUserCredentials implements UserCredentials {
 		String username;
 		String password;
@@ -112,11 +113,17 @@ public class CheckoutSettingsForProject implements CheckoutSettings {
 		}
 	}
 	
+	/**
+	 * The repository is assumed to use the standard folders 
+	 * {@link http://svnbook.red-bean.com/nightly/en/svn.intro.quickstart.html}
+	 * so if repository is given as <code>http://server/repository/myproject</code>
+	 * the latest contents will be checked out from <code>http://server/repository/myproject/trunk</code>.
+	 */
 	private class ProjectRepositoryUrl implements RepositoryUrl {
 		private SVNUrl url;	
 		ProjectRepositoryUrl(String projectName) {
 			try {
-				this.url = new SVNUrl(ROOT_URL + projectName + '/' + FOLDER_NAME);
+				this.url = new SVNUrl(ROOT_URL + projectName + "/trunk/");
 			} catch (MalformedURLException e) {
 				throw new RuntimeException("MalformedURLException handling missing", e);
 			}
