@@ -33,7 +33,7 @@ public interface MandatoryReposOperations {
 	 * 
 	 * @throws ConflictException Meaning that commit was not performed because there is at least one conflict.
 	 */
-	public void synchronize()
+	public void synchronize(String commitMessage)
 		throws ConflictException;
 	
 	/**

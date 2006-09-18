@@ -36,11 +36,8 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 	private File tmpFolder;
 	
 	public void testWorkflow() throws IOException {
-		// first instantiate in new folder
-		// Note that currently the username and password for ProjectEngine
-		//  is hard coded into CheckoutSettingsForProject 
-		CheckoutSettings settings = 
-			new CheckoutSettingsForTest();
+		// first instantiate a working copy for a new empty folder
+		CheckoutSettings settings =  new CheckoutSettingsForTest();
 		tmpFolder = settings.getWorkingCopyDirectory();
 		MandatoryReposOperations workingCopy = new PersonalWorkingCopy(settings);
 		
@@ -59,14 +56,14 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		
 		// synchronize should do the same thing now because there are no locks or local changes
 		try {
-			workingCopy.synchronize();
+			workingCopy.synchronize("no changes, should not be committed");
 		} catch (ConflictException e) {
 			fail("Unexpected conflict. Maybe the test is running somewhere else too. Try again.");
 		}
 		
 		// get the automated test file
 		File testFile = new File(settings.getWorkingCopyDirectory().getAbsolutePath() + "/" + TEST_FILE);
-		increaseCounter(testFile);
+		int count = increaseCounter(testFile);
 		
 		// local changes
 		assertTrue("Now there should be local changes (counting also files that have not been added yet",
@@ -90,7 +87,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		
 		// syncronize, should add and commit changes
 		try {
-			workingCopy.synchronize();
+			workingCopy.synchronize("Committed test number " + count);
 		} catch (ConflictException e) {
 			fail("Unexpected conflict. Maybe the test is running somewhere else too. Try again.");
 		}
@@ -100,7 +97,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		
 	}
 
-	private void increaseCounter(File testFile) throws IOException, FileNotFoundException {
+	private int increaseCounter(File testFile) throws IOException, FileNotFoundException {
 		if (!testFile.exists()) {
 			testFile.createNewFile();
 			FileWriter fout = new FileWriter(testFile);
@@ -117,6 +114,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		FileWriter fout = new FileWriter(testFile);
 		fout.write("" + ++count);
 		fout.close();
+		return count;
 	}
 
 /*	public void testHasLocalChanges() {

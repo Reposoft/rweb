@@ -22,6 +22,7 @@ import se.repos.svn.ClientProvider;
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ImmutableUserCredentials;
+import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.client.ReposWorkingCopySvnAnt;
 
 import junit.framework.TestCase;
@@ -40,6 +41,8 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 		
 		mockClient = createMock(ISVNClientAdapter.class);
 		expect(clientProvider.getSvnClient(userCredentials)).andReturn(mockClient);
+		
+		replay(settings, clientProvider); // but let the test replay mockClient
 		
 		return getInstance(clientProvider, settings);
 	}
@@ -82,5 +85,17 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 		
 		assertTrue(true);
 	} */
+	
+	public void testAddNotifyListener() {
+		ReposWorkingCopySvnAnt w = getInstanceWithMockClient();
+		
+		NotifyListener notifyListener = createMock(NotifyListener.class);
+		mockClient.addNotifyListener(notifyListener);
+		expectLastCall();
+		replay(mockClient);
+		
+		w.addNotifyListener(notifyListener);
+		verify(mockClient);
+	}
 	
 }

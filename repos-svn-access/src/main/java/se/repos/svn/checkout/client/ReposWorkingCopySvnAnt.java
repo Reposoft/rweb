@@ -4,14 +4,27 @@ package se.repos.svn.checkout.client;
 
 import java.io.File;
 
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.DirectoryScanner;
+import org.apache.tools.ant.FileScanner;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.types.FileSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tigris.subversion.svnant.Add;
+import org.tigris.subversion.svnant.Checkout;
+import org.tigris.subversion.svnant.Commit;
+import org.tigris.subversion.svnant.Feedback;
+import org.tigris.subversion.svnant.SvnCommand;
+import org.tigris.subversion.svnant.Update;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.ISVNStatus;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.tigris.subversion.svnclientadapter.SVNStatusKind;
+import org.tigris.subversion.svnclientadapter.SVNUrl;
 
 import se.repos.svn.ClientProvider;
+import se.repos.svn.RepositoryUrl;
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
@@ -39,6 +52,9 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	
 	CheckoutSettings settings;
 	
+	//used for all Ant calls that need a Project instance
+    private final Project ANTPROJECT = new Project();
+	
 	/**
 	 * 
 	 * @param clientProvider
@@ -47,6 +63,10 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	public ReposWorkingCopySvnAnt(ClientProvider clientProvider, CheckoutSettings settings) {
 		client = clientProvider.getSvnClient(settings.getLogin());
 		this.settings = settings;
+        if (settings.getWorkingCopyDirectory().list().length > 0) {
+        	logger.debug("There is a working copy in {}, need to verify", settings.getWorkingCopyDirectory().getAbsolutePath());
+        	validateWorkingCopyMatchesRepositoryUrl(settings.getWorkingCopyDirectory(), settings.getCheckoutUrl());
+        }
 	}
 	
 	/**
@@ -54,15 +74,89 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	 * @param notifyListener A callback implementation.
 	 */
 	public void addNotifyListener(NotifyListener notifyListener) {
-		
+		client.addNotifyListener(notifyListener);
 	}
 
+	public void checkout() {
+        Checkout co = new Checkout();
+        co.setDestpath(settings.getWorkingCopyDirectory());
+        co.setUrl(settings.getCheckoutUrl().getUrl());
+        logger.info("Checking out using command {}", co);
+        execute(co);
+	}    
+
+	public void update() throws ConflictException {
+		Update update = new Update();
+        update.setDir(settings.getWorkingCopyDirectory());
+        execute(update);
+	}
+	
+	public void update(File path) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#update not implemented yet");
+		}
+		
+	}
+	
+    public void commit(String commitMessage) throws ConflictException {
+    	Commit commit = new Commit();
+        commit.setDir(settings.getWorkingCopyDirectory());
+        commit.setMessage(commitMessage);
+        try {
+            execute(commit);
+        } catch (BuildException be) {
+            logger.error("Could not commit, probably there were no changes.");
+            be.printStackTrace();
+        }
+    }
+    
+	/**
+	 * No logic, just an update and a commit
+	 */
+	public void synchronize(String commitMessage) throws ConflictException {
+		this.update();
+		this.commit(commitMessage);
+	}
+
+	public boolean hasLocalChanges() {
+		return hasLocalChanges(settings.getWorkingCopyDirectory());
+	}
+	
+	public boolean hasLocalChanges(File path) {
+        ISVNStatus[] statuses = null;
+        try {
+            statuses = client.getStatus(path, true, true); //descend, all
+        } catch (SVNClientException e) {
+            throw new RuntimeException("Handling for SVNClientException not implemented", e);
+        }
+        // will exit and return true when it finds a modified file/dir
+        for (int i = 0; i<statuses.length; i++) {
+            ISVNStatus st = statuses[i];
+            logger.debug(st.getPath() + ": TextStatus=" + st.getTextStatus() + ", PropStatus=" + st.getPropStatus());
+            if (hasLocalChanges(st)) {
+            	return true;
+            }
+        }
+        return false;
+	}
+	
 	public void add(File path) {
 		if (true) {
 			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#add not implemented yet");
 		}
 		
 	}
+	
+    public void addAll() {
+        FileScanner directoryScanner = new DirectoryScanner();
+        directoryScanner.setBasedir(settings.getWorkingCopyDirectory());
+        FileSet fileSet = new FileSet();
+        fileSet.setupDirectoryScanner(directoryScanner, ANTPROJECT);
+        fileSet.setDir(settings.getWorkingCopyDirectory());
+        Add add = new Add();
+        add.addFileset(fileSet);
+        execute(add);
+    }
 
 	public void delete(File path) {
 		if (true) {
@@ -90,18 +184,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#revert not implemented yet");
 		}
 		
-	}
-
-	public void update(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#update not implemented yet");
-		}
-		
-	}
-
-	public boolean hasLocalChanges() {
-		return hasLocalChanges(settings.getWorkingCopyDirectory());
-	}
+	}	
 
 	public void markConflictResolved(ConflictInformation conflictInformation) {
 		if (true) {
@@ -110,45 +193,16 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		
 	}
 
-	public void synchronize() throws ConflictException {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#synchronize not implemented yet");
-		}
-		
-	}
-
-	public void update() throws ConflictException {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#update not implemented yet");
-		}
-		
-	}
-
-	public void checkout() {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#checkout not implemented yet");
-		}
-		
-	}
-
-	public boolean hasLocalChanges(File path) {
-        ISVNStatus[] statuses = null;
-        try {
-            statuses = client.getStatus(path, true, true); //descend, all
-        } catch (SVNClientException e) {
-            throw new RuntimeException("Handling for SVNClientException not implemented", e);
-        }
-        // will exit and return true when it finds a modified file/dir
-        for (int i = 0; i<statuses.length; i++) {
-            ISVNStatus st = statuses[i];
-            logger.debug(st.getPath() + ": TextStatus=" + st.getTextStatus() + ", PropStatus=" + st.getPropStatus());
-            if (hasLocalChanges(st)) {
-            	return true;
-            }
-        }
-        return false;
-	}
-
+    private void execute(SvnCommand command) {
+    	if (command.getProject() == null) {
+    		command.setProject(ANTPROJECT); // dummy, might be needed for some operations
+    	}
+        //Feedback feedback = new Feedback(command);
+        //svnClient.addNotifyListener(feedback);
+        command.execute(client);
+        //svnClient.removeNotifyListener(feedback);
+    }
+	
     /**
      * @param fileOrDirStatus from the wokring copy
      * @return true if there is something to commit according to the status.
@@ -171,5 +225,30 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		}
 		return false;
 	}	
+    
+	private void validateWorkingCopyMatchesRepositoryUrl(File workingCopyDirectory, RepositoryUrl checkoutUrl) {
+		SVNUrl actual = getActualRepositoryUrl(workingCopyDirectory);
+		if (!checkoutUrl.equals(actual)) {
+			throw new IllegalArgumentException("The existing check out URL is '" + checkoutUrl
+					+ "' but the working copy URL at '" + workingCopyDirectory.getPath() + "' is: " + checkoutUrl);
+		}
+		logger.info("The repository URL of {} matches the specified: {}", workingCopyDirectory.getPath(), checkoutUrl);
+	}
 	
+	public SVNUrl getActualRepositoryUrl(File workingCopyDirectory) {
+		try {
+			ISVNStatus status = client.getSingleStatus(workingCopyDirectory);
+			return status.getUrl();
+		} catch (SVNClientException e) {
+			throw new RuntimeException("SVNClientException handling missing", e);
+		}
+	}
+
+	public boolean isVersioned(File path) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#isVersioned not implemented yet");
+		}
+		return false;
+	}
+    
 }

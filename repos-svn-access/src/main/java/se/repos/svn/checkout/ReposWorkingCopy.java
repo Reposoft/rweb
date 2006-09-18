@@ -28,7 +28,7 @@ import java.io.File;
  * It that happens, the user will have two files: the latest local file
  * and the latest from the repository.
  * 
- * Preferrably conflicts are detected by doing an update() before synchronize,
+ * Preferrably conflicts are detected by doing an update() before commit,
  * so that the latest repository changes are inspected locally before committing.
  * 
  * Implementations should be as dumb as possible. Not do any automatic stuff that the user has not requested.
@@ -58,14 +58,38 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	/**
 	 * Checkout is needed only if the working copy has not been used before.
 	 * Use isVersioned() to check if a working copy root dir contains checked out files.
+	 * @see MandatoryReposOperations#synchronize(String)
 	 */
 	public void checkout();
 	
 	/**
-	 * 
-	 * @param path 
+	 * Like {@link ReposWorkingCopy#update()} but for a part of the working copy.
+	 * @param path Folder or file within a working copy
+	 */
+	public void update(File path);
+	
+	/**
+	 * Sends local changes to the repository
+	 * @param commitMessage For the log
+	 * @throws ConflictException The risk of this is minimal if an update is done just before every commit.
+	 */
+	public void commit(String commitMessage) throws ConflictException;
+	
+	/**
+	 * Checks status of a specific resource
+	 * @param path The file or folder to check
+	 * @return true if the file or the folder with subfolders needs commit
+	 * @see MandatoryReposOperations#hasLocalChanges()
 	 */
 	public boolean hasLocalChanges(File path);
+	
+	/**
+	 * Checks if status is 
+	 * @param path file or folder
+	 * @return true if the path exists and is under version control
+	 * @throws IllegalArgumentException if the path does not exist
+	 */
+	public boolean isVersioned(File path);
 	
 	/**
 	 * Reserve a file so that others can not change it.
@@ -78,12 +102,6 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	public void lock(File path);
 	
 	/**
-	 * Like {@link ReposWorkingCopy#update()} but for a part of the working copy.
-	 * @param path Folder or file within a working copy
-	 */
-	public void update(File path);
-	
-	/**
 	 * Add a new file in the working copy to version control
 	 * For folders that are already under version control,
 	 * it is invalid to do add again to add all contents recursively.
@@ -91,6 +109,12 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * @param path File or folder, for new folders all contents are also added.
 	 */
 	public void add(File path);
+	
+	/**
+	 * Adds all unversioned files inside the working copy to version control.
+	 * Contrary to {@link #add(File)} this can be called for a directory that is itself under version control.
+	 */
+	public void addAll();
 	
 	/**
 	 * Remove a file or folder from version control.
