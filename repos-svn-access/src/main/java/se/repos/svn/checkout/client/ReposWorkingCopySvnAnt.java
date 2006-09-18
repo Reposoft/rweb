@@ -4,7 +4,12 @@ package se.repos.svn.checkout.client;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
+import org.tigris.subversion.svnclientadapter.ISVNStatus;
+import org.tigris.subversion.svnclientadapter.SVNClientException;
+import org.tigris.subversion.svnclientadapter.SVNStatusKind;
 
 import se.repos.svn.ClientProvider;
 import se.repos.svn.UserCredentials;
@@ -28,7 +33,11 @@ import se.repos.svn.checkout.ReposWorkingCopy;
  */
 public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	
-	ISVNClientAdapter client = null;
+	final Logger logger = LoggerFactory.getLogger(this.getClass());	
+	
+	ISVNClientAdapter client;
+	
+	CheckoutSettings settings;
 	
 	/**
 	 * 
@@ -36,9 +45,8 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	 * @param settings 
 	 */
 	public ReposWorkingCopySvnAnt(ClientProvider clientProvider, CheckoutSettings settings) {
-		client = clientProvider.getSvnClient();
-		client.setUsername(settings.getLogin().getUsername());
-		client.setPassword(settings.getLogin().getPassword());
+		client = clientProvider.getSvnClient(settings.getLogin());
+		this.settings = settings;
 	}
 	
 	/**
@@ -92,10 +100,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	}
 
 	public boolean hasLocalChanges() {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#hasLocalChanges not implemented yet");
-		}
-		return false;
+		return hasLocalChanges(settings.getWorkingCopyDirectory());
 	}
 
 	public void markConflictResolved(ConflictInformation conflictInformation) {
@@ -126,11 +131,45 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		
 	}
 
-	public void hasLocalChanges(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#hasLocalChanges not implemented yet");
-		}
-		
+	public boolean hasLocalChanges(File path) {
+        ISVNStatus[] statuses = null;
+        try {
+            statuses = client.getStatus(path, true, true); //descend, all
+        } catch (SVNClientException e) {
+            throw new RuntimeException("Handling for SVNClientException not implemented", e);
+        }
+        // will exit and return true when it finds a modified file/dir
+        for (int i = 0; i<statuses.length; i++) {
+            ISVNStatus st = statuses[i];
+            logger.debug(st.getPath() + ": TextStatus=" + st.getTextStatus() + ", PropStatus=" + st.getPropStatus());
+            if (hasLocalChanges(st)) {
+            	return true;
+            }
+        }
+        return false;
 	}
 
+    /**
+     * @param fileOrDirStatus from the wokring copy
+     * @return true if there is something to commit according to the status.
+     * 	unversion files are counted as modifications.
+     */
+	boolean hasLocalChanges(ISVNStatus fileOrDirStatus) {
+		SVNStatusKind textStatus = fileOrDirStatus.getTextStatus();
+		SVNStatusKind propStatus = fileOrDirStatus.getPropStatus();
+		if (SVNStatusKind.MODIFIED.equals(textStatus)) {
+		    return true; // could also check for conflicts
+		}
+		if (SVNStatusKind.MODIFIED.equals(propStatus)) {
+		    return true;
+		}
+		if (SVNStatusKind.UNVERSIONED.equals(textStatus)) {
+			return true;
+		}
+		if (SVNStatusKind.ADDED.equals(textStatus)) {
+		    return true; // could also check for conflicts
+		}
+		return false;
+	}	
+	
 }

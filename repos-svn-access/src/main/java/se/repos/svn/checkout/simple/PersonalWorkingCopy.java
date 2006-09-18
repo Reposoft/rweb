@@ -29,6 +29,8 @@ import se.repos.svn.RepositoryUrl;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.MandatoryReposOperations;
+import se.repos.svn.checkout.ReposWorkingCopy;
+import se.repos.svn.checkout.ReposWorkingCopyFactory;
 import se.repos.svn.checkout.client.CheckoutSettingsValidator;
 import se.repos.svn.file.RejectPathDoesNotExist;
 import se.repos.svn.javasvn.TmateSvnClientProvider;
@@ -74,6 +76,8 @@ public class PersonalWorkingCopy implements MandatoryReposOperations {
     private static final ValidationRule<CheckoutSettings> CHECKOUT_SETTINGS_VALIDATOR = 
     	Validation.rule(CheckoutSettingsValidator.class);
     
+    private ReposWorkingCopy workingCopy;
+    
     /**
      * Working copy configuration.
      */
@@ -95,6 +99,7 @@ public class PersonalWorkingCopy implements MandatoryReposOperations {
         	logger.debug("There is a working copy in {}, need to verify", settings.getWorkingCopyDirectory().getAbsolutePath());
         	validateWorkingCopyMatchesRepositoryUrl(settings.getWorkingCopyDirectory(), settings.getCheckoutUrl());
         }
+        this.workingCopy = ReposWorkingCopyFactory.getClient(settings);
     }
 
 	/**
@@ -128,51 +133,8 @@ public class PersonalWorkingCopy implements MandatoryReposOperations {
 	}
 
     public boolean hasLocalChanges() {
-    	return hasLocalChanges("");
+    	return workingCopy.hasLocalChanges();
     }
-    
-    public boolean hasLocalChanges(String relativePath) {
-        ISVNClientAdapter client = getClientAdapter();
-        
-        File dir = new File(getLocalRootDir().getAbsolutePath() + relativePath);
-        new RejectPathDoesNotExist().validate(dir);
-        ISVNStatus[] statuses = null;
-        try {
-            statuses = client.getStatus(dir, true, true); //descend, all
-        } catch (SVNClientException e) {
-            throw new RuntimeException("Handling for SVNClientException not implemented", e);
-        }
-        // will exit and return true when it finds a modified file/dir
-        for (int i = 0; i<statuses.length; i++) {
-            ISVNStatus st = statuses[i];
-            logger.debug(st.getPath() + ": TextStatus=" + st.getTextStatus() + ", PropStatus=" + st.getPropStatus());
-            if (hasLocalChanges(st)) {
-            	return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param fileOrDirStatus from the wokring copy
-     * @return true if there is something to commit according to the status.
-     * 	unversion files are counted as modifications.
-     */
-	boolean hasLocalChanges(ISVNStatus fileOrDirStatus) {
-		if (SVNStatusKind.MODIFIED.equals(fileOrDirStatus.getTextStatus())) {
-		    return true; // could also check for conflicts
-		}
-		if (SVNStatusKind.MODIFIED.equals(fileOrDirStatus.getPropStatus())) {
-		    return true;
-		}
-		if (SVNStatusKind.UNVERSIONED.equals(fileOrDirStatus.getTextStatus())) {
-			return true;
-		}
-		if (SVNStatusKind.ADDED.equals(fileOrDirStatus.getTextStatus())) {
-		    return true; // could also check for conflicts
-		}
-		return false;
-	}
     
     public void synchronize() {
         ISVNClientAdapter client = getClientAdapter();

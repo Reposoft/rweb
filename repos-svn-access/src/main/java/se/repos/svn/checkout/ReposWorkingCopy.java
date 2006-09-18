@@ -65,7 +65,7 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * 
 	 * @param path 
 	 */
-	public void hasLocalChanges(File path);
+	public boolean hasLocalChanges(File path);
 	
 	/**
 	 * Reserve a file so that others can not change it.

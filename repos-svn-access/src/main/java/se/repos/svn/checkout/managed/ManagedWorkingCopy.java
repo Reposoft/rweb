@@ -114,11 +114,11 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		
 	}
 
-	public void hasLocalChanges(File path) {
+	public boolean hasLocalChanges(File path) {
 		if (true) {
 			throw new UnsupportedOperationException("Method ManagedWorkingCopy#hasLocalChanges not implemented yet");
 		}
-		
+		return false;
 	}
 
 }

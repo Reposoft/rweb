@@ -21,10 +21,6 @@ public abstract class AbstractCheckoutSettings implements CheckoutSettings {
 	public AbstractCheckoutSettings(String url, String workingCopyAbsolutePath) {
 		this(url, convertToFile(workingCopyAbsolutePath));
 	}
-
-	private static File convertToFile(String workingCopyAbsolutePath) {
-		return new File(workingCopyAbsolutePath);
-	}
 	
 	public AbstractCheckoutSettings(String url, File workingCopyAbsolutePath) {
 		this(new Url(url), workingCopyAbsolutePath);
@@ -54,6 +50,10 @@ public abstract class AbstractCheckoutSettings implements CheckoutSettings {
 			return path.getPath();
 		}
 		return null;
+	}
+	
+	private static File convertToFile(String workingCopyAbsolutePath) {
+		return new File(workingCopyAbsolutePath);
 	}
 	
 	private static class Url implements RepositoryUrl {

@@ -12,45 +12,75 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.repos.svn.checkout;
+package se.repos.svn.checkout.client;
 
+import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.ISVNStatus;
 import org.tigris.subversion.svnclientadapter.SVNStatusKind;
+
+import se.repos.svn.ClientProvider;
+import se.repos.svn.UserCredentials;
+import se.repos.svn.checkout.CheckoutSettings;
+import se.repos.svn.checkout.ImmutableUserCredentials;
+import se.repos.svn.checkout.client.ReposWorkingCopySvnAnt;
 
 import junit.framework.TestCase;
 
 import static org.easymock.EasyMock.*;
 
 // TODO design the class with more flexible instantiation, to allow this kind of testing
-public class ReposWorkingCopyTest extends TestCase {
+public class ReposWorkingCopySvnAntTest extends TestCase {
+
+	private ISVNClientAdapter mockClient = null;
+	private ReposWorkingCopySvnAnt getInstanceWithMockClient() {
+		UserCredentials userCredentials = new ImmutableUserCredentials("", "");
+		CheckoutSettings settings = createMock(CheckoutSettings.class);
+		expect(settings.getLogin()).andReturn(userCredentials);
+		ClientProvider clientProvider = createMock(ClientProvider.class);
+		
+		mockClient = createMock(ISVNClientAdapter.class);
+		expect(clientProvider.getSvnClient(userCredentials)).andReturn(mockClient);
+		
+		return getInstance(clientProvider, settings);
+	}
+
+	private ReposWorkingCopySvnAnt getInstance(ClientProvider clientProvider, CheckoutSettings settings) {
+		return new ReposWorkingCopySvnAnt(clientProvider, settings);
+	}
 	
 	public void testHasLocalChangesISVNStatusUnmodified() {
+		ReposWorkingCopySvnAnt w = getInstanceWithMockClient();
+		
 		ISVNStatus mockStatus = createMock(ISVNStatus.class);
 		expect(mockStatus.getTextStatus()).andReturn(SVNStatusKind.NORMAL);
 		expect(mockStatus.getPropStatus()).andReturn(SVNStatusKind.NORMAL);
 		replay(mockStatus);
-		assertFalse(false);
+		assertFalse(w.hasLocalChanges(mockStatus));
 	}
 
 	public void testHasLocalChangesISVNStatusContentsModified() {
+		ReposWorkingCopySvnAnt w = getInstanceWithMockClient();
+		
 		ISVNStatus mockStatus = createMock(ISVNStatus.class);
 		expect(mockStatus.getTextStatus()).andReturn(SVNStatusKind.MODIFIED);
 		expect(mockStatus.getPropStatus()).andReturn(SVNStatusKind.NORMAL);
 		replay(mockStatus);
-		assertTrue(true);
+		assertTrue(w.hasLocalChanges(mockStatus));
 	}
 	
 	public void testHasLocalChangesISVNStatusPropsModified() {
+		ReposWorkingCopySvnAnt w = getInstanceWithMockClient();
+		
 		ISVNStatus mockStatus = createMock(ISVNStatus.class);
 		expect(mockStatus.getTextStatus()).andReturn(SVNStatusKind.NORMAL);
 		expect(mockStatus.getPropStatus()).andReturn(SVNStatusKind.MODIFIED);
 		replay(mockStatus);
-		assertTrue(true);
+		assertTrue(w.hasLocalChanges(mockStatus));
 	}
 	
-	public void testHasLocalChangesISVNStatusUnversioned() {
+	/* public void testHasLocalChangesISVNStatusUnversioned() {
 		
 		assertTrue(true);
-	}	
+	} */
 	
 }
