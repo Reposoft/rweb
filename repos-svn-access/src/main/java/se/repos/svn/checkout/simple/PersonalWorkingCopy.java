@@ -38,6 +38,10 @@ import se.repos.validation.ValidationRule;
  *
  * Designed to make interactions minimal and as clear sa possible for a
  * user who has no experience with source code versioning systems.
+ * 
+ * - Automatic add at synchronize.
+ * TODO Automatic delete at syncronize.
+ * TODO Handle situations where user has moved a working copy folder (with no svn move)
  *
  * @author Staffan Olsson
  * @since 2006-apr-16

@@ -50,8 +50,8 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		try {
 			workingCopy.update();
 		} catch (ConflictException e1) {
-			// TODO auto-generated
-			throw new RuntimeException("ConflictException thrown, not handled", e1);
+			// Tested in PersonalWorkingCopyConflictTest
+			fail("Unexpected conflict. Maybe the test is running somewhere else too. Try again.");
 		}
 		assertFalse("there should be no local changes", workingCopy.hasLocalChanges());
 		
@@ -59,7 +59,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		try {
 			workingCopy.synchronize();
 		} catch (ConflictException e) {
-			throw new RuntimeException("ConflictException handling missing", e);
+			fail("Unexpected conflict. Maybe the test is running somewhere else too. Try again.");
 		}
 		
 		// get the automated test file
@@ -74,8 +74,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		try {
 			workingCopy.update();
 		} catch (ConflictException e1) {
-			// TODO auto-generated
-			throw new RuntimeException("ConflictException thrown, not handled", e1);
+			fail("Unexpected conflict. Maybe the test is running somewhere else too. Try again.");
 		}
 		assertTrue("Update does not replace the changed file", workingCopy.hasLocalChanges());
 				
@@ -91,7 +90,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		try {
 			workingCopy.synchronize();
 		} catch (ConflictException e) {
-			throw new RuntimeException("Conflict to be handled by user. Not expected in this test.", e);
+			fail("Unexpected conflict. Maybe the test is running somewhere else too. Try again.");
 		}
 		
 		assertFalse("Now the local changes should not be local anymore, they should be commited",
