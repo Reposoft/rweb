@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.repos.svn.checkout.simple;
+package se.repos.svn.checkout;
 
 import org.tigris.subversion.svnclientadapter.ISVNStatus;
 import org.tigris.subversion.svnclientadapter.SVNStatusKind;
@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 import static org.easymock.EasyMock.*;
 
 // TODO design the class with more flexible instantiation, to allow this kind of testing
-public class PersonalWorkingCopyTest extends TestCase {
+public class ReposWorkingCopyTest extends TestCase {
 	
 	public void testHasLocalChangesISVNStatusUnmodified() {
 		ISVNStatus mockStatus = createMock(ISVNStatus.class);

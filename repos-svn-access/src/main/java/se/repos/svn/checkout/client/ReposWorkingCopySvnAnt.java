@@ -5,10 +5,10 @@ package se.repos.svn.checkout.client;
 import java.io.File;
 
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
-import org.tigris.subversion.svnclientadapter.ISVNNotifyListener;
 
 import se.repos.svn.ClientProvider;
 import se.repos.svn.UserCredentials;
+import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.NotifyListener;
@@ -30,13 +30,15 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	
 	ISVNClientAdapter client = null;
 	
-	public ReposWorkingCopySvnAnt(ClientProvider clientProvider) {
+	/**
+	 * 
+	 * @param clientProvider
+	 * @param settings 
+	 */
+	public ReposWorkingCopySvnAnt(ClientProvider clientProvider, CheckoutSettings settings) {
 		client = clientProvider.getSvnClient();
-	}
-	
-	public void setUserCredentials(UserCredentials authentication) {
-		client.setUsername(authentication.getUsername());
-		client.setPassword(authentication.getPassword());
+		client.setUsername(settings.getLogin().getUsername());
+		client.setPassword(settings.getLogin().getPassword());
 	}
 	
 	/**
@@ -113,6 +115,20 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	public void update() throws ConflictException {
 		if (true) {
 			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#update not implemented yet");
+		}
+		
+	}
+
+	public void checkout() {
+		if (true) {
+			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#checkout not implemented yet");
+		}
+		
+	}
+
+	public void hasLocalChanges(File path) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#hasLocalChanges not implemented yet");
 		}
 		
 	}

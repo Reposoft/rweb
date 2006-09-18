@@ -107,4 +107,18 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		
 	}
 
+	public void checkout() {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#checkout not implemented yet");
+		}
+		
+	}
+
+	public void hasLocalChanges(File path) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#hasLocalChanges not implemented yet");
+		}
+		
+	}
+
 }

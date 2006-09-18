@@ -56,6 +56,18 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	public void addNotifyListener(NotifyListener notifyListener);
 	
 	/**
+	 * Checkout is needed only if the working copy has not been used before.
+	 * Use isVersioned() to check if a working copy root dir contains checked out files.
+	 */
+	public void checkout();
+	
+	/**
+	 * 
+	 * @param path 
+	 */
+	public void hasLocalChanges(File path);
+	
+	/**
 	 * Reserve a file so that others can not change it.
 	 * Ensure that the file is writable locally.
 	 * Locking is never required, and only encouraged for binary files like word documents.

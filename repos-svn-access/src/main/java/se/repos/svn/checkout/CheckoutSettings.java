@@ -31,14 +31,14 @@ import se.repos.svn.UserCredentials;
  * @version $Id$
  */
 public interface CheckoutSettings {
-
+	
 	/**
-	 * @return The local directory to check out to.
+	 * @return The local directory to check out to, does not end with path separator
 	 */
 	File getWorkingCopyDirectory();
 	
 	/**
-	 * @return The URL to checkout from
+	 * @return The URL to checkout from, does not end with '/'
 	 */
 	RepositoryUrl getCheckoutUrl();
 	
@@ -46,4 +46,12 @@ public interface CheckoutSettings {
 	 * @return What's needed for authentication and authorization
 	 */
 	UserCredentials getLogin();
+	
+	/**
+	 * Converts a file system path to a relative path within the working copy
+	 * @param path The file system path.
+	 * @return The path of the file in the repository, not starting with path separator.
+	 * @throws RuntimeException if the path is not inside the working copy (considered a programming error)
+	 */
+	String toRelative(File path);
 }

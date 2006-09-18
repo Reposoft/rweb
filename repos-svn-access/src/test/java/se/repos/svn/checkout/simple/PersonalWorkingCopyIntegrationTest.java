@@ -22,6 +22,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import se.repos.svn.checkout.CheckoutSettings;
+import se.repos.svn.checkout.CheckoutSettingsForTest;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.MandatoryReposOperations;
 
@@ -32,14 +33,15 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 	private static final String TEST_FILE = "automated-test-increment.txt";
 	
 	// folder for test working copy. expected to have deleteOnExit.
-	private File tmpFolder = getEmptyTemporaryDirectory();
+	private File tmpFolder;
 	
 	public void testWorkflow() throws IOException {
 		// first instantiate in new folder
 		// Note that currently the username and password for ProjectEngine
 		//  is hard coded into CheckoutSettingsForProject 
 		CheckoutSettings settings = 
-			new CheckoutSettingsForTest(tmpFolder);
+			new CheckoutSettingsForTest();
+		tmpFolder = settings.getWorkingCopyDirectory();
 		MandatoryReposOperations workingCopy = new PersonalWorkingCopy(settings);
 		
 		// this should cause a checkout right here
@@ -115,21 +117,6 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		FileWriter fout = new FileWriter(testFile);
 		fout.write("" + ++count);
 		fout.close();
-	}
-	
-	public static File getEmptyTemporaryDirectory() {
-		try {
-			File tmp = File.createTempFile("PersonalWorkingCopyTest", "dir");
-			tmp.delete();
-			tmp.mkdir();
-			tmp.deleteOnExit();
-			System.out.println("Using temporary directory: " + tmp.getAbsolutePath());
-			return tmp;
-		} catch (IOException e) {
-			// TODO auto-generated
-			throw new RuntimeException("IOException handling missing", e);
-		}
-		
 	}
 
 /*	public void testHasLocalChanges() {

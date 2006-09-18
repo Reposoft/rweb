@@ -29,6 +29,7 @@ import se.repos.svn.RepositoryUrl;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.MandatoryReposOperations;
+import se.repos.svn.checkout.client.CheckoutSettingsValidator;
 import se.repos.svn.file.RejectPathDoesNotExist;
 import se.repos.svn.javasvn.TmateSvnClientProvider;
 import se.repos.validation.Validation;
@@ -110,7 +111,7 @@ public class PersonalWorkingCopy implements MandatoryReposOperations {
 	private void validateWorkingCopyMatchesRepositoryUrl(File workingCopyDirectory, RepositoryUrl checkoutUrl) {
 		SVNUrl actual = getActualRepositoryUrl(workingCopyDirectory);
 		if (!checkoutUrl.equals(actual)) {
-			throw new IllegalArgumentException("The existing choeck out URL is '" + checkoutUrl
+			throw new IllegalArgumentException("The existing check out URL is '" + checkoutUrl
 					+ "' but the working copy URL at '" + workingCopyDirectory.getPath() + "' is: " + checkoutUrl);
 		}
 		logger.info("The repository URL of {} matches the specified: {}", workingCopyDirectory.getPath(), checkoutUrl);

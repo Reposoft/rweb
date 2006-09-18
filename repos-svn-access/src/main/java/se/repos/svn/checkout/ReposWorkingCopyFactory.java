@@ -19,7 +19,7 @@ public abstract class ReposWorkingCopyFactory {
     // the client pool/factory. could be injected
     private static ClientProvider DEFAULT_CLIENT_PROVIDER = new TmateSvnClientProvider();
 	
-	public ReposWorkingCopy getClient() {
-		return new ReposWorkingCopySvnAnt(DEFAULT_CLIENT_PROVIDER);
+	public static ReposWorkingCopy getClient(CheckoutSettings settings) {
+		return new ReposWorkingCopySvnAnt(DEFAULT_CLIENT_PROVIDER, settings);
 	}
 }
