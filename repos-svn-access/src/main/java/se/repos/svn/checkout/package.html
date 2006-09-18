@@ -1,9 +1,15 @@
 <html>
 <head></head>
 <body>
+<p>
 The subversion client, using a working copy in the local file system.
-
-The main attraction here is the ReposWorkingCopy interface,
-which represents the user's interactions with the repository.
+</p>
+<p>
+The actual client, doing SVN operations according to the <a href="ReposWorkingCopy.html">ReposWorkingCopy</a> interface, is found in the <a href="client"/>client</a> package.
+</p>
+<p>
+Working copy management, logic that helps the user, is optional.
+Two implementations are currently provided:
+<a href="../simple/">simple client</a> and <a href="../managed/">managed client</a>.
 </body>
 </html>

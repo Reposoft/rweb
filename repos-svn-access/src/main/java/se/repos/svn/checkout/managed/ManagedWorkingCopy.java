@@ -5,20 +5,25 @@ package se.repos.svn.checkout.managed;
 import java.io.File;
 
 import se.repos.svn.checkout.CheckoutSettings;
-import se.repos.svn.checkout.simple.PersonalWorkingCopy;
+import se.repos.svn.checkout.ConflictException;
+import se.repos.svn.checkout.ConflictInformation;
+import se.repos.svn.checkout.NotifyListener;
+import se.repos.svn.checkout.ReposWorkingCopy;
 
 /**
+ * A subversion client like all the others, with no user logic
  * 
+ * A more classic versioning client than {@link ReposWorkingCopy}, with fine grained explicit operations.
  *
+ * Still uses {@link ReposWorkingCopy#synchronize()} in place of commit.
+ * 
  * @author Staffan Olsson (solsson)
  * @version $Id$
  */
-public class ManagedWorkingCopy extends PersonalWorkingCopy implements
-		ReposWorkingCopyClient {
+public class ManagedWorkingCopy implements ReposWorkingCopy {
 
 	public ManagedWorkingCopy(CheckoutSettings settings) {
-		super(settings);
-		// TODO auto-generated
+		
 	}
 
 	public void add(File path) {
@@ -56,6 +61,48 @@ public class ManagedWorkingCopy extends PersonalWorkingCopy implements
 	public void revert(File path) {
 		if (true) {
 			throw new UnsupportedOperationException("Method ManagedWorkingCopy#revert not implemented yet");
+		}
+		
+	}
+
+	public void addNotifyListener(NotifyListener notifyListener) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#addNotifyListener not implemented yet");
+		}
+		
+	}
+
+	public void lock(File path) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#lock not implemented yet");
+		}
+		
+	}
+
+	public boolean hasLocalChanges() {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#hasLocalChanges not implemented yet");
+		}
+		return false;
+	}
+
+	public void markConflictResolved(ConflictInformation conflictInformation) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#markConflictResolved not implemented yet");
+		}
+		
+	}
+
+	public void synchronize() throws ConflictException {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#synchronize not implemented yet");
+		}
+		
+	}
+
+	public void update() throws ConflictException {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#update not implemented yet");
 		}
 		
 	}

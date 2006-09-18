@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
-import se.repos.svn.checkout.ReposWorkingCopy;
+import se.repos.svn.checkout.MandatoryReposOperations;
 
 import junit.framework.TestCase;
 
@@ -40,7 +40,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		//  is hard coded into CheckoutSettingsForProject 
 		CheckoutSettings settings = 
 			new CheckoutSettingsForTest(tmpFolder);
-		ReposWorkingCopy workingCopy = new PersonalWorkingCopy(settings);
+		MandatoryReposOperations workingCopy = new PersonalWorkingCopy(settings);
 		
 		// this should cause a checkout right here
 		assertTrue("Should now find a .svn folder inside checkout dir",

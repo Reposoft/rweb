@@ -9,9 +9,10 @@ import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$
+ * @todo add handling of client library not available, for example an exception
  */
 public interface ClientProvider {
-
+	
 	/**
 	 * Provides an initialized svnClient to the application.
 	 *

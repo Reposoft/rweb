@@ -27,7 +27,8 @@ import org.tigris.subversion.svnclientadapter.SVNUrl;
 import se.repos.svn.ClientProvider;
 import se.repos.svn.RepositoryUrl;
 import se.repos.svn.checkout.CheckoutSettings;
-import se.repos.svn.checkout.ReposWorkingCopy;
+import se.repos.svn.checkout.ConflictInformation;
+import se.repos.svn.checkout.MandatoryReposOperations;
 import se.repos.svn.file.RejectPathDoesNotExist;
 import se.repos.svn.javasvn.TmateSvnClientProvider;
 import se.repos.validation.Validation;
@@ -54,8 +55,9 @@ import se.repos.validation.ValidationRule;
  * @todo Should all files be write-protected until locked?
  * @todo handle when files and directories have been moved in windows folder
  * @todo handle commit message (input) and commit errors (result)
+ * @todo rename to SimpleWorkingCopy
  */
-public class PersonalWorkingCopy implements ReposWorkingCopy {
+public class PersonalWorkingCopy implements MandatoryReposOperations {
 
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -265,6 +267,13 @@ public class PersonalWorkingCopy implements ReposWorkingCopy {
 		if (true) {
 			throw new UnsupportedOperationException("Method PersonalWorkingCopy#lock not implemented yet.");
 		}
+	}
+
+	public void markConflictResolved(ConflictInformation conflictInformation) {
+		if (true) {
+			throw new UnsupportedOperationException("Method PersonalWorkingCopy#markConflictResolved not implemented yet");
+		}
+		
 	}
 
 }

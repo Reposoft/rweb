@@ -14,6 +14,8 @@
  */
 package se.repos.svn.checkout;
 
+import java.io.File;
+
 /**
  * The repos.se operations on a working copy, as an abstraction above svnClientAdapter.
  * 
@@ -39,7 +41,7 @@ package se.repos.svn.checkout;
  * @todo switch between tasks, create tasks (branch), complete tasks (merge): make a "task-aware" client
  * @todo switch between users within the same working copy: make a "multiuser" client
  */
-public interface ReposWorkingCopy {
+public interface ReposWorkingCopy extends MandatoryReposOperations {
 
 	/**
 	 * To be added to file name (before .extension) when a conflicting file 
@@ -48,11 +50,10 @@ public interface ReposWorkingCopy {
 	public static final String DEFAULT_LOCAL_RENAME_AT_CONFLICT = "_your-modified";
 	
 	/**
-	 * Update the current working copy with the changes from the repository.
-	 * @todo return UpdateInformation with paths and change type, same as in synchronize
-	 *  -- NO, add notify listeners to the instance instead
+	 * Allows callback after operations.
+	 * @param notifyListener A callback implementation.
 	 */
-	public void update() throws ConflictException;
+	public void addNotifyListener(NotifyListener notifyListener);
 	
 	/**
 	 * Reserve a file so that others can not change it.
@@ -60,36 +61,43 @@ public interface ReposWorkingCopy {
 	 * Locking is never required, and only encouraged for binary files like word documents.
 	 * @param relativePath path relative to local directory root, no starting '/'
 	 * @param maybe change the parameter to File or an interface representing local resource
+	 * @todo maybe move to the mandatory methods
 	 */
-	public void lock(String relativePath);
+	public void lock(File path);
 	
 	/**
-	 * @param relativePath empty for entire local dir
-	 * @return true if there are uncommitet changes in this file or directory (recursively)
+	 * Like {@link ReposWorkingCopy#update()} but for a part of the working copy.
+	 * @param path Folder or file within a working copy
 	 */
-	public boolean hasLocalChanges();
+	public void update(File path);
 	
 	/**
-	 * Synchronize with the shared repository.
-	 * <ol>
-	 * <li>Release all locks</li>
-	 * <li>Update, handle any conflicts as user errors</li>
-	 * <li>Commit local changes</li>
-	 * </ol>
-	 * Conflicts are treated as unexpected errors that the application must handle.
-	 * The operation is aborted if it encounters conflict,
-	 * ant the user must manually inspect the files and merge the local changes into
-	 * the latest shared file. Then mark the conflict resolved. Then retry the operation.
-	 * 
-	 * TODO return updates
-	 * TODO return commits
-	 * 
-	 * @throws ConflictException On the first encountered conflict.
-	 * 	When resolved, subsequent calls may throw a new exception on next conflict,
-	 *  until the complete operation can be commited.
-	 *  If a conflict occurs, update may be partially done.
+	 * Add a new file in the working copy to version control
+	 * For folders that are already under version control,
+	 * it is invalid to do add again to add all contents recursively.
+	 * Instead those files must be added one by one.
+	 * @param path File or folder, for new folders all contents are also added.
 	 */
-	public void synchronize()
-		throws ConflictException;
+	public void add(File path);
 	
+	/**
+	 * Remove a file or folder from version control.
+	 * @param path To be removed from repository HEAD, 
+	 * if it still exists locally it will be deleted after the operation.
+	 */
+	public void delete(File path);
+	
+	/**
+	 * Mark a file or folder as moved in the repository.
+	 * TODO is this operation only possible if the file is still at original location?
+	 * @param from current location
+	 * @param to new location
+	 */
+	public void move(File from, File to);
+	
+	/**
+	 * Restores a file or folder to the version in repository
+	 * @param path file to reset all changes in, or folder to recursively restore
+	 */
+	public void revert(File path);
 }
