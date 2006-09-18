@@ -25,12 +25,11 @@ import se.repos.validation.strings.RejectStringContentsMissing;
 import se.repos.validation.strings.RejectStringIsEmpty;
 
 /**
- * 
+ * The logic to validate settings before checkout
  *
  * @author Staffan Olsson
  * @since 2006-apr-16
  * @version $Id$
- * @todo better design for validate & rejects with multiple rules and multiple fields
  */
 public class CheckoutSettingsValidator extends ValidationRejectStrategy<CheckoutSettings> {
 	

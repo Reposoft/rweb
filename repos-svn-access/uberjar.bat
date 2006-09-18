@@ -12,7 +12,7 @@ java -cp "C:\Documents and Settings\%USERNAME%\.m2\repository\junit\junit\4.1\ju
 
 echo fat jar built and tested, press enter to exit
 pause
-exit
+goto end
 
 rem --- Old instructions, for use with 'system' scope libs.
 rem create the uberjar
@@ -21,3 +21,5 @@ rem now manually unpack the jars from the 'lib' folder into the uberjar, because
 @echo now manually unpack the jars from the 'lib' folder into the uberjar, because the assembly plugin just places them in the root of the archive
 rem make test jar
 mvn jar:test-jar
+
+:end

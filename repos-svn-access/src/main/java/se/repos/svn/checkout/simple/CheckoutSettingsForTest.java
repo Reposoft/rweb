@@ -27,9 +27,9 @@ import se.repos.validation.Validation;
 import se.repos.validation.ValidationRule;
 
 /**
- * Default implementation, assuming standard project reporsitory layout.
+ * Test settings, assuming standard project reporsitory layout.
  *
- * The URL is given as repository root, and returned with the 'trunk' folder.
+ * The URL is given as repository root, but returned with the 'trunk' folder.
  *
  * @author Staffan Olsson
  * @since 2006-apr-15

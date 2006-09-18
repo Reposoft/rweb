@@ -175,7 +175,7 @@ public class PersonalWorkingCopy implements ReposWorkingCopy {
         	logger.info("There is local changes, performing commit.");
             doCommit(client, "Testing new contents");
         } else {
-        	logger.info("There is no local changes");
+        	logger.info("There are no local changes");
         }
     }
 
@@ -186,7 +186,7 @@ public class PersonalWorkingCopy implements ReposWorkingCopy {
         try {
             execute(commit, client);
         } catch (BuildException be) {
-            System.out.println("Could not commit, probably there were no changes.");
+            logger.error("Could not commit, probably there were no changes.");
             be.printStackTrace();
         }
     }
@@ -234,7 +234,8 @@ public class PersonalWorkingCopy implements ReposWorkingCopy {
     }
 
     protected void handleFeedback(Feedback feedback) {
-		// feedback not handled yet
+		// TODO requires our own NotifyListener implementation
+    	// TODO add execute method with custom NotifyListener
 	}
 
 	private SVNUrl getUrl() {

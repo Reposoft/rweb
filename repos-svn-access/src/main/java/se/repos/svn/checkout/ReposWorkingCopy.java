@@ -15,16 +15,21 @@
 package se.repos.svn.checkout;
 
 /**
- * Operations to keep a local copy of a workspace.
+ * Supports the repository user's work with a local working gopy.
  * 
- * Before a file is changed, it should be reserved using {@see #lock()}.
- * If a file is changed when it is not locked,
- * it will be treated as optimistic locking. This means that if someone else
- * checked in a newer file, the changes will not be saved.
- * It that happens, the user needs to get the latest version of the file from the repository,
- * and manually merge the local changes to it.
+ * Before a file is changed, it can be reserved using {@see #lock(String)}.
+ * If a file is changed when it is not locked, optimistic locking is used.
+ * So if there are no conflicts, synchronize will not complain
+ * (this goes also for non-binary files that can be automatically merged).
+ * If someone checked in changes that can not be merged witht the local file,
+ * a conflict will be reported.
+ * It that happens, the user will have two files: the latest local file
+ * and the latest from the repository.
  * 
- * Implementations should be as dumb as possible. 
+ * Preferrably conflicts are detected by doing an update() before synchronize,
+ * so that the latest repository changes are inspected locally before committing.
+ * 
+ * Implementations should be as dumb as possible. Not do any automatic stuff that the user has not requested.
  * For example always using absolute URLs (i.e. 'switch' would be implemented using a new explicit url).
  * Any assumptions about repository structure should be placed in a {@link se.repos.svn.checkout.CheckoutSettings} implementation.
  *
@@ -46,14 +51,17 @@ public interface ReposWorkingCopy {
 	public static final String DEFAULT_LOCAL_RENAME_AT_CONFLICT = "_your_changes";
 	
 	/**
-	 * Update the current working copy.
+	 * Update the current working copy with the changes from the repository.
+	 * @todo return UpdateInformation with paths and change type, same as in synchronize
 	 */
-	public void update();
+	public void update() throws ConflictException;
 	
 	/**
 	 * Reserve a file so that others can not change it.
 	 * Ensure that the file is writable locally.
-	 * @param relativePath path relative to local rirectory root, no starting '/'
+	 * Locking is never required, and only encouraged for binary files like word documents.
+	 * @param relativePath path relative to local directory root, no starting '/'
+	 * @param maybe change the parameter to File or an interface representing local resource
 	 */
 	public void lock(String relativePath);
 	
@@ -71,10 +79,9 @@ public interface ReposWorkingCopy {
 	 * <li>Commit local changes</li>
 	 * </ol>
 	 * Conflicts are treated as unexpected errors that the application must handle.
-	 * The operation stops at the first conflict it encounters.
-	 * Application should get the latest version of the file and
-	 * then mark the conflict as resolved. Local changes should be merged manually.
-	 * Then retry the operation. Might give another conflict somewhere else.
+	 * The operation is aborted if it encounters conflict,
+	 * ant the user must manually inspect the files and merge the local changes into
+	 * the latest shared file. Then mark the conflict resolved. Then retry the operation.
 	 * 
 	 * TODO return updates
 	 * TODO return commits

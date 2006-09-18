@@ -24,7 +24,7 @@ import se.repos.svn.UserCredentials;
  * 
  * Given the svn {@link http://svnbook.red-bean.com/nightly/en/svn.ref.svn.c.checkout.html checkout}
  * command line syntax, this defines a command<br />
- * <code>svn checkout {@link #getLogin()} {@link #getCheckoutUrl()} {@link #getWorkingCopyDirectory()}.
+ * <code>svn checkout {@see #getLogin()} {@see #getCheckoutUrl()} {@see #getWorkingCopyDirectory()}.
  *
  * @author Staffan Olsson
  * @since 2006-apr-15

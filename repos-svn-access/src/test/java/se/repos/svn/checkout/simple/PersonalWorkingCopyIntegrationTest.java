@@ -31,6 +31,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 	
 	private static final String TEST_FILE = "automated-test-increment.txt";
 	
+	// folder for test working copy. expected to have deleteOnExit.
 	private File tmpFolder = getEmptyTemporaryDirectory();
 	
 	public void testWorkflow() throws IOException {
@@ -46,7 +47,12 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 				new File(tmpFolder.getAbsolutePath() + '/' + ".svn").exists());
 		
 		// should be able to do an update
-		workingCopy.update();
+		try {
+			workingCopy.update();
+		} catch (ConflictException e1) {
+			// TODO auto-generated
+			throw new RuntimeException("ConflictException thrown, not handled", e1);
+		}
 		assertFalse("there should be no local changes", workingCopy.hasLocalChanges());
 		
 		// synchronize should do the same thing now because there are no locks or local changes
@@ -65,7 +71,12 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 				workingCopy.hasLocalChanges());
 		
 		// an update should not affect the changes
-		workingCopy.update();
+		try {
+			workingCopy.update();
+		} catch (ConflictException e1) {
+			// TODO auto-generated
+			throw new RuntimeException("ConflictException thrown, not handled", e1);
+		}
 		assertTrue("Update does not replace the changed file", workingCopy.hasLocalChanges());
 				
 		// it should be possible to close the program and next time open the same working copy again
