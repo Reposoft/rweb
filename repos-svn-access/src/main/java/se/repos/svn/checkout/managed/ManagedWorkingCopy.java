@@ -1,12 +1,18 @@
 /* $license_header$
  */
-package se.repos.svn.checkout.client;
+package se.repos.svn.checkout.managed;
 
 import java.io.File;
 
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.simple.PersonalWorkingCopy;
 
+/**
+ * 
+ *
+ * @author Staffan Olsson (solsson)
+ * @version $Id$
+ */
 public class ManagedWorkingCopy extends PersonalWorkingCopy implements
 		ReposWorkingCopyClient {
 
@@ -45,6 +51,13 @@ public class ManagedWorkingCopy extends PersonalWorkingCopy implements
 					"Method ManagedWorkingCopy#update not implemented yet");
 		}
 
+	}
+
+	public void revert(File path) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#revert not implemented yet");
+		}
+		
 	}
 
 }

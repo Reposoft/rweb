@@ -117,7 +117,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		fout.close();
 	}
 	
-	private File getEmptyTemporaryDirectory() {
+	public static File getEmptyTemporaryDirectory() {
 		try {
 			File tmp = File.createTempFile("PersonalWorkingCopyTest", "dir");
 			tmp.delete();

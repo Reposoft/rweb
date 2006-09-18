@@ -1,6 +1,6 @@
 /* $license_header$
  */
-package se.repos.svn.checkout.client;
+package se.repos.svn.checkout.managed;
 
 import java.io.File;
 
@@ -45,4 +45,10 @@ public interface ReposWorkingCopyClient extends ReposWorkingCopy {
 	 * @param to new location
 	 */
 	public void move(File from, File to);
+	
+	/**
+	 * Restores a file or folder to the version in repository
+	 * @param path file to reset all changes in, or folder to recursively restore
+	 */
+	public void revert(File path);
 }

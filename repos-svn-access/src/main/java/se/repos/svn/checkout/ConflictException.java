@@ -44,6 +44,10 @@ public class ConflictException extends Exception {
 	}
 
 	private class ConflictingFile implements ConflictInformation {
+		public File getWorkingCopyPath() {
+			return getLatestSharedFile();
+		}
+		
 		public File getLocalChangedFile() {
 			if (true) {
 				throw new UnsupportedOperationException("Method ConflictException#getLocalChangedFile not implemented yet.");

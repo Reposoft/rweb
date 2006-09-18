@@ -34,19 +34,26 @@ import se.repos.validation.Validation;
 import se.repos.validation.ValidationRule;
 
 /**
- * Basic working copy using the {@link http://subclipse.tigris.org/svnant.html SvnAnt} commands.
+ * Subversion client for an office user working in a windows folder.
+ * 
+ * This is currently a proof-of-concept. It is likely that failsafe operation
+ * of a working copy is not possible without constant monitoring of the folder.
  *
  * Designed to make interactions minimal and as clear sa possible for a
  * user who has no experience with source code versioning systems.
  * 
+ * Features above the normal operations:
  * - Automatic add at synchronize.
  * TODO Automatic delete at syncronize.
+ * TODO Automatic locks?
  * TODO Handle situations where user has moved a working copy folder (with no svn move)
  *
  * @author Staffan Olsson
  * @since 2006-apr-16
  * @version $Id$
  * @todo Should all files be write-protected until locked?
+ * @todo handle when files and directories have been moved in windows folder
+ * @todo handle commit message (input) and commit errors (result)
  */
 public class PersonalWorkingCopy implements ReposWorkingCopy {
 
@@ -135,7 +142,7 @@ public class PersonalWorkingCopy implements ReposWorkingCopy {
         // will exit and return true when it finds a modified file/dir
         for (int i = 0; i<statuses.length; i++) {
             ISVNStatus st = statuses[i];
-            System.out.println(st.getPath() + ": TextStatus=" + st.getTextStatus() + ", PropStatus=" + st.getPropStatus());
+            logger.debug(st.getPath() + ": TextStatus=" + st.getTextStatus() + ", PropStatus=" + st.getPropStatus());
             if (hasLocalChanges(st)) {
             	return true;
             }

@@ -18,10 +18,16 @@ import java.io.File;
 
 import se.repos.svn.RepositoryUrl;
 
+/**
+ * Represents the resources needed to resolve a conflict.
+ *
+ * @author Staffan Olsson (solsson)
+ * @version $Id$
+ */
 public interface ConflictInformation {
-
+	
 	/**
-	 * @return The file that coontains the latest local verision, causing the conflict
+	 * @return The file that coontains the latest local verision, causing the conflict.
 	 */
 	public File getLocalChangedFile();
 	
@@ -32,8 +38,15 @@ public interface ConflictInformation {
 	public File getLatestSharedFile();
 	
 	/**
+	 * @return The original location of the file, and the location where canges should be merged.
+	 * It is recommended that this is =={@link #getLatestSharedFile()}.
+	 */
+	public File getWorkingCopyPath();
+	
+	/**
 	 * @return The link to the online repository file.
-	 * 	Contents should be identical with {@link #getLatestSharedFile()} when the conflict occurs.
+	 * 	That file's contents is identical to {@link #getLatestSharedFile()} when the conflict is reported
+	 *  (except for updated <code>svn:keywords</code>)
 	 */
 	public RepositoryUrl getFileUrl();
 	

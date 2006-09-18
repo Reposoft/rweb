@@ -15,7 +15,7 @@
 package se.repos.svn.checkout;
 
 /**
- * Supports the repository user's work with a local working gopy.
+ * The repos.se operations on a working copy, as an abstraction above svnClientAdapter.
  * 
  * Before a file is changed, it can be reserved using {@see #lock(String)}.
  * If a file is changed when it is not locked, optimistic locking is used.
@@ -36,11 +36,8 @@ package se.repos.svn.checkout;
  * @author Staffan Olsson
  * @since 2006-apr-11
  * @version $Id$
- * @todo switch between tasks, create tasks (branch), complete tasks (merge)
- * @todo switch between users within the same working copy.
- * @todo handle how file or dir is marked for deletion
- * @todo handle when files and directories have been moved in windows folder
- * @todo handle commit message (input) and commit errors (result)
+ * @todo switch between tasks, create tasks (branch), complete tasks (merge): make a "task-aware" client
+ * @todo switch between users within the same working copy: make a "multiuser" client
  */
 public interface ReposWorkingCopy {
 
@@ -48,11 +45,12 @@ public interface ReposWorkingCopy {
 	 * To be added to file name (before .extension) when a conflicting file 
 	 * is checked out to the original name, and the conflict is marked resolved automatically.
 	 */
-	public static final String DEFAULT_LOCAL_RENAME_AT_CONFLICT = "_your_changes";
+	public static final String DEFAULT_LOCAL_RENAME_AT_CONFLICT = "_your-modified";
 	
 	/**
 	 * Update the current working copy with the changes from the repository.
 	 * @todo return UpdateInformation with paths and change type, same as in synchronize
+	 *  -- NO, add notify listeners to the instance instead
 	 */
 	public void update() throws ConflictException;
 	
