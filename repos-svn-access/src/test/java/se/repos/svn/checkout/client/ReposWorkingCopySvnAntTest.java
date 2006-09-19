@@ -21,26 +21,32 @@ import org.tigris.subversion.svnclientadapter.SVNStatusKind;
 import se.repos.svn.ClientProvider;
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
+import se.repos.svn.checkout.ConflictException;
+import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.ImmutableUserCredentials;
 import se.repos.svn.checkout.NotifyListener;
+import se.repos.svn.checkout.TestFolder;
 import se.repos.svn.checkout.client.ReposWorkingCopySvnAnt;
 
 import junit.framework.TestCase;
 
 import static org.easymock.EasyMock.*;
 
-// TODO design the class with more flexible instantiation, to allow this kind of testing
 public class ReposWorkingCopySvnAntTest extends TestCase {
 
-	private ISVNClientAdapter mockClient = null;
+	// note that any test that uses this need to do replay(mockClient)
 	private ReposWorkingCopySvnAnt getInstanceWithMockClient() {
 		UserCredentials userCredentials = new ImmutableUserCredentials("", "");
 		CheckoutSettings settings = createMock(CheckoutSettings.class);
-		expect(settings.getLogin()).andReturn(userCredentials);
+		expect(settings.getLogin()).andReturn(userCredentials).atLeastOnce();
+		expect(settings.getWorkingCopyDirectory()).andReturn(TestFolder.getNew()).atLeastOnce();
 		ClientProvider clientProvider = createMock(ClientProvider.class);
 		
+		ISVNClientAdapter mockClient = null;
 		mockClient = createMock(ISVNClientAdapter.class);
 		expect(clientProvider.getSvnClient(userCredentials)).andReturn(mockClient);
+		mockClient.addNotifyListener(isA(NotifyListener.class));
+		expectLastCall().atLeastOnce();
 		
 		replay(settings, clientProvider); // but let the test replay mockClient
 		
@@ -87,15 +93,41 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 	} */
 	
 	public void testAddNotifyListener() {
-		ReposWorkingCopySvnAnt w = getInstanceWithMockClient();
+		ReposWorkingCopySvnAnt wc = getInstanceWithMockClient();
 		
 		NotifyListener notifyListener = createMock(NotifyListener.class);
-		mockClient.addNotifyListener(notifyListener);
+		wc.getClient().addNotifyListener(notifyListener);
 		expectLastCall();
-		replay(mockClient);
+		replay(wc.getClient());
 		
-		w.addNotifyListener(notifyListener);
-		verify(mockClient);
+		wc.addNotifyListener(notifyListener);
+		//does not work so well: verify(wc.getClient());
+	}
+	
+	public void testCatchConflictAtUpdate() {
+		String error = "C  C:/DOCUME~1/solsson/LOKALA~1/Temp/test/increment.txt";
+		ReposWorkingCopySvnAnt w = getInstanceWithMockClient();
+		NotifyListener n = w.getConflictNotifyListener();
+		try {
+			n.logError(error);
+		} catch (Throwable e) {
+			fail("Can not throw exception because the underlying SVN lib catches it, and needs to do cleanup.");
+			assertTrue("The error message should contain the file name",
+					e.getMessage().contains("C:/DOCUME~1/solsson/LOKALA~1/Temp/test/increment.txt"));
+		}
+		// every update and commit needs to do this
+		try {
+			ReposWorkingCopySvnAnt.Conflict.reportConflicts();
+			fail("A conflict should have been detected for last commit");
+		} catch (ConflictException e) {
+			assertEquals("Should report one conflicting file", 1, e.getConflicts().length);
+			ConflictInformation c = e.getConflicts()[0];
+		}
+	}
+	
+	public void testCatchConflictNotResolvedAtCommit() {
+		String error = "svn: Commit failed (details follow): " +
+			"svn: Aborting commit: 'C:\\DOCUME~1\\solsson\\LOKALA~1\\Temp\\test\\increment.txt' remains in conflict";
 	}
 	
 }

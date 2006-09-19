@@ -65,7 +65,7 @@ public class AbstractCheckoutSettingsTest extends TestCase {
 		CheckoutSettings c = new CheckoutSettingsForTest();
 		final String testDir = c.getWorkingCopyDirectory().getAbsolutePath();
 		String rel = c.toRelative(new File(testDir + S + "file.txt"));
-		assertEquals("file.txt", rel, "Should strip the working copy directory from the absolute path");
+		assertEquals("Should strip the working copy directory from the absolute path", "file.txt", rel);
 	}
 
 }

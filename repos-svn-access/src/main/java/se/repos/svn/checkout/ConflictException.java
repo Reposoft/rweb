@@ -14,10 +14,6 @@
  */
 package se.repos.svn.checkout;
 
-import java.io.File;
-
-import se.repos.svn.RepositoryUrl;
-
 /**
  * Thrown when there the local changes can not be merged with the remote ones.
  * 
@@ -27,7 +23,8 @@ import se.repos.svn.RepositoryUrl;
  * For a commit this means that the operation was aborted.
  * It is recommended to handle conflicts at update,
  * but never guaranteed that they can be avoided at commit
- * (because there could always be very new changes remotely).
+ * (because there could always be very new changes remotely,
+ * and the local files might still be open).
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$
@@ -36,37 +33,16 @@ public class ConflictException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
+	private ConflictInformation[] conflicts;
+	
+	public ConflictException(ConflictInformation[] conflicts) {
+		this.conflicts = conflicts;
+	}
+	
 	/**
 	 * @return the conflict location(s)
 	 */
-	public ConflictInformation[] getFiles() {
-		throw new UnsupportedOperationException("Not implemented yet.");
-	}
-
-	private class ConflictingFile implements ConflictInformation {
-		public File getWorkingCopyPath() {
-			return getLatestSharedFile();
-		}
-		
-		public File getLocalChangedFile() {
-			if (true) {
-				throw new UnsupportedOperationException("Method ConflictException#getLocalChangedFile not implemented yet.");
-			}
-			return null;
-		}
-
-		public File getLatestSharedFile() {
-			if (true) {
-				throw new UnsupportedOperationException("Method ConflictException#getLatestSharedFile not implemented yet.");
-			}
-			return null;
-		}
-
-		public RepositoryUrl getFileUrl() {
-			if (true) {
-				throw new UnsupportedOperationException("Method ConflictException#getFileUrl not implemented yet.");
-			}
-			return null;
-		}
+	public ConflictInformation[] getConflicts() {
+		return this.conflicts;
 	}
 }

@@ -28,9 +28,9 @@ import se.repos.svn.checkout.MandatoryReposOperations;
 
 import junit.framework.TestCase;
 
-public class PersonalWorkingCopyIntegrationTest extends TestCase {
+public class SimpleWorkingCopyIntegrationTest extends TestCase {
 	
-	private static final String TEST_FILE = "automated-test-increment.txt";
+	static final String TEST_FILE = "automated-test-increment.txt";
 	
 	// folder for test working copy. expected to have deleteOnExit.
 	private File tmpFolder;
@@ -39,7 +39,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		// first instantiate a working copy for a new empty folder
 		CheckoutSettings settings =  new CheckoutSettingsForTest();
 		tmpFolder = settings.getWorkingCopyDirectory();
-		MandatoryReposOperations workingCopy = new PersonalWorkingCopy(settings);
+		MandatoryReposOperations workingCopy = new SimpleWorkingCopy(settings);
 		
 		// this should cause a checkout right here
 		assertTrue("Should now find a .svn folder inside checkout dir",
@@ -49,7 +49,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		try {
 			workingCopy.update();
 		} catch (ConflictException e1) {
-			// Tested in PersonalWorkingCopyConflictTest
+			// Tested in SimpleWorkingCopyConflictIntegrationTest
 			fail("Unexpected conflict. Maybe the test is running somewhere else too. Try again.");
 		}
 		assertFalse("there should be no local changes", workingCopy.hasLocalChanges());
@@ -79,7 +79,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 				
 		// it should be possible to close the program and next time open the same working copy again
 		workingCopy = null;
-		workingCopy = new PersonalWorkingCopy(settings);
+		workingCopy = new SimpleWorkingCopy(settings);
 		
 		assertTrue("The changes should still be here if the working copy is reopened",
 				workingCopy.hasLocalChanges());
@@ -97,7 +97,7 @@ public class PersonalWorkingCopyIntegrationTest extends TestCase {
 		
 	}
 
-	private int increaseCounter(File testFile) throws IOException, FileNotFoundException {
+	static int increaseCounter(File testFile) throws IOException, FileNotFoundException {
 		if (!testFile.exists()) {
 			testFile.createNewFile();
 			FileWriter fout = new FileWriter(testFile);

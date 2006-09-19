@@ -3,6 +3,8 @@
 package se.repos.svn.checkout.client;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
@@ -14,12 +16,13 @@ import org.slf4j.LoggerFactory;
 import org.tigris.subversion.svnant.Add;
 import org.tigris.subversion.svnant.Checkout;
 import org.tigris.subversion.svnant.Commit;
-import org.tigris.subversion.svnant.Feedback;
 import org.tigris.subversion.svnant.SvnCommand;
 import org.tigris.subversion.svnant.Update;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
+import org.tigris.subversion.svnclientadapter.ISVNNotifyListener;
 import org.tigris.subversion.svnclientadapter.ISVNStatus;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
+import org.tigris.subversion.svnclientadapter.SVNNodeKind;
 import org.tigris.subversion.svnclientadapter.SVNStatusKind;
 import org.tigris.subversion.svnclientadapter.SVNUrl;
 
@@ -35,11 +38,15 @@ import se.repos.svn.checkout.ReposWorkingCopy;
 /**
  * Uses subclipse {@link http://subclipse.tigris.org/svnant.html SvnAnt} to implement the subversion operations
  *
+ * WRite operations are done using SVnAnt, but many read operations use the svnClientAdapter API directly.
+ *
  * This class uses the {@link http://www.slf4j.org/ slf4j} logging API.
  * See the slf4j docs on how to customize output.
  * 
  * This is a stateful implementation. The instance has its own ISVNClientAdapter,
  * which has a username and password set using {@link #setUserCredentials(UserCredentials)}.
+ * Each instance of this class should be used in one thread only.
+ * It seems that all SVN client libraries are non-threadsafe.
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$
@@ -52,6 +59,8 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	
 	CheckoutSettings settings;
 	
+	ConflictNotifyListener conflictNotifyListener;
+	
 	//used for all Ant calls that need a Project instance
     private final Project ANTPROJECT = new Project();
 	
@@ -62,6 +71,8 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	 */
 	public ReposWorkingCopySvnAnt(ClientProvider clientProvider, CheckoutSettings settings) {
 		client = clientProvider.getSvnClient(settings.getLogin());
+		conflictNotifyListener = new ConflictNotifyListener();
+		this.addNotifyListener(conflictNotifyListener);
 		this.settings = settings;
         if (settings.getWorkingCopyDirectory().list().length > 0) {
         	logger.debug("There is a working copy in {}, need to verify", settings.getWorkingCopyDirectory().getAbsolutePath());
@@ -74,6 +85,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	 * @param notifyListener A callback implementation.
 	 */
 	public void addNotifyListener(NotifyListener notifyListener) {
+		logger.debug("Adding notify listener {}", notifyListener.getClass().getSimpleName());
 		client.addNotifyListener(notifyListener);
 	}
 
@@ -89,6 +101,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		Update update = new Update();
         update.setDir(settings.getWorkingCopyDirectory());
         execute(update);
+        Conflict.reportConflicts();
 	}
 	
 	public void update(File path) {
@@ -102,12 +115,8 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
     	Commit commit = new Commit();
         commit.setDir(settings.getWorkingCopyDirectory());
         commit.setMessage(commitMessage);
-        try {
-            execute(commit);
-        } catch (BuildException be) {
-            logger.error("Could not commit, probably there were no changes.");
-            be.printStackTrace();
-        }
+        execute(commit);
+        Conflict.reportConflicts();
     }
     
 	/**
@@ -197,10 +206,12 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
     	if (command.getProject() == null) {
     		command.setProject(ANTPROJECT); // dummy, might be needed for some operations
     	}
-        //Feedback feedback = new Feedback(command);
-        //svnClient.addNotifyListener(feedback);
-        command.execute(client);
-        //svnClient.removeNotifyListener(feedback);
+        try {
+        	command.execute(client);
+        } catch (BuildException be) {
+        	// this kind of errors should be handled by the notify listener
+        	logger.error("Svn client error '" + be.getMessage() + "' caused by: " + be.getCause().getMessage(), be);
+        }
     }
 	
     /**
@@ -250,5 +261,107 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		}
 		return false;
 	}
-    
+	
+	ISVNClientAdapter getClient() {
+		return client;
+	}
+	
+	NotifyListener getConflictNotifyListener() {
+		return conflictNotifyListener;
+	}
+	
+	/**
+	 * Need to be able to throw Conflict as runtime exception in notify listener
+	 */
+	static class Conflict extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+		// keep track of last conflict in a non threadsafe way
+		private static List conflicts = new LinkedList();
+		private static void push(Conflict newreport) {
+			Conflict.conflicts.add(newreport);
+		}
+		/**
+		 * To be called after each operation that could possibly cause a conflict.
+		 * @throws ConflictException if there was a conflict at the last operation
+		 */
+		static void reportConflicts() throws ConflictException {
+			if (Conflict.conflicts.isEmpty()) {
+				return;
+			}
+			Conflict.conflicts.clear();
+			throw new ConflictException(new ConflictInformation[0]);
+		}
+		
+		// the instcances
+		String filename;
+		boolean previouslyReported = false; // true if this is an old conflict that was never resolved
+		public Conflict(String filename) {
+			this.filename = filename;
+			push(this);
+		}
+		public Conflict(String filename, boolean previouslyReported) {
+			this(filename);
+			this.previouslyReported = previouslyReported;
+		}
+		public String getMessage() {
+			return "Conflict at " + filename + ". This error should not be seen outside client.";
+		}
+		String getFilename() {
+			return filename;
+		}
+		boolean isPreviouslyReported() {
+			return previouslyReported;
+		}
+	}
+	
+	/**
+	 * Mandatory notify lsitener that provides logging and conflict detection.
+	 * 
+	 * Don't throw exceptions from this class. They'll only be silently caught in the JavaSVN lib.
+	 */
+	private class ConflictNotifyListener implements NotifyListener {
+		public void logCommandLine(String commandLine) {
+			logger.info("svn command line: " + commandLine);
+		}
+
+		public void logCompleted(String message) {
+			logger.info("svn completed: " + message);
+		}
+
+		// conflict is reported as "C  C:/myfile.txt"
+		public void logError(String message) {
+			if (message.matches("^*C\\s+.+$")) {
+				logger.warn("Conflict detected: {}", message);
+				//svn client lib has to finis its work// throw new ConflictStack(message);
+				new Conflict(message);
+			}
+			logger.error("svn error: " + message);
+		}
+
+		public void logMessage(String message) {
+			logger.info("svn message: " + message);
+		}
+
+		public void logRevision(long revision, String path) {
+			logger.info("svn updated to revision " + revision + ": " + path);
+		}
+
+		public void onNotify(File path, SVNNodeKind kind) {
+			logger.info("svn notify " + path + " node kind " + kind);
+		}
+
+		public void setCommand(int command) {
+			if (command == ISVNNotifyListener.Command.COMMIT) {
+				logger.info("svn start commit");
+			}
+			if (command == ISVNNotifyListener.Command.UPDATE) {
+				logger.info("svn start update");
+			}
+			if (command == ISVNNotifyListener.Command.STATUS) {
+				logger.debug("svn start status");
+			}
+			logger.info("svn start command " + command);
+		}
+	}
+	
 }

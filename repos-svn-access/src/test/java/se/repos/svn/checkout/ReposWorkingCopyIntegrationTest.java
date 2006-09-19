@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import se.repos.svn.checkout.CheckoutSettings;
-import se.repos.svn.checkout.simple.PersonalWorkingCopyIntegrationTest;
+import se.repos.svn.checkout.simple.SimpleWorkingCopyIntegrationTest;
 import junit.framework.TestCase;
 
 /**

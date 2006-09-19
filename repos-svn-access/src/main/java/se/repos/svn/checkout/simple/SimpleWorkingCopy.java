@@ -36,7 +36,7 @@ import se.repos.validation.ValidationRule;
  * @todo handle commit message (input) and commit errors (result)
  * @todo rename to SimpleWorkingCopy
  */
-public class PersonalWorkingCopy implements MandatoryReposOperations {
+public class SimpleWorkingCopy implements MandatoryReposOperations {
 
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
   
@@ -49,7 +49,7 @@ public class PersonalWorkingCopy implements MandatoryReposOperations {
      * Open up an existing working copy.
      * If the folder is empty nothing can be done until {@link #checkout()} is called.
      */
-    public PersonalWorkingCopy(CheckoutSettings settings) {
+    public SimpleWorkingCopy(CheckoutSettings settings) {
         super();
         logger.info("Initializing working copy with settings: {}", settings);
         CHECKOUT_SETTINGS_VALIDATOR.validate(settings);
@@ -89,7 +89,7 @@ public class PersonalWorkingCopy implements MandatoryReposOperations {
 
 	public void markConflictResolved(ConflictInformation conflictInformation) {
 		if (true) {
-			throw new UnsupportedOperationException("Method PersonalWorkingCopy#markConflictResolved not implemented yet");
+			throw new UnsupportedOperationException("Method SimpleWorkingCopy#markConflictResolved not implemented yet");
 		}
 	}
 

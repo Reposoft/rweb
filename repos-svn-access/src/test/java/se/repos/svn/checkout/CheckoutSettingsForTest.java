@@ -15,7 +15,6 @@
 package se.repos.svn.checkout;
 
 import java.io.File;
-import java.io.IOException;
 
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.ImmutableUserCredentials;
@@ -74,16 +73,8 @@ public class CheckoutSettingsForTest extends AbstractCheckoutSettings {
 	}
 
 	static File getEmptyTemporaryDirectory() {
-		try {
-			File tmp = File.createTempFile("PersonalWorkingCopyTest", "dir");
-			tmp.delete();
-			tmp.mkdir();
-			tmp.deleteOnExit();
-			System.out.println("Using temporary directory: " + tmp.getAbsolutePath());
-			return tmp;
-		} catch (IOException e) {
-			// TODO auto-generated
-			throw new RuntimeException("IOException handling missing", e);
-		}
+		File tmp = TestFolder.getNew();
+		System.out.println("Using temporary directory: " + tmp.getAbsolutePath());
+		return tmp;
 	}
 }
