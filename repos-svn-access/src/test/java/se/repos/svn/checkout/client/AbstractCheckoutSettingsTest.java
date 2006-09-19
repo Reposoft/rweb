@@ -2,12 +2,9 @@
  */
 package se.repos.svn.checkout.client;
 
-
 import java.io.File;
 
 import junit.framework.TestCase;
-
-import org.junit.Before;
 
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
@@ -17,7 +14,6 @@ public class AbstractCheckoutSettingsTest extends TestCase {
 
 	final String S = File.separator;
 	
-	@Before
 	public void setUp() throws Exception {
 	}
 	

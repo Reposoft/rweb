@@ -3,14 +3,11 @@
 package se.repos.svn.checkout.simple;
 
 import java.io.File;
-import java.net.MalformedURLException;
+import java.util.regex.Pattern;
 
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.ImmutableUserCredentials;
 import se.repos.svn.checkout.client.AbstractCheckoutSettings;
-import se.repos.svn.project.RejectInvalidProjectName;
-import se.repos.validation.Validation;
-import se.repos.validation.ValidationRule;
 
 /**
  * The repository is assumed to use the standard folders 
@@ -21,16 +18,17 @@ import se.repos.validation.ValidationRule;
 public class ProjectCheckoutSettings extends AbstractCheckoutSettings {
 
 	/**
-	 * Validation rule for project name, so it will work as a directory name
+	 * Validation rule for project name, so it will work as a directory name.
+	 * This should be the common repos.se rule.
 	 */
-	public static final ValidationRule<String> PROJECT_NAME_RULE = Validation.rule(RejectInvalidProjectName.class);
+	public static final Pattern PROJECT_NAME_RULE = Pattern.compile("[a-zA-Z][\\w-]*");
 	
 	private UserCredentials userCredentials;
 	
 	public ProjectCheckoutSettings(
 			String repositoryRootUrl, String projectName, 
 			File workingCopyFolder,
-			String username, String password) throws MalformedURLException {
+			String username, String password) throws IllegalArgumentException {
 		super(getRepositoryUrl(repositoryRootUrl, projectName), workingCopyFolder);
 		this.userCredentials = new ImmutableUserCredentials(username, password);
 	}
@@ -40,7 +38,10 @@ public class ProjectCheckoutSettings extends AbstractCheckoutSettings {
 	}
 
 	private static String getRepositoryUrl(String repositoryRootUrl, String projectName) {
-		PROJECT_NAME_RULE.validate(projectName);
-		return repositoryRootUrl + "/" + projectName + "/trunk";
+		if (PROJECT_NAME_RULE.matcher(projectName).matches()) {
+			return repositoryRootUrl + "/" + projectName + "/trunk";
+		}
+		throw new IllegalArgumentException("Project name is invalid: " + projectName);
 	}
+	
 }

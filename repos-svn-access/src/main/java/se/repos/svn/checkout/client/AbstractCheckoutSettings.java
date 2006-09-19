@@ -10,26 +10,40 @@ import org.tigris.subversion.svnclientadapter.SVNUrl;
 import se.repos.svn.RepositoryUrl;
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
-import se.repos.validation.Validation;
-import se.repos.validation.ValidationRule;
 
 public abstract class AbstractCheckoutSettings implements CheckoutSettings {
 
 	private RepositoryUrl repositoryUrl;
 	private File workingCopyDirectory;
 
-	public AbstractCheckoutSettings(String url, String workingCopyAbsolutePath) {
+	/**
+	 * 
+	 * @param url
+	 * @param workingCopyAbsolutePath 
+	 * @throws IllegalArgumentException if the url or path is invalid
+	 */
+	public AbstractCheckoutSettings(String url, String workingCopyAbsolutePath) throws IllegalArgumentException {
 		this(url, convertToFile(workingCopyAbsolutePath));
 	}
 	
-	public AbstractCheckoutSettings(String url, File workingCopyAbsolutePath) {
+	public AbstractCheckoutSettings(String url, File workingCopyAbsolutePath) throws IllegalArgumentException {
 		this(new Url(url), workingCopyAbsolutePath);
 	}
 
-	public AbstractCheckoutSettings(RepositoryUrl url, File workingCopyAbsolutePath) {
+	public AbstractCheckoutSettings(RepositoryUrl url, File workingCopyAbsolutePath) throws IllegalArgumentException {
+		validateWorkingCopyPath(workingCopyAbsolutePath);
 		this.repositoryUrl = url;
 		this.workingCopyDirectory = workingCopyAbsolutePath;
 	}	
+	
+	public void validateWorkingCopyPath(File path) throws InvalidWorkingCopyPath {
+		if (path == null) throw new InvalidWorkingCopyPath("is empty", path);
+		if (!path.isAbsolute()) throw new InvalidWorkingCopyPath("is not absolute", path);
+		if (!path.exists()) throw new InvalidWorkingCopyPath("does not exist", path);
+		if (!path.isDirectory()) throw new InvalidWorkingCopyPath("is not a directory", path);
+		if (!path.canRead()) throw new InvalidWorkingCopyPath("is not readable", path);
+		if (!path.canWrite()) throw new InvalidWorkingCopyPath("is not writable", path);
+	}
 	
 	public abstract UserCredentials getLogin();
 	
@@ -57,14 +71,12 @@ public abstract class AbstractCheckoutSettings implements CheckoutSettings {
 	}
 	
 	private static class Url implements RepositoryUrl {
-		static final ValidationRule<String> URL_VALIDATOR = Validation.rule(ValidateRepositoryUrl.class);
 		private SVNUrl url;
 		Url(String url) {
-			URL_VALIDATOR.validate(url); // should guarantee that we don't get a MalformedURLException
 			try {
 				this.url = new SVNUrl(url);
 			} catch (MalformedURLException e) {
-				throw new RuntimeException("URL was not properly validated as it should have been automatically", e);
+				throw new IllegalArgumentException("Invalid repository URL: " + url, e);
 			}
 		}
 		public SVNUrl getUrl() {
@@ -78,4 +90,16 @@ public abstract class AbstractCheckoutSettings implements CheckoutSettings {
 		}
 	}
 
+	class InvalidWorkingCopyPath extends IllegalArgumentException {
+		private static final long serialVersionUID = 1L;
+		private File path;
+		public InvalidWorkingCopyPath(String message, File path) {
+			super(message);
+			this.path = path;
+		}
+		public String getMessage() {
+			return super.getMessage() + ": " + path;
+		}
+	}
+	
 }

@@ -9,9 +9,6 @@ import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.MandatoryReposOperations;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
-import se.repos.svn.checkout.client.CheckoutSettingsValidator;
-import se.repos.validation.Validation;
-import se.repos.validation.ValidationRule;
 
 /**
  * Subversion client for an office user working in a windows folder.
@@ -39,9 +36,6 @@ import se.repos.validation.ValidationRule;
 public class SimpleWorkingCopy implements MandatoryReposOperations {
 
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
-  
-    private static final ValidationRule<CheckoutSettings> CHECKOUT_SETTINGS_VALIDATOR = 
-    	Validation.rule(CheckoutSettingsValidator.class);
     
     private ReposWorkingCopy workingCopy;
     
@@ -52,7 +46,7 @@ public class SimpleWorkingCopy implements MandatoryReposOperations {
     public SimpleWorkingCopy(CheckoutSettings settings) {
         super();
         logger.info("Initializing working copy with settings: {}", settings);
-        CHECKOUT_SETTINGS_VALIDATOR.validate(settings);
+        
         this.workingCopy = ReposWorkingCopyFactory.getClient(settings);
         
         if (settings.getWorkingCopyDirectory().list().length == 0) {
