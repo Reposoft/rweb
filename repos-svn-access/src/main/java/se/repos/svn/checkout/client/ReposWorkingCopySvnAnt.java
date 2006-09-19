@@ -19,7 +19,6 @@ import org.tigris.subversion.svnant.Commit;
 import org.tigris.subversion.svnant.SvnCommand;
 import org.tigris.subversion.svnant.Update;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
-import org.tigris.subversion.svnclientadapter.ISVNNotifyListener;
 import org.tigris.subversion.svnclientadapter.ISVNStatus;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.tigris.subversion.svnclientadapter.SVNNodeKind;
@@ -34,6 +33,7 @@ import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.ReposWorkingCopy;
+import se.repos.svn.checkout.ReposWorkingCopyFactory;
 
 /**
  * Uses subclipse {@link http://subclipse.tigris.org/svnant.html SvnAnt} to implement the subversion operations
@@ -60,6 +60,9 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	CheckoutSettings settings;
 	
 	ConflictNotifyListener conflictNotifyListener;
+	
+	// corrently it is not verified that the application sets this
+	protected ConflictHandler conflictHandler = null;
 	
 	//used for all Ant calls that need a Project instance
     private final Project ANTPROJECT = new Project();
@@ -272,6 +275,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	
 	/**
 	 * Need to be able to throw Conflict as runtime exception in notify listener
+	 * @todo make an instance variable with the conflict stack in enclosing type instead
 	 */
 	static class Conflict extends RuntimeException {
 		private static final long serialVersionUID = 1L;
@@ -287,6 +291,10 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		static void reportConflicts() throws ConflictException {
 			if (Conflict.conflicts.isEmpty()) {
 				return;
+			}
+			ConflictInformation[] c = new ConflictInformation[conflicts.size()];
+			for (int i = 0; i < c.length; i++) {
+				c[i] = conflicthandler
 			}
 			Conflict.conflicts.clear();
 			throw new ConflictException(new ConflictInformation[0]);
@@ -320,48 +328,56 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	 * Don't throw exceptions from this class. They'll only be silently caught in the JavaSVN lib.
 	 */
 	private class ConflictNotifyListener implements NotifyListener {
+		private int currentCommand;
+		private int counter = 0;
+		
+		public void setCommand(int command) {
+			counter++;
+			this.currentCommand = command;			
+		}
+
+		private String getCurrentCommand() {
+			return "" + counter + ":" + currentCommand;
+		}
+		
 		public void logCommandLine(String commandLine) {
-			logger.info("svn command line: " + commandLine);
+			logger.debug("svn command line for {}: {}", getCurrentCommand(), commandLine);
 		}
 
 		public void logCompleted(String message) {
-			logger.info("svn completed: " + message);
+			logger.info("svn completed command {}: {}", getCurrentCommand(), message);
 		}
 
 		// conflict is reported as "C  C:/myfile.txt"
 		public void logError(String message) {
+			logger.error("svn error in command {}: {}", getCurrentCommand(), message);
 			if (message.matches("^*C\\s+.+$")) {
 				logger.warn("Conflict detected: {}", message);
 				//svn client lib has to finis its work// throw new ConflictStack(message);
 				new Conflict(message);
 			}
-			logger.error("svn error: " + message);
 		}
 
 		public void logMessage(String message) {
-			logger.info("svn message: " + message);
+			logger.debug("svn message from command {}: {}", getCurrentCommand(), message);
 		}
 
 		public void logRevision(long revision, String path) {
-			logger.info("svn updated to revision " + revision + ": " + path);
+			logger.info("svn path {} now at revision {}", path, revision);
 		}
 
 		public void onNotify(File path, SVNNodeKind kind) {
-			logger.info("svn notify " + path + " node kind " + kind);
+			logger.info("svn command {} running on path {} ({})", new Object[]{getCurrentCommand(), path, kind});
 		}
+	}
 
-		public void setCommand(int command) {
-			if (command == ISVNNotifyListener.Command.COMMIT) {
-				logger.info("svn start commit");
-			}
-			if (command == ISVNNotifyListener.Command.UPDATE) {
-				logger.info("svn start update");
-			}
-			if (command == ISVNNotifyListener.Command.STATUS) {
-				logger.debug("svn start status");
-			}
-			logger.info("svn start command " + command);
-		}
+	/**
+	 * Inject the logic for reporting ConflictInformation
+	 * Currently this is done by {@link ReposWorkingCopyFactory} but it should probably be done by the application.
+	 * @param conflictHandler istance
+	 */
+	public void setConflictHandler(ConflictHandler conflictHandler) {
+		this.conflictHandler = conflictHandler;
 	}
 	
 }

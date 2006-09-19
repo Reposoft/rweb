@@ -43,20 +43,21 @@ public class SimpleWorkingCopyConflictIntegrationTest extends TestCase {
 			w2.synchronize("Commit conflict test " + i2);
 			fail("Should have got a conflict exception, because two identical changes have been made");
 		} catch (ConflictException e) {
+			listDirContents(s2.getWorkingCopyDirectory());
 			assertEquals("Should report one conflicting file", 1, e.getConflicts().length);
 			conflictInformation = e.getConflicts()[0];
 		}
 		// verify the conflicting file
 		assertEquals("ConflictInformation should report the same absolute path", 
-				f2, conflictInformation.getWorkingCopyPath());
+				f2, conflictInformation.getTargetPath());
 		assertEquals("The remote file should be placed where the local file was",
-				f2, conflictInformation.getLatestSharedFile());
+				f2, conflictInformation.getRepositoryFile());
 		assertFalse("The local file should be renamed",
-				f2.getAbsolutePath().equals(conflictInformation.getLocalChangedFile().getAbsolutePath()));
+				f2.getAbsolutePath().equals(conflictInformation.getUserFile().getAbsolutePath()));
 		
 		// number 2 likes his file better
-		conflictInformation.getLatestSharedFile().delete();
-		conflictInformation.getLocalChangedFile().renameTo(conflictInformation.getWorkingCopyPath());
+		conflictInformation.getRepositoryFile().delete();
+		conflictInformation.getUserFile().renameTo(conflictInformation.getTargetPath());
 		// now resolve the conflict
 		w2.markConflictResolved(conflictInformation);
 		// great, now try to commit again
@@ -67,6 +68,14 @@ public class SimpleWorkingCopyConflictIntegrationTest extends TestCase {
 		}		
 		// now there is no difference between local and remote
 		assertFalse("File is identical with repository version and conflict is resolved", w2.hasLocalChanges());
+	}
+
+	// helper method to examine working copy state
+	private void listDirContents(File workingCopyDirectory) {
+		String[] files = workingCopyDirectory.list();
+		for (int i=0; i < files.length; i++) {
+			System.out.println(files[i]);
+		}
 	}
 
 }

@@ -19,15 +19,6 @@ import java.io.File;
 /**
  * The repos.se operations on a working copy, as an abstraction above svnClientAdapter.
  * 
- * Before a file is changed, it can be reserved using {@see #lock(String)}.
- * If a file is changed when it is not locked, optimistic locking is used.
- * So if there are no conflicts, synchronize will not complain
- * (this goes also for non-binary files that can be automatically merged).
- * If someone checked in changes that can not be merged witht the local file,
- * a conflict will be reported.
- * It that happens, the user will have two files: the latest local file
- * and the latest from the repository.
- * 
  * Preferrably conflicts are detected by doing an update() before commit,
  * so that the latest repository changes are inspected locally before committing.
  * 
@@ -42,12 +33,6 @@ import java.io.File;
  * @todo switch between users within the same working copy: make a "multiuser" client
  */
 public interface ReposWorkingCopy extends MandatoryReposOperations {
-
-	/**
-	 * To be added to file name (before .extension) when a conflicting file 
-	 * is checked out to the original name, and the conflict is marked resolved automatically.
-	 */
-	public static final String DEFAULT_LOCAL_RENAME_AT_CONFLICT = "_your-modified";
 	
 	/**
 	 * Allows callback after operations.
