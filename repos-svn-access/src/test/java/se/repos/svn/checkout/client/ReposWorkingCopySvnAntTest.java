@@ -130,8 +130,35 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 		statusMock.getPropStatus();
 		statusControl.setReturnValue(SVNStatusKind.NONE);
 		statusControl.replay();
-		assertFalse("The file is deleted so it has local changes", w.hasLocalChanges(statusMock));
+		assertTrue("The file is deleted so it has local changes", w.hasLocalChanges(statusMock));
 	}	
+
+	public void testHasLocalChangesMissing() {
+		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		
+		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
+		statusMock.getTextStatus();
+		statusControl.setReturnValue(SVNStatusKind.MISSING);
+		statusMock.getPropStatus();
+		statusControl.setReturnValue(SVNStatusKind.NORMAL);
+		statusControl.replay();
+		assertFalse("The file is missing, but there is nothing to commit until marked for removal", 
+				w.hasLocalChanges(statusMock));
+	}	
+
+	public void testHasLocalChangesMissingButPropertiesChanged() {
+		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		
+		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
+		statusMock.getTextStatus();
+		statusControl.setReturnValue(SVNStatusKind.MISSING);
+		statusMock.getPropStatus();
+		statusControl.setReturnValue(SVNStatusKind.MODIFIED);
+		statusControl.replay();
+		assertTrue("The changed properties of the missing file should be committed", w.hasLocalChanges(statusMock));
+	}		
 	
 	public void testCatchConflictAtUpdate() {
 		String error = "C  C:/DOCUME~1/solsson/LOKALA~1/Temp/test/increment.txt";

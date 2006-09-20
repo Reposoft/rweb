@@ -63,18 +63,18 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	public void commit(String commitMessage) throws ConflictException, RepositoryAccessException;
 	
 	/**
-	 * Checks status of a specific resource
+	 * Checks if a local resource can be committed
 	 * @param path The file or folder to check
-	 * @return true if the file or the folder with subfolders needs commit
+	 * @return true if there is changes to the versioned contents, recursively for folders
 	 * @see MandatoryReposOperations#hasLocalChanges()
 	 */
 	public boolean hasLocalChanges(File path);
 	
 	/**
-	 * Checks if status is 
+	 * Checks if a file is under version control.
+	 * If the file is status=MISSING but not marked for delete, it is still under version control.
 	 * @param path file or folder
-	 * @return true if the path exists and is under version control
-	 * @throws IllegalArgumentException if the path does not exist
+	 * @return true if the path is under version control
 	 */
 	public boolean isVersioned(File path);
 	

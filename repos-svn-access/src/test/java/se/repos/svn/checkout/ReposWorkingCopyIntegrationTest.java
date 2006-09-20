@@ -38,11 +38,24 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		return c;
 	}
 	
-	public void testNewFileStatus() {
+	public void testNewFileStatus() throws IOException {
 		File created = new File(path, "new.txt");
 		if (created.exists()) fail("Invalid test setup. The file " + created.getName() + " is already in the working copy");
-		assertFalse("Is a new file", client.isVersioned(created));
+		created.createNewFile();
+		assertFalse("New files are not versioned until add", client.isVersioned(created));
 		assertFalse("Is a new file so it has no changes", client.hasLocalChanges(created));
+	}
+	
+	public void testMissingFileStatus() {
+		File f = new File(path, "automated-test-increment.txt");
+		if (!f.exists()) fail("For this test to work the file " + f.getName() + " must be under version control");
+		assertTrue("Testing with an existing working copy file", client.isVersioned(f));
+		assertFalse("The existing file is not modified locally", client.hasLocalChanges(f));
+		// now delete without telling the svn client
+		f.delete();
+		assertFalse("To identify a missing file, check (exists==false && isVersioned==true", f.exists());
+		assertTrue("If the file is silently deleted, it is still versioned", client.isVersioned(f));
+		assertFalse("There is nothing to check in, because the file has not been marked for removal", client.hasLocalChanges(f));
 	}
 	
 	public void testAddAndDelete() throws IOException, ConflictException, RepositoryAccessException {
@@ -60,8 +73,6 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		client.commit("Added test file");
 		client.delete(created);
 		assertFalse("The file should be deleted by the client", created.exists());
-		assertTrue("Should still say isVersioned=true for a deleted file, because a new file with the same name can not be created until after commit", 
-				client.isVersioned(created));
 		client.commit("Deleted test file");
 		assertFalse("The file should be gone", created.exists());
 		assertFalse("Now the file name is not used anymore",	client.isVersioned(created));
@@ -85,14 +96,14 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		assertTrue("The file should be added", client.isVersioned(created));
 		client.commit("Added test file (testDeleteAlreadyDeletedFile)");
 		created.delete();
-		client.delete(created);
-		assertTrue("Should mark the file for deletion, even if it is gone already, " +
-				"and report that the path hasLocalChanges", client.hasLocalChanges(created));
-		assertFalse("The client may need to temporarily create the file, but it should be removed again",
-				created.exists());
-		client.commit("Deleted test file (testDeleteAlreadyDeletedFile)");
-		assertFalse("The file should be gone", created.exists());
-		assertFalse("Now the file name is not used anymore", client.isVersioned(created));
+		try {
+			client.delete(created);
+			fail("Should not delete already deleted file. Only clients should have this type of logic.");
+		} catch (WorkingCopyAccessException e) {
+			// expected
+		}
+		created.createNewFile();
+		client.commit("Cleand up after delete test");
 	}
 
 	public void testMove() throws IOException, ConflictException, RepositoryAccessException {

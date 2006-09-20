@@ -4,6 +4,9 @@ package se.repos.svn.checkout.managed;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ConflictInformation;
@@ -32,12 +35,15 @@ import se.repos.svn.checkout.simple.SimpleWorkingCopy;
  * It that happens, the user will have two files: the latest local file
  * and the latest from the repository.
  *
+ * @todo how to handle hasLocalChanges and missing files; autodelete? revert?
  * @author Staffan Olsson (solsson)
  * @version $Id$
  * @see SimpleWorkingCopy for a more automated client
  */
 public class ManagedWorkingCopy implements ReposWorkingCopy {
 
+	final Logger logger = LoggerFactory.getLogger(this.getClass());	
+	
 	ReposWorkingCopy workingCopy;
 	
 	public ManagedWorkingCopy(CheckoutSettings settings) {
@@ -81,7 +87,15 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	}
 
 	public void move(File from, File to) {
-		workingCopy.move(from, to);
+		if (!from.exists() && workingCopy.hasLocalChanges(from)) {
+			logger.info("Detected an attempt to move file that has already been moved. Applying fix.");
+			if (!to.exists()) throw new IllegalArgumentException("Neither source nor destination for move exists");
+			if (workingCopy.isVersioned(to)) throw new IllegalArgumentException("The destination file for move is already versioned");
+			logger.debug("Temporarily moving back from {} to {}", to, from);
+			workingCopy.move(from, to);
+		} else {
+			workingCopy.move(from, to);
+		}
 	}
 
 	public void revert(File path) {

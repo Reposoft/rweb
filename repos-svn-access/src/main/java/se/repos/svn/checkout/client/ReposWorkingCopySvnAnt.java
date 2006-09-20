@@ -361,11 +361,11 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		if (SVNStatusKind.UNVERSIONED.equals(textStatus)) {
 		    return false; // could also check for conflicts
 		}
-		if (SVNStatusKind.DELETED.equals(textStatus)) {
-			return true;
-		}
 		if (SVNStatusKind.MODIFIED.equals(textStatus)) {
 		    return true; // could also check for conflicts
+		}
+		if (SVNStatusKind.DELETED.equals(textStatus)) {
+			return true;
 		}
 		if (SVNStatusKind.MODIFIED.equals(propStatus)) {
 		    return true;

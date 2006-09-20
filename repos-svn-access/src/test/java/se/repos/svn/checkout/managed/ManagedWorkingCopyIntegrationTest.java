@@ -57,25 +57,27 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 	public void testMoveAlreadyMovedFolder() throws IOException, ConflictException, RepositoryAccessException {
 		File f = new File(path, "tobemoved");
 		File d = new File(path, "destination");
-		if (f.exists()) fail ("Test setup error. Folder exists " + f);
-		if (d.exists())fail ("Test setup error. Folder exists " + d);
-		f.createNewFile();
+		if (f.exists()) fail("Test setup error. Folder exists " + f);
+		if (d.exists()) fail("Test setup error. Folder exists " + d);
+		f.mkdir();
 		client.add(f);
 		client.commit("test move already moved");
-		if (client.hasLocalChanges(f)) fail ("Test error. The file " + f + " has not been committed");
+		if (client.hasLocalChanges(f)) fail ("Test error. The folder " + f + " has not been committed");
 		
 		f.renameTo(d);
+		if (f.exists()) fail("Test setup error. Folder should be gone " + f);
+		assertTrue("Double check: Folder is still versioned even if it is removed", client.hasLocalChanges(f));
 		client.move(f, d);
-		assertFalse("The original file should be gone", f.exists());
-		assertTrue("The original file is gone, so it has local changes", client.hasLocalChanges(f));
-		assertTrue("The destination file should exist", d.exists());
-		assertTrue("The destination file has local changes", client.hasLocalChanges(d));
+		assertFalse("The original folder should be gone", f.exists());
+		assertTrue("The original folder is gone, so it has local changes", client.hasLocalChanges(f));
+		assertTrue("The destination folder should exist", d.exists());
+		assertTrue("The destination folder has local changes", client.hasLocalChanges(d));
 		client.commit("test move already moved done");
-		assertFalse("After commit, there is no trace of original file", client.hasLocalChanges(f));
+		assertFalse("After commit, there is no trace of original folder", client.hasLocalChanges(f));
 		assertFalse("After commit, destination file is up to date", client.hasLocalChanges(d));
 		client.delete(d);
 		client.commit("test move already moved cleaned");
-		if (d.exists()) fail("Test error. Could not remove destination file after test.");
+		if (d.exists()) fail("Test error. Could not remove destination folder after test.");
 	}
 	
 }
