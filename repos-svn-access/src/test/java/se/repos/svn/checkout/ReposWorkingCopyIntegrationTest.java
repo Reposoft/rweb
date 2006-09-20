@@ -95,12 +95,26 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		assertFalse("Now the file name is not used anymore", client.isVersioned(created));
 	}
 
-	public void testMove() {
-		fail("Not yet implemented");
-	}
-
-	public void testMoveAlreadyMovedFolder() {
-		fail("Not yet implemented");
+	public void testMove() throws IOException, ConflictException, RepositoryAccessException {
+		File f = new File(path, "tobemoved.txt");
+		File d = new File(path, "destination.txt");
+		if (f.exists()) fail ("Test setup error. File exists " + f);
+		if (d.exists())fail ("Test setup error. File exists " + d);
+		f.createNewFile();
+		client.add(f);
+		client.commit("test move");
+		if (client.hasLocalChanges(f)) fail ("Test error. The file " + f + " has not been committed");
+		client.move(f, d);
+		assertFalse("The original file should be gone", f.exists());
+		assertTrue("The original file is gone, so it has local changes", client.hasLocalChanges(f));
+		assertTrue("The destination file should exist", d.exists());
+		assertTrue("The destination file has local changes", client.hasLocalChanges(d));
+		client.commit("test move done");
+		assertFalse("After commit, there is no trace of original file", client.hasLocalChanges(f));
+		assertFalse("After commit, destination file is up to date", client.hasLocalChanges(d));
+		client.delete(d);
+		client.commit("test move cleaned");
+		if (d.exists()) fail("Test error. Could not remove destination file after test.");
 	}
 	
 }

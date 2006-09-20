@@ -18,6 +18,7 @@ import org.tigris.subversion.svnant.Add;
 import org.tigris.subversion.svnant.Checkout;
 import org.tigris.subversion.svnant.Commit;
 import org.tigris.subversion.svnant.Delete;
+import org.tigris.subversion.svnant.Move;
 import org.tigris.subversion.svnant.SvnCommand;
 import org.tigris.subversion.svnant.Update;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
@@ -303,10 +304,14 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	}
 
 	public void move(File from, File to) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#move not implemented yet");
+		Move move = new Move();
+		move.setSrcPath(from);
+		move.setDestPath(to);
+		try {
+			execute(move);
+		} catch (SVNClientException e) {
+			throw new WorkingCopyAccessException(e);
 		}
-		
 	}
 
 	public void revert(File path) {

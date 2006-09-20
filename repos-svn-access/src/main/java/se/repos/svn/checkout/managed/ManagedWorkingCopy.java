@@ -10,14 +10,19 @@ import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.MandatoryReposOperations;
 import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.ReposWorkingCopy;
+import se.repos.svn.checkout.ReposWorkingCopyFactory;
+import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.simple.SimpleWorkingCopy;
 
 /**
- * A subversion client like all the others, with no user logic
+ * A basic subversion client, with extra logic for supporting common user operations.
+ *
+ * <ul>
+ * <li>Allows {@link MandatoryReposOperations#synchronize(String)} for convenience, and {@link ReposWorkingCopy#commit(String)} for speed.
+ * <li>Allows move operation on an already moved file or folder
+ * <li>Allows delete on an already deleted file or folder
+ * </ul>
  * 
- * A more classic versioning client than {@link se.repos.svn.checkout.simple.SimpleWorkingCopy}, with fine grained explicit operations.
- *
- * Allows {@link MandatoryReposOperations#synchronize(String)} for convenience, and {@link ReposWorkingCopy#commit(String)} for speed.
- *
  * Before a file is changed, it can be reserved using {@see #lock(String)}.
  * If a file is changed when it is not locked, optimistic locking is used.
  * So if there are no conflicts, synchronize will not complain
@@ -29,123 +34,78 @@ import se.repos.svn.checkout.ReposWorkingCopy;
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$
+ * @see SimpleWorkingCopy for a more automated client
  */
 public class ManagedWorkingCopy implements ReposWorkingCopy {
 
+	ReposWorkingCopy workingCopy;
+	
 	public ManagedWorkingCopy(CheckoutSettings settings) {
-		
+		workingCopy = ReposWorkingCopyFactory.getClient(settings);
 	}
 
 	public void add(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#add not implemented yet");
-		}
-		
+		workingCopy.add(path);
 	}
 
 	public void addAll() {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#addAll not implemented yet");
-		}
-		
+		workingCopy.addAll();
 	}
 
 	public void addNotifyListener(NotifyListener notifyListener) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#addNotifyListener not implemented yet");
-		}
-		
+		workingCopy.addNotifyListener(notifyListener);
 	}
 
-	public void checkout() {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#checkout not implemented yet");
-		}
-		
+	public void checkout() throws RepositoryAccessException {
+		workingCopy.checkout();		
 	}
 
-	public void commit(String commitMessage) throws ConflictException {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#commit not implemented yet");
-		}
-		
+	public void commit(String commitMessage) throws ConflictException, RepositoryAccessException {
+		workingCopy.commit(commitMessage);
 	}
 
 	public void delete(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#delete not implemented yet");
-		}
-		
+		workingCopy.delete(path);
 	}
 
 	public boolean hasLocalChanges(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#hasLocalChanges not implemented yet");
-		}
-		return false;
+		return workingCopy.hasLocalChanges(path);
 	}
 
 	public boolean isVersioned(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#isVersioned not implemented yet");
-		}
-		return false;
+		return workingCopy.isVersioned(path);
 	}
 
 	public void lock(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#lock not implemented yet");
-		}
-		
+		workingCopy.lock(path);
 	}
 
 	public void move(File from, File to) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#move not implemented yet");
-		}
-		
+		workingCopy.move(from, to);
 	}
 
 	public void revert(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#revert not implemented yet");
-		}
-		
+		workingCopy.revert(path);
 	}
 
-	public void update(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#update not implemented yet");
-		}
-		
+	public void update(File path) throws ConflictException {
+		workingCopy.update(path);
 	}
 
 	public boolean hasLocalChanges() {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#hasLocalChanges not implemented yet");
-		}
-		return false;
+		return workingCopy.hasLocalChanges();
 	}
 
 	public void markConflictResolved(ConflictInformation conflictInformation) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#markConflictResolved not implemented yet");
-		}
-		
+		workingCopy.markConflictResolved(conflictInformation);
 	}
 
-	public void synchronize(String commitMessage) throws ConflictException {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#synchronize not implemented yet");
-		}
-		
+	public void synchronize(String commitMessage) throws ConflictException, RepositoryAccessException {
+		workingCopy.synchronize(commitMessage);
 	}
 
-	public void update() throws ConflictException {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#update not implemented yet");
-		}
-		
+	public void update() throws ConflictException, RepositoryAccessException {
+		workingCopy.update();
 	}
 
 }
