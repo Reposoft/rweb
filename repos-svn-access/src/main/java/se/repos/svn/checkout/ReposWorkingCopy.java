@@ -51,8 +51,9 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	/**
 	 * Like {@link ReposWorkingCopy#update()} but for a part of the working copy.
 	 * @param path Folder or file within a working copy
+	 * @throws RepositoryAccessException 
 	 */
-	public void update(File path) throws ConflictException;
+	public void update(File path) throws ConflictException, RepositoryAccessException;
 	
 	/**
 	 * Sends local changes to the repository

@@ -48,9 +48,10 @@ public interface CheckoutSettings {
 	UserCredentials getLogin();
 	
 	/**
-	 * Converts a file system path to a relative path within the working copy
+	 * Converts a file system path to a relative path within the working copy.
 	 * @param path The file system path.
 	 * @return The path of the file in the repository, not starting with path separator.
+	 *  With forward slashes, so it can be used in URL.
 	 * @throws RuntimeException if the path is not inside the working copy (considered a programming error)
 	 */
 	String toRelative(File path);

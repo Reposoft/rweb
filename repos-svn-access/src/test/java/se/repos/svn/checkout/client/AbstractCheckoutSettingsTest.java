@@ -5,13 +5,10 @@ package se.repos.svn.checkout.client;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.tools.ant.taskdefs.TempFile;
-
 import junit.framework.TestCase;
 
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
-import se.repos.svn.checkout.CheckoutSettingsForTest;
 import se.repos.svn.checkout.TestFolder;
 
 public class AbstractCheckoutSettingsTest extends TestCase {

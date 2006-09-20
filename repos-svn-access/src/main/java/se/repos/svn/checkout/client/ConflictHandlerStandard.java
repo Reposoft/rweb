@@ -89,6 +89,15 @@ public class ConflictHandlerStandard implements ConflictHandler {
 		public File getTargetPath() {
 			return this.tagetPath;
 		}
+
+		public String toString() {
+			return new StringBuffer()
+				.append(getTargetPath().getAbsolutePath()).append(',')
+				.append(getMergedFile().getName()).append(',')
+				.append(getUserFile().getName()).append(',')
+				.append(getUsedRepositoryFile().getName()).append(',')
+				.append(getRepositoryFile().getName()).toString();
+		}
 		
 	}
 

@@ -18,6 +18,7 @@ import org.tigris.subversion.svnant.Checkout;
 import org.tigris.subversion.svnant.Commit;
 import org.tigris.subversion.svnant.Delete;
 import org.tigris.subversion.svnant.Move;
+import org.tigris.subversion.svnant.Revert;
 import org.tigris.subversion.svnant.SvnCommand;
 import org.tigris.subversion.svnant.Update;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
@@ -187,11 +188,19 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
         reportConflicts();
 	}
 	
-	public void update(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#update not implemented yet");
+	public void update(File path) throws RepositoryAccessException, ConflictException {
+		Update update = new Update();
+		if (path.isDirectory()) {
+			update.setDir(path);
+		} else {
+			update.setFile(path);
 		}
-		
+		try {
+			execute(update);
+		} catch (SVNClientException e) {
+			throw new RepositoryAccessException(e);
+		}
+		reportConflicts();
 	}
 	
     public void commit(String commitMessage) throws ConflictException, RepositoryAccessException {
@@ -320,10 +329,18 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	}
 
 	public void revert(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#revert not implemented yet");
+		Revert revert = new Revert();
+		if (path.isDirectory()) {
+			revert.setDir(path);
+		} else {
+			revert.setFile(path);
 		}
-		
+		try {
+			execute(revert);
+		} catch (SVNClientException e) {
+			// revert is a local operation
+			throw new WorkingCopyAccessException(e);
+		}
 	}	
 
 	public void markConflictResolved(ConflictInformation conflictInformation) throws WorkingCopyAccessException {

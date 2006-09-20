@@ -2,7 +2,9 @@
  */
 package se.repos.svn.checkout.managed;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import se.repos.svn.checkout.CheckoutSettings;
@@ -33,13 +35,16 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 	
 	protected ManagedWorkingCopy init(CheckoutSettings settings) throws RepositoryAccessException {
 		ManagedWorkingCopy c = new ManagedWorkingCopy(settings);
-		c.checkout();
+		c.checkout(); // ManagedWorkingCopy needs explicit checkout
 		return c;
 	}	
 	
 	public void testDeleteAlreadyDeletedFile() throws IOException, ConflictException, RepositoryAccessException {
-		File created = new File(path, "tobedeleted.txt");
+		File created = new File(path, "tobedeleted.txt" + System.currentTimeMillis());
 		created.createNewFile();
+		BufferedWriter out = new BufferedWriter(new FileWriter(created));
+        out.write("someContents"); // empty file is too easy to revert
+        out.close();
 		client.add(created);
 		assertTrue("The file should be added", client.isVersioned(created));
 		client.commit("Added test file (testDeleteAlreadyDeletedFile)");
@@ -61,6 +66,13 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		if (d.exists()) fail("Test setup error. Folder exists " + d);
 		f.mkdir();
 		if (!f.exists() || !f.isDirectory()) fail("Test setup error. Should have created folder " + f);
+		// add some contents so it's not too easy
+		File ff = new File(f, "afile.txt");
+		ff.createNewFile();
+		BufferedWriter out = new BufferedWriter(new FileWriter(ff));
+        out.write("someContents");
+        out.close();
+		// add to repository
 		client.add(f);
 		client.commit("test move already moved");
 		if (!client.isVersioned(f)) fail("Test error. Seems the folder " + f + " was not added");

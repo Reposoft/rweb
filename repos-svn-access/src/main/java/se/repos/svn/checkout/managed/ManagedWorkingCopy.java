@@ -3,7 +3,6 @@
 package se.repos.svn.checkout.managed;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +64,9 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		workingCopy.addNotifyListener(notifyListener);
 	}
 
+	/**
+	 * Note that checkout will work as an update if the working copy is already checked out.
+	 */
 	public void checkout() throws RepositoryAccessException {
 		workingCopy.checkout();		
 	}
@@ -74,13 +76,10 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	}
 
 	public void delete(File path) {
-		// temporarily create the file so it can be deleted by the client
+		// temporarily revert the file so it can be deleted by the client
 		if (!path.exists()) {
-			try {
-				path.createNewFile();
-			} catch (IOException e) {
-				throw new WorkingCopyAccessException(e);
-			}
+			// must be the exact same contents to allow delete
+			workingCopy.revert(path);
 		}
 		workingCopy.delete(path);
 	}
@@ -120,7 +119,7 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		workingCopy.revert(path);
 	}
 
-	public void update(File path) throws ConflictException {
+	public void update(File path) throws ConflictException, RepositoryAccessException {
 		workingCopy.update(path);
 	}
 

@@ -45,4 +45,12 @@ public class ConflictException extends Exception {
 	public ConflictInformation[] getConflicts() {
 		return this.conflicts;
 	}
+
+	public String getMessage() {
+		StringBuffer sb = new StringBuffer("Conflict: ");
+		for (int i = 0; i < conflicts.length; i++) {
+			sb.append(conflicts[i]);
+		}
+		return sb.toString();
+	}
 }

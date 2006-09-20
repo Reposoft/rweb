@@ -39,5 +39,4 @@ public class ConflictHandlerStandardTest extends TestCase {
 		assertFalse(o.exists());
 		assertFalse(n.exists());
 	}
-
 }
