@@ -349,8 +349,16 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
      * @return true if there is something to commit according to the status.
      */
 	boolean hasLocalChanges(ISVNStatus fileOrDirStatus) {
+		// currently this is not implemented with a systematic approach,
+		// it's based on the test cas
 		SVNStatusKind textStatus = fileOrDirStatus.getTextStatus();
 		SVNStatusKind propStatus = fileOrDirStatus.getPropStatus();
+		if (SVNStatusKind.UNVERSIONED.equals(textStatus)) {
+		    return false; // could also check for conflicts
+		}
+		if (SVNStatusKind.DELETED.equals(textStatus)) {
+			return true;
+		}
 		if (SVNStatusKind.MODIFIED.equals(textStatus)) {
 		    return true; // could also check for conflicts
 		}

@@ -9,6 +9,7 @@ import java.io.IOException;
 import se.repos.svn.checkout.CheckoutSettingsForTest;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ConflictInformation;
+import se.repos.svn.checkout.RepositoryAccessException;
 import junit.framework.TestCase;
 
 public class SimpleWorkingCopyConflictIntegrationTest extends TestCase {
@@ -17,7 +18,7 @@ public class SimpleWorkingCopyConflictIntegrationTest extends TestCase {
 		super.setUp();
 	}
 
-	public void testConflictAtSynchronize() throws FileNotFoundException, IOException {
+	public void testConflictAtSynchronize() throws FileNotFoundException, IOException, RepositoryAccessException {
 		CheckoutSettingsForTest s1 = new CheckoutSettingsForTest();
 		CheckoutSettingsForTest s2 = new CheckoutSettingsForTest();
 		SimpleWorkingCopy w1 = new SimpleWorkingCopy(s1);

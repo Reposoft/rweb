@@ -119,6 +119,19 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 		statusControl.replay();
 		assertFalse("The file is not added so it has no changes", w.hasLocalChanges(statusMock));
 	}	
+
+	public void testHasLocalChangesDeleted() {
+		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		
+		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
+		statusMock.getTextStatus();
+		statusControl.setReturnValue(SVNStatusKind.DELETED);
+		statusMock.getPropStatus();
+		statusControl.setReturnValue(SVNStatusKind.NONE);
+		statusControl.replay();
+		assertFalse("The file is deleted so it has local changes", w.hasLocalChanges(statusMock));
+	}	
 	
 	public void testCatchConflictAtUpdate() {
 		String error = "C  C:/DOCUME~1/solsson/LOKALA~1/Temp/test/increment.txt";

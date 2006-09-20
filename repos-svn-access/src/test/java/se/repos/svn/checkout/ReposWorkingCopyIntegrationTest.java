@@ -19,11 +19,17 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 	
 	private ReposWorkingCopy client;
 	
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
 		super.setUp();
 		CheckoutSettings settings = new CheckoutSettingsForTest();
 		path = settings.getWorkingCopyDirectory();
 		client = init(settings);
+	}
+	
+	public void tearDown() {
+		path = null;
+		client = null;
+		CheckoutSettingsForTest.tearDown();
 	}
 	
 	protected ReposWorkingCopy init(CheckoutSettings settings) throws RepositoryAccessException {
@@ -34,12 +40,14 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 	
 	public void testNewFileStatus() {
 		File created = new File(path, "new.txt");
+		if (created.exists()) fail("Invalid test setup. The file " + created.getName() + " is already in the working copy");
 		assertFalse("Is a new file", client.isVersioned(created));
 		assertFalse("Is a new file so it has no changes", client.hasLocalChanges(created));
 	}
 	
 	public void testAddAndDelete() throws IOException, ConflictException, RepositoryAccessException {
 		File created = new File(path, "tobedeleted.txt");
+		if (created.exists()) fail("Invalid test setup. The file " + created.getName() + " is already in the working copy");
 		created.createNewFile();
 		client.add(created);
 		assertTrue("The file should be added", client.isVersioned(created));
@@ -62,20 +70,29 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 	public void testAddOutsideWorkingCopy() throws IOException {
 		File tmp = File.createTempFile("PersonalWorkingCopyTestFile", "file");
 		tmp.deleteOnExit();
-		client.add(tmp);
-		fail("Should have reported error because the new folder is not inside a working copy");
+		try {
+			client.add(tmp);
+			fail("Should have reported error because the new folder is not inside a working copy");
+		} catch (WorkingCopyAccessException e) {
+			// expected
+		}
 	}
 	
-	public void testDeleteAlreadyDeletedFile() {
+	public void testDeleteAlreadyDeletedFile() throws IOException, ConflictException, RepositoryAccessException {
 		File created = new File(path, "tobedeleted.txt");
+		created.createNewFile();
 		client.add(created);
 		assertTrue("The file should be added", client.isVersioned(created));
+		client.commit("Added test file (testDeleteAlreadyDeletedFile)");
 		created.delete();
 		client.delete(created);
 		assertTrue("Should mark the file for deletion, even if it is gone already, " +
 				"and report that the path hasLocalChanges", client.hasLocalChanges(created));
 		assertFalse("The client may need to temporarily create the file, but it should be removed again",
 				created.exists());
+		client.commit("Deleted test file (testDeleteAlreadyDeletedFile)");
+		assertFalse("The file should be gone", created.exists());
+		assertFalse("Now the file name is not used anymore", client.isVersioned(created));
 	}
 
 	public void testMove() {

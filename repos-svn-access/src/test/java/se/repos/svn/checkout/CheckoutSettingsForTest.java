@@ -77,4 +77,8 @@ public class CheckoutSettingsForTest extends AbstractCheckoutSettings {
 		System.out.println("Using temporary directory: " + tmp.getAbsolutePath());
 		return tmp;
 	}
+
+	public static void tearDown() {
+		TestFolder.cleanUp();
+	}
 }
