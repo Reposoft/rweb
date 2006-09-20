@@ -38,6 +38,7 @@ import se.repos.svn.checkout.simple.SimpleWorkingCopy;
  * and the latest from the repository.
  *
  * @todo how to handle hasLocalChanges and missing files; autodelete? revert?
+ * @todo recursive lock?
  * @author Staffan Olsson (solsson)
  * @version $Id$
  * @see SimpleWorkingCopy for a more automated client
@@ -137,6 +138,13 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 
 	public void update() throws ConflictException, RepositoryAccessException {
 		workingCopy.update();
+	}
+
+	public void unlock(File path) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#unlock not implemented yet");
+		}
+		
 	}
 
 }

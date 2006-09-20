@@ -503,5 +503,12 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 			return "(unknown type " + command + ")";
 		}
 	}
+
+	public void unlock(File path) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#unlock not implemented yet");
+		}
+		
+	}
 	
 }

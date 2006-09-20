@@ -82,11 +82,16 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * Reserve a file so that others can not change it.
 	 * Ensure that the file is writable locally.
 	 * Locking is never required, and only encouraged for binary files like word documents.
-	 * @param relativePath path relative to local directory root, no starting '/'
-	 * @param maybe change the parameter to File or an interface representing local resource
-	 * @todo maybe move to the mandatory methods
+	 * @param path The resource to lock. Usually a file, because lock does not work recursively.
 	 */
 	public void lock(File path);
+	
+	/**
+	 * Remove locks from file.
+	 * SVN standard behaviour is to do this automatically at commit.
+	 * @param path The locked resource
+	 */
+	public void unlock(File path);
 	
 	/**
 	 * Add a new file in the working copy to version control
