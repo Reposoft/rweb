@@ -41,6 +41,7 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 	public void testNewFileStatus() throws IOException {
 		File created = new File(path, "new.txt");
 		if (created.exists()) fail("Invalid test setup. The file " + created.getName() + " is already in the working copy");
+		assertFalse("A file that does not exist and is not under version control is not versioned", client.isVersioned(created));
 		created.createNewFile();
 		assertFalse("New files are not versioned until add", client.isVersioned(created));
 		assertFalse("Is a new file so it has no changes", client.hasLocalChanges(created));
@@ -76,7 +77,22 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		client.commit("Deleted test file");
 		assertFalse("The file should be gone", created.exists());
 		assertFalse("Now the file name is not used anymore",	client.isVersioned(created));
-	}	
+	}
+	
+	public void testAddAndDeleteEmptyFolder() throws ConflictException, RepositoryAccessException, IOException {
+		File f = new File(path, "testfolder");
+		f.mkdir();
+		client.add(f);
+		assertTrue("Folder has been added, so it is versioned", client.isVersioned(f));
+		assertTrue("There is a new folder to commit", client.hasLocalChanges());
+		client.commit("Added empty folder");
+		assertFalse("Folder committed already", client.hasLocalChanges());
+		client.delete(f);
+		assertTrue("There is a delete operation to commit", client.hasLocalChanges());
+		client.commit("Deleted empty folder");
+		assertFalse("Client should have deleted the folder on commit (or directly when marked for deletion?)", f.exists());
+		assertFalse("Working copy is up to date", client.hasLocalChanges());
+	}
 	
 	public void testAddOutsideWorkingCopy() throws IOException {
 		File tmp = File.createTempFile("PersonalWorkingCopyTestFile", "file");
@@ -90,7 +106,7 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 	}
 	
 	public void testDeleteAlreadyDeletedFile() throws IOException, ConflictException, RepositoryAccessException {
-		File created = new File(path, "tobedeleted.txt");
+		File created = new File(path, "tobedeletedtwice.txt");
 		created.createNewFile();
 		client.add(created);
 		assertTrue("The file should be added", client.isVersioned(created));
@@ -100,9 +116,12 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 			client.delete(created);
 			fail("Should not delete already deleted file. Only clients should have this type of logic.");
 		} catch (WorkingCopyAccessException e) {
+			fail("Should throw IllegalArgumentException because this is definitely a programming error");
+		} catch (IllegalArgumentException e) {
 			// expected
 		}
 		created.createNewFile();
+		client.delete(created);
 		client.commit("Cleand up after delete test");
 	}
 

@@ -3,7 +3,6 @@
 package se.repos.svn.checkout.client;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,7 +43,11 @@ import se.repos.svn.checkout.WorkingCopyAccessException;
 /**
  * Uses subclipse {@link http://subclipse.tigris.org/svnant.html SvnAnt} to implement the subversion operations
  *
- * WRite operations are done using SVnAnt, but many read operations use the svnClientAdapter API directly.
+ * This implementation is not at all forgiving. There is usually only one correct way of doing things here.
+ * For example doing {@link #delete(File)} on a missing file causes an IllegalArgumentException.
+ * Where it is obvious that a {@see File} must exist, for example in {@see {@link #lock(File)}, 
+ * NullPointerExceptions might be thrown on invlid input.
+ * Use the managed clients to get supporting logic.
  *
  * This class uses the {@link http://www.slf4j.org/ slf4j} logging API.
  * See the slf4j docs on how to customize output.
@@ -252,7 +255,11 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	public void add(File path) {
 		if (!path.exists()) throw new IllegalArgumentException("Can not add the file '" + path + "' because it does not exist");
 		Add add = new Add();
-		add.setFile(path);
+		if (path.isDirectory()) {
+			add.setDir(path);
+		} else {
+			add.setFile(path);
+		}
 		try {
 			execute(add);
 		} catch (SVNClientException e) {
@@ -281,13 +288,11 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
      */
 	public void delete(File path) throws WorkingCopyAccessException {
 		Delete delete = new Delete();
-		delete.setFile(path);
-		if (!path.exists()) {
-			try {
-				path.createNewFile();
-			} catch (IOException e) {
-				throw new WorkingCopyAccessException(e);
-			}
+		if (!path.exists()) throw new IllegalArgumentException("The path does not exist so it can not be marked for deletion: " + path);
+		if (path.isDirectory()) {
+			delete.setDir(path);
+		} else {
+			delete.setFile(path);
 		}
 		try {
 			execute(delete);

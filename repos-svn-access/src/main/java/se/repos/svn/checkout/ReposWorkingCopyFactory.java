@@ -11,6 +11,8 @@ import se.repos.svn.javasvn.TmateSvnClientProvider;
 /**
  * A factory to instantiate a default ReposWorkingCopy implementatoin,
  * for applications that don't use dependency injection.
+ * 
+ * Should verify that the required client libraries are available.
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$

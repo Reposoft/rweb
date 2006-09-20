@@ -3,6 +3,7 @@
 package se.repos.svn.checkout.managed;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.checkout.simple.SimpleWorkingCopy;
 
 /**
@@ -71,6 +73,14 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	}
 
 	public void delete(File path) {
+		// temporarily create the file so it can be deleted by the client
+		if (!path.exists()) {
+			try {
+				path.createNewFile();
+			} catch (IOException e) {
+				throw new WorkingCopyAccessException(e);
+			}
+		}
 		workingCopy.delete(path);
 	}
 
@@ -86,13 +96,20 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		workingCopy.lock(path);
 	}
 
+	/**
+	 * Supports moving files that have already moved, but not folders.
+	 */
 	public void move(File from, File to) {
-		if (!from.exists() && workingCopy.hasLocalChanges(from)) {
-			logger.info("Detected an attempt to move file that has already been moved. Applying fix.");
+		if (!from.exists() && workingCopy.isVersioned(from)) {
+			logger.info("Detected an attempt to move file that has already been moved. Restoring the source temporarily.");
 			if (!to.exists()) throw new IllegalArgumentException("Neither source nor destination for move exists");
-			if (workingCopy.isVersioned(to)) throw new IllegalArgumentException("The destination file for move is already versioned");
-			logger.debug("Temporarily moving back from {} to {}", to, from);
-			workingCopy.move(from, to);
+			if (to.isFile() && workingCopy.isVersioned(to)) throw new IllegalArgumentException("The destination file for move is already versioned: " + to);
+			// TODO test that, if it is a folder, it has svn metadata from the old location
+			if (to.renameTo(from)) {
+				workingCopy.move(from, to);
+			} else {
+				throw new WorkingCopyAccessException("Could not restore the moved folder " + from + " from the destination " + to + ", so the versioned move can not be done");
+			}
 		} else {
 			workingCopy.move(from, to);
 		}

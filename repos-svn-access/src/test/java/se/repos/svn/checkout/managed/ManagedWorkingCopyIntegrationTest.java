@@ -52,27 +52,37 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		client.commit("Deleted test file (testDeleteAlreadyDeletedFile)");
 		assertFalse("The file should be gone", created.exists());
 		assertFalse("Now the file name is not used anymore", client.isVersioned(created));
-	}	
+	}
 	
 	public void testMoveAlreadyMovedFolder() throws IOException, ConflictException, RepositoryAccessException {
-		File f = new File(path, "tobemoved");
-		File d = new File(path, "destination");
+		File f = new File(path, "tobemoved" + System.currentTimeMillis());
+		File d = new File(path, "destination" + System.currentTimeMillis());
 		if (f.exists()) fail("Test setup error. Folder exists " + f);
 		if (d.exists()) fail("Test setup error. Folder exists " + d);
 		f.mkdir();
+		if (!f.exists() || !f.isDirectory()) fail("Test setup error. Should have created folder " + f);
 		client.add(f);
 		client.commit("test move already moved");
-		if (client.hasLocalChanges(f)) fail ("Test error. The folder " + f + " has not been committed");
+		if (!client.isVersioned(f)) fail("Test error. Seems the folder " + f + " was not added");
+		if (client.hasLocalChanges(f)) fail("Test error. The folder " + f + " has not been committed");
 		
 		f.renameTo(d);
 		if (f.exists()) fail("Test setup error. Folder should be gone " + f);
-		assertTrue("Double check: Folder is still versioned even if it is removed", client.hasLocalChanges(f));
-		client.move(f, d);
-		assertFalse("The original folder should be gone", f.exists());
+		assertTrue("Double check: Folder is still versioned even if it is removed", client.isVersioned(f));
+		//try {
+			client.move(f, d);
+		//	fail("When moving a versioned directory, the .svn folder stays ant the SVN client can not recover. Should throw IllegalArgumentException.");
+		//} catch (IllegalArgumentException e) {
+		//	assertTrue("Error message should say that the destination is versioned", 
+		//			e.getMessage().contains("destination") && e.getMessage().contains("versioned"));
+		//	return; // test done
+		//}
+		//// if ManagedWorkingClient implements support for automatically handling moved folders, the below should pass
 		assertTrue("The original folder is gone, so it has local changes", client.hasLocalChanges(f));
 		assertTrue("The destination folder should exist", d.exists());
 		assertTrue("The destination folder has local changes", client.hasLocalChanges(d));
 		client.commit("test move already moved done");
+		assertFalse("The original folder should be gone", f.exists());
 		assertFalse("After commit, there is no trace of original folder", client.hasLocalChanges(f));
 		assertFalse("After commit, destination file is up to date", client.hasLocalChanges(d));
 		client.delete(d);

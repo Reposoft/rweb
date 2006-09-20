@@ -28,4 +28,8 @@ public class WorkingCopyAccessException extends RuntimeException {
 		super(e);
 	}
 
+	public WorkingCopyAccessException(String string) {
+		super(string);
+	}
+
 }
