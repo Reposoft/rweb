@@ -19,6 +19,7 @@ import org.tigris.subversion.svnant.Commit;
 import org.tigris.subversion.svnant.SvnCommand;
 import org.tigris.subversion.svnant.Update;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
+import org.tigris.subversion.svnclientadapter.ISVNNotifyListener;
 import org.tigris.subversion.svnclientadapter.ISVNStatus;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.tigris.subversion.svnclientadapter.SVNNodeKind;
@@ -262,10 +263,13 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	}	
 
 	public void markConflictResolved(ConflictInformation conflictInformation) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#markConflictResolved not implemented yet");
+		try {
+			client.resolved(conflictInformation.getTargetPath());
+		} catch (SVNClientException e) {
+			// TODO auto-generated
+			throw new RuntimeException("SVNClientException thrown, not handled", e);
 		}
-		
+		conflictHandler.afterConflictResolved(conflictInformation);
 	}
 
     private void execute(SvnCommand command) {
@@ -334,7 +338,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	 * Don't throw exceptions from the ISVNNotifyListener methods. They'll only be silently caught in the JavaSVN lib.
 	 */
 	private class ConflictNotifyListener implements NotifyListener {
-		private int currentCommand;
+		private String currentCommand;
 		private int counter = 0;
 		
 		// recently encountered conflicts
@@ -358,7 +362,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		
 		public void setCommand(int command) {
 			counter++;
-			this.currentCommand = command;			
+			currentCommand = getCommandName(command);		
 		}
 
 		private String getCurrentCommand() {
@@ -393,6 +397,43 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 
 		public void onNotify(File path, SVNNodeKind kind) {
 			logger.info("svn command {} running on path {} ({})", new Object[]{getCurrentCommand(), path, kind});
+		}
+		
+		private String getCommandName(int command) {
+			switch (command) {
+			case ISVNNotifyListener.Command.UPDATE: return "update";
+			case ISVNNotifyListener.Command.ADD: return "add";
+			case ISVNNotifyListener.Command.ANNOTATE: return "annotate";
+			case ISVNNotifyListener.Command.CAT: return "cat";
+			case ISVNNotifyListener.Command.CHECKOUT: return "checkout";
+			case ISVNNotifyListener.Command.CLEANUP: return "cleanup";
+			case ISVNNotifyListener.Command.COMMIT: return "commit";
+			case ISVNNotifyListener.Command.COPY: return "copy";
+			case ISVNNotifyListener.Command.CREATE_REPOSITORY: return "crete_repository";
+			case ISVNNotifyListener.Command.DIFF: return "diff";
+			case ISVNNotifyListener.Command.EXPORT: return "export";
+			case ISVNNotifyListener.Command.IMPORT: return "import";
+			case ISVNNotifyListener.Command.INFO: return "info";
+			case ISVNNotifyListener.Command.LOCK: return "lock";
+			case ISVNNotifyListener.Command.LOG: return "log";
+			case ISVNNotifyListener.Command.LS: return "ls";
+			case ISVNNotifyListener.Command.MERGE: return "merge";
+			case ISVNNotifyListener.Command.MKDIR: return "mkdir";
+			case ISVNNotifyListener.Command.MOVE: return "move";
+			case ISVNNotifyListener.Command.PROPDEL: return "propdel";
+			case ISVNNotifyListener.Command.PROPGET: return "propget";
+			case ISVNNotifyListener.Command.PROPLIST: return "proplist";
+			case ISVNNotifyListener.Command.PROPSET: return "propset";
+			case ISVNNotifyListener.Command.RELOCATE: return "relocate";
+			case ISVNNotifyListener.Command.REMOVE: return "remove";
+			case ISVNNotifyListener.Command.RESOLVED: return "resolved";
+			case ISVNNotifyListener.Command.REVERT: return "revert";
+			case ISVNNotifyListener.Command.STATUS: return "status";
+			case ISVNNotifyListener.Command.SWITCH: return "switch";
+			case ISVNNotifyListener.Command.UNDEFINED: return "undefined";
+			case ISVNNotifyListener.Command.UNLOCK: return "unlock";
+			}
+			return "(unknown type " + command + ")";
 		}
 	}
 	

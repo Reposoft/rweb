@@ -82,9 +82,7 @@ public class SimpleWorkingCopy implements MandatoryReposOperations {
 	}
 
 	public void markConflictResolved(ConflictInformation conflictInformation) {
-		if (true) {
-			throw new UnsupportedOperationException("Method SimpleWorkingCopy#markConflictResolved not implemented yet");
-		}
+		workingCopy.markConflictResolved(conflictInformation);
 	}
 
 }

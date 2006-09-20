@@ -50,13 +50,9 @@ public class SimpleWorkingCopyConflictIntegrationTest extends TestCase {
 		// verify the conflicting file
 		assertEquals("ConflictInformation should report the same absolute path", 
 				f2, conflictInformation.getTargetPath());
-		assertEquals("The remote file should be placed where the local file was",
-				f2, conflictInformation.getRepositoryFile());
-		assertFalse("The local file should be renamed",
-				f2.getAbsolutePath().equals(conflictInformation.getUserFile().getAbsolutePath()));
 		
 		// number 2 likes his file better
-		conflictInformation.getRepositoryFile().delete();
+		conflictInformation.getTargetPath().delete();
 		conflictInformation.getUserFile().renameTo(conflictInformation.getTargetPath());
 		// now resolve the conflict
 		w2.markConflictResolved(conflictInformation);
@@ -68,6 +64,9 @@ public class SimpleWorkingCopyConflictIntegrationTest extends TestCase {
 		}		
 		// now there is no difference between local and remote
 		assertFalse("File is identical with repository version and conflict is resolved", w2.hasLocalChanges());
+		// verify that the conflict files have been removed
+		assertFalse("HEAD file should have been removed", conflictInformation.getRepositoryFile().exists());
+		listDirContents(s2.getWorkingCopyDirectory());
 	}
 
 	// helper method to examine working copy state

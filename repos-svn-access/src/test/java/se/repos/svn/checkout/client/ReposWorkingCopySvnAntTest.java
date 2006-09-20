@@ -17,10 +17,13 @@ package se.repos.svn.checkout.client;
 import java.io.File;
 
 import org.easymock.MockControl;
+import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.ISVNStatus;
+import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.tigris.subversion.svnclientadapter.SVNStatusKind;
 
 import se.repos.svn.checkout.ConflictException;
+import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.client.ReposWorkingCopySvnAnt;
 
@@ -91,6 +94,30 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 		}
 		
 		conflictHandlerControl.verify();
+	}
+	
+	public void testMarkConflictResolved() throws SVNClientException {
+		File target = new File("tmp.txt");
+		MockControl infoControl = MockControl.createControl(ConflictInformation.class);
+		ConflictInformation info = (ConflictInformation) infoControl.getMock();
+		info.getTargetPath();
+		infoControl.setReturnValue(target);
+		infoControl.replay();
+		
+		MockControl clientControl = MockControl.createNiceControl(ISVNClientAdapter.class);
+		ISVNClientAdapter client = (ISVNClientAdapter) clientControl.getMock();
+		client.resolved(target);
+		clientControl.replay();
+		
+		MockControl conflictControl = MockControl.createControl(ConflictHandler.class);
+		ConflictHandler conflict = (ConflictHandler) conflictControl.getMock();
+		conflict.afterConflictResolved(info);
+		conflictControl.replay();
+		
+		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		w.setClientAdapter(client);
+		w.setConflictHandler(conflict);
+		w.markConflictResolved(info);
 	}
 	
 	public void testCatchConflictNotResolvedAtCommit() {
