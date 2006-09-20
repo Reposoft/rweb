@@ -48,6 +48,11 @@
       <artifactId>svnant-svnjavahl</artifactId>
       <version>1.0</version>
     </dependency>
+    <dependency>
+      <groupId>easymock</groupId>
+      <artifactId>easymock</artifactId>
+      <version>1.2_Java1.3</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -58,19 +63,6 @@
           <source>1.4</source>
           <target>1.4</target>
         </configuration>
-        <executions>
-          <execution>
-              <id>compile-tests</id>
-              <phase>process-test-sources</phase>
-              <goals>
-                  <goal>testCompile</goal>
-              </goals>
-              <configuration>
-                  <source>1.5</source>
-                  <target>1.5</target>
-              </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

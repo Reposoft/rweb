@@ -5,7 +5,6 @@ package se.repos.svn.checkout.client;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import se.repos.svn.RepositoryUrl;
 import se.repos.svn.checkout.ConflictInformation;
 
 /**
@@ -26,23 +25,21 @@ public class ConflictHandlerStandard implements ConflictHandler {
 	/**
 	 * @throws IllegalArgumentException if not all the standard files exist
 	 */
-	public ConflictInformation handleConflictingFile(File path, RepositoryUrl url) {
+	public ConflictInformation handleConflictingFile(File path) {
 		if (!path.isAbsolute()) throw new IllegalArgumentException("Conflict path " + path + " is not absolute");
 		if (!path.exists()) throw new IllegalArgumentException("Conflict file " + path + " does not exist");
 		if (!path.isFile()) throw new IllegalArgumentException("Conflict path " + path + " is not a directory");
-		return new Names(path, url);
+		return new Names(path);
 	}
 
 	private class Names implements ConflictInformation {
-		private RepositoryUrl fileUrl;
 		private File tagetPath;
 		private File usedRepositoryFile;
 		private File mergedFile;
 		private File userFile;
 		private File repositoryFile;
 		
-		Names(File path, RepositoryUrl url) {
-			this.fileUrl = url;
+		Names(File path) {
 			this.tagetPath = path;
 			this.mergedFile = path;
 			this.userFile = toUserFile(path);
@@ -60,7 +57,7 @@ public class ConflictHandlerStandard implements ConflictHandler {
 			};
 			File[] names = folder.listFiles(filenameFilter);
 			if (names.length != 2) throw new IllegalArgumentException("Conflict should have two files matching '" + namestart + "*', found " + names.length);
-			if (names[0].compareTo(names[1])>0) {
+			if (names[0].compareTo(names[1])<0) {
 				this.usedRepositoryFile = names[0];
 				this.repositoryFile = names[1];
 			} else {
@@ -71,10 +68,6 @@ public class ConflictHandlerStandard implements ConflictHandler {
 
 		private File toUserFile(File path) {
 			return new File(path.getAbsolutePath() + ".mine");
-		}
-
-		public RepositoryUrl getFileUrl() {
-			return this.fileUrl;
 		}
 
 		public File getRepositoryFile() {
@@ -97,6 +90,12 @@ public class ConflictHandlerStandard implements ConflictHandler {
 			return this.tagetPath;
 		}
 		
+	}
+
+	public void afterConflictResolved(ConflictInformation conflictInformation) {
+		conflictInformation.getUserFile().delete();
+		conflictInformation.getUsedRepositoryFile().delete();
+		conflictInformation.getRepositoryFile().delete();
 	}
 	
 }

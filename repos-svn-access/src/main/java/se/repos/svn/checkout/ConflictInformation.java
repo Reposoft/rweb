@@ -16,7 +16,6 @@ package se.repos.svn.checkout;
 
 import java.io.File;
 
-import se.repos.svn.RepositoryUrl;
 import se.repos.svn.checkout.client.ConflictHandler;
 
 /**
@@ -66,12 +65,5 @@ public interface ConflictInformation {
 	 * @return File that can not be committed because it has conflict markup
 	 */
 	public File getMergedFile();
-	
-	/**
-	 * @return The link to the online repository file.
-	 * 	That file's contents is identical to {@link #getRepositoryFile()} when the conflict is reported
-	 *  (except for updated <code>svn:keywords</code>)
-	 */
-	public RepositoryUrl getFileUrl();
 	
 }

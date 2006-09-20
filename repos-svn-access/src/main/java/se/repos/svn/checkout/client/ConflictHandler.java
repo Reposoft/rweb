@@ -4,7 +4,6 @@ package se.repos.svn.checkout.client;
 
 import java.io.File;
 
-import se.repos.svn.RepositoryUrl;
 import se.repos.svn.checkout.ConflictInformation;
 
 /**
@@ -20,9 +19,15 @@ public interface ConflictHandler {
 	 * Implementations of this interface may chose to modify, move or delete local files
 	 * to suite a particular client application.
 	 * @param path Absolute path, the original location of the file before the conflict
-	 * @param fileUrl The online address for the file
 	 * @return files
 	 */
-	ConflictInformation handleConflictingFile(File path, RepositoryUrl fileUrl);
+	ConflictInformation handleConflictingFile(File path);
+	
+	/**
+	 * Does for example cleanup when the target file has been manually merged
+	 * and the conflict marked resolved in the working copy.
+	 * @param conflictInformation The instance that was returned from this handler
+	 */
+	void afterConflictResolved(ConflictInformation conflictInformation);
 	
 }

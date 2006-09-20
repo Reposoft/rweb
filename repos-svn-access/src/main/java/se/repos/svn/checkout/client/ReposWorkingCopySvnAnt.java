@@ -67,20 +67,75 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	//used for all Ant calls that need a Project instance
     private final Project ANTPROJECT = new Project();
 	
+    /**
+     * Default constructor for use in testing.
+     * Requires all dependencies to be set with setters.
+     */
+    ReposWorkingCopySvnAnt() {
+    	// required setup
+    	conflictNotifyListener = new ConflictNotifyListener();
+	}
+    
+    /**
+     * @param client the initialized svn client, must be set before any svn operation
+     */
+	void setClientAdapter(ISVNClientAdapter client) {
+		this.client = client;
+		this.addNotifyListener(conflictNotifyListener);
+	}
+
+	/**
+	 * @param settings the working copy settings, must be set before any svn operation
+	 */
+	void setCheckoutSettings(CheckoutSettings settings) {
+		this.settings = settings;
+	}
+	
+	/**
+	 * Inject the logic for reporting ConflictInformation
+	 * Currently this is done by {@link ReposWorkingCopyFactory} but it should probably be done by the application.
+	 * @param conflictHandler istance
+	 */
+	void setConflictHandler(ConflictHandler conflictHandler) {
+		this.conflictHandler = conflictHandler;
+	}
+	
+	/**
+	 * @return for testing
+	 */
+	ISVNClientAdapter getClientAdapter() {
+		return client;
+	}
+
+	/**
+	 * @return for testing
+	 */
+	NotifyListener getConflictNotifyListener() {
+		return conflictNotifyListener;
+	}
+	
+	/**
+	 * Verify set up
+	 */
+	void afterPropertiesSet() {
+		if (settings.getWorkingCopyDirectory().list().length > 0) {
+        	logger.debug("There is a working copy in {}", settings.getWorkingCopyDirectory().getAbsolutePath());
+        	validateWorkingCopyMatchesRepositoryUrl(settings.getWorkingCopyDirectory(), settings.getCheckoutUrl());
+        }
+	}
+    
 	/**
 	 * 
 	 * @param clientProvider
 	 * @param settings 
 	 */
-	public ReposWorkingCopySvnAnt(ClientProvider clientProvider, CheckoutSettings settings) {
-		client = clientProvider.getSvnClient(settings.getLogin());
-		conflictNotifyListener = new ConflictNotifyListener();
-		this.addNotifyListener(conflictNotifyListener);
-		this.settings = settings;
-        if (settings.getWorkingCopyDirectory().list().length > 0) {
-        	logger.debug("There is a working copy in {}, need to verify", settings.getWorkingCopyDirectory().getAbsolutePath());
-        	validateWorkingCopyMatchesRepositoryUrl(settings.getWorkingCopyDirectory(), settings.getCheckoutUrl());
-        }
+	public ReposWorkingCopySvnAnt(ClientProvider clientProvider, CheckoutSettings settings, ConflictHandler conflictHandler) {
+		// set up
+		this();
+		setClientAdapter(clientProvider.getSvnClient(settings.getLogin()));
+		setCheckoutSettings(settings);
+		setConflictHandler(conflictHandler);
+		afterPropertiesSet();
 	}
 	
 	/**
@@ -90,6 +145,14 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	public void addNotifyListener(NotifyListener notifyListener) {
 		logger.debug("Adding notify listener {}", notifyListener.getClass().getSimpleName());
 		client.addNotifyListener(notifyListener);
+	}
+	
+	/**
+	 * To be called after every operation that could cause a conflict
+	 * @throws ConflictException
+	 */
+	void reportConflicts() throws ConflictException {
+		conflictNotifyListener.reportConflicts();
 	}
 
 	public void checkout() {
@@ -104,7 +167,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		Update update = new Update();
         update.setDir(settings.getWorkingCopyDirectory());
         execute(update);
-        Conflict.reportConflicts();
+        reportConflicts();
 	}
 	
 	public void update(File path) {
@@ -119,7 +182,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
         commit.setDir(settings.getWorkingCopyDirectory());
         commit.setMessage(commitMessage);
         execute(commit);
-        Conflict.reportConflicts();
+        reportConflicts();
     }
     
 	/**
@@ -265,71 +328,33 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		return false;
 	}
 	
-	ISVNClientAdapter getClient() {
-		return client;
-	}
-	
-	NotifyListener getConflictNotifyListener() {
-		return conflictNotifyListener;
-	}
-	
-	/**
-	 * Need to be able to throw Conflict as runtime exception in notify listener
-	 * @todo make an instance variable with the conflict stack in enclosing type instead
-	 */
-	static class Conflict extends RuntimeException {
-		private static final long serialVersionUID = 1L;
-		// keep track of last conflict in a non threadsafe way
-		private static List conflicts = new LinkedList();
-		private static void push(Conflict newreport) {
-			Conflict.conflicts.add(newreport);
-		}
-		/**
-		 * To be called after each operation that could possibly cause a conflict.
-		 * @throws ConflictException if there was a conflict at the last operation
-		 */
-		static void reportConflicts() throws ConflictException {
-			if (Conflict.conflicts.isEmpty()) {
-				return;
-			}
-			ConflictInformation[] c = new ConflictInformation[conflicts.size()];
-			for (int i = 0; i < c.length; i++) {
-				c[i] = conflicthandler
-			}
-			Conflict.conflicts.clear();
-			throw new ConflictException(new ConflictInformation[0]);
-		}
-		
-		// the instcances
-		String filename;
-		boolean previouslyReported = false; // true if this is an old conflict that was never resolved
-		public Conflict(String filename) {
-			this.filename = filename;
-			push(this);
-		}
-		public Conflict(String filename, boolean previouslyReported) {
-			this(filename);
-			this.previouslyReported = previouslyReported;
-		}
-		public String getMessage() {
-			return "Conflict at " + filename + ". This error should not be seen outside client.";
-		}
-		String getFilename() {
-			return filename;
-		}
-		boolean isPreviouslyReported() {
-			return previouslyReported;
-		}
-	}
-	
 	/**
 	 * Mandatory notify lsitener that provides logging and conflict detection.
 	 * 
-	 * Don't throw exceptions from this class. They'll only be silently caught in the JavaSVN lib.
+	 * Don't throw exceptions from the ISVNNotifyListener methods. They'll only be silently caught in the JavaSVN lib.
 	 */
 	private class ConflictNotifyListener implements NotifyListener {
 		private int currentCommand;
 		private int counter = 0;
+		
+		// recently encountered conflicts
+		private List conflictFileList = new LinkedList();
+		
+		/**
+		 * To be called after each operation that could possibly cause a conflict.
+		 * @throws ConflictException if there was a conflict at the last operation
+		 */
+		private void reportConflicts() throws ConflictException {
+			if (conflictFileList.isEmpty()) {
+				return;
+			}
+			ConflictInformation[] c = new ConflictInformation[conflictFileList.size()];
+			for (int i = 0; i < c.length; i++) {
+				c[i] = conflictHandler.handleConflictingFile((File)conflictFileList.get(i));
+			}
+			conflictFileList.clear();
+			throw new ConflictException(c);
+		}
 		
 		public void setCommand(int command) {
 			counter++;
@@ -353,8 +378,8 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 			logger.error("svn error in command {}: {}", getCurrentCommand(), message);
 			if (message.matches("^*C\\s+.+$")) {
 				logger.warn("Conflict detected: {}", message);
-				//svn client lib has to finis its work// throw new ConflictStack(message);
-				new Conflict(message);
+				String filename = message.split("\\s+")[1];
+				conflictFileList.add(new File(filename));
 			}
 		}
 
@@ -363,21 +388,12 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		}
 
 		public void logRevision(long revision, String path) {
-			logger.info("svn path {} now at revision {}", path, revision);
+			logger.info("svn path {} now at revision {}", path, Long.toString(revision));
 		}
 
 		public void onNotify(File path, SVNNodeKind kind) {
 			logger.info("svn command {} running on path {} ({})", new Object[]{getCurrentCommand(), path, kind});
 		}
-	}
-
-	/**
-	 * Inject the logic for reporting ConflictInformation
-	 * Currently this is done by {@link ReposWorkingCopyFactory} but it should probably be done by the application.
-	 * @param conflictHandler istance
-	 */
-	public void setConflictHandler(ConflictHandler conflictHandler) {
-		this.conflictHandler = conflictHandler;
 	}
 	
 }

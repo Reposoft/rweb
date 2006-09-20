@@ -1,7 +1,7 @@
-#Tue Sep 19 18:04:00 CEST 2006
-eclipse.preferences.version=1
-org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.5
-org.eclipse.jdt.core.compiler.compliance=1.5
-org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
+#Wed Sep 20 08:05:15 CEST 2006
 org.eclipse.jdt.core.compiler.problem.enumIdentifier=error
-org.eclipse.jdt.core.compiler.source=1.5
+org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.4
+eclipse.preferences.version=1
+org.eclipse.jdt.core.compiler.source=1.4
+org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
+org.eclipse.jdt.core.compiler.compliance=1.4

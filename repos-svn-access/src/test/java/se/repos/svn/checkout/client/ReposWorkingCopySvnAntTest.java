@@ -14,115 +14,83 @@
  */
 package se.repos.svn.checkout.client;
 
-import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
+import java.io.File;
+
+import org.easymock.MockControl;
 import org.tigris.subversion.svnclientadapter.ISVNStatus;
 import org.tigris.subversion.svnclientadapter.SVNStatusKind;
 
-import se.repos.svn.ClientProvider;
-import se.repos.svn.UserCredentials;
-import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
-import se.repos.svn.checkout.ConflictInformation;
-import se.repos.svn.checkout.ImmutableUserCredentials;
 import se.repos.svn.checkout.NotifyListener;
-import se.repos.svn.checkout.TestFolder;
 import se.repos.svn.checkout.client.ReposWorkingCopySvnAnt;
 
 import junit.framework.TestCase;
 
-import static org.easymock.EasyMock.*;
-
 public class ReposWorkingCopySvnAntTest extends TestCase {
 
-	// note that any test that uses this need to do replay(mockClient)
-	private ReposWorkingCopySvnAnt getInstanceWithMockClient() {
-		UserCredentials userCredentials = new ImmutableUserCredentials("", "");
-		CheckoutSettings settings = createMock(CheckoutSettings.class);
-		expect(settings.getLogin()).andReturn(userCredentials).atLeastOnce();
-		expect(settings.getWorkingCopyDirectory()).andReturn(TestFolder.getNew()).atLeastOnce();
-		ClientProvider clientProvider = createMock(ClientProvider.class);
-		
-		ISVNClientAdapter mockClient = null;
-		mockClient = createMock(ISVNClientAdapter.class);
-		expect(clientProvider.getSvnClient(userCredentials)).andReturn(mockClient);
-		mockClient.addNotifyListener(isA(NotifyListener.class));
-		expectLastCall().atLeastOnce();
-		
-		replay(settings, clientProvider); // but let the test replay mockClient
-		
-		return getInstance(clientProvider, settings);
-	}
-
-	private ReposWorkingCopySvnAnt getInstance(ClientProvider clientProvider, CheckoutSettings settings) {
-		return new ReposWorkingCopySvnAnt(clientProvider, settings);
-	}
-	
 	public void testHasLocalChangesISVNStatusUnmodified() {
-		ReposWorkingCopySvnAnt w = getInstanceWithMockClient();
+		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
 		
-		ISVNStatus mockStatus = createMock(ISVNStatus.class);
-		expect(mockStatus.getTextStatus()).andReturn(SVNStatusKind.NORMAL);
-		expect(mockStatus.getPropStatus()).andReturn(SVNStatusKind.NORMAL);
-		replay(mockStatus);
-		assertFalse(w.hasLocalChanges(mockStatus));
+		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
+		statusMock.getTextStatus();
+		statusControl.setReturnValue(SVNStatusKind.NORMAL);
+		statusMock.getPropStatus();
+		statusControl.setReturnValue(SVNStatusKind.NORMAL);
+		statusControl.replay();
+		assertFalse("There is no changes", w.hasLocalChanges(statusMock));
 	}
 
 	public void testHasLocalChangesISVNStatusContentsModified() {
-		ReposWorkingCopySvnAnt w = getInstanceWithMockClient();
+		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
 		
-		ISVNStatus mockStatus = createMock(ISVNStatus.class);
-		expect(mockStatus.getTextStatus()).andReturn(SVNStatusKind.MODIFIED);
-		expect(mockStatus.getPropStatus()).andReturn(SVNStatusKind.NORMAL);
-		replay(mockStatus);
-		assertTrue(w.hasLocalChanges(mockStatus));
+		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
+		statusMock.getTextStatus();
+		statusControl.setReturnValue(SVNStatusKind.MODIFIED);
+		statusMock.getPropStatus();
+		statusControl.setReturnValue(SVNStatusKind.NORMAL);
+		statusControl.replay();
+		assertTrue("There is contents changes", w.hasLocalChanges(statusMock));
 	}
 	
 	public void testHasLocalChangesISVNStatusPropsModified() {
-		ReposWorkingCopySvnAnt w = getInstanceWithMockClient();
+		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
 		
-		ISVNStatus mockStatus = createMock(ISVNStatus.class);
-		expect(mockStatus.getTextStatus()).andReturn(SVNStatusKind.NORMAL);
-		expect(mockStatus.getPropStatus()).andReturn(SVNStatusKind.MODIFIED);
-		replay(mockStatus);
-		assertTrue(w.hasLocalChanges(mockStatus));
-	}
-	
-	/* public void testHasLocalChangesISVNStatusUnversioned() {
-		
-		assertTrue(true);
-	} */
-	
-	public void testAddNotifyListener() {
-		ReposWorkingCopySvnAnt wc = getInstanceWithMockClient();
-		
-		NotifyListener notifyListener = createMock(NotifyListener.class);
-		wc.getClient().addNotifyListener(notifyListener);
-		expectLastCall();
-		replay(wc.getClient());
-		
-		wc.addNotifyListener(notifyListener);
-		//does not work so well: verify(wc.getClient());
+		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
+		statusMock.getTextStatus();
+		statusControl.setReturnValue(SVNStatusKind.NORMAL);
+		statusMock.getPropStatus();
+		statusControl.setReturnValue(SVNStatusKind.MODIFIED);
+		statusControl.replay();
+		assertTrue("There is property changes", w.hasLocalChanges(statusMock));
 	}
 	
 	public void testCatchConflictAtUpdate() {
 		String error = "C  C:/DOCUME~1/solsson/LOKALA~1/Temp/test/increment.txt";
-		ReposWorkingCopySvnAnt w = getInstanceWithMockClient();
+		
+		MockControl conflictHandlerControl = MockControl.createControl(ConflictHandler.class);
+		ConflictHandler conflictHandler = (ConflictHandler) conflictHandlerControl.getMock();
+		
+		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		w.setConflictHandler(conflictHandler);
+		
+		conflictHandler.handleConflictingFile(new File("C:/DOCUME~1/solsson/LOKALA~1/Temp/test/increment.txt"));
+		conflictHandlerControl.setReturnValue(null);
+		conflictHandlerControl.replay();
+		
+		// the new instance creates a nofifylistener by default
 		NotifyListener n = w.getConflictNotifyListener();
+		n.logError(error);
+		// and the update method should do
 		try {
-			n.logError(error);
-		} catch (Throwable e) {
-			fail("Can not throw exception because the underlying SVN lib catches it, and needs to do cleanup.");
-			assertTrue("The error message should contain the file name",
-					e.getMessage().contains("C:/DOCUME~1/solsson/LOKALA~1/Temp/test/increment.txt"));
-		}
-		// every update and commit needs to do this
-		try {
-			ReposWorkingCopySvnAnt.Conflict.reportConflicts();
-			fail("A conflict should have been detected for last commit");
+			w.reportConflicts();
 		} catch (ConflictException e) {
-			assertEquals("Should report one conflicting file", 1, e.getConflicts().length);
-			ConflictInformation c = e.getConflicts()[0];
+			assertEquals("Should report one conflict", 1, e.getConflicts().length);
 		}
+		
+		conflictHandlerControl.verify();
 	}
 	
 	public void testCatchConflictNotResolvedAtCommit() {

@@ -27,8 +27,10 @@ public abstract class ReposWorkingCopyFactory {
      * @return
      */
 	public static ReposWorkingCopy getClient(CheckoutSettings settings) {
-		ReposWorkingCopySvnAnt wc = new ReposWorkingCopySvnAnt(DEFAULT_CLIENT_PROVIDER, settings);
-		wc.setConflictHandler(new ConflictHandlerStandard());
+		ReposWorkingCopySvnAnt wc = new ReposWorkingCopySvnAnt(
+				DEFAULT_CLIENT_PROVIDER, 
+				settings,
+				new ConflictHandlerStandard());
 		return wc;
 	}
 }
