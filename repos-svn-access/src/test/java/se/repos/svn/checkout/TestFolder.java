@@ -9,7 +9,7 @@ public abstract class TestFolder {
 
 	public static File getNew() {
 		try {
-			File tmp = File.createTempFile("PersonalWorkingCopyTest", "dir");
+			File tmp = File.createTempFile("ReposWorkingCopyTest", "dir");
 			tmp.delete();
 			tmp.mkdir();
 			tmp.deleteOnExit();

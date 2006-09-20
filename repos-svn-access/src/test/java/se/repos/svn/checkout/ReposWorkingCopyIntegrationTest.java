@@ -5,8 +5,6 @@ package se.repos.svn.checkout;
 import java.io.File;
 import java.io.IOException;
 
-import se.repos.svn.checkout.CheckoutSettings;
-import se.repos.svn.checkout.simple.SimpleWorkingCopyIntegrationTest;
 import junit.framework.TestCase;
 
 /**
@@ -28,15 +26,38 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		client = init(settings);
 	}
 	
-	protected ReposWorkingCopy init(CheckoutSettings settings) {
-		return ReposWorkingCopyFactory.getClient(settings);
+	protected ReposWorkingCopy init(CheckoutSettings settings) throws RepositoryAccessException {
+		ReposWorkingCopy c = ReposWorkingCopyFactory.getClient(settings);
+		c.checkout();
+		return c;
 	}
-
-	public void testAdd() {
-		File created = new File(path, "newfile.txt");
+	
+	public void testNewFileStatus() {
+		File created = new File(path, "new.txt");
+		assertFalse("Is a new file", client.isVersioned(created));
+		assertFalse("Is a new file so it has no changes", client.hasLocalChanges(created));
+	}
+	
+	public void testAddAndDelete() throws IOException, ConflictException, RepositoryAccessException {
+		File created = new File(path, "tobedeleted.txt");
+		created.createNewFile();
 		client.add(created);
-		//CheckStatus.expect(path, CheckStatus.ADDED);
-	}
+		assertTrue("The file should be added", client.isVersioned(created));
+		try {
+			client.delete(created);
+			fail("Should say that the file can not be deleted because it has local modifications");
+		} catch (WorkingCopyAccessException e) {
+			// expected
+		}
+		client.commit("Added test file");
+		client.delete(created);
+		assertFalse("The file should be deleted by the client", created.exists());
+		assertTrue("Should still say isVersioned=true for a deleted file, because a new file with the same name can not be created until after commit", 
+				client.isVersioned(created));
+		client.commit("Deleted test file");
+		assertFalse("The file should be gone", created.exists());
+		assertFalse("Now the file name is not used anymore",	client.isVersioned(created));
+	}	
 	
 	public void testAddOutsideWorkingCopy() throws IOException {
 		File tmp = File.createTempFile("PersonalWorkingCopyTestFile", "file");
@@ -44,23 +65,17 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		client.add(tmp);
 		fail("Should have reported error because the new folder is not inside a working copy");
 	}
-
-	public void testDelete() {
-		File created = new File(path, "tobedeleted.txt");
-		client.add(created);
-		//CheckStatus.expect(path, CheckStatus.ADDED);
-		client.delete(created);
-		//CheckStatus.expect(path, CheckStatus.ADDED);
-	}
 	
 	public void testDeleteAlreadyDeletedFile() {
 		File created = new File(path, "tobedeleted.txt");
 		client.add(created);
-		//CheckStatus.expect(path, CheckStatus.ADDED);
+		assertTrue("The file should be added", client.isVersioned(created));
 		created.delete();
 		client.delete(created);
-		//CheckStatus.expect(path, CheckStatus.ADDED);
-		fail("Should not accept to delete a file that is gone, or should it?");
+		assertTrue("Should mark the file for deletion, even if it is gone already, " +
+				"and report that the path hasLocalChanges", client.hasLocalChanges(created));
+		assertFalse("The client may need to temporarily create the file, but it should be removed again",
+				created.exists());
 	}
 
 	public void testMove() {
@@ -69,6 +84,6 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 
 	public void testMoveAlreadyMovedFolder() {
 		fail("Not yet implemented");
-	}	
+	}
 	
 }

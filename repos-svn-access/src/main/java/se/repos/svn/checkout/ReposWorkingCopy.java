@@ -43,9 +43,10 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	/**
 	 * Checkout is needed only if the working copy has not been used before.
 	 * Use isVersioned() to check if a working copy root dir contains checked out files.
+	 * @throws RepositoryAccessException 
 	 * @see MandatoryReposOperations#synchronize(String)
 	 */
-	public void checkout();
+	public void checkout() throws RepositoryAccessException;
 	
 	/**
 	 * Like {@link ReposWorkingCopy#update()} but for a part of the working copy.
@@ -57,8 +58,9 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * Sends local changes to the repository
 	 * @param commitMessage For the log
 	 * @throws ConflictException The risk of this is minimal if an update is done just before every commit.
+	 * @throws RepositoryAccessException 
 	 */
-	public void commit(String commitMessage) throws ConflictException;
+	public void commit(String commitMessage) throws ConflictException, RepositoryAccessException;
 	
 	/**
 	 * Checks status of a specific resource

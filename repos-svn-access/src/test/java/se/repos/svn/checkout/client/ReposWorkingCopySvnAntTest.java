@@ -16,7 +16,9 @@ package se.repos.svn.checkout.client;
 
 import java.io.File;
 
+import org.apache.tools.ant.BuildException;
 import org.easymock.MockControl;
+import org.tigris.subversion.svnant.SvnCommand;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.ISVNStatus;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
@@ -31,6 +33,41 @@ import junit.framework.TestCase;
 
 public class ReposWorkingCopySvnAntTest extends TestCase {
 
+	public void testHandleAntException() {
+		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		SvnCommand command = new SvnCommand() {
+			public void execute(ISVNClientAdapter arg0) throws BuildException {
+				throw new BuildException();
+			}
+		};
+		try {
+			w.execute(command);
+			fail("Should have translated the build exception to a runtimeexcetpion");
+		} catch (RuntimeException e) {
+			// expected
+		} catch (SVNClientException e) {
+			fail("This is an uncategorized build exception that should be thrown as RuntimeException");
+		}
+	}
+
+	public void testHandleAntExceptionSVNClient() {
+		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		SvnCommand command = new SvnCommand() {
+			public void execute(ISVNClientAdapter arg0) throws BuildException {
+				throw new BuildException("The svn client threw a test exception",
+						new SVNClientException("some svnClientAdapter exception"));
+			}
+		};
+		try {
+			w.execute(command);
+			fail("Should have rethrown the cause which is an SVNClientException");
+		} catch (RuntimeException e) {
+			fail("Should have recognized the cause, and thrown it (SVNClientException");
+		} catch (SVNClientException e) {
+			// expected
+		}
+	}	
+	
 	public void testHasLocalChangesISVNStatusUnmodified() {
 		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
 		
@@ -69,6 +106,19 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 		statusControl.replay();
 		assertTrue("There is property changes", w.hasLocalChanges(statusMock));
 	}
+
+	public void testHasLocalChangesUnversioned() {
+		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		
+		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
+		statusMock.getTextStatus();
+		statusControl.setReturnValue(SVNStatusKind.UNVERSIONED);
+		statusMock.getPropStatus();
+		statusControl.setReturnValue(SVNStatusKind.NONE);
+		statusControl.replay();
+		assertFalse("The file is not added so it has no changes", w.hasLocalChanges(statusMock));
+	}	
 	
 	public void testCatchConflictAtUpdate() {
 		String error = "C  C:/DOCUME~1/solsson/LOKALA~1/Temp/test/increment.txt";

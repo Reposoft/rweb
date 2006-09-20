@@ -25,6 +25,7 @@ import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.CheckoutSettingsForTest;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.MandatoryReposOperations;
+import se.repos.svn.checkout.RepositoryAccessException;
 
 import junit.framework.TestCase;
 
@@ -35,7 +36,7 @@ public class SimpleWorkingCopyIntegrationTest extends TestCase {
 	// folder for test working copy. expected to have deleteOnExit.
 	private File tmpFolder;
 	
-	public void testWorkflow() throws IOException {
+	public void testWorkflow() throws IOException, RepositoryAccessException {
 		// first instantiate a working copy for a new empty folder
 		CheckoutSettings settings =  new CheckoutSettingsForTest();
 		tmpFolder = settings.getWorkingCopyDirectory();

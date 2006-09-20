@@ -3,6 +3,7 @@
 package se.repos.svn.checkout.client;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.tigris.subversion.svnant.Add;
 import org.tigris.subversion.svnant.Checkout;
 import org.tigris.subversion.svnant.Commit;
+import org.tigris.subversion.svnant.Delete;
 import org.tigris.subversion.svnant.SvnCommand;
 import org.tigris.subversion.svnant.Update;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
@@ -35,6 +37,8 @@ import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
+import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.WorkingCopyAccessException;
 
 /**
  * Uses subclipse {@link http://subclipse.tigris.org/svnant.html SvnAnt} to implement the subversion operations
@@ -156,18 +160,26 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		conflictNotifyListener.reportConflicts();
 	}
 
-	public void checkout() {
+	public void checkout() throws RepositoryAccessException {
         Checkout co = new Checkout();
         co.setDestpath(settings.getWorkingCopyDirectory());
         co.setUrl(settings.getCheckoutUrl().getUrl());
         logger.info("Checking out using command {}", co);
-        execute(co);
+        try {
+			execute(co);
+		} catch (SVNClientException e) {
+			throw new RepositoryAccessException(e);
+		}
 	}    
 
-	public void update() throws ConflictException {
+	public void update() throws ConflictException, RepositoryAccessException {
 		Update update = new Update();
         update.setDir(settings.getWorkingCopyDirectory());
-        execute(update);
+        try {
+			execute(update);
+		} catch (SVNClientException e) {
+			throw new RepositoryAccessException(e);
+		}
         reportConflicts();
 	}
 	
@@ -178,22 +190,42 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		
 	}
 	
-    public void commit(String commitMessage) throws ConflictException {
+    public void commit(String commitMessage) throws ConflictException, RepositoryAccessException {
+    	logger.info("Committing working copy {} with message: {}", settings.getWorkingCopyDirectory().getAbsolutePath(), commitMessage);
     	Commit commit = new Commit();
         commit.setDir(settings.getWorkingCopyDirectory());
         commit.setMessage(commitMessage);
-        execute(commit);
+        try {
+			execute(commit);
+		} catch (SVNClientException e) {
+			throw new RepositoryAccessException(e);
+		}
         reportConflicts();
     }
     
 	/**
 	 * No logic, just an update and a commit
+	 * @throws RepositoryAccessException 
 	 */
-	public void synchronize(String commitMessage) throws ConflictException {
+	public void synchronize(String commitMessage) throws ConflictException, RepositoryAccessException {
 		this.update();
 		this.commit(commitMessage);
 	}
 
+
+	public boolean isVersioned(File path) throws WorkingCopyAccessException {
+		ISVNStatus status = getSingleStatus(path);
+		return (status.getTextStatus() != SVNStatusKind.UNVERSIONED);
+	}
+
+	private ISVNStatus getSingleStatus(File path) {
+		try {
+			return client.getSingleStatus(path);
+		} catch (SVNClientException e) {
+			throw new WorkingCopyAccessException(e);
+		}
+	}
+	
 	public boolean hasLocalChanges() {
 		return hasLocalChanges(settings.getWorkingCopyDirectory());
 	}
@@ -203,7 +235,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
         try {
             statuses = client.getStatus(path, true, true); //descend, all
         } catch (SVNClientException e) {
-            throw new RuntimeException("Handling for SVNClientException not implemented", e);
+            throw new WorkingCopyAccessException(e);
         }
         // will exit and return true when it finds a modified file/dir
         for (int i = 0; i<statuses.length; i++) {
@@ -217,10 +249,14 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	}
 	
 	public void add(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#add not implemented yet");
+		if (!path.exists()) throw new IllegalArgumentException("Can not add the file '" + path + "' because it does not exist");
+		Add add = new Add();
+		add.setFile(path);
+		try {
+			execute(add);
+		} catch (SVNClientException e) {
+			throw new WorkingCopyAccessException(e);
 		}
-		
 	}
 	
     public void addAll() {
@@ -231,14 +267,32 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
         fileSet.setDir(settings.getWorkingCopyDirectory());
         Add add = new Add();
         add.addFileset(fileSet);
-        execute(add);
+        try {
+			execute(add);
+		} catch (SVNClientException e) {
+			throw new WorkingCopyAccessException(e);
+		}
     }
 
-	public void delete(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#delete not implemented yet");
+    /**
+     * It is adviced that applicaiton first checks if the file has local modifications,
+     * because then it can't be deleted.
+     */
+	public void delete(File path) throws WorkingCopyAccessException {
+		Delete delete = new Delete();
+		delete.setFile(path);
+		if (!path.exists()) {
+			try {
+				path.createNewFile();
+			} catch (IOException e) {
+				throw new WorkingCopyAccessException(e);
+			}
 		}
-		
+		try {
+			execute(delete);
+		} catch (SVNClientException e) {
+			throw new WorkingCopyAccessException(e);
+		}
 	}
 
 	public void lock(File path) {
@@ -262,32 +316,37 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		
 	}	
 
-	public void markConflictResolved(ConflictInformation conflictInformation) {
+	public void markConflictResolved(ConflictInformation conflictInformation) throws WorkingCopyAccessException {
 		try {
 			client.resolved(conflictInformation.getTargetPath());
 		} catch (SVNClientException e) {
-			// TODO auto-generated
-			throw new RuntimeException("SVNClientException thrown, not handled", e);
+			throw new WorkingCopyAccessException(e);
 		}
 		conflictHandler.afterConflictResolved(conflictInformation);
 	}
 
-    private void execute(SvnCommand command) {
+	/**
+	 * @param command SvnAnt command
+	 * @throws SVNClientException to force the caller to categorize the error
+	 */
+    void execute(SvnCommand command) throws SVNClientException {
     	if (command.getProject() == null) {
     		command.setProject(ANTPROJECT); // dummy, might be needed for some operations
     	}
-        try {
-        	command.execute(client);
-        } catch (BuildException be) {
-        	// this kind of errors should be handled by the notify listener
-        	logger.error("Svn client error '" + be.getMessage() + "' caused by: " + be.getCause().getMessage(), be);
-        }
+    	try {
+    		command.execute(client);
+    	} catch (BuildException e) {
+    		if (e.getCause() instanceof SVNClientException) {
+    			throw (SVNClientException) e.getCause();
+    		} else {
+    			throw new RuntimeException("Svn client error '" + e.getMessage() + "' caused by: " + e.getCause().getMessage(), e);
+    		}
+    	}
     }
 	
     /**
      * @param fileOrDirStatus from the wokring copy
      * @return true if there is something to commit according to the status.
-     * 	unversion files are counted as modifications.
      */
 	boolean hasLocalChanges(ISVNStatus fileOrDirStatus) {
 		SVNStatusKind textStatus = fileOrDirStatus.getTextStatus();
@@ -297,9 +356,6 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		}
 		if (SVNStatusKind.MODIFIED.equals(propStatus)) {
 		    return true;
-		}
-		if (SVNStatusKind.UNVERSIONED.equals(textStatus)) {
-			return true;
 		}
 		if (SVNStatusKind.ADDED.equals(textStatus)) {
 		    return true; // could also check for conflicts
@@ -323,13 +379,6 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		} catch (SVNClientException e) {
 			throw new RuntimeException("SVNClientException handling missing", e);
 		}
-	}
-
-	public boolean isVersioned(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#isVersioned not implemented yet");
-		}
-		return false;
 	}
 	
 	/**

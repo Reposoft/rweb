@@ -19,8 +19,9 @@ public interface MandatoryReposOperations {
 	
 	/**
 	 * Update the current working copy with the changes from the repository.
+	 * @throws RepositoryAccessException 
 	 */
-	public void update() throws ConflictException;
+	public void update() throws ConflictException, RepositoryAccessException;
 	
 	/**
 	 * Synchronize with the shared repository.
@@ -32,9 +33,10 @@ public interface MandatoryReposOperations {
 	 * the latest shared file. Then mark the conflict resolved. Then retry the operation.
 	 * 
 	 * @throws ConflictException Meaning that commit was not performed because there is at least one conflict.
+	 * @throws RepositoryAccessException 
 	 */
 	public void synchronize(String commitMessage)
-		throws ConflictException;
+		throws ConflictException, RepositoryAccessException;
 	
 	/**
 	 * Make a file ready for commit again after a conflict

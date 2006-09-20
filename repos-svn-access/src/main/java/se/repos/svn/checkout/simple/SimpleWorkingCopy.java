@@ -9,6 +9,7 @@ import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.MandatoryReposOperations;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
+import se.repos.svn.checkout.RepositoryAccessException;
 
 /**
  * Subversion client for an office user working in a windows folder.
@@ -42,8 +43,9 @@ public class SimpleWorkingCopy implements MandatoryReposOperations {
     /**
      * Open up an existing working copy.
      * If the folder is empty nothing can be done until {@link #checkout()} is called.
+     * @throws RepositoryAccessException 
      */
-    public SimpleWorkingCopy(CheckoutSettings settings) {
+    public SimpleWorkingCopy(CheckoutSettings settings) throws RepositoryAccessException {
         super();
         logger.info("Initializing working copy with settings: {}", settings);
         
@@ -59,7 +61,7 @@ public class SimpleWorkingCopy implements MandatoryReposOperations {
     	return workingCopy.hasLocalChanges();
     }
     
-    public void synchronize(String commitMessage) throws ConflictException {
+    public void synchronize(String commitMessage) throws ConflictException, RepositoryAccessException {
         // update
         logger.debug("Starting synchronize() with an update");
         this.update();
@@ -77,7 +79,7 @@ public class SimpleWorkingCopy implements MandatoryReposOperations {
         }
     }
     
-	public void update() throws ConflictException {
+	public void update() throws ConflictException, RepositoryAccessException {
 		workingCopy.update();
 	}
 
