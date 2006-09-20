@@ -21,8 +21,10 @@ import se.repos.svn.checkout.simple.SimpleWorkingCopy;
 /**
  * A basic subversion client, with extra logic for supporting common user operations.
  *
+ * "Managed" client means that it is assumed that the user gets some help in maintaining the working copy, so no integrity checks are needed here.
+ *
  * <ul>
- * <li>Allows {@link MandatoryReposOperations#synchronize(String)} for convenience, and {@link ReposWorkingCopy#commit(String)} for speed.
+ * <li>Allows {@link #synchronize(String)} for convenience, and {@link #commit(String)} for speed.
  * <li>Allows move operation on an already moved file or folder
  * <li>Allows delete on an already deleted file or folder
  * </ul>

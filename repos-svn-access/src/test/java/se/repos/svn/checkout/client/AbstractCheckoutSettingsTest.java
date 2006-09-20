@@ -70,5 +70,33 @@ public class AbstractCheckoutSettingsTest extends TestCase {
 		String rel = c.toRelative(f);
 		assertEquals("Should strip the working copy directory from the absolute path", "file.txt", rel);
 	}
+	
+	public void testValidateWorkingCopyPath() {
+		File testDir = TestFolder.getNew();
+		AbstractCheckoutSettings c = new AbstractCheckoutSettings("http://test.repos.se/testrepo", testDir) {
+			public UserCredentials getLogin() {return null;}
+		};
+		try {
+			c.validateWorkingCopyPath(testDir);
+		} catch (IllegalArgumentException e) {
+			fail("An existing empty folder is a valid working copy path");
+		}
+	}
 
+	public void testValidateWorkingCopyPathNonEmpty() throws IOException {
+		File testDir = TestFolder.getNew();
+		File file = new File(testDir, "a.txt");
+		file.createNewFile();
+		file.deleteOnExit();
+		AbstractCheckoutSettings c = new AbstractCheckoutSettings("http://test.repos.se/testrepo", testDir) {
+			public UserCredentials getLogin() {return null;}
+		};
+		try {
+			c.validateWorkingCopyPath(file);
+			fail(file + " is a file so it is not a valid working copy");
+		} catch (IllegalArgumentException e) {
+			// expected
+		}
+	}	
+	
 }
