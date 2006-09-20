@@ -3,12 +3,16 @@
 package se.repos.svn.checkout.client;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.apache.tools.ant.taskdefs.TempFile;
 
 import junit.framework.TestCase;
 
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.CheckoutSettingsForTest;
+import se.repos.svn.checkout.TestFolder;
 
 public class AbstractCheckoutSettingsTest extends TestCase {
 
@@ -17,14 +21,15 @@ public class AbstractCheckoutSettingsTest extends TestCase {
 	public void setUp() throws Exception {
 	}
 	
-	public void testInitialize() {
-		CheckoutSettings c = new AbstractCheckoutSettings("http://test.repos.se/testrepo", S + "tmp") {
+	public void testInitialize() throws IllegalArgumentException, IOException {
+		File path = TestFolder.getNew();
+		CheckoutSettings c = new AbstractCheckoutSettings("http://test.repos.se/testrepo", path) {
 			public UserCredentials getLogin() {
 				return null;
 			}
 		};
 		assertEquals("http://test.repos.se/testrepo", c.getCheckoutUrl().toString());
-		assertEquals(S + "tmp", c.getWorkingCopyDirectory().getPath());
+		assertEquals(path.getPath(), c.getWorkingCopyDirectory().getPath());
 	}
 
 	public void testInitializeInvalidUrl() {
@@ -58,9 +63,14 @@ public class AbstractCheckoutSettingsTest extends TestCase {
 	}	
 	
 	public void testToRelative() {
-		CheckoutSettings c = new CheckoutSettingsForTest();
-		final String testDir = c.getWorkingCopyDirectory().getAbsolutePath();
-		String rel = c.toRelative(new File(testDir + S + "file.txt"));
+		File testDir = TestFolder.getNew();
+		CheckoutSettings c = new AbstractCheckoutSettings("http://test.repos.se/testrepo", testDir) {
+			public UserCredentials getLogin() {
+				return null;
+			}
+		};
+		File f = new File(testDir + S + "file.txt");
+		String rel = c.toRelative(f);
 		assertEquals("Should strip the working copy directory from the absolute path", "file.txt", rel);
 	}
 

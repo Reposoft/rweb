@@ -63,7 +63,10 @@ public abstract class AbstractCheckoutSettings implements CheckoutSettings {
 		if (!path.isAbsolute()) {
 			return path.getPath();
 		}
-		return null;
+		if (!path.getAbsolutePath().startsWith(getWorkingCopyDirectory().getAbsolutePath())) {
+			throw new IllegalArgumentException("The path " + path + " is not under working copy directory " + getWorkingCopyDirectory());
+		}
+		return path.getAbsolutePath().substring(getWorkingCopyDirectory().getAbsolutePath().length() + 1);
 	}
 	
 	private static File convertToFile(String workingCopyAbsolutePath) {
