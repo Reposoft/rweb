@@ -1,9 +1,9 @@
 <?php
-require_once 'PHPUnit/Framework/TestCase.php';
+require("../lib/simpletest/setup.php");
 
-require '../../edit/edit.class.php';
+require 'edit.class.php';
  
-class EditTest extends PHPUnit_Framework_TestCase
+class EditTest extends UnitTestCase
 {
 
 	function testIsSuccessfulUsingDIRCommand() {
@@ -30,38 +30,41 @@ class EditTest extends PHPUnit_Framework_TestCase
 		$edit = new Edit('test');
 		$this->returnval = true;
 		$edit->result = "Committed revision 107.";
-		$this->assertEquals('107', $edit->getCommittedRevision());
+		$this->assertEqual('107', $edit->getCommittedRevision());
 	}
 	
 	function testAddArgument() {
 		$edit = new Edit('test');
-		$edit->addArgument('arg1');
-		$this->assertEquals('arg1', $edit->args[0]);
-		$edit->addArgument('arg_');
-		$this->assertEquals('arg1', $edit->args[0]);
-		$this->assertEquals('arg_', $edit->args[1]);
+		$edit->addArgPath('arg1');
+		$this->assertEqual('arg1', $edit->args[0]);
+		$edit->addArgOption('arg_');
+		$this->assertEqual('arg1', $edit->args[0]);
+		$this->assertEqual('arg_', $edit->args[1]);
 	}
 	
 	function testCommand() {
 		// actually we shouldnt care much about what the command looks like, but here's one test to help
 		$edit = new Edit('import');
 		$edit->setMessage('msg');
-		$edit->addArgument('file.txt');
-		$edit->addArgument('https://my.repo/file.txt');
+		$edit->addArgFilename('file.txt');
+		$edit->addArgUrl('https://my.repo/file.txt');
 		$cmd = $edit->getCommand();
-		$this->assertEquals('import -m "msg" file.txt https://my.repo/file.txt', $cmd);
+		$this->assertEqual('import -m "msg" "file.txt" "https://my.repo/file.txt"', $cmd);
 	}
 	
 	function testCommandEscape() {
 		if (substr(PHP_OS, 0, 3) != 'WIN') {
 			$edit = new Edit('" $(ls)');
 			$edit->setMessage('msg " `ls`');
-			$edit->addArgument("'ls'");
-			$edit->addArgument('\" | rm');
+			$edit->addArgOption("'ls'");
+			$edit->addArgOption('\" | rm');
 			$cmd = $edit->getCommand();
-			$this->assertEquals('\" \$\(ls\) -m "msg \" \`ls\`" \'ls\' \\\" \| rm', $cmd);
+			$this->assertEqual('\" \$\(ls\) -m "msg \" \`ls\`" \'ls\' \\\" \| rm', $cmd);
 		}
 	}
 
 }
+
+$test = &new EditTest();
+$test->run(new HtmlReporter());
 ?>
