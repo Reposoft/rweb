@@ -20,6 +20,7 @@
 $testfiles = array(
 'conf/repos.properties.test.php',
 'conf/Presentation.test.php',
+'account/login.test.php',
 'open/start/RepositoryTree.test.php'
 );
 

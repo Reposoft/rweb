@@ -1,45 +1,70 @@
 <?php
-require_once 'PHPUnit/Framework/TestCase.php';
+require("../lib/simpletest/setup.php");
 
-require '../../account/login.inc.php';
+require 'login.inc.php';
  
-class LoginTest extends PHPUnit_Framework_TestCase
-{
-	public function setUp() {
-		unset($_GET);
-		unset($_SERVER);
-		global $_GET, $_SERVER;
-	}
+//define('TESTREPO', "http://test.repos.se/testrepo");
+define('TESTREPO', "http://alto.optime.se/testrepo");
+ 
+class Login_include_Test extends UnitTestCase {
 
+	public function setUp() {
+		// some server varables are used in the test below and must be reset every time
+		unset($_GET['target']);
+		unset($_GET['path']);
+		unset($_GET['file']);
+		unset($_GET['repo']);
+	}
+	
 	public function testGetHttpHeadersInsecure() {
-		$headers = getHttpHeaders("http://svn.optime.se/optime");
-		echo("---- test output: ----\n");
+		$headers = getHttpHeaders(TESTREPO);
+		echo("<pre>---- no login attempted, should be 401 Authorization Required with realm ----\n");
 		print_r($headers);
+		echo("</pre>\n");
 	}
 
 	public function testGetHttpHeadersInsecureAuth() {
-		$headers = getHttpHeaders("http://svn.optime.se/optime",'nonexistinguser','qwerty');
-		echo("---- test output: ----\n");
+		$headers = getHttpHeaders(TESTREPO,'nonexistinguser','qwerty');
+		echo("<pre>---- login attempted but invalid credentials, should be 401 ----\n");
 		print_r($headers);
+		echo("</pre>\n");
+	}
+
+	public function testGetHttpHeadersInsecureAccessControl() {
+		$headers = getHttpHeaders(TESTREPO,'test','test');
+		echo("<pre>---- login ok, but access denied by ACL, should be 403 ----\n");
+		print_r($headers);
+		echo("</pre>\n");
+	}	
+	
+	public function testGetHttpHeadersSecureAuth() {
+		if(login_isSSLSupported()) {
+			$headers = getHttpHeaders("https://www.repos.se/sweden");
+			echo("<pre>---- SSL headers, no login: ----\n");
+			print_r($headers);
+			echo("</pre>\n");
+		} else {
+			echo("<pre>SSL is not supported on this server</pre>\n");
+		}
 	}
 	
 	public function testGetAuthName() {
-		$url = "http://svn.optime.se/optime";
+		$url = TESTREPO;
 		$realm = getAuthName($url);
-		$this->assertEquals("Optime", $realm);
+		$this->assertEqual("Optime", $realm);
 	}
 	
 	public function testGetAuthNameNoAuth() {
 		$url = "http://www.google.se";
 		$realm = getAuthName($url);
-		$this->assertEquals(false, $realm);
+		$this->assertEqual(false, $realm);
 	}
 	
 	// target is a file in the repository, absolute url from repository root
 	public function testTargetTarget() {
 		$_GET['target'] = '/my/file.txt';
 		$target = getTarget();
-		$this->assertEquals('/my/file.txt', $target);
+		$this->assertEqual('/my/file.txt', $target);
 	}
 	
 	// target is a directory, absolute url from repository root, no tailing slash
@@ -47,7 +72,7 @@ class LoginTest extends PHPUnit_Framework_TestCase
 	public function testTargetPath() {
 		$_GET['path'] = '/my/dir';
 		$target = getTarget();
-		$this->assertEquals('/my/dir/', $target);
+		$this->assertEqual('/my/dir/', $target);
 	}
 	
 	// target is both path and file
@@ -55,7 +80,7 @@ class LoginTest extends PHPUnit_Framework_TestCase
 		$_GET['path'] = '/my/dir';
 		$_GET['file'] = 'file.txt';
 		$target = getTarget();
-		$this->assertEquals('/my/dir/file.txt', $target);
+		$this->assertEqual('/my/dir/file.txt', $target);
 	}
 	
 	// target is both path and file
@@ -63,27 +88,27 @@ class LoginTest extends PHPUnit_Framework_TestCase
 		$_GET['path'] = '/my/dir/';
 		$_GET['file'] = 'file.txt';
 		$target = getTarget();
-		$this->assertEquals('/my/dir/file.txt', $target);
+		$this->assertEqual('/my/dir/file.txt', $target);
 	}
 	
 	// repository url when repo param is set
 	public function testRepositoryUrlRepo() {
 		$_GET['repo'] = 'http://my.repo/';
-		$this->assertEquals('http://my.repo', getRepositoryUrl());
+		$this->assertEqual('http://my.repo', getRepositoryUrl());
 	}
 	
 	// repository url from referrer and path
 	public function testRepositoryUrlReferrerPath() {
 		$_SERVER['HTTP_REFERER'] = 'http://my.repo/my/dir';
 		$_GET['path'] = '/my/dir';
-		$this->assertEquals('http://my.repo', getRepositoryUrl());
+		$this->assertEqual('http://my.repo', getRepositoryUrl());
 	}
 	
 	public function testRepositoryUrlReferrerPathSlash() {
 		$_SERVER['HTTP_REFERER'] = 'http://my.repo/my/dir';
 		$_GET['path'] = '/my/dir/';
 		// according to function docs this should return nothing
-		$this->assertEquals('http://my.repo', getRepositoryUrl());
+		$this->assertEqual('http://my.repo', getRepositoryUrl());
 	}
 	
 	// composition of target url (absolute URI)
@@ -91,7 +116,7 @@ class LoginTest extends PHPUnit_Framework_TestCase
 		$_GET['repo'] = 'http://my.repo';
 		$_GET['target'] = '/my/dir/file.txt';
 		// according to function docs this should return nothing
-		$this->assertEquals('http://my.repo/my/dir/file.txt', getTargetUrl());
+		$this->assertEqual('http://my.repo/my/dir/file.txt', getTargetUrl());
 	}
 	
 	public function testTargetUrldecode() {
@@ -101,9 +126,9 @@ class LoginTest extends PHPUnit_Framework_TestCase
 	
 	// getTargetUrl should return false if target can not be automatically resolved
 	public function testGetTargetUrlFalse() {
-		$this->assertEquals(false, getTargetUrl());
+		$this->assertEqual(false, getTargetUrl());
 		$_GET['repo'] = 'http://my.repo';
-		$this->assertEquals(false, getTargetUrl());
+		$this->assertEqual(false, getTargetUrl());
 	}
 	
 	// url manipulation for the logged in user
@@ -111,58 +136,76 @@ class LoginTest extends PHPUnit_Framework_TestCase
 		$_SERVER['PHP_AUTH_USER'] = 'mE';
 		$_SERVER['PHP_AUTH_PW'] = 'm&p8ss';
 		$url = getLoginUrl('https://my.repo:88/home');
-		$this->assertEquals('https://mE:m&p8ss@my.repo:88/home', $url);
+		$this->assertEqual('https://mE:m&p8ss@my.repo:88/home', $url);
 	}
 	
 	public function testGetLoginUrlNoUser() {
 		unset($_SERVER['PHP_AUTH_USER']);
 		unset($_SERVER['PHP_AUTH_PW']);
 		$url = getLoginUrl('https://my.repo:88/home');
-		$this->assertEquals('https://my.repo:88/home', $url);
+		$this->assertEqual('https://my.repo:88/home', $url);
 	}
 	
-	public function testVerifyLogin() {
+	public function testVerifyLoginDemoAccount() {
 		if (login_isSSLSupported()) {
 			// test demo account authentication
 			$_SERVER['PHP_AUTH_USER'] = 'svensson';
 			$_SERVER['PHP_AUTH_PW'] = 'medel';
 			$url = 'https://www.repos.se/sweden/svensson/trunk';
 			verifyLogin($url);
-			$this->assertEquals(true, verifyLogin($url));
+			$this->assertEqual(true, verifyLogin($url));
 		}
+	}
+
+	public function testVerifyLoginTestServer() {
+		// test demo account authentication
+		$_SERVER['PHP_AUTH_USER'] = 'test';
+		$_SERVER['PHP_AUTH_PW'] = 'test';
+		$url = TESTREPO.'/test/trunk';
+		verifyLogin($url);
+		$this->assertEqual(true, verifyLogin($url));
 	}
 	
 	public function testVerifyLoginFail() {
-		if (login_isSSLSupported()) {
-			// test demo account authentication
-			$_SERVER['PHP_AUTH_USER'] = 'svensson';
-			$_SERVER['PHP_AUTH_PW'] = 'medel';
-			$url = 'https://www.repos.se/sweden';
-			$this->assertEquals(false, verifyLogin($url));
-		}
+		// test demo account authentication
+		$_SERVER['PHP_AUTH_USER'] = 'test';
+		$_SERVER['PHP_AUTH_PW'] = 'test';
+		$url = TESTREPO;
+		$this->assertEqual(false, verifyLogin($url));
 	}
 	
 	public function testGetHttpHeaders() {
 		$headers = getHttpHeaders("http://www.google.se/");
 		$this->assertTrue(count($headers) > 0);
-		$this->assertEquals("HTTP/1.0 200 OK", $headers[0]);
+		$this->assertEqual("HTTP/1.0 200 OK", $headers[0]);
 	}
 	
-	public function testGetHttpHeadersAuth() {
-	if (login_isSSLSupported()) {	
-		$headers = getHttpHeaders("https://www.repos.se/sweden");
+	public function testGetHttpHeadersAuth() {	
+		$headers = getHttpHeaders(TESTREPO);
 		$this->assertTrue(count($headers) > 0);
-		$this->assertEquals("HTTP/1.1 401 Authorization Required", $headers[0]);
-	}
+		$this->assertEqual("HTTP/1.1 401 Authorization Required", $headers[0]);
 	}
 	
-	public function testGetHttpHeadersAuthFailed() {
-	if (login_isSSLSupported()) {
-		$headers = my_get_headers("https://www.repos.se/sweden",'nonexistinguser','qwerty');
+	// one of the test cases below may fail on for example SuSE 9.1 + Apache 2 + svn 1.2.3 where incorrect header is sent
+	// see the selenium test case for invalid login
+	
+	public function testGetHttpHeadersAuthenticationFailed() {
+		$headers = my_get_headers(TESTREPO,'nonexistinguser','qwerty');
 		$this->assertTrue(count($headers) > 0);
-		$this->assertEquals("HTTP/1.1 401 Unauthorized", $headers[0]);
-	}
+		// with an invalid username, we expect another login attempt
+		$this->assertEqual("HTTP/1.1 401 Authorization Required", $headers[0]);
 	}
 
+	public function testGetHttpHeadersAuthorizationFailed() {
+		// user "test" does not have access to repository root
+		$headers = my_get_headers(TESTREPO,'test','test');
+		$this->assertTrue(count($headers) > 0);
+		// with a valid username, but no access according to ACL, we expect to see an access denied page
+		$this->assertEqual("HTTP/1.1 403 Forbidden", $headers[0]);
+	}	
+	
 }
+
+$test = &new Login_include_Test();
+$test->run(new HtmlReporter());
 ?>
