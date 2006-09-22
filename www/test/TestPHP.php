@@ -22,13 +22,14 @@ $testfiles = array(
 'open/start/RepositoryTree.test.php'
 );
 
-if (isset($_GET['file'])) {
-// --- test case ---
-$file = $_GET['file'];
-if (!in_array($file, $testfiles)) {
-	trigger_error("$file is not a known testcase");
-	exit;
+function printTestSuite($testfiles) {
+	echo("<tr><td><b>repos.se PHP Test Suite</b></td></tr>\n");
+	foreach ($testfiles as $file) {
+		echo("<tr><td><a href=\"?file=$file\">$file</a></td></tr>\n");
+	}
 }
+
+function printTestCase($file) {
 ?>
 <tr><td rowspan="1" colspan="3"><?php echo($file); ?></td></tr>
 </thead><tbody>
@@ -48,14 +49,17 @@ if (!in_array($file, $testfiles)) {
 	<td></td>
 </tr>
 <?php
-// -----------------
-} else {
-// --- test suite ---
-echo("<tr><td><b>repos.se PHP Test Suite</b></td></tr>\n");
-foreach ($testfiles as $file) {
-	echo("<tr><td><a href=\"?file=$file\">$file</a></td></tr>\n");
 }
-// ------------------
+
+if (isset($_GET['file'])) {
+	$file = $_GET['file'];
+	if (!in_array($file, $testfiles)) {
+		trigger_error("$file is not a known testcase");
+		exit;
+	}
+	printTestCase($file);
+} else {
+	printTestSuite($testfiles);
 }
 
 ?>
@@ -63,7 +67,7 @@ foreach ($testfiles as $file) {
 </table>
 <?php
 if (!isset($_GET['file'])) {
-echo('<p><a class="action" id="back" href="./" target="_top">&lt back</a></p>');
+	echo('<p><a class="action" id="back" href="./" target="_top">&lt back</a></p>');
 }
 ?>
 </body>
