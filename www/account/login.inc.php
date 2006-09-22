@@ -113,7 +113,8 @@ function login($targetUrl) {
 }
 
 /**
- * @return true if the current user can access the resource
+ * @return true if the current user can access the resource, 
+ * TODO this means that 404 status returns true, make a function that returns the status code, and do error handling on unexpected codes
  */
 function verifyLogin($targetUrl) {
 	$user = getReposUser();
@@ -121,7 +122,7 @@ function verifyLogin($targetUrl) {
 		return false;
 	}
 	$headers = getHttpHeaders($targetUrl, $user, getReposPass());
-	return strpos($headers[0], '401') == false;
+	return strpos($headers[0], '401') || strpos($headers[0], '403') === false;
 }
 
 /**

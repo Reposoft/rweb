@@ -3,8 +3,8 @@ require("../lib/simpletest/setup.php");
 
 require 'login.inc.php';
  
-//define('TESTREPO', "http://test.repos.se/testrepo");
-define('TESTREPO', "http://alto.optime.se/testrepo");
+define('TESTREPO', "http://test.repos.se/testrepo");
+//define('TESTREPO', "http://alto.optime.se/testrepo");
  
 class Login_include_Test extends UnitTestCase {
 
@@ -14,6 +14,13 @@ class Login_include_Test extends UnitTestCase {
 		unset($_GET['path']);
 		unset($_GET['file']);
 		unset($_GET['repo']);
+	}
+
+	public function testGetHttpHeadersStart() {
+		$headers = getHttpHeaders("http://www.repos.se");
+		echo("<pre>---- headers from the repos.se start page ----\n");
+		print_r($headers);
+		echo("</pre>\n");
 	}
 	
 	public function testGetHttpHeadersInsecure() {
