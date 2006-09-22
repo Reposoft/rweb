@@ -282,7 +282,7 @@ function _repos_getFullCommand($commandName, $argumentsString) {
 		// existing single quotes must be adapted for shell
 		$run = " '".$run.' '.str_replace("'","'\\''",$argumentsString).' 2>&1'."'";
 	} else {
-		$run += ' '.$argumentsString;
+		$run .= ' '.$argumentsString;
 	}
 	return "$wrapper$run 2>&1";
 }
