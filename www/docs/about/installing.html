@@ -9,10 +9,12 @@
 <h1>Repos installation</h1>
 <h2>Server setup checklist</h2>
 <ol>
-  <li>Create a subversion repository. See the <a href="http://svnbook.red-bean.com/" target="_blank">Subversion book</a>. </li>
-  <li>Install the repos www folder in a <em>/repos</em> directory at your server root (same hostname and port as for direct repository access, because browsers don't like cross-domain references in scripts and stylesheets). </li>
-  <li>Set up <a href="http://svnbook.red-bean.com/nightly/en/svn-book.html#svn.serverconfig.httpd">apache</a> and the user database. You can get some help from the repos <a href="../admin/">admin</a> section. First check that access works without the SVNIndexXSLT directive.</li>
-  <li>Enable the repos stylesheet, and if the /repos folder is configured correctly the basic functionality works.</li>
+  <li>Create a subversion repository. See the <a href="http://svnbook.red-bean.com/" target="_blank">Subversion book</a>.</li>
+  <li>Set up <a href="http://svnbook.red-bean.com/nightly/en/svn-book.html#svn.serverconfig.httpd">subversion with apache</a> and the user database. You can get some help from the repos <a href="../admin/">admin</a> section.</li>
+  <li>Check that you can use the repository without repos. Try to log in from a browser to the empty repository root. If you're on windows, use the <a href="http://tortoisesvn.tigris.org/" target="_blank">TortoiseSVN</a> client to check out the repository.</li>
+  <li>Install the repos www folder in a <em>/repos</em> directory at your server root. This must be at the same hostname and port as for direct repository access, because browsers don't like cross-domain references in scripts and stylesheets.</li>
+  <li>Configure repos according to the configuration instructions</li>
+  <li>Add the SVNIndexXSLT directive to the apache repository configuraion, pointing to <code>/repos/view/repos.xsl</code>. If the /repos folder is configured correctly the basic functionality works.</li>
   <li>Some external resources can not be included in the distribution due to license matters. There is ant scripts to download those. Examples are /smarty and themes/simple/icons. Install <a href="http://ant.apache.org/">Apache Ant</a>, look for <em>build.xml</em> files and run the command <em>ant</em> in the sam folder. </li>
   <li>Copy the client certificate to the server root, so that it can be installed into users' browsers. Run <em>ant</em> in the conf/svn-config-dir/ folder to install server settings. </li>
   <li>Optional components are the installed individually. For example, to enable <a href="http://www.repos.se/quay/">repos Quay</a>, install it into a /quay folder at the server root.</li>
