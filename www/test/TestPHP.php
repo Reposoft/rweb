@@ -16,7 +16,7 @@
 <body>
 <table id="suiteTable" class="rows" width="100%" border="0">
 	<tbody>
-<?
+<?php
 $testfiles = array(
 'conf/repos.properties.test.php',
 'conf/Presentation.test.php',
