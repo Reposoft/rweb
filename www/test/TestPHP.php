@@ -18,6 +18,7 @@
 	<tbody>
 <?
 $testfiles = array(
+'conf/repos.properties.test.php',
 'conf/Presentation.test.php',
 'open/start/RepositoryTree.test.php'
 );
