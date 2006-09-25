@@ -682,7 +682,7 @@ function tmt_getNodesTable(formNode, type){
 }
 
 // TODO move to settings script and make it load correctly in IE
-tmt_globalPatterns.reposFilename = new RegExp("^[^&:\"'<>@#~\\?\\*\\$\\|\\(\\)\\[\\]\\t\\n\\/\\\\]+$");
+tmt_globalPatterns.reposFilename = new RegExp("^[^&:\"'<>@#~\\?\\*\\$\\|\\[\\]\\t\\n\\/\\\\]+$");
 tmt_globalPatterns.reposLogmessage = new RegExp("^[^\\f\\v\\0]+$");
 
 // always loads after onload now with Repos
