@@ -55,11 +55,9 @@ class EditTest extends UnitTestCase
 	function testCommandEscape() {
 		if (substr(PHP_OS, 0, 3) != 'WIN') {
 			$edit = new Edit('" $(ls)');
-			$edit->setMessage('msg " `ls`');
-			$edit->addArgOption("'ls'");
-			$edit->addArgOption('\" | rm');
+			$edit->setMessage('msg " `ls` \'ls\' \ " | rm');
 			$cmd = $edit->getCommand();
-			$this->assertEqual('\" \$\(ls\) -m "msg \" \`ls\`" \'ls\' \\\" \| rm', $cmd);
+			$this->assertEqual('\" \$\(ls\) -m "msg \" \`ls\` \'ls\' \\\\ \" | rm"', $cmd);
 		}
 	}
 
