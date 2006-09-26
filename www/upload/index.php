@@ -83,8 +83,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		//exit;
 		$commit->execute();
 		// Seems that there is a problem with svn 1.3.0 and 1.3.1 that it does not always see the update on a replaced file
+		//  remove this block when we don't need to support svn versions onlder than 1.3.2
 		if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
-			// try again, it might be the bug that sucks, release this as soon as we support only 1.4.0+
 			exec("echo \"\" >> \"$updatefile\"");
 			$commit = new Edit('commit');
 			$commit->setMessage($upload->getMessage());

@@ -27,7 +27,11 @@ function autoFillFilename(path) {
   <input type="hidden" name="paste" value="1"/>
   <p>
     <label for="usertext">file contents</label><br />
-    <textarea name="usertext" id="usertext" cols="100" rows="20" tmt:required="true"></textarea>
+	<!--{if $isfile}-->
+    <textarea name="usertext" id="usertext" cols="100" rows="20" tmt:required="true">{=$targeturl|login_svnPassthruFile}</textarea>
+	<!--{else}-->
+	<textarea name="usertext" id="usertext" cols="100" rows="20" tmt:required="true"></textarea>
+	<!--{/if}-->
     <label for="userfile"></label>
   </p>
   <p>
