@@ -185,8 +185,8 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		assertTrue("Should recursively add the file in the new folder", client.isVersioned(df));
 		assertTrue("The added folder should need commit", client.hasLocalChanges(d));
 		
-		// now revert the changed file and the added folder
-		client.revert();
+		// now revert at working copy root
+		client.revert(d.getParentFile());
 		assertFalse("File is not changed anymore", client.hasLocalChanges(f));
 		assertTrue("File is still versioned after revert", client.isVersioned(f));
 		assertEquals("File should be empty", 0, f.length());
