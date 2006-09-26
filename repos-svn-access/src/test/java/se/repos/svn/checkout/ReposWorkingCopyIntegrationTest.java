@@ -78,7 +78,7 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 	}
 	
 	public void testAddAndDelete() throws IOException, ConflictException, RepositoryAccessException {
-		File created = new File(path, "tobedeleted.txt");
+		File created = new File(path, "to be deleted.txt" + System.currentTimeMillis());
 		if (created.exists()) fail("Invalid test setup. The file " + created.getName() + " is already in the working copy");
 		created.createNewFile();
 		client.add(created);
@@ -89,12 +89,22 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		} catch (WorkingCopyAccessException e) {
 			// expected
 		}
+		// create an empty folder too
+		File folder = new File(path, "new folder " + System.currentTimeMillis());
+		folder.mkdir();
+		client.add(folder);
+		assertTrue("The new folder should be added", client.isVersioned(folder));
+		// do the commit
 		client.commit("Added test file");
+		// delete it all
 		client.delete(created);
+		client.delete(folder);
 		assertFalse("The file should be deleted by the client", created.exists());
-		client.commit("Deleted test file");
+		assertTrue("The folder should be marked for delete but not deleted until commit", folder.exists());
+		client.commit("Deleted test file and folder");
 		assertFalse("The file should be gone", created.exists());
-		assertFalse("Now the file name is not used anymore",	client.isVersioned(created));
+		assertFalse("The deleted folder should be gone after commit", folder.exists());
+		assertFalse("Now the file name is not used anymore", client.isVersioned(created));
 	}
 	
 	public void testAddAndDeleteEmptyFolder() throws ConflictException, RepositoryAccessException, IOException {
@@ -170,12 +180,17 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		File f = new File(path, "newfile" + System.currentTimeMillis());
 		f.createNewFile();
 		client.add(f);
-		client.commit("Created new file that will soon be changed");
+		File d0 = new File(path, "temp folder " + System.currentTimeMillis());
+		d0.mkdir();
+		client.add(d0);
+		client.commit("Created new file that will soon be changed, and a folder that will be deleted");
 		Writer w = new BufferedWriter(new FileWriter(f));
 		w.write("Changed contents");
 		w.flush();
 		w.close();
 		assertTrue("File status should be 'modified'", client.hasLocalChanges(f));
+		client.delete(d0);
+		d0.delete();
 		
 		File d = new File(path, "newfolder" + System.currentTimeMillis());
 		d.mkdir();
@@ -190,6 +205,7 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		assertFalse("File is not changed anymore", client.hasLocalChanges(f));
 		assertTrue("File is still versioned after revert", client.isVersioned(f));
 		assertEquals("File should be empty", 0, f.length());
+		assertTrue("The empty folder should have been restored", d0.exists());
 		assertFalse("The added directory is not versioned anymore", client.isVersioned(d));
 		assertFalse("The file inside the added directory is not versioned", client.isVersioned(df));
 		

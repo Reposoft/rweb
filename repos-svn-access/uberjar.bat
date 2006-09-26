@@ -1,4 +1,6 @@
-@rem now this should do it:
+call mvn clean
+
+@rem pack it
 call mvn assembly:assembly -Ddescriptor=src/main/assembly/with-dependencies.xml
 IF %ERRORLEVEL% NEQ 0 goto error
 
