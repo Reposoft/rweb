@@ -218,17 +218,23 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
     
 	/**
 	 * No logic, just an update and a commit
-	 * @throws RepositoryAccessException 
 	 */
 	public void synchronize(String commitMessage) throws ConflictException, RepositoryAccessException {
 		this.update();
 		this.commit(commitMessage);
 	}
 
-
 	public boolean isVersioned(File path) throws WorkingCopyAccessException {
-		ISVNStatus status = getSingleStatus(path);
-		return (status.getTextStatus() != SVNStatusKind.UNVERSIONED);
+		try {
+			ISVNStatus status = getSingleStatus(path);
+			return (status.getTextStatus() != SVNStatusKind.UNVERSIONED);
+		} catch (WorkingCopyAccessException e) {
+			// throws client exception if the parent path is not versioned
+			try {
+				if (!isVersioned(path.getParentFile())) return false;
+			} catch (Throwable t) {}
+			throw e;
+		}
 	}
 
 	private ISVNStatus getSingleStatus(File path) {
@@ -328,10 +334,14 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		}
 	}
 
+	/**
+	 * Always does recursive revert on directories, as specified by interface.
+	 */
 	public void revert(File path) {
 		Revert revert = new Revert();
 		if (path.isDirectory()) {
 			revert.setDir(path);
+			revert.setRecurse(true);
 		} else {
 			revert.setFile(path);
 		}
@@ -526,6 +536,10 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#unlock not implemented yet");
 		}
 		
+	}
+
+	public void revert() {
+		this.revert(settings.getWorkingCopyDirectory());
 	}
 	
 }

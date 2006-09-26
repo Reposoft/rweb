@@ -2,8 +2,11 @@
  */
 package se.repos.svn.checkout;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 
 import junit.framework.TestCase;
 
@@ -45,6 +48,21 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		created.createNewFile();
 		assertFalse("New files are not versioned until add", client.isVersioned(created));
 		assertFalse("Is a new file so it has no changes", client.hasLocalChanges(created));
+	}
+	
+	public void testNewFolderStatus() throws IOException {
+		File d1 = new File(path, "d1");
+		d1.mkdir();
+		File d2 = new File(d1, "d2");
+		d2.mkdir();
+		File f3 = new File(d2, "f3.txt");
+		f3.createNewFile();
+		assertFalse("Folder 1 shouldn't be versioned", client.isVersioned(d1));
+		assertFalse("d1 not versioned -> no local changes", client.isVersioned(d1));
+		assertFalse("Subfolder shouldn't be versioned", client.isVersioned(d2));
+		assertFalse("Subfolder not versioned -> no local changes", client.isVersioned(d2));
+		assertFalse("File in subfolder shouldn't be versioned", client.isVersioned(f3));
+		assertFalse("Folder not versioned -> file has no local changes", client.isVersioned(f3));
 	}
 	
 	public void testMissingFileStatus() {
@@ -106,7 +124,7 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 	}
 	
 	public void testDeleteAlreadyDeletedFile() throws IOException, ConflictException, RepositoryAccessException {
-		File created = new File(path, "tobedeletedtwice.txt");
+		File created = new File(path, "tobedeletedtwice.txt" + System.currentTimeMillis());
 		created.createNewFile();
 		client.add(created);
 		assertTrue("The file should be added", client.isVersioned(created));
@@ -145,6 +163,39 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		client.delete(d);
 		client.commit("test move cleaned");
 		if (d.exists()) fail("Test error. Could not remove destination file after test.");
+	}
+
+	public void testRevertRecursively() throws IOException, ConflictException, RepositoryAccessException {
+		assertFalse(client.hasLocalChanges());
+		File f = new File(path, "newfile" + System.currentTimeMillis());
+		f.createNewFile();
+		client.add(f);
+		client.commit("Created new file that will soon be changed");
+		Writer w = new BufferedWriter(new FileWriter(f));
+		w.write("Changed contents");
+		w.flush();
+		w.close();
+		assertTrue("File status should be 'modified'", client.hasLocalChanges(f));
+		
+		File d = new File(path, "newfolder" + System.currentTimeMillis());
+		d.mkdir();
+		File df = new File(d, "newfolder" + System.currentTimeMillis());
+		df.createNewFile();
+		client.add(d);
+		assertTrue("Should recursively add the file in the new folder", client.isVersioned(df));
+		assertTrue("The added folder should need commit", client.hasLocalChanges(d));
+		
+		// now revert the changed file and the added folder
+		client.revert();
+		assertFalse("File is not changed anymore", client.hasLocalChanges(f));
+		assertTrue("File is still versioned after revert", client.isVersioned(f));
+		assertEquals("File should be empty", 0, f.length());
+		assertFalse("The added directory is not versioned anymore", client.isVersioned(d));
+		assertFalse("The file inside the added directory is not versioned", client.isVersioned(df));
+		
+		// clean up
+		client.delete(f);
+		client.commit("Deleted test file");
 	}
 	
 }

@@ -148,4 +148,8 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		
 	}
 
+	public void revert() {
+		workingCopy.revert();
+	}
+
 }

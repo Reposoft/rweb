@@ -125,7 +125,13 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	public void move(File from, File to);
 	
 	/**
-	 * Restores a file or folder to the version in repository
+	 * Restores the entire working copy to the revision that was retreived last time an update was done.
+	 */
+	public void revert();
+	
+	/**
+	 * Restores a file or folder (recursively) to the version in repository.
+	 * If the argument is a folder, it will be reverted recursively. Reverting only modified properties of a folder is a very rare operation, and if needed it is possible to propget the old version's properties and revert manually.
 	 * @param path file to reset all changes in, or folder to recursively restore
 	 */
 	public void revert(File path);
