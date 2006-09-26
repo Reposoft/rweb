@@ -111,7 +111,7 @@ class Edit {
 	/**
 	 * Runs the operation securely (no risk for shell command injection)
 	 */
-	function execute() {	
+	function execute() {
 		$cmd = login_getSvnSwitches().' '.$this->getCommand();
 		$this->output = repos_runCommand('svn', $cmd);
 		$this->returnval = array_pop($this->output);

@@ -64,24 +64,40 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 			$presentation->trigger_error('Can not read current version of the file named "'
 				.$filename.'" from repository path "'.$repoFolder.'"');
 		}
-		unlink($updatefile);
+		//unlink($updatefile);
+		rename($updatefile, $updatefile.'.old');
 		$upload->processSubmit($updatefile);
 		if(!file_exists($updatefile)) {
 			$presentation->trigger_error('Could not read uploaded file "'
 				.$filename.'" for operation "'.basename($dir).'"');
 		}
-		// create the commit commant
+		// store the diff in the presentation object
+		$diff = new Edit('diff');
+		$diff->addArgPath($updatefile);
+		$diff->execute();
+		$presentation->assign('diff', $diff->getResult());
+		// create the commit command
 		$commit = new Edit('commit');
 		$commit->setMessage($upload->getMessage());
 		$commit->addArgPath($dir);
+		//exit;
 		$commit->execute();
+		// Seems that there is a problem with svn 1.3.0 and 1.3.1 that it does not always see the update on a replaced file
+		if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
+			// try again, it might be the bug that sucks, release this as soon as we support only 1.4.0+
+			exec("echo \"\" >> \"$updatefile\"");
+			$commit = new Edit('commit');
+			$commit->setMessage($upload->getMessage());
+			$commit->addArgPath($dir);
+			$commit->execute();
+		}
 		// clean up
 		$upload->cleanUp();
 		// remove working copy
 		removeTempDir($dir); // recursively
 		// commit returns nothing if there are no local changes
-		// Seems that there is a problem with svn 1.3.0 and 1.3.1 that it does not always see the update on a replaced file
 		if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
+			// normal behaviour
 			$presentation->trigger_error('The uploaded file '.$upload->getOriginalFilename()
 				.' is identical to the current file '.$upload->getName());
 		}
