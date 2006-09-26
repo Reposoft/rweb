@@ -186,6 +186,32 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 		conflictHandlerControl.verify();
 	}
 	
+	public void testCatchConflictWithSpaceInPath() {
+		String error = "C C:\\Repos-pe\\mina konflikter\\Ny mapp\\ny fil.txt";
+		
+		MockControl conflictHandlerControl = MockControl.createControl(ConflictHandler.class);
+		ConflictHandler conflictHandler = (ConflictHandler) conflictHandlerControl.getMock();
+		
+		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		w.setConflictHandler(conflictHandler);
+		
+		conflictHandler.handleConflictingFile(new File("C:\\Repos-pe\\mina konflikter\\Ny mapp\\ny fil.txt"));
+		conflictHandlerControl.setReturnValue(null);
+		conflictHandlerControl.replay();
+		
+		// the new instance creates a nofifylistener by default
+		NotifyListener n = w.getConflictNotifyListener();
+		n.logError(error);
+		// and the update method should do
+		try {
+			w.reportConflicts();
+		} catch (ConflictException e) {
+			assertEquals("Should report one conflict", 1, e.getConflicts().length);
+		}
+		
+		conflictHandlerControl.verify();
+	}
+	
 	public void testMarkConflictResolved() throws SVNClientException {
 		File target = new File("tmp.txt");
 		MockControl infoControl = MockControl.createControl(ConflictInformation.class);

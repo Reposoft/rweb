@@ -5,6 +5,8 @@ package se.repos.svn.checkout.client;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
@@ -473,11 +475,14 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 
 		// conflict is reported as "C  C:/myfile.txt"
 		public void logError(String message) {
-			logger.error("svn error in command {}: {}", getCurrentCommand(), message);
-			if (message.matches("^*C\\s+.+$")) {
+			Pattern conflictPattern = Pattern.compile("^\\s*C\\s+(.+)\\s*$");
+			Matcher conflictMatcher = conflictPattern.matcher(message);
+			if (conflictMatcher.matches()) {
 				logger.warn("Conflict detected: {}", message);
-				String filename = message.split("\\s+")[1];
+				String filename = conflictMatcher.group(1);
 				conflictFileList.add(new File(filename));
+			} else {
+				logger.error("svn error in command {}: {}", getCurrentCommand(), message);
 			}
 		}
 
