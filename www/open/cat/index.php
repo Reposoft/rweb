@@ -49,25 +49,8 @@ if (isset($_GET['open'])) {
 		$p->assign('repo', dirname($url));
 	}
 	$p->assign('dowloandUrl', $downloadUrl);
+	$p->assign('targetpeg', $url.'@'.$rev);
 	$p->display();
-	doPassthru($url, $rev);
-	
-	?>
-	</pre>
-	<hr />
-	</div>
-	<div class="footer"></div>
-	</div>
-	</body>
-	</html>
-	<?php
-}
-
-function doPassthru($targetUrl, $revision) {
-	//$cmd = 'cat' . ' -r'.$revision . ' "'.$targetUrl.'"';
-	$cmd = 'cat '.escapeArgument($targetUrl.'@'.$revision); // using "peg" revision
-	$returnvalue = login_svnPassthru($cmd);
-	return $returnvalue;
 }
 
 function getMimeType($targetUrl, $revision) {

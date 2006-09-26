@@ -380,6 +380,24 @@ function login_svnPassthru($cmd) {
 }
 
 /**
+ * Cat file@revision directly to result stream.
+ * @param targetUrl the resource url. must be a file, can be with a peg revision (url@revision)
+ * @param revision optional, >0, the revision to read. if omitted the function reads HEAD.
+ * @return return value of the svn command,=0 if successful. handleSvnError may be used to get error message
+ */
+function login_svnPassthruFile($targetUrl, $revision=0) {
+	if ($revision > 0) {
+		$cmd = 'cat '.escapeArgument($targetUrl.'@'.$revision); // using "peg" revision
+	} else {
+		$cmd = 'cat '.escapeArgument($targetUrl);
+	}
+	$returnvalue = login_svnPassthru($cmd);
+	return $returnvalue;
+}
+
+// TODO login_svnPassthruFileHtml
+
+/**
  * @return Mandatory arguments to the svn command
  */
 function login_getSvnSwitches() {
@@ -390,6 +408,7 @@ function login_getSvnSwitches() {
 
 /**
  * Renders error message as XML if SVN command fails. Use trigger_error for normal error message.
+ * @TODO output as XHTML tags, so that the output can be used both in XSL and HTML pages
  */
 function login_handleSvnError($executedcmd, $errorcode, $output = Array()) {
 	echo "<error code=\"$errorcode\">\n";

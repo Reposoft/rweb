@@ -12,12 +12,12 @@ function autoFillFilename(path) {
 
 <body>
 <h1>Paste contents of file</h1>
-<!--{if $file}-->
-<p>As a new version of file <span class="path">{=$path}{=$file}</span> <a class="action" target="_blank" href="../open/?target={=$path}{=$file}">open current version</a></p>
-<p><a class="action" href="./?path={=$path}&file={=$file}">switch to normal file upload</a></p>
+<!--{if $isfile}-->
+<p>As a new version of file <span class="path">{=$target}</span> <a class="action" target="_blank" href="../open/?target={=$target}">open current version</a></p>
+<p><a class="action" href="./?target={=$target}">switch to normal file upload</a></p>
 <!--{else}-->
-<p>As a new file in folder {=$path}</p>
-<p><a class="action" href="./?path={=$path}">switch to normal file upload</a></p>
+<p>As a new file in folder {=$target}</p>
+<p><a class="action" href="./?target={=$target}">switch to normal file upload</a></p>
 <!--{/if}-->
 <p>Open the local file in a text editor, such as notepad, and copy the contents to this form.</p>
 <form action="./" method="post" name="formUpload" id="formUpload" tmt:validate="true">
@@ -32,9 +32,9 @@ function autoFillFilename(path) {
   </p>
   <p>
     <label for="currentname">name in repository</label>
-	<!--{if $file}-->
-    <input type="text" id="currentname" name="currentname" value="{=$file}" disabled="disabled" size="40" />
-	<input type="hidden" id="name" name="name" value="{=$file}"/>
+	<!--{if $isfile}-->
+    <input type="text" id="currentname" name="currentname" value="{=$target|basename}" disabled="disabled" size="40" />
+	<input type="hidden" id="name" name="name" value="{=$target|basename}"/>
 	<!--{else}-->
 	<input type="text" id="name" name="name" size="40" tmt:required="true" tmt:pattern="reposFilename" tmt:message="Filename is required and may not contain ^, :, &amp;, <, >, @, , #, ~, ?, *, $, |, [, ], /, \, commas or quotes"/>
 	<input type="hidden" id="create" name="create" value="yes"/>

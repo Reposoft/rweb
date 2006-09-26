@@ -9,19 +9,20 @@ define('MAX_FILE_SIZE', 1000000);
 
 if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template = new Presentation();
-	$target = getTargetUrl();
+	$target = getTarget();
+	$targeturl = getTargetUrl();
 	$file = getFile();
 	if (strlen($file) > 0) {
-		$mimetype = getMimeType($target);
+		$mimetype = getMimeType($targeturl);
 		if ($mimetype && strpos($mimetype, 'application/') == 0) {
-			$template->assign('binary', true);
+			$template->assign('isbinary', true);
 		}
 	}
 	
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
-	$template->assign('path',getPath());
-	$template->assign('file',getFile());
-	$template->assign('targeturl',$target);
+	$template->assign('isfile',isTargetFile());
+	$template->assign('target',$target);
+	$template->assign('targeturl',$targeturl);
 	if (isset($_GET['text'])) {
 		$template->display($template->getLocaleFile(dirname(__FILE__).'/index-text'));
 	} else {
@@ -198,7 +199,7 @@ function getMimeType($targetUrl) {
 	$result = login_svnRun($cmd);
 	$returnvalue = array_pop($result);
 	if ($returnvalue) {
-		trigger_error("Could not find the file '$targetUrl' in repository version $revision.");
+		trigger_error("Could not find the file '$targetUrl' in latest version of the repository.");
 	}
 	if (count($result) == 0) {
 		return false; // svn:mime-type not set

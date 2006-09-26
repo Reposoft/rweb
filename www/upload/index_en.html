@@ -19,16 +19,16 @@ function autoFillFilename(path) {
 <body>
 <div id="contents">
 <h1>Upload file</h1>
-<!--{if $file}-->
-<p>As a new version of file <span class="path">{=$path}{=$file}</span>. <a class="action" target="_blank" href="../open/?target={=$path}{=$file}">open current version</a></p>
+<!--{if $isfile}-->
+<p>As a new version of file <span class="path">{=$target}</span>. <a class="action" target="_blank" href="../open/?target={=$target}">open current version</a></p>
 <!--{else}-->
-<p>As a new file in folder {=$path}</p>
+<p>As a new file in folder {=$target}</p>
 <!--{/if}-->
-<!--{if $file && !$binary}-->
-<p>The current verison is a text file, so it is also possible to <a class="action" href="./?path={=$path}&file={=$file}&text">copy-paste your local file's contents</a></p>
+<!--{if $isfile && !$isbinary}-->
+<p>The current verison is a text file, so it is also possible to <a class="action" href="./?target={=$target}&text">copy-paste your local file's contents</a></p>
 <!--{/if}-->
-<!--{if !$file}-->
-<p>It is also possible to <a class="action" href="./?path={=$path}&text">copy-paste your local file's contents</a></p>
+<!--{if !$isfile}-->
+<p>It is also possible to <a class="action" href="./?target={=$target}&text">copy-paste your local file's contents</a></p>
 <!--{/if}-->
 <form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload" tmt:validate="true">
 <fieldset>
@@ -41,9 +41,9 @@ function autoFillFilename(path) {
   </p>
   <p>
     <label for="currentname">name in repository</label>
-	<!--{if $file}-->
+	<!--{if $isfile}-->
     <input type="text" id="currentname" name="currentname" value="{=$file}" disabled="disabled" size="40" />
-	<input type="hidden" id="name" name="name" value="{=$file}"/>
+	<input type="hidden" id="name" name="name" value="{=$target|basename}"/>
 	<!--{else}-->
 	<input type="text" id="name" name="name" size="40" tmt:required="true" tmt:pattern="reposFilename" tmt:message="Filename is required and may not contain ^, :, &amp;, <, >, @, #, ~, ?, *, $, |, [, ], /, \, commas or quotes"/>
 	<input type="hidden" id="create" name="create" value="yes"/>
