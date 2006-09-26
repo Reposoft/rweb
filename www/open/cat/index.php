@@ -19,17 +19,17 @@ $filename = getFile();
 $target = getTarget();
 $downloadUrl = repos_getSelfUrl().'?'.repos_getSelfQuery().'&open';
 
-$mimetype = getMimetype($url, $rev);
+$mimetype = login_getMimeType($url.'@'.$rev);
 
 // download
 if (isset($_GET['open'])) {
 	if ($mimetype) {
 		header('Content-type: '.$mimetype);
 	} else {
-		header('Content-type: text/plain; charset=utf-8');
+		header('Content-type: application/x-unknown');
 	}
 	header('Content-Disposition: attachment; filename="'.$filename.'"');
-	$returnvalue = doPassthru($url, $rev);
+	$returnvalue = login_svnPassthruFile($url, $rev);
 	if ($returnvalue) {
 		trigger_error("Error. Could not read '$url' version $rev.");
 	}
@@ -53,16 +53,4 @@ if (isset($_GET['open'])) {
 	$p->display();
 }
 
-function getMimeType($targetUrl, $revision) {
-	$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl.'@'.$revision);
-	$result = login_svnRun($cmd);
-	$returnvalue = array_pop($result);
-	if ($returnvalue) {
-		trigger_error("Could not find the file '$targetUrl' in repository version $revision." );
-	}
-	if (count($result) == 0) {
-		return false; // svn:mime-type not set
-	}
-	return $result[0];
-}
 ?>

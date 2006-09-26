@@ -380,10 +380,11 @@ function login_svnPassthru($cmd) {
 }
 
 /**
- * Cat file@revision directly to result stream.
+ * Cat file(@revision) directly to result stream.
+ * Currently there's no error handling on error. Ideally error handling should be compatible with XML, XHTML and <pre>-tags.
+ * This function can be used from a Smarty template like: {=$targetpeg|login_svnPassthruFile}
  * @param targetUrl the resource url. must be a file, can be with a peg revision (url@revision)
  * @param revision optional, >0, the revision to read. if omitted the function reads HEAD.
- * @return return value of the svn command,=0 if successful. handleSvnError may be used to get error message
  */
 function login_svnPassthruFile($targetUrl, $revision=0) {
 	if ($revision > 0) {
@@ -392,10 +393,31 @@ function login_svnPassthruFile($targetUrl, $revision=0) {
 		$cmd = 'cat '.escapeArgument($targetUrl);
 	}
 	$returnvalue = login_svnPassthru($cmd);
-	return $returnvalue;
+	// can not return a value, because this function is often used to print directly to result //return $returnvalue;
+	// TODO error handling
 }
 
 // TODO login_svnPassthruFileHtml
+
+/**
+ * Returns the mime type for a file in the repository.
+ * If the property svn:mime-type is set, that value is returned. If not, default based on filename extension is returned.
+ * @param targetUrl the file, might be with a peg revision
+ * @return the mime type string
+ */
+function login_getMimeType($targetUrl) {
+	$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl);
+	$result = login_svnRun($cmd);
+	$returnvalue = array_pop($result);
+	if ($returnvalue) {
+		trigger_error("Could not find the file '$targetUrl' in repository version $revision." );
+	}
+	if (count($result) == 0) { // mime type property not set, return default
+		return false;//deprecated in PHP//return mime_content_type(basename($targetUrl)); // svn:mime-type not set
+		// return "application/x-unknown" ?
+	}
+	return $result[0];
+}
 
 /**
  * @return Mandatory arguments to the svn command

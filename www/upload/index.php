@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$targeturl = getTargetUrl();
 	$file = getFile();
 	if (strlen($file) > 0) {
-		$mimetype = getMimeType($targeturl);
+		$mimetype = login_getMimeType($targeturl);
 		if ($mimetype && strpos($mimetype, 'application/') == 0) {
 			$template->assign('isbinary', true);
 		}
@@ -192,18 +192,5 @@ class Upload {
 	function getErrorCode() {
 		return $_FILES[$this->file_id]['error'];
 	}
-}
-
-function getMimeType($targetUrl) {
-	$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl);
-	$result = login_svnRun($cmd);
-	$returnvalue = array_pop($result);
-	if ($returnvalue) {
-		trigger_error("Could not find the file '$targetUrl' in latest version of the repository.");
-	}
-	if (count($result) == 0) {
-		return false; // svn:mime-type not set
-	}
-	return $result[0];
 }
 ?>
