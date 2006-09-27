@@ -64,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 			$presentation->trigger_error('Can not read current version of the file named "'
 				.$filename.'" from repository path "'.$repoFolder.'"');
 		}
-		//unlink($updatefile);
-		rename($updatefile, $updatefile.'.old');
+		$oldsize = filesize($updatefile);
+		unlink($updatefile);
 		$upload->processSubmit($updatefile);
 		if(!file_exists($updatefile)) {
 			$presentation->trigger_error('Could not read uploaded file "'
@@ -85,11 +85,13 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		// Seems that there is a problem with svn 1.3.0 and 1.3.1 that it does not always see the update on a replaced file
 		//  remove this block when we don't need to support svn versions onlder than 1.3.2
 		if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
-			exec("echo \"\" >> \"$updatefile\"");
-			$commit = new Edit('commit');
-			$commit->setMessage($upload->getMessage());
-			$commit->addArgPath($dir);
-			$commit->execute();
+			if ($oldsize != filesize($updatefile)) {
+				exec("echo \"\" >> \"$updatefile\"");
+				$commit = new Edit('commit');
+				$commit->setMessage($upload->getMessage());
+				$commit->addArgPath($dir);
+				$commit->execute();
+			}
 		}
 		// clean up
 		$upload->cleanUp();
