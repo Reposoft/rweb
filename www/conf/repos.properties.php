@@ -117,12 +117,32 @@ function repos_getSelfQuery() {
 /**
  * Handles the common temp dir for repos-php
  * @param subdir optional category within the temp folder, no slashes
- * @return avsolute path to the temp dir, ending with slash or backslash
+ * @return absolute path to the temp dir, ending with slash or backslash
  */
 function getTempDir($subdir=null) {
-	$parent = '/tmp'; // don't know how to get PHPs system temp dir
+// Get temporary directory
+	if (!empty($_ENV['TMP'])) {
+			$tempdir = $_ENV['TMP'];
+	} elseif (!empty($_ENV['TMPDIR'])) {
+			$tempdir = $_ENV['TMPDIR'];
+	} elseif (!empty($_ENV['TEMP'])) {
+			$tempdir = $_ENV['TEMP'];
+	} else {
+			$tempdir = dirname(tempnam('', 'na'));
+	}
+
+	if (empty($tempdir)) { die ('No temporary directory'); }
+	
+
+	// Make sure temporary directory is writable
+//	if (is_writable($tempdir) == false) {
+//        die ('Temporary directory isn\'t writable');
+//	}
+
+//	$parent = '/tmp'; // don't know how to get PHPs system temp dir
 	$appname = str_replace('%', '_', rawurlencode(substr(getConfig('repos_web'), 7)));
-	$tmpdir = rtrim($parent, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $appname;
+//	$tmpdir = rtrim($parent, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $appname;
+	$tmpdir = rtrim($tempdir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $appname;
 	if (!file_exists($tmpdir)) {
 		mkdir($tmpdir);
 	}
