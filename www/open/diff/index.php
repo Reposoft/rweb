@@ -32,7 +32,7 @@ if (empty($referer)) {
 $diffarray = login_svnRun($cmd);
 $result = array_pop($diffarray);
 // TODO handle error codes
-$p->assign('diff', implode("\n",$diffstring));
+$p->assign('diff', implode("\n",$diffarray));
 
 $p->display();
 
