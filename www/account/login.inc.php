@@ -367,7 +367,8 @@ function login_svnRun($cmd) {
 }
 
 /**
- * Execute svn command like the PHP passthru() function
+ * Execute svn command like the PHP passthru() function.
+ * This can not be used from a Smarty template, because it returns an integer that will be appended to the page.
  * @param cmd The command without the SVN part, for example 'log /url/to/repo'
  * @return return value of the execution.
  *   If returnval!=0, login_handleSvnError may be used to get error message compatible with the styleshett.

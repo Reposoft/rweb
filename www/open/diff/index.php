@@ -28,7 +28,10 @@ if (empty($referer)) {
 } else {
 	$p->assign('referer', $referer);
 }
-$p->assign('cmd', $cmd);
+
+$diffstring = login_svnRun($cmd);
+$p->assign('diff', $diffstring);
+
 $p->display();
 
 
