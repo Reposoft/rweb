@@ -58,11 +58,3 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a
  * @desc Delete a cookie.
  */
 eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[(function(e){return d[e]})];e=(function(){return'\\w+'});c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('$.6=y(9,f,2){7(g f!=\'G\'){2=2||{};4 3=\'\';7(g 2.3==\'q\'||(2.3&&2.3.k)){4 5;7(g 2.3==\'q\'){5=2.3*w*n*n}j{4 m=l o();5=z((2.3.k()-m.k())/B); 7(5>0&&5<1){5=1}}7(5<=0){3=\'; 3=\'+l o(0).D()}j{3=\'; r-s=\'+5}}4 8=2.8?\'; 8=\'+2.8:\'\';4 a=2.a?\'; a=\'+2.a:\'\';4 c=2.c?\'; c\':\'\';b.6=[9,\'=\',t(f),3,8,a,c].v(\'\')}j{4 h=A;7(b.6&&b.6!=\'\'){4 d=b.6.C(\';\');E(4 i=0;i<d.e;i++){4 6=d[i];7(6.p(0,9.e+1)==(9+\'=\')){h=x(6.p(9.e+1));F}}}u h}};',43,43,'||options|expires|var|maxAge|cookie|if|path|name|domain|document|secure|cookies|length|value|typeof|cookieValue||else|getTime|new|now|60|Date|substring|number|max|age|encodeURIComponent|return|join|24|decodeURIComponent|function|parseInt|null|1000|split|toGMTString|for|break|undefined'.split('|'),0,{}))
-
-// ----- import plugins ----
-if (typeof(repos_load)!='undefined') {
-	for (i=0; i<repos_load.length; i++) {
-		repos_addScript(repos_load[i]);
-		//$("head").append('<script type="text/javascript" src="'+repos_load[i]+'"></script>');	
-	}
-}
