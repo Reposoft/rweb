@@ -218,7 +218,20 @@ function getFile() {
  * @return true if the target is a file, false if it is a folder or undefined
  */
 function isTargetFile() {
+	// new strategy
+	if (endsWith(getTarget(),'/')) {
+		return false;
+	}
+	// old strategy
 	return (getFile()!=false);
+}
+
+// generic helper functions
+function beginsWith( $str, $sub ) {
+   return ( substr( $str, 0, strlen( $sub ) ) === $sub );
+}
+function endsWith( $str, $sub ) {
+   return ( substr( $str, strlen( $str ) - strlen( $sub ) ) === $sub );
 }
 
 /**
