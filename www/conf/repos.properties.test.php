@@ -8,10 +8,69 @@ class TestReposProperties extends UnitTestCase {
 		$this->UnitTestCase();
 	}
 
+	function testBeginsWith() {
+		$this->assertTrue(beginsWith('/a', '/'));
+		$this->assertFalse(beginsWith('a/', '/'));
+		$this->assertFalse(beginsWith('', '/'));
+		$this->assertFalse(beginsWith(null, '/'));
+		$this->assertFalse(beginsWith(3, '/'));
+	}
+
+	function testEndsWith() {
+		$this->assertTrue(endsWith('a/', '/'));
+		$this->assertFalse(endsWith('/a', '/'));
+		$this->assertFalse(endsWith('', '/'));
+		$this->assertFalse(endsWith(null, '/'));
+		$this->assertFalse(endsWith(3, '/'));
+	}	
+	
 	function testGetTempDir() {
 		$dir = getTempDir();
+		$this->assertTrue(endsWith($dir, DIRECTORY_SEPARATOR));
 		$this->assertTrue(file_exists($dir));
 		$this->assertTrue(is_writable($dir));
+	}
+
+	function testGetTempnamDir() {
+		$dir1 = getTempnamDir();
+		$dir2 = getTempnamDir();
+		$this->assertTrue(file_exists($dir1));
+		$this->assertTrue(is_writable($dir1));
+		$this->assertNotEqual($dir1, $dir2);
+	}
+	
+	function testGetTempnamDirName() {
+		$dir1 = getTempnamDir('mytest');
+		$this->assertTrue(endsWith($dir1, DIRECTORY_SEPARATOR));
+		$this->assertTrue(strpos($dir1, DIRECTORY_SEPARATOR.'mytest'.DIRECTORY_SEPARATOR)>0);
+	}
+	
+	function testRemoveTempDir() {
+		$dir = getTempnamDir();
+		mkdir($dir.'new folder/');
+		mkdir($dir.'.svn/');
+		touch($dir.'.svn/test.txt');
+		removeTempDir($dir);
+		$this->assertFalse(file_exists($dir.'new folder/'));
+		$this->assertFalse(file_exists($dir.'.svn/test.txt'));
+		$this->assertFalse(file_exists($dir.'.svn/'));
+	}
+	
+	function testRemoveTempDirWriteProtected() {
+		$dir = getTempnamDir();
+		// the svn client makes the .svn folder write protected in windows
+		mkdir($dir.'.svn/', 0400);
+		touch($dir.'.svn/test.txt');
+		$this->assertTrue(chmod($dir.'.svn/test.txt', 0400));
+		removeTempDir($dir);
+		$this->assertFalse(file_exists($dir.'.svn/test.txt'));
+		$this->assertFalse(file_exists($dir.'.svn/'));
+	}	
+	
+	function testRemoveTempDirInvalid() {
+		$dir = "/this/is/any/kind/of/dir";
+		removeTempDir($dir);
+		$this->assertError('Will not remove non-temp dir /this/is/any/kind/of/dir.');
 	}
 	
 	// the tests below modify server variables, so they might affect other tests. Should maybe use simpletest mock server instead.

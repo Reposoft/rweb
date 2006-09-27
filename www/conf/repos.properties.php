@@ -30,6 +30,10 @@ function getConfig($key) {
 	return false;
 }
 
+// ----- string helper functions that should have been in php -----
+function beginsWith($str, $sub) { return (substr($str, 0, strlen($sub)) === $sub); }
+function endsWith($str, $sub) { return (substr($str, strlen($str) - strlen($sub)) === $sub); }
+
 // ----- user settings -----
 
 $possibleLocales = array(
@@ -115,34 +119,40 @@ function repos_getSelfQuery() {
 // ----- file system helper functions ------
 
 /**
+ * Platform independen way of getting the server's temp folder
+ */
+function getSystemTempDir() {
+	if (!empty($_ENV['TMP'])) {
+		$tempdir = $_ENV['TMP'];
+	} elseif (!empty($_ENV['TMPDIR'])) {
+		$tempdir = $_ENV['TMPDIR'];
+	} elseif (!empty($_ENV['TEMP'])) {
+		$tempdir = $_ENV['TEMP'];
+	} else {
+		$tempdir = dirname(tempnam('', 'emptytempfile'));
+	}
+
+	if (empty($tempdir)) { die ('Can not get the system temp dir'); }
+	
+	return $tempdir;
+}
+
+/**
  * Handles the common temp dir for repos-php
  * @param subdir optional category within the temp folder, no slashes
  * @return absolute path to the temp dir, ending with slash or backslash
  */
 function getTempDir($subdir=null) {
-// Get temporary directory
-	if (!empty($_ENV['TMP'])) {
-			$tempdir = $_ENV['TMP'];
-	} elseif (!empty($_ENV['TMPDIR'])) {
-			$tempdir = $_ENV['TMPDIR'];
-	} elseif (!empty($_ENV['TEMP'])) {
-			$tempdir = $_ENV['TEMP'];
-	} else {
-			$tempdir = dirname(tempnam('', 'na'));
+	// Get temporary directory
+	$systemp = getSystemTempDir();
+	
+	// Make sure temporary directory is writable
+	if (is_writable($systemp) == false) {
+		die ('Temporary directory isn\'t writable');
 	}
 
-	if (empty($tempdir)) { die ('No temporary directory'); }
-	
-
-	// Make sure temporary directory is writable
-//	if (is_writable($tempdir) == false) {
-//        die ('Temporary directory isn\'t writable');
-//	}
-
-//	$parent = '/tmp'; // don't know how to get PHPs system temp dir
 	$appname = str_replace('%', '_', rawurlencode(substr(getConfig('repos_web'), 7)));
-//	$tmpdir = rtrim($parent, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $appname;
-	$tmpdir = rtrim($tempdir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $appname;
+	$tmpdir = rtrim($systemp, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $appname;
 	if (!file_exists($tmpdir)) {
 		mkdir($tmpdir);
 	}
@@ -158,9 +168,9 @@ function getTempDir($subdir=null) {
 /**
  * Like PHP's tempname() but creates a folder instead
  * @param subdir optional parent dir name for the new dir, no slashes
- * @return a newly created folder
+ * @return a newly created folder, with tailing slash
  */
-function getTempnamDir($subdir='') {
+function getTempnamDir($subdir=null) {
        // Use PHP's tmpfile function to create a temporary
        // directory name. Delete the file and keep the name.
        $tempname = tempnam(getTempDir($subdir), '');
@@ -172,7 +182,7 @@ function getTempnamDir($subdir='') {
 
        // Create the temporary directory and returns its name.
        if (mkdir($tempname))
-               return $tempname;
+               return $tempname.DIRECTORY_SEPARATOR;
 
        return false;
 }
@@ -183,7 +193,8 @@ function getTempnamDir($subdir='') {
  */
 function removeTempDir($directory) {
 	if (strpos($directory, getTempDir())===false) {
-		trigger_error("Can not remove non-temp dir $dir."); exit;
+		trigger_error("Will not remove non-temp dir $directory.");
+		return;
 	}
 	rtrim($directory, DIRECTORY_SEPARATOR);
 	if(!file_exists($directory) || !is_dir($directory)) {
@@ -198,11 +209,13 @@ function removeTempDir($directory) {
 				if(is_dir($path)) {
 					removeTempDir($path);
 				} else {
+					chmod($path, 0777);
 					unlink($path);
 				}
 			}
 		}
 		closedir($handle);
+		chmod($directory, 0777);
 		if(!rmdir($directory)) {
 			return false;
 		}

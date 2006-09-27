@@ -226,14 +226,6 @@ function isTargetFile() {
 	return (getFile()!=false);
 }
 
-// generic helper functions
-function beginsWith( $str, $sub ) {
-   return ( substr( $str, 0, strlen( $sub ) ) === $sub );
-}
-function endsWith( $str, $sub ) {
-   return ( substr( $str, strlen( $str ) - strlen( $sub ) ) === $sub );
-}
-
 /**
  * Target is the absolute url of a repository resource, from repository root
  * (thus starting with '/')

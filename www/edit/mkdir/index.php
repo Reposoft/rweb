@@ -31,7 +31,7 @@ function createFolder($parentUri, $name, $message) {
 	$edit->addArgPath($dir, true);
 	$edit->addArgUrl($newfolder);
 	$edit->execute();
-	//rmdir($dir);
+	removeTempDir($dir);
 	$edit->present($template, getTargetUrl());
 }
 
