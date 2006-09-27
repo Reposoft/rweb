@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>repos.se dateformat plugin test page</title>
+
+<link href="../../style/global.css" rel="stylesheet" type="text/css" />
+<!-- plugins -->
+<script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="dateformat.js"></script>
+<!-- for unit testing -->
+<script type="text/javascript" src="../../scripts/lib/ecmaunit/ecmaunit.js"></script>
+</head>
+
+<body>
+<p id="d1" class="datetime">2006-09-07T16:00:00.123456Z</p>
+<span id="d2" class="datetime">2006-09-06T20:30:59.000Z</span>
+
+<div id="testlog"></div>
+
+<script type="text/javascript">
+
+function TestDateformat() {
+    this.name = 'TestDateformat';
+
+    this.setUp = function() {
+    };
+	
+	this.testFormat = function() {
+		var d = "2006-09-07T12:00:00.000Z";
+		var f = new Dateformat().format(d);
+		this.assertEquals("den 7 september 2006 14:00:00", f, "Should make an iso date with no milliseconds.");
+	};
+	
+	this.testFormatElement = function() {
+		var e = document.createElement('span');
+		e.innerHTML = "2006-09-07T12:00:00.000Z";
+		new Dateformat().formatElement(e);
+		this.assertEquals("den 7 september 2006 14:00:00", e.innerHTML, "Should format the date of the element that has not been added to the DOM");
+	};
+	
+	this.testFormatAll = function() {
+		// The plugin has already executed, through onload
+		var formatted1 = $('#d1').get(0).innerHTML;
+		var formatted2 = $('#d2').get(0).innerHTML;
+		this.assertEquals(new Dateformat().format('2006-09-07T16:00:00.123456Z'), formatted1, "Should format all 'datetime' texts on load");
+		this.assertEquals(new Dateformat().format('2006-09-06T20:30:59.000Z'), formatted2, "Should format all 'datetime' texts on load");
+	};
+}
+TestDateformat.prototype = new TestCase;
+
+$(document).ready(function() {
+var testcase = new TestDateformat();
+var placeholder = document.getElementById('testlog');
+testcase.initialize(new HTMLReporter(placeholder));
+testcase.runTests();
+});
+
+</script>
+
+</body>
+</html>

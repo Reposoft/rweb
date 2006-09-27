@@ -6,78 +6,8 @@
  * Nice page: http://www.xaprb.com/demos/rx-toolkit/
  * $Id$
  */
-Dateformat = Class.create();
-Dateformat.prototype = {
-	/**
-	 * Run all conversion on the page immediately
-	 */
-	initialize: function() {
-		// set user settings
-	},
-	
-	/**
-	 * Verify that a string is an ISO8601 date, with date+time or only date
-	 */
-	isDatetime: function(text) {
-		if (typeof(text) != 'string') return false;
-		if (text.length < 8) return false;
-		if (text.length > 32) return false;
-		// and some regexp
-		return true;
-	},
-
-	/**
-	 * Get all elements that have a given classname
-	 */
-	getElements: function(classname) {
-		return document.getElementsByClassName(classname);	
-	},
-	
-	/**
-	 * Loop through all elements that have the given classname and format them
-	 */
-	formatAll: function(classname) {
-		var n = this.getElements(classname);
-		for (i = 0; i<n.length; i++) {
-			this.formatElement(n[i]);
-		}
-	},
-	
-	/**
-	 * @param texttag element containing date time
-	 */
-	formatElement: function(texttag) {
-		var d = texttag.innerHTML;
-		if (!this.isDatetime(d)) {
-			throw "Invalid datetime string in tag " + (texttag.id ? texttag.id : texttag.tagName) + ": " + d;	
-		}
-		var f = this.format(d);
-		texttag.innerHTML = f;
-	},
-	
-	/**
-	 * @param xsd:dateTime/ISO 8601 date
-	 * @return string with the formatted datetime
-	 */
-	format: function(dateTime) {
-		if (!this.isDatetime(dateTime)) {
-			throw "Invalid datetime string: " + dateTime;	
-		}
-		var d = new Date();
-		d.setISO8601(dateTime);
-		return d.toLocaleString();
-	}
-
-}
-
-function _dateformat_onPageLoad() {
-	new Dateformat().formatAll('datetime')	
-}
-
-Event.observe(window, 'load', _dateformat_onPageLoad, false);
-
+ 
 // --- extensions to the date class ---
-
 Date.prototype.setISO8601 = function (string) {
     var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" +
         "(T([0-9]{2}):([0-9]{2})(:([0-9]{2})(\.([0-9]+))?)?" +
@@ -150,4 +80,51 @@ Date.prototype.toISO8601String = function (format, offset) {
 
     if (format > 3) { str += offset; }
     return str;
+}
+ 
+// ----- Dateformat class -----
+$(document).ready(function(){
+	d = new Dateformat();
+	$(".datetime").each(function(){ 
+		d.formatElement(this);
+	});
+});
+
+function Dateformat() {
+	
+	/**
+	 * Verify that a string is an ISO8601 date, with date+time or only date
+	 */
+	this.isDatetime = function(text) {
+		if (typeof(text) != 'string') return false;
+		if (text.length < 8) return false;
+		if (text.length > 32) return false;
+		// and some regexp
+		return true;
+	}
+	
+	/**
+	 * @param texttag element containing date time
+	 */
+	this.formatElement = function(texttag) {
+		var d = texttag.innerHTML;
+		if (!this.isDatetime(d)) {
+			throw "Invalid datetime string in tag " + (texttag.id ? texttag.id : texttag.tagName) + ": " + d;	
+		}
+		var f = this.format(d);
+		texttag.innerHTML = f;
+	}
+	
+	/**
+	 * @param xsd:dateTime/ISO 8601 date
+	 * @return string with the formatted datetime
+	 */
+	this.format = function(dateTime) {
+		if (!this.isDatetime(dateTime)) {
+			throw "Invalid datetime string: " + dateTime;	
+		}
+		var d = new Date();
+		d.setISO8601(dateTime);
+		return d.toLocaleString();
+	}
 }
