@@ -46,8 +46,9 @@ $test = rtrim($tempdir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $tst;
 $repo = rtrim($test, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "repo";
 $admin = rtrim($test, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "admin";
 $conf = $test . "/admin/testrepo.conf";
-echo "\n\n\nWARNING!\n";
-echo "Apache should do \"Include $conf\" at some &lt;Location &gt;\n";
+$conf_apachefriendly = str_replace('\\', '/', $conf);
+echo "\n\n\n";
+echo "Apache should do \"Include $conf_apachefriendly\" at some &lt;Location &gt;\n";
 echo "Note that apache must be restarted if there are changes in this file.\n";
 echo "\n\n\n";
 
