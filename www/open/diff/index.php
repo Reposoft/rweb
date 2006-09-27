@@ -29,8 +29,10 @@ if (empty($referer)) {
 	$p->assign('referer', $referer);
 }
 
-$diffstring = login_svnRun($cmd);
-$p->assign('diff', $diffstring);
+$diffarray = login_svnRun($cmd);
+$result = array_pop($diffarray);
+// TODO handle error codes
+$p->assign('diff', implode("\n",$diffstring));
 
 $p->display();
 
