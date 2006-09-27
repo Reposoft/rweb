@@ -20,13 +20,14 @@ function autoFillFilename(path) {
 <p><a class="action" href="./?target={=$target}">switch to normal file upload</a></p>
 <!--{/if}-->
 <p>Open the local file in a text editor, such as notepad, and copy the contents to this form.</p>
+<a name="textform"/>
 <form action="./" method="post" name="formUpload" id="formUpload" tmt:validate="true">
 <fieldset>
   <legend>Upload to repos.se</legend>
   <input type="hidden" name="targeturl" value="{=$targeturl}"/>
   <input type="hidden" name="paste" value="1"/>
   <p>
-    <label for="usertext">file contents</label><br />
+    <label for="usertext">file contents</label> <a class="action" href="#textform" onclick="document.forms[0]['usertext'].value=''">clear contents</a><br />
 	<!--{if $isfile}-->
     <textarea name="usertext" id="usertext" cols="100" rows="20" tmt:required="true">{=$targeturl|login_svnPassthruFile}</textarea>
 	<!--{else}-->
@@ -51,6 +52,7 @@ function autoFillFilename(path) {
   <p>
     <label for="submit"></label>
     <input id="submit" type="submit" name="Submit" value="Upload" />
+    <input type="reset" value="Reset to original contents"/>
   </p>
 </fieldset>
 </form>
