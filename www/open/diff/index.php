@@ -28,15 +28,8 @@ if (empty($referer)) {
 } else {
 	$p->assign('referer', $referer);
 }
+$p->assign('cmd', $cmd);
 $p->display();
 
-$returnvalue = login_svnPassthru($cmd);
-if ($returnvalue) login_handleSvnError($cmd, $returnvalue);
+
 ?>
-</pre>
-<hr />
-</div>
-<div class="footer"></div>
-</div>
-</body>
-</html>
