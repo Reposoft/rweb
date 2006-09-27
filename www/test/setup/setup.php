@@ -1,4 +1,14 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>repos.se: Contents of {=$target|basename}</title>
+<!--{$head}-->
+</head>
+
+<body>
+<pre>
 <?php
+
 
 //  name the temp dir where the repository will be. This dir will be removed recursively.
 $tst="test.repos.se";
@@ -9,22 +19,13 @@ $here=getcwd();
 
 # environment setup
 
-//exec("cmd SET LANG=en_US");
-$encoding = mb_internal_encoding();
-echo "encoding $encoding <BR><BR><BR>";
-$language= mb_language ();
-echo "språk $language <BR><BR><BR>";
-$output = mb_http_output();
-echo "output $output <BR><BR><BR>";
-
-
-//C:\> CD <your subversion path>
-//C:\...> RD /S /Q SHARE
-//works even better ;-)
+//exec("svn");
 
 //export LANG="en_US.UTF-8"
 //export LC_ALL="en_US.UTF-8"
 // svn command alias
+
+//The PATH to SVN and SVNADMIN has to be defined in the SYSTEMPATH, not in the USERPATH
 $svn="svn --config-dir " . rtrim($here, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "test-svn-config-dir";
 
 
@@ -44,7 +45,11 @@ if (empty($tempdir)) { die ('No temporary directory'); }
 $test = rtrim($tempdir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $tst;
 $repo = rtrim($test, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "repo";
 $admin = rtrim($test, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "admin";
-
+$conf = $test . "/admin/testrepo.conf";
+echo "\n\n\nWARNING!\n";
+echo "Apache should do \"Include $conf\" at some &lt;Location &gt;\n";
+echo "Note that apache must be restarted if there are changes in this file.\n";
+echo "\n\n\n";
 
 if (file_exists($repo)) {
 	removeDirectory($test);
@@ -67,7 +72,7 @@ $createRepos="svnadmin create " . $repo . " 2>&1";
 $result0 = array();
 exec($createRepos, &$result0);
 foreach ( $result0 as $v0 ) {
-	echo "v0: $v0 <BR><BR><BR>";
+	echo "$v0 \n";
 }
 //system($createRepos);
 chdir($here);
@@ -107,7 +112,7 @@ fwrite($accessfile, "\n");
 fclose($accessfile);
 
 # create apache 2.2 config
-$conf = $test . "/admin/testrepo.conf";
+
 //touch($conf);
 $conffile = fopen($conf, 'ab');
 fwrite($conffile, "DAV svn\n");
@@ -132,7 +137,7 @@ $repourl = str_replace('\\', '/', $repo);
 $result_CO = array();
 exec("$svn co file:///$repourl $test/wc/ 2>&1", &$result_CO);
 foreach ( $result_CO as $v_CO ) {
-	echo "v_CO $v_CO <BR><BR><BR>";
+	echo "$v_CO \n";
 }
 //system("$svn co file://$repourl $test/wc/");
 mkdir($test . "/wc/svensson", 0777);
@@ -148,22 +153,22 @@ mkdir($test . DIRECTORY_SEPARATOR . "wc" . DIRECTORY_SEPARATOR . "demoproject" .
 $result1 = array();
 exec("$svn add $test/wc/svensson 2>&1", &$result1);
 foreach ( $result1 as $v1 ) {
-	echo "v1 $v1 <BR><BR><BR>";
+	echo "$v1 \n";
 }
 $result2 = array();
 exec("$svn add $test/wc/test 2>&1", &$result2);
 foreach ( $result2 as $v2 ) {
-	echo "v2 $v2 <BR><BR><BR>";
+	echo "$v2 \n";
 }
 $result3 = array();
 exec("$svn add $test/wc/demoproject 2>&1", &$result3);
 foreach ( $result3 as $v3 ) {
-	echo "v3 $v3 <BR><BR><BR>";
+	echo "$v3 \n";
 }
 $result4 = array();
 exec("$svn commit -m \"Created users svensson and test, and a shared project\" $test/wc/ 2>&1", &$result4);
 foreach ( $result4 as $v4 ) {
-	echo "v4 $v4 <BR><BR><BR>";
+	echo "$v4 \n";
 }
 //system("$svn add $test/wc/svensson");
 //system("$svn add $test/wc/test");
@@ -184,12 +189,12 @@ foreach($folders as $dir){
 $result5 = array();
 exec("$svn add $test/wc/test/trunk/fa 2>&1", &$result5);
 foreach ( $result5 as $v5 ) {
-	echo "v5 $v5 <BR><BR><BR>";
+	echo "$v5 \n";
 }
 $result6 = array();
 exec("$svn commit -m \"Created a sample folder structure for user test\" $test/wc/ 2>&1", &$result6);
 foreach ( $result6 as $v6 ) {
-	echo "v6 $v6 <BR><BR><BR>";
+	echo "$v6 \n";
 }
 //system("$svn add $test/wc/test/trunk/fa");
 //system("$svn commit -m \"Created a sample folder structure for user test\" $test/wc/");
@@ -206,12 +211,12 @@ fclose($autotestinc);
 $result7 = array();
 exec("$svn add $test/wc/test/trunk/repos-svn-access 2>&1", &$result7);
 foreach ( $result7 as $v7 ) {
-	echo "v7 $v7 <BR><BR><BR>";
+	echo "$v7 \n";
 }
 $result8 = array();
 exec("$svn commit -m \"Added integration testing folders for other repos projects\" $test/wc/ 2>&1", &$result8);
 foreach ( $result8 as $v8 ) {
-	echo "v8 $v8 <BR><BR><BR>";
+	echo "$v8 \n";
 }
 //system("$svn add $test/wc/test/trunk/repos-svn-access");
 //system("$svn commit -m \"Added integration testing folders for other repos projects\" $test/wc/");
@@ -235,5 +240,9 @@ function removeDirectory($dir) {
    chmod($dir, 0777);
    rmdir($dir);
   }
-} 
+}
+
 ?>
+</pre>
+</body>
+</html> 
