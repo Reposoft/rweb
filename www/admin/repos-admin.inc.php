@@ -58,6 +58,11 @@ function lineend() {
 }
 
 // displaying output 
+// TODO Report.class.php
+// TODO function ok($message)
+// TODO Report.publish
+// TODO Report.display (like smarty display)
+
 function debug($message) {
 	linestart('debug');
 	output($message);
@@ -94,6 +99,7 @@ function fatal($message, $code = 1) {
 	html_end( $code );
 }
 
+// internal
 function output($message) {
 	if (is_array($message))
 		$message = formatArray($message);
