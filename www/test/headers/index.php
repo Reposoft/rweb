@@ -15,7 +15,7 @@ function printHeaders($target) {
 	if(beginsWith($target, '/')) {
 		$target = repos_getSelfRoot().$target;
 	}
-	if(strpos('/', $target)===false) {
+	if(strpos($target,'/')===false) {
 		$target = repos_getSelfUrl().$target;
 	}
 	echo("<h2>$target</h2>");

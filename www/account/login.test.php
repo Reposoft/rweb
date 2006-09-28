@@ -3,8 +3,9 @@ require("../lib/simpletest/setup.php");
 
 require 'login.inc.php';
  
-define('TESTREPO', "http://test.repos.se/testrepo");
-//define('TESTREPO', "http://alto.optime.se/testrepo");
+define('TESTREPO', repos_getSelfRoot()."/testrepo/");
+//define('TESTREPO', "http://test.repos.se/testrepo/");
+//define('TESTREPO', "http://alto.optime.se/testrepo/");
  
 class Login_include_Test extends UnitTestCase {
 
@@ -15,54 +16,21 @@ class Login_include_Test extends UnitTestCase {
 		unset($_GET['file']);
 		unset($_GET['repo']);
 	}
-
-	public function testGetHttpHeadersStart() {
-		$headers = getHttpHeaders("http://www.repos.se");
-		echo("<pre>---- headers from the repos.se start page ----\n");
-		print_r($headers);
-		echo("</pre>\n");
-	}
 	
-	public function testGetHttpHeadersInsecure() {
-		$headers = getHttpHeaders(TESTREPO);
-		echo("<pre>---- no login attempted, should be 401 Authorization Required with realm ----\n");
-		print_r($headers);
-		echo("</pre>\n");
-	}
-
-	public function testGetHttpHeadersInsecureAuth() {
-		$headers = getHttpHeaders(TESTREPO,'nonexistinguser','qwerty');
-		echo("<pre>---- login attempted but invalid credentials, should be 401 ----\n");
-		print_r($headers);
-		echo("</pre>\n");
-	}
-
-	public function testGetHttpHeadersInsecureAccessControl() {
-		$headers = getHttpHeaders(TESTREPO,'test','test');
-		echo("<pre>---- login ok, but access denied by ACL, should be 403 ----\n");
-		print_r($headers);
-		echo("</pre>\n");
-	}	
-	
-	public function testGetHttpHeadersSecureAuth() {
-		if(login_isSSLSupported()) {
-			$headers = getHttpHeaders("https://www.repos.se/sweden");
-			echo("<pre>---- SSL headers, no login: ----\n");
-			print_r($headers);
-			echo("</pre>\n");
-		} else {
-			echo("<pre>SSL is not supported on this server</pre>\n");
-		}
-	}
-	
-	public function testGetAuthName() {
+	public function testGetAuthNameReturnsSomething() {
 		$url = TESTREPO;
 		$realm = getAuthName($url);
-		$this->assertEqual("Optime", $realm);
+		$this->assertTrue(strlen($realm)>0);
 	}
+
+	public function testGetAuthNameReturnsRepositoryRootUrl() {
+		$url = TESTREPO;
+		$realm = getAuthName($url);
+		$this->assertTrue(TESTREPO, $realm);
+	}	
 	
-	public function testGetAuthNameNoAuth() {
-		$url = "http://www.google.se";
+	public function testGetAuthNameNoAuthAtServerRoot() {
+		$url = repos_getSelfRoot();
 		$realm = getAuthName($url);
 		$this->assertEqual(false, $realm);
 	}
@@ -131,6 +99,21 @@ class Login_include_Test extends UnitTestCase {
 		//"https%3A%2F%2Fwww.repos.se%2Fsweden%2Fsvensson%2Ftrunk%2F"
 	}
 	
+	// status code
+	public function testGetHttpStatus() {
+		$this->assertEqual(200, getHttpStatus("HTTP/1.1 200 OK"));
+		$this->assertNotEqual(20, getHttpStatus("HTTP/1.1 200 OK"));
+		$this->assertNoErrors();
+		$this->assertEqual("301", getHttpStatus("HTTP/1.1 301 Moved Permanently"));
+		$this->assertNoErrors();
+		$this->assertEqual(401, getHttpStatus("HTTP/1.1 401 Authorization Required"));
+		$this->assertEqual("401", getHttpStatus("HTTP/1.1 401 Authorization Required"));
+		$this->assertNoErrors();
+		$this->assertEqual(403, getHttpStatus("HTTP/1.1 403 Forbidden"));
+		$this->assertEqual("403", getHttpStatus("HTTP/1.1 403 Forbidden"));
+		$this->assertNoErrors();		
+	}
+	
 	// getTargetUrl should return false if target can not be automatically resolved
 	public function testGetTargetUrlFalse() {
 		$this->assertEqual(false, getTargetUrl());
@@ -168,13 +151,13 @@ class Login_include_Test extends UnitTestCase {
 		// test demo account authentication
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = 'test';
-		$url = TESTREPO.'/test/trunk';
+		$url = TESTREPO.'test/trunk/';
 		verifyLogin($url);
 		$this->assertEqual(true, verifyLogin($url));
 	}
 	
 	public function testVerifyLoginFail() {
-		// test demo account authentication
+		// test demo account authentication to repository root (no access there)
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = 'test';
 		$url = TESTREPO;
@@ -209,7 +192,50 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertTrue(count($headers) > 0);
 		// with a valid username, but no access according to ACL, we expect to see an access denied page
 		$this->assertEqual("HTTP/1.1 403 Forbidden", $headers[0]);
+	}
+	
+		
+	// ---------- HTTP header output for different login conditions ---------
+	// not real tests
+	
+	public function testGetHttpHeadersStart() {
+		$headers = getHttpHeaders("http://www.repos.se");
+		echo("<pre>---- headers from the repos.se start page ----\n");
+		print_r($headers);
+		echo("</pre>\n");
+	}
+	
+	public function testGetHttpHeadersInsecure() {
+		$headers = getHttpHeaders(TESTREPO);
+		echo("<pre>---- no login attempted, should be 401 Authorization Required with realm ----\n");
+		print_r($headers);
+		echo("</pre>\n");
+	}
+
+	public function testGetHttpHeadersInsecureAuth() {
+		$headers = getHttpHeaders(TESTREPO,'nonexistinguser','qwerty');
+		echo("<pre>---- login attempted but invalid credentials, should be 401 ----\n");
+		print_r($headers);
+		echo("</pre>\n");
+	}
+
+	public function testGetHttpHeadersInsecureAccessControl() {
+		$headers = getHttpHeaders(TESTREPO,'test','test');
+		echo("<pre>---- login ok, but access denied by ACL, should be 403 ----\n");
+		print_r($headers);
+		echo("</pre>\n");
 	}	
+	
+	public function testGetHttpHeadersSecureAuth() {
+		if(login_isSSLSupported()) {
+			$headers = getHttpHeaders("https://www.repos.se/sweden");
+			echo("<pre>---- SSL headers, no login: ----\n");
+			print_r($headers);
+			echo("</pre>\n");
+		} else {
+			echo("<pre>SSL is not supported on this server</pre>\n");
+		}
+	}
 	
 }
 

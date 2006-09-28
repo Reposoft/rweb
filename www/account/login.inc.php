@@ -113,8 +113,8 @@ function login($targetUrl) {
 }
 
 /**
- * @return true if the current user can access the resource, 
- * TODO this means that 404 status returns true, make a function that returns the status code, and do error handling on unexpected codes
+ * @return true if the current user can access the resource, false if not
+ * does trigger_error if the resource can not be used for authentication
  */
 function verifyLogin($targetUrl) {
 	$user = getReposUser();
@@ -122,7 +122,11 @@ function verifyLogin($targetUrl) {
 		return false;
 	}
 	$headers = getHttpHeaders($targetUrl, $user, getReposPass());
-	return strpos($headers[0], '401') || strpos($headers[0], '403') === false;
+	$s = getHttpStatus($headers[0]);
+	if ($s==200) return true;
+	if ($s==401 || $s==403) return false;
+	trigger_error("The target URL '$targetUrl' can not be used to validate login. Returned HTTP status code '$s'.");
+	return false;
 }
 
 /**
@@ -146,12 +150,15 @@ function getAuthName($targetUrl) {
 	}
 	return login_getAuthNameFromRepository($targetUrl);
 }
-
-// Uses HTTP to check authentication headers for a resource.
+ 
+/**
+ * Uses HTTP to check authentication headers for a resource.
+ * Returns false if the targetUrl does not request authenticatoin
+ */
 function login_getAuthNameFromRepository($targetUrl) {
 	$headers = getHttpHeaders($targetUrl);
-	//print_r($headers);
-	if (strpos($headers[0], '401') == false) {
+	$s = getHttpStatus($headers[0]);
+	if ($s!='401') {
 		return false;
 	}
 	$auth = $headers['WWW-Authenticate'];
@@ -159,7 +166,17 @@ function login_getAuthNameFromRepository($targetUrl) {
 		return $regs[1];
 	}
 	trigger_error("Repos error: realm not found in authentication string: $auth");
-	exit;
+}
+
+/**
+ * Gets the status code from an HTTP reponse header string like "HTTP/1.1 200 OK" 
+ */
+function getHttpStatus($httpStatusHeader) {
+	if(ereg('HTTP/1...([0-9]+).*', $httpStatusHeader, $match)) {
+		return $match[1];
+	} else {
+		trigger_error("Could not get HTTP status code for header: ".$httpStatusHeader); return;
+	}
 }
 
 // abstraction for HTTP operation
