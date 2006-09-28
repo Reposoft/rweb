@@ -73,6 +73,16 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertError('Will not remove non-temp dir /this/is/any/kind/of/dir.');
 	}
 	
+	// test for the portability functions
+	
+	public function testIsWindows() {
+		if (DIRECTORY_SEPARATOR=='\\') {
+			$this->assertTrue(isWindows());
+		} else {
+			$this->assertFalse(isWindows());
+		}
+	}
+	
 	// the tests below modify server variables, so they might affect other tests. Should maybe use simpletest mock server instead.
 	
 	public function testGetSelfUrl() {

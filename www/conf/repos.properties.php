@@ -82,13 +82,16 @@ function repos_getUserTheme($user = '') {
 
 // ----- helper functions for pages to refer to internal urls -----
 
-// repos_getSelfRoot(): Current server's root url, no tailing slash
+/**
+ * Root of the repos application
+ */
 function repos_getWebappRoot() {
 	return getConfig('repos_web');
 }
 
-
-// repos_getSelfUrl(): The url that the browser used to get the current page, excluding query string
+/**
+ * The url to the host of this request
+ */
 function repos_getSelfRoot() {
 	$url = 'http';
 	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') $url .= 's';
@@ -101,7 +104,10 @@ function repos_getSelfRoot() {
 	return $url;
 }
 
-// Complete self url = repos_getSelfUrl().'?'.repos_getSelfQuery();
+/**
+ * The current URL without query string
+ * Complete url = repos_getSelfUrl().'?'.repos_getSelfQuery();
+ */
 function repos_getSelfUrl() {
 	$uri = $_SERVER['REQUEST_URI'];
 	$q = strpos($uri, '?');
@@ -112,7 +118,12 @@ function repos_getSelfUrl() {
 	return repos_getSelfRoot() . $uri;
 }
 
+/**
+ * Current query string, or empty string if there is no query string
+ * @return string
+ */
 function repos_getSelfQuery() {
+	if (!isset($_SERVER['QUERY_STRING'])) return '';
 	return $_SERVER['QUERY_STRING'];
 }
 
