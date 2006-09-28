@@ -1,4 +1,6 @@
 <?php
+// see http://www.lastcraft.com/reporter_documentation.php
+
     /**
      *	base include file for SimpleTest
      *	@package	SimpleTest

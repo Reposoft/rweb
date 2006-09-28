@@ -62,6 +62,9 @@ function lineend() {
 // TODO function ok($message)
 // TODO Report.publish
 // TODO Report.display (like smarty display)
+// TODO count X output lines (info+), X warnings, X fails, X exception
+// TODO count fatal() as exception
+// TODO CSS class for pre tags
 
 function debug($message) {
 	linestart('debug');
