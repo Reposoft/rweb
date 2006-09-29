@@ -41,6 +41,16 @@ class Report {
 	}
 	
 	/**
+	 * Call when a test or validation has completed successfuly
+	 * (opposite to error)
+	 */
+	function ok($message) {
+		$this->linestart('ok');
+		$this->output($message);
+		$this->lineend();
+	}
+	
+	/**
 	 * Completes the report and saves it as a file at the default reports location.
 	 */
 	function publish() {
@@ -86,7 +96,13 @@ function showAll() {
 
 // internal
 function linestart($class='normal') {
-	if (!$this->offline) echo "<p class=\"$class\">";
+	if ($this->offline) {
+		if ($class=='ok') echo "** ";
+		if ($class=='warning') echo "?? ";
+		if ($class=='error') echo "!! ";	
+	} else {
+		echo "<p class=\"$class\">";
+	}
 }
 function lineend() {
 	if (!$this->offline) echo "</p>";
@@ -100,6 +116,7 @@ function debug($message) {
 }
 
 function info($message) {
+	// TODO convert arrays to PRE blocks in online mode
 	$this->linestart();
 	$this->output($message);
 	$this->lineend();
@@ -167,7 +184,7 @@ function getTime() {
 // temporary solution, TODO make admin a class that takes a report instance as constructor argument
 $report = new Report();
 function debug($message) {global $report; $report->debug($message); }
-function info($message) {global $report; $report->info($message); }
+function info($message) {global $report; $report->ok($message); }
 function warn($message) {global $report; $report->warn($message); }
 function error($message) {global $report; $report->error($message); }
 function fatal($message) {global $report; $report->fatal($message); }

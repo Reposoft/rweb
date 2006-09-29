@@ -23,7 +23,8 @@ function create($repository) {
 	$output = array();
 	$return = 0;
 	$result = (int) exec($command, $output, $return);
-	info("$command said $result and outputted: " . $output);
+	debug("$command said $result and outputted: " . $output);
+	// TODO ok message
 	return ( $return==0 );
 }
 
@@ -162,7 +163,7 @@ function verifyMD5($path) {
 		}
 	}
 	if ($ok)
-		debug("All md5 sums match in dir $path");
+		info("All md5 sums match in dir $path");
 	return($ok);
 }
 
