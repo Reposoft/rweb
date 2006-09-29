@@ -375,9 +375,8 @@ define('SVN_CONFIG_DIR', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'conf'.D
  *   If returnval!=0, login_handleSvnError may be used to get error message compatible with the styleshett.
  */
 function login_svnRun($cmd) {
-	$operation = escapeshellcmd($cmd);
-	$svnCommand = login_getSvnSwitches().' '.$operation;
-	$result = repos_runCommand('svn', $svnCommand);
+	$svnCommand = login_getSvnSwitches().' '.$cmd;
+	$result = repos_runCommand(getCommand('svn'), $svnCommand);
 	return $result;
 }
 
