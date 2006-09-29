@@ -10,7 +10,7 @@
  * Designed for transparent login. Does not print any HTML.
  *
  * If 'target' resource can be resolved using getTarget(),
- * login will be done automatically using:
+ * login will be done automatically using: // TODO restore TEMPORARILY DISABLED
  *  - tagetLogin();
  *
  * If 'target' is not known the standard way, login explicitly
@@ -26,14 +26,10 @@
  * the functions will return true without showing a login box.
  * The credentials will then be empty.
  *
- * This method can be used to check if login is required:
- *  - getAuthName($targetUrl) returns false if login is not required
- *
  * If login passed, use these functions to retrieve credentials:
  *  - getReposUser() username
  *  - getReposPass() cleartext password for repository access
  *  - getReposAuth() encrypted authentication from browser
- *  - getSvnCommand() command line for this user to run 'svn'
  *
  * Also provides functions for shared request processing
  *  - getReferer()   calling page
@@ -44,11 +40,9 @@
  * Note that internally, URLs should never be urlencoded
  *
  * Nomenclature throughout the repos PHP solution:
- * 'path' absolute directory path from repository root
- * 'file' filename
  * 'target' absolute url from repository root to target resource
  * 'targeturl' URI of the resource, permanent location as an HTTP url
- * 'repo' repository root URI, uniquely defines a repository 
+ * 'repo' repository root URI, uniquely defines a repository
  */
 require_once(dirname(dirname(__FILE__)) . '/conf/repos.properties.php');
 
@@ -57,13 +51,6 @@ define('ADMIN_ACCOUNT', 'administrator');
 // the versioned access control files (copied to the location given by repos.properties when changed)
 define('ACCOUNTS_FILE', ADMIN_ACCOUNT.'/trunk/admin/repos-users');
 define('ACCESS_FILE', ADMIN_ACCOUNT.'/trunk/admin/repos-access');
-
-// Headers to disable caching, assumed to be needed on all pages that deal with contents
-// HTTP/1.1
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0, pre-check=0", false);
-// HTTP/1.0
-header("Pragma: no-cache");
 
 /**
  * Redirect to secure URL if current URL is not secure.
@@ -84,7 +71,7 @@ function enforceSSL() {
 }
 
 /**
- * Login to a resource specified with repos standard query parameters.
+ * Login to the resource specified as target according to getTarget()
  */
 function targetLogin() {
 	$targetUrl = getTargetUrl();
@@ -92,7 +79,7 @@ function targetLogin() {
 }
 
 /**
- * @param The resource to login to
+ * @param String targetUrl The resource to authenticate to
  */
 function login($targetUrl) {
 	if (isLoggedIn()) {
@@ -142,6 +129,7 @@ function getLoginUrl($urlWithoutLogin) {
 /**
  * @param targetUrl The absolute URI of the resource
  * @return realm (string) authentication realm or false if login not required
+ * TODO this method can no longer be used to check if authentication is needed. Create a method isProtected?
  */
 function getAuthName($targetUrl) {
 	$conf = getConfig('repo_realm');
@@ -206,8 +194,10 @@ function login_decodeQueryParam($array, $name) {
 
 /**
  * @return path from repository root, ending with '/', non alphanumerical characters except '/' encoded
+ * @deprecated only getTarget is needed
  */
 function getPath() {
+	trigger_error("getPath() is deprecated. Use getTarget() and isFolder() instead.");
 	if(!isset($_GET['path'])) return false;
 	$path = login_decodeQueryParam($_GET,'path');
     $path = rtrim($path,'/').'/';
@@ -216,8 +206,10 @@ function getPath() {
 
 /**
  * @return filename if defined, false if the target is not a file
+ * @deprecated only getTarget is needed
  */
 function getFile() {
+	trigger_error("getFile() is deprecated. Use getTarget() and isFile() instead.");
 	if (isset($_GET['file'])) {
 		return login_decodeQueryParam($_GET,'file');
 	}
@@ -233,14 +225,10 @@ function getFile() {
 
 /**
  * @return true if the target is a file, false if it is a folder or undefined
+ * @deprecated use isFile($path) directly instead
  */
 function isTargetFile() {
-	// new strategy
-	if (endsWith(getTarget(),'/')) {
-		return false;
-	}
-	// old strategy
-	return (getFile()!=false);
+	return (isFile(getTarget()));
 }
 
 /**
@@ -249,12 +237,10 @@ function isTargetFile() {
  * @return target in repository from query paramters WITH tailing slash if it is a directory, false if none of 'target', 'file' and 'path' is defined
  */
 function getTarget() {
-	if(isset($_GET['target'])) {
-		return login_decodeQueryParam($_GET,'target');
+	if(!isset($_GET['target'])) {
+		trigger_error("'target' parameter not set");
 	}
-    // append filename if specified
-    if(getFile()) return getPath() . getFile();
-    return getPath();
+    return login_decodeQueryParam($_GET,'target');
 }
 
 /**
@@ -275,7 +261,6 @@ function getRevision($rev = false) {
 		return $rev;
 	}
 	trigger_error("Error. Revision number '$rev' is not valid.");
-	exit;
 }
 
 /**
@@ -289,6 +274,8 @@ function getRepositoryUrl() {
 		return rtrim($_GET['repo'],'/');
 	}
 	// 2: referer without a query AND query string param 'path'
+    /*
+     * Currently we don't support multiple repositories 
     $ref = getReferer();
 	if (strpos($ref, '?')===false) {
 		$path = rtrim(getPath(),'/');
@@ -297,6 +284,7 @@ function getRepositoryUrl() {
 			if ($repo) return $repo;
 		}
 	}
+	 */
 	// 3: fallback to default repository
     if(function_exists('getConfig')) {
     	return getConfig('repo_url');
@@ -305,6 +293,8 @@ function getRepositoryUrl() {
 }
 
 /**
+ * @param String fullUrl the URL of a repository resource
+ * @param String pathFromRepoRoot the resource path, absolute from repository root
  * @return repository url (to root) with no tailing slash.
  *   Returns false if url is empty or if path is not part of url. 
  */
@@ -540,8 +530,8 @@ function login_clearUsernameCookie() {
 }
 
 // automatic login if a target is specified the standard way
-if (getTargetUrl()) {
-	targetLogin();
-}
+//if (getTargetUrl()) {
+//	targetLogin();
+//}
 
 ?>

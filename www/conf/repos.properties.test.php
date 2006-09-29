@@ -44,20 +44,21 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertTrue(isAbsolute('svn://my.host/'));
 		$this->assertTrue(isAbsolute('https://my.host/path/'));
 		if (isWindows()) {
-			$this->assertTrue(isAbsolute('D:\path'));
+			$this->assertTrue(isAbsolute(toPath('D:\path')));
 		} else {
-			$this->assertFalse(isAbsolute('D:\path'), "paths with drive letter are not absolute on non-windows");
+			$this->assertFalse(isAbsolute(toPath('D:\path')), "paths with drive letter are not absolute on non-windows");
 		}
 		$this->assertFalse(isAbsolute('path'));
 	}
 	
-	function testIsAbsoluteInvalid() {
+	function testIsAbsolute_Invalid() {
 		isAbsolute(null);
 		$this->assertError();
 	}
 
-	function testIsAbsoluteUrlWithBackslash() {
+	function testIsAbsolute_UrlWithBackslash() {
 		isAbsolute('http://my.host\path');
+		$this->assertError();
 		$this->assertError();
 	}	
 	
@@ -88,10 +89,44 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertTrue(isFolder('svn://folder/'));
 		$this->assertTrue(isFolder('/'));
 		if (isWindows()) {
-			$this->assertTrue(isFolder('f\\'));
-			$this->assertTrue(isFolder('C:\f\\'));
+			$this->assertTrue(isFolder(toPath('C:\f\\')));
 		}
 		$this->assertFalse(isFolder('/path'));
+	}
+	
+	function testGetParent() {
+		$this->assertEqual('/my/', getParent('/my/folder/'));
+		$this->assertEqual('/', getParent('/my/'));
+		$this->assertEqual('my/', getParent('my/folder/'));
+		$this->assertEqual('', getParent('my/'));
+		$this->assertEqual('http://my/', getParent('http://my/file.txt'));
+		if (isWindows()) {
+			$this->assertEqual('C:/', getParent('C:/my/'));
+		}
+		getParent('');
+		$this->assertError();
+	}
+	
+	function testGetParentWindowsRoot() {
+		if (isWindows()) {
+			getParent('C:/');
+			$this->assertError();
+		}
+	}
+	
+	function testPhpFunctions() {
+		// check that PHP behaves as we expect in all OSes
+		$this->assertEqual('/my/path', dirname('/my/path/file.txt'));
+		$this->assertEqual('/my', dirname('/my/path/'));
+		$this->assertEqual('/my', dirname('/my/path'));
+		if (isWindows()) {
+			$this->assertEqual('\my', dirname('\my\path'));
+		}
+		$this->assertEqual('', dirname(''));
+		// this is quire weird behaviour
+		$this->assertEqual(DIRECTORY_SEPARATOR, dirname('/'));
+		// translate to generic path
+		$this->assertEqual('C:/my/path/', strtr('C:\my\path\\', '\\', '/'));
 	}
 	
 	// ------ system functions ------

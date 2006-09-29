@@ -91,8 +91,8 @@
 			</xsl:if>
 		</xsl:if>
 		<xsl:if test="$editUrl">
-			<a id="createfolder" class="command translate" href="{$editUrl}/mkdir/?path={@path}">new folder</a>
-			<a id="upload" class="command translate" href="{$web}/upload/?path={@path}">upload</a>
+			<a id="createfolder" class="command translate" href="{$editUrl}/mkdir/?target={@path}/">new folder</a>
+			<a id="upload" class="command translate" href="{$web}/upload/?target={@path}/">upload</a>
 		</xsl:if>
 		<!--
 		<a class="command" href="{$web}/tutorials/?show=networkfolder">
@@ -104,7 +104,7 @@
 				<xsl:with-param name="filetype" select="'_tortoisefolder'"/>
 			</xsl:call-template>check out</a>
 		-->
-		<a id="history" class="command translate" href="{$web}/open/log/?path={@path}">folder history</a>
+		<a id="history" class="command translate" href="{$web}/open/log/?target={@path}/">folder history</a>
 		<a id="refresh" class="command translate" href="#" onclick="window.location.reload( true )">refresh</a>
 		<a id="logout" class="command translate" href="/?logout">logout</a>
 		<!-- print, possibly plugin -->
@@ -153,9 +153,9 @@
 			<div class="actions">
 				<a id="open:{$id}" class="action" href="{@href}">open</a>
 				<xsl:if test="$editUrl">
-					<a id="rename:{$id}" class="action" href="{$editUrl}/rename/?path={../@path}/{@href}">rename</a>
+					<a id="rename:{$id}" class="action" href="{$editUrl}/rename/?target={../@path}/{@href}">rename</a>
 					<span class="action">copy</span>
-					<a id="delete:{$id}" class="action" href="{$editUrl}/delete/?path={../@path}/{@href}">delete</a>
+					<a id="delete:{$id}" class="action" href="{$editUrl}/delete/?target={../@path}/{@href}">delete</a>
 				</xsl:if>
 			</div>
 			<a id="f:{$id}" class="folder" href="{@href}">
@@ -174,7 +174,7 @@
 		<xsl:param name="n" select="count(/svn/index/dir) + position() - 1"/>
 		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
-				<a id="open:{$id}" class="action" title="this file can be opened in Repos" href="{$web}/open/?path={../@path}&amp;file={@href}">open</a>
+				<a id="open:{$id}" class="action" title="this file can be opened in Repos" href="{$web}/open/?target={../@path}/{@href}">open</a>
 				<xsl:if test="$editUrl">
 					<a id="rename:{$id}" class="action" href="{$editUrl}/rename/?target={../@path}/{@href}">rename</a>
 					<span class="action">copy</span>

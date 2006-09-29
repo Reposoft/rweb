@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template = new Presentation();
 	$target = getTarget();
 	$targeturl = getTargetUrl();
-	$file = getFile();
+	$file = basename($target);
 	if (strlen($file) > 0) {
 		$mimetype = login_getMimeType($targeturl);
 		if ($mimetype && strpos($mimetype, 'application/') == 0) {

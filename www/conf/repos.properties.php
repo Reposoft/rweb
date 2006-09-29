@@ -84,20 +84,36 @@ function repos_getUserTheme($user = '') {
 // ----- logic for the repos naming conventions for path -----
 
 /**
- * A path is a String of any length
+ * A path is a String of any length, not containing '\'.
+ * Windows paths must be normalized using toPath.
  */
 function isPath($path) {
+	if (strContains($path, '\\')) {
+		trigger_error('Paths can not contain backslash. Use toPath(path) to convert to generic path.');
+		return false;
+	}
 	return (is_string($path));
 }
 
 /**
- * Absolute paths start with '/' or 'protocol://', on Windows only, 'X:\'.
+ * Converts windows path to path that works on all OSes
+ * @param String $path path that might contain backslashes
+ * @return String the same path, but with forward slashes
+ */
+function toPath($path) {
+	return strtr($path, '\\', '/');
+}
+
+/**
+ * Absolute paths start with '/' or 'protocol://', on Windows only, 'X:/'.
  * @param String $path the file system path or URL to check
  * @return boolean true if path is absolute, false if not
  */
 function isAbsolute($path) {
 	if (!isPath($path)) trigger_error("'$path' is not a valid path");
-	
+	if (strBegins($path, '/')) return true;
+	if (isWindows() && ereg('^[a-zA-Z]:/', $path)) return true;
+	return ereg('^[a-z]+://', $path)!=false;
 }
 
 /**
@@ -106,20 +122,18 @@ function isAbsolute($path) {
  * @return boolean true if path is relative, false if not 
  */
 function isRelative($path) {
-	if (!isPath($path)) trigger_error("'$path' is not a valid path");
-	
+	return !isAbsolute($path);
 }
 
 /**
- * Files are relative or absolute paths that do not end with '/'
- *  or (on Windows only) '\'
- * including paths that do not contain '/' or '\'
+ * Files are relative or absolute paths that do not end with '/'.
+ * The actual filename can be retreived using getParent($path).
  * @param String $path the file system path or URL to check
  * @return boolean true if path is a file, false if not 
  */
 function isFile($path) {
 	if (!isPath($path)) trigger_error("'$path' is not a valid path");
-	
+	return !strEnds($path, '/');
 }
 
 /**
@@ -129,8 +143,22 @@ function isFile($path) {
  * @return boolean true if path is a folder, false if not 
  */
 function isFolder($path) {
+	return !isFile($path);
+}
+
+/**
+ * @param String $path the file system path or URL to check
+ * @return The parent folder if isFolder($path), the folder if isFile($path)
+ */
+function getParent($path) {
 	if (!isPath($path)) trigger_error("'$path' is not a valid path");
-	
+	if (strlen($path)==0 || $path=='/' || (isWindows() && strlen($path)<4 && strpos($path, ':')==1)) {
+		trigger_error("Parent is not defined for path '$path'");
+		return;
+	}
+	$f = substr($path, 0, strrpos(rtrim($path,'/'), '/'));
+	if (strlen($f)==0 && isRelative($path)) return $f;
+	return $f.'/';
 }
 
 // ----- helper functions for pages to refer to internal urls -----
