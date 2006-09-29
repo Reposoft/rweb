@@ -2,6 +2,7 @@
 // common functionality in the edit tools
 require_once( dirname(rtrim(dirname(__FILE__), DIRECTORY_SEPARATOR))."/account/login.inc.php" );
 
+// TODO move these to sever configuration test
 if (mb_http_input()==false) {
 	trigger_error("Server setup error. Multibyte string HTTP input encoding is not supported.");
 	exit;
@@ -10,6 +11,7 @@ if (mb_http_input()!="UTF-8") {
 	trigger_error("Character encoding is '".mb_http_input()."', not 'UTF-8'");
 	exit;
 }
+// TODO make a generic solution to check in access file for read-only folders
 if (getReposUser() == 'svensson' && getConfig('repo_url')=='https://www.repos.se/sweden') {
 	$p = new Presentation();
 	$p->trigger_error("Svensson is a read-only user.");

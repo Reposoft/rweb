@@ -323,6 +323,7 @@ $hasencoded = false; // security check, set to true in the encoding functions an
 // This meathod is only suitable for URLs that refer to existing resources.
 // If the URL is used for write operations, international characters such as umlauts will not be correct in the repository
 function urlEncodeNames($url) {
+	trigger_error("urlEncodeNames is deprecated. Use escapeArgument for command, rawurlencode for query params and htmlspecialchars for presentation.");
 	global $hasencoded; $hasencoded = true; // security check, set to true in the encoding functions and checked before 'run'
 	$parts = explode('/', $url);
 	// first part is the protocol, don't escape
@@ -330,9 +331,6 @@ function urlEncodeNames($url) {
 		$parts[$i] = rawurlencode($parts[$i]);
 	}
 	$encoded = implode('/', $parts);
-	if ('"'.$encoded.'"' != escapeArgument($encoded)) { // doucle check. remove if it's not worth the clock cycles.
-		trigger_error("Error. Could not safely encode the URL.");
-	}
 	return $encoded;
 }
 
@@ -356,12 +354,26 @@ function escapeArgument($argument) {
 	$arg = str_replace('`','\`', $arg);
 	// On SuSE ! is a metacharacter in strings
 	$arg = str_replace('!','\!', $arg);
-	// windows uses % to get variable names. URLs _should_ not be encoded, but if they are we might have a problem.
-	if(isWindows()) {
-		$arg = str_replace('%','°/.', $arg);
+	// windows uses % to get variable names, which can be used to read system properties.
+	if(isWindows() && strContains($arg, '%')) {
+		$arg = escapeWindowsVariables($arg);
 	}
-	return '"'.$arg.'"';
+	return '"'.$arg.'"'; // The quotes are very important because they escape many characters that are not escaped here
 	// #&;`|*?~<>^()[]{}$\, \x0A  and \xFF. ' and "
+}
+
+// if windows sees %abc%, it checks if abc is an environment variables. \% prevents this but adds the backslash to the string.
+function escapeWindowsVariables($arg) {
+	//$arg = str_replace('%','#', $arg);
+	if(substr_count($arg, '%')>1) {
+		// this should be very rare, so it can be an expensive operation
+		foreach($_ENV as $key => $value) {
+			while($s = stristr($arg, "%$key%")) { // must ignore case
+				$arg = substr($arg, 0, strlen($arg)-strlen($s)).'#'.substr($s,1);
+			}
+		}
+	}
+	return $arg;
 }
 
 /**
@@ -399,7 +411,7 @@ function repos_passthruCommand($commandName, $argumentsString) {
 }
 
 /**
- * Comiles the exact string to run on the command line
+ * Compiles the exact string to run on the command line
  */
 function _repos_getFullCommand($commandName, $argumentsString) {
 	$run = getCommand($commandName);

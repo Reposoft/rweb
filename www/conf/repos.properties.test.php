@@ -180,7 +180,22 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertError('Will not remove non-temp dir /this/is/any/kind/of/dir.');
 	}
 	
-	// test for the portability functions
+	// ----- command line escape functions -----
+	
+	function testEscapeWindowsEnv() {
+		$this->assertEqual('"a%b"', escapeArgument('a%b'), 'single percent should not be a problem');
+		$this->assertEqual('"a%NOT-AN-ENV-ENTRY%b"', escapeArgument('a%NOT-AN-ENV-ENTRY%b'),
+			'double percent enclosing something that has not been SET should not be a problem');
+		if (isWindows()) {
+			$this->assertTrue(isset($_ENV['OS']), 'For this test to work OS must be an environment variable');
+			$this->assertEqual('"a#OS%b"', escapeArgument('a%OS%b'));
+			$this->assertEqual('"#OS%b%"', escapeArgument('%OS%b%'));
+			$this->assertEqual('"#OS#OS%"', escapeArgument('%OS%OS%'));
+			$this->assertEqual('"#OS%b%%cd#OS%"', escapeArgument('%OS%b%%cd%OS%'));
+		}
+	}
+	
+	// ----- portability functions -----
 	
 	function testIsOffline() {
 		$this->assertTrue(isOffline()===!isset($_SERVER['REQUEST_URI']));
@@ -194,6 +209,7 @@ class TestReposProperties extends UnitTestCase {
 		}
 	}
 	
+	// ----- url resolution functions -----
 	// the tests below modify server variables, so they might affect other tests. Should maybe use simpletest mock server instead.
 	
 	function testGetSelfUrl() {

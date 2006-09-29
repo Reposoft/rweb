@@ -37,7 +37,10 @@
  *  - getTargetUrl() full url to resource if specified
  *  - getRepositoryUrl() repository root URL from query params,
  *     with fallback to repos.properties
- * Note that internally, URLs should never be urlencoded
+ * 
+ * Note that internally, URLs should never be encoded.
+ * If a subversion command requires an encoded URL, it should be
+ * encoded before it's passed to escapeArgument.
  *
  * Nomenclature throughout the repos PHP solution:
  * 'target' absolute url from repository root to target resource
@@ -266,7 +269,7 @@ function getRevision($rev = false) {
 /**
  * Repository is resolved using HTTP Referrer with fallback to settings.
  * To find out where root is, query paramter 'path' must be set.
- * @return Root url of the repository for this request, no tailing slash.
+ * @return Root url of the repository for this request, no tailing slash. Not encoded.
  */
 function getRepositoryUrl() {
 	// 1: query string
@@ -386,9 +389,9 @@ function login_svnRun($cmd) {
  *   If returnval!=0, login_handleSvnError may be used to get error message compatible with the styleshett.
  */
 function login_svnPassthru($cmd) {
-	$operation = escapeshellcmd($cmd);
-	$svnCommand = login_getSvnSwitches().' '.$operation;
-	$returnval = repos_passthruCommand('svn', $svnCommand);
+	$svnCommand = login_getSvnSwitches().' '.$cmd;
+	echo($svnCommand);
+	$returnval = repos_passthruCommand(getCommand('svn'), $svnCommand);
 	return $returnval;
 }
 
@@ -417,13 +420,14 @@ function login_svnPassthruFile($targetUrl, $revision=0) {
  * If the property svn:mime-type is set, that value is returned. If not, default based on filename extension is returned.
  * @param targetUrl the file, might be with a peg revision
  * @return the mime type string
+ * TODO shared getMimeType for the application, with defaults basedpn file type
  */
 function login_getMimeType($targetUrl) {
 	$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl);
 	$result = login_svnRun($cmd);
 	$returnvalue = array_pop($result);
 	if ($returnvalue) {
-		trigger_error("Could not find the file '$targetUrl' in repository version $revision." );
+		trigger_error("Could not find the file '$targetUrl' in the repository." );
 	}
 	if (count($result) == 0) { // mime type property not set, return default
 		return false;//deprecated in PHP//return mime_content_type(basename($targetUrl)); // svn:mime-type not set
