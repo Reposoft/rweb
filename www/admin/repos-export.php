@@ -1,4 +1,5 @@
 <?php
+// This is a work in progress. not usable yet.
 
 /**
  * --- Incremental repository export ---

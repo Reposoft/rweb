@@ -65,6 +65,7 @@ function lineend() {
 // TODO count X output lines (info+), X warnings, X fails, X exception
 // TODO count fatal() as exception
 // TODO CSS class for pre tags
+// TODO make function names not html-specific. page-start, page-end
 
 function debug($message) {
 	linestart('debug');
@@ -172,7 +173,7 @@ function getCurrentBackup($backupPath, $fileprefix) {
 	// get backup files in directory
 	$files = getDirContents($backupPath,$fileprefix);
 	if ( count($files)==0 )
-		fatal("Directory '$backupPath' contains no files named $fileprefix*.");
+		warn("Directory '$backupPath' contains no files named $fileprefix*. This must be the first backup.");
 	return getBackupInfo($files, $fileprefix);
 }
 

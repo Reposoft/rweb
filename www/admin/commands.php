@@ -20,7 +20,7 @@ if ( $args == 0 || eregi("-*help",$argv[1])>0 ) {
 	echo "Usage:\n";
 	echo "php " . __FILE__ . " command [parameters]\n";
 	echo "Supported commands are: dump, load, verify, verifyMD5\n";
-	echo "Just write the command name to get syntax help";
+	echo "To get syntax help, write only the command name.";
 	echo "\n";
 } elseif ( $argv[1] == "dump" ) {
 	if ($args != 3 || eregi("-*help",$argv[2])>0 )
