@@ -59,11 +59,6 @@ pre {
 code {
 	font-size: 1.1em;
 }
-hr { /* deprectated. <pre> has borders instead */
-	border: none 0;
-	border-top: 1px dashed #CCCC99;
-	height: 1px;
-}
 /* layout of version control concepts, these are usually span tags */
 .path {
 	color: #112200;

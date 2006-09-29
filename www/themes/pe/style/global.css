@@ -47,14 +47,11 @@ h3 {
 }
 pre {
 	font-size: 1.2em;
+	border-top: 1px solid #FEDEA5;
+	border-bottom: 1px solid #FEDEA5;
 }
 code {
 	font-size: 1.1em;
-}
-hr {
-	border: none 0;
-	border-top: 1px solid #FEDEA5;
-	height: 1px;
 }
 /* layout of version control concepts, these are usually span tags */
 .path {
