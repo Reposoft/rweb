@@ -15,7 +15,38 @@ function getTheme() {
 	return "/themes/simple"; 
 }
 
-function html_start($title) {
+// displaying output 
+// TODO Report.class.php
+// TODO function ok($message)
+// TODO Report.publish
+// TODO Report.display (like smarty display)
+// TODO count X output lines (info+), X warnings, X fails, X exception
+// TODO count fatal() as exception
+// TODO CSS class for pre tags
+// TODO make function names not html-specific. page-start, page-end
+class Report {
+
+	var $hasErrors = false; // error events are recorded
+
+	function Report($title='Repos system report', $category='') {
+		$this->_pageStart($title);
+	}
+	
+	/**
+	 * Completes the report and saves it as a file at the default reports location.
+	 */
+	function publish() {
+		
+	}
+	
+	/**
+	 * Ends output and writes it to output stream.
+	 */
+	function display() {
+		$this->_pageEnd();
+	}
+	
+function _pageStart($title) {
 	echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"';
 	echo ' "http://www.w3.org/TR/html4/loose.dtd">';
 	echo "\n<html>";
@@ -44,11 +75,6 @@ function showAll() {
 	echo "<p><a href=\"javascript:showAll()\">Show also debug level</a></p>";
 }
 
-// formatted date
-function getTime() {
-    return '<span class="datetime">'.date("Y-m-d\TH:i:sO").'</span>';
-}
-
 // internal
 function linestart($class='normal') {
 	echo "<p class=\"$class\">";
@@ -57,41 +83,29 @@ function lineend() {
 	echo "</p>\n";
 }
 
-// displaying output 
-// TODO Report.class.php
-// TODO function ok($message)
-// TODO Report.publish
-// TODO Report.display (like smarty display)
-// TODO count X output lines (info+), X warnings, X fails, X exception
-// TODO count fatal() as exception
-// TODO CSS class for pre tags
-// TODO make function names not html-specific. page-start, page-end
-
 function debug($message) {
-	linestart('debug');
-	output($message);
-	lineend();
+	$this->linestart('debug');
+	$this->output($message);
+	$this->lineend();
 }
 
 function info($message) {
-	linestart();
-	output($message);
-	lineend();
+	$this->linestart();
+	$this->output($message);
+	$this->lineend();
 }
 
 function warn($message) {
-	linestart('warning');
-	output($message);
-	lineend();
+	$this->linestart('warning');
+	$this->output($message);
+	$this->lineend();
 }
 
-$hasErrors = false; // error events are recorded
 function error($message) {
-	global $hasErrors;
-	$hasErrors = true;
-	linestart('error');
-	output($message);
-	lineend();
+	$this->hasErrors = true;
+	$this->linestart('error');
+	$this->output($message);
+	$this->lineend();
 }
 
 /**
@@ -99,14 +113,14 @@ function error($message) {
  * It is assumed that fatal errors are handled manually by the administrator.
  */
 function fatal($message, $code = 1) {
-	error( $message );
-	html_end( $code );
+	$this->error( $message );
+	// TODO this method shouldn't be herer, right?
 }
 
 // internal
 function output($message) {
 	if (is_array($message))
-		$message = formatArray($message);
+		$message = $this->formatArray($message);
 	echo $message;
 }
 
@@ -127,12 +141,29 @@ function formatArray($message) {
 	return $msg;
 }
 
-function html_end($code = 0) {
+function _pageEnd($code = 0) {
 	echo "</body></html>\n\n";
 	exit( $code );
 }
 
+} // end report class
+
+// formatted date
+function getTime() {
+    return '<span class="datetime">'.date("Y-m-d\TH:i:sO").'</span>';
+}
+
+// temporary solution, TODO make admin a class that takes a report instance as constructor argument
+$report = new Report();
+function debug($message) {global $report; $report->debug($message); }
+function info($message) {global $report; $report->info($message); }
+function warn($message) {global $report; $report->warn($message); }
+function error($message) {global $report; $report->error($message); }
+function fatal($message) {global $report; $report->fatal($message); }
+function html_end($code = 0) {global $report; $report->display(); }
+
 // --- basic repository examination ---
+// read-only operations. The actual processing is in the backup script which uses these functions.
 
 /**
  * @return true if path points to a repository accessible using svnlook
