@@ -31,10 +31,11 @@ function getConfig($key) {
 }
 
 // ----- string helper functions that should have been in php -----
-function beginsWith($str, $sub) { return (substr($str, 0, strlen($sub)) === $sub); }
-function endsWith($str, $sub) { return (substr($str, strlen($str) - strlen($sub)) === $sub); }
+function strBegins($str, $sub) { return (substr($str, 0, strlen($sub)) === $sub); }
+function strEnds($str, $sub) { return (substr($str, strlen($str) - strlen($sub)) === $sub); }
+function strContains($str, $sub) { return (strpos($str, $sub) !== false); }
 
-// ----- user settings -----
+// ----- user settings, maybe this should not be here -----
 
 $possibleLocales = array(
 	'sv' => 'Svenska',
@@ -78,6 +79,58 @@ function repos_getUserTheme($user = '') {
 	if (empty($user)) return '';
 	if ($user=='test'||$user=='annika'||$user=='arvid'||$user=='hanna') return '';
 	return 'themes/pe/';
+}
+
+// ----- logic for the repos naming conventions for path -----
+
+/**
+ * A path is a String of any length
+ */
+function isPath($path) {
+	return (is_string($path));
+}
+
+/**
+ * Absolute paths start with '/' or 'protocol://', on Windows only, 'X:\'.
+ * @param String $path the file system path or URL to check
+ * @return boolean true if path is absolute, false if not
+ */
+function isAbsolute($path) {
+	if (!isPath($path)) trigger_error("'$path' is not a valid path");
+	
+}
+
+/**
+ * Relative paths are those that are not absolute, including empty strings.
+ * @param String $path the file system path or URL to check
+ * @return boolean true if path is relative, false if not 
+ */
+function isRelative($path) {
+	if (!isPath($path)) trigger_error("'$path' is not a valid path");
+	
+}
+
+/**
+ * Files are relative or absolute paths that do not end with '/'
+ *  or (on Windows only) '\'
+ * including paths that do not contain '/' or '\'
+ * @param String $path the file system path or URL to check
+ * @return boolean true if path is a file, false if not 
+ */
+function isFile($path) {
+	if (!isPath($path)) trigger_error("'$path' is not a valid path");
+	
+}
+
+/**
+ * Folders are relative or absolute paths that _do_ end with '/'
+ *  or (on Windows only) '\'
+ * @param String $path the file system path or URL to check
+ * @return boolean true if path is a folder, false if not 
+ */
+function isFolder($path) {
+	if (!isPath($path)) trigger_error("'$path' is not a valid path");
+	
 }
 
 // ----- helper functions for pages to refer to internal urls -----

@@ -12,7 +12,7 @@ if ($target) {
 
 function printHeaders($target) {
 	head();
-	if(beginsWith($target, '/')) {
+	if(strBegins($target, '/')) {
 		$target = repos_getSelfRoot().$target;
 	}
 	if(strpos($target,'/')===false) {

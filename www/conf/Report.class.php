@@ -11,7 +11,7 @@
 // TODO count X output lines (info+), X warnings, X fails, X exception
 // TODO count fatal() as exception
 // TODO CSS class for pre tags
-// TODO handle HTML-entities (without ending up in some kind of wiki syntax). see test reporter.php
+// TODO convert to HTML-entities where needed (without ending up in some kind of wiki syntax). see test reporter.php
 require_once(dirname(__FILE__).'/repos.properties.php');
 
 class Report {

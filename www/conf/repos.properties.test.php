@@ -7,26 +7,98 @@ class TestReposProperties extends UnitTestCase {
 	function TestReposProperties() {
 		$this->UnitTestCase();
 	}
+	
+	// ------- string functions --------
 
-	function testBeginsWith() {
-		$this->assertTrue(beginsWith('/a', '/'));
-		$this->assertFalse(beginsWith('a/', '/'));
-		$this->assertFalse(beginsWith('', '/'));
-		$this->assertFalse(beginsWith(null, '/'));
-		$this->assertFalse(beginsWith(3, '/'));
+	function testStrBegins() {
+		$this->assertTrue(strBegins('/a', '/'));
+		$this->assertFalse(strBegins('a/', '/'));
+		$this->assertFalse(strBegins('', '/'));
+		$this->assertFalse(strBegins(null, '/'));
+		$this->assertFalse(strBegins(3, '/'));
 	}
 
-	function testEndsWith() {
-		$this->assertTrue(endsWith('a/', '/'));
-		$this->assertFalse(endsWith('/a', '/'));
-		$this->assertFalse(endsWith('', '/'));
-		$this->assertFalse(endsWith(null, '/'));
-		$this->assertFalse(endsWith(3, '/'));
+	function testStrEnds() {
+		$this->assertTrue(strEnds('a/', '/'));
+		$this->assertFalse(strEnds('/a', '/'));
+		$this->assertFalse(strEnds('', '/'));
+		$this->assertFalse(strEnds(null, '/'));
+		$this->assertFalse(strEnds(3, '/'));
+	}
+	
+	function testStrContains() {
+		$this->assertTrue(strContains('xy', 'x'));
+		$this->assertFalse(strContains('x', 'xy'));
+		$this->assertTrue(strContains('x', 'x'));
+		$this->assertFalse(strContains('', 'x'));
+		$this->assertTrue(strContains("a\nb", "\n"));
+	}
+	
+	// -------- path functions --------
+	
+	function testIsAbsolute() {
+		$this->assertTrue(isAbsolute('/path'));
+		$this->assertTrue(isAbsolute('/my/path'));
+		$this->assertTrue(isAbsolute('/'));
+		$this->assertTrue(isAbsolute('http://my.host'));
+		$this->assertTrue(isAbsolute('svn://my.host/'));
+		$this->assertTrue(isAbsolute('https://my.host/path/'));
+		if (isWindows()) {
+			$this->assertTrue(isAbsolute('D:\path'));
+		} else {
+			$this->assertFalse(isAbsolute('D:\path'), "paths with drive letter are not absolute on non-windows");
+		}
+		$this->assertFalse(isAbsolute('path'));
+	}
+	
+	function testIsAbsoluteInvalid() {
+		isAbsolute(null);
+		$this->assertError();
+	}
+
+	function testIsAbsoluteUrlWithBackslash() {
+		isAbsolute('http://my.host\path');
+		$this->assertError();
 	}	
+	
+	function testIsRelative() {
+		$this->assertTrue(isRelative('path/'));
+		$this->assertTrue(isRelative('p/file'));
+		$this->assertTrue(isRelative('.'));
+		$this->assertTrue(isRelative(''));
+		$this->assertFalse(isRelative('https://path'));
+	}
+	
+	function testIsRelativeInvalid() {
+		isRelative(123);
+		$this->assertError();
+	}
+	
+	function testIsFile() {
+		$this->assertTrue(isFile('f'));
+		$this->assertTrue(isFile('folder/file.txt'));
+		$this->assertTrue(isFile('http://folder/file.txt'));
+		$this->assertTrue(isFile('http://file.txt'), 'this method is not responsible for validating URLs');
+		$this->assertFalse(isFile('file.txt/'));
+	}
+	
+	function testIsFolder() {
+		$this->assertTrue(isFolder('f/'));
+		$this->assertTrue(isFolder('my/folder/'));
+		$this->assertTrue(isFolder('svn://folder/'));
+		$this->assertTrue(isFolder('/'));
+		if (isWindows()) {
+			$this->assertTrue(isFolder('f\\'));
+			$this->assertTrue(isFolder('C:\f\\'));
+		}
+		$this->assertFalse(isFolder('/path'));
+	}
+	
+	// ------ system functions ------
 	
 	function testGetTempDir() {
 		$dir = getTempDir();
-		$this->assertTrue(endsWith($dir, DIRECTORY_SEPARATOR));
+		$this->assertTrue(strEnds($dir, DIRECTORY_SEPARATOR));
 		$this->assertTrue(file_exists($dir));
 		$this->assertTrue(is_writable($dir));
 	}
@@ -41,7 +113,7 @@ class TestReposProperties extends UnitTestCase {
 	
 	function testGetTempnamDirName() {
 		$dir1 = getTempnamDir('mytest');
-		$this->assertTrue(endsWith($dir1, DIRECTORY_SEPARATOR));
+		$this->assertTrue(strEnds($dir1, DIRECTORY_SEPARATOR));
 		$this->assertTrue(strpos($dir1, DIRECTORY_SEPARATOR.'mytest'.DIRECTORY_SEPARATOR)>0);
 	}
 	
@@ -75,11 +147,11 @@ class TestReposProperties extends UnitTestCase {
 	
 	// test for the portability functions
 	
-	public function testIsOffline() {
+	function testIsOffline() {
 		$this->assertTrue(isOffline()===!isset($_SERVER['REQUEST_URI']));
 	}
 	
-	public function testIsWindows() {
+	function testIsWindows() {
 		if (DIRECTORY_SEPARATOR=='\\') {
 			$this->assertTrue(isWindows());
 		} else {
@@ -89,7 +161,7 @@ class TestReposProperties extends UnitTestCase {
 	
 	// the tests below modify server variables, so they might affect other tests. Should maybe use simpletest mock server instead.
 	
-	public function testGetSelfUrl() {
+	function testGetSelfUrl() {
 		$_SERVER['SERVER_PORT'] = 80;
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
@@ -97,7 +169,7 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('http://my.host', repos_getSelfUrl());
 	}
 
-	public function testGetSelfUrlS() {
+	function testGetSelfUrlS() {
 		$_SERVER['SERVER_PORT'] = 443;
 		$_SERVER['HTTPS'] = 'on';
 		$_SERVER['SERVER_NAME'] = 'my.host';
@@ -105,7 +177,7 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('https://my.host/', repos_getSelfUrl());
 	}
 	
-	public function testGetSelfUrlPort() {
+	function testGetSelfUrlPort() {
 		$_SERVER['SERVER_PORT'] = 123;
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
@@ -113,7 +185,7 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('http://my.host:123/', repos_getSelfUrl());
 	}
 
-	public function testGetSelfUrlPortS() {
+	function testGetSelfUrlPortS() {
 		$_SERVER['SERVER_PORT'] = 123;
 		$_SERVER['HTTPS'] = 'on';
 		$_SERVER['SERVER_NAME'] = 'my.host';
@@ -121,7 +193,7 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('https://my.host:123/', repos_getSelfUrl());
 	}
 
-	public function testGetSelfUrlFile() {
+	function testGetSelfUrlFile() {
 		$_SERVER['SERVER_PORT'] = 80;
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
@@ -129,7 +201,7 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('http://my.host/index.html', repos_getSelfUrl());
 	}
 	
-	public function testGetSelfUrlPath() {
+	function testGetSelfUrlPath() {
 		$_SERVER['SERVER_PORT'] = 80;
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
@@ -137,7 +209,7 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('http://my.host/home/', repos_getSelfUrl());
 	}
 	
-	public function testGetSelfUrlQ() {
+	function testGetSelfUrlQ() {
 		$_SERVER['SERVER_PORT'] = 80;
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
@@ -145,7 +217,7 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('http://my.host/test/', repos_getSelfUrl());
 	}
 
-	public function testGetSelfUrlQuery() {
+	function testGetSelfUrlQuery() {
 		$_SERVER['SERVER_PORT'] = 80;
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
@@ -153,7 +225,7 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('http://my.host/index.html', repos_getSelfUrl());
 	}
 
-	public function testGetSelfUrlQuery2() {
+	function testGetSelfUrlQuery2() {
 		$_SERVER['SERVER_PORT'] = 80;
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
