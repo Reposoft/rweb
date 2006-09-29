@@ -11,7 +11,7 @@
 // TODO count X output lines (info+), X warnings, X fails, X exception
 // TODO count fatal() as exception
 // TODO CSS class for pre tags
-
+// TODO handle HTML-entities (without ending up in some kind of wiki syntax). see test reporter.php
 require_once(dirname(__FILE__).'/repos.properties.php');
 
 class Report {
@@ -47,12 +47,21 @@ class Report {
 	
 	/**
 	 * Call when a test or validation has completed successfuly
-	 * (opposite to error)
+	 * (opposite to fail)
 	 */
 	function ok($message) {
 		$this->_linestart('ok');
 		$this->_output($message);
 		$this->_lineend();
+	}
+	
+	/**
+	 * Call when a check has failed.
+	 * Not same as error, which is called for unexpected conditions.
+	 * TODO should have it's own class
+	 */
+	function fail($message) {
+		$this->error($message);
 	}
 	
 	/**
@@ -115,10 +124,12 @@ class Report {
 			$this->_print("<p class=\"$class\">");
 		}
 	}
-	// line complete
+	// line complete, does flush()
 	function _lineend() {
 		if (!$this->offline) $this->_print("</p>");
 		$this->_print("\n");
+		
+		flush();
 	}
 	// text block start (printed inside a line)
 	function _blockstart() {

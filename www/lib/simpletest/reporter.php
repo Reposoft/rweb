@@ -1,18 +1,21 @@
 <?php
+/**
+ * Repos PHP unittest report class for the Simpletest library.
+ */
+
+/**#@+
+ * This class delegates to Report
+ */
+require_once(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
+/**#@-*/
+
+/**#@+
+ * This class extends SimpleReporter
+ */
+require_once(dirname(__FILE__) . '/simpletest/scorer.php');
+/**#@-*/
+
 // see http://www.lastcraft.com/reporter_documentation.php
-
-    /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	UnitTester
-     *	@version	$Id: reporter.php,v 1.36 2006/02/06 06:05:18 lastcraft Exp $
-     */
-
-    /**#@+
-     *	include other SimpleTest class files
-     */
-    require_once(dirname(__FILE__) . '/simpletest/scorer.php');
-    /**#@-*/
 
     /**
      *    Sample minimal test displayer. Generates only
@@ -22,6 +25,8 @@
      */
     class HtmlReporter extends SimpleReporter {
         var $_character_set;
+        
+        var $report;
 
         /**
          *    Does nothing yet. The first output will
@@ -42,15 +47,8 @@
          */
         function paintHeader($test_name) {
             $this->sendNoCacheHeaders();
-            print "<html>\n<head>\n<title>$test_name</title>\n";
-            print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" .
-                    $this->_character_set . "\">\n";
-            print "<style type=\"text/css\">\n";
-            print $this->_getCss() . "\n";
-            print "</style>\n";
-            print "</head>\n<body>\n";
-            print "<h1>$test_name</h1>\n";
-            flush();
+            
+            $this->report = new Report($test_name);
         }
 
         /**
@@ -71,15 +69,6 @@
         }
 
         /**
-         *    Paints the CSS. Add additional styles here.
-         *    @return string            CSS code as text.
-         *    @access protected
-         */
-        function _getCss() {
-            return ".fail { color: red; } pre { background-color: lightgray; }";
-        }
-
-        /**
          *    Paints the end of the test with a summary of
          *    the passes and failures.
          *    @param string $test_name        Name class of test.
@@ -96,7 +85,8 @@
             print "<strong>" . $this->getFailCount() . "</strong> fails and ";
             print "<strong>" . $this->getExceptionCount() . "</strong> exceptions.";
             print "</div>\n";
-            print "</body>\n</html>\n";
+            
+            $this->report->display();
         }
 
         /**
@@ -109,11 +99,11 @@
          */
         function paintFail($message) {
             parent::paintFail($message);
-            print "<span class=\"fail\">Fail</span>: ";
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
-            print implode(" -&gt; ", $breadcrumb);
-            print " -&gt; " . $this->_htmlEntities($message) . "<br />\n";
+            $p = implode(" -&gt; ", $breadcrumb);
+            $p .= " -&gt; " . $this->_htmlEntities($message) . "<br />\n";
+            $this->report->fail($p);
         }
 
         /**
@@ -124,11 +114,11 @@
          */
         function paintError($message) {
             parent::paintError($message);
-            print "<span class=\"fail\">Exception</span>: ";
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
-            print implode(" -&gt; ", $breadcrumb);
-            print " -&gt; <strong>" . $this->_htmlEntities($message) . "</strong><br />\n";
+            $p = implode(" -&gt; ", $breadcrumb);
+            $p .= " -&gt; <strong>" . $this->_htmlEntities($message) . "</strong><br />\n";
+            $this->report->error($p);
         }
 
         /**
@@ -137,7 +127,7 @@
          *    @access public
          */
         function paintFormattedMessage($message) {
-            print '<pre>' . $this->_htmlEntities($message) . '</pre>';
+            $this->report->info( array($this->_htmlEntities($message)) );
         }
 
         /**
