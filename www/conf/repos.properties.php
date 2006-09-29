@@ -317,6 +317,9 @@ function repos_passthruCommand($commandName, $argumentsString) {
 	return $returnvalue;
 }
 
+/**
+ * Comiles the exact string to run on the command line
+ */
 function _repos_getFullCommand($commandName, $argumentsString) {
 	$run = getCommand($commandName);
 	$wrapper = _repos_getScriptWrapper();
@@ -344,6 +347,14 @@ function _repos_getScriptWrapper() {
 }
 
 // ------ functions to keep scripts portable -----
+
+/**
+ * @return true if this is PHP running from a command line instead of a web server
+ */
+function isOffline() {
+	// maybe there is some clever CLI detection, but this works too
+	return !isset($_SERVER['REQUEST_URI']);
+}
 
 /**
  * @return true if script is running on windows OS, false for anything else

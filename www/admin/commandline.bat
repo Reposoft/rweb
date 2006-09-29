@@ -1,6 +1,8 @@
 @echo off
 set ADMINPATH=C:\srv\www\htdocs\repos\admin\
+set TESTREPO=C:\WINDOWS\Temp\test.repos.se\repo
 
+echo ** Examples on how to use Repos administration commands without a web server **
 echo *
 echo Verify that PHP is in the shell path:
 echo *
@@ -17,4 +19,13 @@ echo Sample usage:
 echo *
 echo php %ADMINPATH%commands.php dump
 echo *
-echo php %ADMINPATH%commands.php dump C:\WINDOWS\Temp\test.repos.se\repo C:\srv\backup
+echo php %ADMINPATH%commands.php dump %TESTREPO% C:\srv\backup
+echo *
+echo php %ADMINPATH%commands.php verify %TESTREPO%
+echo *
+echo php %ADMINPATH%commands.php verifyMD5 C:\srv\backup
+echo *
+echo mkdir \srv\repository-mirror
+echo svnadmin create \srv\repository-mirror
+echo php %ADMINPATH%commands.php load \srv\repository-mirror C:\srv\backup svnrepo-WINDOWS-Temp-test.repos.se-repo-
+echo svnlook tree \srv\repository-mirror

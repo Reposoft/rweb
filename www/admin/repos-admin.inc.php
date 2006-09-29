@@ -27,16 +27,25 @@ function getTheme() {
 class Report {
 
 	var $hasErrors = false; // error events are recorded
+	var $offline;
 
 	function Report($title='Repos system report', $category='') {
-		$this->_pageStart($title);
+		$this->offline = isOffline();
+		if ($this->offline) {
+			$this->linestart();
+			$this->output("--- $title ---");
+			$this->lineend();
+		} else {
+			$this->_pageStart($title);
+		}
 	}
 	
 	/**
 	 * Completes the report and saves it as a file at the default reports location.
 	 */
 	function publish() {
-		
+		trigger_error("publish() not implemented");
+		$this->display();
 	}
 	
 	/**
@@ -77,10 +86,11 @@ function showAll() {
 
 // internal
 function linestart($class='normal') {
-	echo "<p class=\"$class\">";
+	if (!$this->offline) echo "<p class=\"$class\">";
 }
 function lineend() {
-	echo "</p>\n";
+	if (!$this->offline) echo "</p>";
+	echo "\n";
 }
 
 function debug($message) {
@@ -117,7 +127,7 @@ function fatal($message, $code = 1) {
 	// TODO this method shouldn't be herer, right?
 }
 
-// internal
+// internal, no HTML here because it is used both online and offline
 function output($message) {
 	if (is_array($message))
 		$message = $this->formatArray($message);
@@ -126,7 +136,8 @@ function output($message) {
 
 function formatArray($message) {
 	$msg = '';
-	$linebreak = "<br />\n";
+	$linebreak = "\n";
+	if (!$this->offline) $linebreak = "<br />".$linebreak;
 	foreach ( $message as $key=>$val ) {
 		if ( $val===false )
 			$val = 0;
@@ -142,7 +153,7 @@ function formatArray($message) {
 }
 
 function _pageEnd($code = 0) {
-	echo "</body></html>\n\n";
+	if (!$this->offline) echo "</body></html>\n\n";
 	exit( $code );
 }
 
