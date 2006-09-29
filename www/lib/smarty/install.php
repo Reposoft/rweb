@@ -51,7 +51,7 @@ while($offset < $tar_length) {
 	if (strpos($file_name, "libs/")) {
 		$newpath = substr($file_name, strpos($file_name, "libs/"));
 		echo $dir.$newpath."\n";
-		if ($file_size == 0 && !is_dir($newpath) && $newpath != "."){
+		if ($file_size == 0 && !is_dir($dir.$newpath) && $newpath != "."){
 			mkdir($dir.$newpath);
 		} elseif ($file_size > 0) {
 			$fileFromTar = fopen($dir.$newpath,"wb");
