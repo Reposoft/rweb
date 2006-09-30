@@ -40,6 +40,27 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertTrue(strEnds(getWebapp(),'/repos'), "Currently repos must be installed in /repos/");
 	}
 	
+	function testGetRepository() {
+		global $_repos_config;
+		$this->assertTrue(strlen(getRepository())>0);
+		$this->assertTrue(strContains(getRepository(), '://'), "getRepository() should return a full url");
+		$real = $_repos_config['repositories'];
+		$_repos_config['repositories'] = "http://my.host/repo/";
+		$this->assertEqual('http://my.host/repo/', getRepository());
+		$_repos_config['repositories'] = "http://my.host/repo1/, http://my.host/repo2/";
+		$this->assertEqual('http://my.host/repo1/', getRepository());
+		// test referer
+		$_SERVER['HTTP_REFERER'] = 'http://my.host/repo2/file.txt';
+		$this->assertEqual('http://my.host/repo2/', getRepository());
+		unset($_SERVER['HTTP_REFERER']);
+		$_repos_config['repositories'] = $real;
+	}
+	
+	function testGetRepositoryFromRepoParameter() {
+		$_REQUEST['repo'] = "https://host/r/";
+		$this->assertEqual('https://host/r/', getRepository());
+	}
+	
 	// -------- path functions --------
 	
 	function testIsAbsolute() {
@@ -198,6 +219,12 @@ class TestReposProperties extends UnitTestCase {
 			$this->assertEqual('"#OS%b%"', escapeArgument('%OS%b%'));
 			$this->assertEqual('"#OS#OS%"', escapeArgument('%OS%OS%'));
 			$this->assertEqual('"#OS%b%%cd#OS%"', escapeArgument('%OS%b%%cd%OS%'));
+		}
+	}
+	
+	function testGetScriptWrapper() {
+		if (!isWindows()) {
+			$this->assertTrue(file_exists(_repos_getScriptWrapper()), "the script wrapper file "._repos_getScriptWrapper()." does not exist");
 		}
 	}
 	

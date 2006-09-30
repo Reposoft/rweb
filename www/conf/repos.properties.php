@@ -14,8 +14,8 @@ error_reporting(E_ALL);
 function reportError($n, $message, $file, $line) {
 	$trace = _getStackTrace();
 	if (function_exists('reportErrorToUser')) {
-		call_user_func('reportErrorToUser', $n, $message, $trace); // may exit()
-	} else if($n==E_USER_ERROR || $n==E_USER_WARNING || $n==E_USER_NOTICE) {
+		call_user_func('reportErrorToUser', $n, $message, $trace);
+	} else if ($n != E_STRICT) {
 		echo("Error: $message\n<pre>\n$trace</pre>");
 	}
 }
@@ -66,23 +66,14 @@ function _getConfig($key) {
  */
 function getRepository() {
 	// 1: query string
-	if (isset($_GET['repo'])) {
-		return rtrim($_GET['repo'],'/');
-	}
-	// 2: referer without a query AND query string param 'target'
-    $ref = getHttpReferer();
-	if (strpos($ref, '?')===false && isset($_GET['target'])) {
-		$path = rtrim(getPath(),'/');
-		if ($ref && $path) {
-			$repo = getRepoRoot($ref,$path);
-			if ($repo) return $repo;
-		}
-	}
-	// 3: fallback to default repository
-    if(function_exists('getConfig')) {
-    	return _getConfig('repo_url');
-	}
-	return false;
+	if (isset($_REQUEST['repo'])) return $_REQUEST['repo'];
+	// 2: referer that matches one of the configured repositories
+	$r = getConfig('repositories');
+	if (!strContains($r, ',')) return $r;
+	$ref = getHttpReferer();
+	$all = array_map('trim', explode(',', $r));
+	foreach ($all as $a) if (strBegins($ref, $a)) return $a;
+	return $all[0];
 }
 
 /**
