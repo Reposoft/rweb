@@ -109,7 +109,7 @@ function strBegins($str, $sub) { return (substr($str, 0, strlen($sub)) === $sub)
 function strEnds($str, $sub) { return (substr($str, strlen($str) - strlen($sub)) === $sub); }
 function strContains($str, $sub) { return (strpos($str, $sub) !== false); }
 
-// ----- user settings, maybe this should not be here -----
+// ----- user settings, maybe this should be in account instead -----
 
 $possibleLocales = array(
 	'sv' => 'Svenska',
@@ -500,7 +500,7 @@ function _repos_getScriptWrapper() {
 	if (isWindows()) {
 		return '';
 	}
-	return dirname(dirname(dirname(__FILE__))).'/reposrun.sh';
+	return _getConfigFolder().'reposrun.sh';
 }
 
 // ------ functions to keep scripts portable -----
@@ -557,8 +557,12 @@ function getCommand($command) {
 
 // ----- internal functions -----
 
+function _getConfigFolder() {
+	return dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'repos-config'.DIRECTORY_SEPARATOR;
+}
+
 function _getPropertiesFile() {
-	$propertiesFile = dirname(dirname(dirname(__FILE__))) . '/repos-config/repos.properties';
+	$propertiesFile =  _getConfigFolder().'repos.properties';
 	if (!file_exists($propertiesFile)) {
 		trigger_error("Repos configuration file $propertiesFile not found.");
 		exit;

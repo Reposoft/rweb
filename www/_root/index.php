@@ -8,7 +8,7 @@
  * This script is intended to be placed in server root,
  * for logout to be effective with all URLs on the server.
  */
-define('REPOS_WEB_LOCAL', dirname(__FILE__) . '/repos');
+define('REPOS_WEB_LOCAL', dirname(__FILE__) . '/repos/');
 
 // HTTP/1.1 disable caching
 header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -18,17 +18,17 @@ header("Pragma: no-cache");
 
 if (isset($_GET['logout'])) {
 	// http logout should be done from root url (or parent url to all pages that need authentication)
-	require(REPOS_WEB_LOCAL . '/account/logout/index.php');
+	require(REPOS_WEB_LOCAL . 'account/logout/index.php');
 	exit;
 }
 
 if (isset($_GET['login'])) {
 	// do exactly the same thing as the repos login, but from this url
-	require(REPOS_WEB_LOCAL . '/account/login/index.php');
+	require(REPOS_WEB_LOCAL . 'account/login/index.php');
 	exit;
 }
 
-// simply show start page
+// show start page
 if (file_exists(dirname(__FILE__).'/start.html')) {
 	header("Location: /start.html");
 } else {
