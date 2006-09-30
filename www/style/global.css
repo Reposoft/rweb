@@ -30,10 +30,6 @@ table p {
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
 }
-a[target="_blank"] {
-	padding-right: 16px;
-	background: url(newwindow.png) right center no-repeat;
-}
 a:hover {
 	text-decoration: underline;
 	border-bottom: none;
@@ -199,11 +195,10 @@ span.action {
   </p>
   <p>
     <label for="submit"></label>
-    <input id="submit" type="submit" value="Submit" />
+    <input id="submit" type="submit" name="submit" value="Send" />
   </p>
 </fieldset>
 </form>
-
 */
 fieldset {
 	border:2px solid #CCCC99;

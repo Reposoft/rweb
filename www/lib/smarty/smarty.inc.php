@@ -1,11 +1,23 @@
 <?php
 // this file is not needed anymore. simply instantiate Presentation.
+if (!file_exists(dirname(__FILE__).'/libs/')) {
+	trigger_error("Smarty 'libs' folder has not been installed");
+}
+require(dirname(__FILE__).'/libs/Smarty.class.php');
 
-require( dirname(dirname(__FILE__)).'/conf/Presentation.class.php' );
+define('LEFT_DELIMITER', '{='); // to be able to mix with css and javascript
+define('RIGHT_DELIMITER', '}');
 
-// smarty factory
-function getTemplateEngine() {
-	return new Presentation();
+// make it possible to disable cache during development
+define('CACHING', false);
+
+// the four cache subdirectories must be writable by webserver
+define('CACHE_DIR', getTempDir('smarty-cache'));
+if ( ! file_exists(CACHE_DIR.'templates/') ) {
+	mkdir( CACHE_DIR.'templates/' );
+	mkdir( CACHE_DIR.'templates_c/' );
+	mkdir( CACHE_DIR.'configs/' );
+	mkdir( CACHE_DIR.'cache/' );
 }
 
 ?>

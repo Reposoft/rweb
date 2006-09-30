@@ -1,8 +1,13 @@
 <?php
-require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
-require( dirname(dirname(__FILE__))."/edit.class.php" );
 
-if (isset($_GET['name'])) {
+require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
+require( dirname(dirname(__FILE__))."/edit.class.php" );	
+
+rule('name', FILENAME);
+// message and target have default rules
+
+if (isset($_GET['submit'])) {
+	validate('target', 'name', 'message');
 	createFolder(getTargetUrl(),$_GET['name'],$_GET['message']); 
 } else {
 	$target = getTarget();
@@ -21,7 +26,7 @@ if (isset($_GET['name'])) {
 
 function createFolder($parentUri, $name, $message) {
 	$template = new Presentation();
-	$newfolder = rtrim($parentUri,'/').'/'.urlEncodeNames($name);
+	$newfolder = rtrim($parentUri,'/').'/'.$name;
 	$dir = tmpdir();
 	if (!$dir) {
 		$template->trigger_error("Could not create temporary directory");

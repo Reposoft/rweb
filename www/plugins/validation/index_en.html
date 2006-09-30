@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>repos.se validation plugin test page</title>
+<!--{$head}-->
+</head>
+
+<body>
+<h1>Test repos.se form validation</h1>
+<p><small>This page uses the Smarty integration to generate the form</small></p>
+<form action="./" method="get" name="testForm" id="testForm">
+<fieldset>
+  <legend>repos.se default form layout</legend>
+  <p>
+    <label for="name">name</label>
+    <input type="text" id="name" name="name" size="40" />
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" type="submit" name="Submit" value="Validate and send" />
+    <input type="reset" value="Reset"/>
+  </p>
+</fieldset>
+</form>
+</body>
+</html>

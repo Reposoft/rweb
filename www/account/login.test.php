@@ -12,8 +12,8 @@ class Login_include_Test extends UnitTestCase {
 	public function setUp() {
 		// some server varables are used in the test below and must be reset every time
 		unset($_GET['target']);
-		unset($_GET['path']);
-		unset($_GET['file']);
+		//unset($_GET['path']);
+		//unset($_GET['file']);
 		unset($_GET['repo']);
 	}
 	
@@ -42,6 +42,7 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertEqual('/my/file.txt', $target);
 	}
 	
+	/* file and path parameters are no longer supported
 	// target is a directory, absolute url from repository root, no tailing slash
 	// should always return dir _with_ tailing slash
 	public function testTargetPath() {
@@ -65,6 +66,7 @@ class Login_include_Test extends UnitTestCase {
 		$target = getTarget();
 		$this->assertEqual('/my/dir/file.txt', $target);
 	}
+	*/
 	
 	// repository url when repo param is set
 	public function testRepositoryUrlRepo() {
@@ -75,13 +77,13 @@ class Login_include_Test extends UnitTestCase {
 	// repository url from referrer and path
 	public function testRepositoryUrlReferrerPath() {
 		$_SERVER['HTTP_REFERER'] = 'http://my.repo/my/dir';
-		$_GET['path'] = '/my/dir';
+		$_GET['target'] = '/my/dir/';
 		$this->assertEqual('http://my.repo', getRepositoryUrl());
 	}
 	
 	public function testRepositoryUrlReferrerPathSlash() {
-		$_SERVER['HTTP_REFERER'] = 'http://my.repo/my/dir';
-		$_GET['path'] = '/my/dir/';
+		$_SERVER['HTTP_REFERER'] = 'http://my.repo/my/dir/';
+		$_GET['target'] = '/my/dir/';
 		// according to function docs this should return nothing
 		$this->assertEqual('http://my.repo', getRepositoryUrl());
 	}

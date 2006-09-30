@@ -1,5 +1,9 @@
 @charset "utf-8";
 /* CSS Document */
+a[target="_blank"] {
+	padding-right: 16px;
+	background: url(newwindow.png) right center no-repeat;
+}
 table {
 	border-collapse: collapse;
 }

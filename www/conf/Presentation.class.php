@@ -11,8 +11,11 @@
  * Allows two different markup delimiters:
  * <!--{ ... }-->
  * {= ... }
+ * 
+ * Cache settings are defined in te include file.
  */
 
+// this page is included from other pages: need to do includes relative to __FILE__
 require_once(dirname(__FILE__).'/repos.properties.php');
 
 // don't know why the content type is not correct by default
@@ -20,27 +23,41 @@ require_once(dirname(__FILE__).'/repos.properties.php');
 header('Content-type: text/html; charset=utf-8');
 // don't set the content type headers in the HTML, because then we can't change to xhtml+xml later
 
-// configure Smarty (http://smarty.php.net/) as template engine
-define("SMARTY_DIR",dirname(dirname(__FILE__)).'/lib/smarty/libs/');
-require( SMARTY_DIR.'Smarty.class.php' );
+// ------ form validation support -------
 
-define('LEFT_DELIMITER', '{='); // to be able to mix with css and javascript
-define('RIGHT_DELIMITER', '}');
-// there is also a filter so that delimiters <!--{ and }--> are supported.
+// common field rules
+define('FILENAME', '');
 
-// make it possible to disable cache during development
-define('CACHING', false);
-
-// the four cache subdirectories must be writable by webserver
-define('CACHE_DIR', getTempDir('smarty-cache'));
-if ( ! file_exists(CACHE_DIR.'templates/') ) {
-	mkdir( CACHE_DIR.'templates/' );
-	mkdir( CACHE_DIR.'templates_c/' );
-	mkdir( CACHE_DIR.'configs/' );
-	mkdir( CACHE_DIR.'cache/' );
+// validation one-liners from logic scripts
+function rule($fieldname, $constantOrRegexOrFunction) {
+	
 }
 
-// smarty factory
+function validate($requiredFieldsSeparatedByComma) {
+	$n = func_num_args();
+	for($i=0; $i<$n; $i++) {
+		$fieldname = func_get_arg($i);
+		
+	}
+}
+
+// -------- user settings ---------
+
+function repos_getUserTheme($user = '') {
+	if(!function_exists('getReposUser()')) {
+		return ''; // account logic not imported, this is a public page that uses the default theme
+	}
+	if ($user=='') {
+		$user = getReposUser();
+	}
+	if (empty($user)) return '';
+	if ($user=='test'||$user=='annika'||$user=='arvid'||$user=='hanna') return '';
+	return 'themes/pe/';
+}
+
+// -------- the template class ------------
+require(dirname(dirname(__FILE__)).'/lib/smarty/smarty.inc.php' );
+
 class Presentation extends Smarty {
 
 	var $redirectBeforeDisplay = false;

@@ -15,8 +15,13 @@
 _setGlobalSettings();
 _checkSystem();
 
-// pages that can be included from anywhere need to use __FILE__ to do their own includes
 $repos_config = parse_ini_file( _getPropertiesFile(), false );
+
+// temporary application selfcheck
+if (isset($_GET['file'])) trigger_error("The 'file' parameter is no longer supported");
+if (isset($_GET['path'])) trigger_error("The 'path' parameter is no longer supported");
+
+// ------ local configuration ------
 
 /**
  * Config value getter
@@ -28,6 +33,24 @@ function getConfig($key) {
 	if (isset($repos_config[$key]))
 		return ($repos_config[$key] );
 	return false;
+}
+
+/**
+ * Returns the root URL of the repository that the current user is working with.
+ * This is the only folder in repos that is _not_ returned with a tailing slash,
+ * the reason being that target URLs are defined as absolute URLs from repository root.
+ */
+function getRepository() {
+	// TODO copy from login.inc.php
+	// TODO prohibit retreival of repository from getConfig
+}
+
+/**
+ * Returns the URL to the root folder of the web application.
+ * Can be a complete URL with host and path, as well as an absolute URL from server root.
+ */
+function getWebapp() {
+	// the root 
 }
 
 // ----- string helper functions that should have been in php -----
@@ -69,16 +92,6 @@ function repos_getUserLocale() {
 		$_COOKIE[LOCALE_KEY] = $locale;
 	}
 	return $locale;	
-}
-
-// same function as in head.js
-function repos_getUserTheme($user = '') {
-	if ($user=='') {
-		$user = getReposUser();
-	}
-	if (empty($user)) return '';
-	if ($user=='test'||$user=='annika'||$user=='arvid'||$user=='hanna') return '';
-	return 'themes/pe/';
 }
 
 // ----- logic for the repos naming conventions for path -----

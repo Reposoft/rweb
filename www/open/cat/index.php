@@ -3,7 +3,7 @@ require_once( dirname(dirname(dirname(__FILE__))) . "/conf/Presentation.class.ph
 require_once( dirname(dirname(dirname(__FILE__))) . "/account/login.inc.php" );
 
 $url = getTargetUrl();
-if(!isTargetFile()) {
+if(!isFile($url)) {
 	trigger_error("Error: File not specified. Directories can not be shown here.");
 	exit;
 }
@@ -15,7 +15,7 @@ if(!$rev) {
 
 $referer = getReferer();
 
-$filename = getFile();
+$filename = basename($url);
 $target = getTarget();
 $downloadUrl = repos_getSelfUrl().'?'.repos_getSelfQuery().'&open';
 

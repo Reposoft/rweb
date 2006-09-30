@@ -58,7 +58,7 @@ define('ACCESS_FILE', ADMIN_ACCOUNT.'/trunk/admin/repos-access');
 /**
  * Redirect to secure URL if current URL is not secure.
  * This should always be done for BASIC authentication.
- * This is skipped if query param SKIP_SL is set to one 1
+ * This is skipped if query param SKIP_SSL is set to one 1
  */
 function enforceSSL() {
 	if (isset($_GET['SKIP_SSL']) && $_GET['SKIP_SSL'] == 1) {
@@ -237,11 +237,11 @@ function isTargetFile() {
 /**
  * Target is the absolute url of a repository resource, from repository root
  * (thus starting with '/')
- * @return target in repository from query paramters WITH tailing slash if it is a directory, false if none of 'target', 'file' and 'path' is defined
+ * @return target in repository from query paramters WITH tailing slash if it is a directory, false if 'target' is not set
  */
 function getTarget() {
 	if(!isset($_GET['target'])) {
-		trigger_error("'target' parameter not set");
+		return false;
 	}
     return login_decodeQueryParam($_GET,'target');
 }
@@ -389,7 +389,6 @@ function login_svnRun($cmd) {
  */
 function login_svnPassthru($cmd) {
 	$svnCommand = login_getSvnSwitches().' '.$cmd;
-	echo($svnCommand);
 	$returnval = repos_passthruCommand(getCommand('svn'), $svnCommand);
 	return $returnval;
 }
