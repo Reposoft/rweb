@@ -565,7 +565,7 @@ function _getStackTrace() {
 	$o = '';
 	$stack=debug_backtrace();
 	$o .= "file\tline\tfunction\n";
-	for($i=2; $i<count($stack); $i++) { // skip this method call and reportError
+	for($i=1; $i<count($stack); $i++) { // skip this method call
 		if (isset($stack[$i]["file"]) && $stack[$i]["line"]) {
 	    	$o .= "{$stack[$i]["file"]}\t{$stack[$i]["line"]}\t{$stack[$i]["function"]}\n";
 		}

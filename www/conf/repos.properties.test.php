@@ -319,7 +319,6 @@ class TestReposProperties extends UnitTestCase {
 	
 }
 
-$test = &new TestReposProperties();
-$test->run(new HtmlReporter());
+testrun(new TestReposProperties());
 
 ?>

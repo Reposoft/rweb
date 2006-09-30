@@ -481,7 +481,8 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
    }
    if($fp) {
 	   stream_set_timeout($fp, 10);
-	   $head = "HEAD ".@$url_info['path']."?".@$url_info['query'];
+	   $head = "HEAD ".@$url_info['path'];
+	   if (isset($url_info['query'])) $head .= "?".@$url_info['query'];
 	   $head .= " HTTP/1.0\r\nHost: ".@$url_info['host']."\r\n";
 	   if (strlen($httpUsername) > 0) {
 		$authString = 'Authorization: Basic '.base64_encode("$httpUsername:$httpPassword");
