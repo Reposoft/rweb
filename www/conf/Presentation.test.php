@@ -18,9 +18,12 @@ class TestPresentation extends UnitTestCase {
 		$this->assertNoErrors();
 	}
 
+	function testErrorHandler() {
+		$this->assertEqual(function_exists('reportErrorToUser'),
+			"Presentation class should define a custom error reporting function as defined in repos.properties.php");
+	}
 }
 
-$test = &new TestPresentation();
-$test->run(new HtmlReporter());
+testrun(new TestPresentation());
 
 ?>

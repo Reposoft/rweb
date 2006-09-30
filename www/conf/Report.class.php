@@ -127,19 +127,19 @@ class Report {
 	// line complete, does flush()
 	function _lineend() {
 		if (!$this->offline) $this->_print("</p>");
-		$this->_print("\n");
+		$this->_print(getNewline());
 		
 		flush();
 	}
 	// text block start (printed inside a line)
 	function _blockstart() {
 		if (!$this->offline) $this->_print("<pre>");
-		$this->_print("\n");
+		$this->_print(getNewline());
 	}
 	// text block end (before line end)
 	function _blockend() {
 		if (!$this->offline) $this->_print("</pre>");
-		$this->_print("\n");		
+		$this->_print(getNewline());		
 	}
 	// writes a message to output no HTML here because it is used both online and offline
 	function _output($message) {
@@ -158,7 +158,7 @@ class Report {
 	
 	function _formatArray($message) {
 		$msg = '';
-		$linebreak = "\n";
+		$linebreak = getNewline();
 		if (!$this->offline) $linebreak = "<br />".$linebreak;
 		foreach ( $message as $key=>$val ) {
 			if ( $val===false )

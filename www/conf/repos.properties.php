@@ -1,25 +1,37 @@
 <?php
 /**
- * Repos properties as php variables. Should be accessed through getConfig('key').
+ * Repos logic shared by all PHP pages.
  *
- * First tries to read ../../repos.properties
- * (the parent directory of the repos installation).
- * If that file is not found, it reads from the same foler
- * the repos.properties that is included in the distribution.
- *
- * Also contains some generic functions needed everywhere.
+ * Behaviour is configurable in the file
+ * ../../repos-conf/repos.properties
  */
- 
+
+$_repos_config = parse_ini_file( _getPropertiesFile(), false );
+
 // ----- global settings -----
 
-_setGlobalSettings();
-_checkSystem();
+error_reporting(E_ALL);
+function reportError($n, $message, $file, $line) {
+	$trace = _getStackTrace();
+	if (function_exists('reportErrorToUser')) {
+		call_user_func('reportErrorToUser', $n, $message, $trace); // may exit()
+	} else if($n==E_USER_ERROR || $n==E_USER_WARNING || $n==E_USER_NOTICE) {
+		echo("Error: $message\n<pre>\n$trace</pre>");
+	}
+}
+set_error_handler('reportError');
 
-$repos_config = parse_ini_file( _getPropertiesFile(), false );
+// cookie settings
+define('LOCALE_KEY', 'lang');
+define('THEME_KEY', 'theme');
+define('USERNAME_KEY', 'username');
 
-// temporary application selfcheck
+// --- application selfcheck, can be removed in releases (tests should cover this) ---
+if (!isset($_repos_config['repositories'])) trigger_error("No repositories configured");
+if (!isset($_repos_config['repos_web'])) trigger_error("Repos web applicaiton root not specified in configuration");
 if (isset($_GET['file'])) trigger_error("The 'file' parameter is no longer supported");
 if (isset($_GET['path'])) trigger_error("The 'path' parameter is no longer supported");
+if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable magic_quotes"); }
 
 // ------ local configuration ------
 
@@ -29,20 +41,48 @@ if (isset($_GET['path'])) trigger_error("The 'path' parameter is no longer suppo
  * @return the value corresponding to the specified key. False if key not defined.
  */ 
 function getConfig($key) {
-	global $repos_config;
-	if (isset($repos_config[$key]))
-		return ($repos_config[$key] );
-	return false;
+	// temporary selfcheck
+	if ($key=='repo_url') trigger_error("Use getRepository to get the URL");
+	if ($key=='repos_web') trigger_error("Use getWebapp to get web root URL");
+	//
+	return _getConfig($key);
+}
+
+function _getConfig($key) {
+	global $_repos_config;
+	if (isset($_repos_config[$key]))
+		return ($_repos_config[$key] );
+	return false;	
 }
 
 /**
  * Returns the root URL of the repository that the current user is working with.
  * This is the only folder in repos that is _not_ returned with a tailing slash,
  * the reason being that target URLs are defined as absolute URLs from repository root.
+ *
+ * Repository is resolved using HTTP Referrer with fallback to settings.
+ * To find out where root is, query paramter 'path' must be set.
+ * @return Root url of the repository for this request, no tailing slash. Not encoded.
  */
 function getRepository() {
-	// TODO copy from login.inc.php
-	// TODO prohibit retreival of repository from getConfig
+	// 1: query string
+	if (isset($_GET['repo'])) {
+		return rtrim($_GET['repo'],'/');
+	}
+	// 2: referer without a query AND query string param 'target'
+    $ref = getHttpReferer();
+	if (strpos($ref, '?')===false && isset($_GET['target'])) {
+		$path = rtrim(getPath(),'/');
+		if ($ref && $path) {
+			$repo = getRepoRoot($ref,$path);
+			if ($repo) return $repo;
+		}
+	}
+	// 3: fallback to default repository
+    if(function_exists('getConfig')) {
+    	return _getConfig('repo_url');
+	}
+	return false;
 }
 
 /**
@@ -50,7 +90,18 @@ function getRepository() {
  * Can be a complete URL with host and path, as well as an absolute URL from server root.
  */
 function getWebapp() {
-	// the root 
+	return _getConfig('repos_web');
+}
+
+/**
+ * Gets the referer URL that the browser might send.
+ * @return String HTTP_REFERER if there is one, false otherwise.
+ */
+function getHttpReferer() {
+    if (isset($_SERVER['HTTP_REFERER']) && strlen($_SERVER['HTTP_REFERER']) > 5) {
+		return $_SERVER['HTTP_REFERER'];
+	}
+    return false;
 }
 
 // ----- string helper functions that should have been in php -----
@@ -256,7 +307,7 @@ function getTempDir($subdir=null) {
 		die ('Temporary directory isn\'t writable');
 	}
 
-	$appname = str_replace('%', '_', rawurlencode(substr(getConfig('repos_web'), 7)));
+	$appname = str_replace('%', '_', rawurlencode(substr(getWebapp(), 7)));
 	$tmpdir = rtrim($systemp, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $appname;
 	if (!file_exists($tmpdir)) {
 		mkdir($tmpdir);
@@ -473,22 +524,8 @@ function isWindows() {
  * @return newline character for this OS
  */
 function getNewline() {
-	if ( isWindows() )
-		return "\n\r";
+	if (isOffline() && isWindows()) return "\n\r";
 	else return "\n";
-}
-
-/**
- * Make a path work on any operating system
- * @param pathWithSlashes for example /absolute/path or ../relative
- */
-function getLocalPath($pathWithSlashes) {
-    /* We don't know drive letter.
-     * Instead, in windows, the user should install apache2 on the same drive as the config files.
-	if ( isWindows() )
-		return 'C:' . $pathWithSlashes;
-	 */
-	return $pathWithSlashes;
 }
 
 /**
@@ -518,30 +555,27 @@ function getCommand($command) {
 	return "\"Error: Repos does not support command '$command'\"";
 }
 
-// ----- indernal functions -----
+// ----- internal functions -----
 
 function _getPropertiesFile() {
-	$propertiesFile = dirname(dirname(dirname(__FILE__))) . '/repos.properties';
+	$propertiesFile = dirname(dirname(dirname(__FILE__))) . '/repos-conf/repos.properties';
 	if (!file_exists($propertiesFile)) {
-		$propertiesFile = dirname(__FILE__) . '/repos.properties';
+		trigger_error("Repos configuration file $propertiesFile not found.");
+		exit;
 	}
 	return $propertiesFile;
 }
 
-function _setGlobalSettings() {
-	// during development, show all errors to the user
-	error_reporting(E_ALL);
-	// cookie settings
-	define('LOCALE_KEY', 'lang');
-	define('THEME_KEY', 'theme');
-	define('USERNAME_KEY', 'username');
-}
-
-function _checkSystem() {
-	// assume that magic quotes is enabled
-	if (get_magic_quotes_gpc()!=0) {
-		trigger_error("This server does not have magic quotes disabled. Repos PHP does not work with magic quotes.");
+function _getStackTrace() {
+	$o = '';
+	$stack=debug_backtrace();
+	$o .= "file\tline\tfunction\n";
+	for($i=2; $i<count($stack); $i++) { // skip this method call and reportError
+		if (isset($stack[$i]["file"]) && $stack[$i]["line"]) {
+	    	$o .= "{$stack[$i]["file"]}\t{$stack[$i]["line"]}\t{$stack[$i]["function"]}\n";
+		}
 	}
+	return $o;
 }
 
 // ------ unit testing support -----

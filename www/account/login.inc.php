@@ -1,17 +1,34 @@
 <?php
 /************** repos.se PHP authentication *****************
- * Compatible with java webapp and Apache2 mod_dav_svn access
- *	- Basic authentication
- *  - Enforces HTTPS protocol
+ * 
+ * repos.se versions 1.x has no internal user database.
+ * Instead, all security relies on the repository security,
+ * which relies on the most tested web server there is.
+ * The repository can have any authentication backend, such
+ * as flat file, database or LDAP directory.
+ * 
+ * Repos authenticates every request against the 'target' resource
+ * which is the file or filder that the user wants to reach.
+ * The 'target' is the central concept here, being the identification
+ * of a resource, and a URL that the the user has direct access to.
+ * - getTarget() returns the absolute path from the repository root.
+ * - getTargetURL() returns the absolute URL as the user knows it.
+ * If login passed, use getReposUser() to get the account name.
+ * 
+ * Repos checks the HTTP headers of this direct access URL,
+ * and requires the same authentication for the current page.
+ * 
+ * This way Repos is compatible with all browsers and subversion clients.
+ * Any HTTP capable application can use this to integrate to repos.
  *
  * All scripts working with contents are expected to include
  * this file. Other scripts can use repos.properties.php.
  *
- * Designed for transparent login. Does not print any HTML.
+ * Also designed for transparent login in other PHP applications that
+ * use online access to resources, such as PHPiCalendar and phpThumb.
  *
  * If 'target' resource can be resolved using getTarget(),
- * login will be done automatically using: // TODO restore TEMPORARILY DISABLED
- *  - tagetLogin();
+ * login will be done automatically using tagetLogin();
  *
  * If 'target' is not known the standard way, login explicitly
  * by calling:
@@ -25,18 +42,6 @@
  * the AuthName. If the target resource does not require login,
  * the functions will return true without showing a login box.
  * The credentials will then be empty.
- *
- * If login passed, use these functions to retrieve credentials:
- *  - getReposUser() username
- *  - getReposPass() cleartext password for repository access
- *  - getReposAuth() encrypted authentication from browser
- *
- * Also provides functions for shared request processing
- *  - getReferer()   calling page
- *  - getTarget()    in-repository path for this operation
- *  - getTargetUrl() full url to resource if specified
- *  - getRepositoryUrl() repository root URL from query params,
- *     with fallback to repos.properties
  * 
  * Note that internally, URLs should never be encoded.
  * If a subversion command requires an encoded URL, it should be
@@ -46,6 +51,10 @@
  * 'target' absolute url from repository root to target resource
  * 'targeturl' URI of the resource, permanent location as an HTTP url
  * 'repo' repository root URI, uniquely defines a repository
+ * 
+ * This script produces HTTP headers, so it must be included before
+ * any other output. The script does not print anything to the output stream,
+ * it uses trigger_error on unexpected conditions.
  */
 require_once(dirname(dirname(__FILE__)) . '/conf/repos.properties.php');
 
@@ -54,6 +63,21 @@ define('ADMIN_ACCOUNT', 'administrator');
 // the versioned access control files (copied to the location given by repos.properties when changed)
 define('ACCOUNTS_FILE', ADMIN_ACCOUNT.'/trunk/admin/repos-users');
 define('ACCESS_FILE', ADMIN_ACCOUNT.'/trunk/admin/repos-access');
+
+// --- selfchecks ---
+if (getTarget()) {
+	$r = getHttpReferer();
+	if(!strBegins($r, getRepository())) {
+		if (!isset($_REQUEST['repo'])) {
+			trigger_error("'target' is set, but HTTP referer '$r' is not the configured repository, so a 'repo' parameter is required.");
+		}
+	}
+}
+
+// automatic login if a target is specified the standard way
+if (getTargetUrl()) {
+	targetLogin();
+}
 
 /**
  * Redirect to secure URL if current URL is not secure.
@@ -111,7 +135,7 @@ function verifyLogin($targetUrl) {
 	if (!$user) {
 		return false;
 	}
-	$headers = getHttpHeaders($targetUrl, $user, getReposPass());
+	$headers = getHttpHeaders($targetUrl, $user, _getReposPass());
 	$s = getHttpStatus($headers[0]);
 	if ($s==200) return true;
 	if ($s==401 || $s==403) return false;
@@ -124,7 +148,7 @@ function verifyLogin($targetUrl) {
  */
 function getLoginUrl($urlWithoutLogin) {
 	if (getReposUser()) {
-		return str_replace("://","://" . getReposUser() . ":" .  getReposPass() . "@", $urlWithoutLogin);
+		return str_replace("://","://" . getReposUser() . ":" .  _getReposPass() . "@", $urlWithoutLogin);
 	}
 	return $urlWithoutLogin;
 }
@@ -173,14 +197,6 @@ function getHttpStatus($httpStatusHeader) {
 // abstraction for HTTP operation
 function getHttpHeaders($targetUrl, $user=null, $pass=null) {
 	return my_get_headers($targetUrl, $user, $pass);
-}
-
-// abstraction for referer resolution
-function getReferer() {
-    if (isset($_SERVER['HTTP_REFERER']) && strlen($_SERVER['HTTP_REFERER']) > 5) {
-		return $_SERVER['HTTP_REFERER'];
-	}
-    return false;
 }
 
 // ----- resource URL retreival functionality -----
@@ -270,29 +286,10 @@ function getRevision($rev = false) {
  * Repository is resolved using HTTP Referrer with fallback to settings.
  * To find out where root is, query paramter 'path' must be set.
  * @return Root url of the repository for this request, no tailing slash. Not encoded.
+ * @deprecated use repos.properties.php getRepository() directly instead
  */
 function getRepositoryUrl() {
-	// 1: query string
-	if (isset($_GET['repo'])) {
-		return rtrim($_GET['repo'],'/');
-	}
-	// 2: referer without a query AND query string param 'path'
-    /*
-     * Currently we don't support multiple repositories 
-    $ref = getReferer();
-	if (strpos($ref, '?')===false) {
-		$path = rtrim(getPath(),'/');
-		if ($ref && $path) {
-			$repo = getRepoRoot($ref,$path);
-			if ($repo) return $repo;
-		}
-	}
-	 */
-	// 3: fallback to default repository
-    if(function_exists('getConfig')) {
-    	return getConfig('repo_url');
-	}
-	return false;
+	return getRepository();
 }
 
 /**
@@ -357,7 +354,7 @@ function getReposUser() {
 	//  so it is urlencoded to prevent urlinjection
 	return urlencode($_SERVER['PHP_AUTH_USER']);
 }
-function getReposPass() {
+function _getReposPass() {
 	return $_SERVER['PHP_AUTH_PW'];
 }
 function getReposAuth() {
@@ -438,7 +435,7 @@ function login_getMimeType($targetUrl) {
  * @return Mandatory arguments to the svn command
  */
 function login_getSvnSwitches() {
-	$auth = '--username='.getReposUser().' --password='.getReposPass().' --no-auth-cache';
+	$auth = '--username='.getReposUser().' --password='._getReposPass().' --no-auth-cache';
 	$options = '--non-interactive --config-dir '.SVN_CONFIG_DIR;
 	return $auth.' '.$options;
 }
@@ -530,10 +527,5 @@ function login_setUsernameCookie() {
 function login_clearUsernameCookie() {
 	setcookie(USERNAME_KEY, '', time()-1, '/');
 }
-
-// automatic login if a target is specified the standard way
-//if (getTargetUrl()) {
-//	targetLogin();
-//}
 
 ?>

@@ -23,6 +23,8 @@ require_once(dirname(__FILE__).'/repos.properties.php');
 header('Content-type: text/html; charset=utf-8');
 // don't set the content type headers in the HTML, because then we can't change to xhtml+xml later
 
+// --- selfchecks ---
+
 // ------ form validation support -------
 
 // common field rules
@@ -65,6 +67,7 @@ class Presentation extends Smarty {
 
 	// constructor
 	function Presentation() {
+		
 		$this->caching = CACHING;
 		if (!CACHING) {
 			$this->force_compile = true;
@@ -177,11 +180,21 @@ class Presentation extends Smarty {
 	}
 	
 	/**
+	 * Shows error message without redirect, applicable when a reload can't do any harm
+	 * @param unknown_type $error_msg
+	 */
+	function showErrorNoRedirect($error_msg) {
+		$template = $this->getLocaleFile(dirname(__FILE__) . '/Error');
+		$this->assign('error_msg', $error_msg);
+		$this->display($template);		
+	}
+	
+	/**
 	 * "$this->display" but resolves template name automatically
 	 * @deprecated display with no parameter works the same way
 	 */
 	function show() {
-		
+		trigger_error("show() should be replaced with display()");
 		$this->display($template);
 	}
 	
@@ -194,7 +207,7 @@ class Presentation extends Smarty {
 	
 	function _getThemeHeadTags() {
 		$theme = repos_getUserTheme();
-		$style = getConfig('repos_web').'/'.$theme.'style/';
+		$style = getWebapp().'/'.$theme.'style/';
 		return $this->_getAllHeadTags($style);
 	}
 	
@@ -214,7 +227,7 @@ class Presentation extends Smarty {
 	 */
 	function _getMandatoryHeadTags($stylePath) {
 		return $this->_getLinkCssTag($stylePath.'global.css') .
-			'<script type="text/javascript" src="'.getConfig('repos_web').'/scripts/head.js"></script>';
+			'<script type="text/javascript" src="'.getWebapp().'/scripts/head.js"></script>';
 	}
 	
 	function _getLinkCssTag($href) {
@@ -230,7 +243,7 @@ class Presentation extends Smarty {
 		if (isset($_REQUEST['referer'])) {
 			return $_REQUEST['referer'];
 		}
-		// get from requiest headers
+		// get from requiest headers TODO use getHttpReferer
 		if (isset($_SERVER['HTTP_REFERER'])) {
 			return $_SERVER['HTTP_REFERER'];
 		}
@@ -242,7 +255,7 @@ class Presentation extends Smarty {
 	 * @return repos home page on this server
 	 */
 	function getUserhome() {
-		return getConfig('repos_web').'/account/login/';
+		return getWebapp().'/account/login/';
 	}
 }
 
@@ -254,4 +267,13 @@ function Presentation_useCommentedDelimiters($tpl_source, &$smarty)
 	$replacements[1] = RIGHT_DELIMITER;
     return preg_replace($patterns,$replacements,$tpl_source);
 }
+
+if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $message, $trace) {
+	if ($n==E_USER_ERROR || $n==E_USER_WARNING || $n==E_USER_NOTICE) {
+		$p = new Presentation();
+		$p->showErrorNoRedirect($message."<!-- Error level $n. Stack trace:\n$trace -->");
+		exit(1);
+	}
+}}
+
 ?>

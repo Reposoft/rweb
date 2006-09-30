@@ -12,7 +12,7 @@ $revision = '$Rev$';
 
 require(dirname(dirname(dirname(__FILE__))).'/conf/repos.properties.php');
 
-$repos_web = getConfig('repos_web');
+$repos_web = getWebapp();
 
 // load same plugins in all pages
 // could also use a properties file in all plugins 

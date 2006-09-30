@@ -20,4 +20,7 @@ if ( ! file_exists(CACHE_DIR.'templates/') ) {
 	mkdir( CACHE_DIR.'cache/' );
 }
 
+// smarty 2.6.14 sends error message if SMARTY_DEBUG is not set
+if (!isset($_COOKIE['SMARTY_DEBUG'])) $_COOKIE['SMARTY_DEBUG'] = 0;
+
 ?>

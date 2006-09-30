@@ -47,7 +47,6 @@ require_once(dirname(__FILE__) . '/simpletest/scorer.php');
          */
         function paintHeader($test_name) {
             $this->sendNoCacheHeaders();
-            
             $this->report = new Report($test_name);
         }
 

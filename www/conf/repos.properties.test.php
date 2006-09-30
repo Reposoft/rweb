@@ -34,6 +34,12 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertTrue(strContains("a\nb", "\n"));
 	}
 	
+	// -------- configuration -------- 
+	
+	function testGetWebapp() {
+		$this->assertTrue(strEnds(getWebapp(),'/repos'), "Currently repos must be installed in /repos/");
+	}
+	
 	// -------- path functions --------
 	
 	function testIsAbsolute() {
