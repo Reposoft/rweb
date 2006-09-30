@@ -558,7 +558,7 @@ function getCommand($command) {
 // ----- internal functions -----
 
 function _getPropertiesFile() {
-	$propertiesFile = dirname(dirname(dirname(__FILE__))) . '/repos-conf/repos.properties';
+	$propertiesFile = dirname(dirname(dirname(__FILE__))) . '/repos-config/repos.properties';
 	if (!file_exists($propertiesFile)) {
 		trigger_error("Repos configuration file $propertiesFile not found.");
 		exit;
