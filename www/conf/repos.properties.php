@@ -30,6 +30,7 @@ define('REPO_KEY', 'repo');
 // --- application selfcheck, can be removed in releases (tests should cover this) ---
 if (!isset($_repos_config['repositories'])) trigger_error("No repositories configured");
 if (!isset($_repos_config['repos_web'])) trigger_error("Repos web applicaiton root not specified in configuration");
+if (!isFolder($_repos_config['repos_web'])) trigger_error("repos_web must be a folder (should end with '/')");
 if (isset($_GET['file'])) trigger_error("The 'file' parameter is no longer supported");
 if (isset($_GET['path'])) trigger_error("The 'path' parameter is no longer supported");
 if (isset($_GET['repo'])) trigger_error("The 'repo' parameter should not be used now, will be introduced together with cookie support");
@@ -305,7 +306,7 @@ function getTempDir($subdir=null) {
 		die ('Temporary directory isn\'t writable');
 	}
 
-	$appname = str_replace('%', '_', rawurlencode(substr(getWebapp(), 7)));
+	$appname = str_replace('%', '_', rawurlencode(trim(strAfter(getWebapp(), '://'), '/')));
 	$tmpdir = rtrim($systemp, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $appname;
 	if (!file_exists($tmpdir)) {
 		mkdir($tmpdir);

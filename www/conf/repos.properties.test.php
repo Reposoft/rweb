@@ -41,7 +41,7 @@ class TestReposProperties extends UnitTestCase {
 	// -------- configuration -------- 
 	
 	function testGetWebapp() {
-		$this->assertTrue(strEnds(getWebapp(),'/repos'), "Currently repos must be installed in /repos/");
+		$this->assertTrue(strEnds(getWebapp(),'/repos/'), "Currently repos must be installed in /repos/");
 	}
 	
 	function testGetRepository() {

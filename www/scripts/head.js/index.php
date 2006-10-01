@@ -38,14 +38,14 @@ function repos_addScript(src) {
 	document.getElementsByTagName('head')[0].appendChild(s);
 }
 <?php
-echo("repos_addScript('$repos_web/scripts/repos.js?$nocache');\n");
+echo("repos_addScript('{$repos_web}scripts/repos.js?{$nocache}');\n");
 ?>
 function _repos_load() {
 <?php
 // load the other plugins
 // write settings to the js
 for($i=0; $i<count($plugins); $i++) {
-	echo("repos_addScript('$repos_web/plugins/$plugins[$i]/$plugins[$i].js?$nocache');");
+	echo("repos_addScript('{$repos_web}plugins/{$plugins[$i]}/{$plugins[$i]}.js?{$nocache}');");
 }
 ?>
 }
