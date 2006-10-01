@@ -11,8 +11,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template = new Presentation();
 	$target = getTarget();
 	$targeturl = getTargetUrl();
-	$file = basename($target);
-	if (strlen($file) > 0) {
+	$isfile = isTargetFile();
+	if ($isfile) {
 		$mimetype = login_getMimeType($targeturl);
 		if ($mimetype && strpos($mimetype, 'application/') == 0) {
 			$template->assign('isbinary', true);
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	}
 	
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
-	$template->assign('isfile',isTargetFile());
+	$template->assign('isfile',$isfile);
 	$template->assign('target',$target);
 	$template->assign('targeturl',$targeturl);
 	if (isset($_GET['text'])) {
