@@ -5,10 +5,9 @@ require( dirname(dirname(__FILE__))."/edit.class.php" );
 if (isset($_GET['message'])) {
 	delete($_GET['message']); 
 } else {
-	$target = rtrim(getTarget(),'/'); //folder should also be without tailing slash
+	$target = getTarget();
 	$template = new Presentation();
 	$template->assign('target', $target);
-	$template->assign('repo', getRepositoryUrl());
 	$template->display();
 }
 
