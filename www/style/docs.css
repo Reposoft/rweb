@@ -33,10 +33,25 @@ table.rows td {
 .testsummary {
 	border: 1px solid #CCCC99;
 }
-div.testname {
+div.test {
+	height: 1.4em;
 }
-div.testresult {
+div.test div {
+	display: inline;
+	padding: 1px;
 }
-div.test > div {
-	display: block;
+div.test > .testname {
+	background-color: #eee;
+	margin-right: 2em;
+}
+div.test > div.testresult {
+	background-color: #eee;
+	margin-left: 2em;
+	position: absolute;
+	left: 80%;
+}
+div.test > div.testoutput {
+	position: absolute;
+	left: 35%;
+	font-family: monospace;	
 }

@@ -50,16 +50,18 @@ class Report {
 	}
 	
 	function teststart($name) {
-		$this->_linestart('test n'.$this->nt%4);
+		$this->_linestart('row test n'.$this->nt%4);
 		$this->test = 1 + $this->ne + $this->nf;
 		$this->nt++;
 		
 		$this->_linestart('testname');
 		$this->_output($name);	
 		$this->_lineend();
+		$this->_linestart('testoutput');
 	}
 	
 	function testend() {
+		$this->_lineend();
 		if ($this->ne + $this->nf >= $this->test) {
 			$this->_linestart('testresult error');
 			$this->_output("failed");
@@ -72,17 +74,24 @@ class Report {
 		$this->_lineend();
 	}
 	
+	function _testoutput($class, $message) {
+		$s='i';
+		if ($class=='passed') $s='O';
+		if ($class=='failed') $s='X';
+		if ($class=='debug') $s='.';
+		if ($class=='warning') $s='?';
+		if ($class=='error') $s='!';
+		$message = str_replace('"','&quot;', $message);
+		$this->_output("<div class=\"$class\" title=\"$message\">$s</div>");
+	}
+	
 	/**
 	 * Call when a test or validation has completed successfuly
 	 * (opposite to fail)
 	 */
-	function ok($message=null) {
+	function ok($message='') {
 		$this->no++;
-		if (!is_null($message)) {
-			$this->_linestart('ok');
-			$this->_output($message);
-			$this->_lineend();
-		}
+		$this->_testoutput('passed', $message);
 	}
 	
 	/**
@@ -91,7 +100,7 @@ class Report {
 	 */
 	function fail($message) {
 		$this->nf++;
-		$this->error($message);
+		$this->_testoutput('failed', $message);
 	}
 	
 	/**
@@ -99,6 +108,7 @@ class Report {
 	 */
 	function debug($message) {
 		$this->nd++;
+		if ($this->test) { $this->_testoutput('debug', $message); return; }
 		$this->_linestart('debug');
 		$this->_output($message);
 		$this->_lineend();
@@ -110,6 +120,7 @@ class Report {
 	 */
 	function info($message) {
 		$this->ni++;
+		if ($this->test) { $this->_testoutput(null, $message); return; }
 		$this->_linestart();
 		$this->_output($message);
 		$this->_lineend();
@@ -121,6 +132,7 @@ class Report {
 	 */
 	function warn($message) {
 		$this->nw++;
+		if ($this->test) { $this->_testoutput('warning', $message); return; }
 		$this->_linestart('warning');
 		$this->_output($message);
 		$this->_lineend();
@@ -132,7 +144,7 @@ class Report {
 	 */
 	function error($message) {
 		$this->ne++;
-		$this->hasErrors = true;
+		if ($this->test) { $this->_testoutput('error', $message); return; }
 		$this->_linestart('error');
 		$this->_output($message);
 		$this->_lineend();
@@ -158,10 +170,8 @@ class Report {
 			if ($class=='ok') $this->_print("== ");
 			if ($class=='warning') $this->_print("?? ");
 			if ($class=='error') $this->_print("!! ");	
-		} else if ($this->test) {
-			$this->_print("<div class=\"$class\">");
 		} else {
-			$this->_print("<div class=\"$class row\">");
+			$this->_print("<div class=\"$class\">");
 		}
 	}
 	// line complete, does flush()
