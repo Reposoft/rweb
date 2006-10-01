@@ -40,8 +40,25 @@ class TestReport extends UnitTestCase {
 		$rows = explode("\n",$this->report->printed);
 		$this->assertTrue(2<count($rows), "Block output is minimum 3 lines");
 		$this->assertTrue('test string', $rows[1]);
-	}	
+	}
+
+	function testHasErrors() {
+		$this->report->warn('warn');
+		$this->assertFalse($this->report->hasErrors());
+		$this->report->error('error');
+		$this->assertTrue($this->report->hasErrors());
+	}
+
+	function testHasErrorsFail() {
+		$this->report->fail('fail');
+		$this->assertTrue($this->report->hasErrors());
+	}
 	
+	function testOkMessage() {
+		$this->report->ok();
+		$this->assertEqual(1, $this->report->no, "should count test pass");
+		$this->assertEqual(0, strlen($this->report->printed), "should not display ok line if message is null");
+	}
 }
 
 testrun(new TestReport());

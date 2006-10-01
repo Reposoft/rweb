@@ -16,9 +16,15 @@ require_once(dirname(__FILE__).'/repos.properties.php');
 
 class Report {
 
-	var $hasErrors = false; // error events are recorded
 	var $offline;
-
+	// counters
+	var $nd = 0; //debug
+	var $ni = 0; //info
+	var $nw = 0; //warn
+	var $ne = 0; //error
+	var $no = 0; //ok
+	var $nf = 0; //fail
+	
 	function Report($title='Repos system report', $category='') {
 		$this->offline = isOffline();
 		if ($this->offline) {
@@ -42,6 +48,8 @@ class Report {
 	 * Ends output and writes it to output stream.
 	 */
 	function display() {
+		$this->_summary();
+		if ($this->nd > 0) _toggleDebug();
 		$this->_pageEnd();
 	}
 	
@@ -49,18 +57,21 @@ class Report {
 	 * Call when a test or validation has completed successfuly
 	 * (opposite to fail)
 	 */
-	function ok($message) {
-		$this->_linestart('ok');
-		$this->_output($message);
-		$this->_lineend();
+	function ok($message=null) {
+		$this->no++;
+		if (!is_null($message)) {
+			$this->_linestart('ok');
+			$this->_output($message);
+			$this->_lineend();
+		}
 	}
 	
 	/**
 	 * Call when a check has failed.
-	 * Not same as error, which is called for unexpected conditions.
-	 * TODO should have it's own class
+	 * Not same as error($message), which is called for unexpected conditions.
 	 */
 	function fail($message) {
+		$this->nf++;
 		$this->error($message);
 	}
 	
@@ -68,6 +79,7 @@ class Report {
 	 * Debug lines are hidden by default
 	 */
 	function debug($message) {
+		$this->nd++;
 		$this->_linestart('debug');
 		$this->_output($message);
 		$this->_lineend();
@@ -78,6 +90,7 @@ class Report {
 	 * @param String $message line contents, String array to make a block
 	 */
 	function info($message) {
+		$this->ni++;
 		$this->_linestart();
 		$this->_output($message);
 		$this->_lineend();
@@ -88,6 +101,7 @@ class Report {
 	 * @param String $message line contents, String array to make a block
 	 */
 	function warn($message) {
+		$this->nw++;
 		$this->_linestart('warning');
 		$this->_output($message);
 		$this->_lineend();
@@ -98,6 +112,7 @@ class Report {
 	 * @param String $message line contents, String array to make a block
 	 */
 	function error($message) {
+		$this->ne++;
 		$this->hasErrors = true;
 		$this->_linestart('error');
 		$this->_output($message);
@@ -112,6 +127,10 @@ class Report {
 	function fatal($message, $code = 1) {
 		$this->error( $message );
 		// TODO this method shouldn't be herer, right?
+	}
+	
+	function hasErrors() {
+		return $this->ne + $this->nf > 0;
 	}
 	
 	// prepare for line contents
@@ -182,6 +201,27 @@ class Report {
 		$this->_print('<meta http-equiv="Content-Type" content="text/html; charset=utf-8">');
 		$this->_print('<title>Repos administration: ' . $title . '</title>');
 		$this->_print('<link href="/repos/style/global.css" rel="stylesheet" type="text/css">');
+		$this->_print("</head>\n");
+		$this->_print("<body>\n");
+	}
+	
+	function _pageEnd($code = 0) {
+		if (!$this->offline) $this->_print("</body></html>\n\n");
+		exit( $code );
+	}
+	
+	function _summary() {
+		$colour = $this->hasErrors() ? "red" : "green";
+        print "<div style=\"";
+        print "padding: 8px; margin-top: 1em; background-color: $colour; color: white;";
+        print "\">";
+        print "<strong>" . $this->no . "</strong> passes, ";
+        print "<strong>" . $this->nf . "</strong> fails and ";
+        print "<strong>" . $this->ne . "</strong> exceptions.";
+        print "</div>\n";
+	}
+	
+	function _toggleDebug() {
 		?>
 		<script>
 		function hide(level) {
@@ -196,16 +236,10 @@ class Report {
 				p[i].style.display = '';
 			}	
 		}
+		hide('debug');
 		</script>
 		<?php
-		$this->_print("</head>\n");
-		$this->_print("<body onLoad=\"hide('debug')\">\n");
-		$this->_print("<p><a href=\"javascript:showAll()\">Show also debug level</a></p>");
-	}
-	
-	function _pageEnd($code = 0) {
-		if (!$this->offline) $this->_print("</body></html>\n\n");
-		exit( $code );
+		$this->_print("<p><a href=\"javascript:showAll()\">show $nd debug messages</a></p>");		
 	}
 
 }
