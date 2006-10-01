@@ -36,15 +36,18 @@ if (isset($_GET['open'])) {
 	$p = new Presentation();
 	$p->assign('target', $target);
 	$p->assign('revision', $rev);
-	// TODO sort out the mess with references between browse/log/diff/cat/edit
-	$referer = getHttpReferer();
-	if (empty($referer)) {
-		$p->assign('logurl', '../log/target='.dirname($target).'/');
-	} else if (strpos($referer, '/open/log/')) {
-		$p->assign('logurl', $referer);
-	}
 	$p->assign('dowloandUrl', $downloadUrl);
 	$p->assign('targetpeg', $url.'@'.$rev);
+	// exit points
+	$referer = getHttpReferer();
+	if (!empty($referer) && strpos($referer, '/open/log/')) {
+		$p->assign('logurl', $referer);
+		$p->assign('repository', getRepository().strAfter($referer, 'target='));
+	} else {
+		$existingFolder = login_getFirstNon404Parent(getParent($url), &$s);
+		$p->assign('repository', $existingFolder);
+		$p->assign('logurl', '../log/target='.strAfter($existingFolder, getRepository()));
+	}
 	$p->display();
 }
 

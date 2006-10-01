@@ -144,11 +144,17 @@ function verifyLogin($targetUrl) {
  * @return the url of a resource that exists, false if none found
  */
 function login_getFirstNon404Parent($url, &$status=0) {
-	$status = getHttpStatus($url);
+	$user = null;
+	$pass = null;
+	if (strBegins($url, getRepository())) {
+		$user = getReposUser();
+		$pass = _getReposPass();
+	}
+	$status = getHttpStatus($url, $user, $pass);
 	while ($status==404) {
 		$url = getParent($url);
 		if (!$url) return false;
-		$status = getHttpStatus($url);
+		$status = getHttpStatus($url, $user, $pass);
 	}
 	return $url;
 }

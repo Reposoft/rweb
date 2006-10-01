@@ -34,6 +34,10 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertTrue(strContains("a\nb", "\n"));
 	}
 	
+	function testStrAfter() {
+		$this->assertEqual('hej&ho', strAfter('hej/?t=hej&ho', '?t='));
+	}
+	
 	// -------- configuration -------- 
 	
 	function testGetWebapp() {

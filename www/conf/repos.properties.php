@@ -104,6 +104,7 @@ function getHttpReferer() {
 function strBegins($str, $sub) { return (substr($str, 0, strlen($sub)) === $sub); }
 function strEnds($str, $sub) { return (substr($str, strlen($str) - strlen($sub)) === $sub); }
 function strContains($str, $sub) { return (strpos($str, $sub) !== false); }
+function strAfter($str, $sub) { return (substr($str, strpos($str, $sub) + strlen($sub))); }
 
 // ----- user settings, maybe this should be in account instead -----
 
