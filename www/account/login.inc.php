@@ -143,7 +143,7 @@ function verifyLogin($targetUrl) {
  * @param optional valiable to store the first non-404 status code in when returning
  * @return the url of a resource that exists, false if none found
  */
-function login_getFirstNon404Parent($url, &$status=0) {
+function login_getFirstNon404Parent($url, &$status) {
 	$user = null;
 	$pass = null;
 	if (strBegins($url, getRepository())) {
@@ -398,7 +398,7 @@ define('SVN_CONFIG_DIR', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'conf'.D
  */
 function login_svnRun($cmd) {
 	$svnCommand = login_getSvnSwitches().' '.$cmd;
-	$result = repos_runCommand(getCommand('svn'), $svnCommand);
+	$result = repos_runCommand('svn', $svnCommand);
 	return $result;
 }
 
@@ -411,7 +411,7 @@ function login_svnRun($cmd) {
  */
 function login_svnPassthru($cmd) {
 	$svnCommand = login_getSvnSwitches().' '.$cmd;
-	$returnval = repos_passthruCommand(getCommand('svn'), $svnCommand);
+	$returnval = repos_passthruCommand('svn', $svnCommand);
 	return $returnval;
 }
 
