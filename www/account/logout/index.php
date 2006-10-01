@@ -52,7 +52,7 @@ function getAfterLogoutUrl() {
 	if (isset($_GET['go'])) {
 		return repos_getSelfRoot().rawurldecode($_GET['go']);
 	}
-	return getConfig('repos_web');
+	return getWebapp();
 }
 
 function getVerifyUrl() {

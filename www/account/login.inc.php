@@ -121,17 +121,36 @@ function login($targetUrl) {
  * does trigger_error if the resource can not be used for authentication
  */
 function verifyLogin($targetUrl) {
+	if (!strBegins($targetUrl, getRepository())) {
+		trigger_error('Target URL is not a repository resource. Can not validate login using '.$targetUrl, E_USER_ERROR);
+	}
 	$user = getReposUser();
 	if (!$user) {
-		return false;
+		trigger_error('No user credentials given. Can not validate login.', E_USER_ERROR);
 	}
-	$headers = getHttpHeaders($targetUrl, $user, _getReposPass());
-	$s = getHttpStatus($headers[0]);
+	$s = getHttpStatus($targetUrl, $user, _getReposPass());
+	// allow authentication with parent if the current target is no longer in thre repository
+	if ($s==404) login_getFirstNon404Parent(getParent($targetUrl), &$s);
+	// accepted codes
 	if ($s==200) return true;
 	if ($s==401 || $s==403) return false;
-	if ($s==404 && $p=getParent($targetUrl)) return verifyLogin($p); // could be looking for the history of a deleted file
 	trigger_error("The target URL '$targetUrl' can not be used to validate login. Returned HTTP status code '$s'.");
 	return false;
+}
+
+/**
+ * Looks for an existing resource by checking each parent of the target url.
+ * @param optional valiable to store the first non-404 status code in when returning
+ * @return the url of a resource that exists, false if none found
+ */
+function login_getFirstNon404Parent($url, &$status=0) {
+	$status = getHttpStatus($url);
+	while ($status==404) {
+		$url = getParent($url);
+		if (!$url) return false;
+		$status = getHttpStatus($url);
+	}
+	return $url;
 }
 
 /**
@@ -163,7 +182,7 @@ function getAuthName($targetUrl) {
  */
 function login_getAuthNameFromRepository($targetUrl) {
 	$headers = getHttpHeaders($targetUrl);
-	$s = getHttpStatus($headers[0]);
+	$s = getHttpStatusFromHeader($headers[0]);
 	if ($s!='401') {
 		return false;
 	}
@@ -175,9 +194,17 @@ function login_getAuthNameFromRepository($targetUrl) {
 }
 
 /**
+ * @return the HTTP status code for the URL, with optional user credentials
+ */
+function getHttpStatus($targetUrl, $user=null, $pass=null) {
+	$headers = getHttpHeaders($targetUrl, $user, $pass);
+	return getHttpStatusFromHeader($headers[0]);
+}
+
+/**
  * Gets the status code from an HTTP reponse header string like "HTTP/1.1 200 OK" 
  */
-function getHttpStatus($httpStatusHeader) {
+function getHttpStatusFromHeader($httpStatusHeader) {
 	if(ereg('HTTP/1...([0-9]+).*', $httpStatusHeader, $match)) {
 		return $match[1];
 	} else {
@@ -187,6 +214,7 @@ function getHttpStatus($httpStatusHeader) {
 
 // abstraction for HTTP operation
 function getHttpHeaders($targetUrl, $user=null, $pass=null) {
+	if (substr_count($targetUrl, '/')<3) trigger_error("Can not check headers of $targetUrl, because it is not a valid resource", E_USER_ERROR);
 	return my_get_headers($targetUrl, $user, $pass);
 }
 
@@ -247,10 +275,10 @@ function isTargetFile() {
  * @return target in repository from query paramters WITH tailing slash if it is a directory, false if 'target' is not set
  */
 function getTarget() {
-	if(!isset($_GET['target'])) {
+	if(!isset($_REQUEST['target'])) {
 		return false;
 	}
-    return login_decodeQueryParam($_GET,'target');
+    return login_decodeQueryParam($_REQUEST,'target');
 }
 
 /**

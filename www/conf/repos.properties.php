@@ -231,7 +231,8 @@ function repos_getWebappRoot() {
 }
 
 /**
- * The url to the host of this request
+ * @return The url to the host of this request, 
+ * without tailing slash because absolute urls should be appended.
  */
 function repos_getSelfRoot() {
 	$url = 'http';

@@ -10,11 +10,6 @@ define('TESTREPO', repos_getSelfRoot()."/testrepo/");
 class Login_include_Test extends UnitTestCase {
 
 	public function setUp() {
-		// some server varables are used in the test below and must be reset every time
-		unset($_GET['target']);
-		//unset($_GET['path']);
-		//unset($_GET['file']);
-		unset($_GET['repo']);
 	}
 	
 	public function testGetAuthNameReturnsSomething() {
@@ -29,71 +24,20 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertTrue(TESTREPO, $realm);
 	}	
 	
+	// this belongs to a system configuration test
 	public function testGetAuthNameNoAuthAtServerRoot() {
-		$url = repos_getSelfRoot();
+		$url = repos_getSelfRoot().'/';
 		$realm = getAuthName($url);
 		$this->assertEqual(false, $realm);
 	}
 	
-	// target is a file in the repository, absolute url from repository root
-	public function testTargetTarget() {
-		$_GET['target'] = '/my/file.txt';
-		$target = getTarget();
-		$this->assertEqual('/my/file.txt', $target);
-	}
-	
-	/* file and path parameters are no longer supported
-	// target is a directory, absolute url from repository root, no tailing slash
-	// should always return dir _with_ tailing slash
-	public function testTargetPath() {
-		$_GET['path'] = '/my/dir';
-		$target = getTarget();
-		$this->assertEqual('/my/dir/', $target);
-	}
-	
-	// target is both path and file
-	public function testTargetPathFile() {
-		$_GET['path'] = '/my/dir';
-		$_GET['file'] = 'file.txt';
-		$target = getTarget();
-		$this->assertEqual('/my/dir/file.txt', $target);
-	}
-	
-	// target is both path and file
-	public function testTargetPathShashFile() {
-		$_GET['path'] = '/my/dir/';
-		$_GET['file'] = 'file.txt';
-		$target = getTarget();
-		$this->assertEqual('/my/dir/file.txt', $target);
-	}
-	*/
-	
-	// repository url when repo param is set
-	public function testRepositoryUrlRepo() {
-		$_GET['repo'] = 'http://my.repo/';
-		$this->assertEqual('http://my.repo', getRepositoryUrl());
-	}
-	
-	// repository url from referrer and path
-	public function testRepositoryUrlReferrerPath() {
-		$_SERVER['HTTP_REFERER'] = 'http://my.repo/my/dir';
-		$_GET['target'] = '/my/dir/';
-		$this->assertEqual('http://my.repo', getRepositoryUrl());
-	}
-	
-	public function testRepositoryUrlReferrerPathSlash() {
-		$_SERVER['HTTP_REFERER'] = 'http://my.repo/my/dir/';
-		$_GET['target'] = '/my/dir/';
-		// according to function docs this should return nothing
-		$this->assertEqual('http://my.repo', getRepositoryUrl());
-	}
-	
 	// composition of target url (absolute URI)
 	public function testTargetUrl() {
-		$_GET['repo'] = 'http://my.repo';
-		$_GET['target'] = '/my/dir/file.txt';
-		// according to function docs this should return nothing
+		$_REQUEST[REPO_KEY] = 'http://my.repo';
+		$_REQUEST['target'] = '/my/dir/file.txt';
 		$this->assertEqual('http://my.repo/my/dir/file.txt', getTargetUrl());
+		unset($_REQUEST[REPO_KEY]);
+		unset($_REQUEST['target']);
 	}
 	
 	public function testTargetUrldecode() {
@@ -102,17 +46,17 @@ class Login_include_Test extends UnitTestCase {
 	}
 	
 	// status code
-	public function testGetHttpStatus() {
-		$this->assertEqual(200, getHttpStatus("HTTP/1.1 200 OK"));
-		$this->assertNotEqual(20, getHttpStatus("HTTP/1.1 200 OK"));
+	public function testgetHttpStatusFromHeader() {
+		$this->assertEqual(200, getHttpStatusFromHeader("HTTP/1.1 200 OK"));
+		$this->assertNotEqual(20, getHttpStatusFromHeader("HTTP/1.1 200 OK"));
 		$this->assertNoErrors();
-		$this->assertEqual("301", getHttpStatus("HTTP/1.1 301 Moved Permanently"));
+		$this->assertEqual("301", getHttpStatusFromHeader("HTTP/1.1 301 Moved Permanently"));
 		$this->assertNoErrors();
-		$this->assertEqual(401, getHttpStatus("HTTP/1.1 401 Authorization Required"));
-		$this->assertEqual("401", getHttpStatus("HTTP/1.1 401 Authorization Required"));
+		$this->assertEqual(401, getHttpStatusFromHeader("HTTP/1.1 401 Authorization Required"));
+		$this->assertEqual("401", getHttpStatusFromHeader("HTTP/1.1 401 Authorization Required"));
 		$this->assertNoErrors();
-		$this->assertEqual(403, getHttpStatus("HTTP/1.1 403 Forbidden"));
-		$this->assertEqual("403", getHttpStatus("HTTP/1.1 403 Forbidden"));
+		$this->assertEqual(403, getHttpStatusFromHeader("HTTP/1.1 403 Forbidden"));
+		$this->assertEqual("403", getHttpStatusFromHeader("HTTP/1.1 403 Forbidden"));
 		$this->assertNoErrors();		
 	}
 	
@@ -138,6 +82,7 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertEqual('https://my.repo:88/home', $url);
 	}
 	
+	// belongs to a configuration test
 	public function testVerifyLoginDemoAccount() {
 		if (login_isSSLSupported()) {
 			// test demo account authentication
@@ -196,12 +141,17 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertEqual("HTTP/1.1 403 Forbidden", $headers[0]);
 	}
 	
+	function testGetFirstNon404Parent() {
+		$url = login_getFirstNon404Parent("http://localhost/repos/adsfawerwreq/does/not/exist.no", $status);
+		$this->assertEqual("http://localhost/repos/", $url);
+		$this->assertEqual(200, $status);
+	}
 		
 	// ---------- HTTP header output for different login conditions ---------
 	// not real tests
 	
 	public function testGetHttpHeadersStart() {
-		$headers = getHttpHeaders("http://www.repos.se");
+		$headers = getHttpHeaders("http://www.repos.se/");
 		echo("<pre>---- headers from the repos.se start page ----\n");
 		print_r($headers);
 		echo("</pre>\n");
@@ -241,6 +191,5 @@ class Login_include_Test extends UnitTestCase {
 	
 }
 
-$test = &new Login_include_Test();
-$test->run(new HtmlReporter());
+testrun(new Login_include_Test());
 ?>
