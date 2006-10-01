@@ -18,8 +18,8 @@ if (function_exists('reportErrorToUser')) {
 	trigger_error("Could not register custom error handling because the function 'reportErrorToUser' is already defined");
 } else {
 function reportErrorToUser($level, $message, $trace) {
-	global $reporter;	
-	if (!isset($reporter->report)) $reporter->paintHeader('errors before test start'); // not a good solution because simpletest also prints a header
+	global $reporter;
+	if (!isset($reporter->report)) reportErrorText($level, $message, $trace); // report not started yet
 	if ($level == E_USER_ERROR) {
 		$reporter->paintError("Error:   ".$message);
 	} else if ($level == E_USER_WARNING) {

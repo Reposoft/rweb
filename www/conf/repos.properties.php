@@ -13,9 +13,15 @@ $_repos_config = parse_ini_file( _getPropertiesFile(), false );
 error_reporting(E_ALL);
 function reportError($n, $message, $file, $line) {
 	$trace = _getStackTrace();
-	if (function_exists('reportErrorToUser')) {
+	if (function_exists('reportErrorToUser')) { // formatted error reporting
 		call_user_func('reportErrorToUser', $n, $message, $trace);
-	} else if ($n!=2048) { // E_STRICT not defined in php 4
+	} else {
+		reportErrorText($n, $message, $trace);
+	}
+}
+// default error reporting, for errors that occur before presentation is initialized
+function reportErrorText($n, $message, $trace) {
+	if ($n!=2048) { // E_STRICT not defined in php 4
 		echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>");
 	}
 }

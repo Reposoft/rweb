@@ -24,6 +24,7 @@ class Report {
 	var $ne = 0; //error
 	var $no = 0; //ok
 	var $nf = 0; //fail
+	var $nt = 0; //test cases
 	var $test = false; // true inside a test case
 	
 	function Report($title='Repos system report', $category='') {
@@ -49,9 +50,10 @@ class Report {
 	}
 	
 	function teststart($name) {
-		$this->_linestart('test');
+		$this->_linestart('test n'.$this->nt%4);
 		$this->_output($name);
 		$this->test = $this->ne + $this->nf;
+		$this->nt++;
 	}
 	
 	function testend() {
@@ -134,10 +136,10 @@ class Report {
 	 * Fatal error causes output to end and script to exit.
 	 * It is assumed that fatal errors are handled manually by the administrator.
 	 * @deprecated use error($message) instead, and the reporter might chose to quit the operation
+	 * TODO remove when backup scripts don't need it
 	 */
 	function fatal($message, $code = 1) {
 		$this->error( $message );
-		// TODO this method shouldn't be herer, right?
 	}
 	
 	function hasErrors() {
@@ -156,7 +158,7 @@ class Report {
 	}
 	// line complete, does flush()
 	function _lineend() {
-		if (!$this->offline) $this->_print("</span>");
+		if (!$this->offline) $this->_print("</div>");
 		$this->_print(getNewline());
 		
 		flush();
@@ -216,6 +218,7 @@ class Report {
 		$this->_print('<link href="/repos/style/docs.css" rel="stylesheet" type="text/css">');
 		$this->_print("</head>\n");
 		$this->_print("<body>\n");
+		$this->_print("<div id=\"workspace\">\n");
 		$this->_print("<div id=\"contents\">\n");
 		} else {
 			$this->_linestart();
@@ -225,7 +228,7 @@ class Report {
 	}
 	
 	function _pageEnd($code = 0) {
-		if (!$this->offline) $this->_print("</div></body></html>\n\n");
+		if (!$this->offline) $this->_print("</div></div></body></html>\n\n");
 		exit( $code );
 	}
 	
@@ -242,13 +245,13 @@ class Report {
 		?>
 		<script>
 		function hide(level) {
-			var p = document.getElementsByTagName('p');
+			var p = document.getElementsByTagName('div');
 			for (i = 0; i < p.length; i++) {
-				if (p[i].getAttribute('class') == level) p[i].style.display = 'none';
+				if (p[i].getAttribute('class').indexOf(level)>=0) p[i].style.display = 'none';
 			}
 		}
 		function showAll() {
-			var p = document.getElementsByTagName('p');
+			var p = document.getElementsByTagName('div');
 			for (i = 0; i < p.length; i++) {
 				p[i].style.display = '';
 			}	
