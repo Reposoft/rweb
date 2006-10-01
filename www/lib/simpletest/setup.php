@@ -28,13 +28,14 @@ if (function_exists('reportErrorToUser')) {
 	  case E_USER_NOTICE:
 		$reporter->paintError("Notice:  ".$message);
 		break;
-	  case E_STRICT;
-	  	$t = explode("\n",$trace);
-	  	if (strContains($t[1], 'simpletest')) return; // simpletest has many code check errors
-	  	$reporter->paintMessage("PHP code check warning: ".$message);
-	  	break;
 	  default:
-	    $reporter->paintMessage("Error of unknown type: ".$message);
+	  	if (defined(E_STRICT) && $level==E_STRICT) {
+		  	$t = explode("\n",$trace);
+		  	if (strContains($t[1], 'simpletest')) return; // simpletest has many code check errors
+		  	$reporter->paintMessage("PHP code check warning: ".$message);	  		
+	  	} else {
+	    	$reporter->paintMessage("Error of unknown type: ".$message);
+	  	}
 	    break;
 	  }
 	  $reporter->paintFormattedMessage("$message\n$trace");

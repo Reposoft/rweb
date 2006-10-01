@@ -15,7 +15,7 @@ function reportError($n, $message, $file, $line) {
 	$trace = _getStackTrace();
 	if (function_exists('reportErrorToUser')) {
 		call_user_func('reportErrorToUser', $n, $message, $trace);
-	} else if ($n != E_STRICT) {
+	} else if (!defined(E_STRICT) || $n!=E_STRICT) {
 		echo("Error: $message\n<pre>\n$trace</pre>");
 	}
 }
