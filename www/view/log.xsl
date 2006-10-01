@@ -148,7 +148,7 @@
 				<div class="actions">
 					<a title="the file as it was before the change" class="action" href="{$web}/open/cat/?target={.}&amp;rev={$revfrom}">before</a>
 					<a title="the file after the change" class="action" href="{$web}/open/cat/?target={.}&amp;rev={../../@revision}">after</a>
-					<a title="the difference this change made" class="action" href="{$web}/open/diff/?target={.}&amp;revto={../../@revision}&amp;revfrom={$revfrom}">show diff</a>
+					<a title="the difference this change made" class="action" href="{$web}/open/diff/?target={.}&amp;rev={$revfrom}&amp;revto={../../@revision}">show diff</a>
 				</div>
 			</xsl:if>
 		</div>

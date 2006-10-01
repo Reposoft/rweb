@@ -40,7 +40,7 @@ if (isset($_GET['open'])) {
 	$p->assign('targetpeg', $url.'@'.$rev);
 	// exit points
 	$referer = getHttpReferer();
-	if (!empty($referer) && strpos($referer, '/open/log/')) {
+	if (!empty($referer) && strContains($referer, '/open/log/')) {
 		$p->assign('logurl', $referer);
 		$p->assign('repository', getRepository().strAfter($referer, 'target='));
 	} else {
