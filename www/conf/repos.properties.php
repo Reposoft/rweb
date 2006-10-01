@@ -15,8 +15,8 @@ function reportError($n, $message, $file, $line) {
 	$trace = _getStackTrace();
 	if (function_exists('reportErrorToUser')) {
 		call_user_func('reportErrorToUser', $n, $message, $trace);
-	} else if (!defined(E_STRICT) || $n!=E_STRICT) {
-		echo("Error: $message\n<pre>\n$trace</pre>");
+	} else if ($n!=2048) { // E_STRICT not defined in php 4
+		echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>");
 	}
 }
 set_error_handler('reportError');

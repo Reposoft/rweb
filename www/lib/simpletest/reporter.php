@@ -86,7 +86,7 @@ class HtmlReporter extends SimpleReporter {
     }
 
     function paintMethodStart($test_name) {
-    	parent::paintMethodStart($message);
+    	parent::paintMethodStart($test_name);
     	$this->report->info("Test: $test_name");
     }
     

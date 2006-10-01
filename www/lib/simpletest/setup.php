@@ -15,10 +15,10 @@ function testrun(&$testcase) {
 }
 
 if (function_exists('reportErrorToUser')) {
-	$reporter->report->warning("Could not register custom error handling because the function 'reportErrorToUser' is already defined");
+	trigger_error("Could not register custom error handling because the function 'reportErrorToUser' is already defined");
 } else {
 function reportErrorToUser($level, $message, $trace) {
-	global $reporter;
+	global $reporter;	
 	if (!isset($reporter->report)) $reporter->paintHeader('errors before test start'); // not a good solution because simpletest also prints a header
 	if ($level == E_USER_ERROR) {
 		$reporter->paintError("Error:   ".$message);
@@ -27,9 +27,9 @@ function reportErrorToUser($level, $message, $trace) {
 	} else if ($level == E_USER_NOTICE) {
 		$reporter->paintError("Notice:  ".$message);
 	} else {
-		$t = explode("\n",$trace);
-		if (strContains($t[1], 'simpletest')) return; // simpletest has many code check errors
-		if (defined(E_STRICT) && $level==E_STRICT) {
+		if ($level==2048) { // E_STRICT not defined in PHP 4
+			$t = explode("\n",$trace);
+			if (strContains($t[1], 'simpletest')) return; // simpletest has many code check errors
 		  	$reporter->paintMessage("PHP code check warning: ".$message);  		
 		  	$reporter->paintFormattedMessage("$message\n$trace");
 		} else {
@@ -39,6 +39,5 @@ function reportErrorToUser($level, $message, $trace) {
 	}
 }
 }
-
 
 ?>
