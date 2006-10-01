@@ -71,14 +71,14 @@ class Login_include_Test extends UnitTestCase {
 	public function testGetLoginUrl() {
 		$_SERVER['PHP_AUTH_USER'] = 'mE';
 		$_SERVER['PHP_AUTH_PW'] = 'm&p8ss';
-		$url = getLoginUrl('https://my.repo:88/home');
+		$url = _getLoginUrl('https://my.repo:88/home');
 		$this->assertEqual('https://mE:m&p8ss@my.repo:88/home', $url);
 	}
 	
 	public function testGetLoginUrlNoUser() {
 		unset($_SERVER['PHP_AUTH_USER']);
 		unset($_SERVER['PHP_AUTH_PW']);
-		$url = getLoginUrl('https://my.repo:88/home');
+		$url = _getLoginUrl('https://my.repo:88/home');
 		$this->assertEqual('https://my.repo:88/home', $url);
 	}
 	

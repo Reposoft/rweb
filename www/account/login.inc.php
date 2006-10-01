@@ -156,7 +156,7 @@ function login_getFirstNon404Parent($url, &$status=0) {
 /**
  * @return the url with username:password
  */
-function getLoginUrl($urlWithoutLogin) {
+function _getLoginUrl($urlWithoutLogin) {
 	if (getReposUser()) {
 		return str_replace("://","://" . getReposUser() . ":" .  _getReposPass() . "@", $urlWithoutLogin);
 	}
