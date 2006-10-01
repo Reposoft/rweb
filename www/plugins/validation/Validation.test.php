@@ -1,7 +1,27 @@
 <?php
 
-require("../lib/simpletest/setup.php");
+require("../../lib/simpletest/setup.php");
 
-require(dirname(__FILE__)."/Presentation.class.php");
+require("../../conf/Presentation.class.php");
+
+class TestValidation extends UnitTestCase {
+	
+	function testDefineRuleBeforeInput() {
+		rule('myfield', '--', false);
+		rule('myfield2', '--', true);
+	}
+	
+	function testDefineRuleAfterSubmit() {
+		$_REQUEST['myfield'] = 'hello';
+		rule('myfield', '--');
+	}
+	
+	function testValidate() {
+		
+	}
+	
+}
+
+testrun(new TestValidation());
 
 ?>

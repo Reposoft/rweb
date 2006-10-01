@@ -28,19 +28,25 @@ header('Content-type: text/html; charset=utf-8');
 // ------ form validation support -------
 
 // common field rules
-define('FILENAME', '');
+define('RULE_FILENAME', '');
 
 // validation one-liners from logic scripts
-function rule($fieldname, $constantOrRegexOrFunction) {
+// if a request parameter with the fieldname is set, it is validated immediately
+function rule($fieldname, $constantOrRegexOrFunction, $required=false) {
 	
 }
 
+// validate a list of fields, if there is no rule for a field it is assumed required
 function validate($requiredFieldsSeparatedByComma) {
 	$n = func_num_args();
 	for($i=0; $i<$n; $i++) {
 		$fieldname = func_get_arg($i);
 		
 	}
+}
+
+if (isset($_GET['validate'])) {
+	
 }
 
 // -------- user settings ---------

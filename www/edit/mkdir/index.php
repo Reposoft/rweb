@@ -3,7 +3,7 @@
 require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__))."/edit.class.php" );	
 
-rule('name', FILENAME);
+rule('name', RULE_FILENAME);
 // message and target have default rules
 
 if (isset($_GET['submit'])) {

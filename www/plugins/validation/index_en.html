@@ -3,6 +3,13 @@
 <head>
 <title>repos.se validation plugin test page</title>
 <!--{$head}-->
+<script type="test/javascript" src="validation.js"></script>
+<style type="text/css">
+span.note {
+	margin-left: 2em;
+	font-size: 82.5%;
+}
+</style>
 </head>
 
 <body>
@@ -13,7 +20,18 @@
   <legend>repos.se default form layout</legend>
   <p>
     <label for="name">name</label>
-    <input type="text" id="name" name="name" size="40" />
+    <input type="text" id="name" name="name" size="40" class="required" />
+    <span class="note">required but no rule</span>
+  </p>
+  <p>
+    <label for="name">Name of file</label>
+    <input type="text" id="name" name="name" size="40" class="filename" />
+    <span class="note">class filename, not required</span>
+  </p>
+  <p>
+    <label for="name">username</label>
+    <input type="text" id="name" name="name" size="30" maxlength="20" class="username required" />
+    <span class="note">class username, maxlength 20, not required</span>
   </p>
   <p>
     <label for="submit"></label>
@@ -22,5 +40,49 @@
   </p>
 </fieldset>
 </form>
+<h2>repos.se validation framework</h2>
+<h3>What we need</h3>
+<ul>
+<li>User should be told directly which fields are required.</li>
+<li>User should get direct validation of common fields such as e-mail or date (but this is not needed in repos yet).</li>
+<li>Upon validation, the user wants to keep the values in the form.</li>
+<li>User wants to have visual indication of which fields are invalid, not only field name.</li>
+<li>Error messages can be localized, and the localization should be shared between pages.</li>
+</ul>
+<h3>Development</h3>
+<ul>
+<li>We still want valid HTML.</li>
+<li>The server-side page that receives the sumbit knows which fields are required, and how to validate them.</li>
+<li>Declaring required fields should take one line of code with the field names.</li>
+<li>Programmatic declaration of rules should not depend on the choice of validation framework.</li>
+<li>The HTML designer will know which fields are required, and knows the common classes,</li>
+<li>but does not care about the syntax rules and the exact contents of the error message.</li>
+<li>Some forms require semantic validation, which is a function in the server-side page.</li>
+</ul>
+<h3>Common validation rules</h3>
+<pre>
+required
+date
+datetime
+time
+minlength(x)
+maxlength(x) (only server side, can be specified on client for input boxes)
+filename (or foldername)
+message (practically no restrictions on contents)
+</pre>
+<h3>Repos.se assumptions</h3>
+<p>Same field is shared in many forms (like filename or commit message).</p>
+<p>The common rulse often, but not always, match css classes (such as 'datetime' or 'path').</p>
+<p>Frequent input errors - like missing field - should be prevented by displaying the expectations.</p>
+<p>Frequent errors can be validated with predefined javascript rules.</p>
+<p>For non-frequent errors, it's no big deal if we do a roundtrip to the server.</p>
+<p>90% of the browsers will run javascript+AJAX based validation.</p>
+<p>Upon invalid input, it is quite ok to use browser's back functionality to preserve the form data
+<br />(so the non-javascript solution to form validation is to display an error page with a back button).</p>
+<p>We can benefit from conventions, for example: 'target' is an absolute path to a file or folder.
+All form fields have a <code>&lt;label for="fieldname"&gt;</code> tag, which contains the localized field name.</label>
+
+<h3>References</h3>
+<a target="_blank" href="http://particletree.com/features/a-guide-to-unobtrusive-javascript-validation/">http://particletree.com/features/a-guide-to-unobtrusive-javascript-validation/</a>
 </body>
 </html>

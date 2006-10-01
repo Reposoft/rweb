@@ -221,6 +221,11 @@ label {
 	text-align:right;
 	font-weight:normal;
 }
+input.required {
+	background-image: url(requiredfield.png);
+	background-position: top right;
+	background-repeat: no-repeat;
+}
 /* visible version numbers, #releaseversion or #resourceversion */
 .versiondisplay {
 	font-size:9px;
