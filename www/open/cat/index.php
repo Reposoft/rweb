@@ -13,8 +13,6 @@ if(!$rev) {
 	exit;
 }
 
-$referer = getReferer();
-
 $filename = basename($url);
 $target = getTarget();
 $downloadUrl = repos_getSelfUrl().'?'.repos_getSelfQuery().'&open';
@@ -39,14 +37,11 @@ if (isset($_GET['open'])) {
 	$p->assign('target', $target);
 	$p->assign('revision', $rev);
 	// TODO sort out the mess with references between browse/log/diff/cat/edit
+	$referer = getHttpReferer();
 	if (empty($referer)) {
-		$p->assign('logurl', '../log/?repo='.getConfig('repo_url').'&path='.dirname($target));
-	} else if (false && strpos($referer, '/open/log/')) {
+		$p->assign('logurl', '../log/target='.dirname($target).'/');
+	} else if (strpos($referer, '/open/log/')) {
 		$p->assign('logurl', $referer);
-	} else {
-		$p->assign('back', $referer);
-		// TODO what if the target folder does not exist anymore
-		$p->assign('repo', dirname($url));
 	}
 	$p->assign('dowloandUrl', $downloadUrl);
 	$p->assign('targetpeg', $url.'@'.$rev);

@@ -135,18 +135,11 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('http://my/', getParent('http://my/file.txt'));
 		if (isWindows()) {
 			$this->assertEqual('C:/', getParent('C:/my/'));
+			$this->assertFalse(getParent('C:/'), "should return false if target is windows root");
 		}
-		getParent('');
-		$this->assertError();
+		$this->assertFalse(getParent(''), "should return false if parent is undefined");
 	}
-	
-	function testGetParentWindowsRoot() {
-		if (isWindows()) {
-			getParent('C:/');
-			$this->assertError();
-		}
-	}
-	
+
 	function testPhpFunctions() {
 		// check that PHP behaves as we expect in all OSes
 		$this->assertEqual('/my/path', dirname('/my/path/file.txt'));

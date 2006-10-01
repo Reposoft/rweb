@@ -32,6 +32,7 @@ if (!isset($_repos_config['repositories'])) trigger_error("No repositories confi
 if (!isset($_repos_config['repos_web'])) trigger_error("Repos web applicaiton root not specified in configuration");
 if (isset($_GET['file'])) trigger_error("The 'file' parameter is no longer supported");
 if (isset($_GET['path'])) trigger_error("The 'path' parameter is no longer supported");
+if (isset($_GET['repo'])) trigger_error("The 'repo' parameter should not be used now, will be introduced together with cookie support");
 if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable magic_quotes"); }
 
 // ------ local configuration ------
@@ -207,13 +208,12 @@ function isFolder($path) {
 
 /**
  * @param String $path the file system path or URL to check
- * @return The parent folder if isFolder($path), the folder if isFile($path)
+ * @return The parent folder if isFolder($path), the folder if isFile($path), false if there is no parent
  */
 function getParent($path) {
 	if (!isPath($path)) trigger_error("'$path' is not a valid path");
 	if (strlen($path)==0 || $path=='/' || (isWindows() && strlen($path)<4 && strpos($path, ':')==1)) {
-		trigger_error("Parent is not defined for path '$path'");
-		return;
+		return false;
 	}
 	$f = substr($path, 0, strrpos(rtrim($path,'/'), '/'));
 	if (strlen($f)==0 && isRelative($path)) return $f;

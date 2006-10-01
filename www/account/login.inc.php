@@ -64,16 +64,6 @@ define('ADMIN_ACCOUNT', 'administrator');
 define('ACCOUNTS_FILE', ADMIN_ACCOUNT.'/trunk/admin/repos-users');
 define('ACCESS_FILE', ADMIN_ACCOUNT.'/trunk/admin/repos-access');
 
-// --- selfchecks ---
-if (getTarget()) {
-	$r = getHttpReferer();
-	if(!strBegins($r, getRepository())) {
-		if (!isset($_REQUEST['repo'])) {
-			trigger_error("'target' is set, but HTTP referer '$r' is not the configured repository, so a 'repo' parameter is required.");
-		}
-	}
-}
-
 // automatic login if a target is specified the standard way
 if (getTargetUrl()) {
 	targetLogin();
@@ -139,6 +129,7 @@ function verifyLogin($targetUrl) {
 	$s = getHttpStatus($headers[0]);
 	if ($s==200) return true;
 	if ($s==401 || $s==403) return false;
+	if ($s==404 && $p=getParent($targetUrl)) return verifyLogin($p); // could be looking for the history of a deleted file
 	trigger_error("The target URL '$targetUrl' can not be used to validate login. Returned HTTP status code '$s'.");
 	return false;
 }

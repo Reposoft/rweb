@@ -5,7 +5,6 @@
  *
  * Does the following assigns for every page:
  * head = all shared head tags, place a <!--{head}--> in the <head> of the template
- * repo = the repository root, without tailing slash
  * referer = the HTTP referer url, if there is one
  * userhome = a place where the current user always can go, if there is no other way out
  *
@@ -112,7 +111,6 @@ class Presentation extends Smarty {
 		// set common head tags
 		$this->assign('head', $this->_getThemeHeadTags());
 		$this->assign('referer', $this->getReferer());
-		$this->assign('repo', getRepository());
 		$this->assign('userhome', $this->getUserhome());
 		// display
 		if (!$resource_name) {
