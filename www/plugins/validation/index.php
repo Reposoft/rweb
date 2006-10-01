@@ -15,7 +15,7 @@ $p = new Presentation();
 $p->display();
 
 function processForm() {
-	validate('name');
+	validate('name'); // filename is not required so the rule definition is sufficient
 }
 
 ?>

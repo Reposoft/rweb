@@ -1,0 +1,5 @@
+input.required {
+	background-image: url(requiredfield.png);
+	background-position: top right;
+	background-repeat: no-repeat;
+}
