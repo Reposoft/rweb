@@ -61,7 +61,7 @@
 	</xsl:template>
 	<!-- body contents -->
 	<xsl:template match="index">
-		<div class="workspace">
+		<div id="workspace">
 			<xsl:call-template name="commandbar"/>
 			<xsl:call-template name="contents"/>
 			<xsl:call-template name="footer"/>
@@ -78,7 +78,7 @@
 				<xsl:otherwise>../</xsl:otherwise>
 			</xsl:choose>
 		</xsl:param>
-		<div class="commandbar">
+		<div id="commandbar">
 		<a id="reposbutton">
 			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
 		</a>
@@ -119,7 +119,7 @@
 				<xsl:with-param name="url" select="substring-after(substring(/svn/index/@path, 2),'/')"/>
 			</xsl:call-template>
 		</xsl:param>
-		<div class="contents">
+		<div id="contents">
 		<h2>
 			<a href="{$home}">
 				<span class="projectname">
@@ -190,7 +190,7 @@
 	</xsl:template>
 	<!-- extra info and logos -->
 	<xsl:template name="footer">
-		<div class="footer">
+		<div id="footer">
 		<span id="resourceversion" class="versiondisplay" style="display:none">repos.se stylesheet version $Id: repos.xsl 1601 2006-09-14 09:09:50Z solsson $</span>
 		<span id="badges">
 		</span>

@@ -84,25 +84,25 @@ code {
 	color: #CC3300;
 }
 /* common page elements, may also be layouted for each tool */
-.workspace {
+#workspace {
 }
-.commandbar {
+#commandbar {
 	background-color: #F0F0EE;
 	border-top: 1px solid #CCCC99;
 	height: 1.4em;
 }
-.contents {
+#contents {
 	/* overflow: -moz-scrollbars-vertical; */
 }
-.contents .row {
+#contents .row {
 	width: 100%;
 	padding: 1px;
 	border-bottom: 1px solid #FFFFFF;
 }
-.contents .row:hover {
+#contents .row:hover {
 	border-bottom: 1px dashed #CCCC99;
 }
-.contents .row div.actions {
+#contents .row div.actions {
 	display: inline;
 	position: absolute;
 	left: 70%;
@@ -110,14 +110,14 @@ code {
 .n0, .n1, .n2, .n3 {
 	background: url(rowbackground.png) top repeat-x;
 }
-.footer {
+#footer {
 	bottom: 10px;
 	height: 20px;
 	border-top: 1px solid #CCCC99;
 	color: #999999;
 	font-size: smaller;
 }
-.footer .legal {
+#footer .legal {
 	position: absolute;
 	right: 10px;
 }
@@ -167,22 +167,22 @@ span.action {
 	display: none;
 }
 /* common commands */
-.commandbar #back {
+#commandbar #back {
 	background-image: url('commands/16x16/back.png');
 }
-.commandbar #repository {
+#commandbar #repository {
 	background-image: url('commands/16x16/repository.png');
 }
-.commandbar #history {
+#commandbar #history {
 	background-image: url('commands/16x16/history.png');
 }
-.commandbar #download {
+#commandbar #download {
 	background-image: url('commands/16x16/download.png');
 }
-.commandbar #refresh {
+#commandbar #refresh {
 	background-image: url('commands/16x16/refresh.png');
 }
-.commandbar #logout {
+#commandbar #logout {
 	background-image: url('commands/16x16/logout.png');
 }
 /* -------- forms ---------

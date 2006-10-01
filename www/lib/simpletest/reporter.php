@@ -87,7 +87,12 @@ class HtmlReporter extends SimpleReporter {
 
     function paintMethodStart($test_name) {
     	parent::paintMethodStart($test_name);
-    	$this->report->info("Test: $test_name");
+    	$this->report->teststart($this->unCamelCase($test_name));
+    }
+    
+    function paintMethodEnd($test_name) {
+    	parent::paintMethodEnd($test_name);
+    	$this->report->testend();
     }
     
     function paintPass($message) {
@@ -152,5 +157,15 @@ class HtmlReporter extends SimpleReporter {
     function _htmlEntities($message) {
         return htmlentities($message, ENT_COMPAT, $this->_character_set);
     }
+    
+	function unCamelCase($str){
+		$bits = preg_split('/([A-Z])/',$str,false,PREG_SPLIT_DELIM_CAPTURE);
+		$a = array();
+		array_shift($bits);
+		for($i = 0; $i < count($bits); ++$i) {
+		    if($i%2) $a[] = $bits[$i - 1].$bits[$i];
+		}
+		return implode($a, ' ');
+	}
 }
 ?>

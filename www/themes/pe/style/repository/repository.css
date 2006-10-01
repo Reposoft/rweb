@@ -4,27 +4,27 @@
 	vertical-align: inherit;
 	display: inline;
 }
-.contents {
+#contents {
 	padding-bottom: 20px;
 }
 /* commands */
-.commandbar #history {
+#commandbar #history {
 	background-image: url('history.gif');
 }
-.commandbar #upload {
+#commandbar #upload {
 	background-image: url('upload.gif');
 }
-.commandbar #createfolder {
+#commandbar #createfolder {
 	background-image: url('createfolder.gif');
 }
 /* directory listing */
-.contents .row {
+#contents .row {
 	width: 100%;
 	padding: 1px;
 	border-top: 1px solid #FFFFFF;
 	border-bottom: 1px solid #FFFFFF;
 }
-.contents .row div.actions {
+#contents .row div.actions {
 	display: inline;
 	position: absolute;
 	left: 70%;

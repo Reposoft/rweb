@@ -11,14 +11,14 @@
 	background-position: left top;
 	background-repeat: no-repeat;
 }
-.contents .row {
+#contents .row {
 	width: 100%;
 	padding: 2px;
 	padding-left: 22px;
 	background-position: left center;
 	background-repeat: no-repeat;
 }
-.contents .row div.actions {
+#contents .row div.actions {
 	display: inline;
 	position: absolute;
 	left: 70%;

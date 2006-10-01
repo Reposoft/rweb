@@ -24,16 +24,11 @@ class Report {
 	var $ne = 0; //error
 	var $no = 0; //ok
 	var $nf = 0; //fail
+	var $test = false; // true inside a test case
 	
 	function Report($title='Repos system report', $category='') {
 		$this->offline = isOffline();
-		if ($this->offline) {
-			$this->_linestart();
-			$this->_output("---- $title ----");
-			$this->_lineend();
-		} else {
-			$this->_pageStart($title);
-		}
+		$this->_pageStart($title);
 	}
 	
 	/**
@@ -51,6 +46,22 @@ class Report {
 		$this->_summary();
 		if ($this->nd > 0) _toggleDebug();
 		$this->_pageEnd();
+	}
+	
+	function teststart($name) {
+		$this->_linestart('test');
+		$this->_output($name);
+		$this->test = $this->ne + $this->nf;
+	}
+	
+	function testend() {
+		if ($this->ne + $this->nf > $this->test) {
+			$this->_output("failed");
+		} else {
+			$this->_output("passed");
+		}
+		$this->test = false;
+		$this->_lineend();
 	}
 	
 	/**
@@ -140,12 +151,12 @@ class Report {
 			if ($class=='warning') $this->_print("?? ");
 			if ($class=='error') $this->_print("!! ");	
 		} else {
-			$this->_print("<p class=\"$class\">");
+			$this->_print("<div class=\"row $class\">");
 		}
 	}
 	// line complete, does flush()
 	function _lineend() {
-		if (!$this->offline) $this->_print("</p>");
+		if (!$this->offline) $this->_print("</span>");
 		$this->_print(getNewline());
 		
 		flush();
@@ -194,6 +205,7 @@ class Report {
 	}
 	
 	function _pageStart($title) {
+		if (!$this->offline) {
 		$this->_print('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"');
 		$this->_print(' "http://www.w3.org/TR/html4/loose.dtd">');
 		$this->_print("\n<html>");
@@ -201,24 +213,29 @@ class Report {
 		$this->_print('<meta http-equiv="Content-Type" content="text/html; charset=utf-8">');
 		$this->_print('<title>Repos administration: ' . $title . '</title>');
 		$this->_print('<link href="/repos/style/global.css" rel="stylesheet" type="text/css">');
+		$this->_print('<link href="/repos/style/docs.css" rel="stylesheet" type="text/css">');
 		$this->_print("</head>\n");
 		$this->_print("<body>\n");
+		$this->_print("<div id=\"contents\">\n");
+		} else {
+			$this->_linestart();
+			$this->_output("---- $title ----");
+			$this->_lineend();
+		}
 	}
 	
 	function _pageEnd($code = 0) {
-		if (!$this->offline) $this->_print("</body></html>\n\n");
+		if (!$this->offline) $this->_print("</div></body></html>\n\n");
 		exit( $code );
 	}
 	
 	function _summary() {
-		$colour = $this->hasErrors() ? "red" : "green";
-        print "<div style=\"";
-        print "padding: 8px; margin-top: 1em; background-color: $colour; color: white;";
-        print "\">";
-        print "<strong>" . $this->no . "</strong> passes, ";
-        print "<strong>" . $this->nf . "</strong> fails and ";
-        print "<strong>" . $this->ne . "</strong> exceptions.";
-        print "</div>\n";
+		$class = $this->hasErrors() ? "error" : "passed";
+        $this->_output("<div class=\"testsummary $class\">");
+        $this->_output("<strong>" . $this->no . "</strong> passes, ");
+        $this->_output("<strong>" . $this->nf . "</strong> fails and ");
+        $this->_output("<strong>" . $this->ne . "</strong> exceptions.");
+        $this->_output("</div>\n");
 	}
 	
 	function _toggleDebug() {

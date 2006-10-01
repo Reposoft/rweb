@@ -14,6 +14,7 @@ class TestValidation extends UnitTestCase {
 	function testDefineRuleAfterSubmit() {
 		$_REQUEST['myfield'] = 'hello';
 		rule('myfield', '--');
+		$this->assertError();
 	}
 	
 	function testValidate() {

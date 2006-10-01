@@ -1,5 +1,5 @@
 @charset "utf-8";
-/* CSS Document */
+/* repos.se documentation styles, only needed in the default theme */
 a[target="_blank"] {
 	padding-right: 16px;
 	background: url(newwindow.png) right center no-repeat;
@@ -28,4 +28,11 @@ table.columns td > p {
 table.rows td {
 	border-top: 1px solid #CCCC99;	
 	border-bottom: 1px solid #CCCC99;	
+}
+/* tests */
+.testsummary {
+	border: 1px solid #CCCC99;
+}
+.testname {
+	width: 35%;
 }

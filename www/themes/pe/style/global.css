@@ -80,18 +80,18 @@ code {
 	color: #CC3300;
 }
 /* common page elements, may also be layouted for each tool */
-.workspace {
+#workspace {
 }
-.commandbar {
+#commandbar {
 	background-color: #eeeeee;
 	border-top: 5px solid #FDBC4B;
 	border-bottom: 1px solid #dddddd;
 	height: 25px;
 }
-.contents {
+#contents {
 	/* overflow: -moz-scrollbars-vertical; */
 }
-.contents .row {
+#contents .row {
 
 }
 .n0, .n2 {
@@ -100,17 +100,17 @@ code {
 .n1, .n3 {
 	background-color: #F0F0EE;	
 }
-.footer {
+#footer {
 	border-top: 1px solid #FDBC4B;
 	bottom: 10px;
 	height: 20px;
 	color: #cccccc;
 	font-size: smaller;
 }
-.footer a {
+#footer a {
 	color: #cccccc;
 }
-.footer .legal {
+#footer .legal {
 	position: absolute;
 	right: 10px;
 }
@@ -150,22 +150,22 @@ span.action {
 	display: none;
 }
 /* common commands */
-.commandbar #back {
+#commandbar #back {
 	background-image: url('back.gif');
 }
-.commandbar #parent {
+#commandbar #parent {
 	background-image: url('parent.gif');
 }
-.commandbar #repository {
+#commandbar #repository {
 	background-image: url('repository.gif');
 }
-.commandbar #download {
+#commandbar #download {
 	background-image: url('download.gif');
 }
-.commandbar #refresh {
+#commandbar #refresh {
 	background-image: url('refresh.gif');
 }
-.commandbar #logout {
+#commandbar #logout {
 	background-image: url('logout.gif');
 }
 /* -------- forms ---------

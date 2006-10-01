@@ -6,8 +6,8 @@
 </head>
 
 <body>
-<div class="workspace">
-<div class="commandbar">
+<div id="workspace">
+<div id="commandbar">
 <!--{if $logurl}-->
 <a id="history" class="command" href="{=$logurl}">return to folder history</a>
 <!--{/if}-->
@@ -21,7 +21,7 @@
 {=$diff|htmlspecialchars}
 </pre>
 </div>
-<div class="footer"></div>
+<div id="footer"></div>
 </div>
 </body>
 </html>

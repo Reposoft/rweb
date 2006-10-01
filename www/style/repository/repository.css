@@ -4,17 +4,17 @@
 	vertical-align: inherit;
 	display: inline;
 }
-.contents {
+#contents {
 	padding-bottom: 20px;
 }
 /* commands */
-.commandbar #parent {
+#commandbar #parent {
 	background-image: url('../commands/16x16/parent.png');
 }
-.commandbar #upload {
+#commandbar #upload {
 	background-image: url('../commands/16x16/attach.png');
 }
-.commandbar #createfolder {
+#commandbar #createfolder {
 	background-image: url('../commands/16x16/createfolder.png');
 }
 /* directory listing */
