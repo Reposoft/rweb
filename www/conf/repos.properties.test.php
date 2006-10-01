@@ -42,23 +42,29 @@ class TestReposProperties extends UnitTestCase {
 	
 	function testGetRepository() {
 		global $_repos_config;
+		unset($_REQUEST[REPO_KEY]);
+		unset($_COOKIE[REPO_KEY]);
 		$this->assertTrue(strlen(getRepository())>0);
 		$this->assertTrue(strContains(getRepository(), '://'), "getRepository() should return a full url");
 		$real = $_repos_config['repositories'];
 		$_repos_config['repositories'] = "http://my.host/repo/";
 		$this->assertEqual('http://my.host/repo/', getRepository());
+		// test multiple configured repositories
 		$_repos_config['repositories'] = "http://my.host/repo1/, http://my.host/repo2/";
 		$this->assertEqual('http://my.host/repo1/', getRepository());
-		// test referer
+		// if there is a cookie referer should have no effect
 		$_SERVER['HTTP_REFERER'] = 'http://my.host/repo2/file.txt';
 		$this->assertEqual('http://my.host/repo2/', getRepository());
 		unset($_SERVER['HTTP_REFERER']);
 		$_repos_config['repositories'] = $real;
 	}
 	
-	function testGetRepositoryFromRepoParameter() {
+	function testGetRepositoryFromRepoParameterAndCookie() {
+		$_COOKIE[REPO_KEY] = "https://host/c/";
 		$_REQUEST['repo'] = "https://host/r/";
 		$this->assertEqual('https://host/r/', getRepository());
+		unset($_REQUEST['repo']);
+		$this->assertEqual('https://host/c/', getRepository());
 	}
 	
 	// -------- path functions --------

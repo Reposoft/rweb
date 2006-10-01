@@ -5,8 +5,9 @@
  *
  * Does the following assigns for every page:
  * head = all shared head tags, place a <!--{head}--> in the <head> of the template
- * referer = the HRRP referer url, if there is one
- * userhome = sa place where the current user always can go
+ * repo = the repository root, without tailing slash
+ * referer = the HTTP referer url, if there is one
+ * userhome = a place where the current user always can go, if there is no other way out
  *
  * Allows two different markup delimiters:
  * <!--{ ... }-->
@@ -111,20 +112,21 @@ class Presentation extends Smarty {
 		// set common head tags
 		$this->assign('head', $this->_getThemeHeadTags());
 		$this->assign('referer', $this->getReferer());
+		$this->assign('repo', getRepository());
 		$this->assign('userhome', $this->getUserhome());
 		// display
 		if (!$resource_name) {
 			$resource_name = $this->getDefaultTemplate();
 		}
 		if (//debug:// false && 
-		  $this->isRedirectBeforeDisplay()) {
+			$this->isRedirectBeforeDisplay()) {
 			// TODO how to get PHP errors and warnings into the result page instead of before the redirect
 			$file = tempnam(getTempDir('pages'),'');
 			$handle = fopen($file, "w");
 			fwrite($handle, $this->fetch($resource_name, $cache_id, $compile_id));
 			fclose($handle);
 			// should be handled by the root page
-			$nexturl = repos_getWebappRoot() . '/view/?result=' . basename($file);
+			$nexturl = getWebapp() . '/view/?result=' . basename($file);
 			header("Location: $nexturl");
 		} else {
 			parent::display($resource_name, $cache_id, $compile_id);

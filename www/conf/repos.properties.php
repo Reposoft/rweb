@@ -25,6 +25,7 @@ set_error_handler('reportError');
 define('LOCALE_KEY', 'lang');
 define('THEME_KEY', 'theme');
 define('USERNAME_KEY', 'username');
+define('REPO_KEY', 'repo');
 
 // --- application selfcheck, can be removed in releases (tests should cover this) ---
 if (!isset($_repos_config['repositories'])) trigger_error("No repositories configured");
@@ -60,13 +61,15 @@ function _getConfig($key) {
  * This is the only folder in repos that is _not_ returned with a tailing slash,
  * the reason being that target URLs are defined as absolute URLs from repository root.
  *
- * Repository is resolved using HTTP Referrer with fallback to settings.
- * To find out where root is, query paramter 'path' must be set.
+ * If a REPO_KEY request parameter or cookie exists, the value of it is returned.
+ * If not, configuration is used. If there is many repositories, the one matching
+ * the http referrer is used.
  * @return Root url of the repository for this request, no tailing slash. Not encoded.
  */
 function getRepository() {
-	// 1: query string
-	if (isset($_REQUEST['repo'])) return $_REQUEST['repo'];
+	// 1: query string or cookie
+	if (isset($_REQUEST[REPO_KEY])) return $_REQUEST[REPO_KEY];
+	if (isset($_COOKIE[REPO_KEY])) return $_COOKIE[REPO_KEY];
 	// 2: referer that matches one of the configured repositories
 	$r = getConfig('repositories');
 	if (!strContains($r, ',')) return $r;
@@ -79,6 +82,7 @@ function getRepository() {
 /**
  * Returns the URL to the root folder of the web application.
  * Can be a complete URL with host and path, as well as an absolute URL from server root.
+ * // TODO configure _with_ tailing slash
  */
 function getWebapp() {
 	return _getConfig('repos_web');
@@ -222,7 +226,8 @@ function getParent($path) {
  * Root of the repos application
  */
 function repos_getWebappRoot() {
-	return getConfig('repos_web');
+	trigger_error("use getWebapp() instead of repos_getWebappRoot()");
+	return getWebapp();
 }
 
 /**
