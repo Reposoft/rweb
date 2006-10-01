@@ -97,7 +97,6 @@ class HtmlReporter extends SimpleReporter {
     
     function paintPass($message) {
     	parent::paintPass($message);
-    	if (strContains($message, '[')) $message = null; // filter out default messages
     	$this->report->ok($message);
     }
     
@@ -135,7 +134,7 @@ class HtmlReporter extends SimpleReporter {
     
     function paintMessage($message) {
     	parent::paintMessage($message);
-    	$this->report->info($message);
+    	$this->report->debug($message);
     }
 
     /**
@@ -159,6 +158,7 @@ class HtmlReporter extends SimpleReporter {
     }
     
 	function unCamelCase($str){
+		return $str; // disabled
 		$bits = preg_split('/([A-Z])/',$str,false,PREG_SPLIT_DELIM_CAPTURE);
 		$a = array();
 		array_shift($bits);

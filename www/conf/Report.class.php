@@ -45,23 +45,29 @@ class Report {
 	 */
 	function display() {
 		$this->_summary();
-		if ($this->nd > 0) _toggleDebug();
+		if ($this->nd > 0) $this->_toggleDebug();
 		$this->_pageEnd();
 	}
 	
 	function teststart($name) {
 		$this->_linestart('test n'.$this->nt%4);
-		$this->_output($name);
-		$this->test = $this->ne + $this->nf;
+		$this->test = 1 + $this->ne + $this->nf;
 		$this->nt++;
+		
+		$this->_linestart('testname');
+		$this->_output($name);	
+		$this->_lineend();
 	}
 	
 	function testend() {
-		if ($this->ne + $this->nf > $this->test) {
+		if ($this->ne + $this->nf >= $this->test) {
+			$this->_linestart('testresult error');
 			$this->_output("failed");
 		} else {
+			$this->_linestart('testresult passed');
 			$this->_output("passed");
 		}
+		$this->_lineend();
 		$this->test = false;
 		$this->_lineend();
 	}
@@ -152,15 +158,19 @@ class Report {
 			if ($class=='ok') $this->_print("== ");
 			if ($class=='warning') $this->_print("?? ");
 			if ($class=='error') $this->_print("!! ");	
+		} else if ($this->test) {
+			$this->_print("<div class=\"$class\">");
 		} else {
-			$this->_print("<div class=\"row $class\">");
+			$this->_print("<div class=\"$class row\">");
 		}
 	}
 	// line complete, does flush()
 	function _lineend() {
-		if (!$this->offline) $this->_print("</div>");
-		$this->_print(getNewline());
-		
+		if ($this->offline) {
+			$this->_print(getNewline());
+		} else {
+			$this->_print("</div>".getNewline());
+		}
 		flush();
 	}
 	// text block start (printed inside a line)
@@ -243,11 +253,11 @@ class Report {
 	
 	function _toggleDebug() {
 		?>
-		<script>
-		function hide(level) {
+		<script type="text/javascript">
+		function hideDebug() {
 			var p = document.getElementsByTagName('div');
-			for (i = 0; i < p.length; i++) {
-				if (p[i].getAttribute('class').indexOf(level)>=0) p[i].style.display = 'none';
+			for (i = 0; i < p.length; i++) { // does not work in ie
+				if (/debug.*/.test(p[i].getAttribute('class'))) p[i].style.display = 'none';
 			}
 		}
 		function showAll() {
@@ -256,10 +266,10 @@ class Report {
 				p[i].style.display = '';
 			}	
 		}
-		hide('debug');
+		hideDebug();
 		</script>
 		<?php
-		$this->_print("<p><a href=\"javascript:showAll()\">show $nd debug messages</a></p>");		
+		$this->_print("<p><a href=\"javascript:showAll()\">show $this->nd debug messages</a></p>\n");		
 	}
 
 }

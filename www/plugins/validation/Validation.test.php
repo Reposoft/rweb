@@ -13,6 +13,7 @@ class TestValidation extends UnitTestCase {
 	
 	function testDefineRuleAfterSubmit() {
 		$_REQUEST['myfield'] = 'hello';
+		$this->sendMessage('defining a rule for "myfield"');
 		rule('myfield', '--');
 		$this->assertError();
 	}

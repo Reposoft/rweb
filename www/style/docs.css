@@ -33,6 +33,10 @@ table.rows td {
 .testsummary {
 	border: 1px solid #CCCC99;
 }
-.testname {
-	width: 35%;
+div.testname {
+}
+div.testresult {
+}
+div.test > div {
+	display: block;
 }
