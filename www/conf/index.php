@@ -89,7 +89,8 @@ function html_start($title='Repos configuration info') {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title><?php echo $title ?></title>
-<link href="../css/repos-standard.css" rel="stylesheet" type="text/css">
+<link href="../style/global.css" rel="stylesheet" type="text/css">
+<link href="../style/docs.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
