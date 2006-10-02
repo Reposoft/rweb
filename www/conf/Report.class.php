@@ -76,13 +76,17 @@ class Report {
 	
 	function _testoutput($class, $message) {
 		$s='i';
-		if ($class=='passed') $s='O';
+		if ($class=='passed') $s='=';
 		if ($class=='failed') $s='X';
 		if ($class=='debug') $s='.';
 		if ($class=='warning') $s='?';
 		if ($class=='error') $s='!';
-		$message = str_replace('"','&quot;', $message);
-		$this->_output("<div class=\"$class\" title=\"$message\">$s</div>");
+		if ($this->offline) {
+			$this->_output(" $s $message");
+		} else {
+			$message = str_replace('"','&quot;', $message);
+			$this->_output("<div class=\"$class\" title=\"$message\">$s</div>");
+		}
 	}
 	
 	/**
