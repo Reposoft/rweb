@@ -1,1 +1,0 @@
-php "C:\Program\Wamp\Php\phpdoc" -t "C:\Program\Wamp\www\output" -o HTML:frames:default -d "C:\Program\Wamp\www\repos" -i "C:\Program\Wamp\www\repos\lib\*.*"
