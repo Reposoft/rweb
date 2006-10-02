@@ -43,7 +43,8 @@ table.rows td {
 div.test {
 	height: 1.4em;
 }
-div.test div {
+div.test div,acronym {
+	cursor: help;
 	display: inline;
 	padding: 1px;
 }
@@ -64,6 +65,7 @@ div.test > div.testoutput > acronym {
 	padding-left: 0.4em;
 	padding-right: 0.4em;	
 }
+/* using sweetTitles instead
 div.test > div.testoutput > pre {
 	margin-top: -0.2em;
 	width: 1.4em;
@@ -75,3 +77,4 @@ div.test > div.testoutput > pre:hover {
 	width: auto;
 	height: auto;
 }
+*/

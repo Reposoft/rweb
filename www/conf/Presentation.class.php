@@ -46,7 +46,8 @@ function validate($requiredFieldsSeparatedByComma) {
 }
 
 if (isset($_GET['validate'])) {
-	
+	echo "Validation not implemented";
+	exit(0);
 }
 
 // -------- user settings ---------

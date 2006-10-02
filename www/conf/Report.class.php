@@ -90,7 +90,9 @@ class Report {
 			$this->_output(" $s $message");
 		} else {
 			$message = str_replace('"','&quot;', $message);
-			$this->_output("<acronym class=\"$class\" title=\"$message\">$s</acronym>");
+			$this->_output("<acronym class=\"$class\" title=\"");
+			$this->_output($message);
+			$this->_output("\">$s</acronym>");
 		}
 	}
 	
@@ -216,7 +218,6 @@ class Report {
 	function _formatArray($message) {
 		$msg = '';
 		$linebreak = getNewline();
-		if (!$this->offline) $linebreak = "<br />".$linebreak;
 		foreach ( $message as $key=>$val ) {
 			if ( $val===false )
 				$val = 0;
@@ -241,6 +242,8 @@ class Report {
 		$this->_print('<title>Repos administration: ' . $title . '</title>');
 		$this->_print('<link href="/repos/style/global.css" rel="stylesheet" type="text/css"/>');
 		$this->_print('<link href="/repos/style/docs.css" rel="stylesheet" type="text/css"/>');
+		// TODO use head.js
+		$this->_print('<script src="/repos/scripts/lib/jquery/jquery.js" type="text/javascript"></script>');
 		$this->_print('<link href="/repos/plugins/titles/sweetTitles.css" rel="stylesheet" type="text/css"/>');
 		$this->_print('<script src="/repos/plugins/titles/addEvent.js" type="text/javascript"></script>');
 		$this->_print('<script src="/repos/plugins/titles/sweetTitles.js" type="text/javascript"></script>');
@@ -272,24 +275,11 @@ class Report {
 	}
 	
 	function _toggleDebug() {
+		// thanks to jQuery
 		?>
-		<script type="text/javascript">
-		function hideDebug() {
-			var p = document.getElementsByTagName('div');
-			for (i = 0; i < p.length; i++) { // does not work in ie
-				if (/debug.*/.test(p[i].getAttribute('class'))) p[i].style.display = 'none';
-			}
-		}
-		function showAll() {
-			var p = document.getElementsByTagName('div');
-			for (i = 0; i < p.length; i++) {
-				p[i].style.display = '';
-			}	
-		}
-		hideDebug();
-		</script>
-		<?php
-		$this->_print("<p><a href=\"javascript:showAll()\">show $this->nd debug messages</a></p>\n");		
+		<script type="text/javascript">$('.debug').hide();</script>
+		<p><a href="#" onclick="$('.debug').show()">show <?php echo($this->nd); ?> debug messages</a></p>
+		<?php	
 	}
 
 }

@@ -127,8 +127,8 @@ class HtmlReporter extends SimpleReporter {
         parent::paintError($message);
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
-        $p = implode(" -&gt; ", $breadcrumb);
-        $p .= " -&gt; <strong>" . $this->_htmlEntities($message) . "</strong><br />\n";
+        $p = implode(":", $breadcrumb);
+        $p .= ": " . $this->_htmlEntities($message) . "";
         $this->report->error($p);
     }
     

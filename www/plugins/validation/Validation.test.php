@@ -29,9 +29,11 @@ class TestValidation extends UnitTestCase {
 		$url = getParent($url).'?validate=1&name=somename';
 		$this->sendMessage("Request url: $url");
 		$handle = fopen($url, 'r');
-		$result = fread($handle);
+		$result = fread($handle, 32*1024); // max response size for test
 		fclose($handle);
-		$this->sendMessage("Response: ".$result);
+		$this->assertFalse(strContains($result, '<html'), "Should not return HTML, only a response string.");
+		$this->sendMessage(array('Result:',$result));
+		
 	}
 	
 }
