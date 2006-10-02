@@ -26,29 +26,10 @@ header('Content-type: text/html; charset=utf-8');
 // --- selfchecks ---
 
 // ------ form validation support -------
-
 // common field rules
 define('RULE_FILENAME', '');
-
-// validation one-liners from logic scripts
-// if a request parameter with the fieldname is set, it is validated immediately
-function rule($fieldname, $constantOrRegexOrFunction, $required=false) {
-	
-}
-
-// validate a list of fields, if there is no rule for a field it is assumed required
-function validate($requiredFieldsSeparatedByComma) {
-	$n = func_num_args();
-	for($i=0; $i<$n; $i++) {
-		$fieldname = func_get_arg($i);
-		
-	}
-}
-
-if (isset($_GET['validate'])) {
-	echo "Validation not implemented";
-	exit(0);
-}
+// the plugin
+require_once(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php');
 
 // -------- user settings ---------
 
