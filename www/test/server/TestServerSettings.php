@@ -14,6 +14,10 @@ class TestServerSettings extends UnitTestCase {
 		$M = 1048576;
 		$this->assertTrue($maxsize > 10*$M, "10 MB file uploads must be allowed, but upload_max_filesize is $maxsize.");
 	}
+	
+	function testUrlFopen() {
+		$this->assertTrue(1, ini_get('allow_url_fopen'), "allow_url_fopen must be enabled");
+	}
 }
 
 testrun(new TestServerSettings());

@@ -24,6 +24,7 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertFalse(strEnds('', '/'));
 		$this->assertFalse(strEnds(null, '/'));
 		$this->assertFalse(strEnds(3, '/'));
+		$this->assertTrue(strEnds('http://localhost/repos/plugins/validation/Validation.test.php', 'validation/Validation.test.php'));
 	}
 	
 	function testStrContains() {

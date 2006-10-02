@@ -90,7 +90,7 @@ class Report {
 			$this->_output(" $s $message");
 		} else {
 			$message = str_replace('"','&quot;', $message);
-			$this->_output("<div class=\"$class\" title=\"$message\">$s</div>");
+			$this->_output("<acronym class=\"$class\" title=\"$message\">$s</acronym>");
 		}
 	}
 	
@@ -239,8 +239,11 @@ class Report {
 		$this->_print('<head>');
 		$this->_print('<meta http-equiv="Content-Type" content="text/html; charset=utf-8">');
 		$this->_print('<title>Repos administration: ' . $title . '</title>');
-		$this->_print('<link href="/repos/style/global.css" rel="stylesheet" type="text/css">');
-		$this->_print('<link href="/repos/style/docs.css" rel="stylesheet" type="text/css">');
+		$this->_print('<link href="/repos/style/global.css" rel="stylesheet" type="text/css"/>');
+		$this->_print('<link href="/repos/style/docs.css" rel="stylesheet" type="text/css"/>');
+		$this->_print('<link href="/repos/plugins/titles/sweetTitles.css" rel="stylesheet" type="text/css"/>');
+		$this->_print('<script src="/repos/plugins/titles/addEvent.js" type="text/javascript"></script>');
+		$this->_print('<script src="/repos/plugins/titles/sweetTitles.js" type="text/javascript"></script>');
 		$this->_print("</head>\n");
 		$this->_print("<body>\n");
 		$this->_print("<div id=\"workspace\">\n");

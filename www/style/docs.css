@@ -60,7 +60,7 @@ div.test > div.testoutput {
 	left: 35%;
 	font-family: monospace;	
 }
-div.test > div.testoutput > div {
+div.test > div.testoutput > acronym {
 	padding-left: 0.4em;
 	padding-right: 0.4em;	
 }

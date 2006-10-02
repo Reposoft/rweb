@@ -3,6 +3,7 @@
  * see test page for documentation
  */
 
+// currently the validation methods are in the Presentation class
 require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
 
 // define the validation rules

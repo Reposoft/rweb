@@ -22,6 +22,18 @@ class TestValidation extends UnitTestCase {
 		
 	}
 	
+	function testValidateFieldUsingAJAX() {
+		$url = repos_getSelfUrl();
+		$this->sendMessage("This test has URL $url, file is ".basename(__FILE__));
+		if (!strEnds($url, basename(__FILE__))) $this->fail("Can not get URL of this test, aborting AJAX test.");
+		$url = getParent($url).'?validate=1&name=somename';
+		$this->sendMessage("Request url: $url");
+		$handle = fopen($url, 'r');
+		$result = fread($handle);
+		fclose($handle);
+		$this->sendMessage("Response: ".$result);
+	}
+	
 }
 
 testrun(new TestValidation());
