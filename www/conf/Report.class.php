@@ -14,6 +14,10 @@
 // TODO convert to HTML-entities where needed (without ending up in some kind of wiki syntax). see test reporter.php
 require_once(dirname(__FILE__).'/repos.properties.php');
 
+function getReportTime() {
+    return '<span class="datetime">'.date("Y-m-d\TH:i:sO").'</span>';
+}
+
 class Report {
 
 	var $offline;
@@ -240,6 +244,8 @@ class Report {
 		$this->_print("<body>\n");
 		$this->_print("<div id=\"workspace\">\n");
 		$this->_print("<div id=\"contents\">\n");
+		$this->_print("<h1>$title</h1>\n");
+		$this->_print(getReportTime());
 		} else {
 			$this->_linestart();
 			$this->_output("---- $title ----");

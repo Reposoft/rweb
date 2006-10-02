@@ -1,10 +1,7 @@
 <?php
 // svn propset svn:keywords "Rev" configuration.php
 $rev = strtr("$Rev$",'$',' ');
-// default configuration includes, the way they should be referenced in php files
-function upOne($dirname) { return substr($dirname, 0, strrpos(rtrim(strtr($dirname,'\\','/'),'/'),'/') ); }
-//require( upOne(dirname(__FILE__)) . '/conf/authentication.inc.php' );
-require( upOne(dirname(__FILE__)) . "/conf/repos.properties.php" );
+require("../../conf/repos.properties.php" );
 
 // page contents
 $links = array(
@@ -16,15 +13,15 @@ $sections = array(
 	'administration' => 'Local files needed for administration of the repository',
 	'apache2' => 'Web server configuration directives',
 	'crontab' => 'Crontab or scheduler commands needed for backup',
-	'hooks' => 'Hook scripts for event-driven repository maintenance',
-	'ie_png' => 'Enable 24-bit PNG transparency in IE for basic SVN layout theme'
+	//'hooks' => 'Hook scripts for event-driven repository maintenance',
+	//'ie_png' => 'Enable 24-bit PNG transparency in IE for basic SVN layout theme'
 	);
 
 // helper variables
-$repourl = getConfig( 'repo_url' );
+$repourl = getRepository();
 $reponame = $repourl; // getConfig( 'repo_name' ) no loger used, minimizing config dependence.
 $repodir = getConfig( 'local_path' );
-$reposweb = getConfig( 'repos_web' );
+$reposweb = getWebapp();
 $admindir = getConfig( 'admin_folder' );
 $repouri = ereg_replace("[[:alpha:]]+://[^-/<>[:space:]]+[[:alnum:]/]","/", $repourl);
 $user = exec( getCommand('whoami') );
@@ -55,7 +52,7 @@ function showFooter($Q=';') {
 	line("$Q --------------------------------" );
 }
 function line($text='') {
-	echo "$text\n\r";
+	echo $text.getNewline();
 }
 
 if ( isset($_GET['download']) ) {
@@ -76,19 +73,21 @@ if ( isset($_GET['download']) ) {
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title><?php echo $title ?></title>
-	<link href="../css/repos-standard.css" rel="stylesheet" type="text/css">
+	<link href="../../style/global.css" rel="stylesheet" type="text/css">
+	<link href="../../style/docs.css" rel="stylesheet" type="text/css">
 	</head>
 	
 	<body>
+	<h2>Repository set up</h2>
+	<p>based on the current <a href="../../conf/">repos.properties</a> configuration.</p>
 	<?php
-	line( "<h2>Configuration sections</h2>" );
 	line( "<ul>");
 	foreach ( $sections as $name => $descr ) {
 		line( "<li><a href=\"#$name\">$descr</a></li>" );
 	}
 	line( "</ul>");
 	foreach ( $sections as $name => $descr ) {
-		line( "<h3><a name=\"$name\"/>$name</h3>" );
+		line( "<a name=\"$name\"></a><h2>$name</h2>" );
 		line( "<p>$descr</p>" );
 		line( "<a href=\"?download=$name\">download</a>" );
 		line( "<pre>" );
@@ -101,8 +100,9 @@ if ( isset($_GET['download']) ) {
 function repository() {
     global $repodir;
 	$cmd = getCommand( 'svnadmin' );
+	$user = 'administrator';
 	// create command
-	showHeader("Create repository $dir accessible for system user $user","#" );
+	showHeader("Create repository $repodir accessible for system user $user","#" );
 	line( "mkdir $repodir" );
 	line( "$cmd create $repodir" );
 	if ( ! isWindows() ) {
@@ -118,6 +118,7 @@ function repository() {
 }
 
 function administration() {
+	global $isAcl, $isExport, $path;
 	if ( $isAcl ) {
 		// authorization
 		$acl = getConfig('access_file');
@@ -159,8 +160,8 @@ function apache2() {
 	  DAV svn
 	  SVNPath <?php echo $repodir ?> 
 	  Options Indexes
-	  #Only from the specified domain: SVNIndexXSLT "<?php echo $reposweb . "/svnlayout/repos.xsl" ?>"
-	  SVNIndexXSLT "<?php echo "/repos/svnlayout/repos.xsl" ?>"
+	  # Layout file, "<?php echo $reposweb . "view/repos.xsl" ?>" or:
+	  SVNIndexXSLT "<?php echo "/repos/view/repos.xsl" ?>"
 	  # Allow edit from WebDAV folder
 	  SVNAutoversioning on
 	  
@@ -173,23 +174,6 @@ function apache2() {
 	  AuthzSVNAccessFile <?php echo $admindir . '/' . getConfig('access_file'); ?> 
 	  <?php } ?> 
 	&lt;/Location&gt;
-	# Tomcat connector
-	&lt;IfModule mod_jk2.c&gt;
-		# Jk2 worker lb must be properly set up, see installation docs
-		&lt;Location ~ ".*\.jwa"&gt;
-			JkUriSet group lb:lb
-			JkUriSet info "repos.se"
-		&lt;/Location&gt;
-		&lt;Location ~ ".*\.jsp"&gt;
-			JkUriSet group lb:lb
-			JkUriSet info "repos.se"
-		&lt;/Location&gt;
-	&lt;/IfModule&gt;
-	&lt;IfModule mod_jk.c&gt;
-		# Jk worker ajp13 must be properly set up
-		JkMount *.jsp ajp13
-		JkMount *.jwa ajp13
-	&lt;/IfModule&gt;
 	
 	<?php if ( $isBackup ) { ?>
 	# Repository backup folder for mirroring <?php echo $backupurl ?> 
@@ -211,26 +195,5 @@ function apache2() {
 	<?php } 
 	showFooter("#");
 }
-
-function hooks() {
-
-}
-
-function ie_png() {
-	?>
-	// Need absolute URL to png-behavior for Internet Explorer
-	// in themes/simple/css/repos-standard.css:
-	.. img { 
-		behavior: url("https://[your host here]/themes/simple/css/pngbehavior.htc");
-	} ..
-	// Need the host to match the SVN url to make IE feel secure
-	// in themes/simple/css/htbehavior.htc:
-	..
-	blankSrc = "https://[your host here]/themes/simple/css/" + blankSrc;
-	..
-	// Also, dont forget to go to themes/simple/icons and run "Ant" to download icons
-	<?
-}
-
 
 ?>

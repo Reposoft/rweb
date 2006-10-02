@@ -2,12 +2,10 @@
 require( dirname(dirname(__FILE__)) . '/conf/Report.class.php' );
 require( dirname(__FILE__) . '/admin.inc.php' );
 
-$report = new Report('Repos backup status');
+//$report = new Report('System status');
 
-html_start("status");
-
-$repourl = getConfig( 'repo_url' );
-$repodir = getConfig( 'local_path' );
+$repourl = getRepository();
+$repodir = getConfig('local_path');
 if ( !isRepository($repodir) )
 	fatal("repository '$repourl' is not available locally");
 $headrev = getHeadRevisionNumber($repodir);
@@ -38,10 +36,9 @@ function getBackupInfoAsHtml($backupArray) {
 }
 
 ?>
-<h2>Repos configuration</h2>
 <p><a href="../conf/index.php">Check configuration</a></p>
-<p><a href="configuration.php">Propose system configuration</a></p>
-<h2>Administration</h2>
+<p><a href="configure/">Propose system configuration</a></p>
+<h2>Backup status</h2>
 <table id="repository_list">
 <tr>
 <th><?php echo $repourl; ?></th>
@@ -50,5 +47,5 @@ function getBackupInfoAsHtml($backupArray) {
 <td colspan="2"><?php getBackupInfoAsHtml($backup); ?></td>
 </tr>
 </table>
-<p><a href="repos-backup-verify.php">Verify current backup files</a></p>
+<p><a href="verify/">Verify current backup files</a></p>
 <?php html_end() ?>

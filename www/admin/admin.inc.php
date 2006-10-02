@@ -1,6 +1,6 @@
 <?php
-require( dirname(dirname(__FILE__)) . "/conf/repos.properties.php" );
-require( dirname(dirname(__FILE__)) . "/conf/Report.class.php" );
+require_once( dirname(dirname(__FILE__)) . "/conf/repos.properties.php" );
+require_once( dirname(dirname(__FILE__)) . "/conf/Report.class.php" );
 
 /**
  * This file contains helper functions for backup administration (such as file name resolution).
@@ -12,11 +12,6 @@ require( dirname(dirname(__FILE__)) . "/conf/Report.class.php" );
 // override theme function
 function getTheme() {
 	return "/themes/simple"; 
-}
-
-// formatted date
-function getTime() {
-    return '<span class="datetime">'.date("Y-m-d\TH:i:sO").'</span>';
 }
 
 // temporary solution, TODO make admin a class that takes a report instance as constructor argument

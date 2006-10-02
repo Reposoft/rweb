@@ -53,17 +53,17 @@ $repository = array(
 
 
 // checking urls needed for repository access
-$rurl = getConfig('repo_url');
-$realm = getConfig('repo_realm');
+$rurl = getRepository();
+$realm = $rurl;
 if (strlen($realm)<1) trigger_error('repo_realm not set in configuration');
-$aurl = str_replace("://","://" . getReposUser() . ":" .  getReposPass() . "@", getConfig('repo_url'));
+$aurl = str_replace("://","://" . getReposUser() . ":" .  _getReposPass() . "@", getRepository());
 $uurl = $aurl.'/'.getReposUser();
-$lurl = ereg_replace("://[^/<>[:space:]]+[[:alnum:]]/","://localhost/", getConfig('repo_url'));
-if ( getConfig('repos_web'==$rurl) )
-	echo "Warning: repos_web and repos_url are the same - mixing static resources and repository";
+$lurl = ereg_replace("://[^/<>[:space:]]+[[:alnum:]]/","://localhost/", getRepository());
+if ( getWebapp()==getRepository() )
+	echo "Warning: repos_web is same as repository - mixing static resources and repository";
 	
-$requiredUrls = array( getConfig('repos_web') => 'Acces to static contents ' . getConfig('repos_web') );
-$requiredUrls[$rurl] = 'Anonymous acces to the repository ' . getConfig('repo_url');
+$requiredUrls = array( getWebapp() => 'Acces to static contents ' . getRepository());
+$requiredUrls[$rurl] = 'Anonymous acces to the repository ' . getRepository();
 $requiredUrls[$aurl] = "Access to repository with current authenticatied user (" . getReposUser() . ")";
 $requiredUrls[$uurl] = "Access to user folder in repository (" . getReposUser() . ")";
 $requiredUrls[$lurl] = "Access to repository using localhost";
@@ -93,7 +93,7 @@ function html_start($title='Repos configuration info') {
 </head>
 
 <body>
-<?
+<?php
 }
 
 function html_end() {
@@ -103,7 +103,7 @@ function html_end() {
 function line_start($text='') {
 	echo "<p>";
 	if (strlen($text)>0) {
-	?><span style="width: 400px; overflow:hidden; border-bottom: thin dotted #CCCCCC; "><? echo $text ?></span><?
+	?><span style="width: 400px; overflow:hidden; border-bottom: thin dotted #CCCCCC; "><?php echo $text ?></span><?php
 	}
 }
 
@@ -114,11 +114,11 @@ function line_end() {
 // --- helper functions ---
 
 function sayOK($msg = 'OK') {
-	?><span style="color:#006600; padding-left:5px; padding-right:5px;"><strong><? echo $msg ?></strong></span><?
+	?><span style="color:#006600; padding-left:5px; padding-right:5px;"><strong><?php echo $msg ?></strong></span><?php
 }
 
 function sayFailed($msg = 'Failed') {
-	?><span style="color:#990000; padding-left:5px; padding-right:5px;"><strong><? echo $msg ?></strong></span><?
+	?><span style="color:#990000; padding-left:5px; padding-right:5px;"><strong><?php echo $msg ?></strong></span><?php
 }
 
 // --- sections' presentation ---
@@ -135,7 +135,7 @@ function links() {
 function requiredConfig() {
 	global $requiredConfig;
 	foreach ($requiredConfig as $key => $descr) {
-		$val = getConfig($key);
+		$val = _getConfig($key);
 		line_start("$descr ($key): ");
 		if ($val === false)
 			sayFailed("Missing");
@@ -236,7 +236,7 @@ function debug() {
 	//echo $repos_authentication['user'];
 	echo getReposUser();
 	echo "\nPassword = ";
-	echo str_repeat("*", strlen(getReposPass()));
+	echo str_repeat("*", strlen(_getReposPass()));
 	//echo $repos_authentication['pass'];
 	echo "\nBASIC string = ";
 	echo getReposAuth();

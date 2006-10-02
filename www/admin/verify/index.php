@@ -1,6 +1,6 @@
 <?php
 
-require( dirname(__FILE__) . '/repos-backup.inc.php' );
+require('../repos-backup.inc.php' );
 
 $backupFolder = getConfig('backup_folder');
 
