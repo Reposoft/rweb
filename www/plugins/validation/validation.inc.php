@@ -44,9 +44,14 @@ class Rule {
 	 * @param String $value the value to check
 	 * @return String error message if invalid, null if valid (use empty() to check)
 	 */
-	function validate($value) { if (!$this->valid($value)) return $this->_message; }
+	function validate($value) { if (!$this->valid($value)) {return $this->_message;} }
 	/**
 	 * Represents the actual validation logic.
+	 * 
+	 * Subclasses may override validate($value) instead,
+	 * to have different messages for different types of errors,
+	 * which leaves this function undefined.
+	 * 
 	 * @param String $value the value to check
 	 * @return true if valid, false if invalid
 	 */

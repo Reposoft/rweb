@@ -57,6 +57,8 @@ class TestValidation extends UnitTestCase {
 		$r = new RuleEreg('name', 'must be a string with @ somewhere in the middle', $regexp);
 		$this->assertTrue($r->valid('a@b'));
 		$this->assertFalse($r->valid('ab'));
+		$this->assertNull($r->validate('a@b'));
+		$this->assertNotNull($r->validate('ab'));
 	}
 	
 	function testValidateDirectlyWhenRuleIsCreated() {
