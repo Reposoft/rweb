@@ -4,7 +4,7 @@
  * Functions for reading and writing an ordered list of incremental SVN dumpfiles
  */
 
-require( dirname(__FILE__) . '/repos-admin.inc.php' );
+require( dirname(__FILE__) . '/admin.inc.php' );
 
 define('TEMP_DIR',"/tmp");
 define('BACKUP_SCRIPT_VERSION',"\$LastChangedRevision$");

@@ -1,5 +1,8 @@
 <?php
-require( dirname(__FILE__) . '/repos-admin.inc.php' );
+require( dirname(dirname(__FILE__)) . '/conf/Report.class.php' );
+require( dirname(__FILE__) . '/admin.inc.php' );
+
+$report = new Report('Repos backup status');
 
 html_start("status");
 
