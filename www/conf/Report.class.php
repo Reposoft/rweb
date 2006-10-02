@@ -63,7 +63,7 @@ class Report {
 	function testend() {
 		$this->_lineend();
 		if ($this->ne + $this->nf >= $this->test) {
-			$this->_linestart('testresult error');
+			$this->_linestart('testresult failed');
 			$this->_output("failed");
 		} else {
 			$this->_linestart('testresult passed');
@@ -108,10 +108,7 @@ class Report {
 	 */
 	function debug($message) {
 		$this->nd++;
-		if ($this->test) { $this->_testoutput('debug', $message); return; }
-		$this->_linestart('debug');
-		$this->_output($message);
-		$this->_lineend();
+		$this->_outputline('debug', $message);
 	}
 	
 	/**
@@ -120,10 +117,7 @@ class Report {
 	 */
 	function info($message) {
 		$this->ni++;
-		if ($this->test) { $this->_testoutput(null, $message); return; }
-		$this->_linestart();
-		$this->_output($message);
-		$this->_lineend();
+		$this->_outputline(null, $message);
 	}
 	
 	/**
@@ -132,10 +126,7 @@ class Report {
 	 */
 	function warn($message) {
 		$this->nw++;
-		if ($this->test) { $this->_testoutput('warning', $message); return; }
-		$this->_linestart('warning');
-		$this->_output($message);
-		$this->_lineend();
+		$this->_outputline('warning', $message);
 	}
 	
 	/**
@@ -145,9 +136,7 @@ class Report {
 	function error($message) {
 		$this->ne++;
 		if ($this->test) { $this->_testoutput('error', $message); return; }
-		$this->_linestart('error');
-		$this->_output($message);
-		$this->_lineend();
+		$this->_outputline('error', $message);
 	}
 	
 	/**
@@ -192,6 +181,13 @@ class Report {
 	function _blockend() {
 		if (!$this->offline) $this->_print("</pre>");
 		$this->_print(getNewline());		
+	}
+	// writes a line of output
+	function _outputline($class, $message) {
+		if ($this->test) { $this->_testoutput($class, $message); return; }
+		$this->_linestart($class);
+		$this->_output($message);
+		$this->_lineend();
 	}
 	// writes a message to output no HTML here because it is used both online and offline
 	function _output($message) {
@@ -253,7 +249,7 @@ class Report {
 	}
 	
 	function _summary() {
-		$class = $this->hasErrors() ? "error" : "passed";
+		$class = $this->hasErrors() ? "failed" : "passed";
         $this->_output("<div class=\"testsummary $class\">");
         $this->_output("<strong>" . $this->no . "</strong> passes, ");
         $this->_output("<strong>" . $this->nf . "</strong> fails and ");

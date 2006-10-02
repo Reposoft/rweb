@@ -30,8 +30,15 @@ table.rows td {
 	border-bottom: 1px solid #CCCC99;	
 }
 /* tests */
+.passed {
+	background-color: #ddffbb;
+}
+.failed {
+	background-color: #ffddbb;	
+}
 .testsummary {
-	border: 1px solid #CCCC99;
+	padding: 0.4em;
+	margin-top: 0.4em;
 }
 div.test {
 	height: 1.4em;
@@ -41,17 +48,19 @@ div.test div {
 	padding: 1px;
 }
 div.test > .testname {
-	background-color: #eee;
-	margin-right: 2em;
 }
 div.test > div.testresult {
-	background-color: #eee;
-	margin-left: 2em;
 	position: absolute;
 	left: 80%;
+	width: 12%;
+	text-align: center;
 }
 div.test > div.testoutput {
 	position: absolute;
 	left: 35%;
 	font-family: monospace;	
+}
+div.test > div.testoutput > div {
+	padding-left: 4px;
+	padding-right: 4px;	
 }

@@ -18,6 +18,7 @@
 	<tbody>
 <?php
 $testfiles = array(
+'test/server/TestServerSettings.php',
 'conf/repos.properties.test.php',
 'conf/Presentation.test.php',
 'conf/Report.test.php',
@@ -30,7 +31,8 @@ $testfiles = array(
 function printTestSuite($testfiles) {
 	echo("<tr><td><b>repos.se PHP Test Suite</b></td></tr>\n");
 	foreach ($testfiles as $file) {
-		echo("<tr><td><a href=\"?file=$file\">$file</a></td></tr>\n");
+		$name = substr($file, strpos($file, '/')+1);
+		echo("<tr><td><a href=\"?file=$file\">$name</a></td></tr>\n");
 	}
 }
 
