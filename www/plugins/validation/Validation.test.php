@@ -4,6 +4,14 @@ require("../../lib/simpletest/setup.php");
 
 require("../../conf/Presentation.class.php");
 
+class MyRule extends Rule {
+	function valid($value) { return ($value=='ohmy'); }
+}
+
+class MyRuleWithDynamicMessage extends Rule {
+	function validate($value) { if ($value!='ohmy') return "Value is \"$value\", but should be \"ohmy\""; }
+}
+
 class TestValidation extends UnitTestCase {
 	
 	function testJson() {
@@ -19,20 +27,45 @@ class TestValidation extends UnitTestCase {
 		$this->assertEqual($value, $backagain);
 	}
 	
-	function testDefineRuleBeforeInput() {
-		rule('myfield', '--', false);
-		rule('myfield2', '--', true);
+	function testDefaultRule() {
+		$r = new Rule('name');
+		$this->assertNotNull($r);
+		$this->assertTrue($r->valid('something'), "default rule should accept any value except empty");
+		$this->assertFalse($r->valid(''), "default rule should reject empty string");
+		$this->assertFalse($r->valid(null), "default rule should reject null");
+		$this->assertNull($r->validate('s'), "validate(value) should not return anything if valid");
+		$this->assertEqual($r->_message, $r->validate(''), "should return error message if value is invalid");
 	}
 	
-	function testDefineRuleAfterSubmit() {
-		$_REQUEST['myfield'] = 'hello';
-		$this->sendMessage('defining a rule for "myfield"');
-		rule('myfield', '--');
+	function testCustomRule() {
+		$r = new MyRule('name', 'not the default error message');
+		$this->assertTrue($r->valid('ohmy'));
+		$this->assertFalse($r->valid('oh'));
+		$this->assertNull($r->validate('ohmy'));
+		$this->assertEqual('not the default error message', $r->validate('oh'));
+	}
+	
+	function testCustomRuleWithMessage() {
+		$r = new MyRuleWithDynamicMessage('n');
+		$this->assertNull($r->validate('ohmy'));
+		$this->assertEqual('Value is "oh", but should be "ohmy"', $r->valid('oh'));
+	}
+	
+	function testRuleEreg() {
+		$regexp = '[^@]+@[^@]+';
+		$this->sendMessage("The reqular expression in this test is '$regexp'");
+		$r = new RuleEreg('name', 'must be a string with @ somewhere in the middle', $regexp);
+		$this->assertTrue($r->valid('a@b'));
+		$this->assertFalse($r->valid('ab'));
+	}
+	
+	function testValidateDirectlyWhenRuleIsCreated() {
+		$_REQUEST['myfield'] = '';
+		$r = new Rule('myfield');
+		$this->sendMessage("If a rule is defined and a matching parameter is given, it should be validated directly.");
 		$this->assertError();
-	}
-	
-	function testValidate() {
-		
+		if ($r->valid('')) $this->fail("Seems that the default rule did not validate correctly.");
+		unset($_REQUEST['myfield']);
 	}
 	
 	function testValidateFieldUsingAJAX() {
@@ -55,7 +88,8 @@ class TestValidation extends UnitTestCase {
 		$this->assertEqual("{id: 'name', value: 'somename', success: true, msg: ''}", $result);
 	}
 	
-	function testValidateFieldRuleFail() {
+	function testValidateFieldUsingAJAXRuleFail() {
+		// the function does exit() so it is hard to test
 		$expect = "{id: 'r_username', value: 'bosse', success: false, msg: 'Your Username is too short (more than 6 characters) Please try again'}";
 	}
 	
