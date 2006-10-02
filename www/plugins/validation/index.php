@@ -7,7 +7,8 @@
 require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
 
 // define the validation rules
-define(RULE_FILENAME, new RuleEreg('filename','naaaaaa. only regex in constant?'));
+//define(RULE_FILENAME, new RuleEreg('filename','naaaaaa. only regex in constant?'));
+new Rule('name'); // = 'name' is required
 
 // dispatch to form processing if 'submit' was pressed (button must have name="submit"
 if (isset($_GET['submit'])) processForm();

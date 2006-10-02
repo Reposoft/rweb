@@ -34,7 +34,7 @@ class Rule {
 	 * @param String $fieldname the parameter name when the field value is received
 	 * @param String $message the error message if validation fails, defaults to "This is a required field"
 	 */
-	function Rule($fieldname, $message = "This is a required field") {
+	function Rule($fieldname, $message = "required") {
 		$this->_message = $message;
 		$this->fieldname = $fieldname;
 		Validation::_add($this);
