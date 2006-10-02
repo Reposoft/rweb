@@ -7,7 +7,7 @@ if (isWindows()) {
 }
 // the shell script will be removed when we know that the php version works on all platforms
 header('Content-type: text/plain; charset=utf-8');
-$cmd = dirname(__FILE__).'/setup.sh 2>&1';
+$cmd = dirname(__FILE__).'/setup.php 2>&1';
 $result = passthru($cmd);
 if ($result) {
 	echo("\n\nThe test setup script exited with error code");
