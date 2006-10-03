@@ -6,7 +6,7 @@
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">TestSubmit</td></tr>
+<tr><td rowspan="1" colspan="3">Test submit without client side validation</td></tr>
 </thead><tbody>
 <tr>
 	<td>setTimeout</td>
@@ -15,22 +15,42 @@
 </tr>
 <tr>
 	<td>open</td>
-	<td>plugins/validation/?submit=test&username=short</td>
+	<td>plugins/validation/?submit=test&amp;name=n&amp;filename=&amp;testuser=short</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>Error</td>
+	<td>'description'</td>
 	<td></td>
 </tr>
 <tr>
 	<td>open</td>
-	<td>plugins/validation/?submit=test&username=niceenough</td>
+	<td>plugins/validation/?submit=test&amp;name=n&amp;filename=&amp;description=&amp;testuser=bad</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>welcome</td>
+	<td>error</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>testuser</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>"bad"</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>plugins/validation/?submit=test&amp;name=n&amp;filename=&amp;description=&amp;testuser=niceenough</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>happy campers</td>
 	<td></td>
 </tr>
 

@@ -255,6 +255,14 @@ class Presentation extends Smarty {
 		if (isset($_REQUEST['referer'])) {
 			return $_REQUEST['referer'];
 		}
+		// use javascript in redirect-after-post results
+		if (isset($_GET['result'])) {
+			return "javascript:history.go(-1)";	
+		}
+		// use javascript after form, to preserve values
+		if (isset($_REQUEST['submit'])) {
+			return "javascript:history.go(-1)";
+		}
 		// get from requiest headers TODO use getHttpReferer
 		if (getHttpReferer() && !isset($_GET['result'])) {
 			return getHttpReferer();

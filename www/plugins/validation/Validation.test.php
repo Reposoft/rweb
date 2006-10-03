@@ -119,12 +119,12 @@ class TestValidation extends UnitTestCase {
 	}
 	
 	function testValidateFieldUsingAJAXRuleFail() {
-		$errormsg = 'Username is max 20 characters and can not contain special characters'; // from the test page
-		$expect = "{id: 'username', value: 'test', success: false, msg: '$errormsg'}";
+		$errormsg = 'Username is 4-20 characters and can not contain special characters'; // from the test page
+		$expect = "{id: 'testuser', value: 'tes', success: false, msg: '$errormsg'}";
 		$json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
 		$expected = $json->decode($expect);
 		
-		$url = getParent(repos_getSelfUrl()).'?validation&username=test';
+		$url = getParent(repos_getSelfUrl()).'?validation&testuser=tes';
 		$handle = fopen($url, 'r');
 		$result = fgets($handle);
 		fclose($handle);
