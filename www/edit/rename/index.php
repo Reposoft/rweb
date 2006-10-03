@@ -6,11 +6,13 @@ require( dirname(dirname(__FILE__))."/edit.class.php" );
 new FilenameRule('newname');
 
 // dispatch
-if (isset($_GET['submit'])) {
+if (isset($_GET[SUBMIT])) {
 	svnRename(); 
 } else {
+	$target = getTarget();
 	$template = new Presentation();
-	$template->assign('target', getTarget());
+	$template->assign('target', $target);
+	$template->assign('repository', getRepository().getParent($target));
 	$template->display();
 }
 
@@ -19,7 +21,7 @@ if (isset($_GET['submit'])) {
 // it is also allowed in templates for presentation, but not in field values
 
 function svnRename() {
-	Validation::expect('target', 'newname');
+	Validation::expect('target', 'newname', 'message');
 	$edit = new Edit('move');
 	$targetUrl = getTargetUrl();
 	$newUrl = str_replace(basename($_GET['target']), $_GET['newname'], $targetUrl);

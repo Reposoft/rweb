@@ -6,19 +6,23 @@
 </head>
 
 <body>
+<div id="workspace">
+<div id="commandbar">
+<a id="repository" class="command" href="{=$repository}">return to repository</a>
+</div>
 <div id="contents">
 <h1>Create subfolder</h1>
-<form id="createFolder" name="createFolder" method="get" action="#" tmt:validate="true">
+<form id="createFolder" name="createFolder" method="get" action="#">
   <fieldset>
 	<legend>Create folder in {=$target}</legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
   <p>
     <label for="name">name of new folder</label>
-    <input name="name" type="text" id="name" size="40" tmt:required="true" tmt:pattern="reposFilename" tmt:message="Folder name is required and may not contain ^, :, &amp;, <, >, @, , #, ~, ?, *, $, |, [, ], /, \, commas or quotes" />
+    <input name="name" type="text" id="name" size="40"/>
 </p>
   <p>
     <label for="message">history text</label>
-    <textarea name="message" id="message" cols="30" rows="2" tmt:pattern="reposLogmessage" tmt:message="Contains invalid characters"></textarea>
+    <textarea name="message" id="message" cols="30" rows="2"></textarea>
   </p>
   <p>
     <label for="submit"></label>
@@ -26,7 +30,7 @@
   </p>
   </fieldset>
 </form>
-<p><a id="back" class="action" href="{=$referer}">&lt; back</a></p>
+</div>
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@ require( dirname(dirname(__FILE__))."/edit.class.php" );
 new FilenameRule('name');
 // message and target have default rules
 
-if (isset($_GET['submit'])) {
+if (isset($_GET[SUBMIT])) {
 	Validation::expect('target', 'name', 'message'); //TODO what about message, that is not required?
 	createFolder(getTargetUrl(),$_GET['name'],$_GET['message']); 
 } else {
@@ -16,7 +16,7 @@ if (isset($_GET['submit'])) {
 	}
 	$template = new Presentation();
 	$template->assign('target', $target);
-	$template->assign('repo', getRepositoryUrl());
+	$template->assign('repository', getRepository().$target);
 	$template->display();
 }
 

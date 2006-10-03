@@ -2,12 +2,14 @@
 require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__))."/edit.class.php" );
 
-if (isset($_GET['message'])) {
+if (isset($_GET[SUBMIT])) {
+	Validation::expect('message');
 	delete($_GET['message']); 
 } else {
 	$target = getTarget();
 	$template = new Presentation();
 	$template->assign('target', $target);
+	$template->assign('repository', getRepository().getParent($target));
 	$template->display();
 }
 

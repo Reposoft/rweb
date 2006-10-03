@@ -47,7 +47,7 @@ class FilenameRule extends RuleEreg {
 			'^[a-zA-Z0-9.]+$');
 	}
 	function validate($value) {
-		if (empty($value)) return $this->required ? 'required' : null;
+		if (empty($value)) return $this->required ? 'This is a required field' : null;
 		if (strlen($value) > 50) return "max length 50";
 		return parent::validate($value);
 	}
@@ -260,7 +260,7 @@ class Presentation extends Smarty {
 			return "javascript:history.go(-1)";	
 		}
 		// use javascript after form, to preserve values
-		if (isset($_REQUEST['submit'])) {
+		if (isset($_REQUEST[SUBMIT])) {
 			return "javascript:history.go(-1)";
 		}
 		// get from requiest headers TODO use getHttpReferer

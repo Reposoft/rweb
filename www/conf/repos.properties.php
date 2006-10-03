@@ -33,6 +33,9 @@ define('USERNAME_KEY', 'account');
 define('LOCALE_KEY', 'lang');
 define('THEME_KEY', 'theme');
 
+// parameter conventions
+define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST
+
 // --- application selfcheck, can be removed in releases (tests should cover this) ---
 if (!isset($_repos_config['repositories'])) trigger_error("No repositories configured");
 if (!isset($_repos_config['repos_web'])) trigger_error("Repos web applicaiton root not specified in configuration");

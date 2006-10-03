@@ -22,7 +22,7 @@ new FilenameRule('filename', false);
 new TestUsernameRule('testuser');
 
 // dispatch to form processing if 'submit' was pressed (button must have name="submit")
-if (isset($_GET['submit'])) {
+if (isset($_REQUEST[SUBMIT])) {
 	processForm();
 } else {
 	presentForm();
