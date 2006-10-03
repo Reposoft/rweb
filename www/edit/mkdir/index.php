@@ -3,11 +3,11 @@
 require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__))."/edit.class.php" );	
 
-rule('name', RULE_FILENAME);
+new FilenameRule('name');
 // message and target have default rules
 
 if (isset($_GET['submit'])) {
-	validate('target', 'name', 'message');
+	Validation::expect('target', 'name'); //TODO what about message, that is not required?
 	createFolder(getTargetUrl(),$_GET['name'],$_GET['message']); 
 } else {
 	$target = getTarget();

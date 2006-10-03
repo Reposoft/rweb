@@ -34,15 +34,18 @@ function printTestSuite($testfiles) {
 		$name = substr($file, strpos($file, '/')+1);
 		echo("<tr><td><a href=\"?file=$file\">$name</a></td></tr>\n");
 	}
+	echo ("</tbody></table>\n");
+	echo('<p><a class="action" id="back" href="./" target="_top">&lt back</a></p>');
 }
 
 function printTestCase($file) {
+	$url = '/repos/'.$file;
 ?>
 <tr><td rowspan="1" colspan="3"><?php echo($file); ?></td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td><?php echo('../../'.$file); ?></td>
+	<td><?php echo($url); ?></td>
 	<td></td>
 </tr>
 <tr>
@@ -55,6 +58,9 @@ function printTestCase($file) {
 	<td>0 exceptions</td>
 	<td></td>
 </tr>
+</tbody>
+</table>
+<p><a class="action" id="open" href="<?php echo($url); ?>" target="_blank" accesskey="w">open in new <u>w</u>indow</a></p>
 <?php
 }
 
@@ -69,13 +75,6 @@ if (isset($_GET['file'])) {
 	printTestSuite($testfiles);
 }
 
-?>
-	</tbody>
-</table>
-<?php
-if (!isset($_GET['file'])) {
-	echo('<p><a class="action" id="back" href="./" target="_top">&lt back</a></p>');
-}
 ?>
 </body>
 </html>

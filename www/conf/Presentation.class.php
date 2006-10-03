@@ -39,23 +39,18 @@ require_once(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php'
  * no \/:*?"<> or |.
  */
 class FilenameRule extends RuleEreg {
-	function FilenameRule($fieldname) {
+	var $required;
+	function FilenameRule($fieldname, $required='true') {
 		$this->RuleEreg($fieldname, 
 			'may not contain any of the characters \/:*?<>| or quotes', 
 			'^[a-zA-Z0-9.]+$');
+		$this->required = $required;
 	}
 	function validate($value) {
-		if (empty($value)) return;
+		if (empty($value)) return $this->required ? 'required' : null;
 		if (strlen($value) > 50) return "max length 50";
 		return parent::validate($value);
 	}
-}
-
-/**
- * Shared validation rule representing login name.
- */
-class UsernameRule extends Rule {
-	
 }
 
 // -------- user settings ---------

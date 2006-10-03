@@ -21,59 +21,45 @@
 
 require("../../lib/simpletest/setup.php");
 
-
 class TestServerSettings extends UnitTestCase {
 
-	
-
 	function testMagicQuotes() {
-
 		$this->assertEqual(0, get_magic_quotes_gpc(), "PHP magic_quotes_gpc should be OFF");
-
 	}
 
+	function testErrorReporting() {
+		$this->assertTrue(ini_get('display_errors'), "display_errors should be on because this application handles the presentation");
+	}
 	
-
 	function testFileUploads() {
-
 		$this->assertEqual(1, ini_get('file_uploads'), "File uploads should be allowed");
-
 		$maxsize = ini_get('upload_max_filesize');
-
 		$M = 1048576;
-
-		$this->assertTrue($maxsize > 10*$M, "10 MB file uploads must be allowed, but upload_max_filesize is $maxsize.");
-
+		eval(''.str_replace('M', ' * '.$M, '$max = '.$maxsize.';'));
+		$this->assertTrue($max >= 10*$M, "10 MB file uploads must be allowed, but upload_max_filesize is $maxsize ($max bytes).");
 	}
-
-	
 
 	function testUrlFopen() {
-
 		$this->assertTrue(1, ini_get('allow_url_fopen'), "allow_url_fopen must be enabled");
-
 	}
 
+	function testDefaultEncoding() {
+		$this->assertEqual("text/html", ini_get('default_mimetype'));
+		$this->assertEqual("UTF-8", ini_get('default_charset'));
+	}
 
 	function testMbString() {
-
 		$this->assertTrue(function_exists('mb_http_input'), "extension mb_string must be installed in php");
 		$this->assertEqual("UTF-8", ini_get('mbstring.http_input'));
 		$this->assertFalse(ini_get('mbstring.substitute_character'));
-		$this->assertEqual("UTF-8", ini_get('default_charset'));
-		$this->assertEqual("text/html", ini_get('default_mimetype'));
 		$this->assertEqual("UTF-8", ini_get('mbstring.internal_encoding'));
 		$this->assertEqual("Neutral", ini_get('mbstring.language'));
 		$this->assertTrue(ini_get('mbstring.encoding_translation'));
 		$this->assertEqual("auto", ini_get('mbstring.detect_order'));
-
 	}
-
 }
 
-
 testrun(new TestServerSettings());
-
 
 ?>
 

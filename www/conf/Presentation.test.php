@@ -26,12 +26,19 @@ class TestPresentation extends UnitTestCase {
 	function testFilenameRule() {
 		$r = new FilenameRule('file');
 		$this->assertNull($r->validate('abc.txt'));
-		$this->assertNull($r->validate(''));
+		$this->assertEqual('required', $r->validate(''));
 		$this->assertNull($r->validate(str_repeat('a', 50)));
 		$this->assertNotNull($r->validate(str_repeat('a', 51)), "max length 50");
 		$this->sendMessage("Message on validate 'a\"': ".$r->validate('a"'));
 		$this->assertNotNull($r->validate('a"'), 'double quote not allowed in filename');
 		$this->assertNotNull($r->validate('a*'), '* not allowed in filename');
+	}
+	
+	function testFilenameRuleNotRequired() {
+		$r = new FilenameRule('file', false);
+		$this->assertNull($r->validate(''));
+		$this->assertNull($r->validate('abc.txt'));
+		$this->assertNotNull($r->validate('#¤%&'));
 	}
 }
 

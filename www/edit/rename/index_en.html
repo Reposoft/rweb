@@ -6,24 +6,24 @@
 </head>
 
 <body>
+<div id="workspace">
 <div id="contents">
 <h1>Rename <span class="filename">{=$target|basename}</span></h1>
-<form id="rename" name="rename" method="get" action="#" tmt:validate="true">
+<form id="rename" name="rename" method="get" action="#">
   <fieldset>
 	<legend>rename {=$target}</legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
-	<input name="repo" type="hidden" id="repo" value="{=$repo}" />
   <p>
     <label for="name">current name</label>
     <input id="name" name="name" type="text" size="40" disabled="disabled" value="{=$target|basename}" />
   </p>
   <p>
     <label for="newname">new name</label>
-    <input name="newname" type="text" id="name" size="40" tmt:required="true" tmt:pattern="reposFilename" tmt:message="Name is required and may not contain ^, :, &amp;, <, >, @, #, ~, ?, *, $, |, [, ], /, \, commas or quotes"/>
+    <input name="newname" type="text" id="name" size="40" class="required"/>
 </p>
   <p>
     <label for="message">history text</label>
-    <textarea name="message" id="message" cols="30" rows="2"  tmt:pattern="reposLogmessage" tmt:message="Contains invalid characters"></textarea>
+    <textarea name="message" id="message" cols="30" rows="2"></textarea>
   </p>
   <p>
     <label for="submit"></label>

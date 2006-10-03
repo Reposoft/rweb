@@ -57,7 +57,7 @@ class TestReport extends UnitTestCase {
 	function testOkMessage() {
 		$this->report->ok();
 		$this->assertEqual(1, $this->report->no, "should count test pass");
-		$this->assertEqual(0, strlen($this->report->printed), "should not display ok line if message is null");
+		$this->assertTrue(strContains($this->report->printed, '='));
 	}
 }
 

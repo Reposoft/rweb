@@ -70,11 +70,20 @@ class TestValidation extends UnitTestCase {
 		unset($_REQUEST['myfield']);
 	}
 	
+	function testExpectedFields() {
+		$_REQUEST['myfield'] = '';
+		Validation::expect('myfield');
+		$this->assertNoErrors("Expected fields don't need a value, they just need to be defined.");
+		Validation::expect('myfield', 'formfield2');
+		$this->assertErrorPattern('/formfield2/');
+		unset($_REQUEST['myfield']);
+	}
+	
 	function testValidateFieldUsingAJAX() {
 		$url = repos_getSelfUrl();
 		$this->sendMessage("This test has URL $url, file is ".basename(__FILE__));
 		if (!strEnds($url, basename(__FILE__))) $this->fail("Can not get URL of this test, aborting AJAX test.");
-		$url = getParent($url).'?validate=1&name=somename';
+		$url = getParent($url).'?validation&name=somename';
 		$this->sendMessage("Request url: $url");
 		//$handle = fsockopen($url, 80, $errno, $errstr, 5); // seems to require special php config
 		$handle = fopen($url, 'r');
@@ -87,12 +96,23 @@ class TestValidation extends UnitTestCase {
 		$this->sendMessage(array('Result:',$result));
 		
 		// should be valid
-		$this->assertEqual("{id: 'name', value: 'somename', success: true, msg: ''}", $result);
+		$expected = array('id'=>'name', 'value'=>'somename', 'success'=>true, 'msg'=>'');
+		$json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
+		$this->assertEqual($expected, $json->decode($result));
 	}
 	
 	function testValidateFieldUsingAJAXRuleFail() {
-		// the function does exit() so it is hard to test
-		$expect = "{id: 'r_username', value: 'bosse', success: false, msg: 'Your Username is too short (more than 6 characters) Please try again'}";
+		$errormsg = 'Username is max 20 characters and can not contain special characters'; // from the test page
+		$expect = "{id: 'username', value: 'test', success: false, msg: '$errormsg'}";
+		$json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
+		$expected = $json->decode($expect);
+		
+		$url = getParent(repos_getSelfUrl()).'?validation&username=test';
+		$handle = fopen($url, 'r');
+		$result = fgets($handle);
+		fclose($handle);
+		
+		$this->assertEqual($expected, $json->decode($result));
 	}
 	
 }

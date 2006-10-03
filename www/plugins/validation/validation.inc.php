@@ -24,6 +24,8 @@ function validationRequest() {
  * Note that rules are applied in the order they are instantiated,
  * validation rules that involve many fields can be created by 
  * defining rules that have references to each other.
+ * 
+ * The default rule checks that the field has a non-empty value.
  */
 class Rule {
 	var $_message;
@@ -77,13 +79,10 @@ class RuleEreg extends Rule {
  *
  * Before processing a submit, pages should always do
  * <code>Validation::expect('field1', 'field2', ... )</code>
- * where the argument list contains all required fields.
+ * where the argument list contains all parameters that should be in the request.
  * This enforces two things:
- * 1. Each expected field is submitted and has a String value of length 1 or more.
+ * 1. Each expected field exists, so there will be no undefined index errors.
  * 2. All submitted fields that have a matching Rule instance have been validated according to the rule.
- * So if expect() is called without arguments, all rules are enforced, but no fields are required
- * (it is still up to the rule to accept empty values or not).
- * But that's not needed, because rules are always enfoced.
  */
 class Validation {
 	/**
@@ -97,7 +96,9 @@ class Validation {
 		$n = func_num_args();
 		for($i=0; $i<$n; $i++) {
 			$fieldname = func_get_arg($i);
-		
+			if (!array_key_exists($fieldname, $_REQUEST)) {
+				trigger_error("Can not continue because the expected field '$fieldname' is not submitted");
+			}
 		}
 	}
 	/**

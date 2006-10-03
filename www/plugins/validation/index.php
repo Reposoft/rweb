@@ -3,21 +3,38 @@
  * see test page for documentation
  */
 
-// currently the validation methods are in the Presentation class
+// the validation API is imported by the Presentation class
 require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
 
-// define the validation rules
-//define(RULE_FILENAME, new RuleEreg('filename','naaaaaa. only regex in constant?'));
+// define custom validation rules
+class UsernameRule extends RuleEreg {
+	function UsernameRule($fieldname) {
+		$this->RuleEreg($fieldname,
+			'Username is max 20 characters and can not contain special characters',
+			'^[a-zA-Z0-9\.]$'); // not required
+	}
+}
+
+// create validation instances
 new Rule('name'); // = 'name' is required
+new FilenameRule('filename', false);
+new UsernameRule('username');
 
-// dispatch to form processing if 'submit' was pressed (button must have name="submit"
-if (isset($_GET['submit'])) processForm();
+// dispatch to form processing if 'submit' was pressed (button must have name="submit")
+if (isset($_GET['submit'])) {
+	processForm();
+} else {
+	presentForm();
+}
 
-$p = new Presentation();
-$p->display();
+function presentForm() {
+	$p = new Presentation();
+	$p->display();
+}
 
 function processForm() {
-	Validation::expect('name'); // filename is not required so the rule definition is sufficient
+	Validation::expect('name');
+	presentForm();
 }
 
 ?>
