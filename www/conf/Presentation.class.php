@@ -245,7 +245,9 @@ class Presentation extends Smarty {
 	}
 	
 	/**
-	 * @return the current request's referer
+	 * @return the current page's 'back' url, using
+	 * 1: $_REQUEST['referer'], 2: getHttpReferer() (only if it's not a result=tmp page)
+	 * if no good referer found, use javascript.
 	 */
 	function getReferer() {
 		// allow referer to be set explicitly, for example to 
@@ -254,8 +256,8 @@ class Presentation extends Smarty {
 			return $_REQUEST['referer'];
 		}
 		// get from requiest headers TODO use getHttpReferer
-		if (isset($_SERVER['HTTP_REFERER'])) {
-			return $_SERVER['HTTP_REFERER'];
+		if ($r = getHttpReferer() && !isset($_GET['result'])) {
+			return $r;
 		}
 		// if nothing else can be found
 		return "javascript:history.go(-1)";
@@ -281,7 +283,7 @@ function Presentation_useCommentedDelimiters($tpl_source, &$smarty)
 if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $message, $trace) {
 	if ($n==E_USER_ERROR || $n==E_USER_WARNING || $n==E_USER_NOTICE) {
 		$p = new Presentation();
-		$p->showErrorNoRedirect($message."<!-- Error level $n. Stack trace:\n$trace -->");
+		$p->showErrorNoRedirect(nl2br($message)."<!-- Error level $n. Stack trace:\n$trace -->");
 		exit(1);
 	}
 }}

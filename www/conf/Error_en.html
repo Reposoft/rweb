@@ -6,8 +6,16 @@
 <!--{$head}-->
 
 <body>
+<div id="workspace">
+<div id="commandbar">
+<a id="back" class="command" href="{=$referer}">back</a>
+<a id="repository" class="command" href="{=$userhome}">return to reposistory</a>
+</div>
+<div id="contents">
 <h1>An error occurred</h1>
 <p><em>{=$error_msg}</em></p>
-<p><a id="back" class="action" href="{=$referer}">&lt; back</a> &nbsp; <a id="linkHome" class="action" href="{=$userhome}">&lt; return to reposistory</a></p>
+<p><a class="action" href="{=$referer}">&lt; back</a></p>
+</div>
+</div>
 </body>
 </html>
