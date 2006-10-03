@@ -58,6 +58,35 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		assertFalse("The file should be gone", created.exists());
 		assertFalse("Now the file name is not used anymore", client.isVersioned(created));
 	}
+
+	public void testDeleteAlreadyDeletedFolder() throws IOException, ConflictException, RepositoryAccessException {
+		File created = new File(path, "tobedeleted" + System.currentTimeMillis());
+		created.mkdir();
+		File createdFile = new File(created, "file.txt");
+		createdFile.createNewFile();
+		BufferedWriter out = new BufferedWriter(new FileWriter(createdFile));
+        out.write("someContents"); // empty file is too easy to revert
+        out.close();
+		client.add(created);
+		assertTrue("The folder should be added", client.isVersioned(created));
+		assertTrue("The file in the folder should be added with the folder", client.isVersioned(createdFile));
+		client.commit("Added test folder (testDeleteAlreadyDeletedFolder)");
+		// delete recursively in filesystem
+		createdFile.delete();
+		created.delete();
+		// now try to delete with svn
+		client.delete(created);
+		assertTrue("Should mark the folder for deletion, even if it is gone already, " +
+				"and report that the path hasLocalChanges", client.hasLocalChanges(created));
+		assertTrue("Also the file inside the deleted folder should be marked for deletion", 
+				client.hasLocalChanges(createdFile));
+		assertTrue("The folder must be restored to be able to commit", created.exists());
+		assertFalse("The deleted file should be gone", createdFile.exists());
+		// commit the delete
+		client.commit("Deleted test folder (testDeleteAlreadyDeletedFolder)");
+		assertFalse("After commit the folder should be gone again", created.exists());
+		assertFalse("Now the folder name is not in use anymore", client.isVersioned(created));
+	}	
 	
 	public void testMoveAlreadyMovedFolder() throws IOException, ConflictException, RepositoryAccessException {
 		File f = new File(path, "tobemoved" + System.currentTimeMillis());
