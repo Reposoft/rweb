@@ -32,7 +32,8 @@ class Rule {
 	var $fieldname;
 	/**
 	 * Creates a rule instance for a field in the current page.
-	 * Subclasses with their own constructor must call $this->Rule($fieldname, $message); first in their constructor.
+	 * Subclasses with their own constructor must call $this->Rule($fieldname, $message);
+	 *  in their constructor, AFTER setting fields that validate depends on.
 	 * @param String $fieldname the parameter name when the field value is received
 	 * @param String $message the error message if validation fails, defaults to "This is a required field"
 	 */
@@ -67,11 +68,10 @@ class Rule {
 class RuleEreg extends Rule {
 	var $regex;
 	function RuleEreg($fieldname, $message, $eRegEx) {
-		$this->Rule($fieldname, $message);
 		$this->regex = $eRegEx;
+		$this->Rule($fieldname, $message);
 	}
 	function valid($value) {
-		//echo ($value." will be regexed now using ".$this->regex.'. result: '.ereg($this->regex, $value));
 		return ereg($this->regex, $value);
 	}
 }

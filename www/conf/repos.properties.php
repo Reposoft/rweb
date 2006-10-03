@@ -28,10 +28,10 @@ function reportErrorText($n, $message, $trace) {
 set_error_handler('reportError');
 
 // cookie settings
+define('REPO_KEY', 'repo');
+define('USERNAME_KEY', 'account');
 define('LOCALE_KEY', 'lang');
 define('THEME_KEY', 'theme');
-define('USERNAME_KEY', 'username');
-define('REPO_KEY', 'repo');
 
 // --- application selfcheck, can be removed in releases (tests should cover this) ---
 if (!isset($_repos_config['repositories'])) trigger_error("No repositories configured");
@@ -40,7 +40,15 @@ if (!isFolder($_repos_config['repos_web'])) trigger_error("repos_web must be a f
 if (isset($_GET['file'])) trigger_error("The 'file' parameter is no longer supported");
 if (isset($_GET['path'])) trigger_error("The 'path' parameter is no longer supported");
 if (isset($_GET['repo'])) trigger_error("The 'repo' parameter should not be used now, will be introduced together with cookie support");
-if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable magic_quotes"); }
+function _denyParam($name) { if (isset($_GET[$name]) || isset($_POST[$name])) trigger_error("The parameter '$name' is reserved.", E_USER_ERROR); }
+_denyParam(REPO_KEY);
+_denyParam(USERNAME_KEY);
+_denyParam(LOCALE_KEY);
+_denyParam(THEME_KEY);
+//if (isset($_GET[REPO_KEY])) trigger_error()
+if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable magic_quotes"); } // tested in server test
+
+
 
 // ------ local configuration ------
 

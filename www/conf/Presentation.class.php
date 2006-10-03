@@ -41,10 +41,10 @@ require_once(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php'
 class FilenameRule extends RuleEreg {
 	var $required;
 	function FilenameRule($fieldname, $required='true') {
+		$this->required = $required;
 		$this->RuleEreg($fieldname, 
 			'may not contain any of the characters \/:*?<>| or quotes', 
 			'^[a-zA-Z0-9.]+$');
-		$this->required = $required;
 	}
 	function validate($value) {
 		if (empty($value)) return $this->required ? 'required' : null;
@@ -256,8 +256,8 @@ class Presentation extends Smarty {
 			return $_REQUEST['referer'];
 		}
 		// get from requiest headers TODO use getHttpReferer
-		if ($r = getHttpReferer() && !isset($_GET['result'])) {
-			return $r;
+		if (getHttpReferer() && !isset($_GET['result'])) {
+			return getHttpReferer();
 		}
 		// if nothing else can be found
 		return "javascript:history.go(-1)";

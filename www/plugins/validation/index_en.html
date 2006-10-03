@@ -15,6 +15,7 @@ span.note {
 <body>
 <h1>Test repos.se form validation</h1>
 <p><small>This page uses the Smarty integration to generate the form</small></p>
+<h3>{=$message}</h3>
 <form action="./" method="get" name="testForm" id="testForm">
 <fieldset>
   <legend>repos.se default form layout</legend>
@@ -24,14 +25,19 @@ span.note {
     <span class="note">required but no rule</span>
   </p>
   <p>
-    <label for="filename">Name of file</label>
-    <input type="text" id="name" name="name" size="40" class="filename" />
-    <span class="note">class filename, not required</span>
+    <label for="filename">Test filename</label>
+    <input type="text" id="filename" name="filename" size="40" class="filename" />
+    <span class="note">class filename (standard rule), required</span>
   </p>
   <p>
-    <label for="username">username</label>
-    <input type="text" id="name" name="name" size="30" maxlength="20" class="username required" />
-    <span class="note">class username, maxlength 20, not required</span>
+  	<label for="description">Description</label>
+  	<textarea rows="2" cols="25" id="desciprtion" name="description"></textarea>
+  	<span class="note">not required, no rule if submitted</span>
+  </p>
+  <p>
+    <label for="testuser">Tester</label>
+    <input type="text" id="testuser" name="testuser" size="30" maxlength="20" class="username required" />
+    <span class="note">class username (but custom rule), length 4-20, not required</span>
   </p>
   <p>
     <label for="submit"></label>

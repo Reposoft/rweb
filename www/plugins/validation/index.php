@@ -7,18 +7,19 @@
 require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
 
 // define custom validation rules
-class UsernameRule extends RuleEreg {
-	function UsernameRule($fieldname) {
+class TestUsernameRule extends RuleEreg {
+	function TestUsernameRule($fieldname) {
 		$this->RuleEreg($fieldname,
-			'Username is max 20 characters and can not contain special characters',
-			'[a-zA-Z0-9]+'); // not required
+			'Username is 4-20 characters and can not contain special characters',
+			'^$|^[a-zA-Z0-9]{4,20}$'); // not required
 	}
 }
 
 // create validation instances
-new Rule('name'); // = 'name' is required
+new Rule('name');
 new FilenameRule('filename', false);
-new UsernameRule('username');
+// description has no rule
+new TestUsernameRule('testuser');
 
 // dispatch to form processing if 'submit' was pressed (button must have name="submit")
 if (isset($_GET['submit'])) {
@@ -27,14 +28,15 @@ if (isset($_GET['submit'])) {
 	presentForm();
 }
 
-function presentForm() {
+function presentForm($message='enter some values and press submit') {
 	$p = new Presentation();
+	$p->assign('message', $message);
 	$p->display();
 }
 
 function processForm() {
-	Validation::expect('name');
-	presentForm();
+	Validation::expect('name', 'filename', 'description', 'testuser');
+	presentForm("we're happy campers");
 }
 
 ?>
