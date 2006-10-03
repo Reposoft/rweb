@@ -492,6 +492,9 @@ function repos_passthruCommand($commandName, $argumentsString) {
  */
 function _repos_getFullCommand($commandName, $argumentsString) {
 	$run = getCommand($commandName);
+	if (isWindows()) {
+		$argumentsString = utf8_decode($argumentsString);
+	}
 	$wrapper = _repos_getScriptWrapper();
 	if (strlen($wrapper)>0) {
 		// make one argument (to the wrapper) of the entire command
