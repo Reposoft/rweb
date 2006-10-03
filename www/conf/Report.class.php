@@ -51,6 +51,7 @@ class Report {
 	function display() {
 		$this->_summary();
 		if ($this->nd > 0) $this->_toggleDebug();
+		if ($this->hasErrors()) $this->_toggleError();
 		$this->_pageEnd();
 	}
 	
@@ -282,11 +283,20 @@ class Report {
 		<?php	
 	}
 	
-	function _showErrors() {
+	function _toggleError() {
 		?>
-		<script type="text/javascript>
+		<script type="text/javascript">
 		function showErrors() {
-			
+			var i = 0;
+			$('acronym.failed').each( function() {
+				i++;
+				this.innerHTML=''+i;
+				var error = this.getAttribute('tip'); // seems like sweetTitles renames all to tip
+				var span = document.createElement('span');
+				span.innerHTML = '<small>['+i+'] '+error+'</small>';
+				span.style.display = 'block';
+				this.parentNode.parentNode.appendChild(span);
+			});
 		}
 		</script>
 		<p><a href="#" onclick="showErrors()" accesskey="e">show <?php echo($this->ne + $this->nf); ?> <u>e</u>rror messages</a></p>
