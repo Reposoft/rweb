@@ -7,7 +7,7 @@ new FilenameRule('name');
 // message and target have default rules
 
 if (isset($_GET['submit'])) {
-	Validation::expect('target', 'name'); //TODO what about message, that is not required?
+	Validation::expect('target', 'name', 'message'); //TODO what about message, that is not required?
 	createFolder(getTargetUrl(),$_GET['name'],$_GET['message']); 
 } else {
 	$target = getTarget();
