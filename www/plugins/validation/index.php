@@ -11,7 +11,7 @@ class UsernameRule extends RuleEreg {
 	function UsernameRule($fieldname) {
 		$this->RuleEreg($fieldname,
 			'Username is max 20 characters and can not contain special characters',
-			'^[a-zA-Z0-9\.]$'); // not required
+			'[a-zA-Z0-9]+'); // not required
 	}
 }
 

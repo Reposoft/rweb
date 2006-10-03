@@ -35,7 +35,7 @@ function printTestSuite($testfiles) {
 		echo("<tr><td><a href=\"?file=$file\">$name</a></td></tr>\n");
 	}
 	echo ("</tbody></table>\n");
-	echo('<p><a class="action" id="back" href="./" target="_top">&lt back</a></p>');
+	echo('<p><a class="action" id="back" href="./" target="_top" accesskey="b">&lt <u>b</u>ack</a></p>');
 }
 
 function printTestCase($file) {

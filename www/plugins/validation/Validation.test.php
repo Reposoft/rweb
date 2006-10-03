@@ -12,6 +12,12 @@ class MyRuleWithDynamicMessage extends Rule {
 	function validate($value) { if ($value!='ohmy') return "Value is \"$value\", but should be \"ohmy\""; }
 }
 
+class MyRuleEreg extends RuleEreg {
+	function MyRuleEreg ($fieldname) {
+		$this->RuleEreg($fieldname,	'empty or 1-5 lowercase letters please', '^[a-z]{0,5}$');
+	}
+}
+
 class TestValidation extends UnitTestCase {
 	
 	function testJson() {
@@ -59,6 +65,17 @@ class TestValidation extends UnitTestCase {
 		$this->assertFalse($r->valid('ab'));
 		$this->assertNull($r->validate('a@b'));
 		$this->assertNotNull($r->validate('ab'));
+	}
+	
+	function testExtendRuleEreg() {
+		$r = new MyRuleEreg('a');
+		$this->assertEqual('a', $r->fieldname);
+		$this->assertFalse(empty($r->_message));
+		$this->assertFalse(empty($r->regex));
+		$this->assertTrue($r->valid('abc'));
+		$this->assertTrue($r->valid(''), "Empty string should be allowed by the regex $r->regex");
+		$this->assertNull($r->validate(''));
+		$this->assertNotNull($r->validate('123456789'));	
 	}
 	
 	function testValidateDirectlyWhenRuleIsCreated() {

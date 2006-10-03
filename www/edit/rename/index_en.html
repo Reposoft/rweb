@@ -7,6 +7,9 @@
 
 <body>
 <div id="workspace">
+<div id="commandbar">
+<a id="repository" class="command" href="{=$repository}">return to repository</a>
+</div>
 <div id="contents">
 <h1>Rename <span class="filename">{=$target|basename}</span></h1>
 <form id="rename" name="rename" method="get" action="#">
@@ -27,11 +30,11 @@
   </p>
   <p>
     <label for="submit"></label>
-    <input id="submit" type="submit" value="Submit" />
+    <input id="submit" type="submit" name="submit" value="Rename" />
   </p>
   </fieldset>
 </form>
-<p><a id="back" class="action" href="{=$referer}">&lt; back</a></p>
+</div>
 </div>
 </body>
 </html>

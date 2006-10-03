@@ -278,8 +278,19 @@ class Report {
 		// thanks to jQuery
 		?>
 		<script type="text/javascript">$('.debug').hide();</script>
-		<p><a href="#" onclick="$('.debug').show()">show <?php echo($this->nd); ?> debug messages</a></p>
+		<p><a href="#" onclick="$('.debug').show()" accesskey="d">show <?php echo($this->nd); ?> <u>d</u>ebug messages</a></p>
 		<?php	
+	}
+	
+	function _showErrors() {
+		?>
+		<script type="text/javascript>
+		function showErrors() {
+			
+		}
+		</script>
+		<p><a href="#" onclick="showErrors()" accesskey="e">show <?php echo($this->ne + $this->nf); ?> <u>e</u>rror messages</a></p>
+		<?php
 	}
 
 }

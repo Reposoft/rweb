@@ -71,6 +71,7 @@ class RuleEreg extends Rule {
 		$this->regex = $eRegEx;
 	}
 	function valid($value) {
+		//echo ($value." will be regexed now using ".$this->regex.'. result: '.ereg($this->regex, $value));
 		return ereg($this->regex, $value);
 	}
 }
