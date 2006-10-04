@@ -9,14 +9,12 @@
 <script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="dateformat.js"></script>
 <!-- for unit testing -->
-<script type="text/javascript" src="../../scripts/lib/ecmaunit/ecmaunit.js"></script>
+<script type="text/javascript" src="../../scripts/unittest.js"></script>
 </head>
 
 <body>
 <p id="d1" class="datetime">2006-09-07T16:00:00.123456Z</p>
 <span id="d2" class="datetime">2006-09-06T20:30:59.000Z</span>
-
-<div id="testlog"></div>
 
 <script type="text/javascript">
 
@@ -48,13 +46,7 @@ function TestDateformat() {
 	};
 }
 TestDateformat.prototype = new TestCase;
-
-$(document).ready(function() {
-var testcase = new TestDateformat();
-var placeholder = document.getElementById('testlog');
-testcase.initialize(new HTMLReporter(placeholder));
-testcase.runTests();
-});
+testrun(new TestDateformat());
 
 </script>
 
