@@ -3,7 +3,8 @@ require("../lib/simpletest/setup.php");
 
 require 'login.inc.php';
  
-define('TESTREPO', repos_getSelfRoot()."/testrepo/");
+define('TESTHOST', repos_getSelfRoot());
+define('TESTREPO', TESTHOST."/testrepo/");
 //define('TESTREPO', "http://test.repos.se/testrepo/");
 //define('TESTREPO', "http://alto.optime.se/testrepo/");
  
@@ -35,6 +36,12 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertEqual('http://my.repo/my/dir/file.txt', getTargetUrl());
 		unset($_REQUEST[REPO_KEY]);
 		unset($_REQUEST['target']);
+	}
+	
+	function testTargetUrlFromPath() {
+		$_REQUEST[REPO_KEY] = 'http://my.repo';
+		$this->assertEqual('http://my.repo/h.txt', getTargetUrl('/h.txt'));
+		unset($_REQUEST[REPO_KEY]);
 	}
 	
 	function testTargetUrldecode() {
@@ -140,10 +147,41 @@ class Login_include_Test extends UnitTestCase {
 	}
 	
 	function testGetFirstNon404Parent() {
-		$url = login_getFirstNon404Parent("http://localhost/repos/adsfawerwreq/does/not/exist.no", $status);
-		$this->assertEqual("http://localhost/repos/", $url);
+		$url = login_getFirstNon404Parent(TESTHOST."/repos/adsfawerwreq/does/not/exist.no", $status);
+		$this->assertEqual(TESTHOST."/repos/", $url);
 		$this->assertEqual(200, $status);
 	}
+	
+	function testGetResourceTypeNonExisting() {
+		$url = TESTREPO.'/test/tunk/does/not/exist/dsfajkewrqe';
+		$this->assertFalse(login_getResourceType($url));
+	}
+	
+	function testGetResourceTypeFolder() {
+		$url = TESTREPO.'/test/tunk'; // must be able to accept folders without tailing slash
+		$this->assertEqual(1, login_getResourceType($url));
+	}
+/* folder header
+|HTTP/1.1 200 OK|
+|Date: Wed, 04 Oct 2006 19:20:44 GMT|
+|Server: Apache/2.0.59 (Win32) SVN/1.4.0 PHP/5.1.6 DAV/2|
+|Last-Modified: Wed, 04 Oct 2006 19:17:23 GMT|
+|ETag: W/"1//demoproject/trunk/public"|
+|Accept-Ranges: bytes|
+|Connection: close|
+|Content-Type: text/xml|
+ */
+/* file header
+|HTTP/1.1 200 OK|
+|Date: Wed, 04 Oct 2006 19:33:57 GMT|
+|Server: Apache/2.0.59 (Win32) SVN/1.4.0 PHP/5.1.6 DAV/2|
+|Last-Modified: Wed, 04 Oct 2006 19:30:55 GMT|
+|ETag: "4//demoproject/trunk/public/a.xml"|
+|Accept-Ranges: bytes|
+|Content-Length: 7|
+|Connection: close|
+|Content-Type: text/plain| 
+ */
 		
 	// ---------- HTTP header output for different login conditions ---------
 	// not real tests

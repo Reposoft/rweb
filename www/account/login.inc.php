@@ -160,6 +160,23 @@ function login_getFirstNon404Parent($url, &$status) {
 }
 
 /**
+ * Tries a resource path in current HEAD, for the current user, returning status code.
+ * @param $target the path in the current repository, _does_ accept folder names without tailing slash
+ * @return 0 = does not exist, -1 = access denied, 1 = folder, 2 = file
+ */
+function login_getResourceType($target) {
+	$url = getTarget($target);
+	$user = getReposUser();
+	$pass = _getReposPass();
+	$headers = getHttpHeaders($url, $user, $pass);
+	
+}
+
+function _isFolderHeaders($headers) {
+	// make headers test to validate that this works
+}
+
+/**
  * @return the url with username:password
  */
 function _getLoginUrl($urlWithoutLogin) {
@@ -329,13 +346,11 @@ function getRepoRoot($fullUrl,$pathFromRepoRoot) {
 
 /**
  * Target url is resolved from query parameters
- *  'repo' (fallback to getRepositoryUrl) = root url
- *  'path' = path from repository root
- *  'file' (omitted if not found) = filename inside path
+ * @param target Optional target path, if not set then getTarget() is used.
  * @return Full url of the file or directory this request targets
  */
-function getTargetUrl() {
-	$target = getTarget();
+function getTargetUrl($target=null) {
+	if ($target==null) $target = getTarget();
 	if (strlen($target)<1) return false;
     return getRepositoryUrl() . $target;
 }

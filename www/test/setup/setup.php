@@ -109,6 +109,10 @@ fwrite($accessfile, "\n");
 fwrite($accessfile, "[/demoproject/trunk/noaccess]\n");
 fwrite($accessfile, "@demoproject = \n");
 fwrite($accessfile, "\n");
+fwrite($accessfile, "[/demoproject/trunk/public]\n");
+fwrite($accessfile, "@demoproject = rw\n");
+fwrite($accessfile, "* = r\n");
+fwrite($accessfile, "\n");
 fclose($accessfile);
 
 # create apache 2.2 config
@@ -124,6 +128,7 @@ fwrite($conffile, "AuthType Basic\n");
 fwrite($conffile, "AuthUserFile $users\n");
 fwrite($conffile, "Require valid-user\n");
 fwrite($conffile, "AuthzSVNAccessFile $acl\n");
+fwrite($conffile, "Satisfy Any $acl\n"); // allow public access to * = r or rw folders
 fclose($conffile);
 
 //echo "Apache should do \"Include $CONF\" at some <Location >"
@@ -150,6 +155,7 @@ mkdir($test . DIRECTORY_SEPARATOR . "wc" . DIRECTORY_SEPARATOR . "demoproject", 
 mkdir($test . DIRECTORY_SEPARATOR . "wc" . DIRECTORY_SEPARATOR . "demoproject" . DIRECTORY_SEPARATOR . "trunk", 0777);
 mkdir($test . DIRECTORY_SEPARATOR . "wc" . DIRECTORY_SEPARATOR . "demoproject" . DIRECTORY_SEPARATOR . "trunk" . DIRECTORY_SEPARATOR . "noaccess", 0777);
 mkdir($test . DIRECTORY_SEPARATOR . "wc" . DIRECTORY_SEPARATOR . "demoproject" . DIRECTORY_SEPARATOR . "trunk" . DIRECTORY_SEPARATOR . "readonly", 0777);
+mkdir($test . DIRECTORY_SEPARATOR . "wc" . DIRECTORY_SEPARATOR . "demoproject" . DIRECTORY_SEPARATOR . "trunk" . DIRECTORY_SEPARATOR . "public", 0777);
 $result1 = array();
 exec("$svn add $test/wc/svensson 2>&1", &$result1);
 foreach ( $result1 as $v1 ) {

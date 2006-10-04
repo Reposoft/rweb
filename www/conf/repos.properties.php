@@ -9,7 +9,9 @@
 $_repos_config = parse_ini_file( _getPropertiesFile(), false );
 
 // ----- global settings -----
-// code should report E_USER_ERROR for server errors and E_USER_WARNING for user errors
+// PHP4 does not have exceptions, so we use 'trigger_error' as throw Exception.
+// - code should not do 'exit' after trigger_error, because that does not allow unit testing.
+// - code should report E_USER_ERROR for server errors and E_USER_WARNING for user errors
 error_reporting(E_ALL);
 function reportError($n, $message, $file, $line) {
 	$trace = _getStackTrace();
@@ -218,6 +220,7 @@ function isFile($path) {
 /**
  * Folders are relative or absolute paths that _do_ end with '/'
  *  or (on Windows only) '\'
+ * To check if a URL with no tailing slash is a folder, use login_getResourceType.
  * @param String $path the file system path or URL to check
  * @return boolean true if path is a folder, false if not 
  */
