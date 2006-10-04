@@ -10,21 +10,18 @@ function shouldShow($entrypoint) {
 }
 
 if (!isLoggedIn()) {
-	trigger_error("This is for logged in users only");
-	exit;
+	trigger_error("This is for logged in users only", E_USER_WARNING);
 }
 $user = getReposUser();
 $acl = getConfig('admin_folder').'/'.getConfig('access_file');
 if (!is_file($acl)) {
-	trigger_error("Can not read Access Control List");
-	exit;
+	trigger_error("Can not read Access Control List", E_USER_ERROR);
 }
 $tree = new RepositoryTree($acl, $user);
 
 $repo = getRepositoryUrl();
 if (empty($repo)) {
-	trigger_error("Can not get repository url");
-	exit;
+	trigger_error("Can not get repository url", E_USER_ERROR);
 }
 
 $entrypoints = array_filter($tree->getEntryPoints(), 'shouldShow');

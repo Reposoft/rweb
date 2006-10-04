@@ -9,7 +9,7 @@
 $_repos_config = parse_ini_file( _getPropertiesFile(), false );
 
 // ----- global settings -----
-
+// code should report E_USER_ERROR for server errors and E_USER_WARNING for user errors
 error_reporting(E_ALL);
 function reportError($n, $message, $file, $line) {
 	$trace = _getStackTrace();

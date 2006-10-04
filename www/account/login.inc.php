@@ -134,7 +134,7 @@ function verifyLogin($targetUrl) {
 	// accepted codes
 	if ($s==200) return true;
 	if ($s==401 || $s==403) return false;
-	trigger_error("The target URL '$targetUrl' can not be used to validate login. Returned HTTP status code '$s'.");
+	trigger_error("The target URL '$targetUrl' can not be used to validate login. Returned HTTP status code '$s'.", E_USER_ERROR);
 	return false;
 }
 
@@ -196,7 +196,7 @@ function login_getAuthNameFromRepository($targetUrl) {
 	if(ereg('realm="([^"]*)"', $auth, $regs)) {
 		return $regs[1];
 	}
-	trigger_error("Repos error: realm not found in authentication string: $auth");
+	trigger_error("Repos error: realm not found in authentication string: $auth", E_USER_ERROR);
 }
 
 /**
@@ -214,7 +214,7 @@ function getHttpStatusFromHeader($httpStatusHeader) {
 	if(ereg('HTTP/1...([0-9]+).*', $httpStatusHeader, $match)) {
 		return $match[1];
 	} else {
-		trigger_error("Could not get HTTP status code for header: ".$httpStatusHeader); return;
+		trigger_error("Could not get HTTP status code for header: ".$httpStatusHeader, E_USER_ERROR);
 	}
 }
 
@@ -241,7 +241,7 @@ function login_decodeQueryParam($array, $name) {
  * @deprecated only getTarget is needed
  */
 function getPath() {
-	trigger_error("getPath() is deprecated. Use getTarget() and isFolder() instead.");
+	trigger_error("getPath() is deprecated. Use getTarget() and isFolder() instead.", E_USER_ERROR);
 	if(!isset($_GET['path'])) return false;
 	$path = login_decodeQueryParam($_GET,'path');
     $path = rtrim($path,'/').'/';
@@ -253,7 +253,7 @@ function getPath() {
  * @deprecated only getTarget is needed
  */
 function getFile() {
-	trigger_error("getFile() is deprecated. Use getTarget() and isFile() instead.");
+	trigger_error("getFile() is deprecated. Use getTarget() and isFile() instead.", E_USER_ERROR);
 	if (isset($_GET['file'])) {
 		return login_decodeQueryParam($_GET,'file');
 	}
@@ -304,7 +304,7 @@ function getRevision($rev = false) {
 	if (in_array($rev, $accepted)) {
 		return $rev;
 	}
-	trigger_error("Error. Revision number '$rev' is not valid.");
+	trigger_error("Error. Revision number '$rev' is not valid.", E_USER_ERROR);
 }
 
 /**
@@ -447,7 +447,7 @@ function login_getMimeType($targetUrl) {
 	$result = login_svnRun($cmd);
 	$returnvalue = array_pop($result);
 	if ($returnvalue) {
-		trigger_error("Could not find the file '$targetUrl' in the repository." );
+		trigger_error("Could not find the file '$targetUrl' in the repository.", E_USER_ERROR );
 	}
 	if (count($result) == 0) { // mime type property not set, return default
 		return false;//deprecated in PHP//return mime_content_type(basename($targetUrl)); // svn:mime-type not set
@@ -495,8 +495,7 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
    $url_info=parse_url($url);
    if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
    	if (!login_isSSLSupported()) {
-		trigger_error("Repos error: $url is a secure URL but this server does not have OpenSSL support in PHP.");
-		exit;
+		trigger_error("Repos error: $url is a secure URL but this server does not have OpenSSL support in PHP.", E_USER_ERROR);
 	}
 	   $port = 443;
 	   @$fp=fsockopen('ssl://'.$url_info['host'], $port, $errno, $errstr, 10);
@@ -529,14 +528,12 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
 		   }
 	   }
 	   if (count($headers) < 1) {
-	   	trigger_error("Repos error: could not get authentication requirements from $url");
-		exit;
+	   	trigger_error("Repos error: could not get authentication requirements from $url", E_USER_ERROR);
 	   }
 	   return $headers;
    }
    else {
-   	trigger_error("Repos error: could not connect to target $url");
-	exit;
+   	trigger_error("Repos error: could not connect to target $url", E_USER_ERROR);
    }
 }
 

@@ -28,10 +28,7 @@ function askForCredentialsBeforeLogout() {
 	// does exactly like in login
 	$repo = getRepositoryUrl();
 	$realm = getAuthName($repo);
-	if(!$realm) {
-		trigger_error("Error: No login realm was found for repository $repo");
-		exit;
-	}
+	if(!$realm) trigger_error("Error: No login realm was found for repository $repo", E_USER_ERROR);
 	askForCredentials($realm);
 }
 

@@ -58,8 +58,7 @@ function printTestCase($file) {
 if (isset($_GET['file'])) {
 	$file = $_GET['file'];
 	if (!in_array($file, $testfiles)) {
-		trigger_error("$file is not a known testcase");
-		exit;
+		trigger_error("$file is not a known testcase", E_USER_ERROR);
 	}
 	printTestCase($file);
 } else {

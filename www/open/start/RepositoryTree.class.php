@@ -35,8 +35,7 @@ class RepositoryTree {
 	 */
 	function _parseToAcl($aclFile, $username) {
 		if (!file_exists($aclFile)) {
-			trigger_error("the ACL file does not exist");
-			return false;
+			trigger_error("the ACL file does not exist", E_USER_ERROR);
 		}
 		$acl = parse_ini_file($aclFile, true);
 		if (count($acl) < 2) {

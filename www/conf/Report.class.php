@@ -41,7 +41,7 @@ class Report {
 	 * Completes the report and saves it as a file at the default reports location.
 	 */
 	function publish() {
-		trigger_error("publish() not implemented");
+		trigger_error("publish() not implemented", E_USER_ERROR);
 		$this->display();
 	}
 	

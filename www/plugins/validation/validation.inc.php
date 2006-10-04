@@ -92,13 +92,13 @@ class Validation {
 	 */
 	function expect($requiredFieldsSeparatedByComma) {
 		if (validationRequest()) {
-			trigger_error("This is a validation request ".$_SERVER['QUERY_STRING'].", but no rule has been enforced. Operation aborted.");
+			trigger_error("This is a validation request ".$_SERVER['QUERY_STRING'].", but no rule has been enforced. Operation aborted.", E_USER_WARNING);
 		}
 		$n = func_num_args();
 		for($i=0; $i<$n; $i++) {
 			$fieldname = func_get_arg($i);
 			if (!array_key_exists($fieldname, $_REQUEST)) {
-				trigger_error("Can not continue because the expected field '$fieldname' is not submitted");
+				trigger_error("Can not continue because the expected field '$fieldname' is not submitted", E_USER_WARNING);
 			}
 		}
 	}
@@ -129,7 +129,7 @@ class Validation {
 		if (!empty($r)) {
 			trigger_error('Error in field "'.$rule->fieldname.'", value "'.$value.'": '.$r
 			." \n(with script support enabled this should have been reported when the form was submitted)"
-			." \n\nClick 'back' and try again.", E_USER_ERROR);
+			." \n\nClick 'back' and try again.", E_USER_WARNING);
 		}
 	}
 	/**

@@ -8,5 +8,5 @@ if(isset($_GET['result'])) {
 	fclose($handle);
 	exit;
 } else {
-	trigger_error('Result ID not set. Can not view page.');
+	trigger_error('Result ID not set. Can not view page.', E_USER_ERROR);
 }

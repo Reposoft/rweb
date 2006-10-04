@@ -52,10 +52,7 @@ function loginAndRedirectToHomeDir() {
 		}
 	} elseif (isset($_GET['login']) && $_GET['login'] == 'user') {
 		$realm = getAuthName($repo);
-		if(!$realm) {
-			trigger_error("Error: No login realm was found for repository $repo");
-			exit;
-		}
+		if(!$realm) trigger_error("Error: No login realm was found for repository $repo", E_USER_ERROR);
 		askForCredentials($realm);
 		// browser will refresh upon user input, if there is still no credentials we end up here
 		showLoginCancelled();

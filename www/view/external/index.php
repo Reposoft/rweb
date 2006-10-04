@@ -20,8 +20,7 @@ function getContentType($url) {
 // open the file in a binary mode
 $url = $_GET['url'];
 if (!isAccepted($url)) {
-	trigger_error("Error: The 'url' parameter value is not accepted: $url");
-	exit;
+	trigger_error("Error: The 'url' parameter value is not accepted: $url", E_USER_ERROR);
 }
 
 $fp = fopen($url, 'r');

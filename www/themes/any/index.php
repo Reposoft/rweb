@@ -5,8 +5,7 @@
 require(dirname(dirname(dirname(__FILE__))).'/account/login.inc.php');
 
 if (!isset($_GET['u'])) {
-	trigger_error("Default url, the 'u' parameter, must be set");
-	exit;
+	trigger_error("Default url, the 'u' parameter, must be set", E_USER_WARNING);
 }
 $u = $_GET['u'];
 // find out if it is a nocache url

@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 } else if (isset($_GET['clear'])) {
 	clear();
 } else if (count($_GET)>0) {
-	trigger_error("Reports should be POSTed");
+	trigger_error("Reports should be POSTed", E_USER_WARNING);
 } else {
 	showLog();
 }

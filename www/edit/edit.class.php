@@ -1,6 +1,7 @@
 <?php
 // common functionality in the edit tools
 require_once( dirname(dirname(__FILE__))."/account/login.inc.php" );
+require_once( dirname(dirname(__FILE__))."/plugins/validation/validation.inc.php" );
 
 // shared validation rule
 class NewFilenameRule extends Rule {

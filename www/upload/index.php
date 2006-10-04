@@ -7,6 +7,8 @@ require( PARENT_DIR."/edit/edit.class.php" );
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 
+new FilenameRule("name");
+
 if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template = new Presentation();
 	$target = getTarget();
@@ -29,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		$template->display();
 	}
 } else {
+	Validation::expect('name');
 	$presentation = new Presentation();
 	$upload = new Upload('userfile');
 	if ($upload->isCreate()) {
@@ -55,21 +58,21 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		$checkout->execute();
 		if (!$checkout->isSuccessful()) {
 			$presentation->trigger_error("Could not read current version of file "
-				.$upload->getTargetUrl().". ".$checkout->getResult());
+				.$upload->getTargetUrl().". ".$checkout->getResult(), E_USER_WARNING);
 		}
 		// upload file to working copy
 		$filename = $upload->getName();
 		$updatefile = $dir . '/' . $filename;
 		if(!file_exists($dir.'/.svn') || !file_exists($updatefile)) {
 			$presentation->trigger_error('Can not read current version of the file named "'
-				.$filename.'" from repository path "'.$repoFolder.'"');
+				.$filename.'" from repository path "'.$repoFolder.'"', E_USER_WARNING);
 		}
 		$oldsize = filesize($updatefile);
 		unlink($updatefile);
 		$upload->processSubmit($updatefile);
 		if(!file_exists($updatefile)) {
 			$presentation->trigger_error('Could not read uploaded file "'
-				.$filename.'" for operation "'.basename($dir).'"');
+				.$filename.'" for operation "'.basename($dir).'"', E_USER_WARNING);
 		}
 		// store the diff in the presentation object
 		$diff = new Edit('diff');
@@ -130,8 +133,7 @@ class Upload {
 		if (move_uploaded_file($current, $destinationFile)) {
 			// ok
 		} else {
-			trigger_error("Could not access the uploaded file ".$this->getOriginalFilename());
-			exit;
+			trigger_error("Could not access the uploaded file ".$this->getOriginalFilename(), E_USER_ERROR);
 		}
 	}
 	
@@ -143,7 +145,7 @@ class Upload {
 			fwrite($fp, $contents);
 			fclose($fp);
 		} else {
-			trigger_error("Could write file contents from the submitted text.");
+			trigger_error("Could write file contents from the submitted text.", E_USER_ERROR);
 		}
 	}
 	
