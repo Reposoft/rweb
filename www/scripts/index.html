@@ -8,10 +8,9 @@
 
 <body>
 <h1><img src="../style/logo/repos2.png" alt="repos.se" width="144" height="36" align="absmiddle" /> Javascript framework</h1>
-<p>This is the development startpage for the repos javascript solutions. </p>
-<p><a class="action" href="../test/">go to testing startpage</a></p>
+<p>This is the development location for the repos javascript solutions.</p>
 <h2>Objectives</h2>
-<p>Our requirements specification</p>
+<p>Our requirements specification:</p>
 <ol>
   <li>repos.se should be fully accessible without a single javascript.</li>
   <li>Every page has it's own URL, relating to the main contents item of the page.</li>
@@ -20,11 +19,20 @@
   <li>Javascript is used for adding behaviour to the page.</li>
   <li>Behaviours can be customized per theme. </li>
 </ol>
-<h2>Plugins</h2>
-<p><a href="plugins/dateformat/">Dateformat</a></p>
-<p><a href="plugins/details/">Details</a></p>
-<p><a href="plugins/transform">Transform</a></p>
-<p><a href="plugins/validation/">Validation</a></p>
+<h2>tests</h2>
+<p>Selenium <a href="TestSuite.html">TestSuite</a>. Can be started via the 
+<a class="action" href="../test/">repos testing startpage</a>.</p>
+<p>This contains only tests for the platform functionality. <a href="../plugins/">Plugins</a> have their own tests.</p>
+<h2>head.js</h2>
+<p>All pages import <code>/repos/scripts/head.js</code>.
+It is composed by scripts from this folder that have been accepted for release.
+When heas.js file is modified, the cache headers should make sure that all browsers get the new script package.
+Those headers are tested in <a href="../test/headers/">HTTP headers test</a>.
+</p>
+<h2>tools</h2>
+<p>Some of the tests print to the <a href="http://www.joehewitt.com/software/firebug/" target="_blank">FireBug</a> console.<p>
+<p>For the default firefox script console, we recommend <a href="http://www.digitalmediaminute.com/article/1348/updated-open-firefox-javascript-console-in-a-sidebar" target="_blank">Firefox JavaScript console sidebar</a>.</h3>
+<p>&nbsp;</p>
 </body>
 
 </html>

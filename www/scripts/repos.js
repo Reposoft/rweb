@@ -3,43 +3,9 @@
 // repos.se client side scripting platform
 
 /*
-This script loader should be refactored:
-There will be one static class Repos (placed in this file).
-It does not depend on any other scripts to be loaded in the page.
+This is the development file for repos scripts. when ready, code should be imported to head.js
 
-
-* lib: included by Repos as needed, not referenced directly from scripts
-* plugins: modify the behaviour of a loaded page. Imported after page has loaded.
-
-Standard libraries:
-Prototype 1.5.0 rc1, some classes including Ajax and Selector.findChildElements
-AOP, decorate Event.observe with special handling of 
-	+ decorate document.createElement with createElementNS for xhtml+xml docs
-XSLT, for the transform function
-
-Repos.addBehaviour: http://www.ccs.neu.edu/home/dherman/javascript/behavior/
-Repos.Before: http://www.dotvoid.com/view.php?id=43
-
-For now:
-Scripts can refer to the Repos class, but not ReposScriptSetup
-
-
-*/
-
-// This is a complement to prototype.js, 
-// Scripts that use this library can be developed for prototype.js
-
-/**
-Pattern for calling plugins:
-1. Do includes "Repos.require.."
-2. Create the plugin class, with initializer
-3. Use Prototype Event.observe to create a window.onload event that runs the initializer.
-4. If any other plugins are expected after the initializer is called, do Repos.requirePlugin in the class.
-When (1) comes before (3), Repos will load the dependencies before the initializer is run, which is good.
-
-Plugins may use Repos.require to require libs, or Repos.requirePlugin to import other plugins.
-Theme settings may only use Repos.requirePlugin.
-
+The code requires jquery.
 */
 
 /**
