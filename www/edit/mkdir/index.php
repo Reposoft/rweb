@@ -4,6 +4,7 @@ require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__))."/edit.class.php" );	
 
 new FilenameRule('name');
+new NewFilenameRule('name');
 // message and target have default rules
 
 if (isset($_GET[SUBMIT])) {

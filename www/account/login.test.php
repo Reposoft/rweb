@@ -9,7 +9,6 @@ define('TESTREPO', repos_getSelfRoot()."/testrepo/");
  
 class Login_include_Test extends UnitTestCase {
 
-	
 	function testGetAuthNameReturnsSomething() {
 		$url = TESTREPO;
 		$realm = getAuthName($url);
@@ -136,6 +135,7 @@ class Login_include_Test extends UnitTestCase {
 		$headers = my_get_headers(TESTREPO,'test','test');
 		$this->assertTrue(count($headers) > 0);
 		// with a valid username, but no access according to ACL, we expect to see an access denied page
+		$this->sendMessage("Subversion 1.2.x seems to return wrong code for folder that authenticated user can't access.");
 		$this->assertEqual("HTTP/1.1 403 Forbidden", $headers[0]);
 	}
 	

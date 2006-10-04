@@ -5,7 +5,7 @@ define('PARENT_DIR', dirname(rtrim(DIR, DIRECTORY_SEPARATOR)));
 require( PARENT_DIR."/conf/Presentation.class.php" );
 require( PARENT_DIR."/edit/edit.class.php" );
 
-define('MAX_FILE_SIZE', 1000000);
+define('MAX_FILE_SIZE', 1024*1024*10);
 
 if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template = new Presentation();

@@ -26,7 +26,7 @@ class TestPresentation extends UnitTestCase {
 	function testFilenameRule() {
 		$r = new FilenameRule('file');
 		$this->assertNull($r->validate('abc.txt'));
-		$this->assertEqual('required', $r->validate(''));
+		$this->assertEqual('This is a required field', $r->validate(''));
 		$this->assertNull($r->validate(str_repeat('a', 50)));
 		$this->assertNotNull($r->validate(str_repeat('a', 51)), "max length 50");
 		$this->sendMessage("Message on validate 'a\"': ".$r->validate('a"'));
@@ -38,7 +38,8 @@ class TestPresentation extends UnitTestCase {
 		$r = new FilenameRule('file', false);
 		$this->assertNull($r->validate(''));
 		$this->assertNull($r->validate('abc.txt'));
-		$this->assertNotNull($r->validate('#¤%&'));
+		$this->sendMessage("Error on invalid characters: ".$r->validate('a\\/'));
+		$this->assertNotNull($r->validate('a\\/'));
 	}
 }
 
