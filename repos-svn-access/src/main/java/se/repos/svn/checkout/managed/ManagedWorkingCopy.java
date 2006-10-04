@@ -80,8 +80,8 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	public void delete(File path) {
 		// temporarily revert the file so it can be deleted by the client
 		if (!path.exists()) {
-			// must be the exact same contents to allow delete
-			workingCopy.revert(path);
+			logger.debug("The file or folder is gone already, marking for delete anyway");
+			// svn clients handle this gracefully, they mark the file for deletion even if it is gone
 		}
 		workingCopy.delete(path);
 	}

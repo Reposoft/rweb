@@ -305,7 +305,6 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
      */
 	public void delete(File path) throws WorkingCopyAccessException {
 		Delete delete = new Delete();
-		if (!path.exists()) throw new IllegalArgumentException("The path does not exist so it can not be marked for deletion: " + path);
 		if (path.isDirectory()) {
 			delete.setDir(path);
 		} else {

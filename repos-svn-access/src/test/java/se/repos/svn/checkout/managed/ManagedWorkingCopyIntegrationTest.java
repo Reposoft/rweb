@@ -80,11 +80,11 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 				"and report that the path hasLocalChanges", client.hasLocalChanges(created));
 		assertTrue("Also the file inside the deleted folder should be marked for deletion", 
 				client.hasLocalChanges(createdFile));
-		assertTrue("The folder must be restored to be able to commit", created.exists());
+		// the folder may still exist, if it was there before the delete, but the file should be gone
 		assertFalse("The deleted file should be gone", createdFile.exists());
 		// commit the delete
 		client.commit("Deleted test folder (testDeleteAlreadyDeletedFolder)");
-		assertFalse("After commit the folder should be gone again", created.exists());
+		assertFalse("After commit the folder should definitely be gone", created.exists());
 		assertFalse("Now the folder name is not in use anymore", client.isVersioned(created));
 	}	
 	

@@ -134,23 +134,20 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 	}
 	
 	public void testDeleteAlreadyDeletedFile() throws IOException, ConflictException, RepositoryAccessException {
-		File created = new File(path, "tobedeletedtwice.txt" + System.currentTimeMillis());
+		File created = new File(path, "tobedeleted" + System.currentTimeMillis());
 		created.createNewFile();
 		client.add(created);
 		assertTrue("The file should be added", client.isVersioned(created));
 		client.commit("Added test file (testDeleteAlreadyDeletedFile)");
-		created.delete();
+		created.delete(); // remove the file in file system
 		try {
 			client.delete(created);
-			fail("Should not delete already deleted file. Only clients should have this type of logic.");
-		} catch (WorkingCopyAccessException e) {
-			fail("Should throw IllegalArgumentException because this is definitely a programming error");
 		} catch (IllegalArgumentException e) {
-			// expected
+			fail("All svn clients should be able to mark a missing file for deletion.");
 		}
-		created.createNewFile();
-		client.delete(created);
-		client.commit("Cleand up after delete test");
+		assertTrue("Now the file has local changes", client.hasLocalChanges(created));
+		assertFalse("The file should be gone from the file system immediately after svn delete", created.exists());
+		client.commit("Delete test done");
 	}
 
 	public void testMove() throws IOException, ConflictException, RepositoryAccessException {
