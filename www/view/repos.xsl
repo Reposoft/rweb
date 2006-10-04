@@ -15,6 +15,7 @@
 	<xsl:param name="web">/repos</xsl:param>
 	<!-- static contents urls, set to {$web}/style/ for default theme -->
 	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/style/</xsl:param>
+	<xsl:param name="cssUrl-pe"><xsl:value-of select="$web"/>/themes/pe/style/</xsl:param>
 	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
 	<xsl:param name="editUrl"><xsl:value-of select="$web"/>/edit</xsl:param>
 	<!-- we don't want to force the CSS to set margins everywhere -->
@@ -44,10 +45,13 @@
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 				<!-- if search crawlers has access, contents should not be cached -->
 				<meta name="robots" content="noarchive"/>
-				<!-- default stylesheets -->
-				<link rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
-				<link rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>
 				<link rel="shortcut icon" href="/favicon.ico"/>
+				<!-- default stylesheets -->
+				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
+				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>
+				<!-- alternative stylesheets -->
+				<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}global.css"/>
+				<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}repository/repository.css"/>
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
 			</head>

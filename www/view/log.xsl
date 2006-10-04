@@ -15,6 +15,7 @@
 	<xsl:param name="web">/repos</xsl:param>
 	<!-- static contents urls, set to /themes/any/?u= for automatic theme selection -->
 	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/style/</xsl:param>
+	<xsl:param name="cssUrl-pe"><xsl:value-of select="$web"/>/themes/pe/style/</xsl:param>
 	<!-- when spacer space can't be avoided -->
 	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- document skeleton -->
@@ -28,10 +29,13 @@
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 				<!-- if search crawlers has access, contents should not be cached -->
 				<meta name="robots" content="noarchive"/>
-				<!-- default stylesheet -->
-				<link rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
-				<link rel="stylesheet" type="text/css" href="{$cssUrl}log/log.css"/>
 				<link rel="shortcut icon" href="/favicon.ico"/>
+				<!-- default stylesheet -->
+				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
+				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}log/log.css"/>
+				<!-- pe stylesheet -->
+				<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}global.css"/>
+				<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}log/log.css"/>
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
 			</head>
