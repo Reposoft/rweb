@@ -1,0 +1,15 @@
+body, html {
+	height: 100%;
+    margin: 0;
+    font-family	: Arial, Helvetica, sans-serif;
+}
+body {
+	background: #e0e0e0;
+	color: #333;
+	font-size: 76%;
+    padding: 20px;
+}
+
+#st2, #st3 {
+	display: none;
+}

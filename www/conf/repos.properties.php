@@ -31,7 +31,7 @@ set_error_handler('reportError');
 define('REPO_KEY', 'repo');
 define('USERNAME_KEY', 'account');
 define('LOCALE_KEY', 'lang');
-define('THEME_KEY', 'theme');
+define('THEME_KEY', 'style'); // to match stylesheet switcher
 
 // parameter conventions
 define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST

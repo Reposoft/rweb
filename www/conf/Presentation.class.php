@@ -53,18 +53,13 @@ class FilenameRule extends RuleEreg {
 	}
 }
 
-// -------- user settings ---------
+// -------- user settings from cookies ---------
 
 function repos_getUserTheme($user = '') {
-	if(!function_exists('getReposUser()')) {
-		return ''; // account logic not imported, this is a public page that uses the default theme
-	}
-	if ($user=='') {
-		$user = getReposUser();
-	}
-	if (empty($user)) return '';
-	if ($user=='test'||$user=='annika'||$user=='arvid'||$user=='hanna') return '';
-	return 'themes/pe/';
+	if (!isset($_COOKIE[THEME_KEY])) return '';
+	$style = $_COOKIE[THEME_KEY];
+	if ($style=='repos') return ''; // default stylesheet title is 'repos'
+	return "themes/$style/";
 }
 
 // -------- the template class ------------

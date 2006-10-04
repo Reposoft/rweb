@@ -1,4 +1,7 @@
 <?php
+// this is a concept for loading stylesheets from any theme using one url
+// but it does not work too well in IE, because relative urls in the stylesheet dont work anymore
+// The script is not used anymore, and can be removed.
 require(dirname(dirname(dirname(__FILE__))).'/account/login.inc.php');
 
 if (!isset($_GET['u'])) {
