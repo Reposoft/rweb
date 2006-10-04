@@ -50,11 +50,25 @@ for (i = 0; i < tags.length; i++) {
 }
 if (path.length < 1) alert("Error: Can not find unittest.js in head. Impossible to derive the include path for libs.");
 
+var _head = document.getElementsByTagName('head')[0];
 // import the unit testing library, this makes sure that there is a TestCase class
 var s = document.createElement("script");
 s.type = "text/javascript";
 s.src = path + "lib/ecmaunit/ecmaunit.js";
-document.getElementsByTagName('head')[0].appendChild(s);	
+_head.appendChild(s);	
+
+// import stylesheets
+reposPath = path.substr(0, path.lastIndexOf('/', path.length-2)+1);
+var c = document.createElement("link");
+c.type = "text/css";
+c.rel = "stylesheet";
+c.href = reposPath + "style/global.css";
+_head.appendChild(c);
+var d = document.createElement("link");
+d.type = "text/css";
+d.rel = "stylesheet";
+d.href = reposPath + "style/docs.css";
+_head.appendChild(d);
 
 /**
  * Runs a test case and writes the result to a new div named 'testlog'

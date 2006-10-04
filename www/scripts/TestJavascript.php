@@ -19,10 +19,12 @@
 <?php
 $testfiles = array(
 'scripts/prepare/index.xml',
+'scripts/resourceid/',
+'plugins/dateformat/'
 );
 
 function printTestSuite($testfiles) {
-	echo("<tr><td><b>repos.se Javascript Tests</b></td></tr>\n");
+	echo("<tr><td><b>repos.se javascript tests</b></td></tr>\n");
 	foreach ($testfiles as $file) {
 		$name = substr($file, strpos($file, '/')+1);
 		echo("<tr><td><a href=\"?file=$file\">$name</a></td></tr>\n");
@@ -42,14 +44,9 @@ function printTestCase($file) {
 	<td></td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
-	<td>0 fails</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>0 exceptions</td>
-	<td></td>
+	<td>assertText</td>
+	<td>css=.testsummary</td>
+	<td>* 0 fails*</td>
 </tr>
 </tbody>
 </table>
