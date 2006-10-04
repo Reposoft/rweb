@@ -30,3 +30,35 @@ function ReposResourceId(text) {
 		return /([^\$]*$)/.exec(this.text)[1];
 	}
 }
+
+// ----- marking screens -----
+_getReleaseVersion = function(versionText) {
+	var rid = new ReposResourceId(versionText);
+	return rid.getTextBefore() + rid.getRelease() + rid.getTextAfter();
+}
+
+_getResourceVersion = function(versionText) {
+	var rid = new ReposResourceId(versionText);
+	var release = rid.getRelease();
+	if (rid.isTag) return rid.getTextBefore() + release + rid.getTextAfter();
+	return rid.getTextBefore() + release + ' ' + rid.getRevision() + rid.getTextAfter();
+}
+
+_showVersion = function() {
+	try {
+		var release = $('#releaseversion');
+		if (release) {
+			release.innerHTML = _getReleaseVersion(release.innerHTML);
+			release.style.display = '';
+		}
+		var revision = $('#resourceversion');
+		if (revision) {
+			revision.innerHTML = _getResourceVersion(revision.innerHTML);
+			revision.style.display = '';
+		}
+	} catch (err) {
+		// Repos.reportError(err);
+	}
+},
+
+$(document).ready( function() { _showVersion() } );
