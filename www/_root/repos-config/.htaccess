@@ -1,0 +1,20 @@
+# Only localhost is allowed to view the content of repos-config
+
+Order Deny,Allow
+Deny from all
+Allow from localhost
+
+# If you want to allow other users to view the content of repos-config
+# you should create a password file with htpasswd which should be in 
+# apache/bin directory. Use md5 encription with switch "-m" (it should 
+# be chosen by default).
+# The command
+#		htpasswd -cm password_file Administrator
+# creates a password_file for user Administrator.
+# Uncomment following lines and change the path to your password_file and
+# then don't forget to comment the lines at the beginning of this file.
+#
+# AuthUserFile Path/to/password_file
+# AuthName "Protected Area"
+# AuthType Basic
+# Require user Administrator

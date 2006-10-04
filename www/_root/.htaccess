@@ -1,0 +1,14 @@
+# Bad Request
+ErrorDocument 400 /repos/open/errors/400/
+
+# Authorization Required
+ErrorDocument 401 /repos/open/errors/401/
+
+# Forbidden
+ErrorDocument 403 /repos/open/errors/403/
+
+# Not Found
+ErrorDocument 404 /repos/open/errors/404/
+
+# Server Error
+ErrorDocument 500 /repos/open/errors/500/
