@@ -1,79 +1,116 @@
 /**
- * Repos common script logic (c) Staffan Olsson http://www.repos.se
- * Mutually dependent to ../head.js that imports the Prototype library. 
- * This is a static class, accessible anywhere using Repos.[method]
+ * Repos shared script logic (c) Staffan Olsson http://www.repos.se
+ * Static functions, loaded after prepare and jquery.
  * @version $Id$
+ *
+ * reportError(error) - handles any error message or exception
  */
 var Repos = {
+
+	// ------------ exception handling ------------
+	
 	/**
-	 * Adds a library to the DOM and makes sure it is executed.
-	 * @scriptUrl starting with '/' means absolute, no starting '/' means relative to head.js location
+	 * Allows common error reporting routines, and logging errors to server.
+	 * @param error String error message or Exception 
 	 */
-	require: function(scriptUrl) {
-		reposScriptSetup.require(scriptUrl);
+	reportError: function(error) {
+		var error = Repos._errorToString(error);
+		var id = Repos.generateId();
+		// send to errorlog
+		Repos._logError(error, id);
+		// show to user
+		var msg = "Repos has run into a script error:\n" + error + 
+			  "\n\nThe details of this error have been logged so we can fix the issue. " +
+			  "\nFeel free to contact support@repos.se about this error, ID \""+id+"\"." +
+			  "\n\nBecause of the error, this page may not function properly.";
+		Repos._alertError(msg);
 	},
 	
-	requireAndWait: function(scriptUrl) {
-		alert('requires dependency and waits for it to be evaluated before return');
-	},
 	/**
-	 * Creates a new DOM element
-	 * Replace document.createElement in application/xhtml+xml pages
-	 * @param tagName name in XHTML namespace
-	 * @param elementId id attribute value
-	 * @returns the element reference
+	 * Takes an error of any type and converts to a message String.
 	 */
-	create: function(tagName, elementId) {
-		var e = reposScriptSetup.createElement(tagName);
-		if (elementId) {
-			e.id = elementId;
+	_errorToString: function(error) {
+		if (typeof(error)=='Error') {
+			return Repos._exceptionToString(error);
 		}
-		return e;
-	},
-	/**
-	  * Create a popup window
-	  * @param id element ID
-	  * @param options, as in http://prototype-window.xilinus.com/ but without className
-	  * @returns window object with the API from http://prototype-window.xilinus.com/ (but not nessecarily the same class)
-	  */
-	createWindow: function(optionsHash) {
-		var o = $H({ }).merge(optionsHash);
-		return new Dialog(null, o);
+		return ''+error;
 	},
 	
 	/**
-	 * Adds a before advice to an existing function
-	 * The advice is executed before the real function.
-	 * If the advice returns anything, the real function will not be called.
-	 * @see http://www.dotvoid.com/view.php?id=43
+	 * Converts a caught exception to an error message.
 	 */
-	addBefore: function(aspectFunction, object, objectFunction)
-	{
-	  var fType = typeof(objectFunction);
-	
-	  if (typeof(aspectFunction) != 'function')
-		throw(InvalidAspectFunction);
-	
-	
-		var oldFunctoin = obj.prototype[fName];
-		if (!oldFunction)
-		  throw InvalidMethod;
-	
-		obj.prototype[oldFunction] = function() {
-			var replacement = aspectFunction.apply(this, arguments);
-			if (replacement) {
-				return replacement;	
-			}
-		  	return oldFunction.apply(this, arguments);
+	_exceptionToString: function(exceptionInstance) {
+		// if stacktraces are supported, add the info from it
+		var msg = '(Exception';
+		if (exceptionInstance.fileName) {
+			msg += ' at ' + exceptionInstance.fileName;
 		}
+		if (exceptionInstance.lineNumber) {
+			msg += ' row ' + exceptionInstance.lineNumber;
+		}
+		if (exceptionInstance.message) {
+			msg += ') ' + exceptionInstance.message;
+		} else {
+			msg += ') ' + exceptionInstance;
+		}
+		return msg;
+	},
+	
+	/**
+	 * Sends an error report to the server, if possible.
+	 */
+	_logError: function(error, id) {
+		var logurl = "/repos/errorlog/";
+		var info = Repos._getBrowserInfo();
+		info += '&id=' + id + '&message=' + error;
+		if (typeof(Ajax) != 'undefined') {
+			var report = new Ajax.Request(logurl, {method: 'post', parameters: info});
+		} else {
+			window.status = error; // Find out a way to send an error report anyway	
+			return;
+		}
+	},
+	
+	/**
+	 * Shows the error to the user, without requiring attention.
+	 */
+	_alertError: function(msg) {
+		if (typeof(console) != 'undefined') { // FireBug console
+			console.log(msg);
+		} else if (typeof(window.console) != 'undefined') { // Safari 'defaults write com.apple.Safari IncludeDebugMenu 1'
+			window.console.log(msg);
+		} else if (typeof(Components)!='undefined' && typeof(Component.utils)!='undefined') { // Firefox console
+			Components.utils.reportError(msg);
+		} else { // don't throw exceptions because it disturbs the user, and repos works without javascript too
+			window.status = "Due to a script error the page is not fully functional. Contact support@repos.se for info, error id: " + id;
+		}
+	},
+	
+	/**
+	 * collect debug info about the user's environment
+	 * @return as query string
+	 */
+	_getBrowserInfo: function() {
+		var query,ref,page,date;
+		page=window.location.href; // assuming that script errors occur in tools
+		ref=window.referrer;
+		query = 'url='+escape(page)+'&ref='+escape(ref)+'&os='+escape(navigator.userAgent)+'&browsername='+escape(navigator.appName)
+			+'&browserversion='+escape(navigator.appVersion)+'&lang='+escape(navigator.language)+'&syslang='+escape(navigator.systemLanguage);
+		return query;
+	},
+	
+	/**
+	 * Generate a random character sequence of length 8
+	 */
+	_generateId: function() {
+		var chars = "ABCDEFGHIJKLMNOPQRSTUVWXTZ";
+		var string_length = 8;
+		var randomstring = '';
+		for (var i=0; i<string_length; i++) {
+			var rnum = Math.floor(Math.random() * chars.length);
+			randomstring += chars.charAt(rnum);
+		}
+		return randomstring;
 	}
 	
-};
-
-if (reposScriptSetup == undefined) {
-	alert('Script error. ReposScriptSetup must be loaded before the Repos class');	
-}
-// import the common plugins
-for (i=0; i<reposScriptSetup.commonPlugins.length; i++) {
-	Repos.require(reposScriptSetup.commonPlugins[i]);
 }

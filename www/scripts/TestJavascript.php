@@ -19,6 +19,7 @@
 <?php
 $testfiles = array(
 'scripts/prepare/index.xml',
+'scripts/shared/',
 'scripts/resourceid/',
 'plugins/dateformat/'
 );

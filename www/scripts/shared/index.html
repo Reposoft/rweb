@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>repos.se dateformat plugin test page</title>
+<!-- the script -->
+<script type="text/javascript" src="repos.js"></script>
+<!-- unit testing must be imported after Repos, so it can override functions -->
+<script type="text/javascript" src="../unittest.js"></script>
+<!-- dependencies -->
+<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
+</head>
+
+<body>
+<h1>Repos shared script API</h1>
+<ul>
+<li><code>Repos.reportError(error)</code></li>
+</ul>
+<h2>unit tests</h2>
+<p>The unit test library overrides Repos.reportError, so it can't be tested, but the surrounding functions can be.</p>
+<script type="text/javascript">
+
+function TestRepos() {
+    
+    this.setUp = function() {
+    };
+
+	this.testErrorToString = function() {
+		e = 'abc';
+		this.assertEquals('abc', Repos._errorToString(e));
+	}
+	
+	this.testErrorToStringException = function() {
+		e = new Error('abc');
+		this.assertTrue(Repos._errorToString(e).length > 3);
+	}
+
+	this.testExceptionToString = function() {
+		e = new Error('my bad');
+		msg = Repos._exceptionToString(e);
+		this.assertTrue(msg.indexOf('my bad')>=0, "Should contain the exception message");
+	};
+
+	this.testExceptionToStringContainsFilename = function() {
+		e = new Error();
+		msg = Repos._exceptionToString(e);
+		this.assertTrue(msg.indexOf('/shared/')>=0, "Should contain the script URL");
+	};
+	
+	this.testGenerateId = function() {
+		id1 = Repos._generateId();
+		id2 = Repos._generateId();
+		this.assertTrue((''+id1) != (''+id2));
+	}
+	
+	this.testAlertError = function() {
+		Repos._alertError('this is a test error message');
+	}
+	
+	this.testLogError = function() {
+		Repos._logError('repos.js unit test message');
+	}
+	
+}
+TestRepos.prototype = new TestCase;
+testrun(new TestRepos());
+</script>
+
+</body>
+</html>

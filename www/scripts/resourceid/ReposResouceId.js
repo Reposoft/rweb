@@ -46,19 +46,17 @@ _getResourceVersion = function(versionText) {
 
 _showVersion = function() {
 	try {
-		var release = $('#releaseversion');
-		if (release) {
-			release.innerHTML = _getReleaseVersion(release.innerHTML);
-			release.style.display = '';
-		}
-		var revision = $('#resourceversion');
-		if (revision) {
-			revision.innerHTML = _getResourceVersion(revision.innerHTML);
-			revision.style.display = '';
-		}
+		$('#releaseversion').each( function() {
+			this.innerHTML = _getReleaseVersion(this.innerHTML);
+			this.style.display = '';
+		} );
+		$('#resourceversion').each( function() {
+			this.innerHTML = _getResourceVersion(this.innerHTML);
+			this.style.display = '';
+		} );
 	} catch (err) {
-		// Repos.reportError(err);
+		Repos.reportError(err);
 	}
 },
 
-$(document).ready( function() { _showVersion() } );
+$(document).ready( function() { _showVersion(); } );

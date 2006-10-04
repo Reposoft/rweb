@@ -37,6 +37,14 @@ if (document.documentElement && document.documentElement.namespaceURI && documen
 	};
 }
 
+// replace public functions in Repos shared
+if (typeof(Repos)=='undefined') {
+	var Repos = {};
+}
+Repos.reportError = function(error) {
+	alert(error);
+}
+
 // get the path that this file was included with
 var me = /unittest\.js(\?.*)?$/;
 var path = '';

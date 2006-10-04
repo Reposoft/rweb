@@ -13,11 +13,12 @@
 
 <body>
 <h1>Repos resource id</h1>
-<p>Reads svn:keyword strings and makes them user-readable</p>
+<p>Reads svn:keyword strings and makes them user-readable, like "1.1-dev 1802".</p>
 <h2>examples</h2>
-<p>URL Rev: <span id="resourceversion" class="versiondisplay">resource $URL$ $Rev$</span></p>
-<p>URL: <span id="releaseversion" class="versiondisplay">release $URL$</span></p>
-<p>Id: not converted $Id$</p>
+<p>Automatically converts <code>#resourceversion</code> and <code>#releaseversion</code> if they are defined.</p>
+<p>URL Rev <span id="resourceversion" class="versiondisplay">resourceversion: $URL$ $Rev$</span></p>
+<p>URL <span id="releaseversion" class="versiondisplay">releaseversion: $URL$</span></p>
+<p>Id is not supported: $Id$</p>
 <h2>unit tests</h2>
 <script type="text/javascript">
 
@@ -71,19 +72,19 @@ function TestResourceId() {
 	
 	this.testGetResourceversion = function() { with(this) {
 		var testid = 'version '+X+'URL: https://svn.optime.se/optime/repos/tags/www-1.2.1/index.html '+X+' '+X+'Rev: 1602 '+X+'';
-		var v = Repos._getResourceVersion(testid);
+		var v = _getResourceVersion(testid);
 		assertEquals('1.2.1', v, "Should not give revision number because this is a tag");
 	}};
 	
 	this.testGetReleaseversion = function() { with(this) {
 		var testid = 'version '+X+'URL: https://svn.optime.se/optime/repos/branches/trunk/index.html '+X+' '+X+'Rev: 1602 '+X+'';
-		var v = Repos._getReleaseVersion(testid);
+		var v = _getReleaseVersion(testid);
 		assertEquals('version dev', v, "Should not show revision in 'releaseversion'");
 	}};
 	
 	this.testGetResourceversion = function() { with(this) {
 		var testid = ''+X+'URL: https://svn.optime.se/optime/repos/branches/www-1.2/index.html '+X+' '+X+'Rev: 1602 '+X+' now'
-		var v = Repos._getResourceVersion(testid);
+		var v = _getResourceVersion(testid);
 		assertEquals('1.2 dev 1602 now', v, "Should return both release and revision for branch");
 	}};
 	
