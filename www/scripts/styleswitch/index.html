@@ -1,35 +1,33 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-uk">
 <head>
-	<title>jquery styleswitcher - kelvinluck.com</title>
+	<title>jquery styleswitcher for repos</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	
-	<link rel="stylesheet" type="text/css" href="styles1.css" title="styles1" media="screen" />
-	<link rel="alternate stylesheet" type="text/css" href="styles2.css" title="styles2" media="screen" />
-	<link rel="alternate stylesheet" type="text/css" href="styles3.css" title="styles3" media="screen" />
+	<!-- all styles known by repos -->
+	<link rel="stylesheet" title="repos" type="text/css" href="../../style/global.css" media="screen" />
+	<link rel="alternate stylesheet" title="pe" type="text/css" href="../../themes/pe/style/global.css" media="screen" />
 	
+	<!-- the unpacked switcher script -->
 	<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
 	<script type="text/javascript" src="styleswitch.js"></script>
 </head>
 
 <body>
-	<h1>Stylesheet switcher using jQuery</h1>
-	<p>This is a simple example of my stylesheet switcher which is very simple thanks to the power of <a href="http://www.jquery.com/">jQuery</a>.</p>
-	<p><strong>Update 25/08/2006:</strong> Updated to work with persistant stylesheets and new version of jQuery (r226 from SVN) [thanks Andrea]</p>
-	<p><strong>Update 20/08/2006:</strong> Updated to work with new version of jQuery (r200 from SVN) ["*=style" replaced with "=*style*"]</p>
-	<p>
-		Currently active stylesheet:
-		<span id="st1">styles1</span>
-		<span id="st2">styles2</span>
-		<span id="st3">styles3</span>
-	</p>
-	<p>Choose a different stylesheet:</p>
+<div id="workspace">
+<div id="commandbar">
+<a id="repository" class="command" href="/?login">go to repository</a>
+</div>
+<div id="contents">
+	<h1>Javascript stylesheet switcher</h1>
+	<p>Select a theme by clicking the link:</p>
 	<ul>
-		<li><a href="serversideSwitch.html?style=style1" rel="styles1" class="styleswitch">styles1</a></li>
-		<li><a href="serversideSwitch.html?style=style2" rel="styles2" class="styleswitch">styles2</a></li>
-		<li><a href="serversideSwitch.html?style=style3" rel="styles3" class="styleswitch">styles3</a></li>
+		<li><a href="serversideSwitch.html?style=repos" rel="styles1" class="styleswitch">Repos (default)</a></li>
+		<li><a href="serversideSwitch.html?style=pe" rel="styles2" class="styleswitch">Project Engine</a></li>
 	</ul>
-	<p>Please view source to see how it works or see the <a href="http://www.kelvinluck.com/article/switch-stylesheets-with-jquery">full article</a> about this script for more information. You can download the relevant Javascript here: <a href="styleswitch.js">styleswitch.js</a>, <a href="jquery.js">jquery.js</a></p>
+	<p>When selection is done, <a href="/?login">proceed to login</a></p>
+	<p><small>Using <a href="http://www.kelvinluck.com/article/switch-stylesheets-with-jquery">stylesheet switcher from kelvinluck.com</a>
+	version 25/08/2006. <a href="styleswitch.js">source</a></small></p>
 </body>
 </html>
 
