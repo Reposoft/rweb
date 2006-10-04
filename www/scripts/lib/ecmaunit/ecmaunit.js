@@ -206,8 +206,13 @@ function HTMLReporter(outputelement, verbose) {
     this.outputelement = outputelement;
     this.document = outputelement.ownerDocument;
     this.verbose = verbose; //XXX verbose not yet supported
+    
+    this.np = 0; //pass
+    this.nf = 0; //fail
+    this.ne = 0; //exception
 
     this.reportSuccess = function(testcase, attr) {
+    	this.np++;
         /* report a test success */
         // a single dot looks rather small
         var dot = this.document.createTextNode('+');
@@ -215,6 +220,7 @@ function HTMLReporter(outputelement, verbose) {
     };
 
     this.reportError = function(testcase, attr, exception) {
+    	this.nf++;
         /* report a test failure */
         var f = this.document.createTextNode('F');
         this.outputelement.appendChild(f);
@@ -240,23 +246,17 @@ function HTMLReporter(outputelement, verbose) {
                 this.outputelement.appendChild(div);
             };
             var div = this.document.createElement('div');
-            var text = this.document.createTextNode('NOT OK!');
+            var text = this.document.createTextNode(''+this.np+' passes, '+this.nf+' fails');
             div.appendChild(text);
-            div.style.backgroundColor = 'red';
-            div.style.color = 'black';
-            div.style.fontWeight = 'bold';
-            div.style.textAlign = 'center';
-            div.style.marginTop = '1em';
+            div.id='testresult';
+            div.className='testsummary failed';
             this.outputelement.appendChild(div);
         } else {
             var div = this.document.createElement('div');
-            var text = this.document.createTextNode('OK!');
+            var text = this.document.createTextNode(''+this.np+' passes, '+this.nf+' fails');
             div.appendChild(text);
-            div.style.backgroundColor = 'lightgreen';
-            div.style.color = 'black';
-            div.style.fontWeight = 'bold';
-            div.style.textAlign = 'center';
-            div.style.marginTop = '1em';
+            div.id='testresult';
+            div.className='testsummary passed';
             this.outputelement.appendChild(div);
         };
     };
