@@ -521,7 +521,7 @@ $hasencoded = false; // security check, set to true in the encoding functions an
 // This meathod is only suitable for URLs that refer to existing resources.
 // If the URL is used for write operations, international characters such as umlauts will not be correct in the repository
 function urlEncodeNames($url) {
-	trigger_error("urlEncodeNames is deprecated. Use escapeArgument for command, rawurlencode for query params and htmlspecialchars for presentation.");
+	//trigger_error("urlEncodeNames is deprecated. Use escapeArgument for command, rawurlencode for query params and htmlspecialchars for presentation.");
 	global $hasencoded; $hasencoded = true; // security check, set to true in the encoding functions and checked before 'run'
 	$parts = explode('/', $url);
 	// first part is the protocol, don't escape
