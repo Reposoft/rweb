@@ -89,11 +89,13 @@ class Report {
 		if ($class=='error') $s='!';
 		if ($this->offline) {
 			$this->_output(" $s $message");
-		} else {
+		} else if ($this->test) {
 			$message = str_replace('"','&quot;', $message);
 			$this->_output("<acronym class=\"$class\" title=\"");
 			$this->_output($message);
 			$this->_output("\">$s</acronym>");
+		} else {
+			$this->_outputline($class, " $s $message");
 		}
 	}
 	

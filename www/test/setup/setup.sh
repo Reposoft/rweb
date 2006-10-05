@@ -1,3 +1,5 @@
+# ======= deprecated, use setup.php
+
 #!/bin/bash
 # name the temp dir where the repository will be. This dir will be removed recursively.
 TST="/tmp/test.repos.se"

@@ -1,249 +1,194 @@
 <?php
 
 require('../../conf/Report.class.php');
-$r = new Report('set up test repository');
+$report = new Report('set up test repository');
 
 //  name the temp dir where the repository will be. This dir will be removed recursively.
-$tst="test.repos.se";
-
-// need a short directory separator
-define('DS', DIRECTORY_SEPARATOR);
+$test_repository_folder="test.repos.se/";
 
 //echo "Restoring the repos.se test repository to its baseline"
 //echo ""
 
 # environment setup
-
-// linux needs the following for every command (can not use exec because it won't be persistent)
-//export LANG="en_US.UTF-8"
-//export LC_ALL="en_US.UTF-8"
-// svn command alias
-
-//The PATH to SVN and SVNADMIN has to be defined in the SYSTEMPATH, not in the USERPATH
 $here=getcwd();
-$svn="svn --config-dir " . rtrim($here, DS) . DS . "test-svn-config-dir";
+$svnargs="--config-dir " . rtrim($here, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "test-svn-config-dir";
+
+// On windows, the PATH to SVN and SVNADMIN has to be defined in the SYSTEMPATH, not in the USERPATH
 
 // Get temporary directory
 $tempdir = getSystemTempDir();
 
-$test = rtrim($tempdir, DS) . DS . $tst;
-$repo = rtrim($test, DS) . DS . "repo";
-$admin = rtrim($test, DS) . DS . "admin";
-$conf = $test . "/admin/testrepo.conf";
-$conf_apachefriendly = str_replace('\\', '/', $conf);
-echo "\n\n\n";
-echo "Apache should do \"Include $conf_apachefriendly\" at some &lt;Location &gt;\n";
-echo "Note that apache must be restarted if there are changes in this file.\n";
-echo "\n\n\n";
+$test = $tempdir . $test_repository_folder;
+$repo = $test . "repo/";
+$admin = $test . "admin/";
 
-if (file_exists($repo)) {
-	removeDirectory($test);
-} else {
-	if (file_exists($test)) {
-		echo "Is $test really the right test dir? It already exists but does not contain the testrepository";
-	}
+if (file_exists($test)) {
+	$report->info("Deleting old test repository folder $test");
+	deleteFolder($test);
 }
 
 # create test repository
+createFolder($test);
+createFolder($repo);
+createFolder($admin);
 
-mkdir($test, 0777);
-mkdir($repo, 0777);
-mkdir($admin, 0777);
+$report->info("Running: svnadmin create \"$repo\"");
 
-#svnadmin create "$test/repo/"
-
-chdir($repo);
-$createRepos="svnadmin create " . $repo . " 2>&1";
-$result0 = array();
-exec($createRepos, &$result0);
-foreach ( $result0 as $v0 ) {
-	echo "$v0 \n";
+$result = repos_runCommand('svnadmin', "create " . escapeArgument($repo));
+if (array_pop($result)) {
+	$report->fail("Could not create repository: ".implode("\n", $result));
+} else {
+	$report->ok("Successfully created repository $repo");
 }
-//system($createRepos);
-chdir($here);
 
 # create user database, base64 encoded by htpasswd2
-$users = $test . "/admin/repos-users";
-//touch($users);
-$userfile = fopen($users, 'ab');
-# on windows with WAMP, the passwords should be MD5-encoded
-fwrite($userfile, "svensson:\$apr1\$h03.....\$vSQzcy3gId0sKgc/JvRCs.\n");
-fwrite($userfile, "test:\$apr1\$Sy2.....\$zF88UPXW6Q0dG3BRHOQ2m0");
-fclose($userfile);
+$users =
+"svensson:rrE3/9iLvCoFU\n".
+"test:n8F28qRYJJ4Q6\n";
+$usersencoding = 'base64';
+if (isWindows()) { // MD5
+	$users = 
+	"svensson:\$apr1\$h03.....\$vSQzcy3gId0sKgc/JvRCs.\n".
+	"test:\$apr1\$Sy2.....\$zF88UPXW6Q0dG3BRHOQ2m0\n";
+	$usersencoding = 'MD5';
+}
+
+$userfile = $test . "admin/repos-users";
+if (createFileWithContents($userfile, $users, true)) {
+	$report->ok("Successfully created user account file $userfile with $usersencoding encoded passwords");
+} else {
+	$report->fail("Could not create user account file $userfile");
+}
 
 # create ACL
-$acl = $test . "/admin/repos-access";
-//touch($acl);
-$accessfile = fopen($acl, 'ab');
-fwrite($accessfile, "[groups]\n");
-fwrite($accessfile, "demoproject = svensson, test\n");
-fwrite($accessfile, "\n");
-fwrite($accessfile, "[/]\n");
-fwrite($accessfile, "\n");
-fwrite($accessfile, "[/svensson]\n");
-fwrite($accessfile, "svensson = rw\n");
-fwrite($accessfile, "\n");
-fwrite($accessfile, "[/test]\n");
-fwrite($accessfile, "test = rw\n");
-fwrite($accessfile, "\n");
-fwrite($accessfile, "[/demoproject]\n");
-fwrite($accessfile, "@demoproject = rw\n");
-fwrite($accessfile, "\n");
-fwrite($accessfile, "[/demoproject/trunk/readonly]\n");
-fwrite($accessfile, "@demoproject = r\n");
-fwrite($accessfile, "\n");
-fwrite($accessfile, "[/demoproject/trunk/noaccess]\n");
-fwrite($accessfile, "@demoproject = \n");
-fwrite($accessfile, "\n");
-fwrite($accessfile, "[/demoproject/trunk/public]\n");
-fwrite($accessfile, "@demoproject = rw\n");
-fwrite($accessfile, "* = r\n");
-fwrite($accessfile, "\n");
-fclose($accessfile);
+$aclfile = $test . "admin/repos-access";
+$acl = '
+[groups]
+demoproject = svensson, test
+
+[/]
+
+[/svensson]
+svensson = rw
+
+[/test]
+test = rw
+
+[/demoproject]
+@demoproject = rw
+
+[/demoproject/trunk/readonly]
+@demoproject = r
+
+[/demoproject/trunk/noaccess]
+@demoproject = 
+
+[/demoproject/trunk/public]
+@demoproject = rw
+* = r
+';
+if (createFileWithContents($aclfile, $acl, true)) {
+	$report->ok("Successfully created subversion ACL file $aclfile");
+} else {
+	$report->fail("Could not create subversion ACL file $aclfile");
+}
 
 # create apache 2.2 config
+$conffile = $test . "admin/testrepo.conf";
 
-//touch($conf);
-$conffile = fopen($conf, 'ab');
-fwrite($conffile, "DAV svn\n");
-fwrite($conffile, "SVNIndexXSLT \"/repos/view/repos.xsl\"\n");
-fwrite($conffile, "SVNPath $test/repo/\n");
-fwrite($conffile, "SVNAutoversioning on\n");
-fwrite($conffile, "AuthName \"$tst\"\n");
-fwrite($conffile, "AuthType Basic\n");
-fwrite($conffile, "AuthUserFile $users\n");
-fwrite($conffile, "Require valid-user\n");
-fwrite($conffile, "AuthzSVNAccessFile $acl\n");
-fwrite($conffile, "Satisfy Any\n"); // allow public access to * = r or rw folders
-fclose($conffile);
+$conf = "
+DAV svn
+SVNIndexXSLT \"/repos/view/repos.xsl\"
+SVNPath $test/repo/
+SVNAutoversioning on
+AuthName \"$test_repository_folder\"
+AuthType Basic
+AuthUserFile $users
+Require valid-user
+AuthzSVNAccessFile $acl
+Satisfy Any   # allow public access to * = r folders
+";
+if (createFileWithContents($conffile, $conf, true)) {
+	$report->ok("Successfully created subversion ACL file $aclfile");
+} else {
+	$report->fail("Could not create subversion ACL file $aclfile");
+}
 
-//echo "Apache should do \"Include $CONF\" at some <Location >"
-//echo "Note that apache must be restarted if there are changes in this file."
-//echo ""
+$report->info("Apache should do \"Include $conffile\" at some &lt;Location &gt;");
+$report->info("Note that apache must be restarted when there is changes in the conf file.");
 
 # check out working copy and create base structure
+$wc = $test . "wc/";
+createFolder($wc);
+$repourl = $repo;
 
-mkdir($test . DS . "wc", 0777);
-$repourl = str_replace('\\', '/', $repo);
-$result_CO = array();
-exec("$svn co file:///$repourl $test/wc/ 2>&1", &$result_CO);
-foreach ( $result_CO as $v_CO ) {
-	echo "$v_CO \n";
+$result = repos_runCommand('svn', $svnargs.' co '.escapeArgument("file:///$repourl").' '.$wc);
+if (array_pop($result) || count($result)==0) {
+	$report->fail("Error executing the checkout command");
+} else {
+	$report->ok("Successfully checked out $repourl to working copy $wc");
+	$report->debug($result);
 }
+
 //system("$svn co file://$repourl $test/wc/");
-mkdir($test . "/wc/svensson", 0777);
-mkdir($test . "/wc/svensson/trunk", 0777);
-mkdir($test . "/wc/svensson/calendar", 0777);
-mkdir($test . "/wc/test", 0777);
-mkdir($test . "/wc/test/trunk", 0777);
-mkdir($test . DS . "wc" . DS . "test" . DS . "calendar", 0777);
-mkdir($test . DS . "wc" . DS . "demoproject", 0777);
-$demoproject = $test . DS . "wc" . DS . "demoproject" . DS . "trunk" . DS;
-mkdir($demoproject, 0777);
-mkdir($demoproject . "noaccess", 0777);
-mkdir($demoproject . "readonly", 0777);
-mkdir($demoproject . "public", 0777);
+createFolder($wc."svensson/");
+createFolder($wc."svensson/trunk/");
+createFolder($wc."svensson/calendar/");
+createFolder($wc."test/");
+createFolder($wc."test/trunk/");
+createFolder($wc."test/calendar/");
+createFolder($wc."demoproject/");
+createFolder($wc."demoproject/trunk/");
+createFolder($wc."demoproject/noaccess/");
+createFolder($wc."demoproject/readonly/");
+createFolder($wc."demoproject/public/");
 
-$result1 = array();
-exec("$svn add $test/wc/svensson 2>&1", &$result1);
-foreach ( $result1 as $v1 ) {
-	echo "$v1 \n";
+$publicxml = $wc."demoproject/public/xmlfile.xml";
+createFileWithContents($publicxml, "<empty-document/>\n");
+
+$report->debug(repos_runCommand('svn', $svnargs.' add '.escapeArgument($wc."svensson")));
+$report->debug(repos_runCommand('svn', $svnargs.' add '.escapeArgument($wc."test")));
+$report->debug(repos_runCommand('svn', $svnargs.' add '.escapeArgument($wc."demoproject")));
+$report->debug(repos_runCommand('svn', $svnargs.' propset svn:mime-type text/xml '.escapeArgument($publicxml)));
+
+$result = repos_runCommand('svn', $svnargs.' commit -m "Created users svensson and test, and a shared project" '.escapeArgument($wc));
+if (array_pop($result) || count($result)==0) {
+	$report->fail("Could not commit test folders using svn command");
+} else {
+	$report->ok("Successfully committed test folders");
+	$report->debug($result);
 }
-$result2 = array();
-exec("$svn add $test/wc/test 2>&1", &$result2);
-foreach ( $result2 as $v2 ) {
-	echo "$v2 \n";
-}
-$result3 = array();
 
-$publicxml = $demoproject . "public" . "/xmlfile.xml";
-$xh = fopen($publicxml, 'ab');
-fwrite($xh, "<empty-document/>");
-fclose($xh);
-
-exec("$svn add $test/wc/demoproject 2>&1", &$result3);
-foreach ( $result3 as $v3 ) {
-	echo "$v3 \n";
-}
-exec("$svn propset svn:mime-type text/xml $publicxml 2>&1");
-
-$result4 = array();
-exec("$svn commit -m \"Created users svensson and test, and a shared project\" $test/wc/ 2>&1", &$result4);
-foreach ( $result4 as $v4 ) {
-	echo "$v4 \n";
-}
-//system("$svn add $test/wc/svensson");
-//system("$svn add $test/wc/test");
-//system("$svn add $test/wc/demoproject");
-//system("$svn commit -m \"Created users svensson and test, and a shared project\" $test/wc/");
-
-# create a base structure
+# create a base structure in test/trunk/
 $folders = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z");
-$testfolder = "$test/wc/test/trunk";
+$testfolder = $wc."test/trunk/";
 foreach($folders as $dir){
-	$testfolder="$testfolder/f$dir";
-	mkdir($testfolder, 0777);
-	$folder = fopen("$testfolder/$dir.txt", 'ab');
-	fwrite($folder, "$dir");
-	fclose($folder);
+	$testfolder .= "f$dir/";
+	createFolder($testfolder);
+	createFileWithContents($testfolder."$dir.txt", "$dir");
 }
 
-$result5 = array();
-exec("$svn add $test/wc/test/trunk/fa 2>&1", &$result5);
-foreach ( $result5 as $v5 ) {
-	echo "$v5 \n";
-}
-$result6 = array();
-exec("$svn commit -m \"Created a sample folder structure for user test\" $test/wc/ 2>&1", &$result6);
-foreach ( $result6 as $v6 ) {
-	echo "$v6 \n";
+$report->debug(repos_runCommand('svn', $svnargs.' add '.escapeArgument($wc.'test/trunk/fa/')));
+$result = repos_runCommand('svn', $svnargs.' commit -m "Created a sample folder structure for user test" '.escapeArgument($wc));
+if (array_pop($result) || count($result)==0) {
+	$report->fail("Could not commit folder tree using svn command");
+} else {
+	$report->ok("Successfully committed folder tree");
+	$report->debug($result);
 }
 
-//system("$svn add $test/wc/test/trunk/fa");
-//system("$svn commit -m \"Created a sample folder structure for user test\" $test/wc/");
+# other repos projects that need to do integration testing have one folder each below
+createFolder($wc."test/trunk/repos-svn-access/");
+createFileWithContents($wc."test/trunk/repos-svn-access/automated-test-increment.txt", "0");
 
-# other repos projects that need to do integration testing have a folder each below
-mkdir("$test/wc/test/trunk/repos-svn-access", 0777);
-
-$autotest = "$test/wc/test/trunk/repos-svn-access/automated-test-increment.txt";
-$autotestinc = fopen($autotest, 'ab');
-fwrite($autotestinc, "0");
-fclose($autotestinc);
-
-
-$result7 = array();
-exec("$svn add $test/wc/test/trunk/repos-svn-access 2>&1", &$result7);
-foreach ( $result7 as $v7 ) {
-	echo "$v7 \n";
-}
-$result8 = array();
-exec("$svn commit -m \"Added integration testing folders for other repos projects\" $test/wc/ 2>&1", &$result8);
-foreach ( $result8 as $v8 ) {
-	echo "$v8 \n";
-}
-//system("$svn add $test/wc/test/trunk/repos-svn-access");
-//system("$svn commit -m \"Added integration testing folders for other repos projects\" $test/wc/");
-
-function removeDirectory($dir) {
-  if ($handle = opendir($dir)) {
-   while (false !== ($item = readdir($handle))) {
-     if ($item != "." && $item != "..") {
-       if (is_dir($dir . DS . $item)) {
-	    $directory = $dir . DS . $item;
-		chmod($directory, 0777);
-        removeDirectory($directory);
-       } else {
-	    $file = $dir . DS . $item;
-	    chmod($file, 0777);
-        unlink($file);
-       }
-     }
-   }
-   closedir($handle);
-   chmod($dir, 0777);
-   rmdir($dir);
-  }
+$report->debug(repos_runCommand('svn', $svnargs.' add '.escapeArgument($wc.'test/trunk/repos-svn-access/')));
+$result = repos_runCommand('svn', $svnargs.' commit -m "Added integration testing folders for other repos projects" '.escapeArgument($wc));
+if (array_pop($result) || count($result)==0) {
+	$report->fail("Could not commit integration test folders using svn command");
+} else {
+	$report->ok("Successfully committed integration test folders");
+	$report->debug($result);
 }
 
-$r->display();
+$report->display();
 ?>

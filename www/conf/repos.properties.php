@@ -466,10 +466,23 @@ function deleteFile($file) {
 }
 
 /**
- * does createFile() and fopen+fwrite+fclose.
+ * Instead of createFile() and fopen+fwrite+fclose.
  */
-function createFileWithContents($absolutePath, $contents) {
-	
+function createFileWithContents($absolutePath, $contents, $convertToWindowsNewlineOnWindows=false) {
+	if (!isFile($absolutePath)) {
+		trigger_error("Path $absolutePath is not a file."); return false;
+	}
+	if (file_exists($absolutePath)) {
+		trigger_error("Path $absolutePath already exists. Delete it first."); return false;
+	}
+	if ($convertToWindowsNewlineOnWindows) {
+		$file = fopen($absolutePath, 'xt');	
+	} else {
+		$file = fopen($absolutePath, 'x');
+	}
+	$b = fwrite($file, $contents);
+	fclose($file);
+	return $b;
 }
 
 /**
@@ -478,8 +491,9 @@ function createFileWithContents($absolutePath, $contents) {
  * @return false if it is not allowed to chmod the path writable
  */
 function _chmodWritable($absolutePath) {
-	if (!strContains($absolutePath, '/.svn')) return false;
-	return chmod($absolutePath, 0777);
+	if (strContains($absolutePath, '/.svn')) return chmod($absolutePath, 0777);
+	if (strBegins($absolutePath, getSystemTempDir())) return chmod($absolutePath, 0777);
+	return false;
 }
 
 /**
