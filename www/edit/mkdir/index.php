@@ -3,9 +3,10 @@
 require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__))."/edit.class.php" );	
 
+// automatic validation
 new FilenameRule('name');
-//new NewFilenameRule('name');
-// message and target have default rules
+// explicit validation
+$folderRule = new NewFilenameRule('newfolder');
 
 if (isset($_GET[SUBMIT])) {
 	Validation::expect('target', 'name', 'message');
@@ -26,8 +27,10 @@ if (isset($_GET[SUBMIT])) {
 // it is also allowed in templates for presentation, but not in field values
 
 function createFolder($parentUri, $name, $message) {
+	global $folderRule;
 	$template = new Presentation();
 	$newfolder = rtrim($parentUri,'/').'/'.$name;
+	Validation::_run($folderRule, $newfolder);
 	$dir = tmpdir();
 	if (!$dir) {
 		$template->trigger_error("Could not create temporary directory", E_USER_ERROR);

@@ -18,8 +18,13 @@ function printHeaders($target) {
 	if(strpos($target,'/')===false) {
 		$target = repos_getSelfUrl().$target;
 	}
-	echo("<h2>$target</h2>");
-	$headers = getHttpHeaders($target);
+	echo("<p><strong>URL: <a target=\"blank\" href=\"$target\">$target</a></strong></p>");
+	if (isset($_GET['auth'])) {
+		echo('<p>Authenticating as &quot;'.getReposUser().'&quot;</p>');
+		$headers = getHttpHeaders($target, getReposUser(), _getReposPass());
+	} else {
+		$headers = getHttpHeaders($target);
+	}
 	echo("<pre>");
 	foreach($headers as $h => $v) {
 		echo('|');
@@ -40,7 +45,12 @@ function printForm() {
 <label for="target">Local target URL</label>
 <input type="text" name="target" value="/" size="80"/>
 </p>
+<?php if(isLoggedIn()) { ?>
 <p>
+<label for="auth">Authenticate as current user (<?php echo(getReposUser()); ?>)?</label>
+<input type="checkbox" name="auth"/>
+<p>
+<?php } ?>
 <label for="submit"></label>
 <input type="submit"/>
 </p>

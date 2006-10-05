@@ -248,7 +248,9 @@ function getHttpStatusFromHeader($httpStatusHeader) {
 // abstraction for HTTP operation
 function getHttpHeaders($targetUrl, $user=null, $pass=null) {
 	if (substr_count($targetUrl, '/')<3) trigger_error("Can not check headers of $targetUrl, because it is not a valid resource", E_USER_ERROR);
-	return my_get_headers($targetUrl, $user, $pass);
+	$headers = my_get_headers($targetUrl, $user, $pass);
+	//echo ("Headers for $targetUrl $user:"); print_r($headers);
+	return $headers;
 }
 
 // ----- resource URL retreival functionality -----
