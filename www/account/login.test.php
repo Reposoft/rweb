@@ -161,7 +161,33 @@ class Login_include_Test extends UnitTestCase {
 		$url = TESTREPO.'/test/tunk'; // must be able to accept folders without tailing slash
 		$this->assertEqual(1, login_getResourceType($url));
 	}
+	
+	function testIsHttpHeadersForFolder() {
+		$h = '
+		|HTTP/1.1 200 OK|
+		|Date: Wed, 04 Oct 2006 19:20:44 GMT|
+		|Server: Apache/2.0.59 (Win32) SVN/1.4.0 PHP/5.1.6 DAV/2|
+		|Last-Modified: Wed, 04 Oct 2006 19:17:23 GMT|
+		|ETag: W/"1//demoproject/trunk/public"|
+		|Accept-Ranges: bytes|
+		|Connection: close|
+		|Content-Type: text/xml|
+		'; // copied from the headers test
+		$h = explode('|', $h);
+		array_walk($h, '_splitHeader');
+		print_r($h);
+	}
+	
+	function _splitHeader(&$item, &$key) {
+		list($key, $item) = explode($item);
+		trim($item);
+	}
+	
+	function testIsHttpHeadersForFolderNo() {
+		
+	}
 /* folder header
+'
 |HTTP/1.1 200 OK|
 |Date: Wed, 04 Oct 2006 19:20:44 GMT|
 |Server: Apache/2.0.59 (Win32) SVN/1.4.0 PHP/5.1.6 DAV/2|
@@ -170,13 +196,14 @@ class Login_include_Test extends UnitTestCase {
 |Accept-Ranges: bytes|
 |Connection: close|
 |Content-Type: text/xml|
+'
  */
 /* file header
 |HTTP/1.1 200 OK|
 |Date: Wed, 04 Oct 2006 19:33:57 GMT|
 |Server: Apache/2.0.59 (Win32) SVN/1.4.0 PHP/5.1.6 DAV/2|
 |Last-Modified: Wed, 04 Oct 2006 19:30:55 GMT|
-|ETag: "4//demoproject/trunk/public/a.xml"|
+|ETag: "4//demoproject/trunk/public/xmldoc.xml"|
 |Accept-Ranges: bytes|
 |Content-Length: 7|
 |Connection: close|

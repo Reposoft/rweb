@@ -21,8 +21,8 @@
  * This way Repos is compatible with all browsers and subversion clients.
  * Any HTTP capable application can use this to integrate to repos.
  *
- * All scripts working with contents are expected to include
- * this file. Other scripts can use repos.properties.php.
+ * All scripts working with contents are expected to include this file.
+ * Other scripts can include only repos.properties.php instead.
  *
  * Also designed for transparent login in other PHP applications that
  * use online access to resources, such as PHPiCalendar and phpThumb.
@@ -172,7 +172,7 @@ function login_getResourceType($target) {
 	
 }
 
-function _isFolderHeaders($headers) {
+function _isHttpHeadersForFolder($headers) {
 	// make headers test to validate that this works
 }
 

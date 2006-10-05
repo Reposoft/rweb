@@ -1,17 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title>repos.se: Contents of {=$target|basename}</title>
-<!--{$head}-->
-</head>
-
-<body>
-<pre>
 <?php
+
+require('../../conf/Report.class.php');
+$r = new Report('set up test repository');
 
 //  name the temp dir where the repository will be. This dir will be removed recursively.
 $tst="test.repos.se";
 $here=getcwd();
+
+// need a short directory separator
+define('DS', DIRECTORY_SEPARATOR);
 
 //echo "Restoring the repos.se test repository to its baseline"
 //echo ""
@@ -25,7 +22,7 @@ $here=getcwd();
 // svn command alias
 
 //The PATH to SVN and SVNADMIN has to be defined in the SYSTEMPATH, not in the USERPATH
-$svn="svn --config-dir " . rtrim($here, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "test-svn-config-dir";
+$svn="svn --config-dir " . rtrim($here, DS) . DS . "test-svn-config-dir";
 
 
 // Get temporary directory
@@ -41,9 +38,9 @@ if (!empty($_ENV['TMP'])) {
 
 if (empty($tempdir)) { die ('No temporary directory'); }
 
-$test = rtrim($tempdir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $tst;
-$repo = rtrim($test, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "repo";
-$admin = rtrim($test, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "admin";
+$test = rtrim($tempdir, DS) . DS . $tst;
+$repo = rtrim($test, DS) . DS . "repo";
+$admin = rtrim($test, DS) . DS . "admin";
 $conf = $test . "/admin/testrepo.conf";
 $conf_apachefriendly = str_replace('\\', '/', $conf);
 echo "\n\n\n";
@@ -81,6 +78,7 @@ chdir($here);
 $users = $test . "/admin/repos-users";
 //touch($users);
 $userfile = fopen($users, 'ab');
+# on windows with WAMP, the passwords should be MD5-encoded
 fwrite($userfile, "svensson:\$apr1\$h03.....\$vSQzcy3gId0sKgc/JvRCs.\n");
 fwrite($userfile, "test:\$apr1\$Sy2.....\$zF88UPXW6Q0dG3BRHOQ2m0");
 fclose($userfile);
@@ -128,7 +126,7 @@ fwrite($conffile, "AuthType Basic\n");
 fwrite($conffile, "AuthUserFile $users\n");
 fwrite($conffile, "Require valid-user\n");
 fwrite($conffile, "AuthzSVNAccessFile $acl\n");
-fwrite($conffile, "Satisfy Any $acl\n"); // allow public access to * = r or rw folders
+fwrite($conffile, "Satisfy Any\n"); // allow public access to * = r or rw folders
 fclose($conffile);
 
 //echo "Apache should do \"Include $CONF\" at some <Location >"
@@ -137,7 +135,7 @@ fclose($conffile);
 
 # check out working copy and create base structure
 
-mkdir($test . DIRECTORY_SEPARATOR . "wc", 0777);
+mkdir($test . DS . "wc", 0777);
 $repourl = str_replace('\\', '/', $repo);
 $result_CO = array();
 exec("$svn co file:///$repourl $test/wc/ 2>&1", &$result_CO);
@@ -150,12 +148,14 @@ mkdir($test . "/wc/svensson/trunk", 0777);
 mkdir($test . "/wc/svensson/calendar", 0777);
 mkdir($test . "/wc/test", 0777);
 mkdir($test . "/wc/test/trunk", 0777);
-mkdir($test . DIRECTORY_SEPARATOR . "wc" . DIRECTORY_SEPARATOR . "test" . DIRECTORY_SEPARATOR . "calendar", 0777);
-mkdir($test . DIRECTORY_SEPARATOR . "wc" . DIRECTORY_SEPARATOR . "demoproject", 0777);
-mkdir($test . DIRECTORY_SEPARATOR . "wc" . DIRECTORY_SEPARATOR . "demoproject" . DIRECTORY_SEPARATOR . "trunk", 0777);
-mkdir($test . DIRECTORY_SEPARATOR . "wc" . DIRECTORY_SEPARATOR . "demoproject" . DIRECTORY_SEPARATOR . "trunk" . DIRECTORY_SEPARATOR . "noaccess", 0777);
-mkdir($test . DIRECTORY_SEPARATOR . "wc" . DIRECTORY_SEPARATOR . "demoproject" . DIRECTORY_SEPARATOR . "trunk" . DIRECTORY_SEPARATOR . "readonly", 0777);
-mkdir($test . DIRECTORY_SEPARATOR . "wc" . DIRECTORY_SEPARATOR . "demoproject" . DIRECTORY_SEPARATOR . "trunk" . DIRECTORY_SEPARATOR . "public", 0777);
+mkdir($test . DS . "wc" . DS . "test" . DS . "calendar", 0777);
+mkdir($test . DS . "wc" . DS . "demoproject", 0777);
+$demoproject = $test . DS . "wc" . DS . "demoproject" . DS . "trunk" . DS;
+mkdir($demoproject, 0777);
+mkdir($demoproject . "noaccess", 0777);
+mkdir($demoproject . "readonly", 0777);
+mkdir($demoproject . "public", 0777);
+
 $result1 = array();
 exec("$svn add $test/wc/svensson 2>&1", &$result1);
 foreach ( $result1 as $v1 ) {
@@ -167,10 +167,18 @@ foreach ( $result2 as $v2 ) {
 	echo "$v2 \n";
 }
 $result3 = array();
+
+$publicxml = $demoproject . "public" . "/xmlfile.xml";
+$xh = fopen($publicxml, 'ab');
+fwrite($xh, "<empty-document/>");
+fclose($xh);
+
 exec("$svn add $test/wc/demoproject 2>&1", &$result3);
 foreach ( $result3 as $v3 ) {
 	echo "$v3 \n";
 }
+exec("$svn propset svn:mime-type text/xml $publicxml 2>&1");
+
 $result4 = array();
 exec("$svn commit -m \"Created users svensson and test, and a shared project\" $test/wc/ 2>&1", &$result4);
 foreach ( $result4 as $v4 ) {
@@ -202,6 +210,7 @@ exec("$svn commit -m \"Created a sample folder structure for user test\" $test/w
 foreach ( $result6 as $v6 ) {
 	echo "$v6 \n";
 }
+
 //system("$svn add $test/wc/test/trunk/fa");
 //system("$svn commit -m \"Created a sample folder structure for user test\" $test/wc/");
 
@@ -231,12 +240,12 @@ function removeDirectory($dir) {
   if ($handle = opendir($dir)) {
    while (false !== ($item = readdir($handle))) {
      if ($item != "." && $item != "..") {
-       if (is_dir($dir . DIRECTORY_SEPARATOR . $item)) {
-	    $directory = $dir . DIRECTORY_SEPARATOR . $item;
+       if (is_dir($dir . DS . $item)) {
+	    $directory = $dir . DS . $item;
 		chmod($directory, 0777);
         removeDirectory($directory);
        } else {
-	    $file = $dir . DIRECTORY_SEPARATOR . $item;
+	    $file = $dir . DS . $item;
 	    chmod($file, 0777);
         unlink($file);
        }
@@ -248,7 +257,5 @@ function removeDirectory($dir) {
   }
 }
 
+$r->display();
 ?>
-</pre>
-</body>
-</html> 

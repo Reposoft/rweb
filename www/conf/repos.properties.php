@@ -25,6 +25,7 @@ function reportError($n, $message, $file, $line) {
 function reportErrorText($n, $message, $trace) {
 	if ($n!=2048) { // E_STRICT not defined in php 4
 		echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>");
+		exit;
 	}
 }
 set_error_handler('reportError');
