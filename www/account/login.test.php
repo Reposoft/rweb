@@ -114,6 +114,18 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertEqual(true, verifyLogin($url));
 	}
 	
+	function testVerifyLoginTestServerPercent() {
+		$url = TESTREPO.'demoproject/trunk/public/a%b';
+		$this->assertTrue(verifyLogin($url), "Should find parent of $url and accept login");
+		$this->assertNoErrors();
+	}
+	
+	function testVerifyLoginTestServerUmlaut() {
+		$url = TESTREPO.'demoproject/trunk/public/aöb';
+		$this->assertTrue(verifyLogin($url), "Should find parent of $url and accept login");
+		$this->assertNoErrors();
+	}
+	
 	function testVerifyLoginFail() {
 		// test demo account authentication to repository root (no access there)
 		$_SERVER['PHP_AUTH_USER'] = 'test';

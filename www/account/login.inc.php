@@ -119,6 +119,7 @@ function login($targetUrl) {
 }
 
 /**
+ * @param targetUrl absolute URL, not encoded, characters like åäö and % are accepted
  * @return true if the current user can access the resource, false if not
  * does trigger_error if the resource can not be used for authentication
  */
@@ -126,6 +127,7 @@ function verifyLogin($targetUrl) {
 	if (!strBegins($targetUrl, getRepository())) {
 		trigger_error('Target URL is not a repository resource. Can not validate login using '.$targetUrl, E_USER_ERROR);
 	}
+	$targetUrl = str_replace("%", "%25", $targetUrl); // same as in edit.class.php addArgUrl
 	$user = getReposUser();
 	if (!$user) {
 		trigger_error('No user credentials given. Can not validate login.', E_USER_ERROR);
