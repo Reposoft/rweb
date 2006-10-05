@@ -192,7 +192,7 @@ class Upload {
 	 */
 	function getTargetUrl() {
 		if ($this->isCreate()) {
-			return getTargetUrl() . rawurlencode($this->getName());
+			return getTargetUrl() . $this->getName();
 		}
 		return getTargetUrl();
 	}
