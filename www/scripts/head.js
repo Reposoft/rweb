@@ -97,6 +97,15 @@ function eraseCookie(name)
  */
 var Repos = {
 
+	// -------------- plugin setup --------------
+	
+	addScript: function(src) {
+		var s = document.createElement('script');
+		s.type = "text/javascript";
+		s.src = src;
+		document.getElementsByTagName('head')[0].appendChild(s);
+	},
+
 	// ------------ exception handling ------------
 	
 	/**
@@ -205,7 +214,6 @@ var Repos = {
 	
 }
 
-
 // repos: resourceid
 /**
  * Repos show version number (c) Staffan Olsson http://www.repos.se
@@ -270,3 +278,14 @@ _showVersion = function() {
 
 $(document).ready( function() { _showVersion(); } );
 
+// -------- done, load plugins --------
+
+var plugins = new Array( 
+'dateformat'
+);
+
+$(document).ready( function() {
+	for (i=0; i<plugins.length; i++) {
+		Repos.addScript('/repos/plugins/'+plugins[i]+'/'+plugins[i]+'.js');
+	}
+} );
