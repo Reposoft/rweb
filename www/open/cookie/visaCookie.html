@@ -1,0 +1,21 @@
+<html>
+<head>
+<script type="text/javascript">
+function getCookie(){
+    var name = "style";
+	var start = document.cookie.indexOf( name + "=" );
+	var len = start + name.length + 1;
+	if ( ( !start ) && ( name != document.cookie.substring( 0, name.length ) ) ){
+		return null;
+	}
+	if ( start == -1 ) return null;
+	var end = document.cookie.indexOf( ";", len );
+	if ( end == -1 ) end = document.cookie.length;
+	var kaka = document.cookie.substring( len, end );
+	document.write(kaka);
+}
+</script>
+</head>
+<body onLoad="getCookie()";>
+</body>
+</html>
