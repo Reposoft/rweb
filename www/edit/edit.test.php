@@ -42,6 +42,12 @@ class EditTest extends UnitTestCase
 		$this->assertEqual('arg_', $edit->args[1]);
 	}
 	
+	function testProcentInFilename(){
+		$edit = new Edit('test');
+		$edit->addArgUrl('http://www.bamse.com/%procent%');
+		$this->assertEqual('http://www.bamse.com/%25procent%25', $edit->args[0]);
+	}
+	
 	function testCommand() {
 		// actually we shouldnt care much about what the command looks like, but here's one test to help
 		$edit = new Edit('import');
