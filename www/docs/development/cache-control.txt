@@ -1,0 +1,9 @@
+HTTP Cache-control for repos.se
+
+http://www.websiteoptimization.com/speed/tweak/cache/
+
+http://www.mnot.net/cache_docs/#EXPIRES
+
+http://ontosys.com/php/cache.html
+
+SSL pages are not cached
