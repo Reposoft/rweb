@@ -128,7 +128,7 @@ class Validation {
 		$r = $rule->validate($value);
 		if (!empty($r)) {
 			trigger_error('Error in field "'.$rule->fieldname.'", value "'.$value.'": '.$r
-			." \n(with script support enabled this should have been reported when the form was submitted)"
+			//." \n(with script support enabled this should have been reported when the form was submitted)"
 			." \n\nClick 'back' and try again.", E_USER_WARNING);
 		}
 	}
