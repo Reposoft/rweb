@@ -4,7 +4,18 @@
 * By Kelvin Luck ( http://www.kelvinluck.com/ )
 **/
 
+// special hack for xhtml+xml pages in firefox
+if (typeof(document.cookie)=='undefined') {
+	$.get("/repos/open/cookie/", 
+	{ name: "style" },
+	function(data){ createCookie('style', data); initSwitch(); } )
+} else {
 $(document).ready(function() {
+	initSwitch();
+});
+}
+
+function initSwitch() {
 	$('.styleswitch').click(function()
 	{
 		switchStylestyle(this.getAttribute("rel"));
@@ -12,7 +23,7 @@ $(document).ready(function() {
 	});
 	var c = readCookie('style');
 	if (c) switchStylestyle(c);
-});
+}
 
 function switchStylestyle(styleName)
 {
@@ -37,7 +48,7 @@ function createCookie(name,value,days)
 	document.cookie = name+"="+value+expires+"; path=/";
 }
 function readCookie(name)
-{
+{	
 	var nameEQ = name + "=";
 	var ca = document.cookie.split(';');
 	for(var i=0;i < ca.length;i++)
