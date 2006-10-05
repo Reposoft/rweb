@@ -17,7 +17,7 @@ class TestRepositoryTree extends UnitTestCase {
 	}
 	
 	function tearDown() {
-		unlink($this->tempfile);
+		deleteFile($this->tempfile);
 	}
 
 	function createNewFile() {

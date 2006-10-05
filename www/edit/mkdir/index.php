@@ -39,7 +39,7 @@ function createNewFolder($name, $message) {
 	$edit->addArgPath($dir, true);
 	$edit->addArgUrl($newurl);
 	$edit->execute();
-	removeTempDir($dir);
+	deleteFolder($dir);
 	$edit->present($template, getTargetUrl());
 }
 

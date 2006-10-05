@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$upload = new Upload('userfile');
 	if ($upload->isCreate()) {
 		Validation::expect('name');
-		$newfile = tempnam(getTempDir('upload'), '');
+		$newfile = toPath(tempnam(rtrim(getTempDir('upload'),'/'), ''));
 		$upload->processSubmit($newfile);
 		$edit = new Edit('import');
 		$edit->addArgPath($newfile);
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		$edit->setMessage($upload->getMessage());
 		$edit->execute();
 		// clean up
-		unlink($newfile);
+		deleteFile($newfile);
 		$upload->cleanUp();
 		// show results
 		$edit->present($presentation, dirname($upload->getTargetUrl()));
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 				.$filename.'" from repository path "'.$repoFolder.'"', E_USER_WARNING);
 		}
 		$oldsize = filesize($updatefile);
-		unlink($updatefile);
+		deleteFile($updatefile);
 		$upload->processSubmit($updatefile);
 		if(!file_exists($updatefile)) {
 			$presentation->trigger_error('Could not read uploaded file "'
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		// clean up
 		$upload->cleanUp();
 		// remove working copy
-		removeTempDir($dir); // recursively
+		deleteFolder($dir);
 		// commit returns nothing if there are no local changes
 		if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
 			// normal behaviour
