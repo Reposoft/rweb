@@ -139,16 +139,16 @@ createFolder($wc."test/trunk/");
 createFolder($wc."test/calendar/");
 createFolder($wc."demoproject/");
 createFolder($wc."demoproject/trunk/");
-createFolder($wc."demoproject/noaccess/");
-createFolder($wc."demoproject/readonly/");
-createFolder($wc."demoproject/public/");
+createFolder($wc."demoproject/trunk/noaccess/");
+createFolder($wc."demoproject/trunk/readonly/");
+createFolder($wc."demoproject/trunk/public/");
 
-$publicxml = $wc."demoproject/public/xmlfile.xml";
+$publicxml = $wc."demoproject/trunk/public/xmlfile.xml";
 createFileWithContents($publicxml, "<empty-document/>\n");
 
-$report->debug(repos_runCommand('svn', $svnargs.' add '.escapeArgument($wc."svensson")));
-$report->debug(repos_runCommand('svn', $svnargs.' add '.escapeArgument($wc."test")));
-$report->debug(repos_runCommand('svn', $svnargs.' add '.escapeArgument($wc."demoproject")));
+$report->debug(repos_runCommand('svn', $svnargs.' add '.escapeArgument($wc."svensson/")));
+$report->debug(repos_runCommand('svn', $svnargs.' add '.escapeArgument($wc."test/")));
+$report->debug(repos_runCommand('svn', $svnargs.' add '.escapeArgument($wc."demoproject/")));
 $report->debug(repos_runCommand('svn', $svnargs.' propset svn:mime-type text/xml '.escapeArgument($publicxml)));
 
 $result = repos_runCommand('svn', $svnargs.' commit -m "Created users svensson and test, and a shared project" '.escapeArgument($wc));
