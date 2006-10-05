@@ -263,7 +263,9 @@ class TestReposProperties extends UnitTestCase {
 	}	
 
 	function testDoesNotRemoveWriteProtectedUnlessInSvn() {
-		$dir = getTempnamDir();
+		// this rule does not apply to temp folder, so we'll test it here
+		$dir = toPath(dirname(__FILE__)).'/temp-test-folder-remove-anytime/';
+		createFolder($dir);
 		// the svn client makes the .svn folder write protected in windows
 		createFolder($dir.'.sv/');
 		$this->assertTrue(chmod($dir.'.sv/', 0400));
