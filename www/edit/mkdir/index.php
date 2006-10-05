@@ -6,11 +6,11 @@ require( dirname(dirname(__FILE__))."/edit.class.php" );
 // automatic validation
 new FilenameRule('name');
 // explicit validation
-$folderRule = new NewFilenameRule('newfolder');
+new NewFilenameRule('name');
 
 if (isset($_GET[SUBMIT])) {
 	Validation::expect('target', 'name', 'message');
-	createFolder(getTarget(),$_GET['name'],$_GET['message']); 
+	createFolder($_GET['name'],$_GET['message']); 
 } else {
 	$target = getTarget();
 	if (strlen($target) < 1) {
@@ -26,12 +26,10 @@ if (isset($_GET[SUBMIT])) {
 // be done in common helper files (shared classes)
 // it is also allowed in templates for presentation, but not in field values
 
-function createFolder($parent, $name, $message) {
+function createFolder($name, $message) {
 	global $folderRule;
 	$template = new Presentation();
-	$newfolder = rtrim($parent,'/').'/'.$name;
-	Validation::_run($folderRule, $newfolder);
-	$newurl = getTargetUrl($newfolder);
+	$newurl = getTargetUrl().$name;
 	$dir = tmpdir();
 	if (!$dir) {
 		$template->trigger_error("Could not create temporary directory", E_USER_ERROR);

@@ -19,11 +19,7 @@ function autoFillFilename(path) {
 <body>
 <div id="workspace">
 <div id="commandbar">
-<!--{if $isfile}-->
-<a id="repository" class="command" href="{=$targeturl|getParent}">return to repsitory</a>
-<!--{else}-->
-<a id="repository" class="command" href="{=$targeturl}">return to repository</a>
-<!--{/if}-->
+<a id="repository" class="command" href="{=$repository}">return to repository</a>
 </div>
 <div id="contents">
 <h1>Upload file</h1>
@@ -41,7 +37,7 @@ function autoFillFilename(path) {
 <form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
 <fieldset>
   <legend>Upload to repos.se</legend>
-  <input type="hidden" name="targeturl" value="{=$targeturl}"/>
+  <input type="hidden" name="target" value="{=$target}"/>
   <p>
     <label for="userfile">local file</label>
 	<input type="hidden" name="MAX_FILE_SIZE" value="{=$maxfilesize}" />
@@ -52,7 +48,6 @@ function autoFillFilename(path) {
     <label for="currentname">name in repository</label>
 	<!--{if $isfile}-->
     <input type="text" id="currentname" name="currentname" value="{=$target|basename}" disabled="disabled" size="40" />
-	<input type="hidden" id="name" name="name" value="{=$target|basename}"/>
 	<!--{else}-->
 	<input type="text" id="name" name="name" size="40"/>
 	<input type="hidden" id="create" name="create" value="yes"/>

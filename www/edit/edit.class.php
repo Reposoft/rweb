@@ -5,7 +5,8 @@ require_once( dirname(dirname(__FILE__))."/plugins/validation/validation.inc.php
 
 // shared validation rule
 class NewFilenameRule extends Rule {
-	function validate($target) {
+	function validate($name) {
+		$target = getTarget().$name;
 		$s = login_getResourceType($target);
 		if ($s < 0) return "The URL has access denied, so $target can not be used.";
 		if ($s == 1) return 'There is already a folder named "'.basename($target).'". Chose a different name.';
@@ -151,7 +152,7 @@ class Edit {
 	 */
 	function present($smarty, $nextUrl = null) {
 		if (!$nextUrl) {
-			$nextUrl = $smarty->get_template_vars('referer');
+			$nextUrl = dirname(getTargetUrl()); // parent only if it's a file
 		}
 		if (strlen($this->getResult()) > 0) {
 			$smarty->assign('result', $this->getResult());

@@ -7,34 +7,37 @@ require( PARENT_DIR."/edit/edit.class.php" );
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 
+// name only exists for new files, not for new version requests
 new FilenameRule("name");
+new NewFilenameRule("name");
 
 if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template = new Presentation();
 	$target = getTarget();
-	$targeturl = getTargetUrl();
 	$isfile = isTargetFile();
 	if ($isfile) {
 		$mimetype = login_getMimeType($targeturl);
 		if ($mimetype && strpos($mimetype, 'application/') == 0) {
 			$template->assign('isbinary', true);
 		}
+		$template->assign('repository', getParent(getTargetUrl()));
+	} else {
+		$template->assign('repository', getTargetUrl());
 	}
-	
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
 	$template->assign('isfile',$isfile);
 	$template->assign('target',$target);
-	$template->assign('targeturl',$targeturl);
 	if (isset($_GET['text'])) {
+		$template->assign('targeturl', getTargetUrl());
 		$template->display($template->getLocaleFile(dirname(__FILE__).'/index-text'));
 	} else {
 		$template->display();
 	}
 } else {
-	Validation::expect('name');
 	$presentation = new Presentation();
 	$upload = new Upload('userfile');
 	if ($upload->isCreate()) {
+		Validation::expect('name');
 		$newfile = tempnam(getTempDir('upload'), '');
 		$upload->processSubmit($newfile);
 		$edit = new Edit('import');
@@ -111,8 +114,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	}
 }
 
-// TODO check allowed characters before file operations are performed
-// (in the getters probably, because they might be used before processSubmit)
+// validation is done by the rules at the top of this script
 class Upload {
 	var $file_id;
 	
@@ -165,7 +167,10 @@ class Upload {
 	 *  not encoded
 	 */
 	function getName() {
-		return $_POST['name'];
+		if ($this->isCreate()) {
+			return $_POST['name'];
+		}
+		return basename(getTarget());
 	}
 	
 	/**
@@ -187,9 +192,9 @@ class Upload {
 	 */
 	function getTargetUrl() {
 		if ($this->isCreate()) {
-			return $_POST['targeturl'] . rawurlencode($this->getName());
+			return getTargetUrl() . rawurlencode($this->getName());
 		}
-		return $_POST['targeturl'];
+		return getTargetUrl();
 	}
 	
 	/**
