@@ -10,7 +10,7 @@ $folderRule = new NewFilenameRule('newfolder');
 
 if (isset($_GET[SUBMIT])) {
 	Validation::expect('target', 'name', 'message');
-	createFolder(getTargetUrl(),$_GET['name'],$_GET['message']); 
+	createFolder(getTarget(),$_GET['name'],$_GET['message']); 
 } else {
 	$target = getTarget();
 	if (strlen($target) < 1) {
@@ -26,11 +26,12 @@ if (isset($_GET[SUBMIT])) {
 // be done in common helper files (shared classes)
 // it is also allowed in templates for presentation, but not in field values
 
-function createFolder($parentUri, $name, $message) {
+function createFolder($parent, $name, $message) {
 	global $folderRule;
 	$template = new Presentation();
-	$newfolder = rtrim($parentUri,'/').'/'.$name;
+	$newfolder = rtrim($parent,'/').'/'.$name;
 	Validation::_run($folderRule, $newfolder);
+	$newurl = getTargetUrl($newfolder);
 	$dir = tmpdir();
 	if (!$dir) {
 		$template->trigger_error("Could not create temporary directory", E_USER_ERROR);
@@ -38,7 +39,7 @@ function createFolder($parentUri, $name, $message) {
 	$edit = new Edit('import');
 	$edit->setMessage($message);
 	$edit->addArgPath($dir, true);
-	$edit->addArgUrl($newfolder);
+	$edit->addArgUrl($newurl);
 	$edit->execute();
 	removeTempDir($dir);
 	$edit->present($template, getTargetUrl());

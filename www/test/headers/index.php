@@ -3,9 +3,9 @@
 
 require('../../account/login.inc.php');
 
-$target = getTarget();
-if ($target) {
-	printHeaders($target);
+// can not use 'target' because that is for autologin
+if (isset($_GET['check'])) {
+	printHeaders($_GET['check']);
 } else {
 	printForm();
 }
@@ -18,7 +18,7 @@ function printHeaders($target) {
 	if(strpos($target,'/')===false) {
 		$target = repos_getSelfUrl().$target;
 	}
-	echo("<p><strong>URL: <a target=\"blank\" href=\"$target\">$target</a></strong></p>");
+	echo("<p><strong>URL: <a check=\"blank\" href=\"$target\">$target</a></strong></p>");
 	if (isset($_GET['auth'])) {
 		echo('<p>Authenticating as &quot;'.getReposUser().'&quot;</p>');
 		$headers = getHttpHeaders($target, getReposUser(), _getReposPass());
@@ -42,8 +42,8 @@ function printForm() {
 <fieldset>
 <legend>enter URL to query</legend>
 <p>
-<label for="target">Local target URL</label>
-<input type="text" name="target" value="/" size="80"/>
+<label for="check">Local target URL</label>
+<input type="text" name="check" value="/" size="80"/>
 </p>
 <?php if(isLoggedIn()) { ?>
 <p>
@@ -59,13 +59,13 @@ function printForm() {
 <h3>predefined queries</h3>
 <?php
 	$repo_root = getRepository();
-	echo('<p><a id="repository" href="./?target='.urlencode($repo_root).'">repository root</a></p>');
-	echo('<p><a id="repositorytest" href="./?target='.urlencode($repo_root.'/test/trunk/').'">[repository]/test/trunk/</a></p>');
-	echo('<p><a id="repositorypublicfolder" href="./?target='.urlencode($repo_root.'/demoproject/trunk/public/').'">/demoproject/trunk/public/</a></p>');
-	echo('<p><a id="repositorypublicfile" href="./?target='.urlencode($repo_root.'/demoproject/trunk/public/xmlfile.xml').'">/demoproject/trunk/public/xmlfile.xml</a></p>');
-	echo('<p><a id="100bytes.js" href="./?target=100bytes.js">100bytes.js</a></p>');
-	echo('<p><a id="head.js-file" href="./?target='.urlencode(getWebapp().'scripts/head.js').'">head.js</a></p>');
-	echo('<p><a id="head.js-folder" href="./?target='.urlencode(getWebapp().'scripts/head.js/').'">head.js/</a></p>');
+	echo('<p><a id="repository" href="./?check='.urlencode($repo_root).'">repository root</a></p>');
+	echo('<p><a id="repositorytest" href="./?check='.urlencode($repo_root.'/test/trunk/').'">[repository]/test/trunk/</a></p>');
+	echo('<p><a id="repositorypublicfolder" href="./?check='.urlencode($repo_root.'/demoproject/trunk/public/').'">/demoproject/trunk/public/</a></p>');
+	echo('<p><a id="repositorypublicfile" href="./?check='.urlencode($repo_root.'/demoproject/trunk/public/xmlfile.xml').'">/demoproject/trunk/public/xmlfile.xml</a></p>');
+	echo('<p><a id="100bytes.js" href="./?check=100bytes.js">100bytes.js</a></p>');
+	echo('<p><a id="head.js-file" href="./?check='.urlencode(getWebapp().'scripts/head.js').'">head.js</a></p>');
+	echo('<p><a id="head.js-folder" href="./?check='.urlencode(getWebapp().'scripts/head.js/').'">head.js/</a></p>');
 	echo('<p><a id="back" class="action" href="../">&lt; back</a></p>');
 	foot();
 }

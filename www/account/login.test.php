@@ -171,11 +171,18 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertEqual(1, login_getResourceType($url));
 		$this->assertTrue(login_getResourceType($url)==true); // it does exist
 		$this->assertFalse(login_getResourceType($url)===true); // never returns boolean true
-	}	
+	}
+
+	function testGetResourceTypeFolderNoSlash() {
+		$url = '/demoproject/trunk/public'; // must be able to accept folders without tailing slash (for svn log --xml output)
+		$this->assertEqual(1, login_getResourceType($url));
+		$this->assertTrue(login_getResourceType($url)==true); // it does exist
+		$this->assertFalse(login_getResourceType($url)===true); // never returns boolean true
+	}
 	
 	function testGetResourceTypeFolderWithTestUser() {
 		if (isLoggedIn() && getReposUser()=='test') {
-		$url = TESTREPO.'/test/tunk'; // must be able to accept folders without tailing slash
+		$url = '/test/trunk';
 		$this->assertEqual(1, login_getResourceType($url));
 		} else {
 			$this->sendMessage("test user is not logged in, so this test is skipped");

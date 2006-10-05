@@ -7,7 +7,6 @@ require_once( dirname(dirname(__FILE__))."/plugins/validation/validation.inc.php
 class NewFilenameRule extends Rule {
 	function validate($target) {
 		$s = login_getResourceType($target);
-		echo("type $target = $s");
 		if ($s < 0) return "The URL has access denied, so $target can not be used.";
 		if ($s == 1) return 'There is already a folder named "'.basename($target).'". Chose a different name.';
 		if ($s == 2) return 'There is already a file named "'.basename($target).'". Chose a different name.';

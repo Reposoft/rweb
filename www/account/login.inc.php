@@ -103,7 +103,9 @@ function login($targetUrl) {
 		if(verifyLogin($targetUrl)) {
 			// Do nothing. Parent script resumes operation.
 		} else {
-			header('HTTP/1.0 401 Unauthorized');
+			header('HTTP/1.0 401 Unauthorized'); // TODO should use the same header that we got from targetUrl
+			trigger_error("Access denied for target resource $targetUrl", E_USER_WARNING); // expecting exit
+			exit; // TODO remove extra 'exit' when we're sure this header really is sent and not overwritten
 		}
 	} else {
 		$realm = getAuthName($targetUrl);
@@ -161,11 +163,12 @@ function login_getFirstNon404Parent($url, &$status) {
 
 /**
  * Tries a resource path in current HEAD, for the current user, returning status code.
- * @param $target the path in the current repository, _does_ accept folder names without tailing slash
+ * @param $target the path in the current repository; accepts folder names without tailing slash.
  * @return 0 = does not exist, -1 = access denied, 1 = folder, 2 = file, boolean FALSE if undefined
  */
 function login_getResourceType($target) {
 	$url = getTargetUrl($target);
+	if (substr_count($url, '://')!=1) trigger_error("The URL \"$url\" is invalid", E_USER_WARNING); // remove when not frequent error
 	if (isLoggedIn()) {
 		$user = getReposUser();
 		$pass = _getReposPass();
@@ -174,6 +177,7 @@ function login_getResourceType($target) {
 		$headers = getHttpHeaders($url);
 	}
 	$s = getHttpStatusFromHeader($headers[0]);
+	if ($s==301 && $headers['Location']==$url.'/') return 1;
 	if ($s==404) return 0;
 	if ($s==403) return -1;
 	if ($s==200) return _isHttpHeadersForFolder($headers) ? 1 : 2;
@@ -249,7 +253,6 @@ function getHttpStatusFromHeader($httpStatusHeader) {
 function getHttpHeaders($targetUrl, $user=null, $pass=null) {
 	if (substr_count($targetUrl, '/')<3) trigger_error("Can not check headers of $targetUrl, because it is not a valid resource", E_USER_ERROR);
 	$headers = my_get_headers($targetUrl, $user, $pass);
-	//echo ("Headers for $targetUrl $user:"); print_r($headers);
 	return $headers;
 }
 
