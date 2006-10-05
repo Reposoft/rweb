@@ -92,6 +92,7 @@ class TestReposProperties extends UnitTestCase {
 	function testIsAbsolute_Invalid() {
 		isAbsolute(null);
 		$this->assertError();
+		$this->assertError();
 	}
 
 	function testIsAbsolute_UrlWithBackslash() {
@@ -110,6 +111,7 @@ class TestReposProperties extends UnitTestCase {
 	
 	function testIsRelativeInvalid() {
 		isRelative(123);
+		$this->assertError();
 		$this->assertError();
 	}
 	
@@ -164,31 +166,84 @@ class TestReposProperties extends UnitTestCase {
 	
 	function testGetTempDir() {
 		$dir = getTempDir();
-		$this->assertTrue(strEnds($dir, DIRECTORY_SEPARATOR));
+		$this->assertTrue(strBegins($dir, getSystemTempDir()));
+		$this->assertTrue(strEnds($dir, '/'));
 		$this->assertTrue(file_exists($dir));
 		$this->assertTrue(is_writable($dir));
+		$this->assertTrue(isPath($dir));
+		$this->assertTrue(isAbsolute($dir));
+		$this->assertTrue(isFolder($dir));
 	}
 
+	function testGetTempDirSubfolder() {
+		$dir = getTempDir('testing');
+		$this->assertTrue(strBegins($dir, getSystemTempDir()));
+		$this->assertTrue(strEnds($dir, '/testing/'));
+		$this->assertTrue(file_exists($dir));
+		$this->assertTrue(is_writable($dir));
+		$this->assertTrue(isPath($dir));
+		$this->assertTrue(isAbsolute($dir));
+		$this->assertTrue(isFolder($dir));
+		rmdir($dir);
+	}	
+	
 	function testGetTempnamDir() {
 		$dir1 = getTempnamDir();
 		$dir2 = getTempnamDir();
 		$this->assertTrue(file_exists($dir1));
 		$this->assertTrue(is_writable($dir1));
 		$this->assertNotEqual($dir1, $dir2);
+		$this->assertTrue(isAbsolute($dir1));
+		$this->assertTrue(isFolder($dir1));
+		// clean up
+		$this->assertTrue(strBegins($dir1, getTempDir()));
+		rmdir($dir1);
+		$this->assertTrue(strBegins($dir2, getTempDir()));
+		rmdir($dir2);
 	}
 	
 	function testGetTempnamDirName() {
 		$dir1 = getTempnamDir('mytest');
-		$this->assertTrue(strEnds($dir1, DIRECTORY_SEPARATOR));
-		$this->assertTrue(strpos($dir1, DIRECTORY_SEPARATOR.'mytest'.DIRECTORY_SEPARATOR)>0);
+		$this->assertTrue(strEnds($dir1, '/'));
+		$this->assertTrue(strpos($dir1, '/mytest/')>0);
+		// clean up
+		$this->assertTrue(strBegins($dir1, getTempDir()));
+		rmdir($dir1);
 	}
 	
-	function testRemoveTempDir() {
+	function testCreateAndDeleteFile() {
 		$dir = getTempnamDir();
-		mkdir($dir.'new folder/');
-		mkdir($dir.'.svn/');
-		touch($dir.'.svn/test.txt');
-		removeTempDir($dir);
+		$file = $dir.'file.txt';
+		createFile($file);
+		$this->assertTrue(file_exists($file));
+		deleteFile($file);
+		$this->assertFalse(file_exists($file));
+	}
+
+	function testCreateAndDeleteFolder() {
+		$dir = getTempnamDir();
+		$file = $dir.'folder/';
+		createFolder($file);
+		$this->assertTrue(file_exists($file));
+		deleteFolder($file);
+		$this->assertFalse(file_exists($file));
+	}
+	
+	function testCreateAndDeleteFileInReposWeb() {
+		$dir = toPath(getcwd());
+		$file = $dir.'/test-file_should-be-deleted.txt';
+		createFile($file);
+		$this->assertTrue(file_exists($file));
+		deleteFile($file);
+		$this->assertFalse(file_exists($file));
+	}
+	
+	function testDeleteFolderTempDir() {
+		$dir = getTempnamDir();
+		createFolder($dir.'new folder/');
+		createFolder($dir.'.svn/');
+		createFile($dir.'.svn/test.txt');
+		deleteFolder($dir);
 		$this->assertFalse(file_exists($dir.'new folder/'));
 		$this->assertFalse(file_exists($dir.'.svn/test.txt'));
 		$this->assertFalse(file_exists($dir.'.svn/'));
@@ -197,18 +252,37 @@ class TestReposProperties extends UnitTestCase {
 	function testRemoveTempDirWriteProtected() {
 		$dir = getTempnamDir();
 		// the svn client makes the .svn folder write protected in windows
-		mkdir($dir.'.svn/', 0400);
-		touch($dir.'.svn/test.txt');
+		createFolder($dir.'.svn/');
+		$this->assertTrue(chmod($dir.'.svn/', 0400));
+		createFile($dir.'.svn/test.txt');
 		$this->assertTrue(chmod($dir.'.svn/test.txt', 0400));
-		removeTempDir($dir);
+		deleteFolder($dir);
+		//$this->assertNoErrors();
 		$this->assertFalse(file_exists($dir.'.svn/test.txt'));
 		$this->assertFalse(file_exists($dir.'.svn/'));
+	}	
+
+	function testDoesNotRemoveWriteProtectedUnlessInSvn() {
+		$dir = getTempnamDir();
+		// the svn client makes the .svn folder write protected in windows
+		createFolder($dir.'.sv/');
+		$this->assertTrue(chmod($dir.'.sv/', 0400));
+		createFile($dir.'.sv/test.txt');
+		$this->assertTrue(chmod($dir.'.sv/test.txt', 0400));
+		$this->assertFalse(deleteFolder($dir));
+		$this->assertError();
+		$this->assertError();
+		$this->assertError();
+		chmod($dir.'.sv/', 0700);
+		chmod($dir.'.sv/test.txt', 0700);
+		deleteFolder($dir);
 	}	
 	
 	function testRemoveTempDirInvalid() {
 		$dir = "/this/is/any/kind/of/dir";
-		removeTempDir($dir);
-		$this->assertError('Will not remove non-temp dir /this/is/any/kind/of/dir.');
+		deleteFolder($dir);
+		$this->assertError();
+		$this->assertError();
 	}
 	
 	// ----- command line escape functions -----

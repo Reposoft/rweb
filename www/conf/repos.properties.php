@@ -170,11 +170,19 @@ function repos_getUserLocale() {
  * Windows paths must be normalized using toPath.
  */
 function isPath($path) {
-	if (strContains($path, '\\')) {
-		trigger_error('Paths can not contain backslash. Use toPath(path) to convert to generic path.');
+	if (!is_string($path)) {
+		trigger_error("Path $path is not a string.", E_USER_ERROR);
 		return false;
 	}
-	return (is_string($path));
+	if (strContains($path, '\\')) {
+		trigger_error("Path $path contains backslash. Use toPath(path) to convert to generic path.", E_USER_ERROR);
+		return false;
+	}
+	if (strContains(str_replace('://','',$path), '//')) {
+		trigger_error("Path $path contains double slashes.", E_USER_ERROR);
+		return false;
+	}
+	return true;
 }
 
 /**
@@ -192,7 +200,7 @@ function toPath($path) {
  * @return boolean true if path is absolute, false if not
  */
 function isAbsolute($path) {
-	if (!isPath($path)) trigger_error("'$path' is not a valid path");
+	if (!isPath($path)) trigger_error("'$path' is not a valid path", E_USER_ERROR);
 	if (strBegins($path, '/')) return true;
 	if (isWindows() && ereg('^[a-zA-Z]:/', $path)) return true;
 	return ereg('^[a-z]+://', $path)!=false;
@@ -294,8 +302,14 @@ function repos_getSelfQuery() {
 
 // ----- file system helper functions ------
 
+// it is not allowed for code outside this file to do
+// any of: unlink(x), mkdir(x), touch(x), fopen(x, 'a' or 'w')
+//
+// instead, use the create and delete functions below
+
 /**
- * Platform independen way of getting the server's temp folder
+ * Platform independen way of getting the server's temp folder.
+ * @return String absolute path, folder, existing
  */
 function getSystemTempDir() {
 	if (!empty($_ENV['TMP'])) {
@@ -310,11 +324,14 @@ function getSystemTempDir() {
 
 	if (empty($tempdir)) { die ('Can not get the system temp dir'); }
 	
+	$tempdir = rtrim(toPath($tempdir),'/').'/';
+	
 	return $tempdir;
 }
 
 /**
- * Handles the common temp dir for repos-php
+ * Manages the common temp dir for repos-php. Temp is organized in subfolders per operation.
+ * This method returns an existing temp folder; to get a new empty folder use getTempnamDir.
  * @param subdir optional category within the temp folder, no slashes
  * @return absolute path to the temp dir, ending with slash or backslash
  */
@@ -328,17 +345,17 @@ function getTempDir($subdir=null) {
 	}
 
 	$appname = str_replace('%', '_', rawurlencode(trim(strAfter(getWebapp(), '://'), '/')));
-	$tmpdir = rtrim($systemp, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $appname;
+	$tmpdir = $systemp . $appname;
 	if (!file_exists($tmpdir)) {
 		mkdir($tmpdir);
 	}
 	if ($subdir) {
-		$tmpdir .= DIRECTORY_SEPARATOR . $subdir;
+		$tmpdir .= '/' . $subdir;
 		if (!file_exists($tmpdir)) {
 			mkdir($tmpdir);
 		}
 	}
-	return $tmpdir . DIRECTORY_SEPARATOR;
+	return toPath($tmpdir) . '/';
 }
 
 /**
@@ -349,7 +366,8 @@ function getTempDir($subdir=null) {
 function getTempnamDir($subdir=null) {
        // Use PHP's tmpfile function to create a temporary
        // directory name. Delete the file and keep the name.
-       $tempname = tempnam(getTempDir($subdir), '');
+       $tempname = tempnam(rtrim(getTempDir($subdir),'/'), '');
+       $tempname = toPath($tempname);
        if (!$tempname)
                return false;
 
@@ -358,45 +376,127 @@ function getTempnamDir($subdir=null) {
 
        // Create the temporary directory and returns its name.
        if (mkdir($tempname))
-               return $tempname.DIRECTORY_SEPARATOR;
+               return $tempname.'/';
 
        return false;
 }
 
 /**
- * Removes a directory created using getTempDir or getTempnamDir
- * @param directory absolute path
+ * replaces custom-made recursive folder remove.
+ * Removes the folder recursively if it is in one of the allowed locations,
+ * such as the temp dir and the repos folder.
+ * @param String $folder absolute path, with tailing DIRECTORY_SEPARATOR like all folders
  */
-function removeTempDir($directory) {
-	if (strpos($directory, getTempDir())===false) {
-		trigger_error("Will not remove non-temp dir $directory.");
-		return;
+function deleteFolder($folder) {
+	_authorizeFilesystemModify($folder);
+	if (!isFolder($folder)) {
+		trigger_error("Path \"$folder\" is not a folder.", E_USER_ERROR); return false;
 	}
-	rtrim($directory, DIRECTORY_SEPARATOR);
-	if(!file_exists($directory) || !is_dir($directory)) {
-		return false;
-	} elseif(!is_readable($directory)) {
-		return false;
-	} else {
-		$handle = opendir($directory);
+	
+	if (!file_exists($folder) || !is_dir($folder)) {
+		trigger_error("Path \"$folder\" does not exist.", E_USER_ERROR); return false;
+	}
+	if (!is_readable($folder)) {
+		trigger_error("Path \"$folder\" is not readable.", E_USER_ERROR); return false;
+	}
+	if (!is_writable($folder) && !_chmodWritable($folder)) {
+		trigger_error("Path \"$folder\" is not writable.", E_USER_ERROR); return false;
+	}
+	else {
+		$handle = opendir($folder);
 		while (false !== ($item = readdir($handle))) {
 			if ($item != '.' && $item != '..') {
-				$path = $directory.'/'.$item;
+				$path = $folder.$item;
 				if(is_dir($path)) {
-					removeTempDir($path);
+					deleteFolder($path.'/');
 				} else {
-					chmod($path, 0777);
-					unlink($path);
+					deleteFile($path);
 				}
 			}
 		}
 		closedir($handle);
-		chmod($directory, 0777);
-		if(!rmdir($directory)) {
-			return false;
+		if(!rmdir($folder)) {
+			trigger_error("Could not remove folder \"$folder\".", E_USER_ERROR); return false;
 		}
 		return true;
 	}
+}
+
+/**
+ * replaces touch().
+ */
+function createFile($absolutePath) {
+	_authorizeFilesystemModify($absolutePath);
+	if (!isFile($absolutePath)) {
+		trigger_error("Path \" $absolutePath\" is not a valid file name.", E_USER_ERROR); return false;
+	}
+	return touch($absolutePath);
+}
+
+/**
+ * replaces mkdir().
+ */
+function createFolder($absolutePath) {
+	_authorizeFilesystemModify($absolutePath);
+	if (!isFolder($absolutePath)) {
+		trigger_error("Path \" $absolutePath\" is not a valid folder name.", E_USER_ERROR); return false;
+	}
+	return mkdir($absolutePath);
+}
+
+/**
+ * replaces unlink().
+ * @param String $file absolute path to file
+ */
+function deleteFile($file) {
+	_authorizeFilesystemModify($file);
+	if (!isFile($file)) {
+		trigger_error("Path \" $file\" is not a file.", E_USER_ERROR); return false;
+	}
+	if (!file_exists($file)) {
+		trigger_error("Path \" $file\" does not exist.", E_USER_ERROR); return false;
+	}
+	if (!is_readable($file)) {
+		trigger_error("Path \" $file\" is not readable.", E_USER_ERROR); return false;
+	}
+	if (!is_writable($file) && !_chmodWritable($file)) {
+		trigger_error("Path \" $file\" is not writable.", E_USER_ERROR); return false;
+	}
+	return unlink($file);
+}
+
+/**
+ * does createFile() and fopen+fwrite+fclose.
+ */
+function createFileWithContents($absolutePath, $contents) {
+	
+}
+
+/**
+ * Replaces chmod 0777.
+ * Only allowes chmodding of folders that are expected to be write protected, like .svn. 
+ * @return false if it is not allowed to chmod the path writable
+ */
+function _chmodWritable($absolutePath) {
+	if (!strContains($absolutePath, '/.svn')) return false;
+	return chmod($absolutePath, 0777);
+}
+
+/**
+ * It is considered a serious system error if a modify path is invalid according to the internal rules.
+ * Therefore we throw an error and do exit.
+ */
+function _authorizeFilesystemModify($path) {
+	if (!isAbsolute($path)) {
+		trigger_error("Security error: local write not allowed in \"$path\". It is not absolute.");// exit;
+	}
+	if (strBegins($path, getSystemTempDir())) {
+		return true;
+	}
+	if (strBegins($path, toPath(dirname(__FILE__)))) {
+		return true;
+	}
+	trigger_error("Security error: local write not allowed in \"$path\". It is not a temp or repos dir.");// exit;
 }
 
 // ---- functions through which all command execution should go ---

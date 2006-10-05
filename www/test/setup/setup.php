@@ -5,7 +5,6 @@ $r = new Report('set up test repository');
 
 //  name the temp dir where the repository will be. This dir will be removed recursively.
 $tst="test.repos.se";
-$here=getcwd();
 
 // need a short directory separator
 define('DS', DIRECTORY_SEPARATOR);
@@ -15,28 +14,17 @@ define('DS', DIRECTORY_SEPARATOR);
 
 # environment setup
 
-//exec("svn");
-
+// linux needs the following for every command (can not use exec because it won't be persistent)
 //export LANG="en_US.UTF-8"
 //export LC_ALL="en_US.UTF-8"
 // svn command alias
 
 //The PATH to SVN and SVNADMIN has to be defined in the SYSTEMPATH, not in the USERPATH
+$here=getcwd();
 $svn="svn --config-dir " . rtrim($here, DS) . DS . "test-svn-config-dir";
 
-
 // Get temporary directory
-if (!empty($_ENV['TMP'])) {
-		$tempdir = $_ENV['TMP'];
-} elseif (!empty($_ENV['TMPDIR'])) {
-		$tempdir = $_ENV['TMPDIR'];
-} elseif (!empty($_ENV['TEMP'])) {
-		$tempdir = $_ENV['TEMP'];
-} else {
-		$tempdir = dirname(tempnam('', 'na'));
-}
-
-if (empty($tempdir)) { die ('No temporary directory'); }
+$tempdir = getSystemTempDir();
 
 $test = rtrim($tempdir, DS) . DS . $tst;
 $repo = rtrim($test, DS) . DS . "repo";

@@ -10,7 +10,7 @@ new NewFilenameRule('name');
 
 if (isset($_GET[SUBMIT])) {
 	Validation::expect('target', 'name', 'message');
-	createFolder($_GET['name'],$_GET['message']); 
+	createNewFolder($_GET['name'],$_GET['message']); 
 } else {
 	$target = getTarget();
 	if (strlen($target) < 1) {
@@ -26,7 +26,7 @@ if (isset($_GET[SUBMIT])) {
 // be done in common helper files (shared classes)
 // it is also allowed in templates for presentation, but not in field values
 
-function createFolder($name, $message) {
+function createNewFolder($name, $message) {
 	global $folderRule;
 	$template = new Presentation();
 	$newurl = getTargetUrl().$name;
