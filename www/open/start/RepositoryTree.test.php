@@ -21,7 +21,7 @@ class TestRepositoryTree extends UnitTestCase {
 	}
 
 	function createNewFile() {
-		$this->tempfile = tempnam("/tmp", "test-repos-access");
+		$this->tempfile = toPath(tempnam(rtrim(getTempDir('test'),'/'), "test-repos-access"));
 		$handle = fopen($this->tempfile, "w");
 		fwrite($handle, "[groups]\n");
 		fwrite($handle, "aproject =  svensson, test\n");
