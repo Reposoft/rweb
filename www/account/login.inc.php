@@ -162,18 +162,28 @@ function login_getFirstNon404Parent($url, &$status) {
 /**
  * Tries a resource path in current HEAD, for the current user, returning status code.
  * @param $target the path in the current repository, _does_ accept folder names without tailing slash
- * @return 0 = does not exist, -1 = access denied, 1 = folder, 2 = file
+ * @return 0 = does not exist, -1 = access denied, 1 = folder, 2 = file, boolean FALSE if undefined
  */
 function login_getResourceType($target) {
-	$url = getTarget($target);
-	$user = getReposUser();
-	$pass = _getReposPass();
-	$headers = getHttpHeaders($url, $user, $pass);
-	
+	$url = getTargetUrl($target);
+	if (isLoggedIn()) {
+		$user = getReposUser();
+		$pass = _getReposPass();
+		$headers = getHttpHeaders($url, $user, $pass);
+	} else {
+		$headers = getHttpHeaders($url);
+	}
+	$s = getHttpStatusFromHeader($headers[0]);
+	if ($s==404) return 0;
+	if ($s==403) return -1;
+	if ($s==200) return _isHttpHeadersForFolder($headers) ? 1 : 2;
+	return false;
 }
 
 function _isHttpHeadersForFolder($headers) {
 	// make headers test to validate that this works
+	if (!$headers['Content-Type']='text/xml') return false;
+	return !isset($headers['Content-Length']);
 }
 
 /**
@@ -395,6 +405,7 @@ function getReposUser() {
 	return urlencode($_SERVER['PHP_AUTH_USER']);
 }
 function _getReposPass() {
+	if (!isLoggedIn()) return false;
 	return $_SERVER['PHP_AUTH_PW'];
 }
 function getReposAuth() {

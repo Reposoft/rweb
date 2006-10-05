@@ -51,10 +51,11 @@ function printForm() {
 	$repo_root = getRepository();
 	echo('<p><a id="repository" href="./?target='.urlencode($repo_root).'">repository root</a></p>');
 	echo('<p><a id="repositorytest" href="./?target='.urlencode($repo_root.'/test/trunk/').'">[repository]/test/trunk/</a></p>');
-	echo('<p><a id="repositorypublic" href="./?target='.urlencode($repo_root.'/demoproject/trunk/public/').'">/demoproject/trunk/public/</a></p>');
+	echo('<p><a id="repositorypublicfolder" href="./?target='.urlencode($repo_root.'/demoproject/trunk/public/').'">/demoproject/trunk/public/</a></p>');
+	echo('<p><a id="repositorypublicfile" href="./?target='.urlencode($repo_root.'/demoproject/trunk/public/xmlfile.xml').'">/demoproject/trunk/public/xmlfile.xml</a></p>');
 	echo('<p><a id="100bytes.js" href="./?target=100bytes.js">100bytes.js</a></p>');
-	echo('<p><a id="head.js-path" href="./?target='.urlencode(getWebapp().'scripts/head.js').'">head.js</a></p>');
-	echo('<p><a id="head.js-script" href="./?target='.urlencode(getWebapp().'scripts/head.js/').'">head.js/</a></p>');
+	echo('<p><a id="head.js-file" href="./?target='.urlencode(getWebapp().'scripts/head.js').'">head.js</a></p>');
+	echo('<p><a id="head.js-folder" href="./?target='.urlencode(getWebapp().'scripts/head.js/').'">head.js/</a></p>');
 	echo('<p><a id="back" class="action" href="../">&lt; back</a></p>');
 	foot();
 }

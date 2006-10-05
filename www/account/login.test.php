@@ -9,6 +9,12 @@ define('TESTREPO', TESTHOST."/testrepo/");
 //define('TESTREPO', "http://alto.optime.se/testrepo/");
  
 class Login_include_Test extends UnitTestCase {
+	
+	function setUp() {
+		// these tests should not rely on a logged in browser
+		unset($_SERVER['PHP_AUTH_USER']);
+		unset($_SERVER['PHP_AUTH_PW']);
+	}
 
 	function testGetAuthNameReturnsSomething() {
 		$url = TESTREPO;
@@ -153,13 +159,26 @@ class Login_include_Test extends UnitTestCase {
 	}
 	
 	function testGetResourceTypeNonExisting() {
-		$url = TESTREPO.'/test/tunk/does/not/exist/dsfajkewrqe';
-		$this->assertFalse(login_getResourceType($url));
+		$url = '/demoproject/trunk/public/does-not-exist-adsferqwerw/';
+		$this->assertEqual(0, login_getResourceType($url));
+		$this->assertTrue(login_getResourceType($url)==false);
+		$this->assertFalse(login_getResourceType($url)===false);
 	}
-	
+
 	function testGetResourceTypeFolder() {
+		$url = '/demoproject/trunk/public/';
+		$this->assertEqual(1, login_getResourceType($url));
+		$this->assertTrue(login_getResourceType($url)==true); // it does exist
+		$this->assertFalse(login_getResourceType($url)===true); // never returns boolean true
+	}	
+	
+	function testGetResourceTypeFolderWithTestUser() {
+		if (isLoggedIn() && getReposUser()=='test') {
 		$url = TESTREPO.'/test/tunk'; // must be able to accept folders without tailing slash
 		$this->assertEqual(1, login_getResourceType($url));
+		} else {
+			$this->sendMessage("test user is not logged in, so this test is skipped");
+		}
 	}
 	
 	function testIsHttpHeadersForFolder() {
@@ -173,42 +192,31 @@ class Login_include_Test extends UnitTestCase {
 		|Connection: close|
 		|Content-Type: text/xml|
 		'; // copied from the headers test
-		$h = explode('|', $h);
-		array_walk($h, '_splitHeader');
-		print_r($h);
+		foreach(explode('|', $h) as $row) {
+			if (strContains($row, 'HTTP/1.')) $headers = array($row);
+			if (strContains($row, ':')) { $r = explode(':', $row); $headers[$r[0]] = trim($r[1]); }
+		}
+		$this->assertTrue(_isHttpHeadersForFolder($headers), "folder headers: $h");
 	}
 	
-	function _splitHeader(&$item, &$key) {
-		list($key, $item) = explode($item);
-		trim($item);
+	function testIsHttpHeadersForFolderFile() {
+		$h = '
+		|HTTP/1.1 200 OK|
+		|Date: Thu, 05 Oct 2006 08:55:52 GMT|
+		|Server: Apache/2.0.59 (Win32) SVN/1.4.0 PHP/5.1.6 DAV/2|
+		|Last-Modified: Thu, 05 Oct 2006 07:37:59 GMT|
+		|ETag: "1//demoproject/trunk/public/xmlfile.xml"|
+		|Accept-Ranges: bytes|
+		|Content-Length: 17|
+		|Connection: close|
+		|Content-Type: text/xml|
+		'; // copied from the headers test
+		foreach(explode('|', $h) as $row) {
+			if (strContains($row, 'HTTP/1.')) $headers = array($row);
+			if (strContains($row, ':')) { $r = explode(':', $row); $headers[$r[0]] = trim($r[1]); }
+		}
+		$this->assertFalse(_isHttpHeadersForFolder($headers), "file headers: $h");
 	}
-	
-	function testIsHttpHeadersForFolderNo() {
-		
-	}
-/* folder header
-'
-|HTTP/1.1 200 OK|
-|Date: Wed, 04 Oct 2006 19:20:44 GMT|
-|Server: Apache/2.0.59 (Win32) SVN/1.4.0 PHP/5.1.6 DAV/2|
-|Last-Modified: Wed, 04 Oct 2006 19:17:23 GMT|
-|ETag: W/"1//demoproject/trunk/public"|
-|Accept-Ranges: bytes|
-|Connection: close|
-|Content-Type: text/xml|
-'
- */
-/* file header
-|HTTP/1.1 200 OK|
-|Date: Wed, 04 Oct 2006 19:33:57 GMT|
-|Server: Apache/2.0.59 (Win32) SVN/1.4.0 PHP/5.1.6 DAV/2|
-|Last-Modified: Wed, 04 Oct 2006 19:30:55 GMT|
-|ETag: "4//demoproject/trunk/public/xmldoc.xml"|
-|Accept-Ranges: bytes|
-|Content-Length: 7|
-|Connection: close|
-|Content-Type: text/plain| 
- */
 		
 	// ---------- HTTP header output for different login conditions ---------
 	// not real tests
