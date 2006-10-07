@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:output 
+	method="html" 
+	encoding="UTF-8" 
+	omit-xml-declaration="no"
+	doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
+	
+<!-- see the firefox bug discussions:
+https://bugzilla.mozilla.org/show_bug.cgi?id=325835
+-->
 
 <xsl:template match="/">
 	<xsl:apply-templates select="*"/>
@@ -25,7 +34,7 @@ function checkJavascript() {
 // there shoulc be one cookie 'repos_testcookie' set from the php page
 function checkCookie() {
 	var name = /repos_testcookie/;
-	if (!document.cookie) return fail("Cookies not supported in XML document scripts");
+	if (typeof(document.cookie) == 'undefined') return fail("Cookies not supported in XML document scripts");
 	c = document.cookie;
 	if (!name.test(c)) return fail("Your browser does not accept cookies from the server");
 	ok("Your browser supports cookies");
