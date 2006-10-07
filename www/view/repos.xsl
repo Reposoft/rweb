@@ -10,7 +10,8 @@
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
 	<!-- start transform -->
-	<xsl:output method="xml" indent="no"/>
+	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
+		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
 	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
 	<xsl:param name="web">/repos</xsl:param>
 	<!-- static contents urls, set to {$web}/style/ for default theme -->

@@ -34,15 +34,9 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a
 **/
 
 // special hack for xhtml+xml pages in firefox
-if (typeof(document.cookie)=='undefined') {
-	$.get("/repos/open/cookie/", 
-	{ name: "style" },
-	function(data){ createCookie('style', data); initSwitch(); } )
-} else {
 $(document).ready(function() {
 	initSwitch();
 });
-}
 
 function initSwitch() {
 	$('.styleswitch').click(function()
