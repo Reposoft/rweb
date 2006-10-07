@@ -61,21 +61,21 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		$checkout->execute();
 		if (!$checkout->isSuccessful()) {
 			$presentation->trigger_error("Could not read current version of file "
-				.$upload->getTargetUrl().". ".$checkout->getResult(), E_USER_WARNING);
+				.$upload->getTargetUrl().". ".$checkout->getResult(), E_USER_ERROR);
 		}
 		// upload file to working copy
 		$filename = $upload->getName();
-		$updatefile = $dir . '/' . $filename;
+		$updatefile = $dir . $filename;
 		if(!file_exists($dir.'/.svn') || !file_exists($updatefile)) {
 			$presentation->trigger_error('Can not read current version of the file named "'
-				.$filename.'" from repository path "'.$repoFolder.'"', E_USER_WARNING);
+				.$filename.'" from repository path "'.$repoFolder.'"', E_USER_ERROR);
 		}
 		$oldsize = filesize($updatefile);
 		deleteFile($updatefile);
 		$upload->processSubmit($updatefile);
 		if(!file_exists($updatefile)) {
 			$presentation->trigger_error('Could not read uploaded file "'
-				.$filename.'" for operation "'.basename($dir).'"', E_USER_WARNING);
+				.$filename.'" for operation "'.basename($dir).'"', E_USER_ERROR);
 		}
 		// store the diff in the presentation object
 		$diff = new Edit('diff');
