@@ -103,9 +103,9 @@ SVNPath $test/repo/
 SVNAutoversioning on
 AuthName \"$test_repository_folder\"
 AuthType Basic
-AuthUserFile $users
+AuthUserFile $userfile
 Require valid-user
-AuthzSVNAccessFile $acl
+AuthzSVNAccessFile $aclfile
 Satisfy Any   # allow public access to * = r folders
 ";
 if (createFileWithContents($conffile, $conf, true)) {
