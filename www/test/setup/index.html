@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Set up repos test repository</title>
+<link href="../../style/global.css" rel="stylesheet" type="text/css" />
+<link href="../../style/docs.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<h1>Create and reset test repositories</h1>
+<p>
+Each script sets up at least one reposistory, located at <a target="_blank" href="/testrepo/">/testrepo</a>
+</p>
+<table class="rows">
+<tr>
+<th><a href="testrepo/">testrepo</a></th>
+<td>
+The repository used for automated tests. A standard repos setup with accounts 'svensson' and 'test', 
+ACL file, a shared project, writeprotected folder, no-access folder, public folder with anonymous access,
+a deep folder structure in test/trunk/ and integration test folders for other repos comonents,
+such as repos-svn-access.
+</td>
+</tr>
+<tr>
+<th><a href="minimal/">minimal</a></th>
+<td>
+A basic single.project repository. Sample setup for a company running starting with repos in-house,
+with one shared repository and access for all users to all folders. Project folders can be created
+in a custom structure within the <code>trunk</code> folder.
+</td>
+</tr>
+<tr>
+<th>multiple</th>
+<td>TODO at least two repositories, same user file and ACL file with repo name prefix? Test backup scripts for multiple repositories.</td>
+</table>
+
+</body>
+</html>

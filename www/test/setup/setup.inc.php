@@ -11,7 +11,7 @@
  * On windows, the PATH to SVN and SVNADMIN has to be defined in the SYSTEMPATH, not in the USERPATH
  */
 
-require('../../conf/Report.class.php');
+require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
 $report = new Report('set up test repository');
 
 // name the temp dir where the repository will be. This dir will be removed recursively.
@@ -31,8 +31,7 @@ $svnargs="--config-dir " . rtrim($here, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARAT
 // one call to escapeArgument needed as long as the excape check is enabled in repos.properties
 escapeArgument("info");
 
-$report->info("Create and reset /testrepository");
-$report->info("To use the repository, do \"Include $conffile\" from a conf-file and restart apache.");
+$report->info("To use this repository, do \"Include $conffile\" from a conf-file and restart Apache.");
 
 function setup_svnadmin($command) {
 	global $svnargs, $report;
