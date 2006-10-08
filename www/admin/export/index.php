@@ -12,7 +12,7 @@
 require( dirname(__FILE__) . '/repos-admin.inc.php' );
 
 $repourl = getConfig( 'repo_url' );
-$exportfile = getConfig( 'admin_folder' ) . '/' . getConfig( 'export_file' );
+$exportfile = getConfig( 'admin_folder' ) . getConfig( 'export_file' );
 $svncmd = getCommand( 'svn' ); 
 
 html_start( "Incremental export: $repourl" );

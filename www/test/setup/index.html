@@ -9,30 +9,32 @@
 </head>
 <body>
 <h1>Create and reset test repositories</h1>
-<p>
-Each script sets up at least one reposistory, located at <a target="_blank" href="/testrepo/">/testrepo</a>
-</p>
 <table class="rows">
 <tr>
 <th><a href="testrepo/">testrepo</a></th>
 <td>
-The repository used for automated tests. A standard repos setup with accounts 'svensson' and 'test', 
+The repository used for automated tests: <code>/testrepo</code>. A standard repos setup with accounts 'svensson' and 'test', 
 ACL file, a shared project, writeprotected folder, no-access folder, public folder with anonymous access,
 a deep folder structure in test/trunk/ and integration test folders for other repos comonents,
-such as repos-svn-access.
+such as repos-svn-access.<br/>
+Note that tests are allowed to depend on resources in the fresh testrepo, so modifications of the initial setup must
+be preceded and followed by a full automated system test.
 </td>
 </tr>
 <tr>
 <th><a href="minimal/">minimal</a></th>
 <td>
-A basic single.project repository. Sample setup for a company running starting with repos in-house,
+A basic single.project repository <a target="_blank" href="/testrepo/">/testrepo</a>. Sample setup for a company running starting with repos in-house,
 with one shared repository and access for all users to all folders. Project folders can be created
 in a custom structure within the <code>trunk</code> folder.
 </td>
 </tr>
 <tr>
 <th>multiple</th>
-<td>TODO at least two repositories, same user file and ACL file with repo name prefix? Test backup scripts for multiple repositories.</td>
+<td>TODO at least two repositories, same user file and ACL file with repo name prefix? Test backup scripts for multiple repositories.
+     SVNParentPath /tmp/repos..
+     SVNListParentPath on </td>
+</tr>
 </table>
 
 </body>

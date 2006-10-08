@@ -67,7 +67,7 @@ if ( isset($_GET['download']) ) {
 	else
 		line( "Configuration block $block is not defined yet" );
 } else {
-	$tilte = "Repos configuration"?>
+	$title = "Repos configuration"?>
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 	<html>
 	<head>
@@ -168,10 +168,10 @@ function apache2() {
 	  AuthType Basic
 	  # AuthName should be the repository root URL (as a single-signon standard)
 	  AuthName "<?php echo $reponame ?>"
-	  AuthUserFile <?php echo $admindir . '/' . getConfig('users_file'); ?> 
+	  AuthUserFile <?php echo $admindir . getConfig('users_file'); ?> 
 	  Require valid-user
 	  <?php if ( $isAcl ) { ?> 
-	  AuthzSVNAccessFile <?php echo $admindir . '/' . getConfig('access_file'); ?> 
+	  AuthzSVNAccessFile <?php echo $admindir . getConfig('access_file'); ?> 
 	  <?php } ?> 
 	&lt;/Location&gt;
 	
@@ -187,7 +187,7 @@ function apache2() {
 	
 		AuthType Basic
 		AuthName "<?php echo $reponame ?>"
-		AuthUserFile <?php echo $admindir . '/' . getConfig('users_file'); ?> 
+		AuthUserFile <?php echo $admindir . getConfig('users_file'); ?> 
 		Require user administrator
 
 		Satisfy Any

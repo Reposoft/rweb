@@ -55,7 +55,7 @@ if (createFileWithContents($aclfile, $acl, true)) {
 $report->info("create apache 2.2 config");
 
 $conf = "
-<Location /testrepo/>
+<Location /testrepo>
 DAV svn
 SVNIndexXSLT \"/repos/view/repos.xsl\"
 SVNPath $test/repo/

@@ -21,7 +21,7 @@ $sections = array(
 // validating configuration
 $links = array(
 	'../logout.php' => 'Log out',
-	'../admin/configuration.php' => 'System configuration help',
+	'../admin/configure/' => 'System configuration help',
 	'../admin/' => 'Administration'
 	);
 $requiredConfig = array(
@@ -34,9 +34,9 @@ $requiredConfig = array(
 	'backup_folder' => 'Local path for storage of backup'
 	);
 $requiredFiles = array(
-	getConfig('admin_folder') . DIRECTORY_SEPARATOR . getConfig('users_file') => 'File for usernames and passwords',
-	getConfig('admin_folder') . DIRECTORY_SEPARATOR . getConfig('access_file') => 'File for subversion access control',
-	getConfig('admin_folder') . DIRECTORY_SEPARATOR . getConfig('export_file') => 'File for repository export paths',
+	getConfig('admin_folder') . getConfig('users_file') => 'File for usernames and passwords',
+	getConfig('admin_folder') . getConfig('access_file') => 'File for subversion access control',
+	getConfig('admin_folder') . getConfig('export_file') => 'File for repository export paths',
 	getConfig('backup_folder') => 'Local path for storage of backup'
 	);
 $dependencies = array(

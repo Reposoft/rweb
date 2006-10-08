@@ -17,6 +17,10 @@ $backup = getCurrentBackup($backupdir, $backupprefix);
  * @return backup file status as HTML, start, gaps and end
  */
 function getBackupInfoAsHtml($backupArray) {
+	if (count($backupArray)<1) {
+		echo "<p>No backup files found</p>";
+		return;
+	}
 	echo "<p>";
 	echo count($backupArray);
 	echo " backup files";
