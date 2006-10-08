@@ -14,13 +14,18 @@ function getTheme() {
 	return "/themes/simple"; 
 }
 
+function getTime() { // still used in backup
+	return getReportTime();
+}
+
 // temporary solution, TODO make admin a class that takes a report instance as constructor argument
 $report = new Report();
 function debug($message) {global $report; $report->debug($message); }
 function info($message) {global $report; $report->ok($message); }
+function fail($message) {global $report; $report->fail($message); }
 function warn($message) {global $report; $report->warn($message); }
 function error($message) {global $report; $report->error($message); }
-function fatal($message) {global $report; $report->fatal($message); }
+function fatal($message) {global $report; $report->fatal($message); } // deprecated
 function html_end($code = 0) {global $report; $report->display(); }
 
 // --- basic repository examination ---

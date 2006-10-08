@@ -16,7 +16,7 @@ $sections = array(
 	'repository' => 'Checking local repository',
 	'requiredUrls' => 'Checking URLs',
 	'localeSettings' => 'Checking locales for the web server\'s command line',
-	'debug' => 'Debug info'
+	// disabled becaus it contains server data // 'debug' => 'Debug info'
 	);
 // validating configuration
 $links = array(
@@ -26,11 +26,11 @@ $links = array(
 	);
 $requiredConfig = array(
 	'repos_web' => 'The url of this website',
-	'administrator_email' => 'Administrator E-mail',
-	'repo_url' => 'Repoisitory root',
+	// not used in 1.0 //'administrator_email' => 'Administrator E-mail',
+	'repositories' => 'Repoisitory address or addresses',
 	'local_path' => 'Local path of repository',
 	'admin_folder' => 'Administration folder',
-	'users_file' => 'File for usernames and passwords',
+	// not used in 1.0 //'users_file' => 'File for usernames and passwords',
 	'backup_folder' => 'Local path for storage of backup'
 	);
 $requiredFiles = array(
@@ -53,20 +53,17 @@ $repository = array(
 
 
 // checking urls needed for repository access
-$rurl = getRepository();
+$rurl = getRepository().'/';
 $realm = $rurl;
 if (strlen($realm)<1) trigger_error('repo_realm not set in configuration', E_USER_WARNING);
-$aurl = str_replace("://","://" . getReposUser() . ":" .  _getReposPass() . "@", getRepository());
-$uurl = $aurl.'/'.getReposUser();
-$lurl = ereg_replace("://[^/<>[:space:]]+[[:alnum:]]/","://localhost/", getRepository());
+//$aurl = str_replace("://","://" . getReposUser() . ":" .  _getReposPass() . "@", getRepository());
+//$uurl = $aurl.'/'.getReposUser();
+//$lurl = ereg_replace("://[^/<>[:space:]]+[[:alnum:]]/","://localhost/", getRepository());
 if ( getWebapp()==getRepository() )
 	echo "Warning: repos_web is same as repository - mixing static resources and repository";
 	
-$requiredUrls = array( getWebapp() => 'Acces to static contents ' . getRepository());
-$requiredUrls[$rurl] = 'Anonymous acces to the repository ' . getRepository();
-$requiredUrls[$aurl] = "Access to repository with current authenticatied user (" . getReposUser() . ")";
-$requiredUrls[$uurl] = "Access to user folder in repository (" . getReposUser() . ")";
-$requiredUrls[$lurl] = "Access to repository using localhost";
+$requiredUrls = array( getWebapp() => 'Acces to static contents ' . getWebapp());
+$requiredUrls[$rurl] = 'Anonymous acces to the repository ' . getRepository() . '. Note that this should be the same address locally as external, same host as ServerName in apache.';
 
 // run the diagnostics page
 html_start();	
@@ -204,13 +201,22 @@ function requiredUrls() {
 	global $requiredUrls;
 	foreach ( $requiredUrls as $url => $descr ) {
 		line_start($descr);
-		$up = fopen($url, "r");
-		if ($up) {
-			sayOK();
-			fclose($up);
+		$headers = getHttpHeaders($url);
+		$s = getHttpStatusFromHeader($headers[0]);
+		if (strEnds($url, '/repos/')) {
+			if ($s == 200) {
+				sayOK($headers[0]);
+			} else {
+				sayFailed($headers[0]." (Expecting HTTP status 200 for the webapp)");
+			}	
 		} else {
-			sayFailed();
-		} line_end();
+			if ($s == 401) {
+				sayOK($headers[0]);
+			} else {
+				sayFailed($headers[0]." (Should be 401 Authorization required)");
+			}
+		}
+		line_end();
 	}
 }
 
@@ -250,6 +256,7 @@ function debug() {
 	echo "\n==== Server variables ===\n";
 	print_r($_SERVER);
 	echo "\n==== Command line environment ===\n";
+	escapeArgument('dummy');
 	$output = repos_runCommand('env','');
 	print_r($output);
 	echo "</pre>\n";

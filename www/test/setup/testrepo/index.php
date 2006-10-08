@@ -4,16 +4,18 @@ require(dirname(dirname(__FILE__)).'/setup.inc.php');
 
 $repo = $test . "repo/";
 $admin = $test . "admin/";
+$backup = $test . "backup/";
 
 if (file_exists($test)) {
 	$report->info("Deleting old test repository folder $test");
 	deleteFolder($test);
 }
 
-$report->info("create test repository");
+$report->info("create test repository folder with repo/ admin/ and backup/");
 createFolder($test);
 createFolder($repo);
 createFolder($admin);
+createFolder($backup);
 
 $report->info("Running: svnadmin create \"$repo\"");
 
