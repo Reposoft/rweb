@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>TestPHPInfo</title>
+</head>
+<body>
+<small>
+This test is a complement to <a target="_blank" href="/repos/test/server/TestServerSettings.php">TestServerSettings.php</a> running in the PHP test suite.
+<br/>
+<ul>
+<li>Test the apache2handler section of php info for the required apache SVN modules.</li>
+</ul>
+</small>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestPHPInfo</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/repos/test/server/phpinfo/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>mod_dav </td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>mod_dav_svn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>mod_authz_svn</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
