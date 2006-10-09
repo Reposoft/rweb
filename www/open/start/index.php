@@ -10,7 +10,8 @@ function shouldShow($entrypoint) {
 }
 
 if (!isLoggedIn()) {
-	trigger_error("This is for logged in users only", E_USER_WARNING);
+	header("Location: /?login");
+	exit;
 }
 $user = getReposUser();
 $acl = getConfig('admin_folder').getConfig('access_file');
