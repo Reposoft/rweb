@@ -420,7 +420,8 @@ function getReposAuth() {
 }
 
 // *** Subversion client usage ***
-define('SVN_CONFIG_DIR', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'svn-config-dir');
+define('SVN_CONFIG_DIR', _getConfigFolder().'svn-config-dir/');
+if (!file_exists(SVN_CONFIG_DIR)) trigger_error('Svn config folder '.SVN_CONFIG_DIR.' does not exist. Can not run commands.', E_USER_ERROR);
 
 /**
  * Execute svn command like the PHP exec() function

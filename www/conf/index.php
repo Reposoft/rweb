@@ -22,7 +22,9 @@ $sections = array(
 $links = array(
 	'../logout.php' => 'Log out',
 	'../admin/configure/' => 'System configuration help',
-	'../admin/' => 'Administration'
+	'../admin/' => 'Administration',
+	'../test/' => 'Automated tests',
+	'../' => 'startpage'
 	);
 $requiredConfig = array(
 	'repos_web' => 'The url of this website',
@@ -40,7 +42,7 @@ $requiredFiles = array(
 	getConfig('backup_folder') => 'Local path for storage of backup'
 	);
 $dependencies = array(
-	'svn' => '--version',
+	'svn' => '--version --config-dir '.SVN_CONFIG_DIR,
 	'svnlook' => '--version',
 	'svnadmin' => '--version',
 	'gzip' => '--version',

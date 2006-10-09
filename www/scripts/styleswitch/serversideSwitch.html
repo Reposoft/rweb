@@ -3,19 +3,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <link rel="stylesheet" type="text/css" href="styles1.css" title="styles1" media="screen" />
-<title>Serverside stylesheet switcher</title>
+<title>Stylesheet switch failed</title>
+<link rel="stylesheet" type="text/css" href="../../style/global.css" media="screen" />
 </head>
 
 <body>
-<h1>Stylesheet switcher using jQuery</h1>
-
-<p>This page can be used so that the stylesheet switcher degrades gracefully where Javascript is disabled or the level of Javascript support isn't high enough to support the stylesheet switcher (e.g. <a href="http://www.jquery.com/">jQuery</a> isn't supported).</p>
-
-<p>You can program this page in whatever serverside language you prefer. A cookie called "style" should be set to the value of the querystring parameter "style". The page should then redirect to it's referrer.</p>
-
-<p>Then when serving up any other page on your site you will need to set the "rel" attribute of all not selected stylesheet links (e.g. ones whose title isn't the value of the cookie style) to "alternate stylesheet".</p>
-
-<p><strong>NOTE:</strong> this page and process is only necessary if you care about the small percentage of users that the stylesheet switcher won't work for. You could also just display a message on this page informing the user that they need to enable JavaScript in their browser or to download a better broswer from <a href="http://www.mozilla.com/firefox/">here</a>.</p>
+<p>Seems like your browser does not support client side stylesheet selection.</p>
+<p>This means that repos can change the style for form pages, but not for the repository browser or log viewer, so it is of little use.</p>
+<p><a class="action" href="/?login">proceed to login</a></p>
 
 </body>
 </html>

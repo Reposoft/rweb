@@ -44,6 +44,9 @@ function getBackupInfoAsHtml($backupArray) {
 		}
 		$lastrev = $file[2];
 	}
+	if (!$isgaps) {
+		info("Every revision from 0 to $lastrev is backed up.");
+	}
 	return $lastrev;
 }
 
