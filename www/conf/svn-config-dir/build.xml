@@ -2,7 +2,7 @@
 <project name="Repos.se accepted certificates" default="install" basedir=".">
 
   <description>
-	This script gets the PEM certificate for SSL servers accepted by repos.
+	This Ant script gets the PEM certificate for SSL servers accepted by repos.
   	Needed for servers that have a certificate which is not automatically verified by the subversion client.
   </description>
 

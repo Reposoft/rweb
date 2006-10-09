@@ -173,13 +173,11 @@ function dependencies() {
 		$output = array();
 		$run = getCommand($cmd);
 		line_start("$cmd ($run): ");
-		exec( "$run $check", $output, $retval );
-		//print_r($output);
-		//echo "$retval";
+		exec( "$run $check 2>&1", $output, $retval );
 		if ($retval==0)
 			sayOK( $output[0] );
 		else
-			sayFailed();
+			sayFailed( $output[0] );
 		line_end();
 	}
 }
@@ -227,7 +225,7 @@ function localeSettings() {
 		list($env, $val) = explode('=', $locale);
 		line_start($env);
 		if (strpos($val, "UTF-8")===false) {
-			sayFailed("$val (not UTF-8, so i18n not supported in svn commands)");
+			sayFailed("$val Not UTF-8, LC_ALL or all other LC and LANG must be UTF-8.");
 		} else {
 			sayOK();
 		}

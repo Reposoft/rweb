@@ -39,7 +39,7 @@ function getBackupInfoAsHtml($backupArray) {
 			fail("Backup gap. Revision " . ($lastrev + 1) . " to " . ($file[1] - 1) . " missing. ");
 			if (!$isgaps) {
 				$isgaps = true;
-				warn("The best solution to this is currently to delete all backup files after revision ". ($file[1]-1) ." and then <a href=\"backup/\">run the backup script.</a>");	
+				warn("The best solution to this is currently to delete all backup files after revision ". ($file[1]-1) ." (and the corresponding entries in the MD5SUMS file) and then <a href=\"backup/\">run the backup script.</a>");	
 			}
 		}
 		$lastrev = $file[2];

@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>Untitled Document</title>
+<title>Repos automated tests</title>
 <link href="../style/global.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 <h1><img src="../style/logo/repos2.png" alt="repos.se" width="144" height="36" align="absmiddle" /> Integration Testing</h1>
 <p>This is the startpage for automated and manual tests of repos.</p>
-<p><a class="action" href="../">go to repos.se startpage</a></p>
 <p>Repos components are as separated as possible. The unit tests for components are usually in the same folder as the code.</p>
+<p><a href="../">return to repos startpage</a></p>
 <h2>Automated test suites</h2>
 <ul>
 <li><a href="browsercheck/" accesskey="b"><u>B</u>rowser test for new users</a></li>
@@ -19,10 +19,13 @@
 <li><a href="selenium/TestRunner.html?test=..%2FTestPHP.php&resultsUrl=..%2Fpostresults%2F" accesskey="p"><u>P</u>HP unit test suite</a></li>
 <li><a href="selenium/TestRunner.html?test=..%2F..%2Fscripts%2FTestJavascript.php&resultsUrl=..%2Fpostresults%2F" accesskey="j"><u>J</u>avascripts unit tests</a></li>
 </ul>
+<p>Note that tests assume the web application to be located at <code>[current host]/repos/</code>.</p>
+<p>Some test cases reveal server details. They only modify the test repository,
+but it could be a good idea to restrict access to this folder to internal hosts.</p>
 <h2>Test reports</h2>
 <p>The complete test suite is run on each supported browser.</p>
 <h2>Set up</h2>
-<p><a href="setup/">Reset the test repository </a></p>
+<p><a href="setup/">Reset the test repository</a></p>
 </body>
 
 
