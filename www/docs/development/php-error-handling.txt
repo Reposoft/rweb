@@ -1,0 +1,6 @@
+If a function detects a runtime error, like a variable value that is not according to the signature or any other error condition:
+use 'trigger_error("error message", E_USER_ERROR)'.
+No "die" or "exit", because that will stop any error handling logic. Normally, the function should simply return.
+This behaviour is as close as we can get to Java's RuntimeException. Exceptions only available in PHP5.
+
+For user errors, do 'trigger_error("error message", E_USER_WARNING)'.
