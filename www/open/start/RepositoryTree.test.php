@@ -98,6 +98,28 @@ class TestRepositoryTree extends UnitTestCase {
 		$this->assertEqual(false, $e[1]->isByGroup());
 	}
 	
+	function test_getEntryPointsWithAsterisk() {
+		$acl = array();
+		$acl['/'] = array('*' => 'rw'); // the most basic acl
+		$e = $this->tree->_getEntryPointsForUserOrGroup($acl, 'sven', array());
+		$this->assertEqual(1, count($e));
+		$this->assertEqual('', $e[0]->getPath()); // no other paths in ACL have tailing slash
+		$this->assertEqual(false, $e[0]->isReadOnly());
+		// for "/", displayname should be the repository name
+		$this->assertEqual(basename(getRepository()), $e[0]->getDisplayname());
+	}
+
+	function test_getEntryPointsWithAsteriskReadOnlyTrunk() {
+		$acl = array();
+		$acl['/trunk'] = array('*' => 'r'); // the most basic acl
+		$e = $this->tree->_getEntryPointsForUserOrGroup($acl, 'sven', array());
+		$this->assertEqual(1, count($e));
+		$this->assertEqual('/trunk', $e[0]->getPath()); // no other paths in ACL have tailing slash
+		$this->assertEqual(true, $e[0]->isReadOnly());
+		// for "/", displayname should be the repository name
+		$this->assertEqual('trunk', $e[0]->getDisplayname());
+	}	
+	
 	// test the small entry point class too
 	function testRepositoryEntryPoint() {
 		$e = new RepositoryEntryPoint('/my/own/folder', 'rw', false);

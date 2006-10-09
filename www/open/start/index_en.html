@@ -19,13 +19,13 @@
 <!--{foreach from=$entrypoints item=entry}-->
 <div class="row n{=cycle values=0,1,2,3}">
 <!--{if $entry->isReadOnly()}-->
-<a class="folder readonly" href="{=$repo}{=$entry->getPath()}/trunk">{=$entry->getDisplayname()}</a>
+<a class="folder readonly" href="{=$repo}{=$entry->getPath()}/trunk/">{=$entry->getDisplayname()}</a>
 <!--{else}-->
-<a class="folder" href="{=$repo}{=$entry->getPath()}/trunk">{=$entry->getDisplayname()}</a>
+<a class="folder" href="{=$repo}{=$entry->getPath()}/trunk/">{=$entry->getDisplayname()}</a>
 <!--{/if}-->
 <!-- todo: class groupaccess -->
 <div class="actions">
-<a class="action" href="{=$repo}{=$entry->getPath()}/trunk">open</a>
+<a class="action" href="{=$repo}{=$entry->getPath()}/trunk/">open</a>
 </div>
 </div>
 <!--{/foreach}-->

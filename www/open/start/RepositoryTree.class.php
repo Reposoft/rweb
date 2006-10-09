@@ -79,6 +79,7 @@ class RepositoryTree {
 	
 	/**
 	 * @return an array of RepositoryEntryPoint for the user
+	 * TODO rw policies should have precedence over r
 	 */
 	function _getEntryPointsForUserOrGroup($acl, $username, $groups) {
 		$e = array();
@@ -86,7 +87,9 @@ class RepositoryTree {
 			if ($section == 'groups') continue;
 			foreach ($accessrow as $id => $policy) {
 				if (!$this->_isPolicy($policy)) continue;
-				if (substr($id, 0, 1) == '@') {
+				if ($id=='*') {
+					$e[] = new RepositoryEntryPoint($section, $policy, true);
+				} else if (substr($id, 0, 1) == '@') {
 					if (in_array(substr($id, 1), $groups)) {
 						$e[] = new RepositoryEntryPoint($section, $policy, true);
 					}
@@ -152,6 +155,7 @@ class RepositoryEntryPoint {
 	 * @return the path starting with '/' but not ending with one
 	 */
 	function getPath() {
+		if ($this->path=='/') return '';
 		return $this->path;
 	}
 	
@@ -160,6 +164,7 @@ class RepositoryEntryPoint {
 	 * this is often the project id
 	 */
 	function getDisplayname() {
+		if ($this->path=='/') return basename(getRepository());
 		return substr($this->path, strrpos($this->path, '/')+1);
 	}
 }
