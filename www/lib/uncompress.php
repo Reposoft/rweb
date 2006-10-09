@@ -8,6 +8,11 @@
 */
 function uncompressGZ( $srcFileName, $dstFileName, $fileSize ){
 
+	if (!is_writable(dirname($dstFileName))) {
+		trigger_error("Not allowed to write to destination $dstFileName");
+		exit;
+	}
+	
 	if (!$fileSize){
 		$fileSize = 1000000000;
 	}

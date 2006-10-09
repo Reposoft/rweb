@@ -15,7 +15,7 @@ $version = "1.0.1alpha3";
 $archive = "http://heanet.dl.sourceforge.net/sourceforge/simpletest/simpletest_$version.tar.gz";
 
 $basedir = dirname(__FILE__);
-$dir_backslash = rtrim($basedir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+$dir_backslash = rtrim($basedir, DIRECTORY_SEPARATOR);
 $dir = str_replace('\\', '/', $dir_backslash);
 $extracted_folder = "$dir/simpletest-$version";
 
@@ -43,3 +43,4 @@ unlink($filename);  // delete the tar file
 </PRE>
 </BODY>
 </HTML>
+

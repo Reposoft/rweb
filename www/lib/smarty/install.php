@@ -13,9 +13,10 @@ $archive = "$home/distributions/Smarty-$version.tar.gz";
 $file = "Smarty-$version";
 
 $basedir = dirname(__FILE__);
-$dir_backslash = rtrim($basedir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+$dir_backslash = rtrim($basedir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
 $dir = str_replace('\\', '/', $dir_backslash);
 
+$file = $dir.$file;
 
 /*
 	extract GZ archive
