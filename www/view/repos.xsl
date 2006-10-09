@@ -118,10 +118,16 @@
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="contents">
+		<xsl:param name="fullpath" select="concat(/svn/index/@path,'/')"/>
+		<xsl:param name="trunk">
+			<xsl:call-template name="getTrunkPath">
+				<xsl:with-param name="path" select="$fullpath"/>
+			</xsl:call-template>
+		</xsl:param>
+		<xsl:param name="folders" select="substring($fullpath, string-length($trunk)+2)"/>
 		<xsl:param name="home">
 			<xsl:call-template name="getReverseUrl">
-				<!-- home should be the 'trunk' folder, above that is the starpage -->
-				<xsl:with-param name="url" select="substring-after(substring(/svn/index/@path, 2),'/')"/>
+				<xsl:with-param name="url" select="$folders"/>
 			</xsl:call-template>
 		</xsl:param>
 		<div id="contents">
@@ -132,7 +138,9 @@
 				</span>
 			</a>
 			<xsl:value-of select="$spacer"/>
-			<xsl:call-template name="getFolderPath"/>
+			<xsl:call-template name="getFolderPathLinks">
+				<xsl:with-param name="folders" select="$folders"/>
+			</xsl:call-template>
 			<xsl:value-of select="$spacer"/>
 			<!-- rev not asked for by users: <xsl:if test="@rev">
 				<span class="revision">
@@ -217,27 +225,10 @@
 		</span> -->
 		</div>
 	</xsl:template>
-	<!-- get the relative URL to the root of the project (the trunk folder) -->
-	<xsl:template name="getTrunkUrl">
-		<xsl:call-template name="getTrunkPath"/>
-	</xsl:template>
 	<!-- get the root folder name -->
 	<xsl:template name="getProjectName">
 		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
 		<xsl:value-of select="substring-before(substring($path,2),'/')"/>
-	</xsl:template>
-	<!-- get the folders as breadcrumbs (link each folder) -->
-	<xsl:template name="getFolderPath">
-		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
-		<xsl:param name="trunk">
-			<xsl:call-template name="getTrunkPath">
-				<xsl:with-param name="path" select="$path"/>
-			</xsl:call-template>
-		</xsl:param>
-		<xsl:param name="p" select="substring($path, string-length($trunk)+2)"/>
-		<xsl:call-template name="getFolderPathLinks">
-			<xsl:with-param name="folders" select="$p"/>
-		</xsl:call-template>
 	</xsl:template>
 	<!-- divide a path into its elements and make one link for each, expects folders to end with '/' -->
 	<xsl:template name="getFolderPathLinks">

@@ -26,6 +26,7 @@ function showUserLogin() {
 
 function showLoginCancelled() {
 	$presentation = new Presentation();
+	$presentation->assign('start', getParent(getWebapp())); // not the same host if the repository is ssl
 	$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/cancel'));
 }
 
@@ -34,7 +35,7 @@ function showLoginFailed($targetUrl) {
 	$nexturl = repos_getSelfRoot().'/?logout&go='.rawurlencode('?login');
 	$presentation = new Presentation();
 	$presentation->assign('nexturl', $nexturl);
-	$presentation->assign('rooturl', repos_getSelfRoot());
+	$presentation->assign('start', getParent(getWebapp())); // not the same host if the repository is ssl
 	$presentation->assign('targeturl', $targetUrl);
 	$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/failed'));
 }
