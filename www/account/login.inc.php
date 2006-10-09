@@ -133,7 +133,7 @@ function verifyLogin($targetUrl) {
 		trigger_error('No user credentials given. Can not validate login.', E_USER_ERROR);
 	}
 	$s = getHttpStatus($targetUrl, $user, _getReposPass());
-	// allow authentication with parent if the current target is no longer in thre repository
+	// allow authentication with parent if the current target is no longer in the repository
 	if ($s==404) login_getFirstNon404Parent(getParent($targetUrl), &$s);
 	// accepted codes
 	if ($s==200) return true;

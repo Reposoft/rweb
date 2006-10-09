@@ -88,7 +88,7 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null ){
 					}
 				}
 				if ($_file){
-					echo "fil: ".$dstDirectory.$unpdir.$_file."\n";
+					echo "Extracted: ".$dstDirectory.$unpdir.$_file."\n";
 					$fileFromTar = fopen($dstDirectory.$unpdir.$_file ,"wb");
 					fwrite($fileFromTar,$file_contents);
 					fclose($fileFromTar);
