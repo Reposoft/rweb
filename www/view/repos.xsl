@@ -120,7 +120,7 @@
 	<xsl:template name="contents">
 		<xsl:param name="home">
 			<xsl:call-template name="getReverseUrl">
-				<!-- home should be the 'trunk' folder, above that some kind of startpage is needed -->
+				<!-- home should be the 'trunk' folder, above that is the starpage -->
 				<xsl:with-param name="url" select="substring-after(substring(/svn/index/@path, 2),'/')"/>
 			</xsl:call-template>
 		</xsl:param>
@@ -134,7 +134,7 @@
 			<xsl:value-of select="$spacer"/>
 			<xsl:call-template name="getFolderPath"/>
 			<xsl:value-of select="$spacer"/>
-			<!-- not asked for by users <xsl:if test="@rev">
+			<!-- rev not asked for by users: <xsl:if test="@rev">
 				<span class="revision">
 					<xsl:value-of select="@rev"/>
 				</span>
@@ -264,7 +264,7 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- get the mandatory part of the repository, like /project/trunk. Dos not support branches yet. -->
-	<!-- if 'trunk' is not a part of the path, return the first path element -->
+	<!-- if 'trunk' is not a part of the path, or is the first part, return the first path element -->
 	<xsl:template name="getTrunkPath">
 		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
 		<xsl:param name="this" select="substring-before(substring($path, 2), '/')"/>

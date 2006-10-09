@@ -54,8 +54,9 @@ if (createFileWithContents($aclfile, $acl, true)) {
 
 $report->info("create apache 2.2 config");
 
+$conflocation = '/testrepo';
 $conf = "
-<Location /testrepo>
+<Location $conflocation>
 DAV svn
 SVNIndexXSLT \"/repos/view/repos.xsl\"
 SVNPath $test/repo/
@@ -89,6 +90,8 @@ createFolder($wc."trunk/");
 setup_svn("add {$wc}trunk/");
 
 setup_svn('commit -m "Created an empty file archive in repository root" '.$wc);
+
+$report->info('<a href="'.$conflocation.'/trunk/">Log in to trunk</a>');
 
 $report->display();
 ?>

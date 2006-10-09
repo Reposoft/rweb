@@ -34,9 +34,9 @@ function autoFillFilename(path) {
   <p>
     <label for="usertext">file contents</label> <a class="action" href="#textform" onclick="document.forms[0]['usertext'].value=''">clear contents</a><br />
 	<!--{if $isfile}-->
-    <textarea name="usertext" id="usertext" cols="100" rows="20">{=$targeturl|login_svnPassthruFile}</textarea>
+    <textarea name="usertext" id="usertext" cols="100" rows="20" tabindex="1">{=$targeturl|login_svnPassthruFile}</textarea>
 	<!--{else}-->
-	<textarea name="usertext" id="usertext" cols="100" rows="20"></textarea>
+	<textarea name="usertext" id="usertext" cols="100" rows="20" tabindex="1"></textarea>
 	<!--{/if}-->
     <label for="userfile"></label>
   </p>
@@ -45,17 +45,17 @@ function autoFillFilename(path) {
 	<!--{if $isfile}-->
     <input type="text" id="currentname" name="currentname" value="{=$target|basename}" disabled="disabled" size="40" />
 	<!--{else}-->
-	<input type="text" id="name" name="name" size="40"/>
+	<input type="text" id="name" name="name" size="40" class="required" tabindex="2" />
 	<input type="hidden" id="create" name="create" value="yes"/>
 	<!--{/if}-->
   </p>
   <p>
     <label for="message">log message</label>
-    <textarea id="message" name="message" cols="40" rows="2"></textarea>
+    <textarea id="message" name="message" cols="40" rows="2" tabindex="3"></textarea>
   </p>
   <p>
     <label for="submit"></label>
-    <input id="submit" type="submit" name="Submit" value="Upload" />
+    <input id="submit" type="submit" name="Submit" value="Save" tabindex="4" />
     <input type="reset" value="Reset to original contents"/>
   </p>
 </fieldset>

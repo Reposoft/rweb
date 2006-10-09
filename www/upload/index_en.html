@@ -41,7 +41,7 @@ function autoFillFilename(path) {
   <p>
     <label for="userfile">local file</label>
 	<input type="hidden" name="MAX_FILE_SIZE" value="{=$maxfilesize}" />
-    <input type="file" name="userfile" size="40" onchange="autoFillFilename(value)"/>
+    <input type="file" name="userfile" size="40" onchange="autoFillFilename(value)" class="required" tabindex="1" />
     <span class="note">Maximum file size 10MB</span>
   </p>
   <p>
@@ -49,17 +49,17 @@ function autoFillFilename(path) {
 	<!--{if $isfile}-->
     <input type="text" id="currentname" name="currentname" value="{=$target|basename}" disabled="disabled" size="40" />
 	<!--{else}-->
-	<input type="text" id="name" name="name" size="40"/>
+	<input type="text" id="name" name="name" size="40" class="required" tabindex="2" />
 	<input type="hidden" id="create" name="create" value="yes"/>
 	<!--{/if}-->
   </p>
   <p>
     <label for="message">history text</label>
-    <textarea id="message" name="message" cols="40" rows="2"></textarea>
+    <textarea id="message" name="message" cols="40" rows="2" tabindex="3"></textarea>
   </p>
   <p>
     <label for="submit"></label>
-    <input id="submit" type="submit" name="Submit" value="Upload" />
+    <input id="submit" type="submit" name="Submit" value="Upload" tabindex="4" />
   </p>
 </fieldset>
 </form>

@@ -75,8 +75,9 @@ if (createFileWithContents($aclfile, $acl, true)) {
 
 $report->info("create apache 2.2 config");
 
+$conflocation = '/testrepo';
 $conf = "
-<Location /testrepo>
+<Location $conflocation>
 DAV svn
 SVNIndexXSLT \"/repos/view/repos.xsl\"
 SVNPath $test/repo/
@@ -146,6 +147,8 @@ createFileWithContents($wc."test/trunk/repos-svn-access/automated-test-increment
 
 setup_svn("add {$wc}test/trunk/repos-svn-access/");
 setup_svn('commit -m "Added integration testing folders for other repos projects" '.$wc);
+
+$report->info('<a href="'.$conflocation.'/test/trunk/">Log in to test account</a>');
 
 $report->display();
 ?>
