@@ -3,10 +3,14 @@ require( dirname(dirname(dirname(__FILE__))) . "/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__)) . "/login.inc.php" );
 
 /**
- * Get a user's home directory of a repository
+ * Get a user's home directory of a repository, allow override with 'go' parameter as in logout
+ * @param String repository, with tailing slash
  */
 function getHomeDir($repository) {
-	return $repository . '/' . getReposUser() . '/trunk/';
+	$home = $repository . getReposUser() . '/trunk/';
+	$exist = login_getFirstNon404Parent($home);
+	if (!$exist) trigger_error("Could not find a valid URL or parent URL for $home", E_USER_ERROR);
+	return $exist;
 }
 
 function isHttps($repository) {
@@ -36,7 +40,7 @@ function showLoginFailed($targetUrl) {
 }
 
 function loginAndRedirectToHomeDir() {
-	$repo = getRepositoryUrl();
+	$repo = getRepositoryUrl().'/';
 	if (isHttps($repo)) {
 		enforceSSL();
 	}
@@ -52,7 +56,10 @@ function loginAndRedirectToHomeDir() {
 		}
 	} elseif (isset($_GET['login']) && $_GET['login'] == 'user') {
 		$realm = getAuthName($repo);
-		if(!$realm) trigger_error("Error: No login realm was found for repository $repo", E_USER_ERROR);
+		if(!$realm) {
+			$check = '<a href="'.getWebapp().'test/headers/?check='.rawurlencode($repo).'">Check HTTP headers</a> for 401 Authorization Required.';
+			trigger_error("Error: No login realm was found for repository $repo. \n$check", E_USER_ERROR);
+		}
 		askForCredentials($realm);
 		// browser will refresh upon user input, if there is still no credentials we end up here
 		showLoginCancelled();

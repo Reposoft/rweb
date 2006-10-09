@@ -80,7 +80,7 @@ $conf = "
 <Location $conflocation>
 DAV svn
 SVNIndexXSLT \"/repos/view/repos.xsl\"
-SVNPath $test/repo/
+SVNPath {$test}repo/
 SVNAutoversioning on
 # user accounts from password file
 AuthName \"$test_repository_folder\"

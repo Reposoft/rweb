@@ -45,7 +45,6 @@ if (!isset($_repos_config['repos_web'])) trigger_error("Repos web applicaiton ro
 if (!isFolder($_repos_config['repos_web'])) trigger_error("repos_web must be a folder (should end with '/')");
 if (isset($_GET['file'])) trigger_error("The 'file' parameter is no longer supported");
 if (isset($_GET['path'])) trigger_error("The 'path' parameter is no longer supported");
-if (isset($_GET['repo'])) trigger_error("The 'repo' parameter should not be used now, will be introduced together with cookie support");
 function _denyParam($name) { if (isset($_GET[$name]) || isset($_POST[$name])) trigger_error("The parameter '$name' is reserved.", E_USER_ERROR); }
 _denyParam(REPO_KEY);
 _denyParam(USERNAME_KEY);

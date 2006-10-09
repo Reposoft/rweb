@@ -59,7 +59,7 @@ $conf = "
 <Location $conflocation>
 DAV svn
 SVNIndexXSLT \"/repos/view/repos.xsl\"
-SVNPath $test/repo/
+SVNPath {$test}repo/
 SVNAutoversioning on
 # user accounts from password file
 AuthName \"$test_repository_folder\"
@@ -70,6 +70,7 @@ Require valid-user
 AuthzSVNAccessFile $aclfile
 # don't allow anonymous access, because that would be read-write
 Satisfy All
+</Location>
 ";
 if (createFileWithContents($conffile, $conf, true)) {
 	$report->ok("Successfully created apache config file $conffile");

@@ -30,6 +30,9 @@ function askForCredentialsBeforeLogout() {
 	$realm = getAuthName($repo);
 	if(!$realm) trigger_error("Error: No login realm was found for repository $repo", E_USER_ERROR);
 	askForCredentials($realm);
+	// using cancel page from login
+	$presentation = new Presentation();
+	$presentation->display($presentation->getLocaleFile(dirname(dirname(__FILE__)).'/login/cancel'));
 }
 
 function doLogout() {
@@ -44,7 +47,9 @@ function doLogoutVoid() {
 
 // --- logout pages ---
 
-// where to redirect browser when logout is done or not needed
+/**
+ * where to redirect browser when logout is done or not needed, allow override with 'go' parameter as in login
+ */
 function getAfterLogoutUrl() {
 	if (isset($_GET['go'])) {
 		return repos_getSelfRoot().rawurldecode($_GET['go']);

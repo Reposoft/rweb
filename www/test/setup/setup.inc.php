@@ -25,7 +25,7 @@ $test = getSystemTempDir().$test_repository_folder.'/';
 $conffile = $test . "admin/testrepo.conf";
 
 # environment setup, should be valid for both 'svn' and 'svnadmin'
-$here=getcwd();
+$here=dirname(__FILE__);
 $svnargs="--config-dir " . rtrim($here, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "test-svn-config-dir";
 
 // one call to escapeArgument needed as long as the excape check is enabled in repos.properties

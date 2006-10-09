@@ -47,7 +47,7 @@ $dependencies = array(
 	'svnadmin' => '--version',
 	'gzip' => '--version',
 	'gunzip' => '--version',
-	'whoami' => '--version'
+//	'whoami' => '--version'
 );
 $repository = array(
 	getCommand('svnlook') . ' youngest ' . getConfig('local_path') => "Local path contains repository revision: "
@@ -175,6 +175,10 @@ function dependencies() {
 		$output = array();
 		$run = getCommand($cmd);
 		line_start("$cmd ($run): ");
+		if (empty($run)) {
+			sayOK('not supported, not required');
+			continue;
+		}
 		exec( "$run $check 2>&1", $output, $retval );
 		if ($retval==0)
 			sayOK( $output[0] );
