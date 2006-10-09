@@ -63,7 +63,7 @@ class Edit {
 	 */	
 	function addArgUrl($url) {
 		// urlEncodeNames does not work for write operation because there might be UTF-8 characters like umlauts
-		$url = str_replace("%", "%25", $url);
+		$url = urlEncodeNames($url);
 		$this->_addArgument($url);
 	}
 	

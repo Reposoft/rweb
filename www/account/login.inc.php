@@ -127,7 +127,7 @@ function verifyLogin($targetUrl) {
 	if (!strBegins($targetUrl, getRepository())) {
 		trigger_error('Target URL is not a repository resource. Can not validate login using '.$targetUrl, E_USER_ERROR);
 	}
-	$targetUrl = str_replace("%", "%25", $targetUrl); // same as in edit.class.php addArgUrl
+	$targetUrl = urlEncodeNames($targetUrl);
 	$user = getReposUser();
 	if (!$user) {
 		trigger_error('No user credentials given. Can not validate login.', E_USER_ERROR);

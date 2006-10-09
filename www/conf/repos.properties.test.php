@@ -74,6 +74,12 @@ class TestReposProperties extends UnitTestCase {
 	
 	// -------- path functions --------
 	
+	function testUrlEncodeNames() {
+		$this->assertEqual('https://host/r%25p', urlEncodeNames('https://host/r%p'));
+		$this->assertEqual('http://host:80/r%22/?s%25t', urlEncodeNames('http://host:80/r"/?s%t'));
+		$this->assertEqual("/r%3As/t%20/?u%3F", urlEncodeNames("/r:s/t /?u?"));
+	}
+	
 	function testIsAbsolute() {
 		$this->assertTrue(isAbsolute('/path'));
 		$this->assertTrue(isAbsolute('/my/path'));
@@ -230,12 +236,16 @@ class TestReposProperties extends UnitTestCase {
 	}
 	
 	function testCreateAndDeleteFileInReposWeb() {
-		$dir = toPath(getcwd());
+		$dir = toPath(dirname(__FILE__));
+		if (is_writable($dir)) {
 		$file = $dir.'/test-file_should-be-deleted.txt';
 		createFile($file);
 		$this->assertTrue(file_exists($file));
 		deleteFile($file);
 		$this->assertFalse(file_exists($file));
+		} else {
+			$this->sendMessage("Can not run this test because folder '$dir' is not writable for this user.");
+		}
 	}
 	
 	function testDeleteFolderTempDir() {
@@ -253,9 +263,9 @@ class TestReposProperties extends UnitTestCase {
 		$dir = getTempnamDir();
 		// the svn client makes the .svn folder write protected in windows
 		createFolder($dir.'.svn/');
-		$this->assertTrue(chmod($dir.'.svn/', 0400));
 		createFile($dir.'.svn/test.txt');
 		$this->assertTrue(chmod($dir.'.svn/test.txt', 0400));
+		$this->assertTrue(chmod($dir.'.svn/', 0400));
 		deleteFolder($dir);
 		//$this->assertNoErrors();
 		$this->assertFalse(file_exists($dir.'.svn/test.txt'));
@@ -264,13 +274,14 @@ class TestReposProperties extends UnitTestCase {
 
 	function testDoesNotRemoveWriteProtectedUnlessInSvn() {
 		// this rule does not apply to temp folder, so we'll test it here
+		if (is_writable(dirname(__FILE__))) {
 		$dir = toPath(dirname(__FILE__)).'/temp-test-folder-remove-anytime/';
 		createFolder($dir);
 		// the svn client makes the .svn folder write protected in windows
 		createFolder($dir.'.sv/');
-		$this->assertTrue(chmod($dir.'.sv/', 0400));
 		createFile($dir.'.sv/test.txt');
 		$this->assertTrue(chmod($dir.'.sv/test.txt', 0400));
+		$this->assertTrue(chmod($dir.'.sv/', 0400));
 		$this->assertFalse(deleteFolder($dir));
 		$this->assertError();
 		$this->assertError();
@@ -278,6 +289,9 @@ class TestReposProperties extends UnitTestCase {
 		chmod($dir.'.sv/', 0700);
 		chmod($dir.'.sv/test.txt', 0700);
 		deleteFolder($dir);
+		} else {
+			$this->sendMessage("Can not run this test because folder '".dirname(__FILE__)."' is not writable for this user.");
+		}
 	}	
 	
 	function testRemoveTempDirInvalid() {
