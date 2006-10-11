@@ -140,7 +140,7 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertFalse(isFolder('/path'));
 	}
 	
-	function testGetParent() {
+	function test() {
 		$this->assertEqual('/my/', getParent('/my/folder/'));
 		$this->assertEqual('/', getParent('/my/'));
 		$this->assertEqual('my/', getParent('my/folder/'));
@@ -151,6 +151,7 @@ class TestReposProperties extends UnitTestCase {
 			$this->assertFalse(getParent('C:/'), "should return false if target is windows root");
 		}
 		$this->assertFalse(getParent(''), "should return false if parent is undefined");
+		$this->assertFalse(getParent('ftp://adsf/'), 'should return false if path is an URL and server root');
 	}
 
 	function testPhpFunctions() {

@@ -134,7 +134,7 @@ function verifyLogin($targetUrl) {
 	}
 	$s = getHttpStatus($targetUrl, $user, _getReposPass());
 	// allow authentication with parent if the current target is no longer in the repository
-	if ($s==404) login_getFirstNon404Parent(getParent($targetUrl), &$s);
+	if ($s==404) login_getFirstNon404Parent(getParent($targetUrl), $s);
 	// accepted codes
 	if ($s==200) return true;
 	if ($s==401 || $s==403) return false;
@@ -526,6 +526,12 @@ function login_isSSLSupported() {
 // PHP5 get_headers function, but with authentication option
 // currently supports only basic auth
 function my_get_headers($url, $httpUsername, $httpPassword) {
+	if (function_exists('get_headers')) {
+		if (!empty($httpUsername)) {
+			return get_headers(str_replace("://", "://$httpUsername:$httpPassword@", $url), 1);
+		}
+		return get_headers($url, 1);
+	}
    $url_info=parse_url($url);
    if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
    	if (!login_isSSLSupported()) {

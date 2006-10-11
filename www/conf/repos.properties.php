@@ -241,10 +241,9 @@ function isFolder($path) {
  * @return The parent folder if isFolder($path), the folder if isFile($path), false if there is no parent
  */
 function getParent($path) {
-	if (!isPath($path)) trigger_error("'$path' is not a valid path");
-	if (strlen($path)==0 || $path=='/' || (isWindows() && strlen($path)<4 && strpos($path, ':')==1)) {
-		return false;
-	}
+	if (strlen($path)<1) return false;
+	$c = substr_count($path, '/');
+	if ($c < 2 || ($c < 4 && strContains($path, '://') && !($c==3 && !strEnds($path, '/')))) return false; 
 	$f = substr($path, 0, strrpos(rtrim($path,'/'), '/'));
 	if (strlen($f)==0 && isRelative($path)) return $f;
 	return $f.'/';
