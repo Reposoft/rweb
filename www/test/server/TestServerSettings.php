@@ -42,7 +42,7 @@ class TestServerSettings extends UnitTestCase {
 
 	function testUrlFopen() {
 		$this->assertTrue(1, ini_get('allow_url_fopen'), "allow_url_fopen must be enabled");
-		$this->assertTrue(ini_get('default_socket_timeout')<10, "default_socket_timeout should be no more than 10, to make the application responsive. We have local or near local access to all resources.");
+		$this->assertTrue(ini_get('default_socket_timeout')<=10, "default_socket_timeout should be no more than 10, to make the application responsive. We have local or near local access to all resources.");
 	}
 
 	function testDefaultEncoding() {

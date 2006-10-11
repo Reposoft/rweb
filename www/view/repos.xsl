@@ -13,8 +13,8 @@
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
 	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
-	<xsl:param name="web">http://localhost:8085/repos/</xsl:param>
-	<xsl:param name="static">http://localhost/repos/</xsl:param>
+	<xsl:param name="web">/repos/</xsl:param>
+	<xsl:param name="static">/repos/</xsl:param>
 	<!-- static contents urls, set to {$web}style/ for default theme -->
 	<xsl:param name="cssUrl"><xsl:value-of select="$static"/>style/</xsl:param>
 	<xsl:param name="cssUrl-pe"><xsl:value-of select="$static"/>themes/pe/style/</xsl:param>
