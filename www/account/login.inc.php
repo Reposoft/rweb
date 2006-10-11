@@ -57,6 +57,7 @@
  * it uses trigger_error on unexpected conditions.
  */
 require_once(dirname(dirname(__FILE__)) . '/conf/repos.properties.php');
+require(dirname(__FILE__) . '/HttpClient.class.php');
 
 // admin account identification (used for example to add extra post-commit operation in upload)
 define('ADMIN_ACCOUNT', 'administrator');
@@ -523,15 +524,33 @@ function login_isSSLSupported() {
 	return function_exists('openssl_open');
 }
 
+function my_get_headers($url, $httpUsername, $httpPassword) {
+	$url_info=parse_url($url);
+	if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
+		if (!login_isSSLSupported()) {
+			trigger_error("Repos error: $url is a secure URL but this server does not have OpenSSL support in PHP.", E_USER_ERROR);
+		}
+		$port = 443;
+		$host = 'ssl://'.$url_info['host'];
+	} else {
+		$port = isset($url_info['port']) ? $url_info['port'] : 80;
+		$host = $url_info['host'];
+	}
+
+	$client = new HttpClient($host, $port);
+	if ($httpUsername != null) {
+		$client->setAuthorization($httpUsername, $httpPassword);
+	}
+	if (!$client->get($url_info['path'])) {
+		die('An error occurred: '.$client->getError());
+	}
+	return $client->getHeaders();
+}
+
 // PHP5 get_headers function, but with authentication option
 // currently supports only basic auth
-function my_get_headers($url, $httpUsername, $httpPassword) {
-	if (function_exists('get_headers')) {
-		if (!empty($httpUsername)) {
-			return get_headers(str_replace("://", "://$httpUsername:$httpPassword@", $url), 1);
-		}
-		return get_headers($url, 1);
-	}
+// @param max number of headers, to prevent infinite loop if no eof is sent in the headers response
+function OLD_my_get_headers($url, $httpUsername, $httpPassword, $max=20) {
    $url_info=parse_url($url);
    if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
    	if (!login_isSSLSupported()) {
@@ -555,7 +574,7 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
 	   $head .= "\r\n";
 	   fputs($fp, $head);
 	   //echo("----- http headers sent -----\n$head\n-------------------------\n");
-	   while(!feof($fp)) {
+	   while(!feof($fp) && $max-- > 0) {
 		   if($header=trim(fgets($fp, 1024))) {
 				   $sc_pos = strpos( $header, ':' );
 				   if( $sc_pos === false ) {
