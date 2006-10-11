@@ -66,6 +66,7 @@ function printForm() {
 	echo('<p><a id="100bytes.js" href="./?check=100bytes.js">100bytes.js</a></p>');
 	echo('<p><a id="head.js-file" href="./?check='.urlencode(getWebapp().'scripts/head.js').'">head.js</a></p>');
 	echo('<p><a id="head.js-folder" href="./?check='.urlencode(getWebapp().'scripts/head.js/').'">head.js/</a></p>');
+	echo('<p><a id="head.js-folder" href="./?check='.urlencode('/repos/view/repos.xsl').'">repos.xsl</a></p>');
 	echo('<p><a id="back" class="action" href="../">&lt; back</a></p>');
 	foot();
 }

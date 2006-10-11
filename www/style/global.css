@@ -32,7 +32,6 @@ table p {
 }
 a:hover {
 	text-decoration: underline;
-	border-bottom: none;
 }
 h1 {
 	font-weight: normal;
@@ -139,31 +138,23 @@ a.command {
 	border-left: 1px solid #f0f0ee;
 	border-right: 1px solid #f0f0ee;
 }
-a.command:hover {
-	text-decoration: underline;
-	border-left: 1px solid #cccc99;
-	border-right: 1px solid #cccc99;
-}
 span.command {
 	color: #BBBBBB;
 }
 /* action is for buttons inside listings, <a> is  active, <span> is greyed out */
-.action {
+a.action {
+	color: #333333;
 	background-color: #F0F0EE;
 	font-size: 82.5%;
 	margin: 0.2em;
 	padding-left: 0.2em;
 	padding-right: 0.2em;
-}
-a.action {
-	color: #333333;
-}
-a.action:hover {
-	background-color: #CCCC99;
-	text-decoration: none;
+	border-top: 1px solid #DDDDDD;
+	border-right: 1px solid #CCCCCC;
+	border-bottom: 1px solid #DDDDDD;
+	border-left: 1px solid #CCCCCC;
 }
 span.action {
-	color: #BBBBBB;
 	display: none;
 }
 /* common commands */
