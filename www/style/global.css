@@ -134,7 +134,6 @@ code {
 }
 a.command {
 	color: #333333;
-	text-decoration: none;
 	border-left: 1px solid #f0f0ee;
 	border-right: 1px solid #f0f0ee;
 }
@@ -149,10 +148,10 @@ a.action {
 	margin: 0.2em;
 	padding-left: 0.2em;
 	padding-right: 0.2em;
-	border-top: 1px solid #DDDDDD;
-	border-right: 1px solid #CCCCCC;
-	border-bottom: 1px solid #DDDDDD;
-	border-left: 1px solid #CCCCCC;
+	border-top: 1px solid #E7E7E6;
+	border-right: 1px solid #DDDDDD;
+	border-bottom: 1px solid #E7E7E6;
+	border-left: 1px solid #DDDDDD;
 }
 span.action {
 	display: none;
