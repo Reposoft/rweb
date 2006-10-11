@@ -22,7 +22,7 @@ header('Content-type: text/xml');
 echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 echo '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
 echo "<!-- SVN log for $url -->\n";
-echo '<log repo="'.getRepositoryUrl().'" path="'.getTarget().'">' . "\n";
+echo '<log repo="'.getRepositoryUrl().'" path="'.getTarget().'" web="'.getWebapp().'" static="'.getWebappStatic().'">' . "\n";
 $returnvalue = login_svnPassthru($cmd);
 if ($returnvalue) login_handleSvnError($cmd, $returnvalue);
 echo '</log>';

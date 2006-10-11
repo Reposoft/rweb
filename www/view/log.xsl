@@ -13,10 +13,11 @@
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
 	<!-- root url for webapp resources -->
-	<xsl:param name="web">/repos</xsl:param>
+	<xsl:param name="web" select="/log/@web"/>
+	<xsl:param name="static" select="/log/@static"/>
 	<!-- static contents urls, set to /themes/any/?u= for automatic theme selection -->
-	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/style/</xsl:param>
-	<xsl:param name="cssUrl-pe"><xsl:value-of select="$web"/>/themes/pe/style/</xsl:param>
+	<xsl:param name="cssUrl"><xsl:value-of select="$static"/>style/</xsl:param>
+	<xsl:param name="cssUrl-pe"><xsl:value-of select="$static"/>themes/pe/style/</xsl:param>
 	<!-- when spacer space can't be avoided -->
 	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- document skeleton -->
@@ -38,7 +39,7 @@
 				<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}global.css"/>
 				<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}log/log.css"/>
 				<!-- install the repos script bundle -->
-				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
+				<script type="text/javascript" src="{$static}scripts/head.js"></script>
 			</head>
 			<body class="log xml">
 				<xsl:apply-templates select="log"/>
@@ -60,7 +61,7 @@
 	<xsl:template name="commandbar">
 		<div id="commandbar">
 		<a id="reposbutton">
-			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
+			<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		</a>
 		<a id="repository" class="command" href="{@repo}{@path}">return to repository</a>
 		</div>

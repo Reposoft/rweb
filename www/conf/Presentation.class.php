@@ -129,7 +129,7 @@ class Presentation extends Smarty {
 			fwrite($handle, $this->fetch($resource_name, $cache_id, $compile_id));
 			fclose($handle);
 			// should be handled by the root page, but on the same hostso getWebapp() can not be used
-			$nexturl = getParent(getParent(repos_getSelfUrl())) . 'view/?result=' . basename($file);
+			$nexturl = getWebapp() . 'view/?result=' . basename($file);
 			header("Location: $nexturl");
 		} else {
 			parent::display($resource_name, $cache_id, $compile_id);
@@ -212,7 +212,7 @@ class Presentation extends Smarty {
 	
 	function _getThemeHeadTags() {
 		$theme = repos_getUserTheme();
-		$style = getWebapp().$theme.'style/';
+		$style = getWebappStatic().$theme.'style/';
 		return $this->_getAllHeadTags($style);
 	}
 	
@@ -232,7 +232,7 @@ class Presentation extends Smarty {
 	 */
 	function _getMandatoryHeadTags($stylePath) {
 		return $this->_getLinkCssTag($stylePath.'global.css') .
-			'<script type="text/javascript" src="'.getWebapp().'scripts/head.js"></script>';
+			'<script type="text/javascript" src="'.getWebappStatic().'scripts/head.js"></script>';
 	}
 	
 	function _getLinkCssTag($href) {

@@ -109,6 +109,14 @@ function getWebapp() {
 	return _getConfig('repos_web');
 }
 
+function getWebappStatic() {
+	if ($w = _getConfig('repos_static')) {
+		return $w;
+	} else {
+		return getWebapp();
+	}
+}
+
 /**
  * Gets the referer URL that the browser might send.
  * @return String HTTP_REFERER if there is one, false otherwise.

@@ -57,7 +57,6 @@
  * it uses trigger_error on unexpected conditions.
  */
 require_once(dirname(dirname(__FILE__)) . '/conf/repos.properties.php');
-require(dirname(__FILE__) . '/HttpClient.class.php');
 
 // admin account identification (used for example to add extra post-commit operation in upload)
 define('ADMIN_ACCOUNT', 'administrator');
@@ -524,7 +523,7 @@ function login_isSSLSupported() {
 	return function_exists('openssl_open');
 }
 
-function my_get_headers($url, $httpUsername, $httpPassword) {
+function HttpClient_get_headers($url, $httpUsername, $httpPassword) {
 	$url_info=parse_url($url);
 	if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
 		if (!login_isSSLSupported()) {
@@ -552,7 +551,7 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
 // PHP5 get_headers function, but with authentication option
 // currently supports only basic auth
 // @param max number of headers, to prevent infinite loop if no eof is sent in the headers response
-function OLD_my_get_headers($url, $httpUsername, $httpPassword, $max=20) {
+function my_get_headers($url, $httpUsername, $httpPassword, $max=20) {
    $url_info=parse_url($url);
    if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
    	if (!login_isSSLSupported()) {

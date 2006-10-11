@@ -13,16 +13,17 @@
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
 	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
-	<xsl:param name="web">/repos</xsl:param>
-	<!-- static contents urls, set to {$web}/style/ for default theme -->
-	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>/style/</xsl:param>
-	<xsl:param name="cssUrl-pe"><xsl:value-of select="$web"/>/themes/pe/style/</xsl:param>
+	<xsl:param name="web">http://localhost:8085/repos/</xsl:param>
+	<xsl:param name="static">http://localhost/repos/</xsl:param>
+	<!-- static contents urls, set to {$web}style/ for default theme -->
+	<xsl:param name="cssUrl"><xsl:value-of select="$static"/>style/</xsl:param>
+	<xsl:param name="cssUrl-pe"><xsl:value-of select="$static"/>themes/pe/style/</xsl:param>
 	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
-	<xsl:param name="editUrl"><xsl:value-of select="$web"/>/edit</xsl:param>
+	<xsl:param name="editUrl"><xsl:value-of select="$web"/>edit/</xsl:param>
 	<!-- we don't want to force the CSS to set margins everywhere -->
 	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- starpage to use as parent directory of 'trunk' -->
-	<xsl:param name="startpage"><xsl:value-of select="$web"/>/open/start/</xsl:param>
+	<xsl:param name="startpage"><xsl:value-of select="$web"/>open/start/</xsl:param>
 	<!-- TODO followConversions: maintain repository conversions, meaning that:
 	- 'trunk',' branches', 'tags' can not be renamed or removed
 	-  (actually nothing in the same dir as 'trunk' can be renamed or removed).
@@ -54,7 +55,7 @@
 				<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}global.css"/>
 				<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}repository/repository.css"/>
 				<!-- install the repos script bundle -->
-				<script type="text/javascript" src="{$web}/scripts/head.js"></script>
+				<script type="text/javascript" src="{$static}scripts/head.js"></script>
 			</head>
 			<body class="repository xml">
 				<xsl:apply-templates select="svn"/>
@@ -85,7 +86,7 @@
 		</xsl:param>
 		<div id="commandbar">
 		<a id="reposbutton">
-			<img src="{$web}/style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
+			<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
 		</a>
 		<xsl:if test="/svn/index/updir">
 			<xsl:if test="string-length($parentpath)>0">
@@ -96,8 +97,8 @@
 			</xsl:if>
 		</xsl:if>
 		<xsl:if test="$editUrl">
-			<a id="createfolder" class="command translate" href="{$editUrl}/mkdir/?target={@path}/">new folder</a>
-			<a id="upload" class="command translate" href="{$web}/upload/?target={@path}/">upload</a>
+			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={@path}/">new folder</a>
+			<a id="upload" class="command translate" href="{$web}upload/?target={@path}/">upload</a>
 		</xsl:if>
 		<!--
 		<a class="command" href="{$web}/tutorials/?show=networkfolder">
@@ -109,7 +110,7 @@
 				<xsl:with-param name="filetype" select="'_tortoisefolder'"/>
 			</xsl:call-template>check out</a>
 		-->
-		<a id="history" class="command translate" href="{$web}/open/log/?target={@path}/">folder history</a>
+		<a id="history" class="command translate" href="{$web}open/log/?target={@path}/">folder history</a>
 		<a id="refresh" class="command translate" href="#" onclick="window.location.reload( true )">refresh</a>
 		<a id="logout" class="command translate" href="/?logout">logout</a>
 		<!-- print, possibly plugin -->
@@ -166,9 +167,9 @@
 			<div class="actions">
 				<a id="open:{$id}" class="action" href="{@href}">open</a>
 				<xsl:if test="$editUrl">
-					<a id="rename:{$id}" class="action" href="{$editUrl}/rename/?target={../@path}/{@href}">rename</a>
+					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{@href}">rename</a>
 					<span class="action">copy</span>
-					<a id="delete:{$id}" class="action" href="{$editUrl}/delete/?target={../@path}/{@href}">delete</a>
+					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{@href}">delete</a>
 				</xsl:if>
 			</div>
 			<a id="f:{$id}" class="folder" href="{@href}">
@@ -187,13 +188,13 @@
 		<xsl:param name="n" select="count(/svn/index/dir) + position() - 1"/>
 		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
-				<a id="open:{$id}" class="action" title="this file can be opened in Repos" href="{$web}/open/?target={../@path}/{@href}">open</a>
+				<a id="open:{$id}" class="action" title="this file can be opened in Repos" href="{$web}open/?target={../@path}/{@href}">open</a>
 				<xsl:if test="$editUrl">
-					<a id="rename:{$id}" class="action" href="{$editUrl}/rename/?target={../@path}/{@href}">rename</a>
+					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{@href}">rename</a>
 					<span class="action">copy</span>
-					<a id="delete:{$id}" class="action" href="{$editUrl}/delete/?target={../@path}/{@href}">delete</a>
+					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{@href}">delete</a>
 					<span class="action">lock</span>
-					<a id="upload:{$id}" class="action" href="{$web}/upload/?target={../@path}/{@href}">upload changes</a>
+					<a id="upload:{$id}" class="action" href="{$web}upload/?target={../@path}/{@href}">upload changes</a>
 				</xsl:if>
 			</div>
 			<a id="f:{$id}" class="file-{$filetype} file" href="{@href}">
