@@ -538,6 +538,8 @@ function my_get_headers($url, $httpUsername, $httpPassword) {
 	}
 
 	$client = new HttpClient($host, $port);
+	$client->setHeadersOnly(true);
+	$client->setHandleRedirects(false);
 	if ($httpUsername != null) {
 		$client->setAuthorization($httpUsername, $httpPassword);
 	}

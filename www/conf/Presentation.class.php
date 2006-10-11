@@ -128,8 +128,8 @@ class Presentation extends Smarty {
 			$handle = fopen($file, "w");
 			fwrite($handle, $this->fetch($resource_name, $cache_id, $compile_id));
 			fclose($handle);
-			// should be handled by the root page
-			$nexturl = getWebapp() . 'view/?result=' . basename($file);
+			// should be handled by the root page, but on the same hostso getWebapp() can not be used
+			$nexturl = getParent(getParent(repos_getSelfUrl())) . 'view/?result=' . basename($file);
 			header("Location: $nexturl");
 		} else {
 			parent::display($resource_name, $cache_id, $compile_id);

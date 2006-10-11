@@ -28,7 +28,8 @@ class TestServerSettings extends UnitTestCase {
 	}
 
 	function testErrorReporting() {
-		$this->assertFalse(ini_get('display_errors'), "We handle the errors ourselves, and if we don't php should not print them as HTML");
+		//$this->assertFalse(ini_get('display_errors'), "We handle the errors ourselves, and if we don't php should not print them as HTML");
+		$this->assertTrue(ini_get('display_errors'), "For internal use we don't want to risk losing error messages");
 	}
 	
 	function testFileUploads() {
