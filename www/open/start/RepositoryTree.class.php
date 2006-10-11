@@ -2,6 +2,7 @@
 
 /**
  * Represents the starting poins a user has in a repository.
+ * - Excludes * = r resources, except [/], because they are usually public messages and shares
  *
  * Limitations:
  * - Does not support groups that contain other groups
@@ -88,6 +89,7 @@ class RepositoryTree {
 			foreach ($accessrow as $id => $policy) {
 				if (!$this->_isPolicy($policy)) continue;
 				if ($id=='*') {
+					if ($section != '/' && $policy=='r') continue; // don't list public shared readonly resources
 					$e[] = new RepositoryEntryPoint($section, $policy, true);
 				} else if (substr($id, 0, 1) == '@') {
 					if (in_array(substr($id, 1), $groups)) {

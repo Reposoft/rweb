@@ -311,19 +311,28 @@ function repos_getSelfQuery() {
  * @return String absolute path, folder, existing
  */
 function getSystemTempDir() {
-	if (!empty($_ENV['TMP'])) {
-		$tempdir = $_ENV['TMP'];
-	} elseif (!empty($_ENV['TMPDIR'])) {
-		$tempdir = $_ENV['TMPDIR'];
-	} elseif (!empty($_ENV['TEMP'])) {
-		$tempdir = $_ENV['TEMP'];
+	$type = "no temp dir resolved";
+	if (getenv('TMP')) {
+		$type = 'TMP';
+		$tempdir = getenv('TMP');
+	} elseif (getenv('TMPDIR')) {
+		$type = 'TMPDIR';
+		$tempdir = getenv('TMPDIR');
+	} elseif (getenv('TEMP')) {
+		$type = 'TEMP';
+		$tempdir = getenv('TEMP');
 	} else {
-		$tempdir = dirname(tempnam('', 'emptytempfile'));
+		$type = 'tempnam';
+		$tmpfile = tempnam('', 'emptytempfile');
+		$tempdir = dirname($tmpfile);
+		unlink($tmpfile);
+		if (strlen($tempdir)<4) trigger_error("Attempted to use tempnam() to get system temp dir, but the result is: $tempdir", E_USER_ERROR);
 	}
 
-	if (empty($tempdir)) { die ('Can not get the system temp dir'); }
+	if (empty($tempdir)) { trigger_error('Can not get the system temp dir', E_USER_ERROR); }
 	
 	$tempdir = rtrim(toPath($tempdir),'/').'/';
+	if (strlen($tempdir) < 4) { trigger_error('Can not get the system temp dir, "'.$tempdir.'" is too short. Method: '.$type, E_USER_ERROR); }
 	
 	return $tempdir;
 }
@@ -566,15 +575,15 @@ function escapeArgument($argument) {
 // if windows sees %abc%, it checks if abc is an environment variables. \% prevents this but adds the backslash to the string.
 function escapeWindowsVariables($arg) {
 	//$arg = str_replace('%','#', $arg);
-	if(substr_count($arg, '%')>1) {
-		// this should be very rare, so it can be an expensive operation
-		foreach($_ENV as $key => $value) {
-			while($s = stristr($arg, "%$key%")) { // must ignore case
-				$arg = substr($arg, 0, strlen($arg)-strlen($s)).'#'.substr($s,1);
-			}
-		}
+	$i = strpos($arg, '%');
+	if ($i === false) return $arg;
+	$j = strpos($arg, '%', $i+1);
+	if ($j === false) return $arg;
+	if ($j > $i+1 && getenv(substr($arg, $i+1, $j-$i-1))) {
+		return substr($arg, 0, $j).'#'.escapeWindowsVariables(substr($arg,$j+1));
+	} else {
+		return substr($arg, 0, $j).escapeWindowsVariables(substr($arg,$j));
 	}
-	return $arg;
 }
 
 /**

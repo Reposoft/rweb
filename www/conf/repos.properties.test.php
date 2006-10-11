@@ -169,11 +169,23 @@ class TestReposProperties extends UnitTestCase {
 	}
 	
 	// ------ system functions ------
+
+	function testGetSystemTempDir() {
+		$dir = getSystemTempDir();
+		$this->assertTrue(strEnds($dir, '/'));
+		$this->assertTrue(strlen($dir)>=4, "minimal temp dir is /tmp/ or C:/tmp/");
+		$this->assertTrue(file_exists($dir));
+		$this->assertTrue(is_writable($dir));
+		$this->assertTrue(isPath($dir));
+		$this->assertTrue(isAbsolute($dir));
+		$this->assertTrue(isFolder($dir));
+	}
 	
 	function testGetTempDir() {
 		$dir = getTempDir();
 		$this->assertTrue(strBegins($dir, getSystemTempDir()));
 		$this->assertTrue(strEnds($dir, '/'));
+		$this->assertTrue(strlen($dir)>=strlen(getSystemTempDir()), "webapp name should be appended to system temp dir");
 		$this->assertTrue(file_exists($dir));
 		$this->assertTrue(is_writable($dir));
 		$this->assertTrue(isPath($dir));
@@ -308,11 +320,12 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('"a%NOT-AN-ENV-ENTRY%b"', escapeArgument('a%NOT-AN-ENV-ENTRY%b'),
 			'double percent enclosing something that has not been SET should not be a problem');
 		if (isWindows()) {
-			$this->assertTrue(isset($_ENV['OS']), 'For this test to work OS must be an environment variable');
-			$this->assertEqual('"a#OS%b"', escapeArgument('a%OS%b'));
-			$this->assertEqual('"#OS%b%"', escapeArgument('%OS%b%'));
-			$this->assertEqual('"#OS#OS%"', escapeArgument('%OS%OS%'));
-			$this->assertEqual('"#OS%b%%cd#OS%"', escapeArgument('%OS%b%%cd%OS%'));
+			$this->assertTrue(getenv('OS'), 'For this test to work OS must be an environment variable');
+			$this->assertEqual('"a%OS#b"', escapeArgument('a%OS%b'));
+			$this->assertEqual('"%OS#b%"', escapeArgument('%OS%b%'));
+			$this->assertEqual('"%O%OS#b%"', escapeArgument('%O%OS%b%'));
+			$this->assertEqual('"%OS#OS%"', escapeArgument('%OS%OS%'));
+			$this->assertEqual('"%OS#b%%cd%OS#"', escapeArgument('%OS%b%%cd%OS%'));
 		}
 	}
 	

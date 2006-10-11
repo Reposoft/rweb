@@ -100,25 +100,36 @@ class TestRepositoryTree extends UnitTestCase {
 	
 	function test_getEntryPointsWithAsterisk() {
 		$acl = array();
-		$acl['/'] = array('*' => 'rw'); // the most basic acl
+		$acl['/'] = array('*' => 'r'); // the most basic acl
 		$e = $this->tree->_getEntryPointsForUserOrGroup($acl, 'sven', array());
 		$this->assertEqual(1, count($e));
 		$this->assertEqual('', $e[0]->getPath()); // no other paths in ACL have tailing slash
-		$this->assertEqual(false, $e[0]->isReadOnly());
+		$this->assertEqual(true, $e[0]->isReadOnly());
 		// for "/", displayname should be the repository name
 		$this->assertEqual(basename(getRepository()), $e[0]->getDisplayname());
 	}
 
 	function test_getEntryPointsWithAsteriskReadOnlyTrunk() {
 		$acl = array();
-		$acl['/trunk'] = array('*' => 'r'); // the most basic acl
+		$acl['/trunk'] = array('*' => 'rw');
 		$e = $this->tree->_getEntryPointsForUserOrGroup($acl, 'sven', array());
 		$this->assertEqual(1, count($e));
-		$this->assertEqual('/trunk', $e[0]->getPath()); // no other paths in ACL have tailing slash
-		$this->assertEqual(true, $e[0]->isReadOnly());
+		$this->assertEqual('/trunk', $e[0]->getPath());
+		$this->assertEqual(false, $e[0]->isReadOnly());
 		// for "/", displayname should be the repository name
 		$this->assertEqual('trunk', $e[0]->getDisplayname());
 	}	
+
+	function test_getEntryPointsIgnoreReadOnlyPublicFiles() {
+		$acl = array();
+		//$acl['/sven'] = array('sven' => 'rw');
+		$acl['/sven/public/xmlfile.xml'] = array('sven' => 'r'); // is obviously a folder
+		// read only files is considered temporary shares, not a target for navigation
+		$acl['/trunk/public/xmlfile.xml'] = array('*' => 'r');
+		$e = $this->tree->_getEntryPointsForUserOrGroup($acl, 'sven', array());
+		$this->assertEqual(1, count($e), "Don't list readonly resources that are accessible to everyone");
+		$this->assertEqual('/sven/public/xmlfile.xml', $e[0]->getPath());
+	}
 	
 	// test the small entry point class too
 	function testRepositoryEntryPoint() {
