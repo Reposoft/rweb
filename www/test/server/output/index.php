@@ -21,17 +21,20 @@ if (is_numeric($max) && $max > 0 && $max < 60*60) {
 	$report->info("Note that set_time_limit has not been called, so depending on the server configuration the script might terminate prematurely.");
 	if ($explicitFlush) $report->warn("Doing explicit flush in this page, so this test does not nessecarily reflect the application's behaviour.");
 	$report->info("---- output starts now -----");
-	ob_flush(); flush(); // one explicit flush here to see the explanation
+	if (ob_get_contents()) {
+		$report->fail("Seem like output is buffered");
+		ob_flush(); flush();
+	}
 } else {
 	trigger_error("Invalid max value: $max");
 }
 
 for ($i = 1; $i <= $max; $i++) {
 	$report->info("|$i|");
-	if ($explicitFlush) { ob_flush(); flush(); }
+	if ($explicitFlush && ob_get_contents()) { ob_flush(); flush(); }
 	sleep(1);
 }
-
+if (!ob_get_contents()) $report->ok("The buffer is empty. That's good.");
 $report->info("---- output completed ----");
 $report->display();
  

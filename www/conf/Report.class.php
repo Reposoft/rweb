@@ -12,6 +12,9 @@
 // TODO convert to HTML-entities where needed (without ending up in some kind of wiki syntax). see test reporter.php
 require_once(dirname(__FILE__).'/repos.properties.php');
 
+// reports may be long running
+set_time_limit(60*5);
+
 $reportDate = date("Y-m-d\TH:i:sO");
 
 function getReportTime() {
@@ -252,8 +255,9 @@ class Report {
 		$this->_print('<script src="/repos/plugins/titles/sweetTitles.js" type="text/javascript"></script>');
 		$this->_print("</head>\n");
 		$this->_print("<body>\n");
-		$this->_print("<div id=\"workspace\">\n");
-		$this->_print("<div id=\"contents\">\n");
+		// don't use containers, because then the prowser can not show process as the operation proceeds
+		//$this->_print("<div id=\"workspace\">\n");
+		//$this->_print("<div id=\"contents\">\n");
 		$this->_print("<h1>$title</h1>\n");
 		$this->_print('<p>'.getReportTime().'</p>');
 		} else {
@@ -264,7 +268,7 @@ class Report {
 	}
 	
 	function _pageEnd($code = 0) {
-		if (!$this->offline) $this->_print("</div></div></body></html>\n\n");
+		if (!$this->offline) $this->_print("</body></html>\n\n");
 		exit( $code );
 	}
 	
