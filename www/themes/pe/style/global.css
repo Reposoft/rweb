@@ -72,7 +72,7 @@ code {
 	background-color: #eeeeee;
 	border-top: 5px solid #FDBC4B;
 	border-bottom: 1px solid #dddddd;
-	height: 25px;
+	padding: 6px;
 }
 #contents {
 	/* overflow: -moz-scrollbars-vertical; */
@@ -102,14 +102,13 @@ code {
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 .command {
-	position: relative;
-	background-position: left center;
+	background-position: center left;
 	background-repeat: no-repeat;
-	font-size: 82.5%;
-	height: 26px;
-	margin: 1px;
-	padding: 5px;
-	padding-left: 28px; /* assuming that all commands have an icon */
+	margin: 0.2em;
+	padding-left: 28px;
+	padding-right: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 a.command {
 	color: #333333;
@@ -204,7 +203,7 @@ textarea
 }
 select
 {
-    coloe: black;
+    color: black;
 	margin: 0px;
 	padding: 0px;
 }

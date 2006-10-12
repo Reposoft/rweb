@@ -115,8 +115,10 @@ code {
 	margin-right: 5px;
 	margin-top: 0px;
 	margin-bottom: 0px;
-	padding: 0.2em;
-	padding-left: 20px; /* assuming that all commands have an icon */
+	padding-left: 20px;
+	padding-right: 0.2em;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
 }
 a.command {
 	color: #333333;
