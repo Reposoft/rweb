@@ -2,21 +2,7 @@
 /* make sure that different browser text size settings work */
 body {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
-	font-size: small;
-}
-/* seems that IE treats XML pages differently */
-body.xml {
-	font-size: x-small;
-}
-/* things that IE does not understand */
-html>body,
-html>body div,
-html>body p,
-html>body th,
-html>body td,
-html>body li,
-html>body dd {
-	font-size: small;
+	font-size: 82.5%;
 }
 /* resume with em font sizes relative to the above */
 a {
