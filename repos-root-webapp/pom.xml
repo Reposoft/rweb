@@ -11,7 +11,7 @@
   <name>Repos webapp componenet parent</name>
   <version>1.0</version>
   <properties>
-	  <jetty-version>6.0.1</jetty-version>
+	  <jetty-version>6.0.0rc0</jetty-version>
   </properties>
   <dependencies>
     <dependency>
