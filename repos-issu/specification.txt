@@ -1,0 +1,6 @@
+1.0
+- Create issue with Name field only, returning a readable ID
+- For the creator, return the ID as a short URL
+
+
+- Add labels, any text with autocomplete, to issues in a project

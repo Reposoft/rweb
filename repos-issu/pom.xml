@@ -27,23 +27,12 @@
     <!-- hibernate -->
     <dependency>
       <groupId>org.springframework</groupId>
-      <artifactId>spring-jdbc</artifactId>
-      <version>${spring-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-dao</artifactId>
-      <version>${spring-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
       <artifactId>spring-hibernate3</artifactId>
       <version>${spring-version}</version>
     </dependency>
     <!-- run this command from the downloaded hibernate-annotations jar's lib folder:
       mvn install:install-file -Dfile=ejb3-persistence.jar -DgroupId=javax.persistence
       -DartifactId=ejb -Dversion=3.0 -Dpackaging=jar
-      -->
     <dependency>
       <groupId>javax.persistence</groupId>
       <artifactId>ejb</artifactId>
@@ -52,12 +41,13 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate</artifactId>
-      <version>3.2.0.cr2</version>
+      <version>3.2.0.cr5</version>
     </dependency>
+     use transitive dependencies -->
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-annotations</artifactId>
-      <version>3.2.0.cr1</version>
+      <version>3.2.0.cr3</version>
     </dependency>
     <!-- testing -->
     <dependency>
@@ -69,7 +59,7 @@
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
-      <version>1.8.0.4</version>
+      <version>1.8.0.7</version>
       <scope>test</scope>
     </dependency>
     <dependency>
