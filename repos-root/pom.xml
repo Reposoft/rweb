@@ -68,6 +68,20 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <!-- recognize @todo tag in types, constructors and methods -->
+        <configuration>
+          <tags>
+            <tag>
+              <name>todo</name>
+              <placement>tcm</placement>
+              <head>To do something:</head>
+            </tag>
+          </tags>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <reporting>
