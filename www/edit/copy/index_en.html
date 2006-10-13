@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Copy repos item</title>
+<!--{$head}-->
+</head>
+
+<body>
+<div id="workspace">
+<div id="commandbar">
+<a id="repository" class="command" href="{=$folder|urlEncodeNames}">return to repository</a>
+</div>
+<div id="contents">
+<h1>Copy or move <span class="filename">{=$oldname}</span></h1>
+<p>Makes a copy of a file or folder at a new location in the repository.
+Optionally the name can be changed too. Optionally delete the original file or folder (which makes a move operation).</p>
+<form id="copy" name="copy" method="get" action="#">
+  <fieldset>
+	<legend>repository copy of {=$target}</legend>
+    <input name="target" type="hidden" id="target" value="{=$target}" />
+  <p>
+    <label for="name">copy the current</label>
+    <input id="name" name="name" type="text" size="40" disabled="disabled" value="{=$oldname}" />
+    <input id="oldname" name="oldname" type="hidden" value="{=$oldname}" />
+  </p>
+	<p><small>
+		<label for="repository">within repository</label>
+		<input id="repository" name="repository" type="text" size="40" disabled="disabled" value="{=$repository}" />
+  	</small></p>
+	<p>
+		<label for="folder">from folder</label>
+		<input id="folder" name="folder" type="text" size="40" disabled="disabled" value="{=$folder}" />	
+	</p>
+	<p>
+		<label for="tofolder">to folder</label>
+		<input id="tofolder" name="tofolder" type="text" size="40" value="" class="required" />		
+	</p>
+	<p>
+		<label for="newname">and change name from {=oldname} to</label>
+	   <input name="newname" type="text" id="name" size="40" />
+	</p>
+	<p>
+		<label for="move">and delete the original</label>
+		<input id="moveno" name="move" type="radio" value="0" checked="checked"/> No<br />
+		<input id="moveyes" name="move" type="radio" value="1"/> Yes
+	</p>
+  <p>
+    <label for="message">history text</label>
+    <textarea name="message" id="message" cols="30" rows="2" tabindex="2" ></textarea>
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" type="submit" name="submit" value="Copy" tabindex="3" />
+  </p>
+  </fieldset>
+</form>
+<p>Copies inside the repository take no extra storage space. It is the current revision that is copied.
+So a copy can be a good way to share a file as it looks now, but without sharing the future changes to the original.</p>
+</div>
+</div>
+</body>
+</html>
