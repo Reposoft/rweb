@@ -1,5 +1,8 @@
-/* repository visualization, shared classes */
-/* make sure that different browser text size settings work */
+/* repos.se common styles for Project Engine integration */
+html {
+	/* Fix IE background image flicker */
+	filter: expression(document.execCommand("BackgroundImageCache", false, true));
+}
 body {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
 	font-size: 82.5%;
