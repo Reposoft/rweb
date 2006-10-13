@@ -9,7 +9,7 @@
 	<name>repos:root-spring</name>
 	<packaging>pom</packaging>
 	<properties>
-		<spring-version>2.0-rc2</spring-version>
+		<spring-version>2.0</spring-version>
 	</properties>
 	<dependencies>
 		<!-- using slf4j instead of commons logging -->
@@ -32,6 +32,18 @@
 		        </exclusion>
 		    </exclusions>
 		</dependency>
-		<!-- aopalliance, aspectjweaver and aspectjrt should also be transitive -->
+		<!-- aopalliance should also be transitive -->
+		<!-- aspectj is marked optional in spring-aop pom -->
+		<dependency>
+			<groupId>aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.5.2a</version>
+		</dependency>
+		<dependency>
+			<groupId>aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.5.2a</version>
+		</dependency>
 	</dependencies>
 </project>
+
