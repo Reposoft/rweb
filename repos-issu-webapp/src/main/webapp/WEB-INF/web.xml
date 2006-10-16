@@ -4,6 +4,17 @@
 
 <web-app>
     <display-name>issu.se</display-name>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<!-- repos-issu-context -->
+		<param-value>classpath:context.xml</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
     <servlet>
         <servlet-name>IssuApplication</servlet-name>
         <servlet-class>wicket.protocol.http.WicketServlet</servlet-class>
