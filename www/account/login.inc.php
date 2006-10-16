@@ -403,13 +403,12 @@ function isLoggedIn() {
 }
 
 /**
- * @return logged in username, urlencoded, or false if no user (but use isLoggedIn to check)
+ * @return logged in username, or false if no user (but use isLoggedIn to check)
  */
 function getReposUser() {
 	if (!isLoggedIn()) return false;
-	// the username is used in urls (like the repository home dir for the user)
-	//  so it is urlencoded to prevent urlinjection
-	return urlencode($_SERVER['PHP_AUTH_USER']);
+	validateUsername($_SERVER['PHP_AUTH_USER']);
+	return $_SERVER['PHP_AUTH_USER'];
 }
 function _getReposPass() {
 	if (!isLoggedIn()) return false;
@@ -417,6 +416,18 @@ function _getReposPass() {
 }
 function getReposAuth() {
 	return "This function is deprecated. Will be removed in 1.0"; // $_SERVER['HTTP_AUTHORIZATION'];
+}
+/**
+ * Triggers error on invalid usernames, this protects from urlinjection when username is used in paths
+ * TODO when there is a GUI for creating users, there should be a lot more restrictions than this function has.
+ * @return true if the provided string is a valid username
+ */
+function validateUsername($username) {
+	if (strContains($username, '/')) trigger_error('Invalid username. Can not contain "/".');
+	if (strContains($username, '\\')) trigger_error('Invalid username. Can not contain "\\".');
+	if (strContains($username, '"') || strContains($username, '\'') || strContains($username, '`'))
+		trigger_error('Invalid username. Can not contain quotes.');
+	return true;
 }
 
 // *** Subversion client usage ***
@@ -494,7 +505,7 @@ function login_getMimeType($targetUrl) {
  * @return Mandatory arguments to the svn command
  */
 function login_getSvnSwitches() {
-	$auth = '--username='.getReposUser().' --password='._getReposPass().' --no-auth-cache';
+	$auth = '--username='.escapeArgument(getReposUser()).' --password='.escapeArgument(_getReposPass()).' --no-auth-cache';
 	$options = '--non-interactive --config-dir '.SVN_CONFIG_DIR;
 	return $auth.' '.$options;
 }

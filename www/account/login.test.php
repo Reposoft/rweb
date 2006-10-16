@@ -16,6 +16,14 @@ class Login_include_Test extends UnitTestCase {
 		//unset($_SERVER['PHP_AUTH_USER']);
 		//unset($_SERVER['PHP_AUTH_PW']);
 	}
+	
+	function testGetReposUserEncode() {
+		$_SERVER['PHP_AUTH_USER'] = "A B";
+		$this->assertEqual("A B", getReposUser(), "Username should not be encoded");
+		$_SERVER['PHP_AUTH_USER'] = "A+B";
+		$this->assertEqual("A+B", getReposUser());
+		unset($_SERVER['PHP_AUTH_USER']);
+	}
 
 	function testGetAuthNameReturnsSomething() {
 		$url = TESTREPO;
@@ -84,6 +92,8 @@ class Login_include_Test extends UnitTestCase {
 		$_SERVER['PHP_AUTH_PW'] = 'm&p8ss';
 		$url = _getLoginUrl('https://my.repo:88/home');
 		$this->assertEqual('https://mE:m&p8ss@my.repo:88/home', $url);
+		unset($_SERVER['PHP_AUTH_USER']);
+		unset($_SERVER['PHP_AUTH_PW']);
 	}
 	
 	function testGetLoginUrlNoUser() {
@@ -91,6 +101,15 @@ class Login_include_Test extends UnitTestCase {
 		unset($_SERVER['PHP_AUTH_PW']);
 		$url = _getLoginUrl('https://my.repo:88/home');
 		$this->assertEqual('https://my.repo:88/home', $url);
+	}
+	
+	function testGetSvnSwitches() {
+		$_SERVER['PHP_AUTH_USER'] = 'a b';
+		$_SERVER['PHP_AUTH_PW'] = 'c"d';
+		$this->assertTrue(strContains(login_getSvnSwitches(), '--username="a b"'), "Username should be escaped for command line.");
+		$this->assertTrue(strContains(login_getSvnSwitches(), '--password="c\\"d"'), "Password should be escaped for command line.");
+		unset($_SERVER['PHP_AUTH_USER']);
+		unset($_SERVER['PHP_AUTH_PW']);
 	}
 	
 	// belongs to a configuration test, does not work if the demo repository is not in configuration
