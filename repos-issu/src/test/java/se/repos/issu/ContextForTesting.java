@@ -6,6 +6,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import se.repos.issu.persistence.DatabaseSetup;
+
 public class ContextForTesting {
 
 	private static ApplicationContext testContext = null;

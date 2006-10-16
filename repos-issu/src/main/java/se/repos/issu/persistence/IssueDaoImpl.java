@@ -2,7 +2,6 @@ package se.repos.issu.persistence;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.hibernate.SessionFactory;
 

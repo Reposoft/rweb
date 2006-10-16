@@ -1,6 +1,6 @@
 /* $license_header$
  */
-package se.repos.issu;
+package se.repos.issu.persistence;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import org.springframework.jdbc.object.SqlUpdate;
 public class DatabaseSetup {
 
 	public DatabaseSetup(ApplicationContext applicationContext) {
-		Resource databaseSetup = applicationContext.getResource("database/setup.sql");
+		Resource databaseSetup = applicationContext.getResource(ApplicationContext.CLASSPATH_URL_PREFIX + "database/setup.sql");
 		String setupSql = getSqlFromFile(databaseSetup);
 		DataSource dataSource = (DataSource) applicationContext.getBean("dataSource");
 		runSql(setupSql, dataSource);
