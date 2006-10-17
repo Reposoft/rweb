@@ -12,8 +12,11 @@ $name = $rurl['host'];
 if(isset($_GET['ca'])) {
 	importCertificateAuthority($report, $_GET['ca'], $name);
 }
-if(isset($_GET[SUBMIT]) && $_GET[SUBMIT]='accept') {
+if(isset($_GET['accept'])) {
 	acceptCertificate($report, $r);
+}
+if(isset($_GET['clear'])) {
+	clearAuthenticationConfig($report);
 }
 
 //$report->info('http://svnbook.red-bean.com/nightly/en/svn.advanced.html#svn.advanced.confarea');
@@ -62,14 +65,24 @@ if (strBegins($r, 'https://')) {
 		$report->ok("Repository access is OK. No furthere certificate management needed.");
 	}
 }
+$report->info('<form method="get" action="#"><input name="clear" value="Clear authentication cache" type="submit"/></form>');
+$report->info('<form method="get" action="#"><input name="submit" value="retry" type="submit"/></form>');
 
 $report->display();
 
 function handleCertificateNotTrusted($report) {
 	$report->fail("The server certificate of this repository is not signed by a trusted issuer");
-	$report->info("The Certificate Authority must be added to the runtime config. Paste a URL to the CA.crt here:");
+	//$report->info("The Certificate Authority must be added to the runtime config. Paste a URL to the CA.crt here:");
 	//$report->info('<form method="get" action="#"><input name="ca" type="text" size="60"/><input type="submit"/></form>');
-	$report->info('<form method="get" action="#"><input name="submit" value="accept" type="submit"/></form>');
+	$report->info('<form method="get" action="#"><input name="accept" value="Permanently accept the certificate of this repository" type="submit"/></form>');
+}
+
+function clearAuthenticationConfig($report) {
+	if (deleteFolder(toPath(SVN_CONFIG_DIR.'auth'.DIRECTORY_SEPARATOR))) {
+		$report->ok("Successfuly deleted authenticatino cache");
+	} else {
+		$report->error("Could not remove authentication cache");
+	}
 }
 
 /**
@@ -79,7 +92,7 @@ function handleCertificateNotTrusted($report) {
  */
 function acceptCertificate($report, $repository) {
 	// a command without no-auth-cache that is used to probe the certificate
-	$cmd = getCommand('svn').' --username=test --password=test --config-dir '.SVN_CONFIG_DIR.' info '.$repository;
+	$cmd = getCommand('svn').' --config-dir '.SVN_CONFIG_DIR.' info '.$repository;
 	
 	$report->info("Run the following command on the server, and chose to accept certificate permanently:");
 	$report->info(array($cmd));

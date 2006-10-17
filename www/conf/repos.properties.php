@@ -522,7 +522,10 @@ function _authorizeFilesystemModify($path) {
 	if (strBegins($path, getSystemTempDir())) {
 		return true;
 	}
-	if (strBegins($path, toPath(dirname(__FILE__)))) {
+	if (strBegins($path, toPath(dirname(dirname(__FILE__))))) {
+		return true;
+	}
+	if (strBegins($path, toPath(dirname(dirname(dirname(__FILE__))).'/repos-config/'))) {
 		return true;
 	}
 	trigger_error("Security error: local write not allowed in \"$path\". It is not a temp or repos dir.");// exit;
