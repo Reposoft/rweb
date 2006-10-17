@@ -530,8 +530,6 @@ function _authorizeFilesystemModify($path) {
 
 // ---- functions through which all command execution should go ---
 
-$hasencoded = false; // security check, set to true in the encoding functions and checked before 'run'
-
 /**
  * Enocdes a url for use as href,
  * does not replace URL metacharacters like /, ? and : (for port number).
@@ -558,7 +556,6 @@ function escapeCommand($command) {
 
 // Encloses an argument in quotes and escapes any quotes within it
 function escapeArgument($argument) {
-	global $hasencoded; $hasencoded = true; // security check, set to true in the encoding functions and checked before 'run'
 	// Shell metacharacters are: & ; ` ' \ " | * ? ~ < > ^ ( ) [ ] { } $ \n \r (WWW Security FAQ [Stein 1999, Q37])
 	// Use escapeshellcmd to make argument safe for command line
 	// (double qoutes around the string escapes: *, ?, ~, ', &, <, >, |, (, )
@@ -602,11 +599,6 @@ function escapeWindowsVariables($arg) {
  *   Last element is the return code (use array_pop to remove).
  */
 function repos_runCommand($commandName, $argumentsString) {
- 	global $hasencoded; if (!$hasencoded) { // security check, set to true in the encoding functions and checked before 'run'. Not real protection.
-		trigger_error("Possible security risk. No argument has been encoded.");
-		exit;
-	}
-	//echo (_repos_getFullCommand($commandName, $argumentsString)); exit;
 	exec(_repos_getFullCommand($commandName, $argumentsString), $output, $returnvalue);
 	$output[] = $returnvalue;
 	return $output;
@@ -619,10 +611,6 @@ function repos_runCommand($commandName, $argumentsString) {
  * @returns the return code of the execution. Any messages have been passed through.
  */
 function repos_passthruCommand($commandName, $argumentsString) {
- 	global $hasencoded; if (!$hasencoded) { // security check, set to true in the encoding functions and checked before 'run'. Not real protection.
-		trigger_error("Possible security risk. No argument has been encoded.");
-		exit;
-	}
 	passthru(_repos_getFullCommand($commandName, $argumentsString), $returnvalue);
 	return $returnvalue;
 }
