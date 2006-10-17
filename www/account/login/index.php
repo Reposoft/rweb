@@ -7,10 +7,15 @@ require( dirname(dirname(__FILE__)) . "/login.inc.php" );
  * @param String repository, with tailing slash
  */
 function getHomeDir($repository) {
-	$home = $repository . rawurlencode(getReposUser()) . '/trunk/';
+	$home = $repository . login_encodeUsernameForURL(getReposUser()) . '/trunk/';
 	$exist = login_getFirstNon404Parent($home);
 	if (!$exist) trigger_error("Could not find a valid URL or parent URL for $home", E_USER_ERROR);
 	return $exist;
+}
+
+function login_encodeUsernameForURL($username) {
+	$username = str_replace(' ', '%20', $username);
+	return $username;
 }
 
 function isHttps($repository) {

@@ -28,7 +28,7 @@ $report->info("create user database, base64 or MD5 encoded using htpasswd");
 $users =
 "svensson:rrE3/9iLvCoFU\n". //password 'medel'
 "test:n8F28qRYJJ4Q6\n". //password 'test'
-"$trickyusername:".base64_encode('test')."\n"; //password 'test'
+"$trickyusername:UjhsQAWhDE0UY\n"; //password 'test'
 $usersencoding = 'base64';
 if (isWindows()) { // MD5
 	$users = 
