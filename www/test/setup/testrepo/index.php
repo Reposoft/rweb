@@ -21,15 +21,20 @@ $report->info("Running: svnadmin create \"$repo\"");
 
 setup_svnadmin("create $repo");
 
+// Too tricky for apache passwd file //$trickyusername = "Åke Mühl-Ägg";
+$trickyusername = "Sv@n s-on";
+
 $report->info("create user database, base64 or MD5 encoded using htpasswd");
 $users =
-"svensson:rrE3/9iLvCoFU\n".
-"test:n8F28qRYJJ4Q6\n";
+"svensson:rrE3/9iLvCoFU\n". //password 'medel'
+"test:n8F28qRYJJ4Q6\n". //password 'test'
+"$trickyusername:".base64_encode('test')."\n"; //password 'test'
 $usersencoding = 'base64';
 if (isWindows()) { // MD5
 	$users = 
 	"svensson:\$apr1\$h03.....\$vSQzcy3gId0sKgc/JvRCs.\n".
-	"test:\$apr1\$Sy2.....\$zF88UPXW6Q0dG3BRHOQ2m0\n";
+	"test:\$apr1\$Sy2.....\$zF88UPXW6Q0dG3BRHOQ2m0\n".
+	"$trickyusername:\$apr1\$QT......\$Ce3c7V78FmQ1hyJhp3h6o/\n";
 	$usersencoding = 'MD5';
 }
 
@@ -42,9 +47,9 @@ if (createFileWithContents($userfile, $users, true)) {
 
 $report->info("create ACL");
 $aclfile = $test . "admin/repos-access";
-$acl = '
+$acl = "
 [groups]
-demoproject = svensson, test
+demoproject = svensson, test, $trickyusername
 
 [/]
 
@@ -53,6 +58,9 @@ svensson = rw
 
 [/test]
 test = rw
+
+[/$trickyusername]
+$trickyusername = rw
 
 [/demoproject]
 @demoproject = rw
@@ -66,7 +74,7 @@ test = rw
 [/demoproject/trunk/public]
 @demoproject = rw
 * = r
-';
+";
 if (createFileWithContents($aclfile, $acl, true)) {
 	$report->ok("Successfully created subversion ACL file $aclfile");
 } else {
@@ -122,12 +130,16 @@ createFolder($wc."demoproject/trunk/public/");
 $publicxml = $wc."demoproject/trunk/public/xmlfile.xml";
 createFileWithContents($publicxml, "<empty-document/>\n");
 
-setup_svn("add {$wc}svensson/");
-setup_svn("add {$wc}test/");
-setup_svn("add {$wc}demoproject/");
+setup_svn("add {$wc}*");
 setup_svn("propset svn:mime-type text/xml $publicxml");
 
-setup_svn('commit -m "Created users svensson and test, and a shared project" '.$wc);
+setup_svn('commit -m "Created users svensson, test and $trickusername, and a shared project" '.$wc);
+
+# PHP mkdir can not handle UTF-8 characters
+$dir = getTempnamDir();
+setup_svn("import -m \"$trickyusername\" $dir \"file:///$repourl$trickyusername\"");
+setup_svn("import -m \"\" $dir \"file:///$repourl$trickyusername/trunk\"");
+deleteFolder($dir);
 
 # create a base structure in test/trunk/
 $folders = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z");
