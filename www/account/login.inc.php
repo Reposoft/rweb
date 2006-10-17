@@ -64,6 +64,8 @@ define('ADMIN_ACCOUNT', 'administrator');
 define('ACCOUNTS_FILE', ADMIN_ACCOUNT.'/trunk/admin/repos-users');
 define('ACCESS_FILE', ADMIN_ACCOUNT.'/trunk/admin/repos-access');
 
+define('URL_FOPEN_TIMEOUT', 10);
+
 // automatic login if a target is specified the standard way
 if (getTargetUrl()) {
 	targetLogin();
@@ -559,13 +561,13 @@ function my_get_headers($url, $httpUsername, $httpPassword, $max=20) {
 		trigger_error("Repos error: $url is a secure URL but this server does not have OpenSSL support in PHP.", E_USER_ERROR);
 	}
 	   $port = 443;
-	   @$fp=fsockopen('ssl://'.$url_info['host'], $port, $errno, $errstr, 10);
+	   @$fp=fsockopen('ssl://'.$url_info['host'], $port, $errno, $errstr, URL_FOPEN_TIMEOUT);
    } else {
 	   $port = isset($url_info['port']) ? $url_info['port'] : 80;
-	   @$fp=fsockopen($url_info['host'], $port, $errno, $errstr, 10);
+	   @$fp=fsockopen($url_info['host'], $port, $errno, $errstr, URL_FOPEN_TIMEOUT);
    }
    if($fp) {
-	   stream_set_timeout($fp, 10);
+	   stream_set_timeout($fp, URL_FOPEN_TIMEOUT);
 	   $head = "HEAD ".@$url_info['path'];
 	   if (isset($url_info['query'])) $head .= "?".@$url_info['query'];
 	   $head .= " HTTP/1.0\r\nHost: ".@$url_info['host']."\r\n";
