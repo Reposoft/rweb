@@ -14,7 +14,7 @@ function getHomeDir($repository) {
 }
 
 function login_encodeUsernameForURL($username) {
-	$username = str_replace(' ', '%20', $username);
+	//won't work on svn 1.2.3, not needed//$username = str_replace(' ', '%20', $username);
 	return $username;
 }
 
