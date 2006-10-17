@@ -26,7 +26,7 @@ if (isset($_GET['logout']) && $_GET['logout']=='verify') {
 
 function askForCredentialsBeforeLogout() {
 	// does exactly like in login
-	$repo = getRepositoryUrl();
+	$repo = getRepository();
 	$realm = getAuthName($repo);
 	if(!$realm) trigger_error("Error: No login realm was found for repository $repo", E_USER_ERROR);
 	askForCredentials($realm);

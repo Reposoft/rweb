@@ -20,7 +20,7 @@ if (!is_file($acl)) {
 }
 $tree = new RepositoryTree($acl, $user);
 
-$repo = getRepositoryUrl();
+$repo = getRepository();
 if (empty($repo)) {
 	trigger_error("Can not get repository url", E_USER_ERROR);
 }

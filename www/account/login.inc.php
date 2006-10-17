@@ -342,16 +342,6 @@ function getRevision($rev = false) {
 }
 
 /**
- * Repository is resolved using HTTP Referrer with fallback to settings.
- * To find out where root is, query paramter 'path' must be set.
- * @return Root url of the repository for this request, no tailing slash. Not encoded.
- * @deprecated use repos.properties.php getRepository() directly instead
- */
-function getRepositoryUrl() {
-	return getRepository();
-}
-
-/**
  * @param String fullUrl the URL of a repository resource
  * @param String pathFromRepoRoot the resource path, absolute from repository root
  * @return repository url (to root) with no tailing slash.
@@ -369,7 +359,7 @@ function getRepoRoot($fullUrl,$pathFromRepoRoot) {
 function getTargetUrl($target=null) {
 	if ($target==null) $target = getTarget();
 	if (strlen($target)<1) return false;
-    return getRepositoryUrl() . $target;
+    return getRepository() . $target;
 }
 
 /**
@@ -431,7 +421,7 @@ function validateUsername($username) {
 }
 
 // *** Subversion client usage ***
-define('SVN_CONFIG_DIR', _getConfigFolder().'svn-config-dir/');
+define('SVN_CONFIG_DIR', _getConfigFolder().'svn-config-dir' . DIRECTORY_SEPARATOR);
 if (!file_exists(SVN_CONFIG_DIR)) trigger_error('Svn config folder '.SVN_CONFIG_DIR.' does not exist. Can not run commands.', E_USER_ERROR);
 
 /**

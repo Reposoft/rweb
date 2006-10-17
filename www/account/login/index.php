@@ -46,7 +46,7 @@ function showLoginFailed($targetUrl) {
 }
 
 function loginAndRedirectToHomeDir() {
-	$repo = getRepositoryUrl().'/';
+	$repo = getRepository().'/';
 	if (isHttps($repo)) {
 		enforceSSL();
 	}
