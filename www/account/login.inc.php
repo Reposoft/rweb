@@ -475,9 +475,10 @@ function login_svnPassthruFile($targetUrl, $revision=0) {
 /**
  * Returns the mime type for a file in the repository.
  * If the property svn:mime-type is set, that value is returned. If not, default based on filename extension is returned.
+ * The current approach reads the mime type from the HTTP header of the repository resource. That gives us defaults
+ * based on filename extension, without the need to maintain our ow list. However it can only be used for HEAD revision.
  * @param targetUrl the file, might be with a peg revision
  * @return the mime type string
- * TODO shared getMimeType for the application, with defaults based on file type
  */
 function login_getMimeType($targetUrl) {
 	//use headers instead to get defaults too//$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl);

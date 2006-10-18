@@ -194,6 +194,7 @@
 					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={../@path}/{@href}">copy or move</a>
 					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{@href}">delete</a>
 					<span class="action">lock</span>
+					<a id="work:{$id}" class="action" href="{$web}open/work/?target={../@path}/{@href}">edit</a>
 					<a id="upload:{$id}" class="action" href="{$web}upload/?target={../@path}/{@href}">upload changes</a>
 				</xsl:if>
 			</div>

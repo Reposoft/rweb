@@ -1,0 +1,10 @@
+repos.se details plugin
+-----------------------
+
+Looks through the page for class="filedetails" elements.
+Reads the title="[target path or absolute URL with repository]" attribute of those elements.
+Gets the file details of the target URL using AJAX, and prints as contents of the element.
+
+Printed html is formatted using CSS.
+
+What is the standard HTML for name/value lists? How do we do with the nested properties list?
