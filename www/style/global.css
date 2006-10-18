@@ -93,7 +93,7 @@ code {
 #contents .row div.actions {
 	display: inline;
 	position: absolute;
-	left: 70%;
+	left: 55%;
 }
 .n0, .n1, .n2, .n3 {
 	background: url(rowbackground.png) top repeat-x;
@@ -201,6 +201,9 @@ label {
 	padding-top:0.2em;
 	text-align:right;
 	font-weight:normal;
+}
+input.required {
+	background: url(required.png) top right no-repeat;	
 }
 /* visible version numbers, #releaseversion or #resourceversion */
 .versiondisplay {

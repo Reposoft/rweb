@@ -3,10 +3,10 @@ require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__))."/edit.class.php" );
 
 // automatic validation
-new FilenameRule('oldname');
+new Rule('folder');
 new FilenameRule('newname');
 // explicit validation
-new NewFilenameRule('newname', getTarget());
+new NewFilenameRule('newname', $_GET['folder']);
 
 // dispatch
 if (isset($_GET[SUBMIT])) {
@@ -14,9 +14,9 @@ if (isset($_GET[SUBMIT])) {
 } else {
 	$target = getTarget();
 	$template = new Presentation();
-	$template->assign('target', getParent($target));
+	$template->assign('target', $target);
+	$template->assign('folder', getParent($target));
 	$template->assign('oldname', basename($target));
-	$template->assign('repository', getRepository().getParent($target));
 	$template->display();
 }
 
@@ -25,16 +25,16 @@ if (isset($_GET[SUBMIT])) {
 // it is also allowed in templates for presentation, but not in field values
 
 function svnRename() {
-	Validation::expect('target', 'oldname', 'newname', 'message');
+	Validation::expect('target', 'folder', 'newname', 'message');
 	$edit = new Edit('move');
-	$oldUrl = getTargetUrl().$_GET['oldname'];
-	$newUrl = getTargetUrl().$_GET['newname'];
+	$oldUrl = getTargetUrl();
+	$newUrl = getRepository().$_GET['folder'].$_GET['newname'];
 	if (isset($_GET['message'])) {
 		$edit->setMessage($_GET['message']);
 	}
 	$edit->addArgUrl($oldUrl);
 	$edit->addArgUrl($newUrl);
 	$edit->execute();
-	$edit->present(new Presentation(), getTargetUrl());
+	$edit->present(new Presentation());
 }
 ?>
