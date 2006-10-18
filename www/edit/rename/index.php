@@ -6,7 +6,7 @@ require( dirname(dirname(__FILE__))."/edit.class.php" );
 new FilenameRule('oldname');
 new FilenameRule('newname');
 // explicit validation
-new NewFilenameRule('newname');
+new NewFilenameRule('newname', getTarget());
 
 // dispatch
 if (isset($_GET[SUBMIT])) {

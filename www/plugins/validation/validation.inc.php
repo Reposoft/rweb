@@ -51,6 +51,7 @@ class Rule {
 	/**
 	 * Represents the actual validation logic.
 	 * 
+	 * Don't rely on that this methid runs the validation loginc.
 	 * Subclasses may override validate($value) instead,
 	 * to have different messages for different types of errors,
 	 * which leaves this function undefined.

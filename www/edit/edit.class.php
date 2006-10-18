@@ -5,8 +5,13 @@ require_once( dirname(dirname(__FILE__))."/plugins/validation/validation.inc.php
 
 // shared validation rule
 class NewFilenameRule extends Rule {
+	var $_pathPrefix;
+	function NewFilenameRule($fieldname, $pathPrefix='') {
+		$this->Rule($fieldname, '');
+		$this->_pathPrefix = $pathPrefix;
+	}
 	function validate($name) {
-		$target = getTarget().$name;
+		$target = $_pathPrefix.$name;
 		$s = login_getResourceType($target);
 		if ($s < 0) return "The URL has access denied, so $target can not be used.";
 		if ($s == 1) return 'There is already a folder named "'.basename($target).'". Chose a different name.';

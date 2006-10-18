@@ -258,8 +258,11 @@ class Report {
 		// don't use containers, because then the prowser can not show process as the operation proceeds
 		//$this->_print("<div id=\"workspace\">\n");
 		//$this->_print("<div id=\"contents\">\n");
+		
+		$this->_print('<div id="commandbar"><a class="command" href="/repos/conf/">config</a><a class="command" href="/repos/admin/">admin</a><a  class="command" href="/repos/test/">test</a></div>');
+		
 		$this->_print("<h1>$title</h1>\n");
-		$this->_print('<p>'.getReportTime().'</p>');
+		$this->_print('<p><span class="datetime">'.getReportTime().'</span></p>');
 		} else {
 			$this->_linestart();
 			$this->_output("---- $title ----");

@@ -6,16 +6,13 @@ require( dirname(dirname(__FILE__))."/edit.class.php" );
 // automatic validation
 new FilenameRule('name');
 // explicit validation
-new NewFilenameRule('name');
+new NewFilenameRule('name', getTarget());
 
 if (isset($_GET[SUBMIT])) {
 	Validation::expect('target', 'name', 'message');
 	createNewFolder($_GET['name'],$_GET['message']); 
 } else {
 	$target = getTarget();
-	if (strlen($target) < 1) {
-		trigger_error("Path parameter not set.", E_USER_ERROR);
-	}
 	$template = new Presentation();
 	$template->assign('target', $target);
 	$template->assign('repository', getRepository().$target);
@@ -31,9 +28,6 @@ function createNewFolder($name, $message) {
 	$template = new Presentation();
 	$newurl = getTargetUrl().$name;
 	$dir = tmpdir();
-	if (!$dir) {
-		$template->trigger_error("Could not create temporary directory", E_USER_ERROR);
-	}
 	$edit = new Edit('import');
 	$edit->setMessage($message);
 	$edit->addArgPath($dir, true);

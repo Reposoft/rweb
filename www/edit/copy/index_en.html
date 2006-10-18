@@ -3,6 +3,23 @@
 <head>
 <title>Copy repos item</title>
 <!--{$head}-->
+<script type="text/javascript">
+function pasteUrl() {
+	r='{=$repository}';
+	url=prompt('Paste the full URL of the destination folder','');
+	if (url==null) {
+		return;
+	}
+	if (url.indexOf(r)!=0) {
+		alert('The folder URL must begin with the repository URL '+r);
+		return;
+	}
+	document.getElementsByName('tofolder')[0].value = url.substring(r.length);
+}
+function setMove(move) {
+	button = document.getElementsByName('submit')[0].value = move ? "Move" : "Copy";
+}
+</script>
 </head>
 
 <body>
@@ -12,37 +29,34 @@
 </div>
 <div id="contents">
 <h1>Copy or move <span class="filename">{=$oldname}</span></h1>
-<p>Makes a copy of a file or folder at a new location in the repository.
-Optionally the name can be changed too. Optionally delete the original file or folder (which makes a move operation).</p>
+<p>Makes a copy of a file or folder at a new location in the repository.</p>
+<p>Select "delete the original" to make this a move operation.</p>
 <form id="copy" name="copy" method="get" action="#">
   <fieldset>
-	<legend>repository copy of {=$target}</legend>
+	<legend>make a copy of {=$target} inside repository {=$repository}</legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
   <p>
     <label for="name">copy the current</label>
     <input id="name" name="name" type="text" size="40" disabled="disabled" value="{=$oldname}" />
     <input id="oldname" name="oldname" type="hidden" value="{=$oldname}" />
   </p>
-	<p><small>
-		<label for="repository">within repository</label>
-		<input id="repository" name="repository" type="text" size="40" disabled="disabled" value="{=$repository}" />
-  	</small></p>
 	<p>
 		<label for="folder">from folder</label>
 		<input id="folder" name="folder" type="text" size="40" disabled="disabled" value="{=$folder}" />	
 	</p>
 	<p>
 		<label for="tofolder">to folder</label>
-		<input id="tofolder" name="tofolder" type="text" size="40" value="" class="required" />		
+		<input id="tofolder" name="tofolder" type="text" size="40" value="" class="required" />	
+		<a class="action" href="#" onclick="pasteUrl()">paste the full URL</a>	
 	</p>
 	<p>
-		<label for="newname">and change name from {=oldname} to</label>
-	   <input name="newname" type="text" id="name" size="40" />
+		<label for="newname">name in new folder</label>
+	   <input name="newname" type="text" id="name" size="40" value="{=$oldname}" class="required" />
 	</p>
 	<p>
 		<label for="move">and delete the original</label>
-		<input id="moveno" name="move" type="radio" value="0" checked="checked"/> No<br />
-		<input id="moveyes" name="move" type="radio" value="1"/> Yes
+		<input id="moveyes" name="move" type="radio" value="1" onchange="setMove(this.checked)"/> Yes 
+		<input id="moveno" name="move" type="radio" value="0" checked="checked" onchange="setMove(!this.checked)" /> No
 	</p>
   <p>
     <label for="message">history text</label>
@@ -54,7 +68,7 @@ Optionally the name can be changed too. Optionally delete the original file or f
   </p>
   </fieldset>
 </form>
-<p>Copies inside the repository take no extra storage space. It is the current revision that is copied.
+<p>Copies inside the repository take no extra storage space. A copy is just a reference to the current revision of a resource.
 So a copy can be a good way to share a file as it looks now, but without sharing the future changes to the original.</p>
 </div>
 </div>

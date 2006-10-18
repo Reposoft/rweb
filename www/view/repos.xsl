@@ -168,7 +168,7 @@
 				<a id="open:{$id}" class="action" href="{@href}">open</a>
 				<xsl:if test="$editUrl">
 					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{@href}">rename</a>
-					<span class="action">copy</span>
+					<a id="copy:{$id}" class="action"  href="{$editUrl}copy/?target={../@path}/{@href}">copy or move</a>
 					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{@href}">delete</a>
 				</xsl:if>
 			</div>
@@ -191,7 +191,7 @@
 				<a id="open:{$id}" class="action" title="this file can be opened in Repos" href="{$web}open/?target={../@path}/{@href}">open</a>
 				<xsl:if test="$editUrl">
 					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{@href}">rename</a>
-					<span class="action">copy</span>
+					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={../@path}/{@href}">copy or move</a>
 					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{@href}">delete</a>
 					<span class="action">lock</span>
 					<a id="upload:{$id}" class="action" href="{$web}upload/?target={../@path}/{@href}">upload changes</a>
