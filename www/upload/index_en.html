@@ -28,7 +28,7 @@ function autoFillFilename(path) {
 <!--{else}-->
 <p>As a new file in folder {=$target}</p>
 <!--{/if}-->
-<!--{if $isfile && !$isbinary}-->
+<!--{if $isfile && $istext}-->
 <p>The current verison is a text file, so it is also possible to <a class="action" href="./?target={=$target}&text">copy-paste your local file's contents</a></p>
 <!--{/if}-->
 <!--{if !$isfile}-->

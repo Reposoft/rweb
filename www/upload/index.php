@@ -18,10 +18,10 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$isfile = isTargetFile();
 	if ($isfile) {
 		$mimetype = login_getMimeType($targeturl);
-		if (!$mimetype || strBegins($mimetype, 'application/')) {
-			$template->assign('isbinary', true);
+		if (_canEditAsTextarea($mimetype)) {
+			$template->assign('istext', true);
 		} else {
-			$template->assign('isbinary', false);
+			$template->assign('istext', false);
 		}
 		$template->assign('repository', getParent($targeturl));
 	} else {
@@ -115,6 +115,10 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		// show results
 		$commit->present($presentation, dirname($upload->getTargetUrl()));
 	}
+}
+
+function _canEditAsTextarea($mimetype) {
+	return $mimetype=='text/plain';
 }
 
 // validation is done by the rules at the top of this script

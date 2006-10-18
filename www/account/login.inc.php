@@ -480,17 +480,12 @@ function login_svnPassthruFile($targetUrl, $revision=0) {
  * TODO shared getMimeType for the application, with defaults based on file type
  */
 function login_getMimeType($targetUrl) {
-	$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl);
-	$result = login_svnRun($cmd);
-	$returnvalue = array_pop($result);
-	if ($returnvalue) {
-		trigger_error("Could not find the file '$targetUrl' in the repository.", E_USER_ERROR );
-	}
-	if (count($result) == 0) { // mime type property not set, return default
-		return false;//deprecated in PHP//return mime_content_type(basename($targetUrl)); // svn:mime-type not set
-		// return "application/x-unknown" ?
-	}
-	return $result[0];
+	//use headers instead to get defaults too//$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl);
+	$headers = getHttpHeaders($targetUrl, getReposUser(), _getReposPass());
+	if (!isset($headers['Content-Type'])) trigger_error("Could not get content type for target $targetUrl");
+	$c = $headers['Content-Type'];
+	if (strContains($c, ';')) return substr($c, 0, strpos($c, ';'));
+	return $c;
 }
 
 /**
