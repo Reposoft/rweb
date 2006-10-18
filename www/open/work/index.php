@@ -6,6 +6,8 @@ $target = getTarget();
 $downloadUrl = '../../open/cat/?target='.rawurlencode($target).'&rev=HEAD&open';
 $repository = getParent(getTargetUrl());
 
+// it is possible to bring up the save as dialog or a client download here, before the new page is shown
+
 $p = new Presentation();
 $p->assign('target', $target);
 $p->assign('downloadUrl', $downloadUrl);
