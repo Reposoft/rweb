@@ -34,6 +34,12 @@ class TestPresentation extends UnitTestCase {
 		$this->assertNotNull($r->validate('a*'), '* not allowed in filename');
 	}
 	
+	function testFilenameRuleSpecialCases() {
+		$r = new FilenameRule('file');
+		$this->assertNotNull($r->validate('.'));
+		$this->assertNotNull($r->validate('..'));
+	}
+	
 	function testFilenameRuleNotRequired() {
 		$r = new FilenameRule('file', false);
 		$this->assertNull($r->validate(''));

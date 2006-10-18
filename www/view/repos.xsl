@@ -133,7 +133,7 @@
 		</xsl:param>
 		<div id="contents">
 		<h2>
-			<a href="{$home}">
+			<a id="home" href="{$home}">
 				<span class="projectname">
 					<xsl:call-template name="getProjectName"/>
 				</span>
@@ -142,8 +142,8 @@
 			<xsl:call-template name="getFolderPathLinks">
 				<xsl:with-param name="folders" select="$folders"/>
 			</xsl:call-template>
-			<xsl:value-of select="$spacer"/>
 			<!-- rev not asked for by users: <xsl:if test="@rev">
+			<xsl:value-of select="$spacer"/>
 				<span class="revision">
 					<xsl:value-of select="@rev"/>
 				</span>
@@ -242,12 +242,19 @@
 				<xsl:with-param name="url" select="$rest"/>
 			</xsl:call-template>
 		</xsl:param>
+		<xsl:param name="id">
+			<xsl:call-template name="getFileID">
+				<xsl:with-param name="filename" select="$return"/>
+			</xsl:call-template>
+		</xsl:param>
 		<xsl:if test="not(string-length($rest)>0)">
-			<xsl:value-of select="$f"/>
-			<xsl:value-of select="'/'"/>
+			<span id="folder" class="path">
+				<xsl:value-of select="$f"/>
+				<xsl:value-of select="'/'"/>
+			</span>
 		</xsl:if>
 		<xsl:if test="string-length($rest)>0">
-			<a href="{$return}">
+			<a id="{$id}" href="{$return}">
 				<xsl:value-of select="$f"/>
 			</a>
 			<xsl:value-of select="'/'"/>

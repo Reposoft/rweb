@@ -48,6 +48,8 @@ class FilenameRule extends RuleEreg {
 	}
 	function validate($value) {
 		if (empty($value)) return $this->required ? 'This is a required field' : null;
+		if ($value=='.') return 'The name "." is not a valid filename';
+		if ($value=='..') return 'The name ".." is not a valid filename';
 		if (strlen($value) > 50) return "max length 50";
 		return parent::validate($value);
 	}
