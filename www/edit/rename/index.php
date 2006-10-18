@@ -17,6 +17,7 @@ if (isset($_GET[SUBMIT])) {
 	$template->assign('target', $target);
 	$template->assign('folder', getParent($target));
 	$template->assign('oldname', basename($target));
+	$template->assign('repository', getRepository());
 	$template->display();
 }
 

@@ -78,10 +78,7 @@ code {
 	padding: 6px;
 }
 #contents {
-	/* overflow: -moz-scrollbars-vertical; */
-}
-#contents .row {
-
+	/* rows styled in repository.css and log.css */
 }
 .n0, .n2 {
 	background-color: #F7F7F6;
@@ -197,6 +194,9 @@ input
     color: black;
 	margin: 0px;
 	padding: 0px;
+}
+input.required {
+	background: url(requiredfield.gif) top right no-repeat;	
 }
 textarea
 {

@@ -93,7 +93,7 @@ code {
 #contents .row div.actions {
 	display: inline;
 	position: absolute;
-	left: 55%;
+	left: 45%;
 }
 .n0, .n1, .n2, .n3 {
 	background: url(rowbackground.png) top repeat-x;

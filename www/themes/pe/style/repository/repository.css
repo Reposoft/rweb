@@ -27,7 +27,7 @@
 #contents .row div.actions {
 	display: inline;
 	position: absolute;
-	left: 70%;
+	left: 45%;
 }
 .file {
 	background-image: url('file.gif');
