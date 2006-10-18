@@ -78,14 +78,25 @@ d.rel = "stylesheet";
 d.href = reposPath + "style/docs.css";
 _head.appendChild(d);
 
+
+var testCase = null;
+
+/**
+ * Makes sure the test case is executed after all other onload activities.
+ */
+function testrun(testCaseInstance) {
+	testCase = testCaseInstance;
+	var _onload = window.onload;
+ 	window.onload = function() { _onload(); testexec(); } 
+}
+
 /**
  * Runs a test case and writes the result to a new div named 'testlog'
  */
-function testrun(testCaseInstance) {
+function testexec() {
 	var e = document.createElement('div');
 	e.id = 'testlog';
 	document.getElementsByTagName('body')[0].appendChild(e);
-
-	testCaseInstance.initialize(new HTMLReporter(e));
-	testCaseInstance.runTests();
+	testCase.initialize(new HTMLReporter(e));
+	testCase.runTests();	
 }
