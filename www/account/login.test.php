@@ -112,7 +112,10 @@ class Login_include_Test extends UnitTestCase {
 		unset($_SERVER['PHP_AUTH_PW']);
 	}
 	
-	// belongs to a configuration test, does not work if the demo repository is not in configuration
+	// ----------- below are integration tests ---------------
+	
+	/*
+	 * should not work because login refuses repositories that do not match the local configuration
 	function testVerifyLoginDemoAccount() {
 		if (login_isSSLSupported()) {
 			// test demo account authentication
@@ -121,6 +124,20 @@ class Login_include_Test extends UnitTestCase {
 			$url = 'https://www.repos.se/sweden/svensson/trunk/';
 			verifyLogin($url);
 			$this->assertEqual(true, verifyLogin($url));
+		}
+	} */
+	
+	function test___integrationtests_below___() {
+		$this->assertTrue(strBegins(TESTHOST, 'http'), "The integration tests below require a hostname TESTHOST");
+		$this->assertTrue(strBegins(TESTREPO, TESTHOST) && strlen(TESTREPO)>strlen(TESTHOST), "The integration tests below require a TESTREPO");
+		$this->sendMessage("The integration tests will run with the repository: ".TESTREPO);
+		
+		$url = parse_url(TESTREPO);
+		$fp = fsockopen($url['host'], $url['scheme']=='https' ? 443 : 80, $errno, $errstr, 3);
+		if (!$fp) {
+   		$this->fail("Connection to test host timed out (3 s). Can not run integration tests.");
+		} else {
+			fclose($fp);
 		}
 	}
 

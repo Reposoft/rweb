@@ -244,8 +244,10 @@ class TestReposProperties extends UnitTestCase {
 		$file = $dir.'folder/';
 		createFolder($file);
 		$this->assertTrue(file_exists($file));
-		deleteFolder($file);
-		$this->assertFalse(file_exists($file));
+		$this->assertTrue(deleteFolder($file), "deleteFolder returned false -> not successful");
+		clearstatcache(); // needed for file_exists
+		$this->assertFalse(file_exists($file), "the folder $file should have been deleted");
+		$this->assertTrue(deleteFolder($dir), "should delete the temp folder");
 	}
 	
 	function testCreateAndDeleteFileInReposWeb() {
@@ -267,6 +269,7 @@ class TestReposProperties extends UnitTestCase {
 		createFolder($dir.'.svn/');
 		createFile($dir.'.svn/test.txt');
 		deleteFolder($dir);
+		clearstatcache();
 		$this->assertFalse(file_exists($dir.'new folder/'));
 		$this->assertFalse(file_exists($dir.'.svn/test.txt'));
 		$this->assertFalse(file_exists($dir.'.svn/'));
