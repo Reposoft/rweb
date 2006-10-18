@@ -1,0 +1,40 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>repos.se automated test</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Check the HTTP headers of the mod_dav_svn directory listing</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/repos/test/headers/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>repositorypublicfolder</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>|HTTP/1.1 200 OK|</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>|Content-Type: text/xml</td>
+	<td></td>
+</tr>
+<tr title="seems like the ETag value after the quote is updated after each change">
+	<td>verifyTextPresent</td>
+	<td>|ETag:|</td>
+	<td></td>
+</tr>
+</tbody></table>
+<p><small>It is important that browsers reload the directory listings after an svn operation. The size of the xml is usually small, so it is not a problem if we get many reloads.
+There has been some discussion on this in the SVN list, see for example <a target="_blank" href="http://svn.haxx.se/dev/archive-2005-11/1327.shtml">Last-Modified HTTP header from mod_dav_svn</a>.</small></p>
+</body>
+</html>
