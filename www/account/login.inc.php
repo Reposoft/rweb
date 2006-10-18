@@ -477,7 +477,7 @@ function login_svnPassthruFile($targetUrl, $revision=0) {
  * If the property svn:mime-type is set, that value is returned. If not, default based on filename extension is returned.
  * @param targetUrl the file, might be with a peg revision
  * @return the mime type string
- * TODO shared getMimeType for the application, with defaults basedpn file type
+ * TODO shared getMimeType for the application, with defaults based on file type
  */
 function login_getMimeType($targetUrl) {
 	$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl);

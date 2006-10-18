@@ -14,15 +14,18 @@ new NewFilenameRule("name");
 if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template = new Presentation();
 	$target = getTarget();
+	$targeturl = getTargetUrl();
 	$isfile = isTargetFile();
 	if ($isfile) {
 		$mimetype = login_getMimeType($targeturl);
-		if ($mimetype && strpos($mimetype, 'application/') == 0) {
+		if (!$mimetype || strBegins($mimetype, 'application/')) {
 			$template->assign('isbinary', true);
+		} else {
+			$template->assign('isbinary', false);
 		}
-		$template->assign('repository', getParent(getTargetUrl()));
+		$template->assign('repository', getParent($targeturl));
 	} else {
-		$template->assign('repository', getTargetUrl());
+		$template->assign('repository', $targeturl);
 	}
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
 	$template->assign('isfile',$isfile);
