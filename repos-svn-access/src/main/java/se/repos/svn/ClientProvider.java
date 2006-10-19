@@ -3,6 +3,7 @@
 package se.repos.svn;
 
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
+import org.tigris.subversion.svnclientadapter.SVNClientException;
 
 /**
  * Represents a choice of svn client library, and the initialization logic for it.
@@ -27,5 +28,16 @@ public interface ClientProvider {
 	 * @return A client ready to do svn operations for the user
 	 */
 	ISVNClientAdapter getSvnClient(UserCredentials login);
+	
+	/**
+	 * Exception thrown by initializer if the client can not be created,
+	 * for example if the library is not available.
+	 */
+	public static class ClientNotAvaliableException extends Exception {
+		private static final long serialVersionUID = 1L;
+		public ClientNotAvaliableException(SVNClientException e) {
+			super(e);
+		}
+	}
 	
 }
