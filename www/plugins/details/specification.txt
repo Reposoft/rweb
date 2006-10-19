@@ -8,3 +8,8 @@ Gets the file details of the target URL using AJAX, and prints as contents of th
 Printed html is formatted using CSS.
 
 What is the standard HTML for name/value lists? How do we do with the nested properties list?
+
+Examples:
+- one div class="filedetails" for each file in a directory listing.
+- a single div in an upload-new-version page
+- simply pull the mime type from the server using a client side script, for example to modify the directory listing icons where the filename extension does not match the mimetype
