@@ -66,6 +66,11 @@ class EditTest extends UnitTestCase
 			$this->assertEqual('\" \$\(ls\) -m "msg \" \`ls\` \'ls\' \\\\ \" | rm"', $cmd);
 		}
 	}
+	
+	function testNewFilenameRule() {
+		$r = new NewFilenameRule('test', '/test/trunk/');
+		$this->assertEqual('/test/trunk/a.txt', $r->_getPath('a.txt'));
+	}
 
 }
 

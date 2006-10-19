@@ -26,7 +26,7 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>fab</td>
+	<td>fa</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -50,7 +50,22 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=return to repository</td>
+	<td>back</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>message</td>
+	<td>should not be able to commit this</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>repository</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>link=fa</td>
 	<td></td>
 </tr>
 </tbody></table>
