@@ -17,7 +17,7 @@ $filename = basename($url);
 $target = getTarget();
 $downloadUrl = repos_getSelfUrl().'?'.repos_getSelfQuery().'&open';
 
-$mimetype = login_getMimeType($url.'@'.$rev);
+$mimetype = login_getMimeType($url, $rev);
 
 // download
 if (isset($_GET['open'])) {

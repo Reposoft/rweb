@@ -474,19 +474,41 @@ function login_svnPassthruFile($targetUrl, $revision=0) {
 
 /**
  * Returns the mime type for a file in the repository.
- * If the property svn:mime-type is set, that value is returned. If not, default based on filename extension is returned.
- * The current approach reads the mime type from the HTTP header of the repository resource. That gives us defaults
- * based on filename extension, without the need to maintain our ow list. However it can only be used for HEAD revision.
- * @param targetUrl the file, might be with a peg revision
- * @return the mime type string
+ * If revision is HEAD (which it is when the second argument is omited)
+ * the mime type is read from the HTTP header of the repository resource. That gives us defaults
+ * based on filename extension, without the need to maintain our ow list.
+ * If revision number is not head, login_getMimeTypeProperty is used.
+ * @param targetUrl the file
+ * @param revision, optional revision number, if not HEAD
+ * @return the mime type string, or false if unknown (suggesting application/x-unknown)
  */
-function login_getMimeType($targetUrl) {
-	//use headers instead to get defaults too//$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl);
+function login_getMimeType($targetUrl, $revision='HEAD') {
+	if ($revision!='HEAD') {
+		return login_getMimeTypeProperty($targetUrl, $revision);
+	}
 	$headers = getHttpHeaders($targetUrl, getReposUser(), _getReposPass());
 	if (!isset($headers['Content-Type'])) trigger_error("Could not get content type for target $targetUrl");
 	$c = $headers['Content-Type'];
 	if (strContains($c, ';')) return substr($c, 0, strpos($c, ';'));
 	return $c;
+}
+
+/**
+ * Returns the value of the svn:mime-type property of a file with revision number.
+ *
+ * @param String $targetUrl the file url
+ * @param String $revision the revision number, integer or HEAD
+ * @return String mime type, or false if property not set.
+ */
+function login_getMimeTypeProperty($targetUrl, $revision) {
+	$url = $targetUrl.'@'.$revision;
+	$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl);
+	$result = login_svnRun($cmd);
+	if (array_pop($result)) trigger_error("Could not find the file '$targetUrl' in the repository.", E_USER_ERROR );
+	if (count($result) == 0) { // mime type property not set, return default
+		return false;
+	}
+	return $result[0];
 }
 
 /**

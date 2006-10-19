@@ -95,6 +95,7 @@ function acceptCertificate($report, $repository) {
 	$cmd = getCommand('svn').' --config-dir '.SVN_CONFIG_DIR.' info '.$repository;
 	
 	$report->info("Run the following command on the server, and chose to accept certificate permanently:");
+	$report->info("(but don't login, because then the credentials will also be saved)");
 	$report->info(array($cmd));
 	
 	// Create a pseudo terminal for the child process
