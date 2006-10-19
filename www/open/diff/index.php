@@ -31,8 +31,7 @@ if (!empty($referer) && strContains($referer, '/open/log/')) {
 }
 
 $diffarray = login_svnRun($cmd);
-$result = array_pop($diffarray);
-// TODO handle error codes
+if(array_pop($diffarray)) trigger_error("Could not read 'diff' for $url revision $revfrom to $revto");
 $p->assign('diff', implode("\n",$diffarray));
 
 $p->display();

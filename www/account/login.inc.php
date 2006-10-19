@@ -466,11 +466,26 @@ function login_svnPassthruFile($targetUrl, $revision=0) {
 		$cmd = 'cat '.escapeArgument($targetUrl);
 	}
 	$returnvalue = login_svnPassthru($cmd);
-	// can not return a value, because this function is often used to print directly to result //return $returnvalue;
-	// TODO error handling
+	if ($returnvalue) trigger_error("Could not read contents of file $targetUrl", E_USER_ERROR);
 }
 
-// TODO login_svnPassthruFileHtml
+/**
+ * Cat file(@revision) to result stream, with output escaped as html.
+ * This function can be used from a Smarty template like: {=$targetpeg|login_svnPassthruFileHtml}
+ * @param targetUrl the resource url. must be a file, can be with a peg revision (url@revision)
+ * @param revision optional, >0, the revision to read. if omitted the function reads HEAD.
+ * TODO currently this function buffers the entire file in memory, which is not nearly as efficient as login_svnPassthruFile.
+ */
+function login_svnPassthruFileHtml($targetUrl, $revision=0) {
+	if ($revision > 0) {
+		$cmd = 'cat '.escapeArgument($targetUrl.'@'.$revision); // using "peg" revision
+	} else {
+		$cmd = 'cat '.escapeArgument($targetUrl);
+	}
+	$contents = login_svnRun($cmd);
+	if (array_pop($contents)) trigger_error("Could not read contents of file $targetUrl", E_USER_ERROR);
+	foreach ($contents as $c) echo htmlspecialchars($c)."\n";
+}
 
 /**
  * Returns the mime type for a file in the repository.
