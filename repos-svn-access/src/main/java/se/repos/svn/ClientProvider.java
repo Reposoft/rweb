@@ -17,7 +17,9 @@ public interface ClientProvider {
 	/**
 	 * Provides an initialized svnClient to the application.
 	 *
-	 * @return A client ready to do svn operations
+	 * @return A client ready to do svn operations. Never returns null.
+	 * @throws Runtime exception if the client can not be started.
+	 * The constructor should throw checked exception if this can be foreseen.
 	 */
 	ISVNClientAdapter getSvnClient();
 	
@@ -37,6 +39,9 @@ public interface ClientProvider {
 		private static final long serialVersionUID = 1L;
 		public ClientNotAvaliableException(SVNClientException e) {
 			super(e);
+		}
+		public ClientNotAvaliableException(String message, SVNClientException e) {
+			super(message, e);
 		}
 	}
 	

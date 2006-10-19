@@ -50,19 +50,24 @@ public abstract class ReposWorkingCopyFactory {
 	 */
 	private static ClientProvider getClientProvider() throws RuntimeException {
 		if (client!=null) return client; // javachl can not be initialize twice
+		// we prefer javahl
 		try {
 			client = new JavahlClientProvider();
 			logger.info("Using Javahl client library. See license: http://subversion.tigris.org/license-1.html");
 			return client;
 		} catch (ClientNotAvaliableException e) {
-			logger.info("Javahl client library is not available.");
+			// it can be very picky about the dll version, so it might be that the dll exists but is invalid
+			logger.info("Javahl client library is not available. Is the dll file 'libsvnjavahl-1' present?");
 		}
 	    // try the pure java library. it can be installed by simply adding the jar.
-	    client = new TmateSvnClientProvider();
-	    if (client!=null) {
-	    	logger.warn("Using the Tmate SVN library. For commercial use this requires a license. See http://tmate.org/.");
-	    	return client;
-	    }
+		try {
+			client = new TmateSvnClientProvider();
+			logger.warn("Using the Tmate SVN library. For commercial use this requires a license. See http://tmate.org/.");
+			return client;
+		} catch (ClientNotAvaliableException e) {
+			logger.info("Javahl client library is not available. Is the dll file 'libsvnjavahl-1' present?");
+		}
+		// all alternatives failed
 	    throw new RuntimeException("There is no SVN client avaliable. Tried Javahl and JavaSVN.");
 	}
 }

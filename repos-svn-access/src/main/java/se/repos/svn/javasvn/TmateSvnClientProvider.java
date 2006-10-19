@@ -31,26 +31,24 @@ import se.repos.svn.UserCredentials;
  */
 public class TmateSvnClientProvider implements ClientProvider {
 
-	public ISVNClientAdapter getSvnClient() {
-		
-		if (!SVNClientAdapterFactory.isSVNClientAvailable(JavaSvnClientAdapterFactory.JAVASVN_CLIENT)) {
-			try {
-	            JavaSvnClientAdapterFactory.setup();
-	        } catch (SVNClientException e) {
-	            // if an exception is thrown, JavaSVN is not available or 
-	            // already registered ...
-	        	e.printStackTrace();
-	        }
-		}
-        
+	public TmateSvnClientProvider() throws ClientNotAvaliableException {
+		try {
+            JavaSvnClientAdapterFactory.setup();
+        } catch (SVNClientException e) {
+        	throw new ClientNotAvaliableException("Tmate JavaSVN is not available or is already registered.", e);
+        }
+	}
+	
+	public ISVNClientAdapter getSvnClient() { 
         ISVNClientAdapter svnClient;
-		svnClient = SVNClientAdapterFactory.createSVNClient(
-				JavaSvnClientAdapterFactory.JAVASVN_CLIENT);
-        
+        try {
+        	svnClient = SVNClientAdapterFactory.createSVNClient(JavaSvnClientAdapterFactory.JAVASVN_CLIENT);
+        } catch (NoClassDefFoundError e) {
+        	throw new RuntimeException("The JavaSVN library is not present. Add 'javasvn.jar' to classpath and retry.");
+        }
         if (svnClient == null) {
         	throw new RuntimeException("There is no SVN client available.");
         }
-        
         return svnClient;
 	}
 

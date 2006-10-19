@@ -15,6 +15,9 @@
 package se.repos.svn.checkout;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.ImmutableUserCredentials;
@@ -31,10 +34,11 @@ import se.repos.svn.checkout.client.AbstractCheckoutSettings;
  */
 public class CheckoutSettingsForTest extends AbstractCheckoutSettings {
 
-	/**
-	 * Root url for the test repository
-	 */
-	public static final String ROOT_URL = "https://localhost/testrepo";
+	// the repository to integration test in. tried in array order.
+	public static final String[] REPOSITORIES = new String[] {
+		"https://localhost/testrepo",
+		"http://test.repos.se/testrepo"
+	};
 	
 	/**
 	 * The project, same as the folder name under repository root, no slashes
@@ -59,12 +63,28 @@ public class CheckoutSettingsForTest extends AbstractCheckoutSettings {
 	
 	private UserCredentials userCredentials = new ImmutableUserCredentials(USERNAME, PASSWORD);
 	
+	private static String getRepository() {
+		for (int i = 0; i < REPOSITORIES.length; i++) {
+			try {
+				URL u = new URL(REPOSITORIES[i]);
+				u.openConnection().connect();
+				System.out.println("Repository "+REPOSITORIES[i]+" is available. Will be used for integration tests.");
+				return u.toString();
+			} catch (MalformedURLException e) {
+				throw new RuntimeException("Repository "+REPOSITORIES[i]+" is invalid", e);
+			} catch (IOException e) {
+				System.out.println("Repository "+REPOSITORIES[i]+" is not available, trying next one");
+			}
+		}
+		throw new RuntimeException("None of the repositories in REPOSITORIES are available. Can not do integraiton tests.");
+	}
+	
 	/**
 	 * @param projectName identifier for project, will be used as folder name
 	 * @param workingCopyDirectory the root for the working copy, corresponding to {@link #getCheckoutUrl()}
 	 */
 	public CheckoutSettingsForTest() {
-		super(ROOT_URL + "/" + PROJECT_NAME + "/trunk/" + TEST_FOLDER, 
+		super(getRepository() + "/" + PROJECT_NAME + "/trunk/" + TEST_FOLDER, 
 				getEmptyTemporaryDirectory());
 	}
 

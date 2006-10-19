@@ -49,8 +49,9 @@ public class SimpleWorkingCopyConflictIntegrationTest extends TestCase {
 			conflictInformation = e.getConflicts()[0];
 		}
 		// verify the conflicting file
+		// seems like javahl reports the full path in windows, and tmatesvn reports short folder names like "DOCUME~1"
 		assertEquals("ConflictInformation should report the same absolute path", 
-				f2, conflictInformation.getTargetPath());
+				f2.getCanonicalPath(), conflictInformation.getTargetPath().getCanonicalPath());
 		
 		// number 2 likes his file better
 		conflictInformation.getTargetPath().delete();

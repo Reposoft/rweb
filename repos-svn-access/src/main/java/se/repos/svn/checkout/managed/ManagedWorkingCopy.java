@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ConflictInformation;
-import se.repos.svn.checkout.MandatoryReposOperations;
 import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;

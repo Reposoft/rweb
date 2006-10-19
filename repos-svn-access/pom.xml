@@ -34,11 +34,12 @@
       <artifactId>ganymed-ssh2</artifactId>
       <version>build209</version>
     </dependency>
+    <!-- only needed if javahl can not be used. destribute separately.
     <dependency>
       <groupId>org.tmate</groupId>
       <artifactId>javasvn</artifactId>
       <version>1.0.4</version>
-    </dependency>
+    </dependency> -->
     <dependency>
       <groupId>org.tigris.subclipse</groupId>
       <artifactId>svnant-svnclientadapter</artifactId>
