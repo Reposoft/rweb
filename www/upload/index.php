@@ -9,7 +9,7 @@ define('MAX_FILE_SIZE', 1024*1024*10);
 
 // name only exists for new files, not for new version requests
 new FilenameRule("name");
-new NewFilenameRule("name");
+new NewFilenameRule("name", getTarget());
 
 if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template = new Presentation();
