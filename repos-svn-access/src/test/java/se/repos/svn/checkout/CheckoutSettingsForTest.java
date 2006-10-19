@@ -34,7 +34,7 @@ public class CheckoutSettingsForTest extends AbstractCheckoutSettings {
 	/**
 	 * Root url for the test repository
 	 */
-	public static final String ROOT_URL = "http://test.repos.se/testrepo";
+	public static final String ROOT_URL = "https://localhost/testrepo";
 	
 	/**
 	 * The project, same as the folder name under repository root, no slashes
