@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Repos installation</title>
+<link href="../../style/global.css" rel="stylesheet" type="text/css" />
+<link href="../../style/docs.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<h1>How to set up a subversion server for Repos</h1>
+<p>
+Version control in <a target="_blank" href="http://www.repos.se/">Repos</a> and <a target="_blank" href="http://www.projectengine.nu/">Project Engine</a> relies on <a target="_blank" href="http://subversion.tigris.org/">Subversion</a>.
+</p><p>
+Subversion is open source (free to install), and widely supported. There are at least 10 books on Amazon about it, and a responsive mailing list as well as the free <a target="_blank" href="http://svnbook.red-bean.com/">Subversion book</a>.
+Contrary to other document management systems, Repos <em>does not lock you in</em> to a proprietary storage solution.
+If you no longer need Repos or Project Engine, you still have all your data and history in a standard Subversion repository,
+which will always be free of charge. You can use clients such as <a target="_blank" href="http://tortoisesvn.net/">Tortoise SVN</a> to access your files. 
+</p><p>
+Repos provides hosting at a monthly fee, but during 2006 this service is only available in Sweden. But it can also be installed on top of your own Subversion server.
+</p>
+<h2>Installing Subversion</h2>
+<p>
+Three steps needed to set up a server for version control:
+<ol>
+<li>Find a suitable server and install Apache2</li>
+<li>Install Subversion</li>
+<li>Create a repository and test it</li>
+</ol>
+The procedure requires basic server and network administration skills. The instructions below only outline the process. The details depend on the operating system. The goal for the server administrator is to get <a target="_blank" href="http://svnbook.red-bean.com/nightly/en/svn.serverconfig.httpd.html">Subversion connected to Apache</a>.
+</p>
+<h2>Find a suitable server and install Apache2</h2>
+<p>
+Most computers on your local network can work as a subversion server. <a target="_blank" href="http://httpd.apache.org/">Apache</a> and Subversion can be installed on Windows, Mac, Unix and Linux. In most Linux distribution, Subversion installation is straightforward using the package manager. One advantage with Linux over Windows is that SSL (secure transfer) support is standard. SSL encrypts your passwords and transfered data when the repository is used from outside your firewall or internet router.
+</p>
+<p>
+On Windows, we recommend purchasing a configured server bundle from Repos. For windows servers that do not have Apache as web server, this makes at least 20 hours of hassle with getting compiled and compatible Apache, PHP, Subversion and OpenSSL. It includes the installation support you need to get your repository up and running.
+</p>
+<h2>Install Subversion</h2>
+The installation procedure documented in the <a target="_blank" href="http://svnbook.red-bean.com/">Subversion book</a>.
+
+</body>
+</html>
