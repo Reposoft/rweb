@@ -14,6 +14,7 @@
  */
 package se.repos.svn.javasvn;
 
+// no imports from org.tmatesoft
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
@@ -24,6 +25,8 @@ import se.repos.svn.UserCredentials;
 
 /**
  * Initializes and creates a {@link http://tmate.org/svn/ JavaSVN} client.
+ *
+ * Note that there should be no compile time references to the tmate classes.
  *
  * @author Staffan Olsson
  * @since 2006-apr-14
