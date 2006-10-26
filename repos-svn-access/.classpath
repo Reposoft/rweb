@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="M2_REPO/junit/junit/4.1/junit-4.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/tigris/subclipse/svnant-svnclientadapter/1.0/svnant-svnclientadapter-1.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/easymock/easymock/2.2/easymock-2.2.jar" sourcepath="M2_REPO/org/easymock/easymock/2.2/easymock-2.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/ch/ethz/ganymed/ganymed-ssh2/build209/ganymed-ssh2-build209.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-simple/1.0.1/slf4j-simple-1.0.1.jar" sourcepath="M2_REPO/org/slf4j/slf4j-simple/1.0.1/slf4j-simple-1.0.1-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/tigris/subclipse/svnant-svnjavahl/1.0/svnant-svnjavahl-1.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/ant/ant/1.6.5/ant-1.6.5.jar" sourcepath="M2_REPO/ant/ant/1.6.5/ant-1.6.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/easymock/easymock/1.2_Java1.3/easymock-1.2_Java1.3.jar" sourcepath="M2_REPO/easymock/easymock/1.2_Java1.3/easymock-1.2_Java1.3-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/tigris/subclipse/svnant/1.0/svnant-1.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/tmate/javasvn/1.0.4/javasvn-1.0.4.jar"/>
-	<classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="src" path="src/main/java"/>
+  <classpathentry kind="src" path="src/test/java" output="target/test-classes"/>
+  <classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="var" path="M2_REPO/org/easymock/easymock/2.2/easymock-2.2.jar" sourcepath="M2_REPO/org/easymock/easymock/2.2/easymock-2.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/tigris/subclipse/svnant/1.0/svnant-1.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-simple/1.0.1/slf4j-simple-1.0.1.jar" sourcepath="M2_REPO/org/slf4j/slf4j-simple/1.0.1/slf4j-simple-1.0.1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/easymock/easymock/1.2_Java1.3/easymock-1.2_Java1.3.jar" sourcepath="M2_REPO/easymock/easymock/1.2_Java1.3/easymock-1.2_Java1.3-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/tigris/subclipse/svnant-svnclientadapter/1.0/svnant-svnclientadapter-1.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/tigris/subclipse/svnant-svnjavahl/1.0/svnant-svnjavahl-1.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/tmate/javasvn/1.0.4/javasvn-1.0.4.jar" sourcepath="M2_REPO/org/tmate/javasvn/1.0.4/javasvn-1.0.4-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/ubique/inieditor/r2/inieditor-r2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/ch/ethz/ganymed/ganymed-ssh2/build209/ganymed-ssh2-build209.jar"/>
+  <classpathentry kind="var" path="M2_REPO/junit/junit/4.1/junit-4.1.jar" sourcepath="M2_REPO/junit/junit/4.1/junit-4.1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/ant/ant/1.6.5/ant-1.6.5.jar" sourcepath="M2_REPO/ant/ant/1.6.5/ant-1.6.5-sources.jar"/>
 </classpath>

@@ -34,12 +34,13 @@
       <artifactId>ganymed-ssh2</artifactId>
       <version>build209</version>
     </dependency>
-    <!-- only needed if javahl can not be used. destribute separately.
     <dependency>
       <groupId>org.tmate</groupId>
       <artifactId>javasvn</artifactId>
       <version>1.0.4</version>
-    </dependency> -->
+      <!-- only needed where javahl does not work. distribute separately. -->
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.tigris.subclipse</groupId>
       <artifactId>svnant-svnclientadapter</artifactId>
@@ -50,6 +51,12 @@
       <artifactId>svnant-svnjavahl</artifactId>
       <version>1.0</version>
     </dependency>
+    <dependency>
+    	<groupId>ubique</groupId>
+    	<artifactId>inieditor</artifactId>
+    	<version>r2</version>
+    </dependency>
+    <!-- testing -->
     <dependency>
       <groupId>easymock</groupId>
       <artifactId>easymock</artifactId>
