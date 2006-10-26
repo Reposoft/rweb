@@ -4,6 +4,8 @@ package se.repos.svn.config;
 
 import java.io.File;
 
+import org.tmatesoft.svn.core.internal.wc.SVNFileUtil;
+
 /**
  * Abstraction for a the subversion client configuration area.
  * 
@@ -13,6 +15,13 @@ import java.io.File;
  * @version $Id$
  */
 public class RuntimeConfigurationArea implements ClientConfiguration {
+	
+	/**
+	 * Reads configuration from the default subversion user folder
+	 */
+	public RuntimeConfigurationArea() {
+		
+	}
 	
 	/**
 	 * 

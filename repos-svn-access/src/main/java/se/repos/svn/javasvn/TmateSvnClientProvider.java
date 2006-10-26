@@ -15,6 +15,10 @@
 package se.repos.svn.javasvn;
 
 // no imports from org.tmatesoft
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
@@ -60,6 +64,41 @@ public class TmateSvnClientProvider implements ClientProvider {
 		svnClient.setUsername(login.getUsername());
 		svnClient.setPassword(login.getPassword());
 		return svnClient;
+	}
+
+	public File getRuntimeConfigurationArea() {
+		Class tmateFileUtil;
+		try {
+			tmateFileUtil = Class.forName("org.tmatesoft.svn.core.wc.SVNWCUtil");
+		} catch (ClassNotFoundException e) {
+			// TODO auto-generated
+			throw new RuntimeException("ClassNotFoundException thrown, not handled", e);
+		}
+		Method m;
+		try {
+			m = tmateFileUtil.getMethod("getDefaultConfigurationDirectory", new Class[]{});
+		} catch (SecurityException e) {
+			// TODO auto-generated
+			throw new RuntimeException("SecurityException thrown, not handled", e);
+		} catch (NoSuchMethodException e) {
+			// TODO auto-generated
+			throw new RuntimeException("NoSuchMethodException thrown, not handled", e);
+		}
+		Object folder;
+		try {
+			folder = m.invoke(null, new Object[]{});
+		} catch (IllegalArgumentException e) {
+			// TODO auto-generated
+			throw new RuntimeException("IllegalArgumentException thrown, not handled", e);
+		} catch (IllegalAccessException e) {
+			// TODO auto-generated
+			throw new RuntimeException("IllegalAccessException thrown, not handled", e);
+		} catch (InvocationTargetException e) {
+			// TODO auto-generated
+			throw new RuntimeException("InvocationTargetException thrown, not handled", e);
+		}
+		if (folder==null) throw new RuntimeException("Could not get configuration area folder from JavaSVN");
+		return (File) folder;
 	}
 
 }
