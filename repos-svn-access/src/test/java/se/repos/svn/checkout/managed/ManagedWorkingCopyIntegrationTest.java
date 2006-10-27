@@ -131,4 +131,34 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		if (d.exists()) fail("Test error. Could not remove destination folder after test.");
 	}
 	
+	public void testAddRecursiveWithDefaultIgnores() throws IOException, ConflictException, RepositoryAccessException {
+		File f = new File(path, "tobeadded" + System.currentTimeMillis());
+		f.mkdir();
+		File folder = new File(f, "newfolder");
+		folder.mkdir();
+		File folderFile = new File(folder, "file.txt");
+		folderFile.createNewFile();
+		// Repos naming convention: "temp" should have global ignore
+		File tempFolder = new File(f, "temp");
+		tempFolder.mkdir();
+		// Recommended (but not default) subversion global ignores, should be enabled in repos
+		File tempFile = new File(f, "#file.txt#");
+		tempFile.mkdir();
+		// now the folder should be added recursively
+		client.add(f);
+		// verify
+		assertTrue("'add' should have been performed", client.isVersioned(f));
+		assertTrue("Add should be recursive", client.isVersioned(folder));
+		assertTrue("Recursive two steps", client.isVersioned(folderFile));
+		assertFalse("Should ignore folders named 'temp'", client.isVersioned(tempFolder));
+		assertFalse("Subversion recommends ignoring #*#", client.isVersioned(tempFile));
+		client.commit("Recusive add but with global ignores");
+		// now explicitly add the ignored
+		client.add(tempFolder);
+		client.add(tempFile);
+		assertTrue("Folders ignored by default can be added explicitly", client.isVersioned(tempFolder));
+		assertTrue("Files ignored by default can be added explicitly", client.isVersioned(tempFile));
+		client.commit("Explicit add needed for names matching the global ignores pattern");
+	}
+	
 }

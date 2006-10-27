@@ -67,13 +67,18 @@ public class CheckoutSettingsForTest extends AbstractCheckoutSettings {
 		for (int i = 0; i < REPOSITORIES.length; i++) {
 			try {
 				URL u = new URL(REPOSITORIES[i]);
-				u.openConnection().connect();
-				System.out.println("Repository "+REPOSITORIES[i]+" is available. Will be used for integration tests.");
+				try {
+					u.openConnection().connect();
+					System.out.println("Repository "+REPOSITORIES[i]+" is available. Will be used for integration tests.");
+				} catch (javax.net.ssl.SSLHandshakeException e) {
+					System.out.println("Repository "+REPOSITORIES[i]+" is available. Certificate must be accepted by the SVN client.");
+				}
 				return u.toString();
 			} catch (MalformedURLException e) {
 				throw new RuntimeException("Repository "+REPOSITORIES[i]+" is invalid", e);
 			} catch (IOException e) {
-				System.out.println("Repository "+REPOSITORIES[i]+" is not available, trying next one");
+				e.printStackTrace();
+				System.out.println("Repository "+REPOSITORIES[i]+" is not available, trying next one. Got: " + e.getMessage());
 			}
 		}
 		throw new RuntimeException("None of the repositories in REPOSITORIES are available. Can not do integraiton tests.");

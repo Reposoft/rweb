@@ -2,11 +2,11 @@
  */
 package se.repos.svn.config;
 
-public class InvalidConfigurationChange extends RuntimeException {
+public class ConfigurationUpdateException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public InvalidConfigurationChange(String message) {
+	public ConfigurationUpdateException(String message) {
 		super(message);
 	}
 

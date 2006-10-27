@@ -41,6 +41,7 @@ import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.VersionedProperties;
 import se.repos.svn.checkout.WorkingCopyAccessException;
 
 /**
@@ -469,7 +470,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		}
 
 		public void logCompleted(String message) {
-			logger.info("svn completed command {}: {}", getCurrentCommand(), message);
+			logger.debug("svn completed command {}: {}", getCurrentCommand(), message);
 		}
 
 		// conflict is reported as "C  C:/myfile.txt"
@@ -481,7 +482,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 				String filename = conflictMatcher.group(1);
 				conflictFileList.add(new File(filename));
 			} else {
-				logger.error("svn error in command {}: {}", getCurrentCommand(), message);
+				logger.error("Subversion error in command {}: {}", getCurrentCommand(), message);
 			}
 		}
 
@@ -490,11 +491,11 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		}
 
 		public void logRevision(long revision, String path) {
-			logger.info("svn path {} now at revision {}", path, Long.toString(revision));
+			logger.info("Now at revision {} for path {}", Long.toString(revision), path);
 		}
 
 		public void onNotify(File path, SVNNodeKind kind) {
-			logger.info("svn command {} running on path {} ({})", new Object[]{getCurrentCommand(), path, kind});
+			logger.debug("svn command {} running on path {} ({})", new Object[]{getCurrentCommand(), path, kind});
 		}
 		
 		private String getCommandName(int command) {
@@ -507,7 +508,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 			case ISVNNotifyListener.Command.CLEANUP: return "cleanup";
 			case ISVNNotifyListener.Command.COMMIT: return "commit";
 			case ISVNNotifyListener.Command.COPY: return "copy";
-			case ISVNNotifyListener.Command.CREATE_REPOSITORY: return "crete_repository";
+			case ISVNNotifyListener.Command.CREATE_REPOSITORY: return "create_repository";
 			case ISVNNotifyListener.Command.DIFF: return "diff";
 			case ISVNNotifyListener.Command.EXPORT: return "export";
 			case ISVNNotifyListener.Command.IMPORT: return "import";
@@ -544,6 +545,24 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 
 	public void revert() {
 		this.revert(settings.getWorkingCopyDirectory());
+	}
+
+	public boolean isMetadataFolder(File path) {
+		return client.isAdminDirectory(path.getName());
+	}
+
+	public boolean isIgnore(File path) {
+		if (isVersioned(path)) return false; // svn status is of no help to see if a version file matches ignore patterns
+		
+		ISVNStatus status = getSingleStatus(path);
+		return (status.getTextStatus() != SVNStatusKind.IGNORED);
+	}
+
+	public VersionedProperties getProperties(File path) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#getProperties not implemented yet");
+		}
+		return null;
 	}
 	
 }

@@ -14,6 +14,7 @@ import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.VersionedProperties;
 import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.checkout.simple.SimpleWorkingCopy;
 
@@ -27,6 +28,9 @@ import se.repos.svn.checkout.simple.SimpleWorkingCopy;
  * <li>Allows move operation on an already moved file or folder
  * <li>Allows delete on an already deleted file or folder
  * </ul>
+ * 
+ * Also maintains client settings with Repos defaults:
+ * For example the names TEMP, Temp and temp should be ignored.
  * 
  * Before a file is changed, it can be reserved using {@see #lock(String)}.
  * If a file is changed when it is not locked, optimistic locking is used.
@@ -149,6 +153,18 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 
 	public void revert() {
 		workingCopy.revert();
+	}
+
+	public boolean isMetadataFolder(File path) {
+		return workingCopy.isMetadataFolder(path);
+	}
+
+	public boolean isIgnore(File path) {
+		return workingCopy.isIgnore(path);
+	}
+
+	public VersionedProperties getProperties(File path) {
+		return workingCopy.getProperties(path);
 	}
 
 }

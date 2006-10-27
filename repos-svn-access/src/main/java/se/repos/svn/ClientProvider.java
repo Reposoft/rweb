@@ -2,8 +2,6 @@
  */
 package se.repos.svn;
 
-import java.io.File;
-
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
 
@@ -32,14 +30,6 @@ public interface ClientProvider {
 	 * @return A client ready to do svn operations for the user
 	 */
 	ISVNClientAdapter getSvnClient(UserCredentials login);
-	
-	/**
-	 * ISVNClientAdapter has no method that can report configuration folder,
-	 * so this has to be specific to each library.
-	 * This method can only be called after {@link #getSvnClient()}.
-	 * @return the default SVN client configuration area for the user
-	 */
-	File getRuntimeConfigurationArea();
 	
 	/**
 	 * Exception thrown by initializer if the client can not be created,

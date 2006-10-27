@@ -12,6 +12,11 @@ package se.repos.svn.checkout;
 public interface MandatoryReposOperations {
 
 	/**
+	 * Checks for changes that have not been committed.
+	 * 
+	 * Checks recursively, but only resources that have been added.
+	 * TODO investigate if, like in TortoiseSVN and SmartSVN, it should be an option to count new files as changes.
+	 * 
 	 * @param relativePath empty for entire local dir
 	 * @return true if there are uncommitet changes in this file or directory (recursively)
 	 */

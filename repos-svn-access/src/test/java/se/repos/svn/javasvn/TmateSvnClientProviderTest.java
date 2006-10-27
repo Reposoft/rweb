@@ -16,14 +16,13 @@ package se.repos.svn.javasvn;
 
 import java.io.File;
 
-import se.repos.svn.ClientProvider;
-import se.repos.svn.ClientProvider.ClientNotAvaliableException;
 import junit.framework.TestCase;
+import se.repos.svn.ClientProvider.ClientNotAvaliableException;
 
 public class TmateSvnClientProviderTest extends TestCase {
 
 	public void testGetRuntimeConfigurationArea() {
-		ClientProvider clientProvider;
+		TmateSvnClientProvider clientProvider;
 		try {
 			clientProvider = new TmateSvnClientProvider();
 		} catch (ClientNotAvaliableException e) {

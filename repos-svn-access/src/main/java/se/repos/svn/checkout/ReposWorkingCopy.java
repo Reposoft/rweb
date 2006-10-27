@@ -64,7 +64,9 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	public void commit(String commitMessage) throws ConflictException, RepositoryAccessException;
 	
 	/**
-	 * Checks if a local resource can be committed
+	 * Checks if a local resource can be committed.
+	 * Only checks resources that have been added, 
+	 * so unversioned files in a folder does not count as local changes.
 	 * @param path The file or folder to check
 	 * @return true if there is changes to the versioned contents, recursively for folders
 	 * @see MandatoryReposOperations#hasLocalChanges()
@@ -135,4 +137,32 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * @param path file to reset all changes in, or folder to recursively restore
 	 */
 	public void revert(File path);
+	
+	/**
+	 * Checks if a working copy folder is a subversion "admin directory".
+	 * @param path the folder
+	 * @return true if the folder is a metadata folder (like ".svn")
+	 */
+	public boolean isMetadataFolder(File path);
+	
+	/**
+	 * Checks global-ignores and parent folder svn:ignore property to see if an entry should be ignored.
+	 * 
+	 * For folders that matches an ignore pattern, but are in version control,
+	 * this method returns false. That is because 'svn status' reports normal versioned status for the file.
+	 * 
+	 * @param path any path in the working copy, parent directory (getParent) must exist.
+	 * @return true if the path should not be in version control, false if it is or should be in version control.
+	 */
+	public boolean isIgnore(File path);
+
+	/**
+	 * Creates a read-write model of a subversion properties for a versioned resource.
+	 * 
+	 * @param path The versioned file or folder
+	 * @return
+	 */
+	public VersionedProperties getProperties(File path);
+	
+	//TODO getClientSettings()
 }
