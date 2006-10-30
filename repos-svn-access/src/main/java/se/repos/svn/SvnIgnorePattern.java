@@ -2,6 +2,8 @@
  */
 package se.repos.svn;
 
+import java.io.File;
+
 /**
  * Every ignore entry is encapsulated in a class, to provide validation.
  *
@@ -9,5 +11,9 @@ package se.repos.svn;
  * @version $Id$
  */
 public class SvnIgnorePattern {
+
+	public SvnIgnorePattern(File child) {
+		// TODO auto-generated
+	}
 
 }

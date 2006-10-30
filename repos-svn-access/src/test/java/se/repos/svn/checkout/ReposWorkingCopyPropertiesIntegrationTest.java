@@ -5,6 +5,8 @@ package se.repos.svn.checkout;
 import java.io.File;
 import java.io.IOException;
 
+import se.repos.svn.SvnIgnorePattern;
+
 import junit.framework.TestCase;
 
 /**
@@ -49,7 +51,7 @@ public class ReposWorkingCopyPropertiesIntegrationTest extends TestCase {
 		File child = new File(path, "file.txt");
 		child.createNewFile();
 		assertFalse(client.isIgnore(child));
-		client.getProperties(f).setIgnore(child);
+		client.getPropertiesForFolder(f).setIgnore(new SvnIgnorePattern(child));
 		assertTrue(client.isIgnore(child));
 		// now check result after the ignored resource has been explicitly added
 		client.add(child);

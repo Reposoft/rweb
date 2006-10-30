@@ -151,11 +151,11 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	public void revert(File path);
 	
 	/**
-	 * Checks if a working copy folder is a subversion "admin directory".
+	 * Checks if a working copy folder is a subversion "administrative area".
 	 * @param path the folder
 	 * @return true if the folder is a metadata folder (like ".svn")
 	 */
-	public boolean isMetadataFolder(File path);
+	public boolean isAdministrativeFolder(File path);
 	
 	/**
 	 * Checks global-ignores and parent folder svn:ignore property to see if an entry should be ignored.
@@ -163,18 +163,39 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * For folders that matches an ignore pattern, but are in version control,
 	 * this method returns false. That is because 'svn status' reports normal versioned status for the file.
 	 * 
+	 * Administrative folder is always ignore.
+	 * 
 	 * @param path any path in the working copy, parent directory (getParent) must exist.
 	 * @return true if the path should not be in version control, false if it is or should be in version control.
 	 */
 	public boolean isIgnore(File path);
 
 	/**
-	 * Creates a read-write model of a subversion properties for a versioned resource.
+	 * Provides access to svn properties as name-value pairs.
 	 * 
 	 * @param path The versioned file or folder
-	 * @return
+	 * @return read-write access to the properties of the path argument
+	 * @throws IllegalArgumentException if the path does not exist or is not versioned
 	 */
-	public VersionedProperties getProperties(File path);
+	public VersionedProperties getProperties(File path);	
+	
+	/**
+	 * Creates a read-write model of a subversion properties for a versioned resource.
+	 * 
+	 * @param file The versioned file
+	 * @return SVN properties for the file
+	 * @throws IllegalArgumentException if the file is a folder or does not exist
+	 */
+	public VersionedFileProperties getPropertiesForFile(File file);
+	
+	/**
+	 * Creates a read-write model of a subversion properties for a versioned resource.
+	 * 
+	 * @param folder The versioned folder
+	 * @return SVN properties for the folder
+	 * @throws IllegalArgumentException if the folder is a file or does not exist
+	 */
+	public VersionedFolderProperties getPropertiesForFolder(File folder);
 	
 	/**
 	 * Creates a model of the settings in the "runtime configuration area".

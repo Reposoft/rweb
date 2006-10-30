@@ -6,6 +6,7 @@ import java.io.File;
 
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 
+import se.repos.svn.VersionedProperty;
 import se.repos.svn.checkout.VersionedProperties;
 
 public class VersionedPropertiesAccess implements VersionedProperties {
@@ -22,12 +23,18 @@ public class VersionedPropertiesAccess implements VersionedProperties {
 		return path;
 	}
 
-	public void setIgnore(String ignorePattern) {
-		// TODO
+	public VersionedProperty getProperty(String name) {
+		if (true) {
+			throw new UnsupportedOperationException("Method VersionedPropertiesAccess#getProperty not implemented yet");
+		}
+		return null;
 	}
 
-	public void setIgnore(File ignoreChild) {
-		this.setIgnore(ignoreChild.getName());
+	public void setProperty(VersionedProperty nameAndValue) {
+		if (true) {
+			throw new UnsupportedOperationException("Method VersionedPropertiesAccess#setProperty not implemented yet");
+		}
+		
 	}
 
 }

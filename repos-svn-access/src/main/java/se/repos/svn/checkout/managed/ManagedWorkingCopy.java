@@ -14,6 +14,8 @@ import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.VersionedFileProperties;
+import se.repos.svn.checkout.VersionedFolderProperties;
 import se.repos.svn.checkout.VersionedProperties;
 import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.checkout.simple.SimpleWorkingCopy;
@@ -156,21 +158,38 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		workingCopy.revert();
 	}
 
-	public boolean isMetadataFolder(File path) {
-		return workingCopy.isMetadataFolder(path);
+	public boolean isAdministrativeFolder(File path) {
+		return workingCopy.isAdministrativeFolder(path);
 	}
 
 	public boolean isIgnore(File path) {
 		return workingCopy.isIgnore(path);
 	}
 
-	public VersionedProperties getProperties(File path) {
-		return workingCopy.getProperties(path);
-	}
-
 	public ClientConfiguration getClientSettings() {
 		if (true) {
 			throw new UnsupportedOperationException("Method ManagedWorkingCopy#getClientSettings not implemented yet");
+		}
+		return null;
+	}
+
+	public VersionedProperties getProperties(File path) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#getProperties not implemented yet");
+		}
+		return null;
+	}
+
+	public VersionedFileProperties getPropertiesForFile(File file) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#getPropertiesForFile not implemented yet");
+		}
+		return null;
+	}
+
+	public VersionedFolderProperties getPropertiesForFolder(File folder) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#getPropertiesForFolder not implemented yet");
 		}
 		return null;
 	}

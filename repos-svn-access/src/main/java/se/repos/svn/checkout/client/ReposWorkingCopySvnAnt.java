@@ -41,6 +41,8 @@ import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.VersionedFileProperties;
+import se.repos.svn.checkout.VersionedFolderProperties;
 import se.repos.svn.checkout.VersionedProperties;
 import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.config.ClientConfiguration;
@@ -548,7 +550,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		this.revert(settings.getWorkingCopyDirectory());
 	}
 
-	public boolean isMetadataFolder(File path) {
+	public boolean isAdministrativeFolder(File path) {
 		return client.isAdminDirectory(path.getName());
 	}
 
@@ -559,16 +561,29 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		return (status.getTextStatus() != SVNStatusKind.IGNORED);
 	}
 
-	public VersionedProperties getProperties(File path) {
+	public ClientConfiguration getClientSettings() {
 		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#getProperties not implemented yet");
+			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#getClientSettings not implemented yet");
+		}
+		return null;
+	}	
+	
+	public VersionedProperties getProperties(File path) {
+		if (!path.exists()) throw new IllegalArgumentException("Can not access properties for the non-existing path " + path);
+		if (!isVersioned(path)) throw new IllegalArgumentException("Can not access properties for the non-versioned path " + path);
+		throw new UnsupportedOperationException("Not implemented");
+	}
+
+	public VersionedFileProperties getPropertiesForFile(File file) {
+		if (true) {
+			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#getPropertiesForFile not implemented yet");
 		}
 		return null;
 	}
 
-	public ClientConfiguration getClientSettings() {
+	public VersionedFolderProperties getPropertiesForFolder(File folder) {
 		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#getClientSettings not implemented yet");
+			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#getPropertiesForFolder not implemented yet");
 		}
 		return null;
 	}
