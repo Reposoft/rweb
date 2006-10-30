@@ -116,8 +116,17 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	
 	/**
 	 * Remove a file or folder from version control.
+	 * 
+	 * Note that if the folder has unversioned files or local modifications
+	 * it can not be deleted (this is the default subversion client behaviour).
+	 * Changes can be either committed or reverted.
+	 * A folder with new contents that really should be deleted can be removed
+	 * with a normal file system operation, then deleted with this method.
+	 * 
 	 * @param path To be removed from repository HEAD, 
 	 * if it still exists locally it will be deleted after the operation.
+	 * @see #isVersioned(File)
+	 * @see #hasLocalChanges(File)
 	 */
 	public void delete(File path);
 	

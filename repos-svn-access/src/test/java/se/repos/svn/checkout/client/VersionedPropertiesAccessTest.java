@@ -34,8 +34,4 @@ public class VersionedPropertiesAccessTest extends TestCase {
 		}
 	}
 
-	public void testSetIgnoreFile() {
-		fail("Not yet implemented");
-	}
-
 }

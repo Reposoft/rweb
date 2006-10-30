@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import se.repos.svn.SvnIgnorePattern;
+import se.repos.svn.VersionedProperty;
 
 import junit.framework.TestCase;
 
@@ -39,6 +40,50 @@ public class ReposWorkingCopyPropertiesIntegrationTest extends TestCase {
 		ReposWorkingCopy c = ReposWorkingCopyFactory.getClient(settings);
 		c.checkout();
 		return c;
+	}
+	
+	public void testProperties() throws ConflictException, RepositoryAccessException {
+		File f = new File(path, "folder" + System.currentTimeMillis());
+		f.mkdir();
+		client.add(f);
+		
+		// for supported properties, the application should provide a VersionedProperty implementation
+		// that wraps and validates the value
+		client.getProperties(f).setProperty(new VersionedProperty() {
+			public String getName() {
+				return "repos:test";
+			}
+			public String getValue() {
+				return "1.X";
+			}
+		});
+		
+		assertEquals("1.X", client.getProperties(f).getProperty("repos:test").getValue());
+		client.commit("Added a custom versioned property");
+		assertFalse("Everything should be committed", client.hasLocalChanges(f));
+		
+		client.getProperties(f).setProperty(new VersionedProperty() {
+			public String getName() {
+				return "repos:test";
+			}
+			public String getValue() {
+				return "2.Y";
+			}
+		});
+		
+		assertTrue("Property change counts as local modification", client.hasLocalChanges(f));
+		assertEquals("2.Y", client.getProperties(f).getProperty("repos:test").getValue());
+		
+		try {
+			client.delete(f);
+			fail("Should not be able to delete folder because it has local property modifications");
+		} catch (WorkingCopyAccessException e) {
+			// expected
+		}
+		client.revert(f);
+		assertEquals("1.X", client.getProperties(f).getProperty("repos:test").getValue());
+		client.delete(f);
+		client.commit("Cleaned up after property test");
 	}
 	
 	public void testIsIgnoreNotVersionedParent() {
@@ -103,8 +148,15 @@ public class ReposWorkingCopyPropertiesIntegrationTest extends TestCase {
 		client.add(child);
 		assertFalse("Added resources are not 'ignore' even if they match", client.isIgnore(child));
 		
+		// check the property value directly
+		VersionedProperty prop = client.getProperties(parent).getProperty("svn:ignore");
+		assertEquals("Property svn:ignore is standard", "svn:ignore", prop.getName());
+		assertEquals("Value of svn:ignore should be 'file.txt'", "file.txt", prop.getValue().trim());
+		
 		// clean up
-		client.revert(child);
+		client.revert(child); // not really needed, parent revert is recursive
+		child.delete(); // needed because folder with local changes can not be marked for deleteion
+		client.revert(parent); // revert the propset
 		client.delete(parent);
 		client.commit("Cleaned up after ignore test");
 	}

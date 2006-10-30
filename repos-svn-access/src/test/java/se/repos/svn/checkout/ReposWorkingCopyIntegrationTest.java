@@ -153,6 +153,30 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		assertFalse("The file should be gone from the file system immediately after svn delete", created.exists());
 		client.commit("Delete test done");
 	}
+	
+	public void testDeleteFolderContainingNewFile() throws IOException, ConflictException, RepositoryAccessException {
+		File created = new File(path, "tobedeleted" + System.currentTimeMillis());
+		created.mkdir();
+		client.add(created);
+		assertTrue("The folder should have been added", client.isVersioned(created));
+		client.commit("Added test folder (testDeleteFolderContainingNewFile)");
+		
+		File child = new File(created, "nonversioned.txt");
+		child.createNewFile();
+		try {
+			client.delete(created);
+			fail("Should have thrown WorkingCopyAccessExcption because there are local changes in the folder");
+		} catch (WorkingCopyAccessException e) {
+			// expected
+		}
+		assertTrue("Should have removed the folder with the new file", client.isVersioned(created));
+		
+		child.delete();
+		created.delete();
+		client.delete(created);
+		client.commit("Deleted test folder");
+		assertFalse("Delete should be successful when the folder has been manually deleted", client.isVersioned(created));
+	}
 
 	public void testMove() throws IOException, ConflictException, RepositoryAccessException {
 		File f = new File(path, "tobemoved.txt");

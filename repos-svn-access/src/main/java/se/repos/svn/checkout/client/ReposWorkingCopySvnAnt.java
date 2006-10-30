@@ -573,7 +573,6 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		
 		SVNStatusKind status = result[0].getTextStatus();
 		
-		System.out.println("Status of " + result[0].getPath() + " is " + status);
 		if (SVNStatusKind.UNVERSIONED.equals(status) && isAdministrativeFolder(path)) return true;
 		return SVNStatusKind.IGNORED.equals(status);
 	}

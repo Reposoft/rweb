@@ -42,10 +42,11 @@ public class PropertyAccess implements VersionedProperties {
 	}
 
 	public void setProperty(VersionedProperty nameAndValue) {
-		if (true) {
-			throw new UnsupportedOperationException("Method VersionedPropertiesAccess#setProperty not implemented yet");
+		try {
+			client.propertySet(path, nameAndValue.getName(), nameAndValue.getValue(), false);
+		} catch (SVNClientException e) {
+			throw new WorkingCopyAccessException(e);
 		}
-		
 	}
 	
 	private class PropertyWrapper implements VersionedProperty {
