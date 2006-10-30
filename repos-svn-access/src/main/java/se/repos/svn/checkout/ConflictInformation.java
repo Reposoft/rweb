@@ -16,6 +16,7 @@ package se.repos.svn.checkout;
 
 import java.io.File;
 
+import se.repos.svn.MandatoryReposOperations;
 import se.repos.svn.checkout.client.ConflictHandler;
 
 /**

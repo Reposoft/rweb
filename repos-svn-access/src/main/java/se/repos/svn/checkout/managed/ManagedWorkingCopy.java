@@ -17,6 +17,7 @@ import se.repos.svn.checkout.RepositoryAccessException;
 import se.repos.svn.checkout.VersionedProperties;
 import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.checkout.simple.SimpleWorkingCopy;
+import se.repos.svn.config.ClientConfiguration;
 
 /**
  * A basic subversion client, with extra logic for supporting common user operations.
@@ -165,6 +166,13 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 
 	public VersionedProperties getProperties(File path) {
 		return workingCopy.getProperties(path);
+	}
+
+	public ClientConfiguration getClientSettings() {
+		if (true) {
+			throw new UnsupportedOperationException("Method ManagedWorkingCopy#getClientSettings not implemented yet");
+		}
+		return null;
 	}
 
 }

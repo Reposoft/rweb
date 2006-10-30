@@ -1,6 +1,11 @@
 /* $license_header$
  */
-package se.repos.svn.checkout;
+package se.repos.svn;
+
+import se.repos.svn.checkout.ConflictException;
+import se.repos.svn.checkout.ConflictInformation;
+import se.repos.svn.checkout.ReposWorkingCopy;
+import se.repos.svn.checkout.RepositoryAccessException;
 
 /**
  * A minimal interface to show which operations are required from a repos client application.
@@ -44,7 +49,7 @@ public interface MandatoryReposOperations {
 		throws ConflictException, RepositoryAccessException;
 	
 	/**
-	 * Make a file ready for commit again after a conflict
+	 * Make a file ready for commit again after a conflict.
 	 * @param conflictInformation The conflicting file
 	 */
 	public void markConflictResolved(ConflictInformation conflictInformation);

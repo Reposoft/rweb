@@ -1,6 +1,6 @@
 /* $license_header$
  */
-package se.repos.svn.config;
+package se.repos.svn;
 
 /**
  * Represents proxy settings with mandatory host and port and optional login.

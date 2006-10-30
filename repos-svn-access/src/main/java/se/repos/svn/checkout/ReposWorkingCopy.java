@@ -16,6 +16,9 @@ package se.repos.svn.checkout;
 
 import java.io.File;
 
+import se.repos.svn.MandatoryReposOperations;
+import se.repos.svn.config.ClientConfiguration;
+
 /**
  * The repos.se operations on a working copy, as an abstraction above svnClientAdapter.
  * 
@@ -128,12 +131,21 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	
 	/**
 	 * Restores the entire working copy to the revision that was retreived last time an update was done.
+	 * @deprecated recursive revert is generally not efficient, because metadata folders may be gone. Use update to restore working copy.
 	 */
 	public void revert();
 	
 	/**
-	 * Restores a file or folder (recursively) to the version in repository.
-	 * If the argument is a folder, it will be reverted recursively. Reverting only modified properties of a folder is a very rare operation, and if needed it is possible to propget the old version's properties and revert manually.
+	 * Restores a file or folder to the version in repository.
+	 * 
+	 * If the argument is a folder, it will be reverted recursively. This has the same limitations
+	 * as in all subversion clients, that if .svn administrative folders are gone, it can not
+	 * know what the contents was at last checkout.
+	 * 
+	 * Use delete+update to restore to the latest version from the repository.
+	 * 
+	 * Reverting only modified properties is not supported: it is a rare operation,
+	 * and if needed it is possible to propget the old version's properties and revert manually.
 	 * @param path file to reset all changes in, or folder to recursively restore
 	 */
 	public void revert(File path);
@@ -164,5 +176,12 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 */
 	public VersionedProperties getProperties(File path);
 	
-	//TODO getClientSettings()
+	/**
+	 * Creates a model of the settings in the "runtime configuration area".
+	 * 
+	 * These settings are shared by all subversion clients for the current user on the local machine.
+	 * 
+	 * @return current subversion runtime configuration
+	 */
+	public ClientConfiguration getClientSettings();
 }

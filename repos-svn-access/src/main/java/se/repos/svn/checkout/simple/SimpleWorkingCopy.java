@@ -3,10 +3,10 @@ package se.repos.svn.checkout.simple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import se.repos.svn.MandatoryReposOperations;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ConflictInformation;
-import se.repos.svn.checkout.MandatoryReposOperations;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
 import se.repos.svn.checkout.RepositoryAccessException;

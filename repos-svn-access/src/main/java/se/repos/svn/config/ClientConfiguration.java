@@ -2,6 +2,9 @@
  */
 package se.repos.svn.config;
 
+import se.repos.svn.SvnIgnorePattern;
+import se.repos.svn.SvnProxySettings;
+
 /**
  * Local subversion client configuration, such as ignre patterns and proxy settings.
  * 

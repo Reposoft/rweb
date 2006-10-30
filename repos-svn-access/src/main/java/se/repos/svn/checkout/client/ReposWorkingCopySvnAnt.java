@@ -43,6 +43,7 @@ import se.repos.svn.checkout.ReposWorkingCopyFactory;
 import se.repos.svn.checkout.RepositoryAccessException;
 import se.repos.svn.checkout.VersionedProperties;
 import se.repos.svn.checkout.WorkingCopyAccessException;
+import se.repos.svn.config.ClientConfiguration;
 
 /**
  * Uses subclipse {@link http://subclipse.tigris.org/svnant.html SvnAnt} to implement the subversion operations
@@ -561,6 +562,13 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	public VersionedProperties getProperties(File path) {
 		if (true) {
 			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#getProperties not implemented yet");
+		}
+		return null;
+	}
+
+	public ClientConfiguration getClientSettings() {
+		if (true) {
+			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#getClientSettings not implemented yet");
 		}
 		return null;
 	}

@@ -7,6 +7,9 @@ import java.lang.reflect.Method;
 
 import org.tigris.subversion.svnclientadapter.AbstractClientAdapter;
 
+import se.repos.svn.SvnIgnorePattern;
+import se.repos.svn.SvnProxySettings;
+
 /**
  * Abstraction for a the subversion client configuration area.
  * 

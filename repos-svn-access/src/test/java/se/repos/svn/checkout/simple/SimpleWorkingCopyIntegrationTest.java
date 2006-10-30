@@ -21,10 +21,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import se.repos.svn.MandatoryReposOperations;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.CheckoutSettingsForTest;
 import se.repos.svn.checkout.ConflictException;
-import se.repos.svn.checkout.MandatoryReposOperations;
 import se.repos.svn.checkout.RepositoryAccessException;
 
 import junit.framework.TestCase;

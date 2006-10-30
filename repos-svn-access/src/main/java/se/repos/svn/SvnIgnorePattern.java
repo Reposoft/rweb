@@ -1,6 +1,6 @@
 /* $license_header$
  */
-package se.repos.svn.config;
+package se.repos.svn;
 
 /**
  * Every ignore entry is encapsulated in a class, to provide validation.
