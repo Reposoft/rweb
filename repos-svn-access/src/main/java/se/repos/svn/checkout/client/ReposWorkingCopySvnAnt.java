@@ -569,23 +569,22 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	}	
 	
 	public VersionedProperties getProperties(File path) {
-		if (!path.exists()) throw new IllegalArgumentException("Can not access properties for the non-existing path " + path);
-		if (!isVersioned(path)) throw new IllegalArgumentException("Can not access properties for the non-versioned path " + path);
-		throw new UnsupportedOperationException("Not implemented");
+		verifyCanAccessProperties(path);
+		return new PropertyAccess(path, this.getClientAdapter());
 	}
 
 	public VersionedFileProperties getPropertiesForFile(File file) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#getPropertiesForFile not implemented yet");
-		}
-		return null;
+		verifyCanAccessProperties(file);
+		return new PropertyAccessFile(file, this.getClientAdapter());
 	}
 
 	public VersionedFolderProperties getPropertiesForFolder(File folder) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#getPropertiesForFolder not implemented yet");
-		}
-		return null;
+		verifyCanAccessProperties(folder);
+		return new PropertyAccessFolder(folder, this.getClientAdapter());
+	}
+	
+	private void verifyCanAccessProperties(File path) {
+		if (!isVersioned(path)) throw new IllegalArgumentException("Can not access properties for the non-versioned path " + path);
 	}
 	
 }

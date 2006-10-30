@@ -4,7 +4,6 @@ package se.repos.svn;
 
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ConflictInformation;
-import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.RepositoryAccessException;
 
 /**
@@ -12,7 +11,7 @@ import se.repos.svn.checkout.RepositoryAccessException;
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$
- * @see ReposWorkingCopy
+ * @see se.repos.svn.checkout.ReposWorkingCopy
  */
 public interface MandatoryReposOperations {
 

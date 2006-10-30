@@ -19,7 +19,7 @@ public class VersionedPropertiesAccessTest extends TestCase {
 		ISVNClientAdapter client = (ISVNClientAdapter) clientControl.getMock();
 		
 		File path = File.createTempFile("repos-svn-access", "versionedPropertiesTest");
-		VersionedProperties prop = new VersionedPropertiesAccess(path, client);
+		VersionedProperties prop = new PropertyAccess(path, client);
 	}
 
 	public void testSetIgnoreFile() {

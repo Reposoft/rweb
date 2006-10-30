@@ -9,14 +9,21 @@ import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import se.repos.svn.VersionedProperty;
 import se.repos.svn.checkout.VersionedProperties;
 
-public class VersionedPropertiesAccess implements VersionedProperties {
+public class PropertyAccess implements VersionedProperties {
 
 	private File path;
 	private ISVNClientAdapter client;
 
-	public VersionedPropertiesAccess(File path, ISVNClientAdapter client) {
+	/**
+	 * 
+	 * @param path
+	 * @param client
+	 * @throws IllegalArgumentException if the path is invalid for property access
+	 */
+	public PropertyAccess(File path, ISVNClientAdapter client) {
 		this.path = path;
 		this.client = client;
+		if (!path.exists()) throw new IllegalArgumentException("Can not access properties for the non-existing path " + path);
 	}
 	
 	public File getPath() {
