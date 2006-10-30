@@ -25,6 +25,8 @@ public interface VersionedFolderProperties extends VersionedProperties {
 	/**
 	 * Adds local svn:ignore property value to the list of ignores for a folder.
 	 * 
+	 * Note that to ignore a file inside a folder, the property should be set on the folder, not the file.
+	 * 
 	 * @param localIgnore 
 	 */
 	public void setIgnore(SvnIgnorePattern localIgnore);

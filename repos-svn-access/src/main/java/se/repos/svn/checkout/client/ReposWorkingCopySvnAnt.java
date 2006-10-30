@@ -233,7 +233,8 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	public boolean isVersioned(File path) throws WorkingCopyAccessException {
 		try {
 			ISVNStatus status = getSingleStatus(path);
-			return (status.getTextStatus() != SVNStatusKind.UNVERSIONED);
+			return (status.getTextStatus() != SVNStatusKind.UNVERSIONED 
+					&& status.getTextStatus() != SVNStatusKind.IGNORED);
 		} catch (WorkingCopyAccessException e) {
 			// throws client exception if the parent path is not versioned
 			try {
@@ -411,7 +412,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		    return true; // could also check for conflicts
 		}
 		return false;
-	}	
+	}
     
 	private void validateWorkingCopyMatchesRepositoryUrl(File workingCopyDirectory, RepositoryUrl checkoutUrl) {
 		SVNUrl actual = getActualRepositoryUrl(workingCopyDirectory);
@@ -465,15 +466,15 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		}
 
 		private String getCurrentCommand() {
-			return "" + counter + ":" + currentCommand;
+			return currentCommand+counter;
 		}
 		
 		public void logCommandLine(String commandLine) {
-			logger.debug("svn command line for {}: {}", getCurrentCommand(), commandLine);
+			logger.debug("svn command line for {} '{}'", getCurrentCommand(), commandLine);
 		}
 
 		public void logCompleted(String message) {
-			logger.debug("svn completed command {}: {}", getCurrentCommand(), message);
+			logger.debug("svn completed command {} '{}'", getCurrentCommand(), message);
 		}
 
 		// conflict is reported as "C  C:/myfile.txt"
@@ -485,12 +486,12 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 				String filename = conflictMatcher.group(1);
 				conflictFileList.add(new File(filename));
 			} else {
-				logger.error("Subversion error in command {}: {}", getCurrentCommand(), message);
+				logger.error("Subversion error in command {} '{}'", getCurrentCommand(), message);
 			}
 		}
 
 		public void logMessage(String message) {
-			logger.debug("svn message from command {}: {}", getCurrentCommand(), message);
+			logger.debug("svn message from command {} '{}'", getCurrentCommand(), message);
 		}
 
 		public void logRevision(long revision, String path) {
@@ -498,7 +499,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		}
 
 		public void onNotify(File path, SVNNodeKind kind) {
-			logger.debug("svn command {} running on path {} ({})", new Object[]{getCurrentCommand(), path, kind});
+			logger.debug("svn command {} running on {} '{}'", new Object[]{getCurrentCommand(), kind, path});
 		}
 		
 		private String getCommandName(int command) {
@@ -555,10 +556,26 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	}
 
 	public boolean isIgnore(File path) {
-		if (isVersioned(path)) return false; // svn status is of no help to see if a version file matches ignore patterns
+		if (this.settings.getWorkingCopyDirectory().equals(path)) return false;
+		if (!path.exists()) throw new IllegalArgumentException("Can not check status for non-existing path: " + path);
+		if (!isVersioned(path.getParentFile())) throw new IllegalArgumentException("Can not check status. The parent folder is not versioned: " + path.getParentFile());
+		if (isVersioned(path)) return false; // svn status is of no help to see if a versioned file matches ignore patterns
+
+		// client.getSingleStatus uses the --no-ignores parameter (for some reason) so it can not be used
 		
-		ISVNStatus status = getSingleStatus(path);
-		return (status.getTextStatus() != SVNStatusKind.IGNORED);
+		ISVNStatus[] result;
+		try {
+			result = client.getStatus(path, false, true, false); //(File path, boolean descend, boolean getAll, boolean contactServer, boolean ignoreExternals)
+		} catch (SVNClientException e) {
+			throw new WorkingCopyAccessException(e);
+		}
+		if (result.length==0) throw new WorkingCopyAccessException("Can not get status for path " + path);
+		
+		SVNStatusKind status = result[0].getTextStatus();
+		
+		System.out.println("Status of " + result[0].getPath() + " is " + status);
+		if (SVNStatusKind.UNVERSIONED.equals(status) && isAdministrativeFolder(path)) return true;
+		return SVNStatusKind.IGNORED.equals(status);
 	}
 
 	public ClientConfiguration getClientSettings() {

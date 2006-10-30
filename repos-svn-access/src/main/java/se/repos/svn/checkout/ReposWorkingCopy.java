@@ -165,7 +165,7 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * 
 	 * Administrative folder is always ignore.
 	 * 
-	 * @param path any path in the working copy, parent directory (getParent) must exist.
+	 * @param path any path in the working copy, must exist, parent directory (getParent) must be versioned.
 	 * @return true if the path should not be in version control, false if it is or should be in version control.
 	 */
 	public boolean isIgnore(File path);

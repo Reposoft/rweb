@@ -11,6 +11,10 @@ import java.io.Writer;
 import junit.framework.TestCase;
 
 /**
+ * Tests basic operations like checkout, commit, update, add, move, delete and status.
+ * 
+ * If this tests does not pass, other integration test will also fail.
+ * 
  * @author Staffan Olsson (solsson)
  * @version $Id$
  * @todo when there is more than one working copy implementation, make this abstract and use to test all implementations

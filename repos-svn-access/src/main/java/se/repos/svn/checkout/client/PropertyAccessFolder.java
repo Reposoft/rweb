@@ -3,11 +3,14 @@
 package se.repos.svn.checkout.client;
 
 import java.io.File;
+import java.util.List;
 
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
+import org.tigris.subversion.svnclientadapter.SVNClientException;
 
 import se.repos.svn.SvnIgnorePattern;
 import se.repos.svn.checkout.VersionedFolderProperties;
+import se.repos.svn.checkout.WorkingCopyAccessException;
 
 public class PropertyAccessFolder extends PropertyAccess
 	implements VersionedFolderProperties {
@@ -18,17 +21,21 @@ public class PropertyAccessFolder extends PropertyAccess
 	}
 
 	public SvnIgnorePattern[] getIgnores() {
-		if (true) {
-			throw new UnsupportedOperationException("Method PropertyAccessFolder#getIgnores not implemented yet");
+		List ignored;
+		try {
+			ignored = client.getIgnoredPatterns(path);
+		} catch (SVNClientException e) {
+			throw new WorkingCopyAccessException(e);
 		}
-		return null;
+		return SvnIgnorePattern.array(ignored);
 	}
 
 	public void setIgnore(SvnIgnorePattern localIgnore) {
-		if (true) {
-			throw new UnsupportedOperationException("Method PropertyAccessFolder#setIgnore not implemented yet");
+		try {
+			client.addToIgnoredPatterns(path, localIgnore.getValue());
+		} catch (SVNClientException e) {
+			throw new WorkingCopyAccessException(e); // "Could not add ignore pattern " + localIgnore + " to path " + path, 
 		}
-		
 	}
 
 }

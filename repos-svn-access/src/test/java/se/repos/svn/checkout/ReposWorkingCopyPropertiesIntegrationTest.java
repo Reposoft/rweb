@@ -41,21 +41,93 @@ public class ReposWorkingCopyPropertiesIntegrationTest extends TestCase {
 		return c;
 	}
 	
+	public void testIsIgnoreNotVersionedParent() {
+		File f = new File(path, "newfolder" + System.currentTimeMillis());
+		f.mkdir();
+		File child = new File(f, "child");
+		child.mkdir();
+		try {
+			client.isIgnore(child);
+			fail("Should throw exception because the parent folder is not versioned");
+		} catch (IllegalArgumentException e) {
+			// expected
+		}
+	}
+	
+	public void testIsIgnoreVersioned() {
+		File f = new File(path, "newfolder" + System.currentTimeMillis());
+		f.mkdir();
+		client.add(f);
+		
+		File child = new File(f, "child");
+		child.mkdir();
+		client.add(child);
+		assertFalse("Should report NOT ignored because the file IS under version control", 
+				client.isIgnore(child));
+	}	
+	
+	public void testIsIgnoreAdministrativeAreaFolder() throws Exception {
+		File svn = new File(path, ".svn");
+		assertFalse("The administrative area should definitely not be versioned", client.isVersioned(svn));
+		if (!svn.exists()) throw new Exception("Can not find administrative area '.svn' in working copy, so this test can not continue.");
+		assertTrue("The administrative area should always be ignored", client.isIgnore(svn));
+	}
+	
 	public void testIgnoreProperty() throws ConflictException, RepositoryAccessException, IOException {
+		assertFalse(client.hasLocalChanges());
+		File parent = new File(path, "newfolder" + System.currentTimeMillis());
+		parent.mkdir();
+		client.add(parent);
+		client.commit("Added empty folder for ignore test"); // not needed, can set properties for newly added path too
+		
+		File child = new File(parent, "file.txt");
+		child.createNewFile();
+		assertFalse("The name file.txt should not be ignored, it has no matching ignore pattern", client.isIgnore(child));
+		
+		// set the ignore property
+		client.getPropertiesForFolder(parent).setIgnore(new SvnIgnorePattern(child));
+		assertTrue("The new property at the parent should count as a local change", 
+				client.hasLocalChanges(parent));
+		assertFalse("The new file has a matching ignore property, but it is not added so it has no local changes",
+				client.hasLocalChanges(child));
+		assertFalse("The file can not be versioned, because then ignore would not be reported",
+				client.isVersioned(child));
+		assertTrue("The local svn:ignore property should now contain 'file.txt'",
+				client.getProperties(parent).getProperty("svn:ignore").getValue().contains("file.txt"));
+		assertTrue("'file.txt' should now be in the ignores list",
+				client.getPropertiesForFolder(parent).getIgnores().length > 0);
+		assertTrue("file.txt should be ignored, it has a matching ignore pattern",
+				client.isIgnore(child));
+		
+		// now check result after the ignored resource has been explicitly added
+		client.add(child);
+		assertFalse("Added resources are not 'ignore' even if they match", client.isIgnore(child));
+		
+		// clean up
+		client.revert(child);
+		client.delete(parent);
+		client.commit("Cleaned up after ignore test");
+	}
+	
+	public void testIsIgnoreNonExisting() throws ConflictException, RepositoryAccessException {
 		assertFalse(client.hasLocalChanges());
 		File f = new File(path, "newfolder" + System.currentTimeMillis());
 		f.mkdir();
 		client.add(f);
-		client.commit("Added empty folder for ignore test");
 		
-		File child = new File(path, "file.txt");
-		child.createNewFile();
-		assertFalse(client.isIgnore(child));
-		client.getPropertiesForFolder(f).setIgnore(new SvnIgnorePattern(child));
-		assertTrue(client.isIgnore(child));
-		// now check result after the ignored resource has been explicitly added
-		client.add(child);
-		assertFalse("Added resources are not 'ignore' even if they match", client.isIgnore(child));
+		File child = new File(f, "file.txt");
+		try {
+			client.isIgnore(child);
+			fail("Should throw IllegalArgumentException for isIgnore on path that does not exist.");
+		} catch (IllegalArgumentException e) {
+			// expected
+		}
+		
+		try {
+			client.getPropertiesForFolder(f).setIgnore(new SvnIgnorePattern(child));
+		} catch (RuntimeException e) {
+			fail("Should allow new ignore value that is the name of a file even if the file does not exist");
+		}
 	}
 	
 	public void testGlobalIgnore() {

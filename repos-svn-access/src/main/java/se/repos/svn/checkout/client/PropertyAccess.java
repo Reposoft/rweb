@@ -5,14 +5,17 @@ package se.repos.svn.checkout.client;
 import java.io.File;
 
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
+import org.tigris.subversion.svnclientadapter.ISVNProperty;
+import org.tigris.subversion.svnclientadapter.SVNClientException;
 
 import se.repos.svn.VersionedProperty;
 import se.repos.svn.checkout.VersionedProperties;
+import se.repos.svn.checkout.WorkingCopyAccessException;
 
 public class PropertyAccess implements VersionedProperties {
 
-	private File path;
-	private ISVNClientAdapter client;
+	protected File path;
+	protected ISVNClientAdapter client;
 
 	/**
 	 * 
@@ -31,10 +34,11 @@ public class PropertyAccess implements VersionedProperties {
 	}
 
 	public VersionedProperty getProperty(String name) {
-		if (true) {
-			throw new UnsupportedOperationException("Method VersionedPropertiesAccess#getProperty not implemented yet");
+		try {
+			return new PropertyWrapper(client.propertyGet(path, name));
+		} catch (SVNClientException e) {
+			throw new WorkingCopyAccessException(e); // offline operation because path is local
 		}
-		return null;
 	}
 
 	public void setProperty(VersionedProperty nameAndValue) {
@@ -42,6 +46,22 @@ public class PropertyAccess implements VersionedProperties {
 			throw new UnsupportedOperationException("Method VersionedPropertiesAccess#setProperty not implemented yet");
 		}
 		
+	}
+	
+	private class PropertyWrapper implements VersionedProperty {
+		private ISVNProperty property;
+
+		PropertyWrapper(ISVNProperty property) {
+			this.property = property;
+		}
+
+		public String getName() {
+			return property.getName();
+		}
+
+		public String getValue() {
+			return property.getValue();
+		}
 	}
 
 }
