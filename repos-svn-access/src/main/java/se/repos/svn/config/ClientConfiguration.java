@@ -22,7 +22,7 @@ public interface ClientConfiguration {
 	
 	void setStorePasswords(boolean authCache);
 	
-	boolean getStorePasswords();
+	boolean isStorePasswords();
 	
 	// -- network configuration, or should this be in the authentication information --
 	

@@ -3,9 +3,10 @@
 package se.repos.svn.config.file;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import se.repos.svn.SvnProxySettings;
+import se.repos.svn.config.ConfigurationStateException;
 import se.repos.svn.config.ConfigurationUpdateException;
 
 import ch.ubique.inieditor.IniEditor;
@@ -21,19 +22,27 @@ public class ServersFile extends IniFile {
 	public static final String GROUP_GLOBAL = "global";
 	protected static final String GROUP_GROUPS = "groups";
 	
-	public ServersFile(File iniFile) throws FileNotFoundException, IOException {
+	/**
+	 * @param iniFile The 'servers' file in the runtime configuration area
+	 * @throws IOException If the file can not be read
+	 * @throws ConfigurationStateException If the file is empty or contents are not valid configuration
+	 */
+	public ServersFile(File iniFile) throws IOException, ConfigurationStateException {
 		super(iniFile);
 		verifyServerFile(iniFile.getAbsolutePath());
 	}
 	
-	private void verifyServerFile(String fileDescriptionForErrorMessages) throws IOException {
+	private void verifyServerFile(String fileDescriptionForErrorMessages) throws ConfigurationStateException {
 		IniEditor file = load();
-		if (!file.hasSection(GROUP_GROUPS)) throw new IOException(fileDescriptionForErrorMessages + " must have a configuration section: " + GROUP_GROUPS);
-		if (!file.hasSection(GROUP_GLOBAL)) throw new IOException(fileDescriptionForErrorMessages + " must have a configuration section: " + GROUP_GLOBAL);
+		if (!file.hasSection(GROUP_GROUPS)) throw new ConfigurationStateException(
+				fileDescriptionForErrorMessages + " must have a configuration section: " + GROUP_GROUPS);
+		if (!file.hasSection(GROUP_GLOBAL)) throw new ConfigurationStateException(
+				fileDescriptionForErrorMessages + " must have a configuration section: " + GROUP_GLOBAL);
 	}
 	
 	/**
-	 * @param group new server group that should be added as a section to the ini file
+	 * @param groupName new server group that should be added as a section to the ini file
+	 * @param domainNameMatch the qualifier for this group
 	 */
 	public void addGroup(String groupName, String domainNameMatch) {
 		if (GROUP_GROUPS.equals(groupName)) throw new ConfigurationUpdateException(groupName + " is not a valid group nane.");
@@ -46,33 +55,51 @@ public class ServersFile extends IniFile {
 	
 	/**
 	 * @param group group name or GROUP_GLOBAL
-	 * @param host
+	 * @param timeout in seconds to wait for server response in the group
 	 */
-	public void setProxyHost(String group, String host) {
-		IniEditor servers = load();
-		if (!servers.hasSection(group)) throw new ConfigurationUpdateException("The group '" + group + "' does not exist in the servers file");
-		servers.set(group, "http-proxy-host", host);
-		save(servers);
+	public void setHttpTimeout(String group, int timeout) {
+		setValue(group, "http-timeout", Integer.toString(timeout));
+	}
+
+	/**
+	 * @param group group name or GROUP_GLOBAL
+	 * @param compress true to allow DAV request compression
+	 */
+	public void setHttpCompression(String group, boolean compress) {
+		setValue(group, "http-compression", compress ? "yes" : "no");
 	}
 	
-	public void setProxyPort(String group, String port) {
-		IniEditor servers = load();
-		if (!servers.hasSection(group)) throw new ConfigurationUpdateException("The group '" + group + "' does not exist in the servers file");
-		servers.set(group, "http-proxy-port", port);
-		save(servers);
+	/**
+	 * @param group group name or GROUP_GLOBAL
+	 * @param settings the proxy for the given group
+	 */
+	public void setProxySettings(String group, SvnProxySettings settings) {
+		setProxyHost(group, settings.getHost());
+		setProxyPort(group, settings.getPort());
+		if (settings.getUsername() != null) setProxyUsername(group, settings.getUsername());
+		if (settings.getPassword() != null) setProxyPassword(group, settings.getPassword());
 	}
 	
-	public void setProxyUsername(String group, String username) {
-		IniEditor servers = load();
-		if (!servers.hasSection(group)) throw new ConfigurationUpdateException("The group '" + group + "' does not exist in the servers file");
-		servers.set(group, "http-proxy-username", username);
-		save(servers);
+	private void setProxyHost(String group, String host) {
+		setValue(group, "http-proxy-host", host);
 	}
 	
-	public void setProxyPassword(String group, String password) {
+	private void setProxyPort(String group, String port) {
+		setValue(group, "http-proxy-port", port);
+	}
+	
+	private void setProxyUsername(String group, String username) {
+		setValue(group, "http-proxy-username", username);
+	}
+	
+	private void setProxyPassword(String group, String password) {
+		setValue(group, "http-proxy-password", password);
+	}
+	
+	private void setValue(String group, String option, String value) {
 		IniEditor servers = load();
 		if (!servers.hasSection(group)) throw new ConfigurationUpdateException("The group '" + group + "' does not exist in the servers file");
-		servers.set(group, "http-proxy-password", password);
+		servers.set(group, option, value);
 		save(servers);
 	}
 }

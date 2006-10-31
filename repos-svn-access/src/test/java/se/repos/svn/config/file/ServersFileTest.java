@@ -14,23 +14,27 @@ import java.util.List;
 import java.util.Properties;
 
 import junit.framework.TestCase;
+import se.repos.svn.SvnProxySettings;
+import se.repos.svn.config.ConfigurationStateException;
 
 public class ServersFileTest extends TestCase {
 
 	public void testEmptyFileException() throws IOException {
 		File f = File.createTempFile("repos-svn-access", "servers");
-		ServersFile servers = null;
 		try {
-			servers = new ServersFile(f);
+			new ServersFile(f);
+			fail("ServersFile should throw exception in initializer if the basic sections are not in the file");
 		} catch (FileNotFoundException e) {
 			throw e;
 		} catch (IOException e) {
+			throw e;
+		} catch (ConfigurationStateException e) {
 			// expected
 		}
 		f.delete();
 	}
 	
-	public void testAddGroup() throws IOException {
+	public void testAddGroup() throws IOException, ConfigurationStateException {
 		File f = File.createTempFile("repos-svn-access", "servers");
 		FileWriter fw = new FileWriter(f);
 		fw.append("[groups]\n");
@@ -42,9 +46,9 @@ public class ServersFileTest extends TestCase {
 		// create a new group
 		config.addGroup("repos", "*.repos.se");
 		// add a group option
-		config.setProxyHost("repos", "1.2.3.4");
+		config.setProxySettings("repos", new SvnProxySettings("1.2.3.4", 80));
 		// add a global option
-		config.setProxyPort(ServersFile.GROUP_GLOBAL, "80");
+		config.setHttpTimeout(ServersFile.GROUP_GLOBAL, 10);
 		
 		FileReader fr = new FileReader(f);
 		BufferedReader file = new BufferedReader(fr);
@@ -70,27 +74,35 @@ public class ServersFileTest extends TestCase {
 		assertTrue("Should contain a http-proxy-host setting for the group [repos]", c<d);
 		
 		int k = rows.indexOf("[global]");
-		int m = rows.indexOf("http-proxy-port = 80");
+		int m = rows.indexOf("http-timeout = 10");
 		assertTrue("Should contain a [global] section", k>=0);
 		assertTrue("Should contain a http-proxy-port settting", m>=0);
-		assertTrue("http-proxy-port should be a global setting", m>k);
+		assertTrue("http-timeout should be a global setting", m>k);
 		
 		f.delete();
 	}
 
-	public void testSetProxyUsernameAndPassword() throws IOException {
+	public void testSetProxyUsernameAndPassword() throws IOException, ConfigurationStateException {
 		File f = File.createTempFile("repos-svn-access", "servers");
 		FileWriter fw = new FileWriter(f);
 		fw.append("[groups]\n");
 		fw.append("[global]\n");
 		fw.close();
 		
+		SvnProxySettings proxySettings = new SvnProxySettings("1.2.3.4", 1234);
+		proxySettings.setUsername("svensson");
+		proxySettings.setPassword("medel");
+		
 		ServersFile config = new ServersFile(f);
-		config.setProxyUsername(ServersFile.GROUP_GLOBAL, "svensson");
-		config.setProxyPassword(ServersFile.GROUP_GLOBAL, "medel");
+		config.setProxySettings(ServersFile.GROUP_GLOBAL, proxySettings);
 		
 		Properties p = new Properties();
 		p.load(new FileInputStream(f));
+		
+		assertTrue(p.containsKey("http-proxy-host"));
+		assertEquals("1.2.3.4", p.get("http-proxy-host"));
+		assertTrue(p.containsKey("http-proxy-port"));
+		assertEquals("1234", p.get("http-proxy-port"));
 		assertTrue(p.containsKey("http-proxy-username"));
 		assertEquals("svensson", p.get("http-proxy-username"));
 		assertTrue(p.containsKey("http-proxy-password"));

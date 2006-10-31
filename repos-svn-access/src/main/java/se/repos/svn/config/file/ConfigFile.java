@@ -5,6 +5,8 @@ package se.repos.svn.config.file;
 import java.io.File;
 import java.io.IOException;
 
+import se.repos.svn.config.ConfigurationStateException;
+
 import ch.ubique.inieditor.IniEditor;
 
 /**
@@ -21,8 +23,10 @@ public class ConfigFile extends IniFile {
 	/**
 	 * 
 	 * @param iniFile The file in the runtime configuration area
+	 * @throws IOException If the file can not be read
+	 * @throws ConfigurationStateException If the file is empty or contents are not valid configuration
 	 */
-	public ConfigFile(File iniFile) throws IOException {
+	public ConfigFile(File iniFile) throws IOException, ConfigurationStateException {
 		super(iniFile);
 	}
 	

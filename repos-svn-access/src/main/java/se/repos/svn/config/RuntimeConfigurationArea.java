@@ -56,7 +56,7 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 		return null;
 	}
 
-	public boolean getStorePasswords() {
+	public boolean isStorePasswords() {
 		if (true) {
 			throw new UnsupportedOperationException("Method RuntimeConfigurationArea#getStorePasswords not implemented yet");
 		}
