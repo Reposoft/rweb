@@ -71,7 +71,7 @@ public class ConfigFileTest extends TestCase {
 		int g = rows.indexOf("global-ignores = .DS_Store");
 		assertTrue("Should have added a global-ignores section", g>0);
 		int n = rows.indexOf("[auto-props]");
-		/* need to write our own ini library
+		/* need to write our own ini library for this
 		assertFalse("Should not add new value right before next section when there's a section description",
 				n == g + 1);
 		assertTrue("Should have added the new value after the last commented out example", 

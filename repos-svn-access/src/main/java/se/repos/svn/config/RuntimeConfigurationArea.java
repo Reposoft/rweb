@@ -3,12 +3,16 @@
 package se.repos.svn.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.tigris.subversion.svnclientadapter.AbstractClientAdapter;
 
 import se.repos.svn.SvnIgnorePattern;
 import se.repos.svn.SvnProxySettings;
+import se.repos.svn.config.file.ConfigFile;
+import se.repos.svn.config.file.ServersFile;
 
 /**
  * Abstraction for a the subversion client configuration area.
@@ -20,28 +24,44 @@ import se.repos.svn.SvnProxySettings;
  */
 public class RuntimeConfigurationArea implements ClientConfiguration {
 	
+	private ConfigFile cofig;
+	private ServersFile servers;
+
 	/**
 	 * Reads configuration from the default subversion user folder
+	 * @throws ConfigurationStateException 
 	 */
-	public RuntimeConfigurationArea() {
-		
+	public RuntimeConfigurationArea() throws ConfigurationStateException {
+		this(getConfigFolder());
 	}
 	
 	/**
 	 * 
 	 * @param configFolder The SVN client's runtime configuration area.
+	 * @throws ConfigurationStateException 
 	 */
-	public RuntimeConfigurationArea(File configFolder) {
+	public RuntimeConfigurationArea(File configFolder) throws ConfigurationStateException {
+		File c = new File(configFolder, "config");
+		File s = new File(configFolder, "servers");
+		if (!c.exists()) throw new ConfigurationStateException("File 'config' not found in runtime configuration area folder " + configFolder);
+		if (!s.exists()) throw new ConfigurationStateException("File 'servers' not found in runtime configuration area folder " + configFolder);
 		
+		try {
+			this.cofig = new ConfigFile(c);
+			this.servers = new ServersFile(s);
+		} catch (IOException e) {
+			throw new ConfigurationStateException("Could not read config files from runtime configuration area " + configFolder);
+		}
 	}
 
 	public void addGlobalIgnore(SvnIgnorePattern pattern) {
-		if (true) {
-			throw new UnsupportedOperationException("Method RuntimeConfigurationArea#addGlobalIgnore not implemented yet");
-		}
 		
 	}
 
+	private void setGlobalIgnores(List svnIgnorePatternList) {
+		
+	}
+	
 	public SvnIgnorePattern[] getGlobalIgnores() {
 		if (true) {
 			throw new UnsupportedOperationException("Method RuntimeConfigurationArea#getGlobalIgnores not implemented yet");

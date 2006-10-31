@@ -22,12 +22,14 @@ import se.repos.svn.config.ClientConfiguration;
 /**
  * The repos.se operations on a working copy, as an abstraction above svnClientAdapter.
  * 
- * Preferrably conflicts are detected by doing an update() before commit,
- * so that the latest repository changes are inspected locally before committing.
+ * The behaviour of this client mimics that of the standard svn command line client.
  * 
  * Implementations should be as dumb as possible. Not do any automatic stuff that the user has not requested.
  * For example always using absolute URLs (i.e. 'switch' would be implemented using a new explicit url).
  * Any assumptions about repository structure should be placed in a {@link se.repos.svn.checkout.CheckoutSettings} implementation.
+ *
+ * Preferrably conflicts are detected by doing an update() before commit,
+ * so that the latest repository changes are inspected locally before committing.
  *
  * @author Staffan Olsson
  * @since 2006-apr-11

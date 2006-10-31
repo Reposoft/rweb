@@ -32,29 +32,37 @@ import se.repos.svn.config.ClientConfiguration;
  * <li>Allows delete on an already deleted file or folder
  * </ul>
  * 
- * Also maintains client settings with Repos defaults:
- * For example the names TEMP, Temp and temp should be ignored.
+ * Also enforces client settings with Repos defaults:
+ * The names TEMP, Temp and temp should be globall ignores.
  * 
  * Before a file is changed, it can be reserved using {@see #lock(String)}.
  * If a file is changed when it is not locked, optimistic locking is used.
  * So if there are no conflicts, synchronize will not complain
  * (this goes also for non-binary files that can be automatically merged).
- * If someone checked in changes that can not be merged witht the local file,
+ * If someone checked in changes that can not be merged with the local file,
  * a conflict will be reported.
- * It that happens, the user will have two files: the latest local file
+ * If that happens, the user will have two files: the latest local file
  * and the latest from the repository.
+ * 
+ * To disable password caching use {@link #getClientSettings()}. Note that 
+ * this changes the settings for all subversion clients in the current user account.
  *
  * @todo how to handle hasLocalChanges and missing files; autodelete? revert?
+ * @todo report new files or folders in any subfolder as localChanges? 
  * @todo recursive lock?
+ * 
  * @author Staffan Olsson (solsson)
  * @version $Id$
  * @see SimpleWorkingCopy for a more automated client
+ * @see ReposWorkingCopy for the standard client description
  */
 public class ManagedWorkingCopy implements ReposWorkingCopy {
 
 	final Logger logger = LoggerFactory.getLogger(this.getClass());	
 	
 	ReposWorkingCopy workingCopy;
+	
+	ConfigureClient configureClient = new DefaultReposClientSettings();
 	
 	public ManagedWorkingCopy(CheckoutSettings settings) {
 		workingCopy = ReposWorkingCopyFactory.getClient(settings);
@@ -74,8 +82,11 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 
 	/**
 	 * Note that checkout will work as an update if the working copy is already checked out.
+	 * 
+	 * Each checkout enforces the {@link DefaultReposClientSettings}.
 	 */
 	public void checkout() throws RepositoryAccessException {
+		configureClient.update(workingCopy.getClientSettings());
 		workingCopy.checkout();		
 	}
 
@@ -148,10 +159,7 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	}
 
 	public void unlock(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#unlock not implemented yet");
-		}
-		
+		workingCopy.unlock(path);
 	}
 
 	public void revert() {
@@ -167,31 +175,19 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	}
 
 	public ClientConfiguration getClientSettings() {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#getClientSettings not implemented yet");
-		}
-		return null;
+		return workingCopy.getClientSettings();
 	}
 
 	public VersionedProperties getProperties(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#getProperties not implemented yet");
-		}
-		return null;
+		return workingCopy.getProperties(path);
 	}
 
 	public VersionedFileProperties getPropertiesForFile(File file) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#getPropertiesForFile not implemented yet");
-		}
-		return null;
+		return workingCopy.getPropertiesForFile(file);
 	}
 
 	public VersionedFolderProperties getPropertiesForFolder(File folder) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ManagedWorkingCopy#getPropertiesForFolder not implemented yet");
-		}
-		return null;
+		return workingCopy.getPropertiesForFolder(folder);
 	}
 
 }
