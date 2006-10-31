@@ -5,6 +5,10 @@ package se.repos.svn.config;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.tigris.subversion.svnclientadapter.AbstractClientAdapter;
@@ -24,8 +28,10 @@ import se.repos.svn.config.file.ServersFile;
  */
 public class RuntimeConfigurationArea implements ClientConfiguration {
 	
-	private ConfigFile cofig;
+	private ConfigFile config;
 	private ServersFile servers;
+	
+	private static final String DELIMITER = "\\s+";
 
 	/**
 	 * Reads configuration from the default subversion user folder
@@ -47,7 +53,7 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 		if (!s.exists()) throw new ConfigurationStateException("File 'servers' not found in runtime configuration area folder " + configFolder);
 		
 		try {
-			this.cofig = new ConfigFile(c);
+			this.config = new ConfigFile(c);
 			this.servers = new ServersFile(s);
 		} catch (IOException e) {
 			throw new ConfigurationStateException("Could not read config files from runtime configuration area " + configFolder);
@@ -55,18 +61,28 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 	}
 
 	public void addGlobalIgnore(SvnIgnorePattern pattern) {
-		
+		setGlobalIgnores(getGlobalIgnores(), pattern);
 	}
 
-	private void setGlobalIgnores(List svnIgnorePatternList) {
-		
+	/**
+	 * @param patterns
+	 * @param added extra pattern
+	 */
+	private void setGlobalIgnores(SvnIgnorePattern[] patterns, SvnIgnorePattern added) {
+		boolean add = true;
+		StringBuffer list = new StringBuffer();
+		for (int i = 0; i < patterns.length; i++) {
+			list.append(" ").append(patterns[i].getValue());
+			if (patterns[i].equals(added)) add = false;
+		}
+		if (add) list.append(" ").append(added.getValue());
+		config.setGlobalIgnores(list.substring(1));
 	}
 	
 	public SvnIgnorePattern[] getGlobalIgnores() {
-		if (true) {
-			throw new UnsupportedOperationException("Method RuntimeConfigurationArea#getGlobalIgnores not implemented yet");
-		}
-		return null;
+		String e = config.getGlobalIgnores();
+		if (e == null) return new SvnIgnorePattern[0];
+		return SvnIgnorePattern.array(Arrays.asList(e.split(DELIMITER)));
 	}
 
 	public SvnProxySettings getProxySettings() {

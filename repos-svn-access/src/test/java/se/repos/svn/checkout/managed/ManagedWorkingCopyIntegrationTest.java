@@ -6,7 +6,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
+import se.repos.svn.SvnIgnorePattern;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.CheckoutSettingsForTest;
 import se.repos.svn.checkout.ConflictException;
@@ -37,7 +40,13 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		ManagedWorkingCopy c = new ManagedWorkingCopy(settings);
 		c.checkout(); // ManagedWorkingCopy needs explicit checkout
 		return c;
-	}	
+	}
+	
+	public void testDefaultClientConfiguration() {
+		// TODO remove a global ignore and it should be recovered
+		List defaultIgnores = Arrays.asList(client.getClientSettings().getGlobalIgnores());
+		assertTrue(defaultIgnores.contains(new SvnIgnorePattern("temp")));
+	}
 	
 	public void testDeleteAlreadyDeletedFile() throws IOException, ConflictException, RepositoryAccessException {
 		File created = new File(path, "tobedeleted.txt" + System.currentTimeMillis());

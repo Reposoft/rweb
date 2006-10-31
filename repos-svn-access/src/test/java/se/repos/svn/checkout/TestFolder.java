@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public abstract class TestFolder {
 
-	public static final String FOLDER_PREFIX = "ReposWorkingCopyTest";
+	public static final String FOLDER_PREFIX = "TestReposSvnAccess";
 	
 	public static File getNew() {
 		try {

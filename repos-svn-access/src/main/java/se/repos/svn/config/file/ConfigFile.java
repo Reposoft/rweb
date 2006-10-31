@@ -20,6 +20,9 @@ public class ConfigFile extends IniFile {
 	// sections
 	private static final String MISCELLANY = "miscellany";
 	
+	// values
+	private static final String MI_GLOBAL_IGNORES = "global-ignores";
+	
 	/**
 	 * 
 	 * @param iniFile The file in the runtime configuration area
@@ -43,6 +46,18 @@ public class ConfigFile extends IniFile {
 	 * @param globalIgnores [miscellany] global-ignores
 	 */
 	public void setGlobalIgnores(String globalIgnores) {
-		this.set(MISCELLANY, "global-ignores", globalIgnores);
+		this.set(MISCELLANY, MI_GLOBAL_IGNORES, globalIgnores);
+	}
+	
+	/**
+	 * @return the property value if the property exists, null otherwise
+	 */
+	public String getGlobalIgnores() {
+		IniEditor config = load();
+		if (config.hasOption(MISCELLANY, MI_GLOBAL_IGNORES)) {
+			return config.get(MISCELLANY, MI_GLOBAL_IGNORES);
+		} else {
+			return null;
+		}
 	}
 }

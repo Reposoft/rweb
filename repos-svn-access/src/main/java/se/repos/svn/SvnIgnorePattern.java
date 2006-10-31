@@ -3,6 +3,7 @@
 package se.repos.svn;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 /**
