@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import se.repos.svn.checkout.ConflictInformation;
-import se.repos.svn.checkout.TestFolder;
+import se.repos.svn.test.TestFolder;
 
 import junit.framework.TestCase;
 

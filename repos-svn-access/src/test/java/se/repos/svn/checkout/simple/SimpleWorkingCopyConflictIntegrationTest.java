@@ -6,10 +6,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import se.repos.svn.checkout.CheckoutSettingsForTest;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.test.CheckoutSettingsForTest;
 import junit.framework.TestCase;
 
 public class SimpleWorkingCopyConflictIntegrationTest extends TestCase {

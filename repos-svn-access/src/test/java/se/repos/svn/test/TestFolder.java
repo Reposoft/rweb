@@ -1,6 +1,6 @@
 /* $license_header$
  */
-package se.repos.svn.checkout;
+package se.repos.svn.test;
 
 import java.io.File;
 import java.io.FilenameFilter;

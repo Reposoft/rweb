@@ -1,14 +1,20 @@
 /* $license_header$
  */
-package se.repos.svn.checkout;
+package se.repos.svn.checkout.commontests;
 
 import java.io.File;
 import java.io.IOException;
 
+import junit.framework.TestCase;
 import se.repos.svn.SvnIgnorePattern;
 import se.repos.svn.VersionedProperty;
-
-import junit.framework.TestCase;
+import se.repos.svn.checkout.CheckoutSettings;
+import se.repos.svn.checkout.ConflictException;
+import se.repos.svn.checkout.ReposWorkingCopy;
+import se.repos.svn.checkout.ReposWorkingCopyFactory;
+import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.WorkingCopyAccessException;
+import se.repos.svn.test.CheckoutSettingsForTest;
 
 /**
  * The logic around properties deserves a separate test case

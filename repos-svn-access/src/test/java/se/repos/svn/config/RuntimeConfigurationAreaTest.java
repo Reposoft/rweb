@@ -7,7 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import se.repos.svn.SvnIgnorePattern;
-import se.repos.svn.checkout.TestFolder;
+import se.repos.svn.test.TestFolder;
 
 import junit.framework.TestCase;
 

@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
-import se.repos.svn.checkout.TestFolder;
+import se.repos.svn.test.TestFolder;
 
 public class AbstractCheckoutSettingsTest extends TestCase {
 

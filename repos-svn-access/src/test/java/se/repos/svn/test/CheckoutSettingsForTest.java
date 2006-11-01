@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.repos.svn.checkout;
+package se.repos.svn.test;
 
 import java.io.File;
 import java.io.IOException;

@@ -23,9 +23,9 @@ import java.io.IOException;
 
 import se.repos.svn.MandatoryReposOperations;
 import se.repos.svn.checkout.CheckoutSettings;
-import se.repos.svn.checkout.CheckoutSettingsForTest;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.test.CheckoutSettingsForTest;
 
 import junit.framework.TestCase;
 

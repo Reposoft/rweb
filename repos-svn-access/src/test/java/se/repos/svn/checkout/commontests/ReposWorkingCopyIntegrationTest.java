@@ -1,6 +1,6 @@
 /* $license_header$
  */
-package se.repos.svn.checkout;
+package se.repos.svn.checkout.commontests;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,6 +9,13 @@ import java.io.IOException;
 import java.io.Writer;
 
 import junit.framework.TestCase;
+import se.repos.svn.checkout.CheckoutSettings;
+import se.repos.svn.checkout.ConflictException;
+import se.repos.svn.checkout.ReposWorkingCopy;
+import se.repos.svn.checkout.ReposWorkingCopyFactory;
+import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.WorkingCopyAccessException;
+import se.repos.svn.test.CheckoutSettingsForTest;
 
 /**
  * Tests basic operations like checkout, commit, update, add, move, delete and status.
