@@ -194,6 +194,17 @@ public class SvnPropertiesIntegrationTest extends TestCase {
 		// every client should respect global ignores
 		// but we don't know what patterns exist on the test machine, so it can not be tested here
 		// check ManagedWorkingCopy
-	}	
+	}
+	
+	public void testAddAllRespectsGlobalIgnores() {
+		// TODO
+	}
+	
+	public void testAddIgnoredFolderAndThenContents() {
+		// TODO
+		// theFolder = some name that matches an svn:ignore or global ignore
+		// force add using add(theFolder)
+		// add contents using addNew(theFolder), works even if the folder is already versioned
+	}
 	
 }

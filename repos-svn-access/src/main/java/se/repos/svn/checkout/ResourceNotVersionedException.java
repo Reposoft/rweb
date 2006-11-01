@@ -23,9 +23,16 @@ svn: 'C:\Documents and Settings\solsson\Lokala inställningar\Temp\folder\nonvers
 public class ResourceNotVersionedException extends
 		WorkingCopyAccessException {
 
+	private static final long serialVersionUID = 1L;
+	private File path;
+
 	public ResourceNotVersionedException(File resource) {
 		super(resource.getAbsolutePath());
-		// TODO auto-generated
+		this.path = resource;
+	}
+
+	public File getPath() {
+		return this.path;
 	}
 
 }

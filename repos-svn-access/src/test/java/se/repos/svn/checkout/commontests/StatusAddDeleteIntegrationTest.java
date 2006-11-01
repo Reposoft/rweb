@@ -10,6 +10,8 @@ import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.ResourceHasLocalChangesException;
+import se.repos.svn.checkout.ResourceNotVersionedException;
 import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.test.CheckoutSettingsForTest;
 
@@ -43,13 +45,45 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		CheckoutSettingsForTest.tearDown();
 	}
 	
+	public void testWorkingCopyRootFolderStatus() {
+		assertTrue("Working copy root folder should of course be versioned", client.isVersioned(path));
+		assertFalse("After checkout working copy has no changes", client.hasLocalChanges());
+		assertFalse("After checkout working copy root folder has no changes", client.hasLocalChanges(path));
+	}
+	
+	public void testFileOutsideWorkingCopy() throws IOException {
+		File tmp = File.createTempFile("PersonalWorkingCopyTestFile", "file");
+		tmp.deleteOnExit();
+		assertFalse("folder that is outside working copy should still report not versioned", client.isVersioned(tmp));
+		try {
+			client.add(tmp);
+			fail("Should have reported error because the new folder is not inside a working copy");
+		} catch (WorkingCopyAccessException e) {
+			// expected, or maybe any runtime exception
+		}
+		tmp.delete();
+	}
+	
 	public void testNewFileStatus() throws IOException {
 		File created = new File(path, "new.txt");
 		if (created.exists()) fail("Invalid test setup. The file " + created.getName() + " is already in the working copy");
 		assertFalse("A file that does not exist and is not under version control is not versioned", client.isVersioned(created));
+		try {
+			client.hasLocalChanges(created);
+			fail("Should not be able to check status on a file that is not versioned, regardless if it exists or not");
+		} catch (ResourceNotVersionedException e) { 
+			assertEquals("The exception should say which file it is that is not versioned", created, e.getPath());
+		}
+		
 		created.createNewFile();
 		assertFalse("New files are not versioned until add", client.isVersioned(created));
-		assertFalse("Is a new file so it has no changes", client.hasLocalChanges(created));
+		try {
+			client.hasLocalChanges(created);
+			fail("Should not be able to check status on a file that is not versioned, even if it exists");
+		} catch (ResourceNotVersionedException e) { 
+			assertEquals("The exception should say which file it is that is not versioned", created, e.getPath());
+		}
+		created.delete();
 	}
 	
 	public void testNewFolderStatus() throws IOException {
@@ -60,11 +94,11 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		File f3 = new File(d2, "f3.txt");
 		f3.createNewFile();
 		assertFalse("Folder 1 shouldn't be versioned", client.isVersioned(d1));
-		assertFalse("d1 not versioned -> no local changes", client.hasLocalChanges(d1));
 		assertFalse("Subfolder shouldn't be versioned, but it should be possible to ask even when parent is not versioned", client.isVersioned(d2));
-		assertFalse("Subfolder not versioned -> no local changes", client.hasLocalChanges(d2));
 		assertFalse("File in subfolder shouldn't be versioned", client.isVersioned(f3));
-		assertFalse("Folder not versioned -> file has no local changes", client.hasLocalChanges(f3));
+		f3.delete();
+		d2.delete();
+		d1.delete();
 	}
 	
 	public void testMissingFileStatus() {
@@ -74,39 +108,78 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		assertFalse("The existing file is not modified locally", client.hasLocalChanges(f));
 		// now delete without telling the svn client
 		f.delete();
-		assertFalse("To identify a missing file, check (exists==false && isVersioned==true", f.exists());
+		assertFalse("To identify a missing file, check (exists==false && isVersioned==true)", f.exists());
 		assertTrue("If the file is silently deleted, it is still versioned", client.isVersioned(f));
-		assertFalse("There is nothing to check in, because the file has not been marked for removal", client.hasLocalChanges(f));
+		try {
+			assertFalse("There is nothing to check in, because the file has not been marked for removal", client.hasLocalChanges(f));
+		} catch (Exception e) {
+			fail("Should be able to check hasLocalChanges on a missing file, if it is isVersioned==true");
+		}
 	}
 	
 	public void testAddAndDelete() throws IOException, ConflictException, RepositoryAccessException {
+		// create new file and folder (both because there is an important difference when they are deleted)
 		File created = new File(path, "to be deleted.txt" + System.currentTimeMillis());
-		if (created.exists()) fail("Invalid test setup. The file " + created.getName() + " is already in the working copy");
 		created.createNewFile();
+		File folder = new File(path, "new folder " + System.currentTimeMillis());
+		folder.mkdir();
+		
+		assertFalse("There are no local changes until the new resources are added to version control", client.hasLocalChanges());
+		
+		// add the file
 		client.add(created);
 		assertTrue("The file should be added", client.isVersioned(created));
+		assertTrue("Means that we have local changes", client.hasLocalChanges(created));
 		try {
 			client.delete(created);
 			fail("Should say that the file can not be deleted because it has local modifications");
+		} catch (ResourceHasLocalChangesException e) {
+			assertEquals(created, e.getPath());
 		} catch (WorkingCopyAccessException e) {
-			// expected
+			fail("Threw the generic WorkingCopyAccessException but should have thrown specific ResourceHasLocalChangesException");
 		}
-		// create an empty folder too
-		File folder = new File(path, "new folder " + System.currentTimeMillis());
-		folder.mkdir();
+		
+		// add a new folder
 		client.add(folder);
 		assertTrue("The new folder should be added", client.isVersioned(folder));
+		assertTrue("Added folder means local changes", client.hasLocalChanges(folder));
+		
 		// do the commit
-		client.commit("Added test file");
-		// delete it all
+		assertTrue("Before the commit there is added files", client.hasLocalChanges());
+		client.commit("Added test file and folder");
+		assertFalse("After commit we're up to date", client.hasLocalChanges());
+		
+		// delete both the file and the folder
 		client.delete(created);
 		client.delete(folder);
 		assertFalse("The file should be deleted by the client", created.exists());
 		assertTrue("The folder should be marked for delete but not deleted until commit", folder.exists());
+		// check that the now non-existing paths both hasLocalChanges
+		assertTrue("The file does not exist, but it's location is versioned", client.isVersioned(created));
+		assertTrue("The file does not exist, but it's location has local changes", client.hasLocalChanges(folder));
+		
 		client.commit("Deleted test file and folder");
 		assertFalse("The file should be gone", created.exists());
 		assertFalse("The deleted folder should be gone after commit", folder.exists());
-		assertFalse("Now the file name is not used anymore", client.isVersioned(created));
+		assertFalse("Now the file name is not in use anymore", client.isVersioned(created));
+		assertFalse("Now the folder name is not in use anymore", client.isVersioned(folder));
+		try {
+			client.hasLocalChanges(created);
+			fail("hasLocalChanges(path) is undefined now that the file has been deleted, should cause exception");
+		} catch (Exception e) {
+			// expected
+		}
+	}
+	
+	public void testAddNonExisting() {
+		File notcreated = new File(path, "does not exist " + System.currentTimeMillis());
+		if (notcreated.exists()) fail("Invalid test setup. The file " + notcreated.getName() + " is already in the working copy");
+		try {
+			client.add(notcreated);
+			fail("Add on nonexisting file or folder should cause IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
+			// expected
+		}
 	}
 	
 	public void testAddAndDeleteEmptyFolder() throws ConflictException, RepositoryAccessException, IOException {
@@ -123,17 +196,29 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		assertFalse("Client should have deleted the folder on commit (or directly when marked for deletion?)", f.exists());
 		assertFalse("Working copy is up to date", client.hasLocalChanges());
 	}
-	
-	public void testAddOutsideWorkingCopy() throws IOException {
-		File tmp = File.createTempFile("PersonalWorkingCopyTestFile", "file");
-		tmp.deleteOnExit();
+
+	public void testAddAlreadyAdded() throws ConflictException, RepositoryAccessException, IOException {
+		File f = new File(path, "testfolder");
+		f.mkdir();
+		client.add(f);
+		assertTrue("Folder has been added, so it is versioned", client.isVersioned(f));
+		assertTrue("There is a new folder to commit", client.hasLocalChanges(f));
 		try {
-			client.add(tmp);
-			fail("Should have reported error because the new folder is not inside a working copy");
+			client.add(f);
+			fail("Should not be allowed to add() an added resource");
 		} catch (WorkingCopyAccessException e) {
 			// expected
 		}
-	}
+		
+		client.commit("Added empty folder");
+		assertFalse("The new folder should be versioned and committed", client.hasLocalChanges(f));
+		try {
+			client.add(f);
+			fail("Should not be allowed to add() a versioned resource");
+		} catch (WorkingCopyAccessException e) {
+			// expected
+		}
+	}	
 	
 	public void testDeleteAlreadyDeletedFile() throws IOException, ConflictException, RepositoryAccessException {
 		File created = new File(path, "tobedeleted" + System.currentTimeMillis());
@@ -153,7 +238,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 	}
 	
 	public void testDeleteFolderContainingNewFile() throws IOException, ConflictException, RepositoryAccessException {
-		File created = new File(path, "tobedeleted" + System.currentTimeMillis());
+		File created = new File(path, "testDeleteFolderContainingNewFile" + System.currentTimeMillis());
 		created.mkdir();
 		client.add(created);
 		assertTrue("The folder should have been added", client.isVersioned(created));
@@ -164,8 +249,16 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		try {
 			client.delete(created);
 			fail("Should have thrown WorkingCopyAccessExcption because there are local changes in the folder");
+		} catch (ResourceHasLocalChangesException e) {
+			assertEquals("The folder that contains the unversioned file can not be deleted, because it counts as hasLocalChanges", e.getPath());
+			try {
+				client.hasLocalChanges(created);
+				fail("But still, it is not possible to check hasLocalChanges. Well, seems a little odd.");
+			} catch (Exception e2) {
+				// expected
+			}
 		} catch (WorkingCopyAccessException e) {
-			// expected
+			fail("Should have thrown the more specific " + ResourceHasLocalChangesException.class.getName());
 		}
 		assertTrue("Should have removed the folder with the new file", client.isVersioned(created));
 		
@@ -176,15 +269,25 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		assertFalse("Delete should be successful when the folder has been manually deleted", client.isVersioned(created));
 	}
 	
-	public void testAddAllRespectsGlobalIgnores() {
-		// TODO
-	}
-	
-	public void testAddIgnoredFolderAndThenContents() {
-		// TODO
-		// theFolder = some name that matches an svn:ignore or global ignore
-		// force add using add(theFolder)
-		// add contents using addNew(theFolder), works even if the folder is already versioned
+	public void testAddNew() throws IOException {
+		File f1 = new File(path, "testAddNew.txt" + System.currentTimeMillis());
+		f1.createNewFile();
+		File d1 = new File(path, "testAddNew" + System.currentTimeMillis());
+		d1.mkdir();
+		File d1f = new File(d1, "file.txt");
+		d1f.createNewFile();
+		client.addNew(d1);
+		assertTrue("The folder should have been added", client.isVersioned(d1));
+		assertTrue("The folder's contents should also have been added", client.isVersioned(d1f));
+		assertFalse("The file next to the folder should not have been added", client.isVersioned(f1));
+		// calling addNew again should not be a problem, but it doesn't do anything
+		client.addNew(d1);
+		// calling addNew for a the added file should also not be a problem, but it doesn't do anything
+		client.addNew(d1f);
+		
+		// now do addNew for the working copy
+		client.addNew();
+		assertFalse("Everything in the working copy should habe been added now", client.isVersioned(f1));
 	}
 	
 }

@@ -80,6 +80,8 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * Checks if a local resource can be committed.
 	 * Only checks resources that have been added, 
 	 * so unversioned files in a folder does not count as local changes.
+	 * A path that is missing has local changes if it is marked for deletion, but not if it is missing.
+	 * The result of this operation is undefined if 'path' is not {@link #isVersioned(File) versioned}.
 	 * @param path The file or folder to check
 	 * @return true if there is changes to the versioned contents, recursively for folders
 	 * @see MandatoryReposOperations#hasLocalChanges()

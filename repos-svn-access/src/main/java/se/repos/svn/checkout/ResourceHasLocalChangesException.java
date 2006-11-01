@@ -16,12 +16,19 @@ svn: 'C:\Documents and Settings\solsson\Lokala inställningar\Temp\folder\to be d
  * @author Staffan Olsson (solsson)
  * @version $Id$
  */
-public class ResourceHasLocalModificationsException extends
+public class ResourceHasLocalChangesException extends
 		WorkingCopyAccessException {
 
-	public ResourceHasLocalModificationsException(File resource) {
+	private static final long serialVersionUID = 1L;
+	private File path;
+	
+	public ResourceHasLocalChangesException(File resource) {
 		super(resource.getAbsolutePath());
-		// TODO auto-generated
+		this.path = resource;
+	}
+
+	public File getPath() {
+		return path;
 	}
 
 }

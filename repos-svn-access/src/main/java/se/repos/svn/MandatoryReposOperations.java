@@ -28,7 +28,7 @@ public interface MandatoryReposOperations {
 	
 	/**
 	 * Update the current working copy with the changes from the repository.
-	 * @throws RepositoryAccessException 
+	 * @throws RepositoryAccessException if the online access fails
 	 */
 	public void update() throws ConflictException, RepositoryAccessException;
 	
@@ -42,7 +42,7 @@ public interface MandatoryReposOperations {
 	 * the latest shared file. Then mark the conflict resolved. Then retry the operation.
 	 * 
 	 * @throws ConflictException Meaning that commit was not performed because there is at least one conflict.
-	 * @throws RepositoryAccessException 
+	 * @throws RepositoryAccessException if the online access fails
 	 */
 	public void synchronize(String commitMessage)
 		throws ConflictException, RepositoryAccessException;
