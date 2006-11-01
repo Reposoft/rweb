@@ -26,6 +26,9 @@ import org.tigris.subversion.svnclientadapter.javasvn.JavaSvnClientAdapterFactor
 
 import se.repos.svn.ClientProvider;
 import se.repos.svn.UserCredentials;
+import se.repos.svn.config.ClientConfiguration;
+import se.repos.svn.config.ConfigurationStateException;
+import se.repos.svn.config.RuntimeConfigurationArea;
 
 /**
  * Initializes and creates a {@link http://tmate.org/svn/ JavaSVN} client.
@@ -100,5 +103,12 @@ public class TmateSvnClientProvider implements ClientProvider {
 		if (folder==null) throw new RuntimeException("Could not get configuration area folder from JavaSVN");
 		return (File) folder;
 	}
+	
+	/**
+	 * Creates default repos-svn-access configuration instance
+	 */
+	public ClientConfiguration getRuntimeConfiguration() throws ConfigurationStateException {
+		return new RuntimeConfigurationArea();
+	}	
 
 }

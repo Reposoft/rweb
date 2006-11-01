@@ -34,6 +34,7 @@ import se.repos.svn.checkout.VersionedFolderProperties;
 import se.repos.svn.checkout.VersionedProperties;
 import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.config.ClientConfiguration;
+import se.repos.svn.config.ConfigurationStateException;
 
 /**
  * Uses subclipse {@link subclipse.tigris.org/svnClientAdapter.html svnClientAdapter} to implement the subversion operations
@@ -66,12 +67,37 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	
 	ISVNClientAdapter client;
 	
+	ClientConfiguration clientConfiguration;
+	
 	CheckoutSettings settings;
 	
 	ConflictNotifyListener conflictNotifyListener;
 	
 	// corrently it is not verified that the application sets this
 	protected ConflictHandler conflictHandler = null;
+	
+	/**
+	 * Complete initialization of the client class for one working copy with one user.
+	 * 
+	 * @param clientProvider Used to get the svnClientAdapter and the {@link ClientConfiguration}
+	 * @param settings for the work session
+	 * @param conflictHandler pluggable callback behaviour when conflicts are detected
+	 * @see #afterPropertiesSet()
+	 */
+	public ReposWorkingCopySvn(ClientProvider clientProvider, CheckoutSettings settings, ConflictHandler conflictHandler) {
+		// set up
+		this();
+		setClientAdapter(clientProvider.getSvnClient(settings.getLogin()));
+		try {
+			setClientConfiguration(clientProvider.getRuntimeConfiguration());
+		} catch (ConfigurationStateException e) {
+			logger.error("Could not read runtime configuration area settings. Client configuration is unknown.");
+			// until ClientConfiguration is well tested, proceed // throw new RuntimeException("ConfigurationStateException thrown, not handled", e);
+		}
+		setCheckoutSettings(settings);
+		setConflictHandler(conflictHandler);
+		afterPropertiesSet();
+	}
 	
     /**
      * Default constructor for use in testing.
@@ -88,6 +114,13 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	void setClientAdapter(ISVNClientAdapter client) {
 		this.client = client;
 		this.addNotifyListener(conflictNotifyListener);
+	}
+	
+	/**
+	 * @param svnConfiguration runtime configuration area contents customizing local subversion clients' behaviur
+	 */
+	void setClientConfiguration(ClientConfiguration svnConfiguration) {
+		this.clientConfiguration = svnConfiguration;
 	}
 
 	/**
@@ -121,27 +154,14 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 	
 	/**
-	 * Verify set up
+	 * Should be called when the client is initialized and all properties set.
+	 * Verifies settings.
 	 */
 	void afterPropertiesSet() {
 		if (settings.getWorkingCopyFolder().list().length > 0) {
         	logger.debug("There is a working copy in {}", settings.getWorkingCopyFolder().getAbsolutePath());
         	validateWorkingCopyMatchesRepositoryUrl(settings.getWorkingCopyFolder(), settings.getCheckoutUrl());
         }
-	}
-    
-	/**
-	 * 
-	 * @param clientProvider
-	 * @param settings 
-	 */
-	public ReposWorkingCopySvn(ClientProvider clientProvider, CheckoutSettings settings, ConflictHandler conflictHandler) {
-		// set up
-		this();
-		setClientAdapter(clientProvider.getSvnClient(settings.getLogin()));
-		setCheckoutSettings(settings);
-		setConflictHandler(conflictHandler);
-		afterPropertiesSet();
 	}
 	
 	/**
@@ -265,7 +285,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		}
 	}
 	
-    public void addAll() {
+    public void addNew() {
         addNew(settings.getWorkingCopyFolder());
     }
     
@@ -525,10 +545,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 
 	public ClientConfiguration getClientSettings() {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#getClientSettings not implemented yet");
-		}
-		return null;
+		return clientConfiguration;
 	}	
 	
 	public VersionedProperties getProperties(File path) {

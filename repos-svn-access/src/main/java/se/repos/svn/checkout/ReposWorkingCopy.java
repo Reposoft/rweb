@@ -34,8 +34,6 @@ import se.repos.svn.config.ClientConfiguration;
  * @author Staffan Olsson
  * @since 2006-apr-11
  * @version $Id$
- * @todo switch between tasks, create tasks (branch), complete tasks (merge): make a "task-aware" client
- * @todo switch between users within the same working copy: make a "multiuser" client
  */
 public interface ReposWorkingCopy extends MandatoryReposOperations {
 	
@@ -102,23 +100,33 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	public void unlock(File path);
 	
 	/**
-	 * Add a new file in the working copy to version control
-	 * For folders that are already under version control,
-	 * it is invalid to do add again to add all contents recursively.
-	 * Instead those files must be added one by one.
+	 * Adds a file or folder in the working copy to version control.
+	 * 
+	 * Throws an excetion if the path is already under version control.
+	 * The parent of the path must be versioned.
+	 * 
+	 * Forced add, meaning that ignore patterns are not overridden.
+	 * 
 	 * @param path File or folder, for new folders all contents are also added.
 	 */
 	public void add(File path);
 	
 	/**
-	 * Adds all unversioned files inside the working copy to version control.
-	 * 
-	 * Contrary to {@link #add(File)} this can be called for a foldar that is already added.
+	 * Adds all unversioned files inside the working copy to version control, respecting ignores.
 	 */
-	public void addAll();
+	public void addNew();
 	
-	// TODO addNew();
-	// TODO addNew(File path);
+	/**
+	 * Adds all unversioned files inside a folder to version control, respecting ignores.
+	 * 
+	 * Files or folders that match an svn:ignore patteron of their parent folder are not added.
+	 * Files or folders that match a global-ignores entry are not added.
+	 * 
+	 * Contrary to {@link #add(File)} this can be called for a file or foldar that is already added.
+	 * 
+	 * @param path The path to add to version control recursively. Parent must be versioned.
+	 */
+	public void addNew(File path);
 	
 	/**
 	 * Remove a file or folder from version control.

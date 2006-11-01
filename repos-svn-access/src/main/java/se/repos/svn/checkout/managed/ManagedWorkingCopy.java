@@ -73,8 +73,12 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		workingCopy.add(path);
 	}
 
-	public void addAll() {
-		workingCopy.addAll();
+	public void addNew() {
+		workingCopy.addNew();
+	}
+	
+	public void addNew(File path) {
+		workingCopy.addNew(path);
 	}
 
 	public void addNotifyListener(NotifyListener notifyListener) {

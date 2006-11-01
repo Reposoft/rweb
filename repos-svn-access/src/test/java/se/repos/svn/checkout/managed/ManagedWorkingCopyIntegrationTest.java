@@ -77,10 +77,11 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		BufferedWriter out = new BufferedWriter(new FileWriter(createdFile));
         out.write("someContents"); // empty file is too easy to revert
         out.close();
-		client.add(created);
+		client.addNew(created);
 		assertTrue("The folder should be added", client.isVersioned(created));
 		assertTrue("The file in the folder should be added with the folder", client.isVersioned(createdFile));
 		client.commit("Added test folder (testDeleteAlreadyDeletedFolder)");
+		
 		// delete recursively in filesystem
 		createdFile.delete();
 		created.delete();
@@ -155,10 +156,10 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		File tempFile = new File(f, "#file.txt#");
 		tempFile.mkdir();
 		// now the folder should be added recursively
-		client.add(f);
+		client.addNew(f);
 		// verify
 		assertTrue("'add' should have been performed", client.isVersioned(f));
-		assertTrue("Add should be recursive", client.isVersioned(folder));
+		assertTrue("addNew should be recursive", client.isVersioned(folder));
 		assertTrue("Recursive two steps", client.isVersioned(folderFile));
 		assertFalse("Should ignore folders named 'temp'", client.isVersioned(tempFolder));
 		assertFalse("Subversion recommends ignoring #*#", client.isVersioned(tempFile));

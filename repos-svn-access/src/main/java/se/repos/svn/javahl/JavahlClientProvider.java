@@ -9,6 +9,9 @@ import org.tigris.subversion.svnclientadapter.javahl.JhlClientAdapterFactory;
 
 import se.repos.svn.ClientProvider;
 import se.repos.svn.UserCredentials;
+import se.repos.svn.config.ClientConfiguration;
+import se.repos.svn.config.ConfigurationStateException;
+import se.repos.svn.config.RuntimeConfigurationArea;
 
 public class JavahlClientProvider implements ClientProvider {
 
@@ -37,6 +40,13 @@ public class JavahlClientProvider implements ClientProvider {
 		svnClient.setUsername(login.getUsername());
 		svnClient.setPassword(login.getPassword());
 		return svnClient;
+	}
+
+	/**
+	 * Creates default repos-svn-access configuration instance
+	 */
+	public ClientConfiguration getRuntimeConfiguration() throws ConfigurationStateException {
+		return new RuntimeConfigurationArea();
 	}
 
 }

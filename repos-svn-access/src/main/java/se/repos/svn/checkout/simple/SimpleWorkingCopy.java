@@ -69,7 +69,7 @@ public class SimpleWorkingCopy implements MandatoryReposOperations {
         //TODO locks
         // add all unadded
         logger.debug("Adding all unversioned files");
-        workingCopy.addAll();
+        workingCopy.addNew();
         // commit
         if (hasLocalChanges()) {
         	logger.info("There is local changes, performing commit.");
