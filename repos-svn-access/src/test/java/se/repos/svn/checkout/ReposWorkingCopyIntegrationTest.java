@@ -63,11 +63,11 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		File f3 = new File(d2, "f3.txt");
 		f3.createNewFile();
 		assertFalse("Folder 1 shouldn't be versioned", client.isVersioned(d1));
-		assertFalse("d1 not versioned -> no local changes", client.isVersioned(d1));
-		assertFalse("Subfolder shouldn't be versioned", client.isVersioned(d2));
-		assertFalse("Subfolder not versioned -> no local changes", client.isVersioned(d2));
+		assertFalse("d1 not versioned -> no local changes", client.hasLocalChanges(d1));
+		assertFalse("Subfolder shouldn't be versioned, but it should be possible to ask even when parent is not versioned", client.isVersioned(d2));
+		assertFalse("Subfolder not versioned -> no local changes", client.hasLocalChanges(d2));
 		assertFalse("File in subfolder shouldn't be versioned", client.isVersioned(f3));
-		assertFalse("Folder not versioned -> file has no local changes", client.isVersioned(f3));
+		assertFalse("Folder not versioned -> file has no local changes", client.hasLocalChanges(f3));
 	}
 	
 	public void testMissingFileStatus() {

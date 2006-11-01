@@ -39,14 +39,15 @@ import se.repos.svn.config.ConfigurationStateException;
 /**
  * Uses subclipse {@link subclipse.tigris.org/svnClientAdapter.html svnClientAdapter} to implement the subversion operations
  *
- * This is the default {@link ReposWorkingCopy} implementation.
+ * This is the default {@link ReposWorkingCopy} implementation (please refer to that for usage documentation).
  * It would be possible to write implementations that use client libs like javahl directly.
  *
  * This implementation does not try to anticipate or understand what the user does.
  * Simply runs the SVN operations to mimic the command line client.
  * The 'principle of least surprise' is important, leaving business logic to the level above.
- * NullPointerExceptions might be thrown on invlid input.
  * Use the managed clients to get supporting logic.
+ * 
+ * No methods accept null arguments, but there are no explicit checks for that so invalid input causes NullPointerExceptions.
  *
  * This class uses the {@link http://www.slf4j.org/ slf4j} logging API.
  * See the slf4j docs on how to customize output.
@@ -360,7 +361,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
      */
 	boolean hasLocalChanges(ISVNStatus fileOrDirStatus) {
 		// currently this is not implemented with a systematic approach,
-		// it's based on the test cas
+		// it's based on the test cases
 		SVNStatusKind textStatus = fileOrDirStatus.getTextStatus();
 		SVNStatusKind propStatus = fileOrDirStatus.getPropStatus();
 		if (SVNStatusKind.UNVERSIONED.equals(textStatus)) {

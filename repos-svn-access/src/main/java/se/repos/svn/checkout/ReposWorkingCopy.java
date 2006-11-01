@@ -30,6 +30,15 @@ import se.repos.svn.config.ClientConfiguration;
  *
  * Preferrably conflicts are detected by doing an update() before commit,
  * so that the latest repository changes are inspected locally before committing.
+ * 
+ * Error handling:
+ * <ul>
+ * <li>Unexpected conditions with {@link java.io.File}s, like file missing, causes {@link IllegalArgumentException}</li>
+ * <li>Versioning operation not allowed or failed causes {@link WorkingCopyAccessException}</lo>
+ * <li>Access to repository failed or invalid causes {@link RepositoryAccessException}</li>
+ * </ul>
+ * The first two are considered logical errors.
+ * The third is a checked exception, because it can be temporary and the application can recover from it.
  *
  * @author Staffan Olsson
  * @since 2006-apr-11
@@ -78,7 +87,8 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	
 	/**
 	 * Checks if a file is under version control.
-	 * If the file is status=MISSING but not marked for delete, it is still under version control.
+	 * If the file is gone (status=MISSING) but not marked for delete, it is still under version control.
+	 * Always returns false if parent path is not under version control.
 	 * @param path file or folder
 	 * @return true if the path is under version control
 	 */
