@@ -48,11 +48,14 @@ import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.config.ClientConfiguration;
 
 /**
- * Uses subclipse {@link http://subclipse.tigris.org/svnant.html SvnAnt} to implement the subversion operations
+ * Uses subclipse {@link subclipse.tigris.org/svnClientAdapter.html svnClientAdapter} to implement the subversion operations
  *
- * This implementation is not at all forgiving. There is usually only one correct way of doing things here.
- * For example doing {@link #delete(File)} on a missing file causes an IllegalArgumentException.
- * Where it is obvious that a {@see File} must exist, for example in {@see {@link #lock(File)}, 
+ * This is the default {@link ReposWorkingCopy} implementation.
+ * It would be possible to write implementations that use client libs like javahl directly.
+ *
+ * This implementation does not try to anticipate or understand what the user does.
+ * Simply runs the SVN operations to mimic the command line client.
+ * The 'principle of least surprise' is important, leaving business logic to the level above.
  * NullPointerExceptions might be thrown on invlid input.
  * Use the managed clients to get supporting logic.
  *
@@ -67,7 +70,7 @@ import se.repos.svn.config.ClientConfiguration;
  * @author Staffan Olsson (solsson)
  * @version $Id$
  */
-public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
+public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	
 	final Logger logger = LoggerFactory.getLogger(this.getClass());	
 	
@@ -87,7 +90,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
      * Default constructor for use in testing.
      * Requires all dependencies to be set with setters.
      */
-    ReposWorkingCopySvnAnt() {
+    ReposWorkingCopySvn() {
     	// required setup
     	conflictNotifyListener = new ConflictNotifyListener();
 	}
@@ -145,7 +148,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 	 * @param clientProvider
 	 * @param settings 
 	 */
-	public ReposWorkingCopySvnAnt(ClientProvider clientProvider, CheckoutSettings settings, ConflictHandler conflictHandler) {
+	public ReposWorkingCopySvn(ClientProvider clientProvider, CheckoutSettings settings, ConflictHandler conflictHandler) {
 		// set up
 		this();
 		setClientAdapter(clientProvider.getSvnClient(settings.getLogin()));

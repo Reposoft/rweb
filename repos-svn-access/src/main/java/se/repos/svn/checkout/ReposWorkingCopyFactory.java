@@ -9,7 +9,7 @@ import se.repos.svn.ClientProvider;
 import se.repos.svn.ClientProvider.ClientNotAvaliableException;
 import se.repos.svn.checkout.client.ConflictHandler;
 import se.repos.svn.checkout.client.ConflictHandlerStandard;
-import se.repos.svn.checkout.client.ReposWorkingCopySvnAnt;
+import se.repos.svn.checkout.client.ReposWorkingCopySvn;
 import se.repos.svn.javahl.JavahlClientProvider;
 import se.repos.svn.javasvn.TmateSvnClientProvider;
 
@@ -35,7 +35,7 @@ public abstract class ReposWorkingCopyFactory {
      * @return
      */
 	public static ReposWorkingCopy getClient(CheckoutSettings settings) {
-		ReposWorkingCopySvnAnt wc = new ReposWorkingCopySvnAnt(
+		ReposWorkingCopySvn wc = new ReposWorkingCopySvn(
 				getClientProvider(), 
 				settings,
 				new ConflictHandlerStandard());

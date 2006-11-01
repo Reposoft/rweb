@@ -8,7 +8,10 @@ import se.repos.svn.UserCredentials;
 
 /**
  * Basic UserCredentials implementation.
- * Immutable, to be passed freely around the application for authenticating the current user.
+ * 
+ * Immutable, so that the client can keep the reference to an instance and
+ * be sure that the credentials don't change.
+ * 
  * @version $Id$
  */
 public class ImmutableUserCredentials implements UserCredentials, Serializable {

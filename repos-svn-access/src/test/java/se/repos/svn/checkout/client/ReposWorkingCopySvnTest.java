@@ -27,14 +27,14 @@ import org.tigris.subversion.svnclientadapter.SVNStatusKind;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.NotifyListener;
-import se.repos.svn.checkout.client.ReposWorkingCopySvnAnt;
+import se.repos.svn.checkout.client.ReposWorkingCopySvn;
 
 import junit.framework.TestCase;
 
-public class ReposWorkingCopySvnAntTest extends TestCase {
+public class ReposWorkingCopySvnTest extends TestCase {
 
 	public void testHandleAntException() {
-		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
 		SvnCommand command = new SvnCommand() {
 			public void execute(ISVNClientAdapter arg0) throws BuildException {
 				throw new BuildException();
@@ -51,7 +51,7 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 	}
 
 	public void testHandleAntExceptionSVNClient() {
-		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
 		SvnCommand command = new SvnCommand() {
 			public void execute(ISVNClientAdapter arg0) throws BuildException {
 				throw new BuildException("The svn client threw a test exception",
@@ -69,7 +69,7 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 	}	
 	
 	public void testHasLocalChangesISVNStatusUnmodified() {
-		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
 		
 		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
 		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
@@ -82,7 +82,7 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 	}
 
 	public void testHasLocalChangesISVNStatusContentsModified() {
-		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
 		
 		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
 		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
@@ -95,7 +95,7 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 	}
 	
 	public void testHasLocalChangesISVNStatusPropsModified() {
-		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
 		
 		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
 		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
@@ -108,7 +108,7 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 	}
 
 	public void testHasLocalChangesUnversioned() {
-		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
 		
 		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
 		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
@@ -121,7 +121,7 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 	}	
 
 	public void testHasLocalChangesDeleted() {
-		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
 		
 		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
 		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
@@ -134,7 +134,7 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 	}	
 
 	public void testHasLocalChangesMissing() {
-		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
 		
 		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
 		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
@@ -148,7 +148,7 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 	}	
 
 	public void testHasLocalChangesMissingButPropertiesChanged() {
-		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
 		
 		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
 		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
@@ -166,7 +166,7 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 		MockControl conflictHandlerControl = MockControl.createControl(ConflictHandler.class);
 		ConflictHandler conflictHandler = (ConflictHandler) conflictHandlerControl.getMock();
 		
-		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
 		w.setConflictHandler(conflictHandler);
 		
 		conflictHandler.handleConflictingFile(new File("C:/DOCUME~1/solsson/LOKALA~1/Temp/test/increment.txt"));
@@ -192,7 +192,7 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 		MockControl conflictHandlerControl = MockControl.createControl(ConflictHandler.class);
 		ConflictHandler conflictHandler = (ConflictHandler) conflictHandlerControl.getMock();
 		
-		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
 		w.setConflictHandler(conflictHandler);
 		
 		conflictHandler.handleConflictingFile(new File("C:\\Repos-pe\\mina konflikter\\Ny mapp\\ny fil.txt"));
@@ -230,7 +230,7 @@ public class ReposWorkingCopySvnAntTest extends TestCase {
 		conflict.afterConflictResolved(info);
 		conflictControl.replay();
 		
-		ReposWorkingCopySvnAnt w = new ReposWorkingCopySvnAnt();
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
 		w.setClientAdapter(client);
 		w.setConflictHandler(conflict);
 		w.markConflictResolved(info);
