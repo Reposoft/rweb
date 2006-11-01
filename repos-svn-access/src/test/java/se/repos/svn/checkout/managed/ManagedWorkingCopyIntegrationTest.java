@@ -45,7 +45,7 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 	
 	public void testDefaultClientConfiguration() {
 		// TODO remove a global ignore and it should be recovered
-		List defaultIgnores = Arrays.asList(client.getClientSettings().getGlobalIgnores());
+		List defaultIgnores = Arrays.asList(client.getClientConfiguration().getGlobalIgnores());
 		assertTrue(defaultIgnores.contains(new SvnIgnorePattern("temp")));
 	}
 	

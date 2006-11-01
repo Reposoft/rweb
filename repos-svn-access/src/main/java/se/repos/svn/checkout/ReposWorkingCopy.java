@@ -55,7 +55,8 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	/**
 	 * Checkout is needed only if the working copy has not been used before.
 	 * Use isVersioned() to check if a working copy root dir contains checked out files.
-	 * @throws RepositoryAccessException 
+	 * @throws RepositoryAccessException if the connection to the repository or the file transfer is not successful
+	 * @throws IllegalStateException if the working copy folder is not empty
 	 * @see MandatoryReposOperations#synchronize(String)
 	 */
 	public void checkout() throws RepositoryAccessException;
@@ -240,5 +241,5 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * 
 	 * @return current subversion runtime configuration
 	 */
-	public ClientConfiguration getClientSettings();
+	public ClientConfiguration getClientConfiguration();
 }

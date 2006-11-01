@@ -45,7 +45,7 @@ import se.repos.svn.config.ClientConfiguration;
  * If that happens, the user will have two files: the latest local file
  * and the latest from the repository.
  * 
- * To disable password caching use {@link #getClientSettings()}. Note that 
+ * To disable password caching use {@link #getClientConfiguration()}. Note that 
  * this changes the settings for all subversion clients in the current user account.
  *
  * @todo how to handle hasLocalChanges and missing files; autodelete? revert?
@@ -91,7 +91,7 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	 * Each checkout enforces the {@link DefaultReposClientSettings}.
 	 */
 	public void checkout() throws RepositoryAccessException {
-		configureClient.update(workingCopy.getClientSettings());
+		configureClient.update(workingCopy.getClientConfiguration());
 		workingCopy.checkout();		
 	}
 
@@ -179,8 +179,8 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		return workingCopy.isIgnore(path);
 	}
 
-	public ClientConfiguration getClientSettings() {
-		return workingCopy.getClientSettings();
+	public ClientConfiguration getClientConfiguration() {
+		return workingCopy.getClientConfiguration();
 	}
 
 	public VersionedProperties getProperties(File path) {

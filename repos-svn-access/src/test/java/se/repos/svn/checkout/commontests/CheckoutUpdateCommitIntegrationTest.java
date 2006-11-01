@@ -39,6 +39,7 @@ public class CheckoutUpdateCommitIntegrationTest extends TestCase {
 		
 		ReposWorkingCopy client = AllTests.getClient(settings, getName());
 		
+		// get the latest contents into the empty working copy folder
 		client.checkout();
 		
 		// this should cause a checkout right here
@@ -54,9 +55,11 @@ public class CheckoutUpdateCommitIntegrationTest extends TestCase {
 		// we have changed a versioned file's contents
 		assertTrue("Now there should be local changes", client.hasLocalChanges(testFile));
 		
-		// an update should not affect the changes
+		// an update should not affect the changes either for the specific resource ...
+		client.update(testFile);
+		// ... or for the working copy
 		client.update();
-		assertTrue("Update does not replace the changed file", client.hasLocalChanges(testFile));
+		assertTrue("Update does not replace the changed file", client.hasLocalChanges(testFile));		
 				
 		// it should be possible to close the program and next time open the same working copy again
 		ReposWorkingCopy client2 = ReposWorkingCopyFactory.getClient(settings);
@@ -72,8 +75,49 @@ public class CheckoutUpdateCommitIntegrationTest extends TestCase {
 		CheckoutSettingsForTest.tearDown();
 	}
 	
-	public void testUpdateSingleFile() {
-		// TODO
+	public void testAdministrativeFolder() throws RepositoryAccessException {
+		CheckoutSettings settings = new CheckoutSettingsForTest();
+		File path = settings.getWorkingCopyFolder();
+		
+		ReposWorkingCopy client = AllTests.getClient(settings, getName());
+		client.checkout();
+		
+		String[] possibleSvn = new String[] {
+				".svn",
+				"_svn"
+		};
+		File svnFolder = null;
+		for (int i = 0; i < possibleSvn.length; i++) {
+			File f = new File(path, possibleSvn[i]);
+			if (f.exists() && client.isAdministrativeFolder(f)) {
+				svnFolder = f;
+				System.out.println("Subversion administrative folders are named " + possibleSvn[i]);
+			}
+		}
+		assertNotNull("Should find an administrative folder in the checked out contents", svnFolder);
+		
+		CheckoutSettingsForTest.tearDown();
+	}
+	
+	public void testCheckoutToNonEmptyFolder() throws IOException {
+		CheckoutSettings settings = new CheckoutSettingsForTest();
+		File path = settings.getWorkingCopyFolder();
+		File file = new File(path, "contents.txt");
+		file.createNewFile();
+		
+		ReposWorkingCopy client = AllTests.getClient(settings, getName());
+		
+		// get the latest contents into the empty working copy folder
+		try {
+			client.checkout();
+			fail("Should throw an exception because the folder to check out to is not empty");
+		} catch (RepositoryAccessException e) {
+			fail("Before checkout goes online, it should check that the folder is empty");
+		} catch (IllegalStateException e) {
+			assertTrue("Should get an error message that specifies the invalid working copy", e.getMessage().contains(path.getAbsolutePath()));
+		}
+		
+		CheckoutSettingsForTest.tearDown();
 	}
 
 	// helper method for testcase

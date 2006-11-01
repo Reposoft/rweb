@@ -158,11 +158,14 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	 * Should be called when the client is initialized and all properties set.
 	 * Verifies settings.
 	 */
-	void afterPropertiesSet() {
-		if (settings.getWorkingCopyFolder().list().length > 0) {
-        	logger.debug("There is a working copy in {}", settings.getWorkingCopyFolder().getAbsolutePath());
-        	validateWorkingCopyMatchesRepositoryUrl(settings.getWorkingCopyFolder(), settings.getCheckoutUrl());
-        }
+	private void afterPropertiesSet() throws IllegalStateException {
+		if (settings == null) throw new IllegalStateException("CheckoutSettings must be set");
+		if (client == null) throw new IllegalStateException("SvnClientAdapter client must be provided");
+		if (clientConfiguration == null) throw new IllegalStateException("ClientConfiguration must be set");
+		if (conflictHandler == null) throw new IllegalStateException("conflictHandler must be set");
+		
+		// check current contents of the working copy folder
+        validateWorkingCopyContentsAtClientCreation(settings.getWorkingCopyFolder(), settings.getCheckoutUrl());
 	}
 	
 	/**
@@ -183,11 +186,13 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 
 	public void checkout() throws RepositoryAccessException {
+		File path = settings.getWorkingCopyFolder();
+		if (path.list().length > 0) throw new IllegalStateException("Can not check out to " + path + " because the folder is not empty.");
         logger.info("Checking out {} HEAD recursively to {}", settings.getCheckoutUrl(), settings.getWorkingCopyFolder());
         try {
 			client.checkout(
 					settings.getCheckoutUrl().getUrl(),
-					settings.getWorkingCopyFolder(), 
+					path, 
 					SVNRevision.HEAD,
 					true);
 		} catch (SVNClientException e) {
@@ -382,13 +387,27 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		return false;
 	}
     
-	private void validateWorkingCopyMatchesRepositoryUrl(File workingCopyDirectory, RepositoryUrl checkoutUrl) {
-		SVNUrl actual = getActualRepositoryUrl(workingCopyDirectory);
-		if (!checkoutUrl.equals(actual)) {
-			throw new IllegalArgumentException("The existing check out URL is '" + checkoutUrl
-					+ "' but the working copy URL at '" + workingCopyDirectory.getPath() + "' is: " + checkoutUrl);
+	/**
+	 * This implementation expects wc folder to be empty or contain a working copy that matches the URL.
+	 * @param workingCopyFolder the folder where the client should find the working copy
+	 * @param checkoutUrl the URL that was provided for repository access
+	 * @throws IllegalStateException if the folder is not valid as working copy
+	 */
+	protected void validateWorkingCopyContentsAtClientCreation(File workingCopyFolder, RepositoryUrl checkoutUrl)
+			throws IllegalStateException {
+		if (workingCopyFolder.list().length == 0) {
+        	return; // folder is empty, which is ok
+        }
+		logger.debug("Working copy folder '{}' is not empty", settings.getWorkingCopyFolder().getAbsolutePath());
+		SVNUrl actual = getActualRepositoryUrl(workingCopyFolder);
+		if (actual == null) {
+			return; // this is not a working copy
 		}
-		logger.info("The repository URL of {} matches the specified: {}", workingCopyDirectory.getPath(), checkoutUrl);
+		if (!checkoutUrl.equals(actual)) {
+			throw new IllegalStateException("The existing check out URL is '" + checkoutUrl
+					+ "' but the working copy URL at '" + workingCopyFolder.getPath() + "' is: " + checkoutUrl);
+		}
+		logger.info("The repository URL of {} matches the specified: {}", workingCopyFolder.getPath(), checkoutUrl);
 	}
 	
 	public SVNUrl getActualRepositoryUrl(File workingCopyDirectory) {
@@ -396,7 +415,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 			ISVNStatus status = client.getSingleStatus(workingCopyDirectory);
 			return status.getUrl();
 		} catch (SVNClientException e) {
-			throw new RuntimeException("SVNClientException handling missing", e);
+			throw new RuntimeException("Got a client error when verifying the working copy folder", e);
 		}
 	}
 	
@@ -545,7 +564,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		return SVNStatusKind.IGNORED.equals(status);
 	}
 
-	public ClientConfiguration getClientSettings() {
+	public ClientConfiguration getClientConfiguration() {
 		return clientConfiguration;
 	}	
 	
