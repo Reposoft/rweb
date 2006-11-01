@@ -14,24 +14,31 @@
  */
 package se.repos.svn.checkout.simple;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
+import junit.framework.TestCase;
 import se.repos.svn.MandatoryReposOperations;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.commontests.CheckoutUpdateCommitIntegrationTest;
 import se.repos.svn.test.CheckoutSettingsForTest;
 
-import junit.framework.TestCase;
-
+/**
+ * This test is currently very similar to {@link CheckoutUpdateCommitIntegrationTest} but it should explain the simplified workflow.
+ *
+ * @author Staffan Olsson (solsson)
+ * @version $Id$
+ */
 public class SimpleWorkingCopyIntegrationTest extends TestCase {
 	
-	static final String TEST_FILE = "automated-test-increment.txt";
+	static final String TEST_FILE = CheckoutUpdateCommitIntegrationTest.TEST_FILE;
+	
+	static int increaseCounter(File testFile) throws IOException, FileNotFoundException {
+		return CheckoutUpdateCommitIntegrationTest.increaseCounter(testFile);
+	}
 	
 	// folder for test working copy. expected to have deleteOnExit.
 	private File tmpFolder;
@@ -71,7 +78,7 @@ public class SimpleWorkingCopyIntegrationTest extends TestCase {
 		int count = increaseCounter(testFile);
 		
 		// local changes
-		assertTrue("Now there should be local changes (counting also files that have not been added yet",
+		assertTrue("Now there should be local changes (counting also files that have not been added yet)",
 				workingCopy.hasLocalChanges());
 		
 		// an update should not affect the changes
@@ -101,41 +108,5 @@ public class SimpleWorkingCopyIntegrationTest extends TestCase {
 				workingCopy.hasLocalChanges());
 		
 	}
-
-	static int increaseCounter(File testFile) throws IOException, FileNotFoundException {
-		if (!testFile.exists()) {
-			testFile.createNewFile();
-			FileWriter fout = new FileWriter(testFile);
-			fout.write("0");
-			fout.close();
-		}
-		// read current number
-		FileReader fin = new FileReader(testFile);
-		BufferedReader in = new BufferedReader(fin);
-		int count = Integer.parseInt(in.readLine());
-		in.close();
-		fin.close();
-		// write incremented number
-		FileWriter fout = new FileWriter(testFile);
-		fout.write("" + ++count);
-		fout.close();
-		return count;
-	}
-
-/*	public void testHasLocalChanges() {
-
-	}
-
-	public void testSynchronize() {
-
-	}
-
-	public void testLock() {
-
-	}
-
-	public void testUpdate() {
-
-	}*/
 
 }

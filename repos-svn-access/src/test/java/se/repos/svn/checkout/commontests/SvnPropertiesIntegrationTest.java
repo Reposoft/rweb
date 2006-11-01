@@ -22,7 +22,7 @@ import se.repos.svn.test.CheckoutSettingsForTest;
  * @author Staffan Olsson (solsson)
  * @version $Id$
  */
-public class ReposWorkingCopyPropertiesIntegrationTest extends TestCase {
+public class SvnPropertiesIntegrationTest extends TestCase {
 
 	// test workingcopy path
 	private File path;
@@ -31,10 +31,10 @@ public class ReposWorkingCopyPropertiesIntegrationTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
-		System.out.println("---------- " + super.getName() + " ----------");
 		CheckoutSettings settings = new CheckoutSettingsForTest();
 		path = settings.getWorkingCopyFolder();
-		client = init(settings);
+		client = AllTests.getClient(settings, getName());
+		client.checkout();
 	}
 	
 	public void tearDown() {
