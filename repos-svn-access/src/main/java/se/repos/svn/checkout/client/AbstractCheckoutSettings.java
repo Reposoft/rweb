@@ -51,22 +51,22 @@ public abstract class AbstractCheckoutSettings implements CheckoutSettings {
 		return this.repositoryUrl;
 	}
 
-	public File getWorkingCopyDirectory() {
+	public File getWorkingCopyFolder() {
 		return this.workingCopyDirectory;
 	}
 	
 	public String toString() {
-		return "svn checkout " + getLogin() + ' ' + getCheckoutUrl() + ' ' + getWorkingCopyDirectory();
+		return "svn checkout " + getLogin() + ' ' + getCheckoutUrl() + ' ' + getWorkingCopyFolder();
 	}
 	
 	public String toRelative(File path) {
 		if (!path.isAbsolute()) {
 			return path.getPath();
 		}
-		if (!path.getAbsolutePath().startsWith(getWorkingCopyDirectory().getAbsolutePath())) {
-			throw new IllegalArgumentException("The path " + path + " is not under working copy directory " + getWorkingCopyDirectory());
+		if (!path.getAbsolutePath().startsWith(getWorkingCopyFolder().getAbsolutePath())) {
+			throw new IllegalArgumentException("The path " + path + " is not under working copy directory " + getWorkingCopyFolder());
 		}
-		return path.getAbsolutePath().substring(getWorkingCopyDirectory().getAbsolutePath().length() + 1);
+		return path.getAbsolutePath().substring(getWorkingCopyFolder().getAbsolutePath().length() + 1);
 	}
 	
 	private static File convertToFile(String workingCopyAbsolutePath) {

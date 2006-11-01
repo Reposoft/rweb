@@ -112,9 +112,13 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	
 	/**
 	 * Adds all unversioned files inside the working copy to version control.
-	 * Contrary to {@link #add(File)} this can be called for a directory that is itself under version control.
+	 * 
+	 * Contrary to {@link #add(File)} this can be called for a foldar that is already added.
 	 */
 	public void addAll();
+	
+	// TODO addNew();
+	// TODO addNew(File path);
 	
 	/**
 	 * Remove a file or folder from version control.
@@ -134,9 +138,12 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	
 	/**
 	 * Mark a file or folder as moved in the repository.
-	 * TODO is this operation only possible if the file is still at original location?
-	 * @param from current location
-	 * @param to new location
+	 * 
+	 * To move to a location where something was just removed from version control,
+	 * a commit is needed before the location can be used.
+	 * 
+	 * @param from current location, must exist and can NOT have local modifications.
+	 * @param to new location, can not exist or be versioned
 	 */
 	public void move(File from, File to);
 	

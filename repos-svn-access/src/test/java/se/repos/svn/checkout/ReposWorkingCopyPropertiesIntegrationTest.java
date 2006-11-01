@@ -25,8 +25,9 @@ public class ReposWorkingCopyPropertiesIntegrationTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		System.out.println("---------- " + super.getName() + " ----------");
 		CheckoutSettings settings = new CheckoutSettingsForTest();
-		path = settings.getWorkingCopyDirectory();
+		path = settings.getWorkingCopyFolder();
 		client = init(settings);
 	}
 	

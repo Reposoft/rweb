@@ -51,8 +51,8 @@ public class SimpleWorkingCopy implements MandatoryReposOperations {
         
         this.workingCopy = ReposWorkingCopyFactory.getClient(settings);
         
-        if (settings.getWorkingCopyDirectory().list().length == 0) {
-        	logger.debug("Working copy direcotry {} is empty, need new checkout", settings.getWorkingCopyDirectory().getAbsolutePath());
+        if (settings.getWorkingCopyFolder().list().length == 0) {
+        	logger.debug("Working copy direcotry {} is empty, need new checkout", settings.getWorkingCopyFolder().getAbsolutePath());
         	workingCopy.checkout();
         }
     }

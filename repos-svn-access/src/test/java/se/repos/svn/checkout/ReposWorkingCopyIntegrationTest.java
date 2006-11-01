@@ -28,8 +28,9 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		System.out.println("---------- " + super.getName() + " ----------");
 		CheckoutSettings settings = new CheckoutSettingsForTest();
-		path = settings.getWorkingCopyDirectory();
+		path = settings.getWorkingCopyFolder();
 		client = init(settings);
 	}
 	
@@ -221,8 +222,9 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		d.mkdir();
 		File df = new File(d, "newfolder" + System.currentTimeMillis());
 		df.createNewFile();
-		client.add(d);
-		assertTrue("Should recursively add the file in the new folder", client.isVersioned(df));
+		client.add(d); // not recursive
+		client.add(df);
+		assertTrue("Contents of folder should be under version control", client.isVersioned(df));
 		assertTrue("The added folder should need commit", client.hasLocalChanges(d));
 		
 		// now revert at working copy root
@@ -237,6 +239,21 @@ public class ReposWorkingCopyIntegrationTest extends TestCase {
 		// clean up
 		client.delete(f);
 		client.commit("Deleted test file");
+	}
+	
+	public void testUpdateSingleFile() {
+		// TODO
+	}
+	
+	public void testAddAllRespectsGlobalIgnores() {
+		// TODO
+	}
+	
+	public void testAddIgnoredFolderAndThenContents() {
+		// TODO
+		// theFolder = some name that matches an svn:ignore or global ignore
+		// force add using add(theFolder)
+		// add contents using addNew(theFolder), works even if the folder is already versioned
 	}
 	
 }

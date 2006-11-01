@@ -20,16 +20,6 @@
   </description>
   <dependencies>
     <dependency>
-      <groupId>org.tigris.subclipse</groupId>
-      <artifactId>svnant</artifactId>
-      <version>1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>ant</groupId>
-      <artifactId>ant</artifactId>
-      <version>1.6.5</version>
-    </dependency>
-    <dependency>
       <groupId>ch.ethz.ganymed</groupId>
       <artifactId>ganymed-ssh2</artifactId>
       <version>build209</version>
@@ -38,18 +28,18 @@
       <groupId>org.tmate</groupId>
       <artifactId>javasvn</artifactId>
       <version>1.0.4</version>
-      <!-- only needed where javahl does not work. distribute separately. -->
-      <scope>test</scope>
+      <!-- only needed where javahl does not work. distribute separately.
+      <scope>test</scope> -->
     </dependency>
     <dependency>
       <groupId>org.tigris.subclipse</groupId>
       <artifactId>svnant-svnclientadapter</artifactId>
-      <version>1.0</version>
+      <version>1.1.0-RC2</version>
     </dependency>
     <dependency>
       <groupId>org.tigris.subclipse</groupId>
       <artifactId>svnant-svnjavahl</artifactId>
-      <version>1.0</version>
+      <version>1.1.0-RC2</version>
     </dependency>
     <dependency>
     	<groupId>ubique</groupId>

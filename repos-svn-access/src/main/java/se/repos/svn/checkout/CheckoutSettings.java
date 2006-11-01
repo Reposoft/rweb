@@ -35,7 +35,7 @@ public interface CheckoutSettings {
 	/**
 	 * @return The local directory to check out to, does not end with path separator
 	 */
-	File getWorkingCopyDirectory();
+	File getWorkingCopyFolder();
 	
 	/**
 	 * @return The URL to checkout from, does not end with '/'

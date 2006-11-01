@@ -16,6 +16,7 @@ public class SimpleWorkingCopyConflictIntegrationTest extends TestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
+		System.out.println("---------- " + super.getName() + " ----------");
 	}
 
 	public void testConflictAtSynchronize() throws FileNotFoundException, IOException, RepositoryAccessException {
@@ -24,8 +25,8 @@ public class SimpleWorkingCopyConflictIntegrationTest extends TestCase {
 		SimpleWorkingCopy w1 = new SimpleWorkingCopy(s1);
 		SimpleWorkingCopy w2 = new SimpleWorkingCopy(s2);
 		// now both should be checked out
-		File f1 = new File(s1.getWorkingCopyDirectory() + "/" + SimpleWorkingCopyIntegrationTest.TEST_FILE);
-		File f2 = new File(s2.getWorkingCopyDirectory() + "/" + SimpleWorkingCopyIntegrationTest.TEST_FILE);
+		File f1 = new File(s1.getWorkingCopyFolder() + "/" + SimpleWorkingCopyIntegrationTest.TEST_FILE);
+		File f2 = new File(s2.getWorkingCopyFolder() + "/" + SimpleWorkingCopyIntegrationTest.TEST_FILE);
 		
 		int i1 = SimpleWorkingCopyIntegrationTest.increaseCounter(f1);
 		int i2 = SimpleWorkingCopyIntegrationTest.increaseCounter(f2);
@@ -44,7 +45,7 @@ public class SimpleWorkingCopyConflictIntegrationTest extends TestCase {
 			w2.synchronize("Commit conflict test " + i2);
 			fail("Should have got a conflict exception, because two identical changes have been made");
 		} catch (ConflictException e) {
-			listDirContents(s2.getWorkingCopyDirectory());
+			listDirContents(s2.getWorkingCopyFolder());
 			assertEquals("Should report one conflicting file", 1, e.getConflicts().length);
 			conflictInformation = e.getConflicts()[0];
 		}
@@ -68,7 +69,7 @@ public class SimpleWorkingCopyConflictIntegrationTest extends TestCase {
 		assertFalse("File is identical with repository version and conflict is resolved", w2.hasLocalChanges());
 		// verify that the conflict files have been removed
 		assertFalse("HEAD file should have been removed", conflictInformation.getRepositoryFile().exists());
-		listDirContents(s2.getWorkingCopyDirectory());
+		listDirContents(s2.getWorkingCopyFolder());
 	}
 
 	// helper method to examine working copy state

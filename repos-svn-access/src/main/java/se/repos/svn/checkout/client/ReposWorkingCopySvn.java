@@ -8,26 +8,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.DirectoryScanner;
-import org.apache.tools.ant.FileScanner;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.FileSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tigris.subversion.svnant.Add;
-import org.tigris.subversion.svnant.Checkout;
-import org.tigris.subversion.svnant.Commit;
-import org.tigris.subversion.svnant.Delete;
-import org.tigris.subversion.svnant.Move;
-import org.tigris.subversion.svnant.Revert;
-import org.tigris.subversion.svnant.SvnCommand;
-import org.tigris.subversion.svnant.Update;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.ISVNNotifyListener;
 import org.tigris.subversion.svnclientadapter.ISVNStatus;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.tigris.subversion.svnclientadapter.SVNNodeKind;
+import org.tigris.subversion.svnclientadapter.SVNRevision;
 import org.tigris.subversion.svnclientadapter.SVNStatusKind;
 import org.tigris.subversion.svnclientadapter.SVNUrl;
 
@@ -61,6 +49,8 @@ import se.repos.svn.config.ClientConfiguration;
  *
  * This class uses the {@link http://www.slf4j.org/ slf4j} logging API.
  * See the slf4j docs on how to customize output.
+ * Does 'info' logging of online operations,
+ * and 'debug' logging of offline operations.
  * 
  * This is a stateful implementation. The instance has its own ISVNClientAdapter,
  * which has a username and password set using {@link #setUserCredentials(UserCredentials)}.
@@ -82,9 +72,6 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	
 	// corrently it is not verified that the application sets this
 	protected ConflictHandler conflictHandler = null;
-	
-	//used for all Ant calls that need a Project instance
-    private final Project ANTPROJECT = new Project();
 	
     /**
      * Default constructor for use in testing.
@@ -137,9 +124,9 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	 * Verify set up
 	 */
 	void afterPropertiesSet() {
-		if (settings.getWorkingCopyDirectory().list().length > 0) {
-        	logger.debug("There is a working copy in {}", settings.getWorkingCopyDirectory().getAbsolutePath());
-        	validateWorkingCopyMatchesRepositoryUrl(settings.getWorkingCopyDirectory(), settings.getCheckoutUrl());
+		if (settings.getWorkingCopyFolder().list().length > 0) {
+        	logger.debug("There is a working copy in {}", settings.getWorkingCopyFolder().getAbsolutePath());
+        	validateWorkingCopyMatchesRepositoryUrl(settings.getWorkingCopyFolder(), settings.getCheckoutUrl());
         }
 	}
     
@@ -175,50 +162,36 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 
 	public void checkout() throws RepositoryAccessException {
-        Checkout co = new Checkout();
-        co.setDestpath(settings.getWorkingCopyDirectory());
-        co.setUrl(settings.getCheckoutUrl().getUrl());
-        logger.info("Checking out using command {}", co);
+        logger.info("Checking out {} HEAD recursively to {}", settings.getCheckoutUrl(), settings.getWorkingCopyFolder());
         try {
-			execute(co);
+			client.checkout(
+					settings.getCheckoutUrl().getUrl(),
+					settings.getWorkingCopyFolder(), 
+					SVNRevision.HEAD,
+					true);
 		} catch (SVNClientException e) {
 			RepositoryAccessException.handle(e);
 		}
 	}    
 
 	public void update() throws ConflictException, RepositoryAccessException {
-		Update update = new Update();
-        update.setDir(settings.getWorkingCopyDirectory());
+		update(settings.getWorkingCopyFolder());
+	}
+	
+	public void update(File path) throws RepositoryAccessException, ConflictException {
+		logger.info("Doing Update to HEAD in folder {}", path);
         try {
-			execute(update);
+			client.update(path, SVNRevision.HEAD, true);
 		} catch (SVNClientException e) {
 			RepositoryAccessException.handle(e);
 		}
         reportConflicts();
 	}
 	
-	public void update(File path) throws RepositoryAccessException, ConflictException {
-		Update update = new Update();
-		if (path.isDirectory()) {
-			update.setDir(path);
-		} else {
-			update.setFile(path);
-		}
-		try {
-			execute(update);
-		} catch (SVNClientException e) {
-			RepositoryAccessException.handle(e);
-		}
-		reportConflicts();
-	}
-	
     public void commit(String commitMessage) throws ConflictException, RepositoryAccessException {
-    	logger.info("Committing working copy {} with message: {}", settings.getWorkingCopyDirectory().getAbsolutePath(), commitMessage);
-    	Commit commit = new Commit();
-        commit.setDir(settings.getWorkingCopyDirectory());
-        commit.setMessage(commitMessage);
+    	logger.info("Committing working copy {} with message: {}", settings.getWorkingCopyFolder().getAbsolutePath(), commitMessage);
         try {
-			execute(commit);
+			client.commit(new File[]{settings.getWorkingCopyFolder()}, commitMessage, true);
 		} catch (SVNClientException e) {
 			RepositoryAccessException.handle(e);
 		}
@@ -256,7 +229,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 	
 	public boolean hasLocalChanges() {
-		return hasLocalChanges(settings.getWorkingCopyDirectory());
+		return hasLocalChanges(settings.getWorkingCopyFolder());
 	}
 	
 	public boolean hasLocalChanges(File path) {
@@ -279,29 +252,27 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	
 	public void add(File path) {
 		if (!path.exists()) throw new IllegalArgumentException("Can not add the file '" + path + "' because it does not exist");
-		Add add = new Add();
-		if (path.isDirectory()) {
-			add.setDir(path);
-		} else {
-			add.setFile(path);
-		}
 		try {
-			execute(add);
+			if (path.isDirectory()) {
+				logger.debug("Adding a folder but not its contents: {}", path);
+				client.addDirectory(path, false, true);
+			} else {
+				logger.debug("Adding file: {}", path);
+				client.addFile(path);
+			}
 		} catch (SVNClientException e) {
 			throw new WorkingCopyAccessException(e);
 		}
 	}
 	
     public void addAll() {
-        FileScanner directoryScanner = new DirectoryScanner();
-        directoryScanner.setBasedir(settings.getWorkingCopyDirectory());
-        FileSet fileSet = new FileSet();
-        fileSet.setupDirectoryScanner(directoryScanner, ANTPROJECT);
-        fileSet.setDir(settings.getWorkingCopyDirectory());
-        Add add = new Add();
-        add.addFileset(fileSet);
+        addNew(settings.getWorkingCopyFolder());
+    }
+    
+    public void addNew(File path) {
+    	logger.info("Adding all new folders and files (except ignored) in path {}", settings.getWorkingCopyFolder());
         try {
-			execute(add);
+			client.addDirectory(settings.getWorkingCopyFolder(), true, false);
 		} catch (SVNClientException e) {
 			throw new WorkingCopyAccessException(e);
 		}
@@ -312,14 +283,9 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
      * because then it can't be deleted.
      */
 	public void delete(File path) throws WorkingCopyAccessException {
-		Delete delete = new Delete();
-		if (path.isDirectory()) {
-			delete.setDir(path);
-		} else {
-			delete.setFile(path);
-		}
+		logger.debug("Deleting file or folder {}, unless it has local changes", path);
 		try {
-			execute(delete);
+			client.remove(new File[]{path}, false);
 		} catch (SVNClientException e) {
 			throw new WorkingCopyAccessException(e);
 		}
@@ -333,11 +299,9 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 
 	public void move(File from, File to) {
-		Move move = new Move();
-		move.setSrcPath(from);
-		move.setDestPath(to);
+		logger.debug("Deleting {} to {}, unless it has local changes", from, to);
 		try {
-			execute(move);
+			client.move(from, to, false);
 		} catch (SVNClientException e) {
 			throw new WorkingCopyAccessException(e);
 		}
@@ -347,15 +311,14 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	 * Always does recursive revert on directories, as specified by interface.
 	 */
 	public void revert(File path) {
-		Revert revert = new Revert();
-		if (path.isDirectory()) {
-			revert.setDir(path);
-			revert.setRecurse(true);
-		} else {
-			revert.setFile(path);
-		}
 		try {
-			execute(revert);
+			if (path.isDirectory()) {
+				logger.info("Reverting folder {} recursively. If it contains deleted folders, update might be needed.", path);
+				client.revert(path, true);
+			} else {
+				logger.debug("Reverting file {}", path);
+				client.revert(path, true);
+			}
 		} catch (SVNClientException e) {
 			// revert is a local operation
 			throw new WorkingCopyAccessException(e);
@@ -370,25 +333,6 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		}
 		conflictHandler.afterConflictResolved(conflictInformation);
 	}
-
-	/**
-	 * @param command SvnAnt command
-	 * @throws SVNClientException to force the caller to categorize the error
-	 */
-    void execute(SvnCommand command) throws SVNClientException {
-    	if (command.getProject() == null) {
-    		command.setProject(ANTPROJECT); // dummy, might be needed for some operations
-    	}
-    	try {
-    		command.execute(client);
-    	} catch (BuildException e) {
-    		if (e.getCause() instanceof SVNClientException) {
-    			throw (SVNClientException) e.getCause();
-    		} else {
-    			throw new RuntimeException("Svn client error '" + e.getMessage() + "' caused by: " + e.getCause().getMessage(), e);
-    		}
-    	}
-    }
 	
     /**
      * @param fileOrDirStatus from the wokring copy
@@ -551,7 +495,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 
 	public void revert() {
-		this.revert(settings.getWorkingCopyDirectory());
+		this.revert(settings.getWorkingCopyFolder());
 	}
 
 	public boolean isAdministrativeFolder(File path) {
@@ -559,7 +503,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 
 	public boolean isIgnore(File path) {
-		if (this.settings.getWorkingCopyDirectory().equals(path)) return false;
+		if (this.settings.getWorkingCopyFolder().equals(path)) return false;
 		if (!path.exists()) throw new IllegalArgumentException("Can not check status for non-existing path: " + path);
 		if (!isVersioned(path.getParentFile())) throw new IllegalArgumentException("Can not check status. The parent folder is not versioned: " + path.getParentFile());
 		if (isVersioned(path)) return false; // svn status is of no help to see if a versioned file matches ignore patterns

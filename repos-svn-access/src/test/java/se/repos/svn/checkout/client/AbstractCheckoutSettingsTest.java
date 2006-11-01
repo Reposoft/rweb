@@ -26,7 +26,7 @@ public class AbstractCheckoutSettingsTest extends TestCase {
 			}
 		};
 		assertEquals("http://test.repos.se/testrepo", c.getCheckoutUrl().toString());
-		assertEquals(path.getPath(), c.getWorkingCopyDirectory().getPath());
+		assertEquals(path.getPath(), c.getWorkingCopyFolder().getPath());
 	}
 
 	public void testInitializeInvalidUrl() {

@@ -36,10 +36,14 @@ public class SimpleWorkingCopyIntegrationTest extends TestCase {
 	// folder for test working copy. expected to have deleteOnExit.
 	private File tmpFolder;
 	
+	public void setUp() {
+		System.out.println("---------- " + super.getName() + " ----------");
+	}
+	
 	public void testWorkflow() throws IOException, RepositoryAccessException {
 		// first instantiate a working copy for a new empty folder
 		CheckoutSettings settings =  new CheckoutSettingsForTest();
-		tmpFolder = settings.getWorkingCopyDirectory();
+		tmpFolder = settings.getWorkingCopyFolder();
 		MandatoryReposOperations workingCopy = new SimpleWorkingCopy(settings);
 		
 		// this should cause a checkout right here
@@ -63,7 +67,7 @@ public class SimpleWorkingCopyIntegrationTest extends TestCase {
 		}
 		
 		// get the automated test file
-		File testFile = new File(settings.getWorkingCopyDirectory().getAbsolutePath() + "/" + TEST_FILE);
+		File testFile = new File(settings.getWorkingCopyFolder().getAbsolutePath() + "/" + TEST_FILE);
 		int count = increaseCounter(testFile);
 		
 		// local changes

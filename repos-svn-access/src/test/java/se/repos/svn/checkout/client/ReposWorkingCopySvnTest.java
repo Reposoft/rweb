@@ -16,9 +16,7 @@ package se.repos.svn.checkout.client;
 
 import java.io.File;
 
-import org.apache.tools.ant.BuildException;
 import org.easymock.MockControl;
-import org.tigris.subversion.svnant.SvnCommand;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.ISVNStatus;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
@@ -32,41 +30,6 @@ import se.repos.svn.checkout.client.ReposWorkingCopySvn;
 import junit.framework.TestCase;
 
 public class ReposWorkingCopySvnTest extends TestCase {
-
-	public void testHandleAntException() {
-		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
-		SvnCommand command = new SvnCommand() {
-			public void execute(ISVNClientAdapter arg0) throws BuildException {
-				throw new BuildException();
-			}
-		};
-		try {
-			w.execute(command);
-			fail("Should have translated the build exception to a runtimeexcetpion");
-		} catch (RuntimeException e) {
-			// expected
-		} catch (SVNClientException e) {
-			fail("This is an uncategorized build exception that should be thrown as RuntimeException");
-		}
-	}
-
-	public void testHandleAntExceptionSVNClient() {
-		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
-		SvnCommand command = new SvnCommand() {
-			public void execute(ISVNClientAdapter arg0) throws BuildException {
-				throw new BuildException("The svn client threw a test exception",
-						new SVNClientException("some svnClientAdapter exception"));
-			}
-		};
-		try {
-			w.execute(command);
-			fail("Should have rethrown the cause which is an SVNClientException");
-		} catch (RuntimeException e) {
-			fail("Should have recognized the cause, and thrown it (SVNClientException");
-		} catch (SVNClientException e) {
-			// expected
-		}
-	}	
 	
 	public void testHasLocalChangesISVNStatusUnmodified() {
 		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
