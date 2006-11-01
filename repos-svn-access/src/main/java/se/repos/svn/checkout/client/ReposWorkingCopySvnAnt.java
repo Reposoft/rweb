@@ -179,7 +179,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
         try {
 			execute(co);
 		} catch (SVNClientException e) {
-			throw new RepositoryAccessException(e);
+			RepositoryAccessException.handle(e);
 		}
 	}    
 
@@ -189,7 +189,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
         try {
 			execute(update);
 		} catch (SVNClientException e) {
-			throw new RepositoryAccessException(e);
+			RepositoryAccessException.handle(e);
 		}
         reportConflicts();
 	}
@@ -204,7 +204,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
 		try {
 			execute(update);
 		} catch (SVNClientException e) {
-			throw new RepositoryAccessException(e);
+			RepositoryAccessException.handle(e);
 		}
 		reportConflicts();
 	}
@@ -217,7 +217,7 @@ public class ReposWorkingCopySvnAnt implements ReposWorkingCopy {
         try {
 			execute(commit);
 		} catch (SVNClientException e) {
-			throw new RepositoryAccessException(e);
+			RepositoryAccessException.handle(e);
 		}
         reportConflicts();
     }

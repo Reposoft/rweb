@@ -15,10 +15,22 @@ import org.tigris.subversion.svnclientadapter.SVNClientException;
  * @see WorkingCopyAccessException
  */
 public class RepositoryAccessException extends Exception {
-	public RepositoryAccessException(SVNClientException e) {
+	
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * To be used instead of constructor.
+	 * Allowes transparent use of an exception hierarchy.
+	 * @param e cause
+	 * @throws RepositoryAccessException
+	 */
+	public static final void handle(SVNClientException e)
+		throws RepositoryAccessException {
+		throw new RepositoryAccessException(e);
+	}
+	
+	protected RepositoryAccessException(SVNClientException e) {
 		super(e);
 	}
-
-	private static final long serialVersionUID = 1L;
 
 }

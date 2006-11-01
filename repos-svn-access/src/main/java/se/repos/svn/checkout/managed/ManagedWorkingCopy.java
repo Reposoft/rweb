@@ -28,8 +28,9 @@ import se.repos.svn.config.ClientConfiguration;
  *
  * <ul>
  * <li>Allows {@link #synchronize(String)} for convenience, and {@link #commit(String)} for speed.
- * <li>Allows move operation on an already moved file or folder
- * <li>Allows delete on an already deleted file or folder
+ * <li>Allows move operation on an already moved file or folder.
+ * <li>Allows delete on an already deleted file or folder.
+ * <li>TODO Reports new contents as hasLocalChanges=true.
  * </ul>
  * 
  * Also enforces client settings with Repos defaults:

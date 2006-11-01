@@ -10,8 +10,8 @@
 	<classpathentry kind="var" path="M2_REPO/org/tigris/subclipse/svnant-svnclientadapter/1.0/svnant-svnclientadapter-1.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/easymock/easymock/1.2_Java1.3/easymock-1.2_Java1.3.jar" sourcepath="M2_REPO/easymock/easymock/1.2_Java1.3/easymock-1.2_Java1.3-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/ant/ant/1.6.5/ant-1.6.5.jar" sourcepath="M2_REPO/ant/ant/1.6.5/ant-1.6.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/tigris/subclipse/svnant-svnjavahl/1.0/svnant-svnjavahl-1.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/tigris/subclipse/svnant/1.0/svnant-1.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/ubique/inieditor/r2/inieditor-r2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/tigris/subclipse/svnant-svnjavahl/1.1.0-RC2/svnant-svnjavahl-1.1.0-RC2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
