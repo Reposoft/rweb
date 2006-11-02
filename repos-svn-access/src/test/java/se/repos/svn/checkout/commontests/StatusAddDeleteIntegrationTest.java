@@ -3,6 +3,7 @@
 package se.repos.svn.checkout.commontests;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import junit.framework.TestCase;
@@ -247,24 +248,54 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		try {
 			client.delete(created);
 			fail("Should have thrown WorkingCopyAccessExcption because there are local changes in the folder");
-		} catch (ResourceHasLocalChangesException e) {
-			assertEquals("The folder that contains the unversioned file can not be deleted, because it counts as hasLocalChanges", e.getPath());
-			try {
-				client.hasLocalChanges(created);
-				fail("But still, it is not possible to check hasLocalChanges. Well, seems a little odd.");
-			} catch (Exception e2) {
-				// expected
-			}
+		} catch (ResourceNotVersionedException e) {
+			assertEquals("The exception should be thrown for the modified file, not the folder",
+					child.getCanonicalPath(), e.getPath().getCanonicalPath());
+			assertFalse("The unversioned file does not count as local changes", client.hasLocalChanges(created));
 		} catch (WorkingCopyAccessException e) {
 			fail("Should have thrown the more specific " + ResourceHasLocalChangesException.class.getName());
 		}
 		assertTrue("Should have removed the folder with the new file", client.isVersioned(created));
 		
+		// simply delete the folder maually before marking for delete to work around this restriction
 		child.delete();
 		created.delete();
 		client.delete(created);
 		client.commit("Deleted test folder");
 		assertFalse("Delete should be successful when the folder has been manually deleted", client.isVersioned(created));
+	}
+	
+	public void testDeleteFolderContainingModifiedFile() throws IOException, ConflictException, RepositoryAccessException {
+		File d = new File(path, getName() + System.currentTimeMillis());
+		d.mkdir();
+		File f1 = new File(d, "versioned.txt");
+		f1.createNewFile();
+		client.add(d);
+		client.add(f1);
+		assertTrue("The folder and file should have been added", client.isVersioned(f1));
+		client.commit(getName() + " setup");
+		
+		// modify the file
+		new FileWriter(f1).append('a').close();
+		assertTrue("New contents in the file, has local modifications", client.hasLocalChanges(f1));
+		
+		try {
+			client.delete(d);
+			fail("Should have thrown WorkingCopyAccessExcption because there are local changes in the folder");
+		} catch (ResourceHasLocalChangesException e) {
+			assertEquals("The exception should be thrown for the modified file, not the folder",
+					f1.getCanonicalPath(), e.getPath().getCanonicalPath());
+			assertTrue("The folder has local changes because of the modified file", client.hasLocalChanges(d));
+		} catch (WorkingCopyAccessException e) {
+			fail("Should have thrown the more specific " + ResourceHasLocalChangesException.class.getName());
+		}
+		assertTrue("Should have removed the folder with the new file", client.isVersioned(d));
+		
+		// revert all changes and then delete
+		client.revert(f1);
+		client.delete(d);
+		client.commit(getName() + " clean");
+		assertFalse("Delete should be successful when the changes have been reverted", client.isVersioned(d));
 	}
 	
 	public void testAddNew() throws IOException {

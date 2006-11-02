@@ -32,13 +32,15 @@ import se.repos.svn.config.ClientConfiguration;
  * so that the latest repository changes are inspected locally before committing.
  * 
  * Error handling:
- * <ul>
+ * <ol>
  * <li>Unexpected conditions with {@link java.io.File}s, like file missing, causes {@link IllegalArgumentException}</li>
  * <li>Versioning operation not allowed or failed causes {@link WorkingCopyAccessException}</lo>
  * <li>Access to repository failed or invalid causes {@link RepositoryAccessException}</li>
- * </ul>
+ * </ol>
  * The first two are considered logical errors.
  * The third is a checked exception, because it can be temporary and the application can recover from it.
+ * The implementations of this interface assume that the layer above is a well tested application,
+ * so no status checks are made for case 2 before an operation is carried out (to avoids extra svn operations).
  *
  * @author Staffan Olsson
  * @since 2006-apr-11
@@ -105,21 +107,6 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	public boolean isVersioned(File path);
 	
 	/**
-	 * Reserve a file so that others can not change it.
-	 * Ensure that the file is writable locally.
-	 * Locking is never required, and only encouraged for binary files like word documents.
-	 * @param path The resource to lock. Usually a file, because lock does not work recursively.
-	 */
-	public void lock(File path);
-	
-	/**
-	 * Remove locks from file.
-	 * SVN standard behaviour is to do this automatically at commit.
-	 * @param path The locked resource
-	 */
-	public void unlock(File path);
-	
-	/**
 	 * Adds a file or folder in the working copy to version control.
 	 * 
 	 * Throws an excetion if the path is already under version control.
@@ -149,29 +136,36 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	public void addNew(File path);
 	
 	/**
-	 * Remove a file or folder from version control.
+	 * Removes a file or folder from version control.
 	 * 
 	 * Note that if the folder has unversioned files or local modifications
 	 * it can not be deleted (this is the default subversion client behaviour).
-	 * Changes can be either committed or reverted.
+	 * The operation is naturally recursive. Upon the first path that is not valid for delete,
+	 * the corresponding exception is thrown with the invalid path.
+	 * That means that with repeated calls to this method, surrounded by try-catch, 
+	 * all unversioned and modified children can be identified.
+	 * 
 	 * A folder with new contents that really should be deleted can be removed
 	 * with a normal file system operation, then deleted with this method.
 	 * 
 	 * @param path To be removed from repository HEAD, 
 	 * if it still exists locally it will be deleted after the operation.
+	 * @throws ResourceNotVersionedException if the path is not versioned or has contents that are not versioned
+	 * @throws ResourceHasLocalChangesException if the path or any sub-path has local modifications
 	 * @see #isVersioned(File)
 	 * @see #hasLocalChanges(File)
 	 */
-	public void delete(File path);
+	public void delete(File path) throws ResourceNotVersionedException, ResourceHasLocalChangesException;
 	
 	/**
-	 * Mark a file or folder as moved in the repository.
+	 * Marks a file or folder as moved in the repository.
 	 * 
 	 * To move to a location where something was just removed from version control,
 	 * a commit is needed before the location can be used.
 	 * 
 	 * @param from current location, must exist and can NOT have local modifications.
 	 * @param to new location, can not exist or be versioned
+	 * @todo Make this a copy operation, applications can do copy+delete, gives more fine grained error handling
 	 */
 	public void move(File from, File to);
 	
@@ -195,6 +189,21 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * @param path file to reset all changes in, or folder to recursively restore
 	 */
 	public void revert(File path);
+	
+	/**
+	 * Reserve a file so that others can not change it.
+	 * Ensure that the file is writable locally.
+	 * Locking is never required, and only encouraged for binary files like word documents.
+	 * @param path The resource to lock. Usually a file, because lock does not work recursively.
+	 */
+	public void lock(File path);
+	
+	/**
+	 * Remove locks from file.
+	 * SVN standard behaviour is to do this automatically at commit.
+	 * @param path The locked resource
+	 */
+	public void unlock(File path);
 	
 	/**
 	 * Checks if a working copy folder is a subversion "administrative area".

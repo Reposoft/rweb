@@ -61,6 +61,7 @@ import se.repos.svn.config.ConfigurationStateException;
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$
+ * @todo remove any extra status checks like isVersioned and hasLocalChanges
  */
 public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	
