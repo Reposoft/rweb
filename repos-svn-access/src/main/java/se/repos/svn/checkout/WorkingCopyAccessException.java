@@ -20,7 +20,18 @@ public class WorkingCopyAccessException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public WorkingCopyAccessException(SVNClientException e) {
+	/**
+	 * To be used instead of constructor.
+	 * Allowes transparent use of an exception hierarchy.
+	 * @param e cause
+	 * @throws WorkingCopyAccessException or a subclass
+	 */
+	public static final void handle(SVNClientException e)
+		throws WorkingCopyAccessException {
+		throw new WorkingCopyAccessException(e);
+	}
+	
+	protected WorkingCopyAccessException(SVNClientException e) {
 		super(e);
 	}
 

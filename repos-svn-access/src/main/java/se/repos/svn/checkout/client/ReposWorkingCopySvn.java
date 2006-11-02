@@ -198,7 +198,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		} catch (SVNClientException e) {
 			RepositoryAccessException.handle(e);
 		}
-	}    
+	}
 
 	public void update() throws ConflictException, RepositoryAccessException {
 		update(settings.getWorkingCopyFolder());
@@ -250,7 +250,8 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		try {
 			return client.getSingleStatus(path);
 		} catch (SVNClientException e) {
-			throw new WorkingCopyAccessException(e);
+			WorkingCopyAccessException.handle(e);
+			return null;
 		}
 	}
 	
@@ -263,7 +264,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
         try {
             statuses = client.getStatus(path, true, true); //descend, all
         } catch (SVNClientException e) {
-            throw new WorkingCopyAccessException(e);
+            WorkingCopyAccessException.handle(e);
         }
         // will exit and return true when it finds a modified file/dir
         for (int i = 0; i<statuses.length; i++) {
@@ -287,7 +288,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 				client.addFile(path);
 			}
 		} catch (SVNClientException e) {
-			throw new WorkingCopyAccessException(e);
+			WorkingCopyAccessException.handle(e);
 		}
 	}
 	
@@ -300,7 +301,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
         try {
 			client.addDirectory(settings.getWorkingCopyFolder(), true, false);
 		} catch (SVNClientException e) {
-			throw new WorkingCopyAccessException(e);
+			WorkingCopyAccessException.handle(e);
 		}
     }
 
@@ -313,7 +314,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		try {
 			client.remove(new File[]{path}, false);
 		} catch (SVNClientException e) {
-			throw new WorkingCopyAccessException(e);
+			WorkingCopyAccessException.handle(e);
 		}
 	}
 
@@ -329,7 +330,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		try {
 			client.move(from, to, false);
 		} catch (SVNClientException e) {
-			throw new WorkingCopyAccessException(e);
+			WorkingCopyAccessException.handle(e);
 		}
 	}
 
@@ -347,7 +348,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 			}
 		} catch (SVNClientException e) {
 			// revert is a local operation
-			throw new WorkingCopyAccessException(e);
+			WorkingCopyAccessException.handle(e);
 		}
 	}	
 
@@ -355,7 +356,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		try {
 			client.resolved(conflictInformation.getTargetPath());
 		} catch (SVNClientException e) {
-			throw new WorkingCopyAccessException(e);
+			WorkingCopyAccessException.handle(e);
 		}
 		conflictHandler.afterConflictResolved(conflictInformation);
 	}
@@ -475,6 +476,8 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 			} else {
 				logger.error("Subversion error in command {} '{}'", getCurrentCommand(), message);
 			}
+			// errors should only happen in testing, in normal use they should be avoided with validation
+			Thread.dumpStack();
 		}
 
 		public void logMessage(String message) {
@@ -550,11 +553,11 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 
 		// client.getSingleStatus uses the --no-ignores parameter (for some reason) so it can not be used
 		
-		ISVNStatus[] result;
+		ISVNStatus[] result = null;
 		try {
 			result = client.getStatus(path, false, true, false); //(File path, boolean descend, boolean getAll, boolean contactServer, boolean ignoreExternals)
 		} catch (SVNClientException e) {
-			throw new WorkingCopyAccessException(e);
+			WorkingCopyAccessException.handle(e);
 		}
 		if (result.length==0) throw new WorkingCopyAccessException("Can not get status for path " + path);
 		

@@ -21,11 +21,11 @@ public class PropertyAccessFolder extends PropertyAccess
 	}
 
 	public SvnIgnorePattern[] getIgnores() {
-		List ignored;
+		List ignored = null;
 		try {
 			ignored = client.getIgnoredPatterns(path);
 		} catch (SVNClientException e) {
-			throw new WorkingCopyAccessException(e);
+			WorkingCopyAccessException.handle(e);
 		}
 		return SvnIgnorePattern.array(ignored);
 	}
@@ -34,7 +34,7 @@ public class PropertyAccessFolder extends PropertyAccess
 		try {
 			client.addToIgnoredPatterns(path, localIgnore.getValue());
 		} catch (SVNClientException e) {
-			throw new WorkingCopyAccessException(e); // "Could not add ignore pattern " + localIgnore + " to path " + path, 
+			WorkingCopyAccessException.handle(e); // "Could not add ignore pattern " + localIgnore + " to path " + path, 
 		}
 	}
 

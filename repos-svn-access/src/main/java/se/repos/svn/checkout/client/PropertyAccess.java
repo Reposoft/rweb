@@ -37,7 +37,8 @@ public class PropertyAccess implements VersionedProperties {
 		try {
 			return new PropertyWrapper(client.propertyGet(path, name));
 		} catch (SVNClientException e) {
-			throw new WorkingCopyAccessException(e); // offline operation because path is local
+			WorkingCopyAccessException.handle(e); // offline operation because path is local
+			return null;
 		}
 	}
 
@@ -45,7 +46,7 @@ public class PropertyAccess implements VersionedProperties {
 		try {
 			client.propertySet(path, nameAndValue.getName(), nameAndValue.getValue(), false);
 		} catch (SVNClientException e) {
-			throw new WorkingCopyAccessException(e);
+			WorkingCopyAccessException.handle(e);
 		}
 	}
 	

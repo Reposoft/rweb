@@ -77,7 +77,6 @@ public class CheckoutSettingsForTest extends AbstractCheckoutSettings {
 			} catch (MalformedURLException e) {
 				throw new RuntimeException("Repository "+REPOSITORIES[i]+" is invalid", e);
 			} catch (IOException e) {
-				e.printStackTrace();
 				System.out.println("Repository "+REPOSITORIES[i]+" is not available, trying next one. Got: " + e.getMessage());
 			}
 		}

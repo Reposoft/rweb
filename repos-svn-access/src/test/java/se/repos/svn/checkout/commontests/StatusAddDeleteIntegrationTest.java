@@ -16,10 +16,8 @@ import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.test.CheckoutSettingsForTest;
 
 /**
- * Tests basic operations like checkout, commit, update, add, move, delete and status.
- * 
- * If this tests does not pass, other integration test will also fail.
- * 
+ * Tests svn add, delete and status.
+ *
  * @author Staffan Olsson (solsson)
  * @version $Id$
  * @todo when there is more than one working copy implementation, make this abstract and use to test all implementations
@@ -52,7 +50,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 	}
 	
 	public void testFileOutsideWorkingCopy() throws IOException {
-		File tmp = File.createTempFile("PersonalWorkingCopyTestFile", "file");
+		File tmp = File.createTempFile("testFileOutsideWorkingCopy", "file");
 		tmp.deleteOnExit();
 		assertFalse("folder that is outside working copy should still report not versioned", client.isVersioned(tmp));
 		try {
@@ -65,7 +63,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 	}
 	
 	public void testNewFileStatus() throws IOException {
-		File created = new File(path, "new.txt");
+		File created = new File(path, "testNewFileStatus.txt");
 		if (created.exists()) fail("Invalid test setup. The file " + created.getName() + " is already in the working copy");
 		assertFalse("A file that does not exist and is not under version control is not versioned", client.isVersioned(created));
 		try {
@@ -119,9 +117,9 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 	
 	public void testAddAndDelete() throws IOException, ConflictException, RepositoryAccessException {
 		// create new file and folder (both because there is an important difference when they are deleted)
-		File created = new File(path, "to be deleted.txt" + System.currentTimeMillis());
+		File created = new File(path, "testAddAndDelete file.txt" + System.currentTimeMillis());
 		created.createNewFile();
-		File folder = new File(path, "new folder " + System.currentTimeMillis());
+		File folder = new File(path, "testAddAndDelete folder " + System.currentTimeMillis());
 		folder.mkdir();
 		
 		assertFalse("There are no local changes until the new resources are added to version control", client.hasLocalChanges());
@@ -183,7 +181,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 	}
 	
 	public void testAddAndDeleteEmptyFolder() throws ConflictException, RepositoryAccessException, IOException {
-		File f = new File(path, "testfolder");
+		File f = new File(path, "testAddAndDeleteEmptyFolder");
 		f.mkdir();
 		client.add(f);
 		assertTrue("Folder has been added, so it is versioned", client.isVersioned(f));
@@ -198,7 +196,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 	}
 
 	public void testAddAlreadyAdded() throws ConflictException, RepositoryAccessException, IOException {
-		File f = new File(path, "testfolder");
+		File f = new File(path, "testAddAlreadyAdded");
 		f.mkdir();
 		client.add(f);
 		assertTrue("Folder has been added, so it is versioned", client.isVersioned(f));
@@ -221,7 +219,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 	}	
 	
 	public void testDeleteAlreadyDeletedFile() throws IOException, ConflictException, RepositoryAccessException {
-		File created = new File(path, "tobedeleted" + System.currentTimeMillis());
+		File created = new File(path, "testDeleteAlreadyDeletedFile" + System.currentTimeMillis());
 		created.createNewFile();
 		client.add(created);
 		assertTrue("The file should be added", client.isVersioned(created));

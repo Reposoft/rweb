@@ -78,15 +78,22 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	
 	/**
 	 * Checks if a local resource can be committed.
-	 * Only checks resources that have been added, 
-	 * so unversioned files in a folder does not count as local changes.
-	 * A path that is missing has local changes if it is marked for deletion, but not if it is missing.
+	 * 
+	 * Only checks resources that have been added, so unversioned files in a folder does not count as local changes.
+	 * A path that is missing has local changes if it is marked for deletion, but not if it is only missing.
+	 * 
 	 * The result of this operation is undefined if 'path' is not {@link #isVersioned(File) versioned}.
+	 * It would be intuitive to return false, but some subversion clients allow new files
+	 * to count as local changes, and we want to leave that decision to the applicaiton layer.
+	 * There is currently no method in this API to check for new unversioned files recursively.
+	 * 
 	 * @param path The file or folder to check
 	 * @return true if there is changes to the versioned contents, recursively for folders
+	 * @throws ResourceNotVersionedException if the path is not under version control,
+	 * check with {@link #isVersioned(File)} before calling this method if unsure.
 	 * @see MandatoryReposOperations#hasLocalChanges()
 	 */
-	public boolean hasLocalChanges(File path);
+	public boolean hasLocalChanges(File path) throws ResourceNotVersionedException;
 	
 	/**
 	 * Checks if a file is under version control.
