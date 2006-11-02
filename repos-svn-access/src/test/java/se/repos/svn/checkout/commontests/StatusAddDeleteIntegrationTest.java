@@ -132,7 +132,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 			client.delete(created);
 			fail("Should say that the file can not be deleted because it has local modifications");
 		} catch (ResourceHasLocalChangesException e) {
-			assertEquals(created, e.getPath());
+			assertEquals(created.getCanonicalPath(), e.getPath().getCanonicalPath());
 		} catch (WorkingCopyAccessException e) {
 			fail("Threw the generic WorkingCopyAccessException but should have thrown specific ResourceHasLocalChangesException");
 		}

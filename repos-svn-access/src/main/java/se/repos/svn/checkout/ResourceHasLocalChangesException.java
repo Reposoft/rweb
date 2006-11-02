@@ -3,6 +3,10 @@
 package se.repos.svn.checkout;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.tigris.subversion.svnclientadapter.SVNClientException;
 
 /**
  * The error message is something like this in javahl:
@@ -21,6 +25,16 @@ public class ResourceHasLocalChangesException extends
 
 	private static final long serialVersionUID = 1L;
 	private File path;
+	
+	private static final Pattern MATCH = Pattern.compile("^.*svn:\\s+'([^']+)'.*has local modifications.*$", Pattern.DOTALL);
+	
+	static void identify(SVNClientException e) throws ResourceHasLocalChangesException {
+		Matcher matcher = MATCH.matcher(e.getMessage());
+		if (matcher.matches()) {
+			File f = new File(matcher.group(1));
+			throw new ResourceHasLocalChangesException(f);
+		}
+	}
 	
 	public ResourceHasLocalChangesException(File resource) {
 		super(resource.getAbsolutePath());

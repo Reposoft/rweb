@@ -3,6 +3,10 @@
 package se.repos.svn.checkout;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.tigris.subversion.svnclientadapter.SVNClientException;
 
 /**
  * Represents the quite common error that an operation was attempted on a non-versioned file or folder.
@@ -26,6 +30,16 @@ public class ResourceNotVersionedException extends
 	private static final long serialVersionUID = 1L;
 	private File path;
 
+	private static final Pattern MATCH = Pattern.compile("^.*svn:\\s+'([^']+)'.*not under version control.*$", Pattern.DOTALL);
+	
+	static void identify(SVNClientException e) throws ResourceNotVersionedException {
+		Matcher matcher = MATCH.matcher(e.getMessage());
+		if (matcher.matches()) {
+			File f = new File(matcher.group(1));
+			throw new ResourceNotVersionedException(f);
+		}
+	}
+	
 	public ResourceNotVersionedException(File resource) {
 		super(resource.getAbsolutePath());
 		this.path = resource;

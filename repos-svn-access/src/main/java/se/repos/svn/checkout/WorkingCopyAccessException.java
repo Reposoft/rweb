@@ -28,6 +28,8 @@ public class WorkingCopyAccessException extends RuntimeException {
 	 */
 	public static final void handle(SVNClientException e)
 		throws WorkingCopyAccessException {
+		ResourceNotVersionedException.identify(e);
+		ResourceHasLocalChangesException.identify(e);
 		throw new WorkingCopyAccessException(e);
 	}
 	

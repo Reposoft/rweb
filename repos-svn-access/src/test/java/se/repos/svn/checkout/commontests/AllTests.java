@@ -19,7 +19,7 @@ public class AllTests {
 	private static String now = "";
 	
 	public static ReposWorkingCopy getClient(CheckoutSettings settings, String name) {
-		if (name!=null && name.equals(now)) {
+		if (name!=null && !name.equals(now)) {
 			System.out.println("----------- " + name + " ----------");
 		}
 		now = name;
