@@ -25,6 +25,7 @@ import org.tigris.subversion.svnclientadapter.SVNStatusKind;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.NotifyListener;
+import se.repos.svn.checkout.ResourceNotVersionedException;
 import se.repos.svn.checkout.client.ReposWorkingCopySvn;
 
 import junit.framework.TestCase;
@@ -79,8 +80,16 @@ public class ReposWorkingCopySvnTest extends TestCase {
 		statusControl.setReturnValue(SVNStatusKind.UNVERSIONED);
 		statusMock.getPropStatus();
 		statusControl.setReturnValue(SVNStatusKind.NONE);
+		File f = new File("a.txt");
+		statusMock.getFile();
+		statusControl.setReturnValue(f);
 		statusControl.replay();
-		assertFalse("The file is not added so it has no changes", w.hasLocalChanges(statusMock));
+		try {
+			w.hasLocalChanges(statusMock);
+			fail("Should throw exception for files that are not versioned");
+		} catch (ResourceNotVersionedException e) {
+			assertEquals("Should get the path from the status object", f, e.getPath());
+		}
 	}	
 
 	public void testHasLocalChangesDeleted() {
@@ -120,8 +129,100 @@ public class ReposWorkingCopySvnTest extends TestCase {
 		statusMock.getPropStatus();
 		statusControl.setReturnValue(SVNStatusKind.MODIFIED);
 		statusControl.replay();
-		assertTrue("The changed properties of the missing file should be committed", w.hasLocalChanges(statusMock));
-	}		
+		assertTrue("The changed properties of the missing file should be committed", 
+				w.hasLocalChanges(statusMock));
+	}
+	
+	public void testStatusUnversionedParent() {
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
+		File f = new File("folder");
+		
+		// recursion does not go into unversioned folders
+		MockControl statusControl = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
+		statusMock.getTextStatus();
+		statusControl.setReturnValue(SVNStatusKind.UNVERSIONED);
+		statusMock.getPath();
+		statusControl.setReturnValue(f.getPath());
+		statusControl.replay();
+		
+		try {
+			w.hasLocalChanges(f, new ISVNStatus[]{statusMock}, false);
+			fail("Should have thrown exception when asking hasLocalChanges on unversioned resource");
+		} catch (ResourceNotVersionedException e) {
+			// expected
+		}
+		statusControl.verify();
+	}
+	
+	public void testStatusNormalButContentsUnversioned() {
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
+		File parent = new File("folder");
+		File child = new File(parent, "file.txt");
+
+		// the folder will not be in the results because it has status normal
+		
+		MockControl sc2 = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus s2 = (ISVNStatus) sc2.getMock();
+		s2.getTextStatus();
+		sc2.setReturnValue(SVNStatusKind.UNVERSIONED, 2); // one extra call because it is a single file
+		s2.getPath();
+		sc2.setReturnValue(child.getPath());
+		sc2.replay();
+		
+		assertFalse("The unversioned contents do not count as local changes",
+				w.hasLocalChanges(parent, new ISVNStatus[]{s2}, false));
+		sc2.verify();
+	}
+	
+	public void testStatusModifiedAndContentsUnversioned() {
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
+		File parent = new File("folder");
+		// folder
+		MockControl sc1 = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus s1 = (ISVNStatus) sc1.getMock();
+		s1.getTextStatus();
+		sc1.setReturnValue(SVNStatusKind.NORMAL, 2); // checked for unversioned first, then the real check
+		s1.getPropStatus();
+		sc1.setReturnValue(SVNStatusKind.MODIFIED);
+		sc1.replay();
+		// contents
+		MockControl sc2 = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus s2 = (ISVNStatus) sc2.getMock();
+		s2.getTextStatus();
+		sc2.setReturnValue(SVNStatusKind.UNVERSIONED);
+		sc2.replay();		
+		
+		assertTrue("Has local changes because parent folder properties are modified",
+			w.hasLocalChanges(parent, new ISVNStatus[]{s1, s2}, false));
+		sc1.verify();
+		//text status probably not asked for//sc2.verify();
+	}
+
+	public void testStatusNormalAndUnversionedPlusModifiedContents() {
+		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
+		File parent = new File("folder");
+		// folder
+		//status normal
+		// contents
+		MockControl sc2 = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus s2 = (ISVNStatus) sc2.getMock();
+		s2.getTextStatus();
+		sc2.setReturnValue(SVNStatusKind.UNVERSIONED);
+		sc2.replay();		
+		MockControl sc3 = MockControl.createControl(ISVNStatus.class);
+		ISVNStatus s3 = (ISVNStatus) sc3.getMock();
+		s3.getTextStatus();
+		sc3.setReturnValue(SVNStatusKind.MODIFIED, 2);
+		s3.getPropStatus();
+		sc3.setReturnValue(SVNStatusKind.NORMAL);
+		sc3.replay();
+		
+		assertTrue("Has local changes because second file is modified",
+			w.hasLocalChanges(parent, new ISVNStatus[]{s2, s3}, false));
+		sc2.verify();
+		sc3.verify();
+	}
 	
 	public void testCatchConflictAtUpdate() {
 		String error = "C  C:/DOCUME~1/solsson/LOKALA~1/Temp/test/increment.txt";

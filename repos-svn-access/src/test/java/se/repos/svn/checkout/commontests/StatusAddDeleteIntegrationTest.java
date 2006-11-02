@@ -15,6 +15,7 @@ import se.repos.svn.checkout.ResourceHasLocalChangesException;
 import se.repos.svn.checkout.ResourceNotVersionedException;
 import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.test.CheckoutSettingsForTest;
+import se.repos.svn.test.TestNotifyListener;
 
 /**
  * Tests svn add, delete and status.
@@ -30,11 +31,15 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 	
 	private ReposWorkingCopy client;
 	
+	TestNotifyListener testNotifyListener = null;
+	
 	public void setUp() throws Exception {
 		super.setUp();
 		CheckoutSettings settings = new CheckoutSettingsForTest();
 		path = settings.getWorkingCopyFolder();
 		client = AllTests.getClient(settings, getName());
+		testNotifyListener = new TestNotifyListener();
+		client.addNotifyListener(testNotifyListener);
 		client.checkout();
 	}
 	
@@ -61,15 +66,17 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 			// expected, or maybe any runtime exception
 		}
 		tmp.delete();
+		assertEquals("One error notify expected", 1, testNotifyListener.errors.size());
 	}
 	
 	public void testNewFileStatus() throws IOException {
-		File created = new File(path, "testNewFileStatus.txt");
+		File created = new File(path, getName() + ".txt");
 		if (created.exists()) fail("Invalid test setup. The file " + created.getName() + " is already in the working copy");
 		assertFalse("A file that does not exist and is not under version control is not versioned", client.isVersioned(created));
 		try {
 			client.hasLocalChanges(created);
-			fail("Should not be able to check status on a file that is not versioned, regardless if it exists or not");
+			assertEquals("svn status can be checked, so there's no error notify", 0, testNotifyListener.errors.size());
+			fail("Should not be able to check status on a file that is not versioned");
 		} catch (ResourceNotVersionedException e) { 
 			assertEquals("The exception should say which file it is that is not versioned", created, e.getPath());
 		}
@@ -78,6 +85,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		assertFalse("New files are not versioned until add", client.isVersioned(created));
 		try {
 			client.hasLocalChanges(created);
+			assertEquals("svn status can be checked, so there's no error notify", 0, testNotifyListener.errors.size());
 			fail("Should not be able to check status on a file that is not versioned, even if it exists");
 		} catch (ResourceNotVersionedException e) { 
 			assertEquals("The exception should say which file it is that is not versioned", created, e.getPath());
@@ -123,9 +131,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		File folder = new File(path, "testAddAndDelete folder " + System.currentTimeMillis());
 		folder.mkdir();
 		
-		assertFalse("There are no local changes until the new resources are added to version control", client.hasLocalChanges());
-		
-		// add the file
+		// add the folder and the file
 		client.add(created);
 		assertTrue("The file should be added", client.isVersioned(created));
 		assertTrue("Means that we have local changes", client.hasLocalChanges(created));
@@ -263,6 +269,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		client.delete(created);
 		client.commit("Deleted test folder");
 		assertFalse("Delete should be successful when the folder has been manually deleted", client.isVersioned(created));
+		assertEquals("Should be reported to the notify listeners", 1, testNotifyListener.errors.size());
 	}
 	
 	public void testDeleteFolderContainingModifiedFile() throws IOException, ConflictException, RepositoryAccessException {
@@ -296,6 +303,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		client.delete(d);
 		client.commit(getName() + " clean");
 		assertFalse("Delete should be successful when the changes have been reverted", client.isVersioned(d));
+		assertEquals("Should be reported to the notify listeners", 1, testNotifyListener.errors.size());
 	}
 	
 	public void testAddNew() throws IOException {

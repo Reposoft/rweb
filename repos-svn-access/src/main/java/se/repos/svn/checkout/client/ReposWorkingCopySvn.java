@@ -29,6 +29,7 @@ import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.ResourceNotVersionedException;
 import se.repos.svn.checkout.VersionedFileProperties;
 import se.repos.svn.checkout.VersionedFolderProperties;
 import se.repos.svn.checkout.VersionedProperties;
@@ -260,22 +261,21 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		return hasLocalChanges(settings.getWorkingCopyFolder());
 	}
 	
+	/**
+	 * This can be a quite expensive operation for large folders,
+	 * because it checks the status of every file, recursively.
+	 * Does the equivalent of 'svn status path' (not -v or -N).
+	 * The status array is forwarded to {@link #hasLocalChanges(ISVNStatus[], boolean)}.
+	 * Unversioned files do not count as modifications.
+	 */
 	public boolean hasLocalChanges(File path) {
         ISVNStatus[] statuses = null;
         try {
-            statuses = client.getStatus(path, true, true); //descend, all
+            statuses = client.getStatus(path, true, false); //descend, all
         } catch (SVNClientException e) {
             WorkingCopyAccessException.handle(e);
         }
-        // will exit and return true when it finds a modified file/dir
-        for (int i = 0; i<statuses.length; i++) {
-            ISVNStatus st = statuses[i];
-            logger.debug(st.getPath() + ": TextStatus=" + st.getTextStatus() + ", PropStatus=" + st.getPropStatus());
-            if (hasLocalChanges(st)) {
-            	return true;
-            }
-        }
-        return false;
+        return hasLocalChanges(path, statuses, false); // unversioned does NOT count as modifications
 	}
 	
 	public void add(File path) {
@@ -362,18 +362,46 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		conflictHandler.afterConflictResolved(conflictInformation);
 	}
 	
+	/**
+	 * Goes through a list of file statuses as those generated with 'svn status'
+	 * @param path the path used in 'svn status [path]'
+	 * @param statuses the result, one element per line, only interesting entries (non-normal status)
+	 * @param unversionedMeansModification false if unversioned is ignored, true if it should be 
+	 * @return
+	 */
+	protected boolean hasLocalChanges(File path, ISVNStatus[] statuses, boolean unversionedMeansModification) {
+		// if the argument path is not versioned we will have one line of result
+        if (statuses.length == 1 && !unversionedMeansModification
+        	&& statuses[0].getTextStatus()==SVNStatusKind.UNVERSIONED
+        	&& !statuses[0].getPath().contains(File.separator)) {
+        	throw new ResourceNotVersionedException(path);
+        }
+        // will exit and return true when it finds a modified file/dir
+        for (int i = 0; i<statuses.length; i++) {
+            ISVNStatus st = statuses[i];
+            if (st.getTextStatus()==SVNStatusKind.UNVERSIONED) {
+            	if (unversionedMeansModification) return true;
+            	continue;
+            }
+            if (hasLocalChanges(st)) {
+            	return true;
+            }
+        }
+        return false;
+	}
+	
     /**
      * @param fileOrDirStatus from the wokring copy
      * @return true if there is something to commit according to the status.
+     * @throws ResourceNotVersionedException if TextStatus==UNVERSIONED
      */
-	boolean hasLocalChanges(ISVNStatus fileOrDirStatus) {
-		// currently this is not implemented with a systematic approach,
-		// it's based on the test cases
+	protected boolean hasLocalChanges(ISVNStatus fileOrDirStatus) throws ResourceNotVersionedException {
+		// currently this is not implemented with a systematic approach, but based on the test cases
 		SVNStatusKind textStatus = fileOrDirStatus.getTextStatus();
-		SVNStatusKind propStatus = fileOrDirStatus.getPropStatus();
-		if (SVNStatusKind.UNVERSIONED.equals(textStatus)) {
-		    return false; // could also check for conflicts
+		if (textStatus==SVNStatusKind.UNVERSIONED) {
+		    throw new ResourceNotVersionedException(fileOrDirStatus.getFile());
 		}
+		SVNStatusKind propStatus = fileOrDirStatus.getPropStatus();
 		if (SVNStatusKind.MODIFIED.equals(textStatus)) {
 		    return true; // could also check for conflicts
 		}
@@ -477,8 +505,6 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 			} else {
 				logger.error("Subversion error in command {} '{}'", getCurrentCommand(), message);
 			}
-			// errors should only happen in testing, in normal use they should be avoided with validation
-			Thread.dumpStack();
 		}
 
 		public void logMessage(String message) {

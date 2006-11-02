@@ -165,7 +165,7 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * 
 	 * @param from current location, must exist and can NOT have local modifications.
 	 * @param to new location, can not exist or be versioned
-	 * @todo Make this a copy operation, applications can do copy+delete, gives more fine grained error handling
+	 * @deprecated Make this a copy operation, applications can do copy+delete, gives more fine grained error handling
 	 */
 	public void move(File from, File to);
 	
