@@ -214,8 +214,6 @@ public class ReposWorkingCopySvnTest extends TestCase {
 		ISVNStatus s3 = (ISVNStatus) sc3.getMock();
 		s3.getTextStatus();
 		sc3.setReturnValue(SVNStatusKind.MODIFIED, 2);
-		s3.getPropStatus();
-		sc3.setReturnValue(SVNStatusKind.NORMAL);
 		sc3.replay();
 		
 		assertTrue("Has local changes because second file is modified",

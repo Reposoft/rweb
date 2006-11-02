@@ -275,7 +275,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
         } catch (SVNClientException e) {
             WorkingCopyAccessException.handle(e);
         }
-        if (statuses.length==0 && !path.exists()) {
+        if (statuses.length==0 && !path.exists()) { // isVersioned but missing would have been a status
         	throw new IllegalArgumentException("Path does not exist AND is not versioned: " + path.getAbsolutePath());
         }
         return hasLocalChanges(path, statuses, false); // unversioned does NOT count as modifications
@@ -374,9 +374,9 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	 */
 	protected boolean hasLocalChanges(File path, ISVNStatus[] statuses, boolean unversionedMeansModification) {
 		// if the argument path is not versioned we will have one line of result
-        if (statuses.length == 1 && !unversionedMeansModification
+        if (statuses.length == 1
         	&& statuses[0].getTextStatus()==SVNStatusKind.UNVERSIONED
-        	&& !statuses[0].getPath().contains(File.separator)) {
+        	&& !statuses[0].getPath().contains(File.separator)) { // the status should be for the path, not a child
         	throw new ResourceNotVersionedException(path);
         }
         // will exit and return true when it finds a modified file/dir
@@ -404,18 +404,17 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		if (textStatus==SVNStatusKind.UNVERSIONED) {
 		    throw new ResourceNotVersionedException(fileOrDirStatus.getFile());
 		}
-		SVNStatusKind propStatus = fileOrDirStatus.getPropStatus();
-		if (SVNStatusKind.MODIFIED.equals(textStatus)) {
+		if (textStatus==SVNStatusKind.MODIFIED) {
 		    return true; // could also check for conflicts
 		}
-		if (SVNStatusKind.DELETED.equals(textStatus)) {
+		if (textStatus==SVNStatusKind.DELETED) {
 			return true;
 		}
-		if (SVNStatusKind.MODIFIED.equals(propStatus)) {
-		    return true;
-		}
-		if (SVNStatusKind.ADDED.equals(textStatus)) {
+		if (textStatus==SVNStatusKind.ADDED) {
 		    return true; // could also check for conflicts
+		}
+		if (fileOrDirStatus.getPropStatus()==SVNStatusKind.MODIFIED) {
+		    return true;
 		}
 		return false;
 	}
