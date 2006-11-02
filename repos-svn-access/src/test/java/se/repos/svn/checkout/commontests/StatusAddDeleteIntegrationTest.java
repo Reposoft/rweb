@@ -74,11 +74,12 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		if (created.exists()) fail("Invalid test setup. The file " + created.getName() + " is already in the working copy");
 		assertFalse("A file that does not exist and is not under version control is not versioned", client.isVersioned(created));
 		try {
+			// note that the file does not exist yet
 			client.hasLocalChanges(created);
 			assertEquals("svn status can be checked, so there's no error notify", 0, testNotifyListener.errors.size());
-			fail("Should not be able to check status on a file that is not versioned");
-		} catch (ResourceNotVersionedException e) { 
-			assertEquals("The exception should say which file it is that is not versioned", created, e.getPath());
+			fail("Should not be invalid to ask for status on a path that does not exist and is not versioned");
+		} catch (IllegalArgumentException e) { 
+			assertTrue("The exception should state the invalid path", e.getMessage().contains(created.getPath()));
 		}
 		
 		created.createNewFile();

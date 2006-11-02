@@ -275,6 +275,9 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
         } catch (SVNClientException e) {
             WorkingCopyAccessException.handle(e);
         }
+        if (statuses.length==0 && !path.exists()) {
+        	throw new IllegalArgumentException("Path does not exist AND is not versioned: " + path.getAbsolutePath());
+        }
         return hasLocalChanges(path, statuses, false); // unversioned does NOT count as modifications
 	}
 	
