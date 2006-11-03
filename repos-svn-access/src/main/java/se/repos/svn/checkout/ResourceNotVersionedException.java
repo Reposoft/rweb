@@ -33,6 +33,7 @@ public class ResourceNotVersionedException extends
 	private static final Pattern MATCH = Pattern.compile("^.*svn:\\s+'([^']+)'.*not under version control.*$", Pattern.DOTALL);
 	
 	static void identify(SVNClientException e) throws ResourceNotVersionedException {
+		ResourceParentNotVersionedException.identify(e);
 		Matcher matcher = MATCH.matcher(e.getMessage());
 		if (matcher.matches()) {
 			File f = new File(matcher.group(1));

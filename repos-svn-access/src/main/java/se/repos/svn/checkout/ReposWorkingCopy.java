@@ -103,8 +103,10 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * Always returns false if parent path is not under version control.
 	 * @param path file or folder
 	 * @return true if the path is under version control
+	 * @throws ResourceParentNotVersionedException if the parent path is not versioned,
+	 *  to reflect the svn client command line warning, and work like {@link #add(File)}.
 	 */
-	public boolean isVersioned(File path);
+	public boolean isVersioned(File path) throws ResourceParentNotVersionedException;
 	
 	/**
 	 * Adds a file or folder in the working copy to version control.
@@ -115,8 +117,10 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * Forced add, meaning that ignore patterns are not overridden.
 	 * 
 	 * @param path File or folder, for new folders all contents are also added.
+	 * @throws WorkingCopyAccessException if the path is already under version control
+	 * @throws ResourceParentNotVersionedException if the path is not in a working copy folder
 	 */
-	public void add(File path);
+	public void add(File path) throws WorkingCopyAccessException, ResourceParentNotVersionedException;
 	
 	/**
 	 * Adds all unversioned files inside the working copy to version control, respecting ignores.

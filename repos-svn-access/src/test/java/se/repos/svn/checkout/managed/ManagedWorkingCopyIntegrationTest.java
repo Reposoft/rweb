@@ -13,6 +13,7 @@ import se.repos.svn.SvnIgnorePattern;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.test.CheckoutSettingsForTest;
 import junit.framework.TestCase;
 
@@ -47,6 +48,20 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		// TODO remove a global ignore and it should be recovered
 		List defaultIgnores = Arrays.asList(client.getClientConfiguration().getGlobalIgnores());
 		assertTrue(defaultIgnores.contains(new SvnIgnorePattern("temp")));
+	}
+	
+	public void testIsVersionedParentNotVersioned() throws IOException {
+		// TODO REWRITE
+		File tmp = File.createTempFile("testFileOutsideWorkingCopy", "file");
+		tmp.deleteOnExit();
+		assertFalse("folder that is outside working copy should still report not versioned", client.isVersioned(tmp));
+		try {
+			client.add(tmp);
+			fail("Should have reported error because the new folder is not inside a working copy");
+		} catch (WorkingCopyAccessException e) {
+			// expected, or maybe any runtime exception
+		}
+		tmp.delete();
 	}
 	
 	public void testDeleteAlreadyDeletedFile() throws IOException, ConflictException, RepositoryAccessException {

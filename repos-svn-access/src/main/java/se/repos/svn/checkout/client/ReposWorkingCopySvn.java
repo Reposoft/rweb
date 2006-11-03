@@ -17,6 +17,7 @@ import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.tigris.subversion.svnclientadapter.SVNNodeKind;
 import org.tigris.subversion.svnclientadapter.SVNRevision;
 import org.tigris.subversion.svnclientadapter.SVNStatusKind;
+import org.tigris.subversion.svnclientadapter.SVNStatusUnversioned;
 import org.tigris.subversion.svnclientadapter.SVNUrl;
 
 import se.repos.svn.ClientProvider;
@@ -30,6 +31,7 @@ import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
 import se.repos.svn.checkout.RepositoryAccessException;
 import se.repos.svn.checkout.ResourceNotVersionedException;
+import se.repos.svn.checkout.ResourceParentNotVersionedException;
 import se.repos.svn.checkout.VersionedFileProperties;
 import se.repos.svn.checkout.VersionedFolderProperties;
 import se.repos.svn.checkout.VersionedProperties;
@@ -235,26 +237,54 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 
 	public boolean isVersioned(File path) throws WorkingCopyAccessException {
-		try {
-			ISVNStatus status = getSingleStatus(path);
-			return (status.getTextStatus() != SVNStatusKind.UNVERSIONED 
-					&& status.getTextStatus() != SVNStatusKind.IGNORED);
-		} catch (WorkingCopyAccessException e) {
-			// throws client exception if the parent path is not versioned
-			try {
-				if (!isVersioned(path.getParentFile())) return false;
-			} catch (Throwable t) {}
-			throw e;
-		}
+		SVNStatusKind textStatus = this.getSingleStatus(path).getTextStatus();
+		return (textStatus != SVNStatusKind.UNVERSIONED 
+				&& textStatus != SVNStatusKind.IGNORED);
 	}
 
+	/**
+	 * ISVNClientAdapter.getSingleStatus has poor error handling, so we use our own
+	 */
 	private ISVNStatus getSingleStatus(File path) {
+		// AbstractJhlClientAdapter does this after checkin status (sigh):
+		//	} catch (ClientException e) {
+		//		if (e.getAprError() == SVN_ERR_WC_NOT_DIRECTORY) {
+		//			// when there is no .svn dir, an exception is thrown ...
+		//			return new ISVNStatus[] {new SVNStatusUnversioned(path)};
+		//		}
 		try {
-			return client.getSingleStatus(path);
+			ISVNStatus status = client.getSingleStatus(path);
+			if (status instanceof SVNStatusUnversioned) {
+				// because of the stupid error handling in SVNClientAdapter we need to manually check parent
+				File parent = path.getParentFile();
+				ISVNStatus parentstatus = client.getSingleStatus(parent);
+				if (parentstatus.getTextStatus()==SVNStatusKind.UNVERSIONED) { // checks unversioned, not the SVNStatusUnversioned bug
+					throw new ResourceParentNotVersionedException(parent);
+				}
+			}
+			return status;
 		} catch (SVNClientException e) {
 			WorkingCopyAccessException.handle(e);
 			return null;
 		}
+	}
+
+	/**
+	 * Gets non-recursive status, verbose, of one file or folder.
+	 * @deprecated Not used, because {@link ISVNClientAdapter#getStatus(File, boolean, boolean)} returns all the contents of the folder, first level.
+	 */
+	private ISVNStatus getStatusOneLine(File path) throws SVNClientException {
+		ISVNStatus[] status = client.getStatus(path, false, true);
+		if (status.length == 0) throw new WorkingCopyAccessException("Could not check status for path " + path);
+		if (status.length > 1) {
+			StringBuffer message = new StringBuffer("Got status for more than one entry with path '");
+			message.append(path).append("':");
+			for (int i = 0; i < status.length; i++) {
+				message.append(status[i].getPath()).append(", ");
+			}
+			throw new WorkingCopyAccessException(message.toString());
+		}
+		return status[0];
 	}
 	
 	public boolean hasLocalChanges() {
@@ -269,12 +299,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	 * Unversioned files do not count as modifications.
 	 */
 	public boolean hasLocalChanges(File path) {
-        ISVNStatus[] statuses = null;
-        try {
-            statuses = client.getStatus(path, true, false); //descend, all
-        } catch (SVNClientException e) {
-            WorkingCopyAccessException.handle(e);
-        }
+        ISVNStatus[] statuses = getStatusRecursiveNonVerbose(path);
         if (statuses.length==0 && !path.exists()) { // isVersioned but missing would have been a status
         	throw new IllegalArgumentException("Path does not exist AND is not versioned: " + path.getAbsolutePath());
         }
@@ -283,16 +308,30 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	
 	public void add(File path) {
 		if (!path.exists()) throw new IllegalArgumentException("Can not add the file '" + path + "' because it does not exist");
+		// need to make a status check here, because svnClientAdapter does not return the warning that a file was already added
+		// check both that parent is versioned and that path is not
+		if (isVersioned(path)) throw new WorkingCopyAccessException("Can not add a path that is already under version control: " + path);
 		try {
-			if (path.isDirectory()) {
-				logger.debug("Adding a folder but not its contents: {}", path);
-				client.addDirectory(path, false, true);
-			} else {
-				logger.debug("Adding file: {}", path);
-				client.addFile(path);
-			}
+			add(path, false, true);
 		} catch (SVNClientException e) {
 			WorkingCopyAccessException.handle(e);
+		}
+	}
+
+	/**
+	 * 
+	 * @param path
+	 * @param recursive descend into folders
+	 * @param noIgnore force add
+	 * @throws SVNClientException
+	 */
+	private void add(File path, boolean recursive, boolean noIgnore) throws SVNClientException {
+		if (path.isDirectory()) {
+			logger.debug("Adding a folder but not its contents: {}", path);
+			client.addDirectory(path, recursive, noIgnore);
+		} else {
+			logger.debug("Adding file: {}", path);
+			client.addFile(path);
 		}
 	}
 	
@@ -302,11 +341,16 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
     
     public void addNew(File path) {
     	logger.info("Adding all new folders and files (except ignored) in path {}", settings.getWorkingCopyFolder());
-        try {
-			client.addDirectory(settings.getWorkingCopyFolder(), true, false);
-		} catch (SVNClientException e) {
-			WorkingCopyAccessException.handle(e);
-		}
+        ISVNStatus[] status = getStatusRecursiveNonVerbose(path);
+        for (int i = 0; i < status.length; i++) {
+        	if (status[i].getTextStatus()==SVNStatusKind.UNVERSIONED) {
+        		try {
+					add(status[i].getFile(), true, false);
+				} catch (SVNClientException e) {
+					WorkingCopyAccessException.handle(e);
+				}
+        	}
+        }
     }
 
     /**
@@ -363,6 +407,15 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 			WorkingCopyAccessException.handle(e);
 		}
 		conflictHandler.afterConflictResolved(conflictInformation);
+	}
+	
+	private ISVNStatus[] getStatusRecursiveNonVerbose(File path) {
+        try {
+            return client.getStatus(path, true, false);
+        } catch (SVNClientException e) {
+            WorkingCopyAccessException.handle(e);
+            return null; // never occurs
+        }
 	}
 	
 	/**

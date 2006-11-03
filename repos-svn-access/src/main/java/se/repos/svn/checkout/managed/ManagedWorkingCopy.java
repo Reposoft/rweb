@@ -30,6 +30,7 @@ import se.repos.svn.config.ClientConfiguration;
  * <li>Allows {@link #synchronize(String)} for convenience, and {@link #commit(String)} for speed.
  * <li>Allows move operation on an already moved file or folder.
  * <li>Allows delete on an already deleted file or folder.
+ * <li>Allows isVersioned on resources that are not in versioned folder (returns false).
  * <li>TODO Reports new contents as hasLocalChanges=true.
  * </ul>
  * 
@@ -113,7 +114,16 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	}
 
 	public boolean isVersioned(File path) {
-		return workingCopy.isVersioned(path);
+		try {
+			return workingCopy.isVersioned(path);
+		} catch (WorkingCopyAccessException e) {
+			// client lib throws client exception if the parent path is not versioned
+			try {
+				if (!isVersioned(path.getParentFile())) return false;
+			} catch (Throwable t) {
+			}
+			throw e;
+		}
 	}
 
 	public void lock(File path) {
