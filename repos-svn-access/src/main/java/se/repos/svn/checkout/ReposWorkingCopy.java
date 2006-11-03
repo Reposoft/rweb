@@ -25,8 +25,8 @@ import se.repos.svn.config.ClientConfiguration;
  * The behaviour of this client mimics that of the standard svn command line client.
  * 
  * Implementations should be as dumb as possible. Not do any automatic stuff that the user has not requested.
- * For example always using absolute URLs (i.e. 'switch' would be implemented using a new explicit url).
- * Any assumptions about repository structure should be placed in a {@link se.repos.svn.checkout.CheckoutSettings} implementation.
+ * Any assumptions about repository structure (such as user accounts, home folder etc)
+ * should be placed in a {@link se.repos.svn.checkout.CheckoutSettings} implementation.
  *
  * Preferrably conflicts are detected by doing an update() before commit,
  * so that the latest repository changes are inspected locally before committing.
@@ -40,7 +40,7 @@ import se.repos.svn.config.ClientConfiguration;
  * The first two are considered logical errors.
  * The third is a checked exception, because it can be temporary and the application can recover from it.
  * The implementations of this interface assume that the layer above is a well tested application,
- * so no status checks are made for case 2 before an operation is carried out (to avoids extra svn operations).
+ * so no status checks are made for case 2 before an operation is carried out (to avoid extra svn operations).
  *
  * @author Staffan Olsson
  * @since 2006-apr-11

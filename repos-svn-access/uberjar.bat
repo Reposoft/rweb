@@ -10,7 +10,7 @@ IF %ERRORLEVEL% NEQ 0 goto error
 @echo -
 call mvn jar:test-jar
 set TESTCASE=se.repos.svn.checkout.simple.SimpleWorkingCopyIntegrationTest
-set RELEASEVERSION=1.1-dev
+set RELEASEVERSION=1.2-dev
 java -cp "C:\Documents and Settings\%USERNAME%\.m2\repository\junit\junit\4.1\junit-4.1.jar";target\repos-svn-access-%RELEASEVERSION%-with-dependencies.jar;target\repos-svn-access-%RELEASEVERSION%-tests.jar junit.textui.TestRunner %TESTCASE%
 
 echo Note that the jar must be redistributed _with_ the licenses, see lib folder.
