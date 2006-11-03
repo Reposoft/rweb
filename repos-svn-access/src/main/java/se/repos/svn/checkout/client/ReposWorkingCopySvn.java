@@ -70,13 +70,13 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	
 	final Logger logger = LoggerFactory.getLogger(this.getClass());	
 	
-	ISVNClientAdapter client;
+	private ISVNClientAdapter client;
 	
-	ClientConfiguration clientConfiguration;
+	private ClientConfiguration clientConfiguration;
 	
-	CheckoutSettings settings;
+	private CheckoutSettings settings;
 	
-	ConflictNotifyListener conflictNotifyListener;
+	private ConflictNotifyListener conflictNotifyListener;
 	
 	// corrently it is not verified that the application sets this
 	protected ConflictHandler conflictHandler = null;
@@ -218,10 +218,10 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
         reportConflicts();
 	}
 	
-    public void commit(String commitMessage) throws ConflictException, RepositoryAccessException {
+    public void commit(File path, String commitMessage) throws ConflictException, RepositoryAccessException {
     	logger.info("Committing working copy {} with message: {}", settings.getWorkingCopyFolder().getAbsolutePath(), commitMessage);
         try {
-			client.commit(new File[]{settings.getWorkingCopyFolder()}, commitMessage, true);
+			client.commit(new File[]{path}, commitMessage, true);
 		} catch (SVNClientException e) {
 			RepositoryAccessException.handle(e);
 		}
@@ -233,7 +233,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	 */
 	public void synchronize(String commitMessage) throws ConflictException, RepositoryAccessException {
 		this.update();
-		this.commit(commitMessage);
+		this.commit(settings.getWorkingCopyFolder(), commitMessage);
 	}
 
 	public boolean isVersioned(File path) throws WorkingCopyAccessException {
@@ -335,7 +335,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 
 	/**
-	 * 
+	 * Adds file or folder with svn client options.
 	 * @param path
 	 * @param recursive descend into folders
 	 * @param noIgnore force add
@@ -350,24 +350,27 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 			client.addFile(path);
 		}
 	}
-	
-    public void addNew() {
-        addNew(settings.getWorkingCopyFolder());
-    }
     
     public void addNew(File path) {
     	logger.info("Adding all new folders and files (except ignored) in path {}", settings.getWorkingCopyFolder());
-        ISVNStatus[] status = getStatusRecursiveNonVerbose(path);
-        for (int i = 0; i < status.length; i++) {
-        	if (status[i].getTextStatus()==SVNStatusKind.UNVERSIONED) {
-        		try {
-					add(status[i].getFile(), true, false);
-				} catch (SVNClientException e) {
-					WorkingCopyAccessException.handle(e);
-				}
-        	}
-        }
+        File[] unversioned = getUnversionedContents(path);
+        try {
+		    for (int i = 0; i < unversioned.length; i++) {
+		    	this.add(unversioned[i], true, false);
+		    }
+        } catch (SVNClientException e) {
+			WorkingCopyAccessException.handle(e);
+		}
     }
+
+	public File[] getUnversionedContents(File path) {
+		ISVNStatus[] status = getStatusRecursiveNonVerbose(path);
+		LinkedList files = new LinkedList();
+        for (int i = 0; i < status.length; i++) {
+        	if (status[i].getTextStatus()==SVNStatusKind.UNVERSIONED) files.add(status[i].getFile());
+        }
+        return (File[]) files.toArray();
+	}
 
     /**
      * It is adviced that applicaiton first checks if the file has local modifications,
@@ -380,13 +383,6 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		} catch (SVNClientException e) {
 			WorkingCopyAccessException.handle(e);
 		}
-	}
-
-	public void lock(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#lock not implemented yet");
-		}
-		
 	}
 
 	public void copy(File from, File to) {
@@ -416,6 +412,22 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		}
 	}	
 
+	public void lock(File path, String lockMessage) {
+		try {
+			client.lock(new File[]{path}, lockMessage, false);
+		} catch (SVNClientException e) {
+			WorkingCopyAccessException.handle(e);
+		}
+	}
+	
+	public void unlock(File path) {
+		try {
+			client.unlock(new File[]{path}, false);
+		} catch (SVNClientException e) {
+			WorkingCopyAccessException.handle(e);
+		}
+	}	
+	
 	public void markConflictResolved(ConflictInformation conflictInformation) throws WorkingCopyAccessException {
 		try {
 			client.resolved(conflictInformation.getTargetPath());
@@ -646,13 +658,6 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 			}
 			return "(unknown type " + command + ")";
 		}
-	}
-
-	public void unlock(File path) {
-		if (true) {
-			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#unlock not implemented yet");
-		}
-		
 	}
 
 	public boolean isAdministrativeFolder(File path) {

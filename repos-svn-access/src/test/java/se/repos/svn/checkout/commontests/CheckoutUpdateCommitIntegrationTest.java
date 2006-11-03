@@ -67,7 +67,7 @@ public class CheckoutUpdateCommitIntegrationTest extends TestCase {
 		
 		// commit changes, but always do update first to check for conflicts
 		client.update();
-		client.commit("Increased test counter for basic workflow test to " + count);
+		client.commit(path, "Increased test counter for basic workflow test to " + count);
 		
 		assertFalse("Everything committed, so working copy should be sync with the repository " +
 				"(except that it might have contents that are not versioned yet)", client.hasLocalChanges());

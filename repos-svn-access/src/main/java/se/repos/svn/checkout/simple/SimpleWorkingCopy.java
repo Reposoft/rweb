@@ -40,6 +40,8 @@ public class SimpleWorkingCopy implements MandatoryReposOperations {
     
     private ReposWorkingCopy workingCopy;
     
+    private CheckoutSettings checkoutSettings;
+    
     /**
      * Open up an existing working copy.
      * If the folder is empty nothing can be done until {@link #checkout()} is called.
@@ -49,6 +51,7 @@ public class SimpleWorkingCopy implements MandatoryReposOperations {
         super();
         logger.info("Initializing working copy with settings: {}", settings);
         
+        this.checkoutSettings = settings;
         this.workingCopy = ReposWorkingCopyFactory.getClient(settings);
         
         if (settings.getWorkingCopyFolder().list().length == 0) {
@@ -69,11 +72,11 @@ public class SimpleWorkingCopy implements MandatoryReposOperations {
         //TODO locks
         // add all unadded
         logger.debug("Adding all unversioned files");
-        workingCopy.addNew();
+        workingCopy.addNew(checkoutSettings.getWorkingCopyFolder());
         // commit
         if (hasLocalChanges()) {
         	logger.info("There is local changes, performing commit.");
-            workingCopy.commit(commitMessage);
+            workingCopy.commit(checkoutSettings.getWorkingCopyFolder(), commitMessage);
         } else {
         	logger.info("There are no local changes");
         }

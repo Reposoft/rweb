@@ -76,7 +76,7 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * @throws ConflictException The risk of this is minimal if an update is done just before every commit.
 	 * @throws RepositoryAccessException 
 	 */
-	public void commit(String commitMessage) throws ConflictException, RepositoryAccessException;
+	public void commit(File path, String commitMessage) throws ConflictException, RepositoryAccessException;
 	
 	/**
 	 * Checks if a local resource can be committed.
@@ -109,6 +109,15 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	public boolean isVersioned(File path) throws ResourceParentNotVersionedException;
 	
 	/**
+	 * Returns paths to all unversioned files or folders inside a versioned folder.
+	 * 
+	 * @param path a folder that is versioned
+	 * @return every unversioned entry, recursively from path, absolute paths.
+	 *  Never returns null so if result length is 0 there are no unversioned files or folders.
+	 */
+	public File[] getUnversionedContents(File path);
+	
+	/**
 	 * Adds a file or folder in the working copy to version control.
 	 * 
 	 * Throws an excetion if the path is already under version control.
@@ -121,11 +130,6 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * @throws ResourceParentNotVersionedException if the path is not in a working copy folder
 	 */
 	public void add(File path) throws WorkingCopyAccessException, ResourceParentNotVersionedException;
-	
-	/**
-	 * Adds all unversioned files inside the working copy to version control, respecting ignores.
-	 */
-	public void addNew();
 	
 	/**
 	 * Adds all unversioned files inside a folder to version control, respecting ignores.
@@ -196,8 +200,9 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * Ensure that the file is writable locally.
 	 * Locking is never required, and only encouraged for binary files like word documents.
 	 * @param path The resource to lock. Usually a file, because lock does not work recursively.
+	 * @param lockMessage The comment that will be shown to other users.
 	 */
-	public void lock(File path);
+	public void lock(File path, String lockMessage);
 	
 	/**
 	 * Remove locks from file.

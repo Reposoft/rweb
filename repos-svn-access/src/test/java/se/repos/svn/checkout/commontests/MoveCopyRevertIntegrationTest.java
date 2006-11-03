@@ -52,7 +52,7 @@ public class MoveCopyRevertIntegrationTest extends TestCase {
 		if (d.exists())fail ("Test setup error. File exists " + d);
 		f.createNewFile();
 		client.add(f);
-		client.commit("test move");
+		client.commit(path, "test move");
 		if (client.hasLocalChanges(f)) fail ("Test error. The file " + f + " has not been committed");
 		client.copy(f, d);
 		client.delete(f);
@@ -60,11 +60,11 @@ public class MoveCopyRevertIntegrationTest extends TestCase {
 		assertTrue("The original file is gone, so it has local changes", client.hasLocalChanges(f));
 		assertTrue("The destination file should exist", d.exists());
 		assertTrue("The destination file has local changes", client.hasLocalChanges(d));
-		client.commit("test move done");
+		client.commit(path, "test move done");
 		assertFalse("After commit, there is no trace of original file", client.hasLocalChanges(f));
 		assertFalse("After commit, destination file is up to date", client.hasLocalChanges(d));
 		client.delete(d);
-		client.commit("test move cleaned");
+		client.commit(path, "test move cleaned");
 		if (d.exists()) fail("Test error. Could not remove destination file after test.");
 	}
 
@@ -76,7 +76,7 @@ public class MoveCopyRevertIntegrationTest extends TestCase {
 		File d0 = new File(path, "temp folder " + System.currentTimeMillis());
 		d0.mkdir();
 		client.add(d0);
-		client.commit("Created new file that will soon be changed, and a folder that will be deleted");
+		client.commit(path, "Created new file that will soon be changed, and a folder that will be deleted");
 		Writer w = new BufferedWriter(new FileWriter(f));
 		w.write("Changed contents");
 		w.flush();
@@ -105,7 +105,7 @@ public class MoveCopyRevertIntegrationTest extends TestCase {
 		
 		// clean up
 		client.delete(f);
-		client.commit("Deleted test file");
+		client.commit(path, "Deleted test file");
 	}
 	
 }

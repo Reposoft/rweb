@@ -167,7 +167,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		
 		// do the commit
 		assertTrue("Before the commit there is added files", client.hasLocalChanges());
-		client.commit("Added test file and folder");
+		client.commit(path, "Added test file and folder");
 		assertFalse("After commit we're up to date", client.hasLocalChanges());
 		
 		// delete both the file and the folder
@@ -179,7 +179,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		assertTrue("The file does not exist, but it's location is versioned", client.isVersioned(created));
 		assertTrue("The file does not exist, but it's location has local changes", client.hasLocalChanges(folder));
 		
-		client.commit("Deleted test file and folder");
+		client.commit(path, "Deleted test file and folder");
 		assertFalse("The file should be gone", created.exists());
 		assertFalse("The deleted folder should be gone after commit", folder.exists());
 		assertFalse("Now the file name is not in use anymore", client.isVersioned(created));
@@ -209,11 +209,11 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		client.add(f);
 		assertTrue("Folder has been added, so it is versioned", client.isVersioned(f));
 		assertTrue("There is a new folder to commit", client.hasLocalChanges());
-		client.commit("Added empty folder");
+		client.commit(path, "Added empty folder");
 		assertFalse("Folder committed already", client.hasLocalChanges());
 		client.delete(f);
 		assertTrue("There is a delete operation to commit", client.hasLocalChanges());
-		client.commit("Deleted empty folder");
+		client.commit(path, "Deleted empty folder");
 		assertFalse("Client should have deleted the folder on commit (or directly when marked for deletion?)", f.exists());
 		assertFalse("Working copy is up to date", client.hasLocalChanges());
 	}	
@@ -246,12 +246,12 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		
 		// add the file too
 		client.add(f);
-		client.commit(getName());
+		client.commit(path, getName());
 		assertFalse("The new folder should be versioned and committed", client.hasLocalChanges(d));
 		
 		// clean up
 		client.delete(d);
-		client.commit(getName() + " clean");
+		client.commit(path, getName() + " clean");
 	}	
 	
 	public void testDeleteAlreadyDeletedFile() throws IOException, ConflictException, RepositoryAccessException {
@@ -259,7 +259,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		created.createNewFile();
 		client.add(created);
 		assertTrue("The file should be added", client.isVersioned(created));
-		client.commit("Added test file (testDeleteAlreadyDeletedFile)");
+		client.commit(path, "Added test file (testDeleteAlreadyDeletedFile)");
 		created.delete(); // remove the file in file system
 		try {
 			client.delete(created);
@@ -268,7 +268,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		}
 		assertTrue("Now the file has local changes", client.hasLocalChanges(created));
 		assertFalse("The file should be gone from the file system immediately after svn delete", created.exists());
-		client.commit("Delete test done");
+		client.commit(path, "Delete test done");
 	}
 	
 	public void testDeleteFolderContainingNewFile() throws IOException, ConflictException, RepositoryAccessException {
@@ -276,7 +276,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		created.mkdir();
 		client.add(created);
 		assertTrue("The folder should have been added", client.isVersioned(created));
-		client.commit(getName() + " setup");
+		client.commit(path, getName() + " setup");
 		
 		File child = new File(created, "nonversioned.txt");
 		child.createNewFile();
@@ -297,7 +297,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		created.delete();
 		client.delete(created);
 		assertTrue("The folder should be versioned until commit", client.isVersioned(created));
-		client.commit("Deleted test folder");
+		client.commit(path, "Deleted test folder");
 		assertFalse("Delete should be successful when the folder has been manually deleted", client.isVersioned(created));
 		assertEquals("Should be reported to the notify listeners", 1, testNotifyListener.errors.size());
 	}
@@ -310,7 +310,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		client.add(d);
 		client.add(f1);
 		assertTrue("The folder and file should have been added", client.isVersioned(f1));
-		client.commit(getName() + " setup");
+		client.commit(path, getName() + " setup");
 		
 		// modify the file
 		new FileWriter(f1).append('a').close();
@@ -330,7 +330,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		// revert all changes and then delete
 		client.revert(f1);
 		client.delete(d);
-		client.commit(getName() + " clean");
+		client.commit(path, getName() + " clean");
 		assertFalse("Delete should be successful when the changes have been reverted", client.isVersioned(d));
 		assertEquals("Should be reported to the notify listeners", 1, testNotifyListener.errors.size());
 	}
@@ -353,7 +353,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		client.addNew(d1f);
 		
 		// now do addNew for the working copy, which should include the file too
-		client.addNew();
+		client.addNew(path);
 		assertTrue("Everything in the working copy should have been added now", client.isVersioned(f1));
 	}
 	

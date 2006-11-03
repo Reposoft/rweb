@@ -66,16 +66,22 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	
 	ConfigureClient configureClient = new DefaultReposClientSettings();
 	
+	File workingCopyFolder;
+	
 	public ManagedWorkingCopy(CheckoutSettings settings) {
 		workingCopy = ReposWorkingCopyFactory.getClient(settings);
+		workingCopyFolder = settings.getWorkingCopyFolder();
 	}
 
 	public void add(File path) {
 		workingCopy.add(path);
 	}
 
+	/**
+	 * Adds all unversioned contents to version control.
+	 */
 	public void addNew() {
-		workingCopy.addNew();
+		workingCopy.addNew(workingCopyFolder);
 	}
 	
 	public void addNew(File path) {
@@ -96,8 +102,15 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		workingCopy.checkout();		
 	}
 
+	/**
+	 * Full commit of the working copy.
+	 */
 	public void commit(String commitMessage) throws ConflictException, RepositoryAccessException {
-		workingCopy.commit(commitMessage);
+		commit(workingCopyFolder, commitMessage);
+	}
+	
+	public void commit(File path, String commitMessage) throws ConflictException, RepositoryAccessException {
+		workingCopy.commit(path, commitMessage);
 	}
 
 	public void delete(File path) {
@@ -126,8 +139,8 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		}
 	}
 
-	public void lock(File path) {
-		workingCopy.lock(path);
+	public void lock(File path, String lockMessage) {
+		workingCopy.lock(path, lockMessage);
 	}
 
 	/**
@@ -205,6 +218,10 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 
 	public VersionedFolderProperties getPropertiesForFolder(File folder) {
 		return workingCopy.getPropertiesForFolder(folder);
+	}
+
+	public File[] getUnversionedContents(File path) {
+		return workingCopy.getUnversionedContents(path);
 	}
 
 }

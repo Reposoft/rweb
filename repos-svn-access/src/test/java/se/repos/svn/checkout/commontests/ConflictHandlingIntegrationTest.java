@@ -44,7 +44,7 @@ public class ConflictHandlingIntegrationTest extends TestCase {
 		
 		// commit the first wc's change
 		try {
-			w1.commit("Commit first working copy in conflict test " + i1);
+			w1.commit(s1.getWorkingCopyFolder(), "Commit first working copy in conflict test " + i1);
 		} catch (ConflictException e) {
 			fail("Should not get conflict for first commit. Maybe the test is running elsewhere. Try again");
 		}
@@ -75,7 +75,7 @@ public class ConflictHandlingIntegrationTest extends TestCase {
 		w2.markConflictResolved(conflictInformation);
 		// great, now try to commit again
 		try {
-			w2.commit("Commit working copy two, after conflict resolved: " + i2);
+			w2.commit(s2.getWorkingCopyFolder(), "Commit working copy two, after conflict resolved: " + i2);
 		} catch (ConflictException e) {
 			fail("Conflict has been marked resolved. Commit should do just fine.");
 		}		

@@ -66,7 +66,7 @@ public class SvnPropertiesIntegrationTest extends TestCase {
 		});
 		
 		assertEquals("1.X", client.getProperties(f).getProperty("repos:test").getValue());
-		client.commit("Added a custom versioned property");
+		client.commit(path, "Added a custom versioned property");
 		assertFalse("Everything should be committed", client.hasLocalChanges(f));
 		
 		client.getProperties(f).setProperty(new VersionedProperty() {
@@ -90,7 +90,7 @@ public class SvnPropertiesIntegrationTest extends TestCase {
 		client.revert(f);
 		assertEquals("1.X", client.getProperties(f).getProperty("repos:test").getValue());
 		client.delete(f);
-		client.commit("Cleaned up after property test");
+		client.commit(path, "Cleaned up after property test");
 	}
 	
 	public void testIsIgnoreNotVersionedParent() {
@@ -130,7 +130,7 @@ public class SvnPropertiesIntegrationTest extends TestCase {
 		File parent = new File(path, "newfolder" + System.currentTimeMillis());
 		parent.mkdir();
 		client.add(parent);
-		client.commit("Added empty folder for ignore test"); // not needed, can set properties for newly added path too
+		client.commit(path, "Added empty folder for ignore test"); // not needed, can set properties for newly added path too
 		
 		File child = new File(parent, "file.txt");
 		child.createNewFile();
@@ -165,7 +165,7 @@ public class SvnPropertiesIntegrationTest extends TestCase {
 		child.delete(); // needed because folder with local changes can not be marked for deleteion
 		client.revert(parent); // revert the propset
 		client.delete(parent);
-		client.commit("Cleaned up after ignore test");
+		client.commit(path, "Cleaned up after ignore test");
 	}
 	
 	public void testIsIgnoreNonExisting() throws ConflictException, RepositoryAccessException {
