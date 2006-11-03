@@ -389,10 +389,10 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		
 	}
 
-	public void move(File from, File to) {
-		logger.debug("Deleting {} to {}, unless it has local changes", from, to);
+	public void copy(File from, File to) {
+		logger.debug("Copying {} to {}, with any uncommitted changes and new files", from, to);
 		try {
-			client.move(from, to, false);
+			client.copy(from, to);
 		} catch (SVNClientException e) {
 			WorkingCopyAccessException.handle(e);
 		}
@@ -653,10 +653,6 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 			throw new UnsupportedOperationException("Method ReposWorkingCopySvnAnt#unlock not implemented yet");
 		}
 		
-	}
-
-	public void revert() {
-		this.revert(settings.getWorkingCopyFolder());
 	}
 
 	public boolean isAdministrativeFolder(File path) {

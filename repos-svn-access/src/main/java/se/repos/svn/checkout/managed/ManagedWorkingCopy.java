@@ -140,13 +140,19 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 			if (to.isFile() && workingCopy.isVersioned(to)) throw new IllegalArgumentException("The destination file for move is already versioned: " + to);
 			// TODO test that, if it is a folder, it has svn metadata from the old location
 			if (to.renameTo(from)) {
-				workingCopy.move(from, to);
+				this.copy(from, to);
 			} else {
 				throw new WorkingCopyAccessException("Could not restore the moved folder " + from + " from the destination " + to + ", so the versioned move can not be done");
 			}
 		} else {
-			workingCopy.move(from, to);
+			this.copy(from, to);
 		}
+		this.delete(from);
+	}
+	
+	
+	public void copy(File from, File to) {
+		workingCopy.copy(from, to);
 	}
 
 	public void revert(File path) {
@@ -175,10 +181,6 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 
 	public void unlock(File path) {
 		workingCopy.unlock(path);
-	}
-
-	public void revert() {
-		workingCopy.revert();
 	}
 
 	public boolean isAdministrativeFolder(File path) {

@@ -54,7 +54,8 @@ public class MoveCopyRevertIntegrationTest extends TestCase {
 		client.add(f);
 		client.commit("test move");
 		if (client.hasLocalChanges(f)) fail ("Test error. The file " + f + " has not been committed");
-		client.move(f, d);
+		client.copy(f, d);
+		client.delete(f);
 		assertFalse("The original file should be gone", f.exists());
 		assertTrue("The original file is gone, so it has local changes", client.hasLocalChanges(f));
 		assertTrue("The destination file should exist", d.exists());

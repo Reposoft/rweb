@@ -162,22 +162,19 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	public void delete(File path) throws ResourceNotVersionedException, ResourceHasLocalChangesException;
 	
 	/**
-	 * Marks a file or folder as moved in the repository.
+	 * Marks a copy of a file or folder in the working copy, which means a cheap copy in the repository.
 	 * 
-	 * To move to a location where something was just removed from version control,
+	 * This interface is kept as small as possible.
+	 * Move operation is the same as copy+delete original.
+	 * Combining these two operations give more fine grained error handling than a single move operation.
+	 * 
+	 * To copy to a location where something was just removed from version control,
 	 * a commit is needed before the location can be used.
 	 * 
 	 * @param from current location, must exist and can NOT have local modifications.
 	 * @param to new location, can not exist or be versioned
-	 * @deprecated Make this a copy operation, applications can do copy+delete, gives more fine grained error handling
 	 */
-	public void move(File from, File to);
-	
-	/**
-	 * Restores the entire working copy to the revision that was retreived last time an update was done.
-	 * @deprecated recursive revert is generally not efficient, because metadata folders may be gone. Use update to restore working copy.
-	 */
-	public void revert();
+	public void copy(File from, File to);
 	
 	/**
 	 * Restores a file or folder to the version in repository.
