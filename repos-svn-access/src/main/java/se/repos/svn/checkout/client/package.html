@@ -4,6 +4,15 @@
 Base classes for working copy management, not containing any user interaction logic.
 </p>
 <p>
+Most svn clients are made for four different usage scenarios:
+online automated,
+working copy automated,
+online user,
+working copy user.
+This client is made for use from an application (automated) and only in working copies (no online operations).
+This minimizes the feature set. For example copy+delete methods makes it unnessecary to add move.
+</p>
+<p>
 The actual client logic should be embedded in a class that encapsulates a usage pattern, 
 such as <a href="../simple/">simple client</a> or <a href="../managed/">managed client</a>.
 </p> 

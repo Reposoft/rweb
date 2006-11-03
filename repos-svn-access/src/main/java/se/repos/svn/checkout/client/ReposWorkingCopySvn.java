@@ -445,7 +445,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		// if the argument path is not versioned we will have one line of result
         if (statuses.length == 1
         	&& statuses[0].getTextStatus()==SVNStatusKind.UNVERSIONED
-        	&& path.getPath().contains(statuses[0].getFile().getPath())) { // from command line it is only relative pahts, convert to File first to get the same slashes
+        	&& isSameFile(path, statuses[0].getFile())) {
         	throw new ResourceNotVersionedException(path);
         }
         // will exit and return true when it finds a modified file/dir
@@ -460,6 +460,26 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
             }
         }
         return false;
+	}
+	
+	/**
+	 * Returns true if the two file instances represent the same pathe.
+	 * Get canonical name does not work, because fromClient path might be relative.
+	 * All paths must be converted to File instances, to get same separator char on windows.
+	 * @param original The path that does not come from the underlying client.
+	 * @param fromClient Path for example from svn status, which might be relative like on the command line.
+	 * @return true if it looks like the same file
+	 */
+	protected boolean isSameFile(File original, File fromClient) {
+		// this works in non-windows and with pure java
+		if (original.getPath().charAt(1)!=':' || 
+				client instanceof org.tigris.subversion.svnclientadapter.javasvn.JavaSvnClientAdapter) {
+			return original.getPath().contains(fromClient.getPath());
+		}
+		// native library on windows seems to return absolute paths and represent >8 char names differently
+		String regex = "\\Q" + original.getPath().replaceAll("~\\d*", "\\\\E.*\\\\Q") + "\\E";
+		Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+		return p.matcher(fromClient.getPath()).matches();
 	}
 	
     /**

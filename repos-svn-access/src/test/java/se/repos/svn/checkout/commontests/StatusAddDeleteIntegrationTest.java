@@ -56,7 +56,8 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 			assertTrue(message, expected.toString().endsWith(actual.toString()));
 			return;
 		}
-		assertEquals(message, expected, actual);
+		// in windows there is sometimes a difference in >8 char foldernames
+		assertEquals(message, expected.getCanonicalPath(), actual.getCanonicalPath());
 	}
 	
 	public void testWorkingCopyRootFolderStatus() {
