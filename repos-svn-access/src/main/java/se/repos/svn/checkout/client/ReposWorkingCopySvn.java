@@ -369,7 +369,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
         for (int i = 0; i < status.length; i++) {
         	if (status[i].getTextStatus()==SVNStatusKind.UNVERSIONED) files.add(status[i].getFile());
         }
-        return (File[]) files.toArray();
+        return (File[]) files.toArray(new File[0]);
 	}
 
     /**

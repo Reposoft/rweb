@@ -56,7 +56,7 @@ import se.repos.svn.config.ClientConfiguration;
  * @author Staffan Olsson (solsson)
  * @version $Id$
  * @see SimpleWorkingCopy for a more automated client
- * @see ReposWorkingCopy for the standard client description
+ * @see ReposWorkingCopy for documentation of the standard methods
  */
 public class ManagedWorkingCopy implements ReposWorkingCopy {
 
@@ -160,6 +160,7 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		} else {
 			this.copy(from, to);
 		}
+		pathDeleteRecursive(from);
 		this.delete(from);
 	}
 	
@@ -224,4 +225,20 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		return workingCopy.getUnversionedContents(path);
 	}
 
+	private boolean pathDeleteRecursive(File remove) {
+		if (!remove.getAbsolutePath().contains(workingCopyFolder.getAbsolutePath())) {
+			throw new RuntimeException("Can not delete folder outside the working copy: " + remove);
+		}
+		if (remove.exists()) {
+			File[] files = remove.listFiles();
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					pathDeleteRecursive(files[i]);
+				} else {
+					files[i].delete();
+				}
+			}
+		}
+		return (remove.delete());
+	}
 }

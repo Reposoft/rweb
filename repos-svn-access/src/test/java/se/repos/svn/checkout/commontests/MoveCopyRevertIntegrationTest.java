@@ -13,6 +13,7 @@ import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.ResourceParentNotVersionedException;
 import se.repos.svn.test.CheckoutSettingsForTest;
 
 /**
@@ -46,14 +47,13 @@ public class MoveCopyRevertIntegrationTest extends TestCase {
 	}
 
 	public void testMove() throws IOException, ConflictException, RepositoryAccessException {
-		File f = new File(path, "tobemoved.txt");
-		File d = new File(path, "destination.txt");
-		if (f.exists()) fail ("Test setup error. File exists " + f);
-		if (d.exists())fail ("Test setup error. File exists " + d);
+		File f = new File(path, getName() + "moved.txt" + System.currentTimeMillis());
+		File d = new File(path, getName() + "destination.txt" + System.currentTimeMillis());
 		f.createNewFile();
 		client.add(f);
 		client.commit(path, "test move");
 		if (client.hasLocalChanges(f)) fail ("Test error. The file " + f + " has not been committed");
+		// move is copy + delete
 		client.copy(f, d);
 		client.delete(f);
 		assertFalse("The original file should be gone", f.exists());
@@ -61,7 +61,7 @@ public class MoveCopyRevertIntegrationTest extends TestCase {
 		assertTrue("The destination file should exist", d.exists());
 		assertTrue("The destination file has local changes", client.hasLocalChanges(d));
 		client.commit(path, "test move done");
-		assertFalse("After commit, there is no trace of original file", client.hasLocalChanges(f));
+		assertFalse("After commit, there is no trace of original file", client.isVersioned(f) || f.exists());
 		assertFalse("After commit, destination file is up to date", client.hasLocalChanges(d));
 		client.delete(d);
 		client.commit(path, "test move cleaned");
@@ -101,8 +101,12 @@ public class MoveCopyRevertIntegrationTest extends TestCase {
 		assertEquals("File should be empty", 0, f.length());
 		assertTrue("The empty folder should have been restored", d0.exists());
 		assertFalse("The added directory is not versioned anymore", client.isVersioned(d));
-		assertFalse("The file inside the added directory is not versioned", client.isVersioned(df));
-		
+		try {
+			assertFalse("The file inside the added directory is not versioned", client.isVersioned(df));
+			fail("Can not check versioned inside a non-versioned folder");
+		} catch (ResourceParentNotVersionedException e) {
+			assertEquals("Exception thrown for the parent folder", d.getName(), e.getPath().getName());
+		}
 		// clean up
 		client.delete(f);
 		client.commit(path, "Deleted test file");

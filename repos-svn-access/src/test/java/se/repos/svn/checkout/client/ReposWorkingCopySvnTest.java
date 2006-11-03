@@ -142,8 +142,8 @@ public class ReposWorkingCopySvnTest extends TestCase {
 		ISVNStatus statusMock = (ISVNStatus) statusControl.getMock();
 		statusMock.getTextStatus();
 		statusControl.setReturnValue(SVNStatusKind.UNVERSIONED);
-		statusMock.getPath();
-		statusControl.setReturnValue(f.getPath());
+		statusMock.getFile();
+		statusControl.setReturnValue(f);
 		statusControl.replay();
 		
 		try {
@@ -166,8 +166,8 @@ public class ReposWorkingCopySvnTest extends TestCase {
 		ISVNStatus s2 = (ISVNStatus) sc2.getMock();
 		s2.getTextStatus();
 		sc2.setReturnValue(SVNStatusKind.UNVERSIONED, 2); // one extra call because it is a single file
-		s2.getPath();
-		sc2.setReturnValue(child.getPath());
+		s2.getFile();
+		sc2.setReturnValue(child);
 		sc2.replay();
 		
 		assertFalse("The unversioned contents do not count as local changes",

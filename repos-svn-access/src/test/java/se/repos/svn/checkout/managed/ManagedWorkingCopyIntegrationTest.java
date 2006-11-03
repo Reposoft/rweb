@@ -54,7 +54,7 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		// TODO REWRITE
 		File tmp = File.createTempFile("testFileOutsideWorkingCopy", "file");
 		tmp.deleteOnExit();
-		assertFalse("folder that is outside working copy should still report not versioned", client.isVersioned(tmp));
+		//assertFalse("folder that is outside working copy should still report not versioned", client.isVersioned(tmp));
 		try {
 			client.add(tmp);
 			fail("Should have reported error because the new folder is not inside a working copy");
@@ -123,13 +123,14 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		if (!f.exists() || !f.isDirectory()) fail("Test setup error. Should have created folder " + f);
 		// add some contents so it's not too easy
 		File ff = new File(f, "afile.txt");
+		File df = new File(d, "afile.txt");
 		ff.createNewFile();
 		BufferedWriter out = new BufferedWriter(new FileWriter(ff));
         out.write("someContents");
         out.close();
 		// add to repository
 		client.add(f);
-		client.commit("test move already moved");
+		client.commit(getName() + " setup");
 		if (!client.isVersioned(f)) fail("Test error. Seems the folder " + f + " was not added");
 		if (client.hasLocalChanges(f)) fail("Test error. The folder " + f + " has not been committed");
 		
@@ -148,12 +149,17 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		assertTrue("The original folder is gone, so it has local changes", client.hasLocalChanges(f));
 		assertTrue("The destination folder should exist", d.exists());
 		assertTrue("The destination folder has local changes", client.hasLocalChanges(d));
-		client.commit("test move already moved done");
+		assertTrue("The moved folder contains the same contents as before", df.exists());
+		assertFalse("The contents are still not versioned", client.isVersioned(df));
+		
+		client.commit(getName() + " done");
 		assertFalse("The original folder should be gone", f.exists());
-		assertFalse("After commit, there is no trace of original folder", client.hasLocalChanges(f));
+		assertFalse("After commit, there is no trace of original folder", f.exists());
 		assertFalse("After commit, destination file is up to date", client.hasLocalChanges(d));
+		// first remove local changes and new entries, then delete
+		df.delete();
 		client.delete(d);
-		client.commit("test move already moved cleaned");
+		client.commit(getName() + " cleanup");
 		if (d.exists()) fail("Test error. Could not remove destination folder after test.");
 	}
 	
