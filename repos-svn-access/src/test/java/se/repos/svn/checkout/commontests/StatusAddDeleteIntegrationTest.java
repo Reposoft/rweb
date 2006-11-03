@@ -50,8 +50,13 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		CheckoutSettingsForTest.tearDown();
 	}
 	
-	private void assertSameFile(String message, File expected, File actual) {
-		
+	private void assertSameFile(String message, File expected, File actual) throws IOException {
+		System.out.println("Comparing " + expected + " and " + actual + (actual.isAbsolute() ? " (absolute)" : " (relative)"));
+		if (!actual.isAbsolute()) {
+			assertTrue(message, expected.toString().endsWith(actual.toString()));
+			return;
+		}
+		assertEquals(message, expected, actual);
 	}
 	
 	public void testWorkingCopyRootFolderStatus() {
@@ -149,7 +154,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 			client.delete(created);
 			fail("Should say that the file can not be deleted because it has local modifications");
 		} catch (ResourceHasLocalChangesException e) {
-			assertEquals(created.getCanonicalPath(), e.getPath().getCanonicalPath());
+			this.assertSameFile("Should report the invalid add", created, e.getPath());
 		} catch (WorkingCopyAccessException e) {
 			fail("Threw the generic WorkingCopyAccessException but should have thrown specific ResourceHasLocalChangesException");
 		}
@@ -278,8 +283,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 			client.delete(created);
 			fail("Should have thrown WorkingCopyAccessExcption because there are local changes in the folder");
 		} catch (ResourceNotVersionedException e) {
-			assertEquals("The exception should be thrown for the modified file, not the folder",
-					child.getCanonicalPath(), e.getPath().getCanonicalPath());
+			this.assertSameFile("The exception should be thrown for the modified file, not the folder", child, e.getPath());
 		} catch (WorkingCopyAccessException e) {
 			fail("Should have thrown the more specific " + ResourceHasLocalChangesException.class.getName());
 		}
@@ -315,8 +319,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 			client.delete(d);
 			fail("Should have thrown WorkingCopyAccessExcption because there are local changes in the folder");
 		} catch (ResourceHasLocalChangesException e) {
-			assertEquals("The exception should be thrown for the modified file, not the folder",
-					f1.getCanonicalPath(), e.getPath().getCanonicalPath());
+			this.assertSameFile("The exception should be thrown for the modified file, not the folder", f1, e.getPath());
 			assertTrue("The folder has local changes because of the modified file", client.hasLocalChanges(d));
 		} catch (WorkingCopyAccessException e) {
 			fail("Should have thrown the more specific " + ResourceHasLocalChangesException.class.getName());
