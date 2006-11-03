@@ -250,14 +250,14 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		try {
 			// If path is not inside a versioned folder, javahl returns SVNStatusUnversioned and JavaSVN says 'not versioned'
 			try {
-				status = client.getSingleStatus(path);
+				status = this.getStatusOneLine(path);
 			} catch (SVNClientException e) {
 				WorkingCopyAccessException.handle(e); // unversioned -> ResourceNotVersioned with JavaSVN
 			}
 		} catch (ResourceNotVersionedException re) { // catch the JavaSVN exception, which says the invalid path is the original path, but it is allowed to ask status on an unversioned file
 			File parent = path.getParentFile();
 			try {
-				client.getSingleStatus(parent);
+				this.getStatusOneLine(parent);
 			} catch (SVNClientException e) {
 				throw new ResourceParentNotVersionedException(parent); // in very rare cases it could be something different
 			}
@@ -272,7 +272,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		if (status instanceof SVNStatusUnversioned) {
 			try {
 				File parent = path.getParentFile();
-				ISVNStatus parentstatus = client.getSingleStatus(parent);
+				ISVNStatus parentstatus = this.getStatusOneLine(parent);
 				if (parentstatus.getTextStatus()==SVNStatusKind.UNVERSIONED) { // checks unversioned, not the SVNStatusUnversioned bug
 					throw new ResourceParentNotVersionedException(parent);
 				}
@@ -285,18 +285,20 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 
 	/**
 	 * Gets non-recursive status, verbose, of one file or folder.
-	 * @deprecated Not used, because {@link ISVNClientAdapter#getStatus(File, boolean, boolean)} returns all the contents of the folder, first level.
+	 * Replaces {@link ISVNClientAdapter#getSingleStatus(File)},
+	 * which looks on-standard and behaves differently depending on client lib.
+	 * We'd better use only {@link ISVNClientAdapter#getStatus(File, boolean, boolean)}.
 	 */
 	private ISVNStatus getStatusOneLine(File path) throws SVNClientException {
 		ISVNStatus[] status = client.getStatus(path, false, true);
-		if (status.length == 0) throw new WorkingCopyAccessException("Could not check status for path " + path);
-		if (status.length > 1) {
-			StringBuffer message = new StringBuffer("Got status for more than one entry with path '");
-			message.append(path).append("':");
-			for (int i = 0; i < status.length; i++) {
-				message.append(status[i].getPath()).append(", ");
-			}
-			throw new WorkingCopyAccessException(message.toString());
+		if (status.length == 0) {
+			if (!path.exists()) return new StatusUnversionedMissing(path);
+			throw new WorkingCopyAccessException("Could not check status for path " + path);
+		}
+		if (status.length == 1) return status[0];
+		// try to figure out which one it is for path
+		if (status[status.length-1].getPath().length() < status[0].getPath().length()) {
+			return status[status.length-1];
 		}
 		return status[0];
 	}
@@ -443,7 +445,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		// if the argument path is not versioned we will have one line of result
         if (statuses.length == 1
         	&& statuses[0].getTextStatus()==SVNStatusKind.UNVERSIONED
-        	&& !statuses[0].getPath().contains(File.separator)) { // the status should be for the path, not a child
+        	&& path.getPath().contains(statuses[0].getFile().getPath())) { // from command line it is only relative pahts, convert to File first to get the same slashes
         	throw new ResourceNotVersionedException(path);
         }
         // will exit and return true when it finds a modified file/dir

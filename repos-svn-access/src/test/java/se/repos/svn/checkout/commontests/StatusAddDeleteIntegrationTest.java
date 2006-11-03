@@ -50,6 +50,10 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		CheckoutSettingsForTest.tearDown();
 	}
 	
+	private void assertSameFile(String message, File expected, File actual) {
+		
+	}
+	
 	public void testWorkingCopyRootFolderStatus() {
 		assertTrue("Working copy root folder should of course be versioned", client.isVersioned(path));
 		assertFalse("After checkout working copy has no changes", client.hasLocalChanges());
@@ -77,7 +81,6 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		try {
 			// note that the file does not exist yet
 			client.hasLocalChanges(created);
-			assertEquals("svn status can be checked, so there's no error notify", 0, testNotifyListener.errors.size());
 			fail("Should be invalid to ask for status on a path that does not exist AND is not versioned");
 		} catch (ResourceNotVersionedException e) { 
 			assertEquals("The exception should state the invalid path", created.getCanonicalPath(), e.getPath().getCanonicalPath());
@@ -87,12 +90,12 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		assertFalse("New files are not versioned until add", client.isVersioned(created));
 		try {
 			client.hasLocalChanges(created);
-			assertEquals("svn status can be checked, so there's no error notify", 0, testNotifyListener.errors.size());
 			fail("Should not be able to check status on a file that is not versioned, even if it exists");
 		} catch (ResourceNotVersionedException e) { 
 			assertEquals("The exception should say which file it is that is not versioned", created, e.getPath());
 		}
 		created.delete();
+		assertEquals("svn status can be checked, so there's no error notify", 0, testNotifyListener.errors.size());
 	}
 	
 	public void testNewFolderStatus() throws IOException {
@@ -280,12 +283,15 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		} catch (WorkingCopyAccessException e) {
 			fail("Should have thrown the more specific " + ResourceHasLocalChangesException.class.getName());
 		}
-		assertTrue("Should have removed the folder with the new file", client.isVersioned(created));
+		assertTrue("Folders should never be deleted when marked for delete", created.exists());
+		assertTrue("The contents of the folder should also still be there", child.exists());
+		assertFalse("Status of the folder should not have changed", client.hasLocalChanges(created));
 		
 		// simply delete the folder maually before marking for delete to work around this restriction
 		child.delete();
 		created.delete();
 		client.delete(created);
+		assertTrue("The folder should be versioned until commit", client.isVersioned(created));
 		client.commit("Deleted test folder");
 		assertFalse("Delete should be successful when the folder has been manually deleted", client.isVersioned(created));
 		assertEquals("Should be reported to the notify listeners", 1, testNotifyListener.errors.size());
