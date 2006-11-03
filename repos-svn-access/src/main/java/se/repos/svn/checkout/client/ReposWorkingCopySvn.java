@@ -246,27 +246,41 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	 * ISVNClientAdapter.getSingleStatus has poor error handling, so we use our own
 	 */
 	private ISVNStatus getSingleStatus(File path) {
-		// AbstractJhlClientAdapter does this after checkin status (sigh):
+		ISVNStatus status = null;
+		try {
+			// If path is not inside a versioned folder, javahl returns SVNStatusUnversioned and JavaSVN says 'not versioned'
+			try {
+				status = client.getSingleStatus(path);
+			} catch (SVNClientException e) {
+				WorkingCopyAccessException.handle(e); // unversioned -> ResourceNotVersioned with JavaSVN
+			}
+		} catch (ResourceNotVersionedException re) { // catch the JavaSVN exception, which says the invalid path is the original path, but it is allowed to ask status on an unversioned file
+			File parent = path.getParentFile();
+			try {
+				client.getSingleStatus(parent);
+			} catch (SVNClientException e) {
+				throw new ResourceParentNotVersionedException(parent); // in very rare cases it could be something different
+			}
+			throw re;
+		} // don't catch any other WorkingCopyAccessExceptions, because they are real.
+		// AbstractJhlClientAdapter does this after checking status (sigh):
 		//	} catch (ClientException e) {
 		//		if (e.getAprError() == SVN_ERR_WC_NOT_DIRECTORY) {
 		//			// when there is no .svn dir, an exception is thrown ...
 		//			return new ISVNStatus[] {new SVNStatusUnversioned(path)};
 		//		}
-		try {
-			ISVNStatus status = client.getSingleStatus(path);
-			if (status instanceof SVNStatusUnversioned) {
-				// because of the stupid error handling in SVNClientAdapter we need to manually check parent
+		if (status instanceof SVNStatusUnversioned) {
+			try {
 				File parent = path.getParentFile();
 				ISVNStatus parentstatus = client.getSingleStatus(parent);
 				if (parentstatus.getTextStatus()==SVNStatusKind.UNVERSIONED) { // checks unversioned, not the SVNStatusUnversioned bug
 					throw new ResourceParentNotVersionedException(parent);
 				}
+			} catch (SVNClientException e) {
+				WorkingCopyAccessException.handle(e);
 			}
-			return status;
-		} catch (SVNClientException e) {
-			WorkingCopyAccessException.handle(e);
-			return null;
 		}
+		return status;
 	}
 
 	/**
@@ -300,8 +314,8 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	 */
 	public boolean hasLocalChanges(File path) {
         ISVNStatus[] statuses = getStatusRecursiveNonVerbose(path);
-        if (statuses.length==0 && !path.exists()) { // isVersioned but missing would have been a status
-        	throw new IllegalArgumentException("Path does not exist AND is not versioned: " + path.getAbsolutePath());
+        if (statuses.length==0 && !path.exists()) { // this method call should not happen, isVersioned but missing would have been a status
+        	throw new ResourceNotVersionedException(path); // same as for existing file
         }
         return hasLocalChanges(path, statuses, false); // unversioned does NOT count as modifications
 	}

@@ -78,9 +78,9 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 			// note that the file does not exist yet
 			client.hasLocalChanges(created);
 			assertEquals("svn status can be checked, so there's no error notify", 0, testNotifyListener.errors.size());
-			fail("Should not be invalid to ask for status on a path that does not exist and is not versioned");
-		} catch (IllegalArgumentException e) { 
-			assertTrue("The exception should state the invalid path", e.getMessage().contains(created.getPath()));
+			fail("Should be invalid to ask for status on a path that does not exist AND is not versioned");
+		} catch (ResourceNotVersionedException e) { 
+			assertEquals("The exception should state the invalid path", created.getCanonicalPath(), e.getPath().getCanonicalPath());
 		}
 		
 		created.createNewFile();
@@ -104,8 +104,8 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		f3.createNewFile();
 		assertFalse("Folder 1 shouldn't be versioned", client.isVersioned(d1));
 		try {
-			assertFalse("Subfolder shouldn't be versioned, but it should be possible to ask even when parent is not versioned", client.isVersioned(d2));
-			//assertFalse("File in subfolder shouldn't be versioned", client.isVersioned(f3));
+			assertFalse("Subfolder shouldn't be versioned, and parent is not", client.isVersioned(d2));
+			assertFalse("File in subfolder shouldn't be versioned", client.isVersioned(f3));
 			fail("isVersioned is defined to throw exception if parent path is not versioned");
 		} catch (ResourceParentNotVersionedException e) {
 			assertEquals("Parent is not a working copy folder", d1.getCanonicalPath(), e.getPath().getCanonicalPath());
