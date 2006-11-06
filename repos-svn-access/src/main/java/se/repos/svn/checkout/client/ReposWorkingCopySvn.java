@@ -177,7 +177,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	 * @param notifyListener A callback implementation.
 	 */
 	public void addNotifyListener(NotifyListener notifyListener) {
-		logger.debug("Adding notify listener {}", notifyListener.getClass().getSimpleName());
+		logger.debug("Adding notify listener {}", notifyListener.getClass().getName());
 		client.addNotifyListener(notifyListener);
 	}
 	
