@@ -25,13 +25,6 @@
       <version>build209</version>
     </dependency>
     <dependency>
-      <groupId>org.tmate</groupId>
-      <artifactId>javasvn</artifactId>
-      <version>1.0.4</version>
-      <!-- only needed where javahl does not work. distribute separately.
-      <scope>test</scope> -->
-    </dependency>
-    <dependency>
       <groupId>org.tigris.subclipse</groupId>
       <artifactId>svnant-svnclientadapter</artifactId>
       <version>1.1.0-RC2</version>
@@ -40,6 +33,13 @@
       <groupId>org.tigris.subclipse</groupId>
       <artifactId>svnant-svnjavahl</artifactId>
       <version>1.1.0-RC2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.tmate</groupId>
+      <artifactId>javasvn</artifactId>
+      <version>1.0.4</version>
+      <!-- only needed where javahl does not work. distribute separately. -->
+      <scope>test</scope>
     </dependency>
     <dependency>
     	<groupId>ubique</groupId>

@@ -65,7 +65,7 @@ public abstract class ReposWorkingCopyFactory {
 			logger.warn("Using the Tmate SVN library. For commercial use this requires a license. See http://tmate.org/.");
 			return client;
 		} catch (ClientNotAvaliableException e) {
-			logger.info("Javahl client library is not available. Is the dll file 'libsvnjavahl-1' present?");
+			logger.info("Tmate JavaSVN client library is not available. Is javasvn.jar present?");
 		}
 		// all alternatives failed
 	    throw new RuntimeException("There is no SVN client avaliable. Tried Javahl and JavaSVN.");
