@@ -30,9 +30,9 @@
       <version>1.1.0-RC2</version>
     </dependency>
     <dependency>
-      <groupId>org.tigris.subclipse</groupId>
-      <artifactId>svnant-svnjavahl</artifactId>
-      <version>1.1.0-RC2</version>
+      <groupId>org.tigris.subversion</groupId>
+      <artifactId>javahl</artifactId>
+      <version>1.4.2</version>
     </dependency>
     <dependency>
       <groupId>org.tmate</groupId>
