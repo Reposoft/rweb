@@ -531,7 +531,7 @@ function login_getMimeTypeProperty($targetUrl, $revision) {
  */
 function login_getSvnSwitches() {
 	$auth = '--username='.escapeArgument(getReposUser()).' --password='.escapeArgument(_getReposPass()).' --no-auth-cache';
-	$options = '--non-interactive --config-dir '.SVN_CONFIG_DIR;
+	$options = '--non-interactive --config-dir '.escapeArgument(SVN_CONFIG_DIR);
 	return $auth.' '.$options;
 }
 

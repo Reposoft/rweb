@@ -19,10 +19,10 @@ function autoFillFilename(path) {
 <h1>Paste contents of file</h1>
 <!--{if $isfile}-->
 <p>As a new version of file <span class="path">{=$target}</span> <a class="action" target="_blank" href="../open/?target={=$target}">open current version</a></p>
-<p><a class="action" href="./?target={=$target}">switch to normal file upload</a></p>
+<p><a id="upload" class="action" href="./?target={=$target}">switch to normal file upload</a></p>
 <!--{else}-->
 <p>As a new file in folder {=$target}</p>
-<p><a class="action" href="./?target={=$target}">switch to normal file upload</a></p>
+<p><a id="upload" class="action" href="./?target={=$target}">switch to normal file upload</a></p>
 <!--{/if}-->
 <a name="textform"></a>
 <p>Open the local file in a text editor, such as notepad, and copy the contents to this form.</p>

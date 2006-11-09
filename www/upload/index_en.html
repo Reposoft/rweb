@@ -29,10 +29,10 @@ function autoFillFilename(path) {
 <p>As a new file in folder {=$target}</p>
 <!--{/if}-->
 <!--{if $isfile && $istext}-->
-<p>The current verison is a text file, so it is also possible to <a class="action" href="./?target={=$target}&text">copy-paste your local file's contents</a></p>
+<p>The current verison is a text file, so it is also possible to <a id="textedit" class="action" href="./?target={=$target}&text">copy-paste your local file's contents</a></p>
 <!--{/if}-->
 <!--{if !$isfile}-->
-<p>It is also possible to <a class="action" href="./?target={=$target}&text">copy-paste your local file's contents</a></p>
+<p>It is also possible to <a id="textedit" class="action" href="./?target={=$target}&text">copy-paste your local file's contents</a></p>
 <!--{/if}-->
 <form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
 <fieldset>
