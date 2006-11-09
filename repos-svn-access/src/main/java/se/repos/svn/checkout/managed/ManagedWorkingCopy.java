@@ -31,7 +31,6 @@ import se.repos.svn.config.ClientConfiguration;
  * <li>Allows move operation on an already moved file or folder.
  * <li>Allows delete on an already deleted file or folder.
  * <li>Allows isVersioned on resources that are not in versioned folder (returns false).
- * <li>TODO Reports new contents as hasLocalChanges=true.
  * </ul>
  * 
  * Also enforces client settings with Repos defaults:
@@ -50,7 +49,7 @@ import se.repos.svn.config.ClientConfiguration;
  * this changes the settings for all subversion clients in the current user account.
  *
  * @todo how to handle hasLocalChanges and missing files; autodelete? revert?
- * @todo report new files or folders in any subfolder as localChanges? 
+ * @todo report new files or folders in any subfolder as localChanges? currently does not.
  * @todo recursive lock?
  * 
  * @author Staffan Olsson (solsson)
@@ -70,6 +69,7 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	
 	public ManagedWorkingCopy(CheckoutSettings settings) {
 		workingCopy = ReposWorkingCopyFactory.getClient(settings);
+		
 		workingCopyFolder = settings.getWorkingCopyFolder();
 	}
 

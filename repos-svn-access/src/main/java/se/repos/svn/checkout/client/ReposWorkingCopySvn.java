@@ -61,6 +61,11 @@ import se.repos.svn.config.ConfigurationStateException;
  * which has a username and password set using {@link #setUserCredentials(UserCredentials)}.
  * Each instance of this class should be used in one thread only.
  * It seems that all SVN client libraries are non-threadsafe.
+ * 
+ * Automatically accept SSL certificates when hostnames match, regardless of CA.
+ * That is because we don't authenticate using certificates, we only use encrypted transfer.
+ * However if the hostname of the server and the certificate don't match,
+ * the certificate is not accepted. No SVN clients accept those certificates permanently.
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$
@@ -103,8 +108,8 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		setConflictHandler(conflictHandler);
 		afterPropertiesSet();
 	}
-	
-    /**
+
+	/**
      * Default constructor for use in testing.
      * Requires all dependencies to be set with setters.
      */
@@ -119,6 +124,8 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	void setClientAdapter(ISVNClientAdapter client) {
 		this.client = client;
 		this.addNotifyListener(conflictNotifyListener);
+		// assuming that the same ISVNPromptUserPassword can be used everywhere
+		this.client.addPasswordCallback(new DefaultAuthenticationReply());
 	}
 	
 	/**

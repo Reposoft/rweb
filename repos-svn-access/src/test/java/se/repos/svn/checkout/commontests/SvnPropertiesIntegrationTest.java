@@ -100,7 +100,7 @@ public class SvnPropertiesIntegrationTest extends TestCase {
 		child.mkdir();
 		try {
 			client.isIgnore(child);
-			fail("Should throw exception because the parent folder is not versioned");
+			fail("Should throw exception because the parent folder is not versioned, so ignore can not be set");
 		} catch (IllegalArgumentException e) {
 			// expected
 		}
