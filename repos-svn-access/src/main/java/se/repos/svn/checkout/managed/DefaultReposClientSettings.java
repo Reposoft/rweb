@@ -22,6 +22,8 @@ public class DefaultReposClientSettings implements ConfigureClient {
 		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern("TEMP"));
 		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern("Temp"));
 		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern("temp"));
+		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern("Thumbs.db"));
+		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern(".DS_Store"));
 	}
 	
 	private void enforceGlobalIgnore(ClientConfiguration config, SvnIgnorePattern mustExist) {

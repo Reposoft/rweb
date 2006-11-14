@@ -26,11 +26,17 @@ public class RepositoryAccessException extends Exception {
 	 */
 	public static final void handle(SVNClientException e)
 		throws RepositoryAccessException {
+		InvalidCredentialsException.identify(e);
 		throw new RepositoryAccessException(e);
 	}
 	
 	protected RepositoryAccessException(SVNClientException e) {
 		super(e);
+	}
+	
+	//currently not used
+	protected RepositoryAccessException(String message) {
+		super(message);
 	}
 
 }

@@ -52,7 +52,7 @@ public class ConfigFileTest extends TestCase {
 		fw.append("### Section for configuring external helper applications.\n");
 		fw.append("# [helpers]\n");
 		fw.append(" \n");
-		fw.append("### Section for configuring miscelleneous Subversion options.\n");
+		fw.append("### Section for configuring miscellaneous Subversion options.\n");
 		fw.append("[miscellany]\n");
 		fw.append("# global-ignores = *.o *.lo *.la #*# .*.rej *.rej .*~ *~ .#* .DS_Store\n");
 		fw.append("\n");

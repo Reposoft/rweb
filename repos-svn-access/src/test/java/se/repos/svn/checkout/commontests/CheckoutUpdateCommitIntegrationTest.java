@@ -10,8 +10,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import junit.framework.TestCase;
+import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
+import se.repos.svn.checkout.ImmutableUserCredentials;
+import se.repos.svn.checkout.InvalidCredentialsException;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
 import se.repos.svn.checkout.RepositoryAccessException;
@@ -118,6 +121,26 @@ public class CheckoutUpdateCommitIntegrationTest extends TestCase {
 		}
 		
 		CheckoutSettingsForTest.tearDown();
+	}
+	
+	public void testInvalidPassword() {
+		CheckoutSettings settings = new CheckoutSettingsForTest() {
+			public UserCredentials getLogin() {
+				return new ImmutableUserCredentials("test","invalidpassword");
+			}
+		};
+		ReposWorkingCopy client = AllTests.getClient(settings, getName());
+		
+		try {
+			client.checkout();
+			fail("Should throw InvalidCredentialsException");
+		} catch (InvalidCredentialsException e) {
+			// expected
+		} catch (RepositoryAccessException e) {
+			e.printStackTrace();
+			fail("Should throw the more specific error InvalidCredentialsException");
+		}
+		
 	}
 
 	// helper method for testcase

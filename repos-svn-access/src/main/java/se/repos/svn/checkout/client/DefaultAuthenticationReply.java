@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tigris.subversion.svnclientadapter.ISVNPromptUserPassword;
 
+import se.repos.svn.checkout.InvalidCredentialsException;
+
 public class DefaultAuthenticationReply implements ISVNPromptUserPassword {
 
 	final Logger logger = LoggerFactory.getLogger(DefaultAuthenticationReply.class);
@@ -23,6 +25,12 @@ public class DefaultAuthenticationReply implements ISVNPromptUserPassword {
 		}
 		logger.info("Rejecting certificate, because it is not reliable");
 		return Reject;
+	}
+	
+	public boolean prompt(String realm, String username, boolean maySave) {
+		// assuming that the connection was attempted with UserCredentials, a prompt means that they were invalid
+		// this interface does not allow checked exceptions here, so we'll just reject the prompt
+		return false;
 	}
 	
 	public String askQuestion(String realm, String question,
@@ -49,47 +57,7 @@ public class DefaultAuthenticationReply implements ISVNPromptUserPassword {
 		}
 		return null;
 	}
-
-	public int getSSHPort() {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#getSSHPort not implemented yet");
-		}
-		return 0;
-	}
-
-	public String getSSHPrivateKeyPassphrase() {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#getSSHPrivateKeyPassphrase not implemented yet");
-		}
-		return null;
-	}
-
-	public String getSSHPrivateKeyPath() {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#getSSHPrivateKeyPath not implemented yet");
-		}
-		return null;
-	}
-
-	public String getSSLClientCertPassword() {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#getSSLClientCertPassword not implemented yet");
-		}
-		return null;
-	}
-
-	public String getSSLClientCertPath() {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#getSSLClientCertPath not implemented yet");
-		}
-		return null;
-	}
-
+	
 	public String getUsername() {
 		if (true) {
 			throw new UnsupportedOperationException(
@@ -98,37 +66,37 @@ public class DefaultAuthenticationReply implements ISVNPromptUserPassword {
 		return null;
 	}
 
-	public boolean prompt(String realm, String username, boolean maySave) {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#prompt not implemented yet");
-		}
-		return false;
-	}
-
-	public boolean promptSSH(String realm, String username, int sshPort,
-			boolean maySave) {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#promptSSH not implemented yet");
-		}
-		return false;
-	}
-
-	public boolean promptSSL(String realm, boolean maySave) {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#promptSSL not implemented yet");
-		}
-		return false;
-	}
-
 	public boolean userAllowedSave() {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#userAllowedSave not implemented yet");
-		}
+		// don't know what this does, but since we don't return a username here we don't want it saved
 		return false;
+	}
+
+	public int getSSHPort() {
+		throw new UnsupportedOperationException("Subversion SSH protocol is not supported");
+	}
+	
+	public boolean promptSSH(String realm, String username, int sshPort, boolean maySave) {
+		throw new UnsupportedOperationException("Subversion SSH protocol is not supported");
+	}
+
+	public String getSSHPrivateKeyPassphrase() {
+		throw new UnsupportedOperationException("Authentication with SSH client certificate is not supported");
+	}
+
+	public String getSSHPrivateKeyPath() {
+		throw new UnsupportedOperationException("Authentication with SSH client certificate is not supported");
+	}
+
+	public String getSSLClientCertPassword() {
+		throw new UnsupportedOperationException("Authentication with SSH client certificate is not supported");
+	}
+
+	public String getSSLClientCertPath() {
+		throw new UnsupportedOperationException("Authentication with SSH client certificate is not supported");
+	}
+	
+	public boolean promptSSL(String realm, boolean maySave) {
+		throw new UnsupportedOperationException("Authentication with SSH client certificate is not supported");
 	}
 
 }
