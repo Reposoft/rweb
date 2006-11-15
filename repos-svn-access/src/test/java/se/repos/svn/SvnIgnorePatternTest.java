@@ -4,6 +4,8 @@ package se.repos.svn;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -18,6 +20,16 @@ public class SvnIgnorePatternTest extends TestCase {
 	}
 	
 	public void testEquals() {
+		SvnIgnorePattern p = new SvnIgnorePattern("temp");
+		SvnIgnorePattern s = new SvnIgnorePattern("temp");
+		assertTrue("The equals method should compare the values", p.equals(s));
+		//Collection c = new LinkedList();//new HashSet();
+		Collection c = new HashSet(); // requires hashCode too
+		c.add(p);
+		assertTrue("Equal means that collection.contains works", c.contains(s));
+	}
+	
+	public void testEqualsFile() {
 		File f = new File("/folder/file.txt");
 		SvnIgnorePattern p = new SvnIgnorePattern(f);
 		

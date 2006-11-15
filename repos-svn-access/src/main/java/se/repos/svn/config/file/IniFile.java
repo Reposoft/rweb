@@ -20,6 +20,9 @@ import ch.ubique.inieditor.IniEditor;
  * Reads and writes ini-file with sections.
  * 
  * Not thread safe.
+ * 
+ * Warning: It looks like the IniEditor library fails silently on parser errors, 
+ * for example if a value occurs twice in the same section.
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$

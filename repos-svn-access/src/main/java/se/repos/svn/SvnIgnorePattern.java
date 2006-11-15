@@ -18,6 +18,10 @@ public class SvnIgnorePattern {
 
 	private String value;
 	
+	public int hashCode() {
+		return this.value.hashCode();
+	}
+
 	public SvnIgnorePattern(File child) {
 		this.value = child.getName();
 	}

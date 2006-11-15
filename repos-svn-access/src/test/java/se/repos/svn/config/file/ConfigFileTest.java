@@ -65,11 +65,15 @@ public class ConfigFileTest extends TestCase {
 		
 		ConfigFile config = new ConfigFile(f);
 		config.setGlobalIgnores(".DS_Store");
+		// add again to see that it is appended
+		config.setGlobalIgnores(".DS_Store plusthis");
+		// and again
+		config.setGlobalIgnores(".DS_Store plusthis andthis");
 		
 		List rows = readContents(f);
 		
 		int s = rows.indexOf("[miscellany]");
-		int g = rows.indexOf("global-ignores = .DS_Store");
+		int g = rows.indexOf("global-ignores = .DS_Store plusthis andthis");
 		assertTrue("Should have added a global-ignores option", g>0);
 		int n = rows.indexOf("[auto-props]");
 

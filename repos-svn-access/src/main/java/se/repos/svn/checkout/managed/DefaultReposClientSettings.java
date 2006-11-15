@@ -19,10 +19,19 @@ public class DefaultReposClientSettings implements ConfigureClient {
 	}
 
 	public void update(ClientConfiguration runtimeConfiguration) {
+		// subversion recommends
+		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern("#*#"));
+		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern("*~"));
+		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern(".#*"));
+		// subversion says that ini file values are case insensitive, but ignore is not
 		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern("TEMP"));
 		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern("Temp"));
 		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern("temp"));
+		// MS office temp files
+		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern("~*"));
+		// Windows image thumbnails
 		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern("Thumbs.db"));
+		// OS X metadata
 		enforceGlobalIgnore(runtimeConfiguration, new SvnIgnorePattern(".DS_Store"));
 	}
 	

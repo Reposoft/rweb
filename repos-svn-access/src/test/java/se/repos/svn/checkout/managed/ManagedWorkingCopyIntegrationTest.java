@@ -6,16 +6,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
-import se.repos.svn.SvnIgnorePattern;
+import junit.framework.TestCase;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.RepositoryAccessException;
 import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.test.CheckoutSettingsForTest;
-import junit.framework.TestCase;
 
 public class ManagedWorkingCopyIntegrationTest extends TestCase {
 
@@ -42,12 +39,6 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		ManagedWorkingCopy c = new ManagedWorkingCopy(settings);
 		c.checkout(); // ManagedWorkingCopy needs explicit checkout
 		return c;
-	}
-	
-	public void testDefaultClientConfiguration() {
-		// TODO remove a global ignore and it should be recovered
-		List defaultIgnores = Arrays.asList(client.getClientConfiguration().getGlobalIgnores());
-		assertTrue(defaultIgnores.contains(new SvnIgnorePattern("temp")));
 	}
 	
 	public void testIsVersionedParentNotVersioned() throws IOException {
@@ -139,7 +130,7 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		assertTrue("Double check: Folder is still versioned even if it is removed", client.isVersioned(f));
 		//try {
 			client.move(f, d);
-		//	fail("When moving a versioned directory, the .svn folder stays ant the SVN client can not recover. Should throw IllegalArgumentException.");
+		//	fail("When moving a versioned directory, the .svn folder stays and the SVN client can not recover. Should throw IllegalArgumentException.");
 		//} catch (IllegalArgumentException e) {
 		//	assertTrue("Error message should say that the destination is versioned", 
 		//			e.getMessage().contains("destination") && e.getMessage().contains("versioned"));

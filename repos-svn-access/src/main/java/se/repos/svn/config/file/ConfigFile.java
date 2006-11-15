@@ -52,8 +52,9 @@ public class ConfigFile extends IniFile {
 			save(config);
 		}
 		// add value
-		if ( ! super.appendAfterLine("^#+\\s*"+option+"\\s*=.*", option + " = " + value, section)) {
-			IniEditor config = load();
+		IniEditor config = load();
+		if (config.hasOption(section, option) ||
+				! super.appendAfterLine("^#+\\s*"+option+"\\s*=.*", option + " = " + value, section)) {
 			config.set(section, option, value);
 			save(config);
 		}

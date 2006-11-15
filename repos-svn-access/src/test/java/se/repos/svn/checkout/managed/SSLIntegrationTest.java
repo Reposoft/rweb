@@ -4,8 +4,9 @@ package se.repos.svn.checkout.managed;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+
+import junit.framework.TestCase;
 
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
@@ -18,10 +19,8 @@ import se.repos.svn.checkout.RepositoryAccessException;
 import se.repos.svn.checkout.SslCertificateHostMismatchException;
 import se.repos.svn.checkout.SslCertificateNotTrustedException;
 import se.repos.svn.checkout.client.GetClientAdapter;
-import se.repos.svn.checkout.client.ReposWorkingCopySvn;
 import se.repos.svn.test.CheckoutSettingsForTest;
 import se.repos.svn.test.TestFolder;
-import junit.framework.TestCase;
 
 public class SSLIntegrationTest extends TestCase {
 
@@ -30,11 +29,6 @@ public class SSLIntegrationTest extends TestCase {
 	 * We don't need an account for this host to test certificate handling.
 	 */
 	public static final String HTTPS_REPOSITORY = "https://www.repos.se/sweden/";
-	
-	// test workingcopy path
-	private File path;
-	
-	private ManagedWorkingCopy client;
 	
 	public void testCheckout() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SVNClientException {
 		System.out.println("---------- " + super.getName() + " ----------");
@@ -52,7 +46,6 @@ public class SSLIntegrationTest extends TestCase {
 				};
 			}
 		};
-		path = settings.getWorkingCopyFolder();
 		ManagedWorkingCopy c = new ManagedWorkingCopy(settings);
 		
 		// get the client instance and set an empty folder as configuration area
