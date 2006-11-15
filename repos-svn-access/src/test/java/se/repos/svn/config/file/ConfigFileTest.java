@@ -53,7 +53,7 @@ public class ConfigFileTest extends TestCase {
 		fw.append("# [helpers]\n");
 		fw.append(" \n");
 		fw.append("### Section for configuring miscellaneous Subversion options.\n");
-		fw.append("[miscellany]\n");
+		fw.append("# [miscellany]\n");
 		fw.append("# global-ignores = *.o *.lo *.la #*# .*.rej *.rej .*~ *~ .#* .DS_Store\n");
 		fw.append("\n");
 		fw.append("### Section for configuring automatic properties.\n");
@@ -68,15 +68,18 @@ public class ConfigFileTest extends TestCase {
 		
 		List rows = readContents(f);
 		
+		int s = rows.indexOf("[miscellany]");
 		int g = rows.indexOf("global-ignores = .DS_Store");
-		assertTrue("Should have added a global-ignores section", g>0);
+		assertTrue("Should have added a global-ignores option", g>0);
 		int n = rows.indexOf("[auto-props]");
-		/* need to write our own ini library for this
-		assertFalse("Should not add new value right before next section when there's a section description",
-				n == g + 1);
+
+		assertTrue("Should have enabled the existing [miscellany] section instead of created a new",
+				s < n);
 		assertTrue("Should have added the new value after the last commented out example", 
 				rows.get(g-1).toString().startsWith("# global-ignores"));
-		*/
+		assertFalse("Should not add new value right before next section when there's a section description",
+				n == g + 1);
+
 		f.delete();
 	}
 

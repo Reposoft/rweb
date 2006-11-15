@@ -55,7 +55,7 @@ public class SSLIntegrationTest extends TestCase {
 		path = settings.getWorkingCopyFolder();
 		ManagedWorkingCopy c = new ManagedWorkingCopy(settings);
 		
-		// get the client instance and set an empty folder as configu
+		// get the client instance and set an empty folder as configuration area
 		ISVNClientAdapter client = GetClientAdapter.from(c.getWorkingCopy());
 		File configFolder = TestFolder.getNew();
 		client.setConfigDirectory(configFolder);
@@ -77,6 +77,7 @@ public class SSLIntegrationTest extends TestCase {
 		}
 		
 		assertTrue("Shold have created an entry in the new config folder", configFolder.listFiles().length > 0);
+		// should also see a log entry at INFO level
 	}
 
 }

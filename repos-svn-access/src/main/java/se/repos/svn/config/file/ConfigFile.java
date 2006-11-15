@@ -2,8 +2,15 @@
  */
 package se.repos.svn.config.file;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import se.repos.svn.config.ConfigurationStateException;
 
@@ -11,6 +18,8 @@ import ch.ubique.inieditor.IniEditor;
 
 /**
  * Models the "config" file in the configuration area.
+ * 
+ * See README.txt in a sunversion configuration area for syntax.
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$
@@ -34,12 +43,20 @@ public class ConfigFile extends IniFile {
 	}
 	
 	private void set(String section, String option, String value) {
-		IniEditor config = load();
-		if (!config.hasSection(section)) {
-			config.addSection(section);
+		// first enable section if it exists but is commented out
+		if ( ! super.replaceLine("^#+\\s*\\["+section+"\\].*", "["+section+"]")) {
+			IniEditor config = load();
+			if (!config.hasSection(section)) {
+				config.addSection(section);
+			}
+			save(config);
 		}
-		config.set(section, option, value);
-		save(config);
+		// add value
+		if ( ! super.appendAfterLine("^#+\\s*"+option+"\\s*=.*", option + " = " + value, section)) {
+			IniEditor config = load();
+			config.set(section, option, value);
+			save(config);
+		}
 	}
 	
 	/**
