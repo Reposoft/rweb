@@ -3,8 +3,12 @@
 package se.repos.svn.checkout.managed;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
+import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
+import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.tigris.subversion.svnclientadapter.SVNUrl;
 
 import se.repos.svn.RepositoryUrl;
@@ -13,7 +17,10 @@ import se.repos.svn.checkout.InvalidCredentialsException;
 import se.repos.svn.checkout.RepositoryAccessException;
 import se.repos.svn.checkout.SslCertificateHostMismatchException;
 import se.repos.svn.checkout.SslCertificateNotTrustedException;
+import se.repos.svn.checkout.client.GetClientAdapter;
+import se.repos.svn.checkout.client.ReposWorkingCopySvn;
 import se.repos.svn.test.CheckoutSettingsForTest;
+import se.repos.svn.test.TestFolder;
 import junit.framework.TestCase;
 
 public class SSLIntegrationTest extends TestCase {
@@ -29,7 +36,7 @@ public class SSLIntegrationTest extends TestCase {
 	
 	private ManagedWorkingCopy client;
 	
-	public void testCheckout() {
+	public void testCheckout() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SVNClientException {
 		System.out.println("---------- " + super.getName() + " ----------");
 		CheckoutSettings settings = new CheckoutSettingsForTest() {
 			public RepositoryUrl getCheckoutUrl() {
@@ -48,6 +55,11 @@ public class SSLIntegrationTest extends TestCase {
 		path = settings.getWorkingCopyFolder();
 		ManagedWorkingCopy c = new ManagedWorkingCopy(settings);
 		
+		// get the client instance and set an empty folder as configu
+		ISVNClientAdapter client = GetClientAdapter.from(c.getWorkingCopy());
+		File configFolder = TestFolder.getNew();
+		client.setConfigDirectory(configFolder);
+		
 		// now try to do checkout
 		try {
 			c.checkout();
@@ -57,11 +69,14 @@ public class SSLIntegrationTest extends TestCase {
 		} catch (SslCertificateHostMismatchException e) {
 			fail("Seems like the test host has an invalid certificate" + e.toString());
 		} catch (InvalidCredentialsException e) {
+			// expected, because if certificate is ok we get a login box
 			//fail("Test error. The certificate was already accepted, if it was in the authentication area already this test does nothing.");
 			//OK certificate is accepted, clear the authentication area manually and test again
 		} catch (RepositoryAccessException e) {
 			throw new RuntimeException("RepositoryAccessException thrown, not handled", e);
 		}
+		
+		assertTrue("Shold have created an entry in the new config folder", configFolder.listFiles().length > 0);
 	}
 
 }

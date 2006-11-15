@@ -241,4 +241,12 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		}
 		return (remove.delete());
 	}
+
+	/**
+	 * For testing
+	 * @return 
+	 */
+	ReposWorkingCopy getWorkingCopy() {
+		return workingCopy;
+	}
 }
