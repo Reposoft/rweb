@@ -24,6 +24,7 @@ public class InvalidCredentialsException extends RepositoryAccessException {
 	private static final Pattern MATCH = Pattern.compile("^.*svn:.*authorization failed\\s+\\(([^\\)]+).*$", Pattern.DOTALL);
 	
 	static void identify(SVNClientException e) throws InvalidCredentialsException {
+		if (e.getMessage()==null) return;
 		Matcher matcher = MATCH.matcher(e.getMessage());
 		if (matcher.matches()) {
 			throw new InvalidCredentialsException(matcher.group(1));
