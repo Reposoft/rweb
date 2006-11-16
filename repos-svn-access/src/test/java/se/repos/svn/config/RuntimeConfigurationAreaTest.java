@@ -49,12 +49,35 @@ public class RuntimeConfigurationAreaTest extends TestCase {
 		TestFolder.cleanUp();
 	}
 
-	public void testIsStorePasswords() {
+	public void testSetStorePasswords() throws IOException, ConfigurationStateException {
+		File testarea = TestFolder.getNew();
+		assertTrue(testarea.isDirectory());
+		File c = new File(testarea, "config");
+		c.createNewFile();
+		File s = new File(testarea, "servers");
+		s.createNewFile();
 		
-	}
-
-	public void testSetStorePasswords() {
+		FileWriter fw = new FileWriter(c);
+		fw.append("[miscellany]\n");
+		fw.close();
+		fw = new FileWriter(s);
+		fw.append("[groups]\n");
+		fw.append("[global]\n");
+		fw.close();
 		
+		ClientConfiguration clientConfiguration = new RuntimeConfigurationArea(testarea);
+		clientConfiguration.setStorePasswords(true);
+		clientConfiguration = null;
+		
+		String changed1 = c.lastModified() + " " + s.lastModified();
+		
+		clientConfiguration = new RuntimeConfigurationArea(testarea);
+		assertTrue("Client should store passwords now", clientConfiguration.isStorePasswords());
+		clientConfiguration.setStorePasswords(false);
+		assertFalse("Client should not store passwords now", clientConfiguration.isStorePasswords());
+		
+		String changed2 = c.lastModified() + " " + s.lastModified();
+		assertTrue("Should have updated a config file", changed1 != changed2);
 	}
 	
 	public void testSetProxySettings() throws ConfigurationStateException, IOException {
@@ -93,6 +116,8 @@ public class RuntimeConfigurationAreaTest extends TestCase {
 			if (line.startsWith("http-proxy-host")) break;
 		}
 		assertNotNull("Should have written the settings to file", line);
+		
+		TestFolder.cleanUp();
 	}
 
 	public void testGetConfigFolder() {

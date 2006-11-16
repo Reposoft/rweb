@@ -2,18 +2,10 @@
  */
 package se.repos.svn.config.file;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import se.repos.svn.config.ConfigurationStateException;
-
 import ch.ubique.inieditor.IniEditor;
 
 /**
@@ -28,9 +20,12 @@ public class ConfigFile extends IniFile {
 
 	// sections
 	private static final String MISCELLANY = "miscellany";
+	private static final String AUTH = "auth";
 	
 	// values
 	private static final String MI_GLOBAL_IGNORES = "global-ignores";
+	private static final String AUTH_STORE_PASSWORDS = "store-passwords";
+	private static final String AUTH_STORE_PASSWORDS_DEFAULT = "yes";
 	
 	/**
 	 * 
@@ -76,6 +71,19 @@ public class ConfigFile extends IniFile {
 			return config.get(MISCELLANY, MI_GLOBAL_IGNORES);
 		} else {
 			return null;
+		}
+	}
+	
+	public void setStorePasswords(String value) {
+		this.set(AUTH, AUTH_STORE_PASSWORDS, value);
+	}
+	
+	public String getStorePasswords() {
+		IniEditor config = load();
+		if (config.hasOption(AUTH, AUTH_STORE_PASSWORDS)) {
+			return config.get(AUTH, AUTH_STORE_PASSWORDS);
+		} else {
+			return AUTH_STORE_PASSWORDS_DEFAULT;
 		}
 	}
 }

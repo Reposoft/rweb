@@ -38,7 +38,7 @@
       <groupId>org.tmate</groupId>
       <artifactId>javasvn</artifactId>
       <version>1.0.4</version>
-      <!-- only needed where javahl does not work. distribute separately. -->
+      <!-- only needed where javahl does not work. never redistribute. -->
       <scope>test</scope>
     </dependency>
     <dependency>

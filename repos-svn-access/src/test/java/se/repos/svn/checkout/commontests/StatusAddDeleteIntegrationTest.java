@@ -204,7 +204,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 	}
 	
 	public void testAddAndDeleteEmptyFolder() throws ConflictException, RepositoryAccessException, IOException {
-		File f = new File(path, "testAddAndDeleteEmptyFolder");
+		File f = new File(path, getName() + System.currentTimeMillis());
 		f.mkdir();
 		client.add(f);
 		assertTrue("Folder has been added, so it is versioned", client.isVersioned(f));

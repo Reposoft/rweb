@@ -29,6 +29,22 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 	private ServersFile servers;
 	
 	private static final String DELIMITER = "\\s+";
+	
+	private static final String TRUE = "yes";
+	private static final String FALSE = "no";
+	
+	private static final String getBooleanValue(boolean flag) {
+		if (flag) return TRUE;
+		return FALSE;
+	}
+	
+	private static final boolean getBoolean(String value) {
+		// documented in README.txt in suversion config area
+		if (TRUE.equalsIgnoreCase(value)) return true;
+		if ("on".equalsIgnoreCase(value)) return true;
+		if ("1".equalsIgnoreCase(value)) return true;
+		return false;
+	}
 
 	/**
 	 * Reads configuration from the default subversion user folder
@@ -82,13 +98,6 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 		return SvnIgnorePattern.array(Arrays.asList(e.split(DELIMITER)));
 	}
 
-	public boolean isStorePasswords() {
-		if (true) {
-			throw new UnsupportedOperationException("Method RuntimeConfigurationArea#getStorePasswords not implemented yet");
-		}
-		return false;
-	}
-
 	public void setProxySettings(SvnProxySettings proxySettings) {
 		servers.setProxySettings(ServersFile.GROUP_GLOBAL, proxySettings);
 	}
@@ -98,10 +107,11 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 	}	
 	
 	public void setStorePasswords(boolean authCache) {
-		if (true) {
-			throw new UnsupportedOperationException("Method RuntimeConfigurationArea#setStorePasswords not implemented yet");
-		}
-		
+		config.setStorePasswords(RuntimeConfigurationArea.getBooleanValue(authCache));
+	}
+	
+	public boolean isStorePasswords() {
+		return RuntimeConfigurationArea.getBoolean(config.getStorePasswords());
 	}
 	
 	/**
