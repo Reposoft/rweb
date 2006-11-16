@@ -15,7 +15,8 @@ public class DefaultReposClientSettingsTest extends TestCase {
 		ClientConfiguration config = (ClientConfiguration) configControl.getMock();
 		
 		config.getGlobalIgnores();
-		configControl.setReturnValue(new SvnIgnorePattern[]{}, 3);
+		configControl.setReturnValue(new SvnIgnorePattern[]{}, 
+				9); // how many patterns are there?
 		config.addGlobalIgnore(new SvnIgnorePattern("TEMP"));
 		config.addGlobalIgnore(new SvnIgnorePattern("Temp"));
 		config.addGlobalIgnore(new SvnIgnorePattern("temp"));

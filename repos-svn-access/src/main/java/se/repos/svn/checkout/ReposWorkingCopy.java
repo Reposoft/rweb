@@ -111,6 +111,11 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	/**
 	 * Returns paths to all unversioned files or folders inside a versioned folder.
 	 * 
+	 * This mirrors the behaviour of 'svn status', looking for unversioned files.
+	 * If an unversioned folder is listed, any contents of it are by definition
+	 * never in version control, so they will not be listed
+	 * (recursion does not go into unversioned folders).
+	 * 
 	 * @param path a folder that is versioned
 	 * @return every unversioned entry, recursively from path, absolute paths.
 	 *  Never returns null so if result length is 0 there are no unversioned files or folders.

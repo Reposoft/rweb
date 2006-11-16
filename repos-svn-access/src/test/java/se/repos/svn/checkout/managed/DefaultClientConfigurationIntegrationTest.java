@@ -3,6 +3,7 @@
 package se.repos.svn.checkout.managed;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,7 +26,7 @@ public class DefaultClientConfigurationIntegrationTest extends TestCase {
 			"temp", "Temp", "TEMP", "~*", "Thumbs.db", ".DS_Store"
 	};
 	
-	public void testCheckout() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SVNClientException {
+	public void testCheckout() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SVNClientException, RepositoryAccessException {
 		System.out.println("---------- " + super.getName() + " ----------");
 		CheckoutSettings settings = new CheckoutSettingsForTest();
 		ManagedWorkingCopy c = new ManagedWorkingCopy(settings);
@@ -36,11 +37,7 @@ public class DefaultClientConfigurationIntegrationTest extends TestCase {
 		client.setConfigDirectory(configFolder);
 		
 		// checkout should be the operation that sets default settings in the configuration area
-		try {
-			c.checkout();
-		} catch (RepositoryAccessException e) {
-			throw new RuntimeException("RepositoryAccessException thrown, not handled", e);
-		}
+		c.checkout();
 		
 		// now the program restarts and next client is instantiated
 		c = null;
@@ -74,6 +71,55 @@ public class DefaultClientConfigurationIntegrationTest extends TestCase {
 		// It looks like setConfigDirectory does not work very well.
 		// It uses the default config directory instead.
 		//assertTrue("Should have created a standard config file in " + configFolder, config.exists());
+	}
+	
+	public void testUnversionedContentsWithIgnores() throws RepositoryAccessException, IOException {
+		System.out.println("---------- " + super.getName() + " ----------");
+		CheckoutSettings settings = new CheckoutSettingsForTest();
+		ManagedWorkingCopy c = new ManagedWorkingCopy(settings);
+		
+		// checkout should be the operation that sets default settings in the configuration area
+		c.checkout();
+		
+		// no contents
+		File path = settings.getWorkingCopyFolder();
+		assertEquals("Working copy should have no new contents yet", 0, c.getUnversionedContents(path).length);
+		
+		File temp = new File(path, "temp");
+		temp.mkdir();
+		File tempfile = new File(temp, "f.txt");
+		tempfile.createNewFile();
+		File thumbs = new File(path, "Thumbs.db");
+		thumbs.createNewFile();
+		File dsstore = new File(path, ".DS_Store");
+		dsstore.mkdir();
+		File officetemp = new File(path, "~a.doc");
+		officetemp.createNewFile();
+		// and some things that should not be ignored
+		File folder = new File(path, "folder");
+		folder.mkdir();
+		File file = new File(folder, "f.txt");
+		file.createNewFile();
+		File filetemp = new File(folder, "TEMP");
+		filetemp.createNewFile();
+		File fileb = new File(folder, "mine.b");
+		fileb.createNewFile();
+
+		File[] unversioned = c.getUnversionedContents(path);
+		assertEquals("The folder named 'folder' should not be ignored", 1, unversioned.length);
+		// add the folder and check that unversioned contents are found
+		c.add(folder);
+		unversioned = c.getUnversionedContents(path);
+		assertEquals(2, unversioned.length);
+		assertEquals("f.txt", unversioned[0].getName());
+		assertEquals("mine.b", unversioned[1].getName());
+		// add all contents of folder recursively, and check that global ignore works
+		c.getPropertiesForFolder(folder).setIgnore(new SvnIgnorePattern("*.b"));
+		c.addNew(folder);
+		assertTrue("Should have added the not ignored f.txt", c.isVersioned(file));
+		assertFalse("Should not have added globally ignored file", c.isVersioned(filetemp));
+		assertFalse("Should not have added locally ignored file", c.isVersioned(fileb));
+		assertEquals("No unversioned contents left", 0, c.getUnversionedContents(path).length);
 	}
 	
 }
