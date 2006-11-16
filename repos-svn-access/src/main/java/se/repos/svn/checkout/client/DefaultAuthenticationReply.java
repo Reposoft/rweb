@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tigris.subversion.svnclientadapter.ISVNPromptUserPassword;
 
-import se.repos.svn.checkout.InvalidCredentialsException;
-
 public class DefaultAuthenticationReply implements ISVNPromptUserPassword {
 
 	final Logger logger = LoggerFactory.getLogger(DefaultAuthenticationReply.class);

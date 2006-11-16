@@ -5,11 +5,7 @@ package se.repos.svn.config;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.tigris.subversion.svnclientadapter.AbstractClientAdapter;
 
@@ -21,6 +17,7 @@ import se.repos.svn.config.file.ServersFile;
 /**
  * Abstraction for a the subversion client configuration area.
  * 
+ * Contains the logic to decide where to store settings (which folder and which file).
  * Does not support windows registry.
  *
  * @author Staffan Olsson (solsson)
@@ -85,13 +82,6 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 		return SvnIgnorePattern.array(Arrays.asList(e.split(DELIMITER)));
 	}
 
-	public SvnProxySettings getProxySettings() {
-		if (true) {
-			throw new UnsupportedOperationException("Method RuntimeConfigurationArea#getProxySettings not implemented yet");
-		}
-		return null;
-	}
-
 	public boolean isStorePasswords() {
 		if (true) {
 			throw new UnsupportedOperationException("Method RuntimeConfigurationArea#getStorePasswords not implemented yet");
@@ -100,12 +90,13 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 	}
 
 	public void setProxySettings(SvnProxySettings proxySettings) {
-		if (true) {
-			throw new UnsupportedOperationException("Method RuntimeConfigurationArea#setProxySettings not implemented yet");
-		}
-		
+		servers.setProxySettings(ServersFile.GROUP_GLOBAL, proxySettings);
 	}
 
+	public SvnProxySettings getProxySettings() {
+		return servers.getProxySettings(ServersFile.GROUP_GLOBAL);
+	}	
+	
 	public void setStorePasswords(boolean authCache) {
 		if (true) {
 			throw new UnsupportedOperationException("Method RuntimeConfigurationArea#setStorePasswords not implemented yet");

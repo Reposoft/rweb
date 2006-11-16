@@ -33,8 +33,8 @@ import se.repos.svn.config.ClientConfiguration;
  * <li>Allows isVersioned on resources that are not in versioned folder (returns false).
  * </ul>
  * 
- * Also enforces client settings with Repos defaults:
- * The names TEMP, Temp and temp should be globall ignores.
+ * Enforces client settings with Repos defaults, described in
+ * {@link DefaultReposClientSettings}. This is done on checkout.
  * 
  * Before a file is changed, it can be reserved using {@see #lock(String)}.
  * If a file is changed when it is not locked, optimistic locking is used.

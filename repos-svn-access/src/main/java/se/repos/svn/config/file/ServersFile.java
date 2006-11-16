@@ -19,6 +19,10 @@ import ch.ubique.inieditor.IniEditor;
  */
 public class ServersFile extends IniFile {
 
+	private static final String HTTP_PROXY_PASSWORD = "http-proxy-password";
+	private static final String HTTP_PROXY_USERNAME = "http-proxy-username";
+	private static final String HTTP_PROXY_PORT = "http-proxy-port";
+	private static final String HTTP_PROXY_HOST = "http-proxy-host";
 	public static final String GROUP_GLOBAL = "global";
 	protected static final String GROUP_GROUPS = "groups";
 	
@@ -81,19 +85,19 @@ public class ServersFile extends IniFile {
 	}
 	
 	private void setProxyHost(String group, String host) {
-		setValue(group, "http-proxy-host", host);
+		setValue(group, HTTP_PROXY_HOST, host);
 	}
 	
 	private void setProxyPort(String group, String port) {
-		setValue(group, "http-proxy-port", port);
+		setValue(group, HTTP_PROXY_PORT, port);
 	}
 	
 	private void setProxyUsername(String group, String username) {
-		setValue(group, "http-proxy-username", username);
+		setValue(group, HTTP_PROXY_USERNAME, username);
 	}
 	
 	private void setProxyPassword(String group, String password) {
-		setValue(group, "http-proxy-password", password);
+		setValue(group, HTTP_PROXY_PASSWORD, password);
 	}
 	
 	private void setValue(String group, String option, String value) {
@@ -102,4 +106,28 @@ public class ServersFile extends IniFile {
 		servers.set(group, option, value);
 		save(servers);
 	}
+
+	public SvnProxySettings getProxySettings(String group) {
+		IniEditor servers = load();
+		if (!servers.hasSection(group)) throw new ConfigurationUpdateException("The group '" + group + "' does not exist in the servers file");
+		if (!servers.hasOption(group, HTTP_PROXY_HOST)) {
+			return SvnProxySettings.NOPROXY;
+		}
+		String host = servers.get(group, HTTP_PROXY_HOST);
+		int port = SvnProxySettings.NOPORT;
+		try {
+			port = Integer.parseInt(servers.get(group, HTTP_PROXY_PORT));
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Could not parse proxy port value: " + e.getMessage(), e);
+		}
+		SvnProxySettings p = new SvnProxySettings(host, port);
+		if (servers.hasOption(group, HTTP_PROXY_USERNAME)) {
+			p.setUsername(servers.get(group, HTTP_PROXY_USERNAME));
+		}
+		if (servers.hasOption(group, HTTP_PROXY_PORT)) {
+			p.setPassword(servers.get(group, HTTP_PROXY_PASSWORD));
+		}
+		return p;
+	}	
+	
 }

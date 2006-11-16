@@ -11,6 +11,14 @@ import org.slf4j.LoggerFactory;
 import se.repos.svn.SvnIgnorePattern;
 import se.repos.svn.config.ClientConfiguration;
 
+/**
+ * Verifies and updates the svn client configuration.
+ * 
+ * Global ignores:  <code>TEMP Temp temp #*# *~ .#* ~* Thumbs.db .DS_Store</code>
+ *
+ * @author Staffan Olsson (solsson)
+ * @version $Id$
+ */
 public class DefaultReposClientSettings implements ConfigureClient {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
