@@ -35,7 +35,7 @@ import se.repos.svn.config.ClientConfiguration;
  * 
  * Enforces client settings with Repos defaults, described in
  * {@link DefaultReposClientSettings}. This is done on checkout.
- * 
+ * <p>
  * Before a file is changed, it can be reserved using {@see #lock(String)}.
  * If a file is changed when it is not locked, optimistic locking is used.
  * So if there are no conflicts, synchronize will not complain
@@ -44,7 +44,7 @@ import se.repos.svn.config.ClientConfiguration;
  * a conflict will be reported.
  * If that happens, the user will have two files: the latest local file
  * and the latest from the repository.
- * 
+ * <p>
  * To disable password caching use {@link #getClientConfiguration()}. Note that 
  * this changes the settings for all subversion clients in the current user account.
  *

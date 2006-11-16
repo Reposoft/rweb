@@ -6,6 +6,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tigris.subversion.svnclientadapter.ISVNPromptUserPassword;
 
+/**
+ * Maintains Repos conventions by automatic answers to some svn dialogs.
+ * <ul>
+ * <li>Certificates are accepted permanently if they can be,
+ *  because we don't authenticate with certificates, we only want encrypted transfer.</li>
+ * <li>Password promts are not answered, becuase if first login attempt is not correct,
+ * an exception is thrown by the Repos client.</li>
+ * <li>SSH questions are rejected, becuase we never use the svn+ssh protocol.</li>
+ * </ul>
+ *
+ * @author Staffan Olsson (solsson)
+ * @version $Id$
+ */
 public class DefaultAuthenticationReply implements ISVNPromptUserPassword {
 
 	final Logger logger = LoggerFactory.getLogger(DefaultAuthenticationReply.class);

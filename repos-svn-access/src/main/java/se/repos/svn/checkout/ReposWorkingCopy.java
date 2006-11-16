@@ -23,14 +23,14 @@ import se.repos.svn.config.ClientConfiguration;
  * The repos.se operations on a working copy, as an abstraction above svnClientAdapter.
  * 
  * The behaviour of this client mimics that of the standard svn command line client.
- * 
+ * <p>
  * Implementations should be as dumb as possible. Not do any automatic stuff that the user has not requested.
  * Any assumptions about repository structure (such as user accounts, home folder etc)
  * should be placed in a {@link se.repos.svn.checkout.CheckoutSettings} implementation.
- *
+ * <p>
  * Preferrably conflicts are detected by doing an update() before commit,
  * so that the latest repository changes are inspected locally before committing.
- * 
+ * <p>
  * Error handling:
  * <ol>
  * <li>Unexpected conditions with {@link java.io.File}s, like file missing, causes {@link IllegalArgumentException}</li>
@@ -83,7 +83,7 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * 
 	 * Only checks resources that have been added, so unversioned files in a folder does not count as local changes.
 	 * A path that is missing has local changes if it is marked for deletion, but not if it is only missing.
-	 * 
+	 * <p>
 	 * The result of this operation is undefined if 'path' is not {@link #isVersioned(File) versioned}.
 	 * It would be intuitive to return false, but some subversion clients allow new files
 	 * to count as local changes, and we want to leave that decision to the applicaiton layer.
@@ -127,7 +127,7 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * 
 	 * Throws an excetion if the path is already under version control.
 	 * The parent of the path must be versioned.
-	 * 
+	 * <p>
 	 * Forced add, meaning that ignore patterns are not overridden.
 	 * 
 	 * @param path File or folder, for new folders all contents are also added.
@@ -141,7 +141,7 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * 
 	 * Files or folders that match an svn:ignore patteron of their parent folder are not added.
 	 * Files or folders that match a global-ignores entry are not added.
-	 * 
+	 * <p>
 	 * Contrary to {@link #add(File)} this can be called for a file or foldar that is already added.
 	 * 
 	 * @param path The path to add to version control recursively. Parent must be versioned.
@@ -157,7 +157,7 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * the corresponding exception is thrown with the invalid path.
 	 * That means that with repeated calls to this method, surrounded by try-catch, 
 	 * all unversioned and modified children can be identified.
-	 * 
+	 * <p>
 	 * A folder with new contents that really should be deleted can be removed
 	 * with a normal file system operation, then deleted with this method.
 	 * 
@@ -176,7 +176,7 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * This interface is kept as small as possible.
 	 * Move operation is the same as copy+delete original.
 	 * Combining these two operations give more fine grained error handling than a single move operation.
-	 * 
+	 * <p>
 	 * To copy to a location where something was just removed from version control,
 	 * a commit is needed before the location can be used.
 	 * 
@@ -191,11 +191,12 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * If the argument is a folder, it will be reverted recursively. This has the same limitations
 	 * as in all subversion clients, that if .svn administrative folders are gone, it can not
 	 * know what the contents was at last checkout.
-	 * 
+	 * <p>
 	 * Use delete+update to restore to the latest version from the repository.
-	 * 
+	 * <p>
 	 * Reverting only modified properties is not supported: it is a rare operation,
 	 * and if needed it is possible to propget the old version's properties and revert manually.
+	 * 
 	 * @param path file to reset all changes in, or folder to recursively restore
 	 */
 	public void revert(File path);
@@ -204,6 +205,7 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * Reserve a file so that others can not change it.
 	 * Ensure that the file is writable locally.
 	 * Locking is never required, and only encouraged for binary files like word documents.
+	 * 
 	 * @param path The resource to lock. Usually a file, because lock does not work recursively.
 	 * @param lockMessage The comment that will be shown to other users.
 	 */
@@ -212,12 +214,14 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	/**
 	 * Remove locks from file.
 	 * SVN standard behaviour is to do this automatically at commit.
+	 * 
 	 * @param path The locked resource
 	 */
 	public void unlock(File path);
 	
 	/**
 	 * Checks if a working copy folder is a subversion "administrative area".
+	 * 
 	 * @param path the folder
 	 * @return true if the folder is a metadata folder (like ".svn")
 	 */
@@ -228,7 +232,7 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * 
 	 * For folders that matches an ignore pattern, but are in version control,
 	 * this method returns false. That is because 'svn status' reports normal versioned status for the file.
-	 * 
+	 * <p>
 	 * Administrative folder is always ignore.
 	 * 
 	 * @param path any path in the working copy, must exist, parent directory (getParent) must be versioned.
@@ -265,7 +269,7 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	
 	/**
 	 * Creates a model of the settings in the "runtime configuration area".
-	 * 
+	 * <p>
 	 * These settings are shared by all subversion clients for the current user on the local machine.
 	 * 
 	 * @return current subversion runtime configuration

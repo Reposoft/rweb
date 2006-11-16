@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.ISVNNotifyListener;
+import org.tigris.subversion.svnclientadapter.ISVNPromptUserPassword;
 import org.tigris.subversion.svnclientadapter.ISVNStatus;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.tigris.subversion.svnclientadapter.SVNNodeKind;
@@ -44,24 +45,24 @@ import se.repos.svn.config.ConfigurationStateException;
  *
  * This is the default {@link ReposWorkingCopy} implementation (please refer to that for usage documentation).
  * It would be possible to write implementations that use client libs like javahl directly.
- *
+ * <p>
  * This implementation does not try to anticipate or understand what the user does.
  * Simply runs the SVN operations to mimic the command line client.
  * The 'principle of least surprise' is important, leaving business logic to the level above.
  * Use the managed clients to get supporting logic.
- * 
+ * <p>
  * No methods accept null arguments, but there are no explicit checks for that so invalid input causes NullPointerExceptions.
- *
+ * <p>
  * This class uses the {@link http://www.slf4j.org/ slf4j} logging API.
  * See the slf4j docs on how to customize output.
  * Does 'info' logging of online operations,
  * and 'debug' logging of offline operations.
- * 
+ * <p>
  * This is a stateful implementation. The instance has its own ISVNClientAdapter,
  * which has a username and password set using {@link #setUserCredentials(UserCredentials)}.
  * Each instance of this class should be used in one thread only.
  * It seems that all SVN client libraries are non-threadsafe.
- * 
+ * <p>
  * Automatically accept SSL certificates when hostnames match, regardless of CA.
  * That is because we don't authenticate using certificates, we only use encrypted transfer.
  * However if the hostname of the server and the certificate don't match,
@@ -125,7 +126,20 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		this.client = client;
 		this.addNotifyListener(conflictNotifyListener);
 		// assuming that the same ISVNPromptUserPassword can be used everywhere
-		this.client.addPasswordCallback(new DefaultAuthenticationReply());
+		this.client.addPasswordCallback(getDefaultAuthenticationReply());
+	}
+
+	/**
+	 * The conventions of Repos clients make a lot of user dialogs unhelpful,
+	 * so instead we provide default answers.
+	 * 
+	 * @return a non-interactive user prompt instance that every client should use.
+	 *  This instance may one day forward relevant calls to a real user prompt,
+	 *  if we need such an interface.
+	 * @see DefaultAuthenticationReply
+	 */
+	protected ISVNPromptUserPassword getDefaultAuthenticationReply() {
+		return new DefaultAuthenticationReply();
 	}
 	
 	/**

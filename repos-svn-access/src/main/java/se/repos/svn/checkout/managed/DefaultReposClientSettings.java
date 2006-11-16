@@ -9,12 +9,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import se.repos.svn.SvnIgnorePattern;
+import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.config.ClientConfiguration;
 
 /**
  * Verifies and updates the svn client configuration.
  * 
  * Global ignores:  <code>TEMP Temp temp #*# *~ .#* ~* Thumbs.db .DS_Store</code>
+ * <p>
+ * Users can create folders named <code>temp</code> anywhere in the working copy,
+ * and contents of that folder will never be listed in versioning operations.
+ * If they need a temporary file in a versioned folder, Repos recommends that
+ * the name should start with "~". We could have added an ignore pattern "*.tmp",
+ * but changing extension breaks associations, which is not good.
+ * <p>
+ * Every client should offer an opportunity to add a file, or folder, to its parent's
+ * local ignores instead of adding it.
+ * See {@link ReposWorkingCopy#getPropertiesForFolder(java.io.File)}.
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$
