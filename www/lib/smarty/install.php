@@ -24,7 +24,7 @@ $file = $dir.$file;
 	arg 2 is the extracted file's name
 	arg 3 is optional. default value is 1 000 000 000. it has to be larger than the extracted file 
 */
-uncompressGZ($archive, $file.".tar", 10000000);
+uncompressGZ($archive, $file.".tar", 2000000);
 
 /*
 	extract TAR archive
