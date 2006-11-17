@@ -39,7 +39,7 @@ define('THEME_KEY', 'style'); // to match stylesheet switcher
 // parameter conventions
 define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST
 
-// --- application selfcheck, can be removed in releases (tests should cover this) ---
+// --- application selfcheck, can be removed in releases (integration tests should check these things) ---
 if (!isset($_repos_config['repositories'])) trigger_error("No repositories configured");
 if (!isset($_repos_config['repos_web'])) trigger_error("Repos web applicaiton root not specified in configuration");
 if (!isFolder($_repos_config['repos_web'])) trigger_error("repos_web must be a folder (should end with '/')");
@@ -103,12 +103,20 @@ function getRepository() {
 /**
  * Returns the URL to the root folder of the web application.
  * Can be a complete URL with host and path, as well as an absolute URL from server root.
- * // TODO configure _with_ tailing slash
+ * 
+ * @return String absolute url to the repos web application URL, ending with slash
  */
 function getWebapp() {
 	return _getConfig('repos_web');
 }
 
+/**
+ * Static resources may be delivered from a different URL than dynamic webapp, for performance.
+ * For example dynamic pages that require login might need SSL, but images don't.
+ * If uncertain, use getWebapp instead of this function
+ * 
+ * @return String webapp root URL to static resources like images, ending with slash
+ */
 function getWebappStatic() {
 	if ($w = _getConfig('repos_static')) {
 		return $w;
@@ -261,6 +269,7 @@ function getParent($path) {
 
 /**
  * Root of the repos application
+ * @deprecated use getWebapp() instead
  */
 function repos_getWebappRoot() {
 	trigger_error("use getWebapp() instead of repos_getWebappRoot()");
@@ -304,6 +313,39 @@ function repos_getSelfUrl() {
 function repos_getSelfQuery() {
 	if (!isset($_SERVER['QUERY_STRING'])) return '';
 	return $_SERVER['QUERY_STRING'];
+}
+
+/**
+ * 
+ * @return boolean true if the current client is local REMOTE_ADDR
+ */
+function isRequestLocal() {
+	return isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']=='127.0.0.1';
+}
+
+/**
+ * This web application runs an intenal HTTP client that is needed to check status codes of pages
+ * @return boolean true if the current request is from our own HTTP client
+ */
+function isRequestInternal() {
+	if (isRequestLocal()) { // assumes we're not mirrored and don't use a proxy
+		// this is not proper identification, but at least it does not return true for any normal browser
+		return !isset($_SERVER['HTTP_USER_AGENT']);
+	}
+	return false;
+}
+
+/**
+ * Compares any url with the current user's repository root URL.
+ * The server might transparently switch between SSL and non-SSL urls,
+ * and possibly between different hosts if mirrored,
+ * so just comparing strings is not sufficient to decide if an url is from the repository.
+ *
+ * @param String $url an absolute url, with protocol
+ * @return boolean true if the $url belongs to our repository
+ */
+function isRepositoryUrl($url) {
+	// TODO
 }
 
 // ----- file system helper functions ------

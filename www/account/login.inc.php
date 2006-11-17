@@ -147,7 +147,7 @@ function verifyLogin($targetUrl) {
 /**
  * Looks for an existing resource by checking each parent of the target url.
  * @param optional valiable to store the first non-404 status code in when returning
- * @return the url of a resource that exists, false if none found
+ * @return the url of a resource that exists, false if none found, same as URL if URL exists
  */
 function login_getFirstNon404Parent($url, &$status) {
 	$user = null;

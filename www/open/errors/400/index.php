@@ -1,6 +1,6 @@
 <?php
 /**
- * Show a nice error message for page not found
+ * 400 Bad Request
  */
 require('../../../conf/Presentation.class.php');
 require('../../../account/login.inc.php');
@@ -16,6 +16,7 @@ echo('-->');
  */
 
 $p->showError('
-HTTP 400 error. Invalid request from client.
-');
+Invalid request from browser. We would be interested to see how this could occur,
+so feel free to contact <a href="mailto:support@repos.se">support@repos.se</a>.
+', 'Bad Request');
 ?>
