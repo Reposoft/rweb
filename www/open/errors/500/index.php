@@ -3,7 +3,6 @@
  * 500 Internal Server Error
  */
 require('../../../conf/Presentation.class.php');
-require('../../../account/login.inc.php');
 
 $p = new Presentation();
 

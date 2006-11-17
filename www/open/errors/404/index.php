@@ -1,13 +1,22 @@
 <?php
 /**
- * S404 Page Not Found
+ * 404 Page Not Found
  */
 require('../../../conf/Presentation.class.php');
-require('../../../account/login.inc.php');
 
 $p = new Presentation();
 
 $url = repos_getSelfUrl();
+
+// should be able to view this page without a login
+if (!isRepositoryUrl($url)) {
+	$p->showErrorNoRedirect(
+	'There is no file or folder with the URL '.$url.'.'
+	,'Page Not Found');
+	exit;
+}
+
+require('../../../account/login.inc.php');
 
 if (isRequestInternal()) {
 	$p->showErrorNoRedirect('Could not find resource '.$url, '404 Page Not Found');

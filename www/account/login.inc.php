@@ -126,7 +126,7 @@ function login($targetUrl) {
  * does trigger_error if the resource can not be used for authentication
  */
 function verifyLogin($targetUrl) {
-	if (!strBegins($targetUrl, getRepository())) {
+	if (!isRepositoryUrl($targetUrl)) {
 		trigger_error('Target URL is not a repository resource. Can not validate login using '.$targetUrl, E_USER_ERROR);
 	}
 	$targetUrl = urlEncodeNames($targetUrl);
@@ -152,7 +152,7 @@ function verifyLogin($targetUrl) {
 function login_getFirstNon404Parent($url, &$status) {
 	$user = null;
 	$pass = null;
-	if (strBegins($url, getRepository())) {
+	if (isRepositoryUrl($url)) {
 		$user = getReposUser();
 		$pass = _getReposPass();
 	}

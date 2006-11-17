@@ -3,7 +3,6 @@
  * 400 Bad Request
  */
 require('../../../conf/Presentation.class.php');
-require('../../../account/login.inc.php');
 
 $p = new Presentation();
 

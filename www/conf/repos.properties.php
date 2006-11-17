@@ -345,7 +345,7 @@ function isRequestInternal() {
  * @return boolean true if the $url belongs to our repository
  */
 function isRepositoryUrl($url) {
-	// TODO
+	return strBegins($url, getRepository());
 }
 
 // ----- file system helper functions ------
