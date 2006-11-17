@@ -345,6 +345,7 @@ function isRequestInternal() {
  * @return boolean true if the $url belongs to our repository
  */
 function isRepositoryUrl($url) {
+	// TODO should ignore http/https
 	return strBegins($url, getRepository());
 }
 
