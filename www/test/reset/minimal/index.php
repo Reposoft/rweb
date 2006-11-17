@@ -92,6 +92,7 @@ setup_svn("add {$wc}trunk/");
 
 setup_svn('commit -m "Created an empty file archive in repository root" '.$wc);
 
+$report->info('Remember that Apace needs to be restarted. This repostory uses Satisfy All instead of Satisfy Any.');
 $report->info('<a href="'.$conflocation.'/trunk/">Log in to trunk</a>');
 
 $report->display();

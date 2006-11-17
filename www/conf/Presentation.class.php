@@ -72,8 +72,21 @@ class Presentation extends Smarty {
 	var $redirectBeforeDisplay = false;
 	var $extraStylesheets = array();
 
+	// singleton accessor, for occations when it is not known if a Presentation object has already been allocated for the request
+	// static, use Presentation::getInstance()
+	function getInstance() {
+		if (isset($GLOBALS['_presentationInstance'])) return $GLOBALS['_presentationInstance'];
+		echo('nop');exit;
+		return new Presentation();
+	}
+	
 	// constructor
 	function Presentation() {
+		// enforce singleton rule
+		if (isset($GLOBALS['_presentationInstance'])) {
+			trigger_error("Code error. An attempt was made to create a second page instance", E_USER_ERROR);
+		}
+		$GLOBALS['_presentationInstance'] = $this;
 		
 		$this->caching = CACHING;
 		if (!CACHING) {
@@ -295,10 +308,15 @@ function Presentation_useCommentedDelimiters($tpl_source, &$smarty)
     return preg_replace($patterns,$replacements,$tpl_source);
 }
 
+// plug in to repos.properties.php's error handling solution
 if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $message, $trace) {
 	if ($n==E_USER_ERROR || $n==E_USER_WARNING || $n==E_USER_NOTICE) {
-		$p = new Presentation();
-		$p->showErrorNoRedirect(nl2br($message)."<!-- Error level $n. Stack trace:\n$trace -->");
+		$p = Presentation::getInstance();
+		if (headers_sent()) {
+			echo("<strong>Error:</strong> ".nl2br($message)."<!-- Error level $n. Stack trace:\n$trace -->"); exit;
+		} else {
+			$p->showErrorNoRedirect(nl2br($message)."<!-- Error level $n. Stack trace:\n$trace -->");
+		}
 		exit(1);
 	}
 }}
