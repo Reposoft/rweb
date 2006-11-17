@@ -37,7 +37,7 @@ if (isset($_GET['open'])) {
 	$p->assign('target', $target);
 	$p->assign('revision', $rev);
 	$p->assign('dowloandUrl', $downloadUrl);
-	$p->assign('targetpeg', $url.'@'.$rev);
+	$p->assign('targetpeg', urlEncodeNames($url).'@'.$rev);
 	// exit points
 	$referer = getHttpReferer();
 	if (!empty($referer) && strContains($referer, '/open/log/')) {
@@ -46,7 +46,7 @@ if (isset($_GET['open'])) {
 	} else {
 		$existingFolder = login_getFirstNon404Parent(getParent($url), $s);
 		$p->assign('repository', $existingFolder);
-		$p->assign('logurl', '../log/target='.strAfter($existingFolder, getRepository()));
+		$p->assign('logurl', '../log/?target='.strAfter($existingFolder, getRepository()));
 	}
 	$p->display();
 }

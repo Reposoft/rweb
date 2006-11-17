@@ -483,7 +483,7 @@ function login_svnPassthruFileHtml($targetUrl, $revision=0) {
 		$cmd = 'cat '.escapeArgument($targetUrl);
 	}
 	$contents = login_svnRun($cmd);
-	if (array_pop($contents)) trigger_error("Could not read contents of file $targetUrl", E_USER_ERROR);
+	if (array_pop($contents)) trigger_error("Could not read contents of file $targetUrl.\n".htmlspecialchars(implode("\n", $contents)), E_USER_ERROR);
 	foreach ($contents as $c) echo htmlspecialchars($c)."\n";
 }
 
