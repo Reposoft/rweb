@@ -2,9 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>repos error message</title></head>
+<title>repos error message</title>
 <!--{$head}-->
-
+<script type="text/javascript">
+$(document).ready( function() {
+	if (history.length<2) $("a[@href^=javascript:history.go(-1)]").hide();
+});
+</script>
+</head>
 <body>
 <div id="workspace">
 <div id="commandbar">
@@ -13,7 +18,7 @@
 <a id="logout" class="command" href="/?logout">logout</a>
 </div>
 <div id="contents">
-<h1>An error occurred</h1>
+<h1>{=$headline}</h1>
 <p><em>{=$error_msg}</em></p>
 <p><a class="action" href="{=$referer}">&lt; back</a></p>
 </div>

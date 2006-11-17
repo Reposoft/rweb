@@ -178,20 +178,30 @@ class Presentation extends Smarty {
 		return $this->redirectBeforeDisplay;
 	}
 	
-	function showError($error_msg) {
+	/**
+	 * Shows error page, by redirecting the browser to a page so that the URL is not tried again.
+	 *
+	 * @param String $error_msg the body of the error page, can contain HTML tags
+	 * @param String $headline the contents of the <h1> tag
+	 */
+	function showError($error_msg, $headline='An error occurred') {
 		// get template from this folder, not the importing script's folder
 		$template = $this->getLocaleFile(dirname(__FILE__) . '/Error');
 		$this->enableRedirect();
+		$this->assign('headline', $headline);
 		$this->assign('error_msg', $error_msg);
 		$this->display($template);
 	}
 	
 	/**
-	 * Shows error message without redirect, applicable when a reload can't do any harm
-	 * @param unknown_type $error_msg
+	 * Shows error message without redirect, applicable when a browser refresh can't do any harm
+	 * 
+	 * @param String $error_msg the body of the error page, can contain HTML tags
+	 * @param String $headline the contents of the <h1> tag
 	 */
-	function showErrorNoRedirect($error_msg) {
+	function showErrorNoRedirect($error_msg, $headline='An error occurred') {
 		$template = $this->getLocaleFile(dirname(__FILE__) . '/Error');
+		$this->assign('headline', $headline);
 		$this->assign('error_msg', $error_msg);
 		$this->display($template);		
 	}
