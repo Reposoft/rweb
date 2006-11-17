@@ -4,7 +4,7 @@
 	extract GZ archive
 	arg 1 is an absolute path to a gz archive
 	arg 2 is the extracted file's name
-	arg 3 is optional. default value is 1 000 000 000. it has to be larger than the extracted file 
+	arg 3 is optional. default value is 10 000 000. it has to be larger than the extracted file 
 */
 function uncompressGZ( $srcFileName, $dstFileName, $fileSize ){
 
@@ -14,7 +14,7 @@ function uncompressGZ( $srcFileName, $dstFileName, $fileSize ){
 	}
 	
 	if (!$fileSize){
-		$fileSize = 1000000000;
+		$fileSize = 10000000;
 	}
 		
 	// read in the GZ file
