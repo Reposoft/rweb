@@ -66,7 +66,11 @@ function printForm() {
 	echo('<p><a id="100bytes.js" href="./?check=100bytes.js">100bytes.js</a></p>');
 	echo('<p><a id="head.js-file" href="./?check='.urlencode(getWebapp().'scripts/head.js').'">head.js</a></p>');
 	echo('<p><a id="head.js-folder" href="./?check='.urlencode(getWebapp().'scripts/head.js/').'">head.js/</a></p>');
-	echo('<p><a id="head.js-folder" href="./?check='.urlencode('/repos/view/repos.xsl').'">repos.xsl</a></p>');
+	echo('<p><a id="favicon.ico" href="./?check='.urlencode('/favicon.ico').'">/favicon.ico</a></p>');
+	echo('<p><a id="repos.xsl" href="./?check='.urlencode('/repos/view/repos.xsl').'">repos.xsl</a></p>');
+	echo('<p><a id="repos1.gif" href="./?check='.urlencode('/repos/style/logo/repos1.gif').'">repos1.gif</a></p>');
+	echo('<p><a id="repos1.png" href="./?check='.urlencode('/repos/style/logo/repos1.png').'">repos1.png</a></p>');
+	echo('<p><a id="global.css" href="./?check='.urlencode('/repos/style/global.css').'">global.css</a></p>');
 	echo('<p><a id="back" class="action" href="../">&lt; back</a></p>');
 	foot();
 }

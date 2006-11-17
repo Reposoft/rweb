@@ -1,0 +1,49 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>repos.se automated test</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Check the HTTP headers of the server icon used in every page</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/repos/test/headers/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>favicon.ico</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>|HTTP/1.1 200 OK|</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>|Content-Type: image/x-icon|</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>|Last-Modified:</td>
+	<td></td>
+</tr>
+<tr title="Should be cached for a week before requested again, it's no big deal if clients get an old icon for a couple of days">
+	<td>verifyTextPresent</td>
+	<td>|Cache-Control: max-age=604800|</td>
+	<td></td>
+</tr>
+<tr title="With the 'max-age' directive comes an exipres header with the date">
+	<td>verifyTextPresent</td>
+	<td>|Expires:</td>
+	<td></td>
+</tr>
+</tbody></table>
+<p><small>Javascript cache headers are essential, because upgrading can cause lots of trouble for clients if script files are cached in browsers. On the other hand, scripts are too big to be sent with every page.</small></p>
+</body>
+</html>

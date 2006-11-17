@@ -6,7 +6,7 @@
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Check the HTTP headers of the mod_dav_svn directory listing</td></tr>
+<tr><td rowspan="1" colspan="3">Check the HTTP headers of a file from mod_dav_svn</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -15,7 +15,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>repositorypublicfolder</td>
+	<td>repositorypublicfile</td>
 	<td></td>
 </tr>
 <tr>
@@ -25,7 +25,17 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>|Content-Type: text/xml</td>
+	<td>|Content-Type: text/xml|</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>|Last-Modified:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>|Content-Length:</td>
 	<td></td>
 </tr>
 <tr title="seems like the ETag value after the quote is updated after each change">
@@ -33,9 +43,9 @@
 	<td>|ETag:</td>
 	<td></td>
 </tr>
-<tr title="however, ETag is not sufficient for Firefox, or our server, to figure out that a refresh is needed, so we have to add Cache-Control">
-	<td>verifyTextPresent</td>
-	<td>|Cache-Control: no-cache|</td>
+<tr title="*Subversion's default ETags should be enough for files">
+	<td>verifyTextNotPresent</td>
+	<td>|Cache-Control:</td>
 	<td></td>
 </tr>
 </tbody></table>

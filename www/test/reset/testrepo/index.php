@@ -100,6 +100,11 @@ AuthzSVNAccessFile $aclfile
 # allow public access to * = r folders
 Satisfy Any
 </Location>
+
+# disable caching for directory listing, because ETag seems not 100% compatible with firefox
+<Location ~ \"^$conflocation/.*/$\">
+	Header add Cache-Control \"no-cache\"
+</Location>
 ";
 if (createFileWithContents($conffile, $conf, true)) {
 	$report->ok("Successfully created apache config file $conffile");
