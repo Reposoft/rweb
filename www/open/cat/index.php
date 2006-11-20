@@ -37,7 +37,7 @@ if (isset($_GET['open'])) {
 	$p->assign('target', $target);
 	$p->assign('revision', $rev);
 	$p->assign('dowloandUrl', $downloadUrl);
-	$p->assign('targetpeg', urlEncodeNames($url).'@'.$rev);
+	$p->assign('targetpeg', $url.'@'.$rev);
 	// exit points
 	$referer = getHttpReferer();
 	if (!empty($referer) && strContains($referer, '/open/log/')) {
