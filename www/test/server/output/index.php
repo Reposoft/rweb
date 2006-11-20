@@ -37,4 +37,5 @@ for ($i = 1; $i <= $max; $i++) {
 if (!ob_get_contents()) $report->ok("The buffer is empty. That's good.");
 $report->info("---- output completed ----");
 $report->display();
+?>
  
