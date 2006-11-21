@@ -29,7 +29,7 @@ class NewFilenameRule extends Rule {
 class Edit {
 	var $operation;
 	var $args = Array(); // command line arguments, properly escaped and surrounded with quotes if needed
-	var $message;
+	var $message; // not escaped
 	var $commitWithMessage = false; // allow for example checkout to run without a -m
 	var $result;
 	var $output; // from exec
@@ -44,7 +44,8 @@ class Edit {
 	}
 	
 	/**
-	 * @param commitMessage The comments to save in svn log
+	 * @param commitMessage The comments to save in svn log.
+	 *  Message should not be surrounded with quotes, because it is escaped when the command is created
 	 */
 	function setMessage($commitMessage) {
 		$this->message = $commitMessage;
@@ -55,6 +56,7 @@ class Edit {
 
 	/**
 	 * @param pathElement filename or directory name
+	 *  Filenames and paths are expected to be properly command-line or URL encoded (this function does not know which)
 	 */
 	function addArgFilename($pathElement) {
 		// rawurlencode does not work with filenames because there might be UTF-8 characters in it like umlauts
@@ -64,6 +66,7 @@ class Edit {
 	
 	/**
 	 * @param name absolute or relative path with slashes
+	 *  Path is expected to be properly adapted to the OS already (see toPath and toShellEncoding)
 	 */
 	function addArgPath($name) {
 		$this->_addArgument(escapeArgument($name));

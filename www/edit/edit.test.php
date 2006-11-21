@@ -33,6 +33,9 @@ class EditTest extends UnitTestCase
 		$this->assertEqual('107', $edit->getCommittedRevision());
 	}
 	
+	/**
+	 * Only some of the command arguments should be escaped, so escaping must be done per argument type.
+	 */
 	function testAddArgument() {
 		$edit = new Edit('test');
 		$edit->addArgPath('arg1');
@@ -40,6 +43,11 @@ class EditTest extends UnitTestCase
 		$edit->addArgOption('arg_');
 		$this->assertEqual('"arg1"', $edit->args[0]);
 		$this->assertEqual('arg_', $edit->args[1]);
+		// file and path should only be escaped, not converted with toPath or toShellEncoding
+		$edit->addArgPath('\temp\file.txt');
+		$edit->addArgFilename("file\xc3\xa5.txt");
+		$this->assertEqual("\"\\\\temp\\\\file.txt\"", $edit->args[2]);
+		$this->assertEqual("\"file\xc3\xa5.txt\"", $edit->args[3]);
 	}
 	
 	function testPercentInFilename(){

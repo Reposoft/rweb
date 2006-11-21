@@ -605,10 +605,18 @@ function escapeCommand($command) {
 
 // Encloses an argument in quotes and escapes any quotes within it
 function escapeArgument($argument) {
+	if (isWindows()) {
+		return _escapeArgumentWindows($argument);
+	} else {
+		return _escapeArgumentNix($argument);
+	}
+}
+	
+function _escapeArgumentNix($arg) {
 	// Shell metacharacters are: & ; ` ' \ " | * ? ~ < > ^ ( ) [ ] { } $ \n \r (WWW Security FAQ [Stein 1999, Q37])
 	// Use escapeshellcmd to make argument safe for command line
 	// (double qoutes around the string escapes: *, ?, ~, ', &, <, >, |, (, )
-	$arg = preg_replace('/(\s+)/',' ',$argument);
+	$arg = preg_replace('/(\s+)/',' ',$arg);
 	$arg = str_replace("\\","\\\\", $arg);
 	$arg = str_replace("\x0A", " ", $arg);
 	$arg = str_replace("\xFF", " ", $arg);
@@ -617,25 +625,32 @@ function escapeArgument($argument) {
 	$arg = str_replace('`','\`', $arg);
 	// On SuSE ! is a metacharacter in strings
 	$arg = str_replace('!','\!', $arg);
-	// windows uses % to get variable names, which can be used to read system properties.
-	if(isWindows() && strContains($arg, '%')) {
-		$arg = escapeWindowsVariables($arg);
-	}
 	return '"'.$arg.'"'; // The quotes are very important because they escape many characters that are not escaped here
 	// #&;`|*?~<>^()[]{}$\, \x0A  and \xFF. ' and "
 }
 
+function _escapeArgumentWindows($arg) {
+	$arg = preg_replace('/(\s+)/',' ',$arg);
+	$arg = str_replace('"','""', $arg);
+	$arg = str_replace("\\","\\\\", $arg); // double backslashes needed when inside quotes, for example in --config-dir
+	// windows uses % to get variable names, which can be used to read system properties.
+	if(strContains($arg, '%')) {
+		$arg = _escapeWindowsVariables($arg);
+	}
+	return '"'.$arg.'"';
+}
+
 // if windows sees %abc%, it checks if abc is an environment variables. \% prevents this but adds the backslash to the string.
-function escapeWindowsVariables($arg) {
+function _escapeWindowsVariables($arg) {
 	//$arg = str_replace('%','#', $arg);
 	$i = strpos($arg, '%');
 	if ($i === false) return $arg;
 	$j = strpos($arg, '%', $i+1);
 	if ($j === false) return $arg;
 	if ($j > $i+1 && getenv(substr($arg, $i+1, $j-$i-1))) {
-		return substr($arg, 0, $j).'#'.escapeWindowsVariables(substr($arg,$j+1));
+		return substr($arg, 0, $j).'#'._escapeWindowsVariables(substr($arg,$j+1));
 	} else {
-		return substr($arg, 0, $j).escapeWindowsVariables(substr($arg,$j));
+		return substr($arg, 0, $j)._escapeWindowsVariables(substr($arg,$j));
 	}
 }
 
@@ -643,7 +658,7 @@ function escapeWindowsVariables($arg) {
  * Executes a given comman on the command line.
  * This function does not deal with security. Everything must be properly escaped.
  * @param a command like 'whoami'
- * @param everything that should be after the blankspace following the command,
+ * @param everything that should be after the blankspace following the command, safely encoded already
  * @returns stdout and stderr output from the command, one array element per row. 
  *   Last element is the return code (use array_pop to remove).
  */
@@ -656,7 +671,7 @@ function repos_runCommand($commandName, $argumentsString) {
 /**
  * Executes a given comman on the command line and does passthru on the output
  * @param a command like 'whoami'
- * @param everything that should be after the blankspace following the command
+ * @param everything that should be after the blankspace following the command, safely encoded already
  * @returns the return code of the execution. Any messages have been passed through.
  */
 function repos_passthruCommand($commandName, $argumentsString) {

@@ -319,6 +319,18 @@ class TestReposProperties extends UnitTestCase {
 	
 	// ----- command line escape functions -----
 	
+	function testEscapeArgument() {
+		// common escape rules
+		$this->assertEqual("\"a\\\\b\"", escapeArgument('a\b'));
+		// rules that depend on OS
+		if (!isWindows()) {
+			$this->assertEqual('"a\"b"', escapeArgument('a"b'));	
+		}
+		if (isWindows()) {
+			$this->assertEqual('"a""b"', escapeArgument('a"b'));	
+		}
+	}
+	
 	function testEscapeWindowsEnv() {
 		$this->assertEqual('"a%b"', escapeArgument('a%b'), 'single percent should not be a problem');
 		$this->assertEqual('"a%NOT-AN-ENV-ENTRY%b"', escapeArgument('a%NOT-AN-ENV-ENTRY%b'),
@@ -349,12 +361,12 @@ class TestReposProperties extends UnitTestCase {
 			//$v = exec("echo n\xE4d\xE5");
 			
 			$this->assertEqual("n\xE4d\xE5", $v);
-			$this->assertEqual("6e e4 64 e5", getchars($v));
+			$this->assertEqual("6e e4 64 e5", $this->getchars($v));
 		} else {
 			// utf-8
 			$v = exec("echo n\xc3\xa4d\xc3\xa5");
 			$this->assertEqual("n\xc3\xa4d\xc3\xa5", $v);
-			$this->assertEqual("6e c3 a4 64 c3 a5", getchars($v));
+			$this->assertEqual("6e c3 a4 64 c3 a5", $this->getchars($v));
 		}
 	}
 	

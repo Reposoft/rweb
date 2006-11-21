@@ -314,7 +314,7 @@ if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $mes
 		if (headers_sent()) {
 			echo("<strong>Error:</strong> ".nl2br($message)."<!-- Error level $n. Stack trace:\n$trace -->"); exit;
 		} else {
-			$p->showErrorNoRedirect(nl2br($message)."<!-- Error level $n. Stack trace:\n$trace -->");
+			$p->showErrorNoRedirect("Error: ".nl2br($message)."<!-- Error level $n. Stack trace:\n$trace -->");
 		}
 		exit(1);
 	}
