@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		}
 		// upload file to working copy
 		$filename = $upload->getName();
-		$updatefile = $dir . $filename;
+		$updatefile = toPath($dir . $filename);
 		if(!file_exists($dir.'/.svn') || !file_exists($updatefile)) {
 			$presentation->trigger_error('Can not read current version of the file named "'
 				.$filename.'" from repository path "'.$repoFolder.'"', E_USER_ERROR);
@@ -170,8 +170,8 @@ class Upload {
 	}
 	
 	/**
-	 * @return name given by the user, or original filename if it should not change
-	 *  not encoded
+	 * @return name given by the user, or original filename if it should not change.
+	 *  Not encoded,
 	 */
 	function getName() {
 		if ($this->isCreate()) {

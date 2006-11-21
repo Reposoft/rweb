@@ -201,12 +201,14 @@ function isPath($path) {
 }
 
 /**
- * Converts windows path to path that works on all OSes
+ * Converts filesystem path to path that works on all OSes, with same encoding as command line.
+ * Windows paths are converted from backslashes to forward slashes, and from UTF-8 to ISO-8859-1 (see toShellEncoding).
+ * If a path does not use the OS encoding, functions like file_exists will only work with ASCII file names. 
  * @param String $path path that might contain backslashes
  * @return String the same path, but with forward slashes
  */
 function toPath($path) {
-	return strtr($path, '\\', '/');
+	return toShellEncoding(strtr($path, '\\', '/'));
 }
 
 /**
@@ -443,6 +445,7 @@ function getTempnamDir($subdir=null) {
  * replaces custom-made recursive folder remove.
  * Removes the folder recursively if it is in one of the allowed locations,
  * such as the temp dir and the repos folder.
+ * Note that the path should be encoded with the local shell encoding, see toPath.
  * @param String $folder absolute path, with tailing DIRECTORY_SEPARATOR like all folders
  */
 function deleteFolder($folder) {
@@ -666,9 +669,7 @@ function repos_passthruCommand($commandName, $argumentsString) {
  */
 function _repos_getFullCommand($commandName, $argumentsString) {
 	$run = getCommand($commandName);
-	if (isWindows()) {
-		$argumentsString = mb_convert_encoding($argumentsString, 'ISO-8859-1', 'UTF-8');
-	}
+	$argumentsString = toShellEncoding($argumentsString);
 	$wrapper = _repos_getScriptWrapper();
 	if (strlen($wrapper)>0) {
 		// make one argument (to the wrapper) of the entire command
@@ -716,6 +717,18 @@ function isWindows() {
 function getNewline() {
 	if (isOffline() && isWindows()) return "\n\r";
 	else return "\n";
+}
+
+/**
+ * Converts a string from internal encoding to the encoding used for file names and commands.
+ * @param String $string the value with internal encoding (same as no encoding)
+ * @return String the same value encoded as the OS expects it on the command line
+ */
+function toShellEncoding($string) {
+	if (isWindows()) {
+		return mb_convert_encoding($string, 'ISO-8859-1', 'UTF-8');
+	}
+	return $string;
 }
 
 /**
