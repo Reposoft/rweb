@@ -76,7 +76,6 @@ class Presentation extends Smarty {
 	// static, use Presentation::getInstance()
 	function getInstance() {
 		if (isset($GLOBALS['_presentationInstance'])) return $GLOBALS['_presentationInstance'];
-		echo('nop');exit;
 		return new Presentation();
 	}
 	
