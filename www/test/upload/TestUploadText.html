@@ -1,0 +1,179 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>TestCreateFolder</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestUploadText</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>../setup/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>upload</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>textedit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>usertext</td>
+	<td>
+	My new novel
+	</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>testfile.txt</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>message</td>
+	<td>created a new file with the copy-paste functionality</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Committed revision</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>revision</td>
+	<td>rev1</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>repository</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>link=testfile.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>upload:testfile.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>upload:testfile.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>testfile.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>textedit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>usertext</td>
+	<td>
+	My new novel
+	Chapter 1
+	</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>message</td>
+	<td>added a line of contents</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Committed revision</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>revision</td>
+	<td>rev2</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>repository</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>f:testfile.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>My new novel*Chapter 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>goBack</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>history</td>
+	<td></td>
+</tr>
+<!-- TODO check diff -->
+<tr>
+	<td>clickAndWait</td>
+	<td>repository</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>delete:testfile.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>message</td>
+	<td>removed TestUploadText file</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>repository</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementNotPresent</td>
+	<td>link=testfile.txt</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

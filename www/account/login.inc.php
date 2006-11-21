@@ -488,7 +488,8 @@ function login_svnPassthruFileHtml($targetUrl, $revision=0) {
 	}
 	$contents = login_svnRun($cmd);
 	if (array_pop($contents)) trigger_error("Could not read contents of file $targetUrl.\n".htmlspecialchars(implode("\n", $contents)), E_USER_ERROR);
-	foreach ($contents as $c) echo htmlspecialchars($c)."\n";
+	// TODO add check if the file is Latin-1, convert if nessecary, and handle the diff header (with filename) based on os
+	foreach ($contents as $c) echo(htmlspecialchars($c)."\n");
 }
 
 /**

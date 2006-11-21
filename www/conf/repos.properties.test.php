@@ -356,17 +356,16 @@ class TestReposProperties extends UnitTestCase {
 		// plain ascii
 		$v = exec("echo nada");
 		$this->assertEqual("nada", $v);
-		if (isWindows()) {
+		if (isWindows()) { // don't know why this test does not work in windows
 			// latin-1
-			//$v = exec("echo n\xE4d\xE5");
-			
+			$v = exec("echo n\xE4d\xE5");
 			$this->assertEqual("n\xE4d\xE5", $v);
-			$this->assertEqual("6e e4 64 e5", $this->getchars($v));
+			$this->assertEqual("6e e4 64 e5 ", $this->getchars($v));
 		} else {
 			// utf-8
 			$v = exec("echo n\xc3\xa4d\xc3\xa5");
 			$this->assertEqual("n\xc3\xa4d\xc3\xa5", $v);
-			$this->assertEqual("6e c3 a4 64 c3 a5", $this->getchars($v));
+			$this->assertEqual("6e c3 a4 64 c3 a5 ", $this->getchars($v));
 		}
 	}
 	
