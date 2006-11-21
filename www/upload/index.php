@@ -154,7 +154,7 @@ class Upload {
 			fwrite($fp, $contents);
 			fclose($fp);
 		} else {
-			trigger_error("Could write file contents from the submitted text.", E_USER_ERROR);
+			trigger_error("Couldn't write file contents from the submitted text.", E_USER_ERROR);
 		}
 	}
 	
