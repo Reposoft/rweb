@@ -55,13 +55,17 @@ class TestServerSettings extends UnitTestCase {
 	}
 
 	function testMbString() {
-		$this->assertTrue(function_exists('mb_http_input'), "extension mb_string must be installed in php");
-		$this->assertEqual("UTF-8", ini_get('mbstring.http_input'));
-		$this->assertFalse(ini_get('mbstring.substitute_character'));
 		$this->assertEqual("UTF-8", ini_get('mbstring.internal_encoding'));
 		$this->assertEqual("Neutral", ini_get('mbstring.language'));
-		$this->assertFalse(ini_get('mbstring.encoding_translation'), "Automatic encoding translation (mbstring.encoding_translation) should be Off");
 		$this->assertEqual("auto", ini_get('mbstring.detect_order'));
+		$this->assertFalse(ini_get('mbstring.substitute_character'), "Don't do mbstring.substitute_character. Input that can't be converted should cause error message");
+		$this->assertEqual(0, ini_get('mbstring.func_overload'), "Don't want mbstring.func_overload, because mb should be called explicitly");
+		// expecting UTF-8 input, but no automatic input conversion because input from browser should be valid already (if not, we throw an error)
+		$this->assertEqual("UTF-8", ini_get('mbstring.http_input'));
+		$this->assertFalse(ini_get('mbstring.encoding_translation'), "Automatic encoding translation (mbstring.encoding_translation) should be Off");
+		// no automatic output conversion
+		$this->assertEqual("", ini_get('output_handler'), "No output handler should be set, because default is to not buffer output");
+		$this->assertEqual(0, ini_get('mbstring.http_output'), "mbstring is not the output handler, so there is no need for a http_output setting");
 	}
 }
 

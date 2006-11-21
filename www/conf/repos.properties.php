@@ -667,7 +667,7 @@ function repos_passthruCommand($commandName, $argumentsString) {
 function _repos_getFullCommand($commandName, $argumentsString) {
 	$run = getCommand($commandName);
 	if (isWindows()) {
-		$argumentsString = utf8_decode($argumentsString);
+		$argumentsString = mb_convert_encoding($argumentsString, 'ISO-8859-1', 'UTF-8');
 	}
 	$wrapper = _repos_getScriptWrapper();
 	if (strlen($wrapper)>0) {

@@ -339,6 +339,35 @@ class TestReposProperties extends UnitTestCase {
 		}
 	}
 	
+	function testCommandLineEncoding() {
+		
+		// plain ascii
+		$v = exec("echo nada");
+		$this->assertEqual("nada", $v);
+		if (isWindows()) {
+			// latin-1
+			//$v = exec("echo n\xE4d\xE5");
+			
+			$this->assertEqual("n\xE4d\xE5", $v);
+			$this->assertEqual("6e e4 64 e5", getchars($v));
+		} else {
+			// utf-8
+			$v = exec("echo n\xc3\xa4d\xc3\xa5");
+			$this->assertEqual("n\xc3\xa4d\xc3\xa5", $v);
+			$this->assertEqual("6e c3 a4 64 c3 a5", getchars($v));
+		}
+	}
+	
+	function getchars($string) {
+		$c = "";
+		for ($i=0;$i<strlen($string);$i++) {
+	   	$chr = $string{$i};
+	   	$ord = ord($chr);
+	   	$c .= dechex($ord)." ";
+		}
+		return $c;
+	}
+	
 	// ----- portability functions -----
 	
 	function testIsOffline() {
