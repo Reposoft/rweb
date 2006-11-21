@@ -28,7 +28,7 @@ class NewFilenameRule extends Rule {
 // the repository write operation class
 class Edit {
 	var $operation;
-	var $args = Array(); // command line arguments, not yet shellcmd-escaped
+	var $args = Array(); // command line arguments, properly escaped and surrounded with quotes if needed
 	var $message;
 	var $commitWithMessage = false; // allow for example checkout to run without a -m
 	var $result;
@@ -59,14 +59,14 @@ class Edit {
 	function addArgFilename($pathElement) {
 		// rawurlencode does not work with filenames because there might be UTF-8 characters in it like umlauts
 		// manually escape the characters that are allowed in filenames but not for retreival
-		$this->_addArgument($pathElement);
+		$this->_addArgument(escapeArgument($pathElement));
 	}
 	
 	/**
 	 * @param name absolute or relative path with slashes
 	 */
 	function addArgPath($name) {
-		$this->_addArgument($name);
+		$this->_addArgument(escapeArgument($name));
 	}
 
 	/**
@@ -75,11 +75,11 @@ class Edit {
 	function addArgUrl($url) {
 		// urlEncodeNames does not work for write operation because there might be UTF-8 characters like umlauts
 		$url = urlEncodeNames($url);
-		$this->_addArgument($url);
+		$this->_addArgument(escapeArgument($url));
 	}
 	
 	/**
-	 * @param option command line switch
+	 * @param option command line switch, will be added to commandline without encoding or quotes
 	 */	
 	function addArgOption($option, $safe=false) {
 		$this->_addArgument($option);
@@ -112,9 +112,9 @@ class Edit {
 		if ($this->commitWithMessage) { // commands expecting a message need this even if it is empty
 			$cmd .= ' -m '.escapeArgument($this->message);
 		}
-		// arguments, enclosed in strings to allow spaces
+		// arguments, already encoded
 		foreach ($this->args as $arg) {
-			$cmd .= ' '.escapeArgument($arg);
+			$cmd .= ' '.$arg;
 		}
 		return $cmd;
 	}

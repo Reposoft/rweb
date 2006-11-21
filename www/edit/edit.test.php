@@ -36,16 +36,16 @@ class EditTest extends UnitTestCase
 	function testAddArgument() {
 		$edit = new Edit('test');
 		$edit->addArgPath('arg1');
-		$this->assertEqual('arg1', $edit->args[0]);
+		$this->assertEqual('"arg1"', $edit->args[0]);
 		$edit->addArgOption('arg_');
-		$this->assertEqual('arg1', $edit->args[0]);
+		$this->assertEqual('"arg1"', $edit->args[0]);
 		$this->assertEqual('arg_', $edit->args[1]);
 	}
 	
-	function testProcentInFilename(){
+	function testPercentInFilename(){
 		$edit = new Edit('test');
-		$edit->addArgUrl('http://www.bamse.com/%procent%');
-		$this->assertEqual('http://www.bamse.com/%25procent%25', $edit->args[0]);
+		$edit->addArgUrl('http://www.where-we-work.com/%procent%');
+		$this->assertEqual('"http://www.where-we-work.com/%25procent%25"', $edit->args[0]);
 	}
 	
 	function testCommand() {
