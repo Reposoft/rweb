@@ -60,7 +60,7 @@ class TestServerSettings extends UnitTestCase {
 		$this->assertFalse(ini_get('mbstring.substitute_character'));
 		$this->assertEqual("UTF-8", ini_get('mbstring.internal_encoding'));
 		$this->assertEqual("Neutral", ini_get('mbstring.language'));
-		$this->assertTrue(ini_get('mbstring.encoding_translation'));
+		$this->assertFalse(ini_get('mbstring.encoding_translation'), "Automatic encoding translation (mbstring.encoding_translation) should be Off");
 		$this->assertEqual("auto", ini_get('mbstring.detect_order'));
 	}
 }

@@ -269,7 +269,11 @@ function getHttpHeaders($targetUrl, $user=null, $pass=null) {
  * Returns the non-escaped URL or path or filename or whatever
  */
 function login_decodeQueryParam($array, $name) {
-	return rawurldecode($array[$name]);
+	$v = rawurldecode($array[$name]);
+	if (mb_detect_encoding($v, 'UTF-8, ISO-8859-1')=='ISO-8859-1') {
+		trigger_error("The value of parameter '$name' ($v) is not valid UTF-8", E_USER_ERROR);
+	}
+	return $v;
 }
 
 /**
