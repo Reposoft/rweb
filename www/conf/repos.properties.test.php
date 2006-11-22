@@ -351,6 +351,17 @@ class TestReposProperties extends UnitTestCase {
 		}
 	}
 	
+	function testExclamtionMarkInPrompt() {
+		// in interactive mode in bash, exclamation marks must be escaped
+		// but \ does not work (it is stored with the log message) so the best option is probably "$'\x21'"
+		// but, hopefully we don't run in interactive mode
+		$out = null;
+		$return = null;
+		$v = exec('echo test!ing', $out, $return);
+		$this->assertEqual(0, $return);
+		$this->assertEqual('test!ing', $v);
+	}
+	
 	function testCommandLineEncoding() {
 		
 		// plain ascii
