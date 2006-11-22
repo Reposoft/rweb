@@ -88,6 +88,7 @@ public abstract class ReposWorkingCopyFactory {
 		try {
 			// here's the only chance we have to synchronize the actual config-dir with the configuration model
 			clientAdapter.setConfigDirectory(configurationArea);
+			logger.info("Using custom configuration area {}", configurationArea);
 		} catch (SVNClientException e) {
 			throw new ConfigurationStateException("Subversion client did not accept configuration area " + runtimeConfigurationArea, e);
 		}
