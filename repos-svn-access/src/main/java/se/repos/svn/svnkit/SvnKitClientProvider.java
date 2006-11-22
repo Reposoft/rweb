@@ -31,9 +31,9 @@ import se.repos.svn.config.ConfigurationStateException;
 import se.repos.svn.config.RuntimeConfigurationArea;
 
 /**
- * Initializes and creates a {@link http://tmate.org/svn/ SvnKit} client.
+ * Initializes and creates a {@link http://svnkit.com/ SvnKit} client.
  *
- * Note that there should be no compile time references to the tmate classes.
+ * Note that there should be no compile time references to the SvnKit classes, due to licencing issues.
  *
  * @author Staffan Olsson
  * @since 2006-apr-14

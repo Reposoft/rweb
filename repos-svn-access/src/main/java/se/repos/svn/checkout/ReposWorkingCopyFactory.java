@@ -62,10 +62,10 @@ public abstract class ReposWorkingCopyFactory {
 	    // try the pure java library. it can be installed by simply adding the jar.
 		try {
 			client = new SvnKitClientProvider();
-			logger.warn("Using the Tmate SVN library. For commercial use this requires a license. See http://tmate.org/.");
+			logger.warn("Using the SvnKit library. For commercial use this requires a license. See http://svnkit.com/.");
 			return client;
 		} catch (ClientNotAvaliableException e) {
-			logger.info("Tmate SvnKit client library is not available. Is svnkit.jar present?");
+			logger.info("SvnKit client library is not available. Is svnkit.jar present?");
 		}
 		// all alternatives failed
 	    throw new RuntimeException("There is no SVN client avaliable. Tried Javahl and SvnKit.");
