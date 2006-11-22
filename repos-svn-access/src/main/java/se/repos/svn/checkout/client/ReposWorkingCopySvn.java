@@ -260,7 +260,8 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	public boolean isVersioned(File path) throws WorkingCopyAccessException {
 		SVNStatusKind textStatus = this.getSingleStatus(path).getTextStatus();
 		return (textStatus != SVNStatusKind.UNVERSIONED 
-				&& textStatus != SVNStatusKind.IGNORED);
+				&& textStatus != SVNStatusKind.IGNORED
+				&& textStatus != SVNStatusKind.NONE); //does not exist and is not versioned
 	}
 
 	/**

@@ -61,7 +61,8 @@ public class MoveCopyRevertIntegrationTest extends TestCase {
 		assertTrue("The destination file should exist", d.exists());
 		assertTrue("The destination file has local changes", client.hasLocalChanges(d));
 		client.commit(path, "test move done");
-		assertFalse("After commit, there is no trace of original file", client.isVersioned(f) || f.exists());
+		assertFalse("After commit, moved file should be gone", f.exists());
+		assertFalse("After commit, old location should not be versioned", client.isVersioned(f));
 		assertFalse("After commit, destination file is up to date", client.hasLocalChanges(d));
 		client.delete(d);
 		client.commit(path, "test move cleaned");
