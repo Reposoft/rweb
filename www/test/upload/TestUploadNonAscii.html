@@ -27,18 +27,18 @@
 	<td>type</td>
 	<td>usertext</td>
 	<td>
-	My new novel
+	Nüdå på europeiska
 	</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>testfile.txt</td>
+	<td>nüdå.txt</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>message</td>
-	<td>created a new file with the copy-paste functionality</td>
+	<td>Created new file with european characters üåäöÜÅÄÖ</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -62,22 +62,22 @@
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>link=testfile.txt</td>
+	<td>f:n_c3_bcd_c3_a5.txt</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>upload:testfile.txt</td>
+	<td>link=nüdå.txt</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>upload:testfile.txt</td>
+	<td>upload:n_c3_bcd_c3_a5.txt</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>testfile.txt</td>
+	<td>nüdå.txt</td>
 	<td></td>
 </tr>
 <tr>
@@ -89,14 +89,14 @@
 	<td>type</td>
 	<td>usertext</td>
 	<td>
-	My new novel
-	Chapter 1
+	Nüdå på europeiska
+	Hejdå
 	</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>message</td>
-	<td>added a line of contents</td>
+	<td>åhej</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -120,12 +120,12 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>f:testfile.txt</td>
+	<td>f:n_c3_bcd_c3_a5.txt</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>My new novel*Chapter 1</td>
+	<td>Nüdå på europeiska*Hejdå</td>
 	<td></td>
 </tr>
 <tr>
@@ -151,13 +151,13 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>delete:testfile.txt</td>
+	<td>delete:n_c3_bcd_c3_a5.txt</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>message</td>
-	<td>removed TestUploadText file</td>
+	<td>Hejdå</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -171,7 +171,7 @@
 </tr>
 <tr>
 	<td>verifyElementNotPresent</td>
-	<td>link=testfile.txt</td>
+	<td>link=nüdå.txt</td>
 	<td></td>
 </tr>
 </tbody></table>
