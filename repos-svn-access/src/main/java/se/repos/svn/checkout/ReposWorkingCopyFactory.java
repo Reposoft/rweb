@@ -62,13 +62,19 @@ public abstract class ReposWorkingCopyFactory {
 	public static ReposWorkingCopy getClient(CheckoutSettings settings) {
 		ClientProvider clientProvider = getClientProvider();
 		ClientConfiguration clientConfiguration;
+		File defaultConfigurationArea = clientProvider.getDefaultRuntimeConfigurationArea();
 		try {
-			clientConfiguration = clientProvider.getRuntimeConfiguration(
-					clientProvider.getDefaultRuntimeConfigurationArea());
+			clientConfiguration = clientProvider.getRuntimeConfiguration(defaultConfigurationArea);
 		} catch (ConfigurationStateException e) {
 			throw new RuntimeException("The shared configuration for Subversion clients in this user profile is invalid", e);
 		}
 		ISVNClientAdapter clientAdapter = getClientAdapter(clientProvider, settings);
+		try {
+			// configuration area must be set even if it is the default, otherwise an auth folder will be created in base dir
+			clientAdapter.setConfigDirectory(defaultConfigurationArea);
+		} catch (SVNClientException e) {
+			throw new RuntimeException("Subversion client did not accept default configuration area " + defaultConfigurationArea, e);
+		}
 		ReposWorkingCopySvn wc = getNewWorkingCopy(clientAdapter, clientConfiguration, settings);
 		return wc;
 	}
