@@ -149,6 +149,13 @@ class Edit {
 	}
 	
 	/**
+	 * @return the output from the svn command
+	 */
+	function getOutput() {
+		return $this->output;
+	}
+	
+	/**
 	 * @return the revision number that this operation created upon success
 	 */
 	function getCommittedRevision() {
