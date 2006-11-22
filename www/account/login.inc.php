@@ -522,9 +522,9 @@ function login_getMimeType($targetUrl, $revision='HEAD') {
  */
 function login_getMimeTypeProperty($targetUrl, $revision) {
 	$url = $targetUrl.'@'.$revision;
-	$cmd = 'propget svn:mime-type '.escapeArgument($targetUrl);
+	$cmd = 'propget svn:mime-type '.escapeArgument($url);
 	$result = login_svnRun($cmd);
-	if (array_pop($result)) trigger_error("Could not find the file '$targetUrl' in the repository.", E_USER_ERROR );
+	if (array_pop($result)) trigger_error("Could not find the file '$targetUrl' revision $revision in the repository.", E_USER_ERROR );
 	if (count($result) == 0) { // mime type property not set, return default
 		return false;
 	}
