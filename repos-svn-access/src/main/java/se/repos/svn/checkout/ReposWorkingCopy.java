@@ -272,7 +272,9 @@ public interface ReposWorkingCopy extends MandatoryReposOperations {
 	 * <p>
 	 * These settings are shared by all subversion clients for the current user on the local machine.
 	 * 
-	 * @return current subversion runtime configuration
+	 * @return current subversion runtime configuration.
+	 * 	If the runtime configuration requires some kind of initialization,
+	 *  this method makes sure it is initalized before returned.
 	 */
 	public ClientConfiguration getClientConfiguration();
 }

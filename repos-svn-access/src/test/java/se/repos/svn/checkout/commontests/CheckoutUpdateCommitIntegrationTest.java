@@ -126,7 +126,8 @@ public class CheckoutUpdateCommitIntegrationTest extends TestCase {
 	public void testInvalidPassword() {
 		CheckoutSettings settings = new CheckoutSettingsForTest() {
 			public UserCredentials getLogin() {
-				return new ImmutableUserCredentials("test","invalidpassword");
+				//return new ImmutableUserCredentials("test","invalidpassword");
+				return new ImmutableUserCredentials("unknownuser","invalidpassword");
 			}
 		};
 		ReposWorkingCopy client = AllTests.getClient(settings, getName());

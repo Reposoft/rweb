@@ -99,7 +99,7 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	 */
 	public void checkout() throws RepositoryAccessException {
 		configureClient.update(workingCopy.getClientConfiguration());
-		workingCopy.checkout();		
+		workingCopy.checkout();
 	}
 
 	/**

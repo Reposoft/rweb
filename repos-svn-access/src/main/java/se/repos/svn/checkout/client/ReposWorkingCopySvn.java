@@ -21,7 +21,6 @@ import org.tigris.subversion.svnclientadapter.SVNStatusKind;
 import org.tigris.subversion.svnclientadapter.SVNStatusUnversioned;
 import org.tigris.subversion.svnclientadapter.SVNUrl;
 
-import se.repos.svn.ClientProvider;
 import se.repos.svn.RepositoryUrl;
 import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
@@ -38,7 +37,6 @@ import se.repos.svn.checkout.VersionedFolderProperties;
 import se.repos.svn.checkout.VersionedProperties;
 import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.config.ClientConfiguration;
-import se.repos.svn.config.ConfigurationStateException;
 
 /**
  * Uses subclipse {@link subclipse.tigris.org/svnClientAdapter.html svnClientAdapter} to implement the subversion operations
@@ -62,6 +60,12 @@ import se.repos.svn.config.ConfigurationStateException;
  * which has a username and password set using {@link #setUserCredentials(UserCredentials)}.
  * Each instance of this class should be used in one thread only.
  * It seems that all SVN client libraries are non-threadsafe.
+ * <p>
+ * The runtime configuration area, modelled by ClientConfiguration, can not be changed after
+ * instantiation (and there is no equivalent to --config-dir) for operations.
+ * This is because the model (ClientConfiguration) and the config folder must be
+ * kept in sync, and there is no way for the client library to notify the configuration
+ * model that configuration area folder has been changed.
  * <p>
  * Automatically accept SSL certificates when hostnames match, regardless of CA.
  * That is because we don't authenticate using certificates, we only use encrypted transfer.
@@ -95,16 +99,13 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	 * @param conflictHandler pluggable callback behaviour when conflicts are detected
 	 * @see #afterPropertiesSet()
 	 */
-	public ReposWorkingCopySvn(ClientProvider clientProvider, CheckoutSettings settings, ConflictHandler conflictHandler) {
-		// set up
-		this();
-		setClientAdapter(clientProvider.getSvnClient(settings.getLogin()));
-		try {
-			setClientConfiguration(clientProvider.getRuntimeConfiguration());
-		} catch (ConfigurationStateException e) {
-			logger.error("Could not read runtime configuration area settings. Client configuration is unknown.");
-			// until ClientConfiguration is well tested, proceed // throw new RuntimeException("ConfigurationStateException thrown, not handled", e);
-		}
+	public ReposWorkingCopySvn(ISVNClientAdapter clientAdapter, 
+			ClientConfiguration clientConfiguration, 
+			CheckoutSettings settings, 
+			ConflictHandler conflictHandler) {
+		this(); // do required setup
+		setClientAdapter(clientAdapter);
+		setClientConfiguration(clientConfiguration);
 		setCheckoutSettings(settings);
 		setConflictHandler(conflictHandler);
 		afterPropertiesSet();
@@ -709,6 +710,10 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 
 	public ClientConfiguration getClientConfiguration() {
+		// first make sure there is a configuration area
+		// the default client behaviour is to create configuration area on everey operation, even SVN status
+		
+		// now we know that there is configuration, set up 
 		return clientConfiguration;
 	}	
 	

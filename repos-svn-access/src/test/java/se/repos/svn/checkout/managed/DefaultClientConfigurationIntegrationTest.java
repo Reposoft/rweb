@@ -28,6 +28,7 @@ public class DefaultClientConfigurationIntegrationTest extends TestCase {
 	
 	public void testCheckout() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SVNClientException, RepositoryAccessException {
 		System.out.println("---------- " + super.getName() + " ----------");
+		
 		CheckoutSettings settings = new CheckoutSettingsForTest();
 		ManagedWorkingCopy c = new ManagedWorkingCopy(settings);
 		
@@ -71,6 +72,20 @@ public class DefaultClientConfigurationIntegrationTest extends TestCase {
 		// It looks like setConfigDirectory does not work very well.
 		// It uses the default config directory instead.
 		//assertTrue("Should have created a standard config file in " + configFolder, config.exists());
+	}
+	
+	/**
+	 * This is a tricky scenario:
+	 * SVN client has not been used on this machine before. We want to do a first checkout
+	 * of a working copy, but we don't want the client to store authentication
+	 * (certificate or password).
+	 * <p>
+	 * Can't do checkout directly, because then there is no configuration, and the default is to store passwords.
+	 * Can't change configuration, because this library does not know how to create configuration files.
+	 */
+	public void testCheckout_ConfigNew_NoSaveAuth() {
+		
+		
 	}
 	
 	public void testUnversionedContentsWithIgnores() throws RepositoryAccessException, IOException {

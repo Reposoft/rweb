@@ -42,6 +42,7 @@ public class DefaultAuthenticationReply implements ISVNPromptUserPassword {
 	public boolean prompt(String realm, String username, boolean maySave) {
 		// assuming that the connection was attempted with UserCredentials, a prompt means that they were invalid
 		// this interface does not allow checked exceptions here, so we'll just reject the prompt
+		logger.warn("Returned 'false' for password prompt");
 		return false;
 	}
 	
@@ -74,6 +75,7 @@ public class DefaultAuthenticationReply implements ISVNPromptUserPassword {
 
 	public boolean userAllowedSave() {
 		// don't know what this does, but since we don't return a username here we don't want it saved
+		logger.warn("Returned 'false' for userAllowedSave");
 		return false;
 	}
 

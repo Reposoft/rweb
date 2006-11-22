@@ -41,6 +41,14 @@ public interface ClientProvider {
 	 * Supplies a read-write model of the runtime configuration area for the client.
 	 * 
 	 * Applications trust that changing this configuration affects the behaviours of the initialized clients.
+	 * <p>
+	 * The funny thing with ISVNClientAdapter is that you can
+	 * {@link ISVNClientAdapter#setConfigDirectory(java.io.File) setConfigDirectory}
+	 * but not read the setting.
+	 * Thus, to change configuration directory it must be set in the client adapter,
+	 * and at the same time reflected with a new ClientConfiguration.
+	 * The way to do that is to initialize the client with a custom
+	 * 
 	 * 
 	 * @return The configuration for the subversion client
 	 */

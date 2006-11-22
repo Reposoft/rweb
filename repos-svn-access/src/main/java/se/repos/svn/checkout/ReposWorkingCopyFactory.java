@@ -4,12 +4,15 @@ package se.repos.svn.checkout;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 
 import se.repos.svn.ClientProvider;
 import se.repos.svn.ClientProvider.ClientNotAvaliableException;
 import se.repos.svn.checkout.client.ConflictHandler;
 import se.repos.svn.checkout.client.ConflictHandlerStandard;
 import se.repos.svn.checkout.client.ReposWorkingCopySvn;
+import se.repos.svn.config.ClientConfiguration;
+import se.repos.svn.config.ConfigurationStateException;
 import se.repos.svn.javahl.JavahlClientProvider;
 import se.repos.svn.svnkit.SvnKitClientProvider;
 
@@ -29,14 +32,26 @@ public abstract class ReposWorkingCopyFactory {
 	
 	private static ClientProvider client = null;
 	
+	//private static File notDefaultConfigurationArea = null;
+	
     /**
      * Creates a working copy instance and sets a {@link ConflictHandler} to it.
-     * @param settings
-     * @return
+     * @param settings User session (url and authentication)
+     * @return New client, based on the client adapter returned from ClientProvider.
      */
 	public static ReposWorkingCopy getClient(CheckoutSettings settings) {
+		ClientProvider clientProvider = getClientProvider();
+		ISVNClientAdapter clientAdapter = clientProvider.getSvnClient(settings.getLogin());
+		ClientConfiguration clientConfiguration;
+		try {
+			clientConfiguration = clientProvider.getRuntimeConfiguration();
+		} catch (ConfigurationStateException e) {
+			// TODO auto-generated
+			throw new RuntimeException("ConfigurationStateException thrown, not handled", e);
+		}
 		ReposWorkingCopySvn wc = new ReposWorkingCopySvn(
-				getClientProvider(), 
+				clientAdapter,
+				clientConfiguration,
 				settings,
 				new ConflictHandlerStandard());
 		logger.info("Created new Repos working copy instance.");

@@ -87,7 +87,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		try {
 			// note that the file does not exist yet
 			client.hasLocalChanges(created);
-			fail("Should be invalid to ask for status on a path that does not exist AND is not versioned");
+			fail("Should be invalid to ask for status on a path that does not exist AND is not versioned (check with isVersioned first)");
 		} catch (ResourceNotVersionedException e) { 
 			assertEquals("The exception should state the invalid path", created.getCanonicalPath(), e.getPath().getCanonicalPath());
 		}
