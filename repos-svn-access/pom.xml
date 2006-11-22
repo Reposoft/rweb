@@ -22,12 +22,12 @@
     <dependency>
       <groupId>ch.ethz.ganymed</groupId>
       <artifactId>ganymed-ssh2</artifactId>
-      <version>build209</version>
+      <version>build210</version>
     </dependency>
     <dependency>
-      <groupId>org.tigris.subclipse</groupId>
-      <artifactId>svnant-svnclientadapter</artifactId>
-      <version>1.1.0-RC2</version>
+      <groupId>org.tigris.subversion</groupId>
+      <artifactId>svnClientAdapter</artifactId>
+      <version>2850</version>
     </dependency>
     <dependency>
       <groupId>org.tigris.subversion</groupId>
@@ -35,16 +35,16 @@
       <version>1.4.2</version>
     </dependency>
     <dependency>
-      <groupId>org.tmate</groupId>
-      <artifactId>javasvn</artifactId>
-      <version>1.0.4</version>
+      <groupId>com.svnkit</groupId>
+      <artifactId>svnkit</artifactId>
+      <version>1.1.0</version>
       <!-- only needed where javahl does not work. never redistribute. -->
       <scope>test</scope>
     </dependency>
     <dependency>
-    	<groupId>ubique</groupId>
+    	<groupId>ch.ubique</groupId>
     	<artifactId>inieditor</artifactId>
-    	<version>r2</version>
+    	<version>r4</version>
     </dependency>
     <!-- testing -->
     <dependency>
