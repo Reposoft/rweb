@@ -4,6 +4,7 @@ package se.repos.svn.javahl;
 
 import java.io.File;
 
+import org.tigris.subversion.javahl.SVNClient;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
@@ -26,9 +27,20 @@ public class JavahlClientProvider implements ClientProvider {
 	}
 	
 	public ISVNClientAdapter getSvnClient() {
+		File auth = new File("auth");
+		boolean authRemove = !auth.exists();
+		
         ISVNClientAdapter svnClient;
 		svnClient = SVNClientAdapterFactory.createSVNClient(
 				JhlClientAdapterFactory.JAVAHL_CLIENT);
+		
+		// the javahl client factory, new SVNClient(), creates an 'auth' folder in base dir for some reason
+		if (authRemove && auth.exists()) {
+			new File(auth, "svn.simple").delete();
+			new File(auth, "svn.ssl.server").delete();
+			new File(auth, "svn.username").delete();
+			auth.delete();
+		}
         
         if (svnClient == null) {
         	throw new RuntimeException("The Javahl client reports that it is avaliable, but it could not be created.");
@@ -39,6 +51,12 @@ public class JavahlClientProvider implements ClientProvider {
 
 	public ISVNClientAdapter getSvnClient(UserCredentials login) {
 		ISVNClientAdapter svnClient = getSvnClient();
+		try {
+			svnClient.setConfigDirectory(RuntimeConfigurationArea.getDefaultConfigFolder());
+		} catch (SVNClientException e) {
+			// TODO auto-generated
+			throw new RuntimeException("SVNClientException thrown, not handled", e);
+		}
 		svnClient.setUsername(login.getUsername());
 		svnClient.setPassword(login.getPassword());
 		return svnClient;
