@@ -623,8 +623,8 @@ function _escapeArgumentNix($arg) {
 	$arg = str_replace('"','\"', $arg);
 	$arg = str_replace('$','\$', $arg);
 	$arg = str_replace('`','\`', $arg);
-	// On SuSE ! is a metacharacter in strings
-	$arg = str_replace('!','\!', $arg);
+	// ! is a metacharacter in strings, but only in interactive mode
+	//$arg = str_replace('!','\!', $arg);
 	return '"'.$arg.'"'; // The quotes are very important because they escape many characters that are not escaped here
 	// #&;`|*?~<>^()[]{}$\, \x0A  and \xFF. ' and "
 }
