@@ -506,7 +506,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	protected boolean isSameFile(File original, File fromClient) {
 		// this works in non-windows and with pure java
 		if (original.getPath().charAt(1)!=':' || 
-				client instanceof org.tigris.subversion.svnclientadapter.javasvn.JavaSvnClientAdapter) {
+				client instanceof org.tigris.subversion.svnclientadapter.svnkit.SvnKitClientAdapter) {
 			return original.getPath().contains(fromClient.getPath());
 		}
 		// native library on windows seems to return absolute paths and represent >8 char names differently

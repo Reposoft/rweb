@@ -38,43 +38,38 @@ public class DefaultAuthenticationReply implements ISVNPromptUserPassword {
 		return Reject;
 	}
 	
+	// this seems to be the prompt for a password
 	public boolean prompt(String realm, String username, boolean maySave) {
 		// assuming that the connection was attempted with UserCredentials, a prompt means that they were invalid
 		// this interface does not allow checked exceptions here, so we'll just reject the prompt
 		return false;
 	}
 	
-	public String askQuestion(String realm, String question,
-			boolean showAnswer, boolean maySave) {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#askQuestion not implemented yet");
-		}
-		return null;
-	}
-
-	public boolean askYesNo(String realm, String question, boolean yesIsDefault) {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#askYesNo not implemented yet");
-		}
+	// this seems to be the prompt for a username
+	public boolean promptUser(String realm, String username, boolean maySave) {
+		logger.error("Method DefaultAuthenticationReply#promptUser not implemented. Returning false.");
 		return false;
 	}
-
+	
 	public String getPassword() {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#getPassword not implemented yet");
-		}
+		logger.error("Method DefaultAuthenticationReply#getPassword not implemented. Returning null.");
 		return null;
 	}
 	
 	public String getUsername() {
-		if (true) {
-			throw new UnsupportedOperationException(
-					"Method DefaultAuthenticationReply#getUsername not implemented yet");
-		}
+		logger.error("Method DefaultAuthenticationReply#getUsername not implemented. Returning null.");
 		return null;
+	}
+	
+	public String askQuestion(String realm, String question,
+			boolean showAnswer, boolean maySave) {
+		logger.error("Method DefaultAuthenticationReply#askQuestion not implemented. Returing null.");
+		return null;
+	}
+
+	public boolean askYesNo(String realm, String question, boolean yesIsDefault) {
+		logger.error("Method DefaultAuthenticationReply#askYesNo not implemented. Returning false.");
+		return false;
 	}
 
 	public boolean userAllowedSave() {

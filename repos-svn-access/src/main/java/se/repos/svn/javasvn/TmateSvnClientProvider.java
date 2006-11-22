@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
-import org.tigris.subversion.svnclientadapter.javasvn.JavaSvnClientAdapterFactory;
+import org.tigris.subversion.svnclientadapter.svnkit.SvnKitClientAdapterFactory;
 
 import se.repos.svn.ClientProvider;
 import se.repos.svn.UserCredentials;
@@ -43,7 +43,7 @@ public class TmateSvnClientProvider implements ClientProvider {
 
 	public TmateSvnClientProvider() throws ClientNotAvaliableException {
 		try {
-            JavaSvnClientAdapterFactory.setup();
+            SvnKitClientAdapterFactory.setup();
         } catch (SVNClientException e) {
         	throw new ClientNotAvaliableException("Tmate JavaSVN is not available or is already registered.", e);
         }
@@ -52,7 +52,7 @@ public class TmateSvnClientProvider implements ClientProvider {
 	public ISVNClientAdapter getSvnClient() { 
         ISVNClientAdapter svnClient;
         try {
-        	svnClient = SVNClientAdapterFactory.createSVNClient(JavaSvnClientAdapterFactory.JAVASVN_CLIENT);
+        	svnClient = SVNClientAdapterFactory.createSVNClient(SvnKitClientAdapterFactory.SVNKIT_CLIENT);
         } catch (NoClassDefFoundError e) {
         	throw new RuntimeException("The JavaSVN library is not present. Add 'javasvn.jar' to classpath and retry.");
         }
