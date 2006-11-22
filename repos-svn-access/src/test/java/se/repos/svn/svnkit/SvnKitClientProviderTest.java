@@ -18,14 +18,14 @@ import java.io.File;
 
 import junit.framework.TestCase;
 import se.repos.svn.ClientProvider.ClientNotAvaliableException;
-import se.repos.svn.svnkit.TmateSvnClientProvider;
+import se.repos.svn.svnkit.SvnKitClientProvider;
 
-public class TmateSvnClientProviderTest extends TestCase {
+public class SvnKitClientProviderTest extends TestCase {
 
 	public void testGetRuntimeConfigurationArea() {
-		TmateSvnClientProvider clientProvider;
+		SvnKitClientProvider clientProvider;
 		try {
-			clientProvider = new TmateSvnClientProvider();
+			clientProvider = new SvnKitClientProvider();
 		} catch (ClientNotAvaliableException e) {
 			// the SvnKit library is not required
 			return;
