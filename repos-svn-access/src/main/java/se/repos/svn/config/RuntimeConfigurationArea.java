@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tigris.subversion.svnclientadapter.AbstractClientAdapter;
 
 import se.repos.svn.SvnIgnorePattern;
@@ -19,14 +21,27 @@ import se.repos.svn.config.file.ServersFile;
  * 
  * Contains the logic to decide where to store settings (which folder and which file).
  * Does not support windows registry.
+ * <p>
+ * This implementation assumes that a standard SVN client has created the runtime
+ * configuratin area before configuration operations are attempted.
+ * This class never creates configuration files, only changes them.
+ * <p>
+ * If configuration is invalid when read, RuntimeExceptions will be thrown
+ * (same as for unexpected IOErrors). To avoid unchecked errors, make sure that the constructor
+ * is called with a configuration area that is already created, because then
+ * validation is done immediately and exceptions are declared. After that it is
+ * assumed that configuration is only changed using this instance, so further
+ * validation should not be required.
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$
  */
 public class RuntimeConfigurationArea implements ClientConfiguration {
 	
-	private ConfigFile config;
-	private ServersFile servers;
+	protected static final Logger logger = LoggerFactory.getLogger(RuntimeConfigurationArea.class);
+	
+	private File folder;
+	private boolean validated = false;
 	
 	private static final String DELIMITER = "\\s+";
 	
@@ -60,19 +75,104 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 	 * @throws ConfigurationStateException 
 	 */
 	public RuntimeConfigurationArea(File configFolder) throws ConfigurationStateException {
-		File c = new File(configFolder, "config");
-		File s = new File(configFolder, "servers");
+		if (configFolder.exists()) {
+			validate(configFolder);
+		}
+		this.folder = configFolder;
+	}
+	
+	/**
+	 * Validate current configureation, if not validated already.
+	 * @throws ConfigurationStateException if not valid
+	 */
+	void validate() throws ConfigurationStateException {
+		if (!validated) validate(getFolder());
+	}
+
+	/**
+	 * Validate current configuration, even if validated flag is true
+	 * @param configFolder Folder that should exist and look like a standard svn runtime configuration area
+	 * @throws ConfigurationStateException if it is not valid
+	 */
+	private void validate(File configFolder) throws ConfigurationStateException {
+		if (!configFolder.exists()) throw new ConfigurationStateException(
+				"Subversion configuration area " + configFolder + " does not exist. " +
+				"Has the subversion client been run with this folder as ---config-dir yet?");
+		if (!configFolder.isDirectory()) throw new ConfigurationStateException("Coniguration area " + configFolder + " is not a folder");
+		// do the check that is never done in the getters
+		File c = getConfigFile(configFolder);
+		File s = getServersFile(configFolder);
 		if (!c.exists()) throw new ConfigurationStateException("File 'config' not found in runtime configuration area folder " + configFolder);
 		if (!s.exists()) throw new ConfigurationStateException("File 'servers' not found in runtime configuration area folder " + configFolder);
-		
+		// run the validation of the specific files
 		try {
-			this.config = new ConfigFile(c);
-			this.servers = new ServersFile(s);
+			this.getConfig(c);
+			this.getServers(s);
+		} catch (Throwable e) {
+			throw new ConfigurationStateException("Invalid configuration area " + configFolder, e);
+		}
+		// ok. normally we expect that validation is only needed once.
+		validated = true;
+	}
+
+	/**
+	 * @return loaded and validated 'config' file from current runtime configuration area
+	 */
+	private ConfigFile getConfig() {
+		try {
+			validate(); // never return config that has not been validated
+			return getConfig(getConfigFile(getFolder()));
+		} catch (ConfigurationStateException e) {
+			throw new RuntimeException("Could not load Subversion 'config' file", e);
+		}
+	}
+	
+	private ConfigFile getConfig(File configFile) throws ConfigurationStateException {
+		try {
+			return new ConfigFile(configFile);
 		} catch (IOException e) {
-			throw new ConfigurationStateException("Could not read config files from runtime configuration area " + configFolder);
+			throw new RuntimeException("Error reading Subversion 'config' file", e);
 		}
 	}
 
+	/**
+	 * @return loaded and validated 'servers' file from current runtime configuration area
+	 */
+	private ServersFile getServers() {
+		try {
+			validate(); // never return config that has not been validated
+			return getServers(getServersFile(getFolder()));
+		} catch (ConfigurationStateException e) {
+			throw new RuntimeException("Could not load Subversion 'servers' file", e);
+		}
+	}
+
+	private ServersFile getServers(File serversFile) throws ConfigurationStateException {
+		try {
+			return new ServersFile(serversFile);
+		} catch (IOException e) {
+			throw new RuntimeException("Error reading Subversion 'servers' file", e);
+		}
+	}	
+	
+	/**
+	 * @return runtime configuration area
+	 */
+	private File getFolder() {
+		return folder;
+	}
+	
+	private File getServersFile(File configFolder) {
+		return new File(configFolder, "servers");
+	}
+
+	private File getConfigFile(File configFolder) {
+		return new File(configFolder, "config");
+	}
+
+	/**
+	 * from interface
+	 */
 	public void addGlobalIgnore(SvnIgnorePattern pattern) {
 		setGlobalIgnores(getGlobalIgnores(), pattern);
 	}
@@ -89,29 +189,29 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 			if (patterns[i].equals(added)) add = false;
 		}
 		if (add) list.append(" ").append(added.getValue());
-		config.setGlobalIgnores(list.substring(1));
+		getConfig().setGlobalIgnores(list.substring(1));
 	}
 	
 	public SvnIgnorePattern[] getGlobalIgnores() {
-		String e = config.getGlobalIgnores();
+		String e = getConfig().getGlobalIgnores();
 		if (e == null) return new SvnIgnorePattern[0];
 		return SvnIgnorePattern.array(Arrays.asList(e.split(DELIMITER)));
 	}
 
 	public void setProxySettings(SvnProxySettings proxySettings) {
-		servers.setProxySettings(ServersFile.GROUP_GLOBAL, proxySettings);
+		getServers().setProxySettings(ServersFile.GROUP_GLOBAL, proxySettings);
 	}
 
 	public SvnProxySettings getProxySettings() {
-		return servers.getProxySettings(ServersFile.GROUP_GLOBAL);
+		return getServers().getProxySettings(ServersFile.GROUP_GLOBAL);
 	}	
 	
 	public void setStorePasswords(boolean authCache) {
-		config.setStorePasswords(RuntimeConfigurationArea.getBooleanValue(authCache));
+		getConfig().setStorePasswords(RuntimeConfigurationArea.getBooleanValue(authCache));
 	}
 	
 	public boolean isStorePasswords() {
-		return RuntimeConfigurationArea.getBoolean(config.getStorePasswords());
+		return RuntimeConfigurationArea.getBoolean(getConfig().getStorePasswords());
 	}
 	
 	/**
@@ -120,8 +220,7 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 	 */
 	public static File getConfigFolder() {
 		File f = new File(getAppdataFolderForUser(), getSubversionConfigFolderName());
-		if (!f.exists() || !f.isDirectory()) throw new RuntimeException(f + " is not a valid configuration folder");
-		// TODO what to do if they don't exist?
+		logger.info("Default subversion configuration is located in {}", f.getAbsolutePath());
 		return f;
 	}
 	
@@ -174,5 +273,5 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 	private static boolean isWindows() {
 		return AbstractClientAdapter.isOsWindows();
 	}
-	
+
 }

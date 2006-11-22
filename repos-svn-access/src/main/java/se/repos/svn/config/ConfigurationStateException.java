@@ -9,5 +9,9 @@ public class ConfigurationStateException extends Exception {
 	public ConfigurationStateException(String message) {
 		super(message);
 	}
+	
+	public ConfigurationStateException(String message, Throwable e) {
+		super(message, e);
+	}
 
 }

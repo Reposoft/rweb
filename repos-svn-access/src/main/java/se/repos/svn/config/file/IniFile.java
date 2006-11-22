@@ -20,7 +20,7 @@ import ch.ubique.inieditor.IniEditor;
  * Reads and writes ini-file with sections.
  * 
  * Not thread safe.
- * 
+ * <p>
  * Warning: It looks like the IniEditor library fails silently on parser errors, 
  * for example if a value occurs twice in the same section.
  *
@@ -31,11 +31,21 @@ public class IniFile {
 
 	private File configFile;
 
-	public IniFile() {
+	/**
+	 * for testing
+	 */
+	IniFile() {
 		super();
 	}
 
+	/**
+	 * Sets file location and validates that the file exists and is writable.
+	 * @param iniFile
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public IniFile(File iniFile) throws FileNotFoundException, IOException {
+		this();
 		if (!iniFile.exists()) throw new FileNotFoundException(iniFile.getAbsolutePath());
 		if (!iniFile.isFile()) throw new IOException(iniFile.getAbsolutePath() + " is not a file");
 		if (!iniFile.canRead()) throw new IOException(iniFile.getAbsolutePath() + " is not readable");
@@ -48,8 +58,7 @@ public class IniFile {
 		try {
 			file.load(configFile);
 		} catch (IOException e) {
-			// TODO auto-generated
-			throw new RuntimeException("IOException thrown, not handled", e);
+			throw new RuntimeException("Error loading configuration file " + configFile, e);
 		}
 		return file;
 	}
@@ -58,8 +67,7 @@ public class IniFile {
 		try {
 			file.save(configFile);
 		} catch (IOException e) {
-			// TODO auto-generated
-			throw new RuntimeException("IOException thrown, not handled", e);
+			throw new RuntimeException("Error writing configuration file " + configFile, e);
 		}
 	}
 	
@@ -79,11 +87,9 @@ public class IniFile {
 			reader.close();
 			fr.close();
 		} catch (FileNotFoundException e) {
-			// TODO auto-generated
-			throw new RuntimeException("FileNotFoundException thrown, not handled", e);
+			throw new RuntimeException("Could not find configuration file " + getConfigFile(), e);
 		} catch (IOException e) {
-			// TODO auto-generated
-			throw new RuntimeException("IOException thrown, not handled", e);
+			throw new RuntimeException("Could not read lines from configuration file " + getConfigFile(), e);
 		}
 		return lines;
 	}
@@ -100,8 +106,7 @@ public class IniFile {
 			bw.close();
 			fw.close();
 		} catch (IOException e) {
-			// TODO auto-generated
-			throw new RuntimeException("IOException thrown, not handled", e);
+			throw new RuntimeException("Could not write lines to configuration file " + getConfigFile(), e);
 		}
 	}
 	

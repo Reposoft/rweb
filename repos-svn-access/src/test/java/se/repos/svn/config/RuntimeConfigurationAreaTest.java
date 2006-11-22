@@ -121,14 +121,44 @@ public class RuntimeConfigurationAreaTest extends TestCase {
 	}
 
 	public void testGetConfigFolder() {
+		// default config area folder -- don't know if it exists or not
 		// assuming that the user running this test has used an svn client
-		File area = RuntimeConfigurationArea.getConfigFolder();
+		File area = null;
+		try {
+			area = RuntimeConfigurationArea.getConfigFolder();
+		} catch (Exception e) {
+			if (!area.exists()) fail();
+			fail();
+			throw new RuntimeException(); // can not happen
+		}
 		assertNotNull(area);
-		assertTrue("The configuration area " + area + " does not exist", area.exists());
+		assertTrue("The configuration area " + area + " does not exist" +
+				" (thist test assumes that an svn client has set up the default area)", area.exists());
 		File c = new File(area, "config");
 		File s = new File(area, "servers");
 		assertTrue("Should find a config file in " + area, c.exists());
 		assertTrue("Should find a servers file in " + area, s.exists());
+	}
+	
+	public void testNewConfigInNonExistingFolder() {
+		File testarea = TestFolder.getNew();
+		testarea.delete();
+		try {
+			new RuntimeConfigurationArea(testarea);
+		} catch (ConfigurationStateException e) {
+			fail("Should not be a problem to instantiate config in non existing folder. " +
+					"Allow SVN client to create the folder before config operations are attemtped. Got: " + e);
+		}
+	}
+	
+	public void testNewConfigInEmptyFolder() {
+		File testarea = TestFolder.getNew();
+		try {
+			new RuntimeConfigurationArea(testarea);
+			fail("We accept non existing config folders, but not empty config folders (svn clients create the folder with contents)");
+		} catch (ConfigurationStateException e) {
+			// expected
+		}
 	}
 
 }

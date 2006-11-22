@@ -108,7 +108,7 @@ public class SvnKitClientProvider implements ClientProvider {
 	 * Creates default repos-svn-access configuration instance
 	 */
 	public ClientConfiguration getRuntimeConfiguration() throws ConfigurationStateException {
-		return new RuntimeConfigurationArea();
+		return new RuntimeConfigurationArea(getRuntimeConfigurationArea());
 	}	
 
 }

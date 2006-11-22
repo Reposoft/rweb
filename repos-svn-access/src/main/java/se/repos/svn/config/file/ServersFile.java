@@ -27,6 +27,7 @@ public class ServersFile extends IniFile {
 	protected static final String GROUP_GROUPS = "groups";
 	
 	/**
+	 * Sets the file location and validates current contents.
 	 * @param iniFile The 'servers' file in the runtime configuration area
 	 * @throws IOException If the file can not be read
 	 * @throws ConfigurationStateException If the file is empty or contents are not valid configuration

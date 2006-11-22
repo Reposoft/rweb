@@ -28,7 +28,7 @@ public class ConfigFile extends IniFile {
 	private static final String AUTH_STORE_PASSWORDS_DEFAULT = "yes";
 	
 	/**
-	 * 
+	 * Sets file location and validates current contents.
 	 * @param iniFile The file in the runtime configuration area
 	 * @throws IOException If the file can not be read
 	 * @throws ConfigurationStateException If the file is empty or contents are not valid configuration
