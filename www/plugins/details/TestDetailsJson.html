@@ -4,18 +4,12 @@
 <title>TestDetailsJson</title>
 </head>
 <body>
-<p>/open/details/ should return the details of a file or folder, for use in page decoration</p>
+<p>/open/details/ should return the details of a file, if URL is a file, or the details of every entry in a folder, if URL is a folder (just like the svn command).
+TODO include properties. TODO include lock status.</p>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
 <tr><td rowspan="1" colspan="3">Test file details as JSON</td></tr>
 </thead><tbody>
-<!-- can not be accessed from repository button
-<tr>
-	<td>assertEval</td>
-	<td>top.setUp(this)</td>
-	<td></td>
-</tr>
- -->
 <tr>
 	<td>open</td>
 	<td>/repos/open/details/?target=/demoproject/trunk/public/xmlfile.xml</td>
@@ -44,6 +38,11 @@
 <tr>
 	<td>verifyTextPresent</td>
 	<td>"properties":{</td><!-- array of properties, possibly empty -->
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/repos/open/details/?target=/demoproject/trunk/public/</td>
 	<td></td>
 </tr>
 </tbody></table>
