@@ -6,7 +6,6 @@
 	<classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-simple/1.0.1/slf4j-simple-1.0.1.jar" sourcepath="M2_REPO/org/slf4j/slf4j-simple/1.0.1/slf4j-simple-1.0.1-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/ch/ubique/inieditor/r4/inieditor-r4.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/tigris/subversion/javahl/1.4.2/javahl-1.4.2.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/easymock/easymock/2.2/easymock-2.2.jar" sourcepath="M2_REPO/org/easymock/easymock/2.2/easymock-2.2-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/svnkit/svnkit/1.1.0/svnkit-1.1.0.jar" sourcepath="M2_REPO/com/svnkit/svnkit/1.1.0/svnkit-1.1.0-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/junit/junit/4.1/junit-4.1.jar" sourcepath="M2_REPO/junit/junit/4.1/junit-4.1-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/ch/ethz/ganymed/ganymed-ssh2/build210/ganymed-ssh2-build210.jar" sourcepath="M2_REPO/ch/ethz/ganymed/ganymed-ssh2/build210/ganymed-ssh2-build210-sources.jar"/>

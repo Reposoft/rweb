@@ -155,7 +155,7 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 	}
 	
 	public void testAddRecursiveWithDefaultIgnores() throws IOException, ConflictException, RepositoryAccessException {
-		File f = new File(path, "tobeadded" + System.currentTimeMillis());
+		File f = new File(path, getName() + System.currentTimeMillis());
 		f.mkdir();
 		File folder = new File(f, "newfolder");
 		folder.mkdir();
@@ -182,6 +182,9 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		assertTrue("Folders ignored by default can be added explicitly", client.isVersioned(tempFolder));
 		assertTrue("Files ignored by default can be added explicitly", client.isVersioned(tempFile));
 		client.commit("Explicit add needed for names matching the global ignores pattern");
+		// clean up
+		client.delete(f);
+		client.commit(getName() + " clean");
 	}
 	
 }

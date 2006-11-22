@@ -76,7 +76,7 @@ public class MoveCopyRevertIntegrationTest extends TestCase {
 		File d0 = new File(path, "temp folder " + System.currentTimeMillis());
 		d0.mkdir();
 		client.add(d0);
-		client.commit(path, "Created new file that will soon be changed, and a folder that will be deleted");
+		client.commit(path, getName() + " Created new file that will soon be changed, and a folder that will be deleted");
 		Writer w = new BufferedWriter(new FileWriter(f));
 		w.write("Changed contents");
 		w.flush();
@@ -109,6 +109,7 @@ public class MoveCopyRevertIntegrationTest extends TestCase {
 		}
 		// clean up
 		client.delete(f);
+		client.delete(d0);
 		client.commit(path, "Deleted test file");
 	}
 	
