@@ -11,7 +11,7 @@ import se.repos.svn.checkout.client.ConflictHandler;
 import se.repos.svn.checkout.client.ConflictHandlerStandard;
 import se.repos.svn.checkout.client.ReposWorkingCopySvn;
 import se.repos.svn.javahl.JavahlClientProvider;
-import se.repos.svn.svnkit.TmateSvnClientProvider;
+import se.repos.svn.svnkit.SvnKitClientProvider;
 
 /**
  * A factory to instantiate a default ReposWorkingCopy implementatoin,
@@ -61,7 +61,7 @@ public abstract class ReposWorkingCopyFactory {
 		}
 	    // try the pure java library. it can be installed by simply adding the jar.
 		try {
-			client = new TmateSvnClientProvider();
+			client = new SvnKitClientProvider();
 			logger.warn("Using the Tmate SVN library. For commercial use this requires a license. See http://tmate.org/.");
 			return client;
 		} catch (ClientNotAvaliableException e) {

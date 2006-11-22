@@ -39,9 +39,9 @@ import se.repos.svn.config.RuntimeConfigurationArea;
  * @since 2006-apr-14
  * @version $Id$
  */
-public class TmateSvnClientProvider implements ClientProvider {
+public class SvnKitClientProvider implements ClientProvider {
 
-	public TmateSvnClientProvider() throws ClientNotAvaliableException {
+	public SvnKitClientProvider() throws ClientNotAvaliableException {
 		try {
             SvnKitClientAdapterFactory.setup();
         } catch (SVNClientException e) {
