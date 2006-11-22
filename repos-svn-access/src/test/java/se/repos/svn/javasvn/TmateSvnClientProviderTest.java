@@ -18,6 +18,7 @@ import java.io.File;
 
 import junit.framework.TestCase;
 import se.repos.svn.ClientProvider.ClientNotAvaliableException;
+import se.repos.svn.svnkit.TmateSvnClientProvider;
 
 public class TmateSvnClientProviderTest extends TestCase {
 

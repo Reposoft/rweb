@@ -11,7 +11,7 @@ import se.repos.svn.checkout.client.ConflictHandler;
 import se.repos.svn.checkout.client.ConflictHandlerStandard;
 import se.repos.svn.checkout.client.ReposWorkingCopySvn;
 import se.repos.svn.javahl.JavahlClientProvider;
-import se.repos.svn.javasvn.TmateSvnClientProvider;
+import se.repos.svn.svnkit.TmateSvnClientProvider;
 
 /**
  * A factory to instantiate a default ReposWorkingCopy implementatoin,
