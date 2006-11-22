@@ -76,6 +76,7 @@ public class CheckoutUpdateCommitIntegrationTest extends TestCase {
 				"(except that it might have contents that are not versioned yet)", client.hasLocalChanges());
 		
 		CheckoutSettingsForTest.tearDown();
+		assertNoAuthGarbage();
 	}
 	
 	public void testAdministrativeFolder() throws RepositoryAccessException {
@@ -100,6 +101,7 @@ public class CheckoutUpdateCommitIntegrationTest extends TestCase {
 		assertNotNull("Should find an administrative folder in the checked out contents", svnFolder);
 		
 		CheckoutSettingsForTest.tearDown();
+		assertNoAuthGarbage();
 	}
 	
 	public void testCheckoutToNonEmptyFolder() throws IOException {
@@ -121,6 +123,7 @@ public class CheckoutUpdateCommitIntegrationTest extends TestCase {
 		}
 		
 		CheckoutSettingsForTest.tearDown();
+		assertNoAuthGarbage();
 	}
 	
 	public void testInvalidPassword() {
@@ -141,7 +144,19 @@ public class CheckoutUpdateCommitIntegrationTest extends TestCase {
 			e.printStackTrace();
 			fail("Should throw the more specific error InvalidCredentialsException");
 		}
+		assertNoAuthGarbage();
+	}
+	
+	private void assertNoAuthGarbage() {
+		// see
+		// http://svn.haxx.se/dev/archive-2006-11/0100.shtml
+		// http://svn.haxx.se/dev/archive-2006-10/0773.shtml
 		
+		// seems like javahl wants to create an auth folder now and then
+		File f = new File("auth");
+		if (f.exists()) {
+			fail(getName() + " created a folder in basedir: " + f.getAbsolutePath());
+		}
 	}
 
 	// helper method for testcase
