@@ -18,7 +18,7 @@ import org.tigris.subversion.svnclientadapter.SVNClientException;
 Tried a versioning operation on an unversioned resource
 svn: 'C:\Documents and Settings\solsson\Lokala inställningar\Temp\folder\nonversioned.txt' is not under version control
  * </pre>
- * And like this in JavaSVN:
+ * And like this in SvnKit:
  * <pre>svn: 'C:\DOCUME~1\solsson\LOKALA~1\Temp\folder\nonversioned.txt' is not under version control</pre>
  * 
  * @author Staffan Olsson (solsson)

@@ -45,7 +45,7 @@ public abstract class ReposWorkingCopyFactory {
 	
 	/**
 	 * Creates the javahl client if available.
-	 * Last resort is the JavaSVN client, that needs a license for redistribution.
+	 * Last resort is the SvnKit client, that needs a license for redistribution.
 	 * @throws RuntimeException if there is no client library available. This is considered a deployment issue.
 	 */
 	private static ClientProvider getClientProvider() throws RuntimeException {
@@ -65,9 +65,9 @@ public abstract class ReposWorkingCopyFactory {
 			logger.warn("Using the Tmate SVN library. For commercial use this requires a license. See http://tmate.org/.");
 			return client;
 		} catch (ClientNotAvaliableException e) {
-			logger.info("Tmate JavaSVN client library is not available. Is javasvn.jar present?");
+			logger.info("Tmate SvnKit client library is not available. Is svnkit.jar present?");
 		}
 		// all alternatives failed
-	    throw new RuntimeException("There is no SVN client avaliable. Tried Javahl and JavaSVN.");
+	    throw new RuntimeException("There is no SVN client avaliable. Tried Javahl and SvnKit.");
 	}
 }

@@ -14,7 +14,7 @@ import org.tigris.subversion.svnclientadapter.SVNClientException;
 Attempting restricted operation for modified resource
 svn: 'C:\Documents and Settings\solsson\Lokala inställningar\Temp\folder\to be deleted.txt' has local modifications
  * </pre>
- * And like this in JavaSVN:
+ * And like this in SvnKit:
  * <pre>svn: 'to be deleted.txt' has local modifications</pre>
  *
  * @author Staffan Olsson (solsson)

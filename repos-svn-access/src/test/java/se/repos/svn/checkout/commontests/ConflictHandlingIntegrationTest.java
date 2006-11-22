@@ -61,7 +61,7 @@ public class ConflictHandlingIntegrationTest extends TestCase {
 			conflictInformation = e.getConflicts()[0];
 		}
 		// verify the conflicting file
-		// using canonicalPath because seems like javahl reports the full path in windows, and tmatesvn reports short folder names like "DOCUME~1"
+		// using canonicalPath because seems like javahl reports the full path in windows, and SvnKit reports short folder names like "DOCUME~1"
 		assertEquals("ConflictInformation should report the path of the versioned file", 
 				f2.getCanonicalPath(), conflictInformation.getTargetPath().getCanonicalPath());
 		

@@ -31,7 +31,7 @@ public class ResourceHasLocalChangesExceptionTest extends TestCase {
 		}
 	}
 	
-	public void testIdentifyJavaSVN() {
+	public void testIdentifySvnKit() {
 		String message = "svn: 'to be deleted.txt' has local modifications";
 		try {
 			ResourceHasLocalChangesException.identify(new SVNClientException(message));

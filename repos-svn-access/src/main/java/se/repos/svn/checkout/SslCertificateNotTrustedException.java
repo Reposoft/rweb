@@ -19,7 +19,7 @@ svn: PROPFIND request failed on '/testrepo/test/trunk/repos-svn-access'
 svn: PROPFIND of '/testrepo/test/trunk/repos-svn-access': Server certificate verification failed: issuer is not trusted (https://localhost)
  * </pre>
  * 
- * JavaSVN accepts this error siletly and proceeds with the transaction.
+ * SvnKit accepts this error siletly and proceeds with the transaction.
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$

@@ -31,7 +31,7 @@ import se.repos.svn.config.ConfigurationStateException;
 import se.repos.svn.config.RuntimeConfigurationArea;
 
 /**
- * Initializes and creates a {@link http://tmate.org/svn/ JavaSVN} client.
+ * Initializes and creates a {@link http://tmate.org/svn/ SvnKit} client.
  *
  * Note that there should be no compile time references to the tmate classes.
  *
@@ -45,7 +45,7 @@ public class TmateSvnClientProvider implements ClientProvider {
 		try {
             SvnKitClientAdapterFactory.setup();
         } catch (SVNClientException e) {
-        	throw new ClientNotAvaliableException("Tmate JavaSVN is not available or is already registered.", e);
+        	throw new ClientNotAvaliableException("Tmate SvnKit is not available or is already registered.", e);
         }
 	}
 	
@@ -54,7 +54,7 @@ public class TmateSvnClientProvider implements ClientProvider {
         try {
         	svnClient = SVNClientAdapterFactory.createSVNClient(SvnKitClientAdapterFactory.SVNKIT_CLIENT);
         } catch (NoClassDefFoundError e) {
-        	throw new RuntimeException("The JavaSVN library is not present. Add 'javasvn.jar' to classpath and retry.");
+        	throw new RuntimeException("The SvnKit library is not present. Add 'svnkit.jar' to classpath and retry.");
         }
         if (svnClient == null) {
         	throw new RuntimeException("There is no SVN client available.");
@@ -100,7 +100,7 @@ public class TmateSvnClientProvider implements ClientProvider {
 			// TODO auto-generated
 			throw new RuntimeException("InvocationTargetException thrown, not handled", e);
 		}
-		if (folder==null) throw new RuntimeException("Could not get configuration area folder from JavaSVN");
+		if (folder==null) throw new RuntimeException("Could not get configuration area folder from SvnKit");
 		return (File) folder;
 	}
 	

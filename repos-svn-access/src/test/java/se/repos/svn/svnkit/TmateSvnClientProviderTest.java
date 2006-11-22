@@ -27,11 +27,11 @@ public class TmateSvnClientProviderTest extends TestCase {
 		try {
 			clientProvider = new TmateSvnClientProvider();
 		} catch (ClientNotAvaliableException e) {
-			// the JavaSVN library is not required
+			// the SvnKit library is not required
 			return;
 		}
 		File area = clientProvider.getRuntimeConfigurationArea();
-		System.out.println("JavaSVN retuned config folder: " + area.getAbsolutePath());
+		System.out.println("SvnKit retuned config folder: " + area.getAbsolutePath());
 		// assuming that the test system has a configuration area
 		assertNotNull("Should return configuration area from client lib", area);
 		assertTrue("Folder should exist", area.exists() && area.isDirectory());

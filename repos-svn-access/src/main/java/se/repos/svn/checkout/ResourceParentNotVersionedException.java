@@ -18,7 +18,7 @@ Det går inte att hitta sökvägen.
 svn: Can't open file 'C:\Documents and Settings\solsson\Lokala inställningar\Temp\TestReposSvnAccess24336dir\testAddNotRecursive1162545488103\.svn\entries': Det går inte att hitta sökvägen.
  * </pre>
  * 
- * But it looks like JavaSVN reports this as
+ * But it looks like SvnKit reports this as
  * <pre>svn: 'C:\DOCUME~1\solsson\LOKALA~1\Temp\TestReposSvnAccess30374dir\d1\d2' is not under version control</pre>
  * on the actual folder. Calls for some custom logic.
  * 

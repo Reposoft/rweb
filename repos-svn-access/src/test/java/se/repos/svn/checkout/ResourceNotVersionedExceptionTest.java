@@ -31,7 +31,7 @@ public class ResourceNotVersionedExceptionTest extends TestCase {
 		}
 	}
 	
-	public void testIdentifyJavaSVN() {
+	public void testIdentifySvnKit() {
 		String message = "svn: '/tmp/file' is not under version control";
 		try {
 			ResourceNotVersionedException.identify(new SVNClientException(message));

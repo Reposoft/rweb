@@ -269,13 +269,13 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	private ISVNStatus getSingleStatus(File path) {
 		ISVNStatus status = null;
 		try {
-			// If path is not inside a versioned folder, javahl returns SVNStatusUnversioned and JavaSVN says 'not versioned'
+			// If path is not inside a versioned folder, javahl returns SVNStatusUnversioned and SvnKit says 'not versioned'
 			try {
 				status = this.getStatusOneLine(path);
 			} catch (SVNClientException e) {
-				WorkingCopyAccessException.handle(e); // unversioned -> ResourceNotVersioned with JavaSVN
+				WorkingCopyAccessException.handle(e); // unversioned -> ResourceNotVersioned with SvnKit
 			}
-		} catch (ResourceNotVersionedException re) { // catch the JavaSVN exception, which says the invalid path is the original path, but it is allowed to ask status on an unversioned file
+		} catch (ResourceNotVersionedException re) { // catch the SvnKit exception, which says the invalid path is the original path, but it is allowed to ask status on an unversioned file
 			File parent = path.getParentFile();
 			try {
 				this.getStatusOneLine(parent);
@@ -576,7 +576,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	/**
 	 * Mandatory notify lsitener that provides logging and conflict detection.
 	 * 
-	 * Don't throw exceptions from the ISVNNotifyListener methods. They'll only be silently caught in the JavaSVN lib.
+	 * Don't throw exceptions from the ISVNNotifyListener methods. They'll only be silently caught in the SvnKit lib.
 	 */
 	private class ConflictNotifyListener implements NotifyListener {
 		private String currentCommand;
