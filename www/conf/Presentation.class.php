@@ -81,12 +81,6 @@ class Presentation extends Smarty {
 	
 	// constructor
 	function Presentation() {
-		// enforce singleton rule
-		if (isset($GLOBALS['_presentationInstance'])) {
-			trigger_error("Code error. An attempt was made to create a second page instance", E_USER_ERROR);
-		}
-		$GLOBALS['_presentationInstance'] = $this;
-		
 		$this->caching = CACHING;
 		if (!CACHING) {
 			$this->force_compile = true;
@@ -101,6 +95,12 @@ class Presentation extends Smarty {
 	
 		$this->left_delimiter = LEFT_DELIMITER;
 		$this->right_delimiter = RIGHT_DELIMITER;
+		
+		// enforce singleton rule, but only after delimiters and such things has been configures (otherwise the error template might be invalid)
+		if (isset($GLOBALS['_presentationInstance'])) {
+			trigger_error("Code error. An attempt was made to create a second page instance", E_USER_ERROR);
+		}
+		$GLOBALS['_presentationInstance'] = $this;
 		
 		// register the prefilter
 		$this->register_prefilter('Presentation_useCommentedDelimiters');
