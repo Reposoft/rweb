@@ -125,7 +125,7 @@ public class RuntimeConfigurationAreaTest extends TestCase {
 		// assuming that the user running this test has used an svn client
 		File area = null;
 		try {
-			area = RuntimeConfigurationArea.getConfigFolder();
+			area = RuntimeConfigurationArea.getDefaultConfigFolder();
 		} catch (Exception e) {
 			if (!area.exists()) fail();
 			fail();

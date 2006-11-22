@@ -2,6 +2,8 @@
  */
 package se.repos.svn;
 
+import java.io.File;
+
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
 
@@ -49,10 +51,14 @@ public interface ClientProvider {
 	 * and at the same time reflected with a new ClientConfiguration.
 	 * The way to do that is to initialize the client with a custom
 	 * 
-	 * 
 	 * @return The configuration for the subversion client
 	 */
-	ClientConfiguration getRuntimeConfiguration() throws ConfigurationStateException;
+	ClientConfiguration getRuntimeConfiguration(File runtimeConfigurationArea) throws ConfigurationStateException;
+	
+	/**
+	 * @return The folder that a new svn client from this provider will use for client configuration by default
+	 */
+	File getDefaultRuntimeConfigurationArea();
 	
 	/**
 	 * Exception thrown by initializer if the client can not be created,

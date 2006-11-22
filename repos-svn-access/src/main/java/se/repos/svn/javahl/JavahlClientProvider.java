@@ -2,6 +2,8 @@
  */
 package se.repos.svn.javahl;
 
+import java.io.File;
+
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
@@ -45,8 +47,12 @@ public class JavahlClientProvider implements ClientProvider {
 	/**
 	 * Creates default repos-svn-access configuration instance
 	 */
-	public ClientConfiguration getRuntimeConfiguration() throws ConfigurationStateException {
-		return new RuntimeConfigurationArea();
+	public ClientConfiguration getRuntimeConfiguration(File clientConfigurationFolder) throws ConfigurationStateException {
+		return new RuntimeConfigurationArea(clientConfigurationFolder);
+	}
+
+	public File getDefaultRuntimeConfigurationArea() {
+		return RuntimeConfigurationArea.getDefaultConfigFolder();
 	}
 
 }

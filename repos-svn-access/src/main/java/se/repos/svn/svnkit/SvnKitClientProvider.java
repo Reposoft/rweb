@@ -69,7 +69,7 @@ public class SvnKitClientProvider implements ClientProvider {
 		return svnClient;
 	}
 
-	public File getRuntimeConfigurationArea() {
+	public File getDefaultRuntimeConfigurationArea() {
 		Class tmateFileUtil;
 		try {
 			tmateFileUtil = Class.forName("org.tmatesoft.svn.core.wc.SVNWCUtil");
@@ -107,8 +107,8 @@ public class SvnKitClientProvider implements ClientProvider {
 	/**
 	 * Creates default repos-svn-access configuration instance
 	 */
-	public ClientConfiguration getRuntimeConfiguration() throws ConfigurationStateException {
-		return new RuntimeConfigurationArea(getRuntimeConfigurationArea());
+	public ClientConfiguration getRuntimeConfiguration(File configurationArea) throws ConfigurationStateException {
+		return new RuntimeConfigurationArea(configurationArea);
 	}	
 
 }

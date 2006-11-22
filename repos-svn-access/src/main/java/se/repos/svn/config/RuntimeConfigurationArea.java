@@ -60,14 +60,6 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 		if ("1".equalsIgnoreCase(value)) return true;
 		return false;
 	}
-
-	/**
-	 * Reads configuration from the default subversion user folder
-	 * @throws ConfigurationStateException 
-	 */
-	public RuntimeConfigurationArea() throws ConfigurationStateException {
-		this(getConfigFolder());
-	}
 	
 	/**
 	 * 
@@ -218,7 +210,7 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 	 * ISVNClientAdapter has no method that can report configuration folder, so the logic for that is here.
 	 * @return the default SVN client configuration area for the user
 	 */
-	public static File getConfigFolder() {
+	public static File getDefaultConfigFolder() {
 		File f = new File(getAppdataFolderForUser(), getSubversionConfigFolderName());
 		logger.info("Default subversion configuration is located in {}", f.getAbsolutePath());
 		return f;

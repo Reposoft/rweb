@@ -20,6 +20,7 @@ import se.repos.svn.checkout.VersionedProperties;
 import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.checkout.simple.SimpleWorkingCopy;
 import se.repos.svn.config.ClientConfiguration;
+import se.repos.svn.config.ConfigurationStateException;
 
 /**
  * A basic subversion client, with extra logic for supporting common user operations.
@@ -67,10 +68,35 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	
 	File workingCopyFolder;
 	
+	/**
+	 * Internal initialization
+	 * @param workingCopyFolder the folder to work in
+	 */
+	private ManagedWorkingCopy(File workingCopyFolder) {
+		this.workingCopyFolder = workingCopyFolder;
+	}
+	
+	/**
+	 * Create a working copy with the default runtime configuration (used by all other svn clients)
+	 * @param settings Specifies the user's worksession
+	 */
 	public ManagedWorkingCopy(CheckoutSettings settings) {
+		this(settings.getWorkingCopyFolder());
 		workingCopy = ReposWorkingCopyFactory.getClient(settings);
-		
-		workingCopyFolder = settings.getWorkingCopyFolder();
+	}
+	
+	/**
+	 * Create a working copy with the custom configuration folder.
+	 * The folder can contain {@link ClientConfiguration} specific to this application.
+	 * @param settings Specifies the user's worksession
+	 * @param runtimeConfigurationArea The non-default configuration area.
+	 *  Folder will be created if it does not exist. If the folder exists alreayd, 
+	 *  contents will be validated, to check that it is a valid configuration area.
+	 * @throws ConfigurationStateException If the configuration area's contents are invalid
+	 */
+	public ManagedWorkingCopy(CheckoutSettings settings, File runtimeConfigurationArea) throws ConfigurationStateException {
+		this(settings.getWorkingCopyFolder());
+		workingCopy = ReposWorkingCopyFactory.getClient(settings, runtimeConfigurationArea);
 	}
 
 	public void add(File path) {

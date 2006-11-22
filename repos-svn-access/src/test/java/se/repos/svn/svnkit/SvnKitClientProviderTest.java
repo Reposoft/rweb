@@ -30,7 +30,7 @@ public class SvnKitClientProviderTest extends TestCase {
 			// the SvnKit library is not required
 			return;
 		}
-		File area = clientProvider.getRuntimeConfigurationArea();
+		File area = clientProvider.getDefaultRuntimeConfigurationArea();
 		System.out.println("SvnKit retuned config folder: " + area.getAbsolutePath());
 		// assuming that the test system has a configuration area
 		assertNotNull("Should return configuration area from client lib", area);
