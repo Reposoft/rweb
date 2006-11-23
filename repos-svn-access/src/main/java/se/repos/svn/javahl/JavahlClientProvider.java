@@ -33,6 +33,10 @@ public class JavahlClientProvider implements ClientProvider {
 		}
 	}
 	
+	/**
+	 * Forwarded to getSvnClient with default configuration area,
+	 * which also serves to make sure that configuration is created if missing.
+	 */
 	public ISVNClientAdapter getSvnClient() {
         // config directory must be set even if it is the default, otherwise credentials can't be saved
         return getSvnClient(getDefaultRuntimeConfigurationArea());

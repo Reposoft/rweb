@@ -13,6 +13,7 @@ import se.repos.svn.checkout.ConflictException;
 import se.repos.svn.checkout.ReposWorkingCopy;
 import se.repos.svn.checkout.ReposWorkingCopyFactory;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.checkout.VersionedFileProperties;
 import se.repos.svn.checkout.WorkingCopyAccessException;
 import se.repos.svn.test.CheckoutSettingsForTest;
 
@@ -205,6 +206,37 @@ public class SvnPropertiesIntegrationTest extends TestCase {
 		// theFolder = some name that matches an svn:ignore or global ignore
 		// force add using add(theFolder)
 		// add contents using addNew(theFolder), works even if the folder is already versioned
+	}
+	
+	public void testMimeTypeProperty() throws IOException, ConflictException, RepositoryAccessException {
+		File f = new File(path, getName() + System.currentTimeMillis());
+		f.createNewFile();
+		client.add(f);
+		client.commit(path, getName() + " setup");
+		
+		// read mime type, which should be empty
+		VersionedFileProperties fileProperties = client.getPropertiesForFile(f);
+		assertFalse("Should not have a mime type set", fileProperties.hasMimeType());
+		assertNull("Should be null when property does not exist", fileProperties.getMimeType());
+		
+		// set mime type
+		assertFalse("No changes to the tempfile yet", client.hasLocalChanges(f));
+		fileProperties.setMimeType(new VersionedFileProperties.MimeType("text/plain"));
+		assertTrue("Now we have updated the property", client.hasLocalChanges(f));
+		client.commit(path, "set property svn:mime-type");
+		
+		// read property
+		assertEquals("text/plain", fileProperties.getMimeType().getValue());
+		
+		// remove property
+		fileProperties.setMimeType(null);
+		assertTrue("Mime type should have been removed, which is a local change", client.hasLocalChanges(f));
+		assertFalse("Mime type not set anymore", fileProperties.hasMimeType());
+		
+		// done
+		client.revert(f);
+		client.delete(f);
+		client.commit(path, getName() + "cleanup");
 	}
 	
 }

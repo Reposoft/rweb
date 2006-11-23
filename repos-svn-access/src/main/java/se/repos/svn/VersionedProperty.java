@@ -16,7 +16,7 @@ public interface VersionedProperty {
 	public String getName();
 	
 	/**
-	 * @return the value, which is sometimes a whitespace separated list
+	 * @return the value, which is sometimes a whitespace separated list, null if the property does not exist
 	 */
 	public String getValue();
 	

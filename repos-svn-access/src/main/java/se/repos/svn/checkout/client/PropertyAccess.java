@@ -32,28 +32,59 @@ public class PropertyAccess implements VersionedProperties {
 	public File getPath() {
 		return path;
 	}
+	
+	public boolean hasProperty(String name) {
+		return get(name) != null;
+	}
 
 	public VersionedProperty getProperty(String name) {
+		return get(name);
+	}
+
+	public void setProperty(VersionedProperty prop) {
+		if (prop==null) throw new IllegalArgumentException("Can not set a null property. Use deleteProperty to remove.");
+		if (prop.getName()==null) throw new IllegalArgumentException("Can not set property with name 'null'");
+		if (prop.getName().length()==0) throw new IllegalArgumentException("Can not set property with empty name");
+		if (prop.getValue()==null) throw new IllegalArgumentException("Invalid property: value is null");
 		try {
-			return new PropertyWrapper(client.propertyGet(path, name));
+			client.propertySet(path, prop.getName(), prop.getValue(), false);
+		} catch (SVNClientException e) {
+			WorkingCopyAccessException.handle(e); // offline operation because path is local
+		}
+	}
+	
+	/**
+	 * Non recursive property remove
+	 */
+	public void deleteProperty(String name) {
+		try {
+			client.propertyDel(path, name, false);
+		} catch (SVNClientException e) {
+			WorkingCopyAccessException.handle(e); // offline operation because path is local
+		}
+	}
+	
+	/**
+	 * Translate between svnClientAdapter properties and our propeties
+	 * @param name property name
+	 * @return the value, or null if no value
+	 */
+	private VersionedProperty get(String name) {
+		ISVNProperty prop;
+		try {
+			prop = client.propertyGet(path, name);
 		} catch (SVNClientException e) {
 			WorkingCopyAccessException.handle(e); // offline operation because path is local
 			return null;
 		}
-	}
-
-	public void setProperty(VersionedProperty nameAndValue) {
-		try {
-			client.propertySet(path, nameAndValue.getName(), nameAndValue.getValue(), false);
-		} catch (SVNClientException e) {
-			WorkingCopyAccessException.handle(e);
-		}
+		if (prop == null) return null;
+		return new PropertyWrapper(prop);
 	}
 	
 	private class PropertyWrapper implements VersionedProperty {
 		private ISVNProperty property;
-
-		PropertyWrapper(ISVNProperty property) {
+		
+		private PropertyWrapper(ISVNProperty property) {
 			this.property = property;
 		}
 

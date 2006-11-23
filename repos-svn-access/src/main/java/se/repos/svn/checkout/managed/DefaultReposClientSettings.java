@@ -26,6 +26,14 @@ import se.repos.svn.config.ClientConfiguration;
  * Every client should offer an opportunity to add a file, or folder, to its parent's
  * local ignores instead of adding it.
  * See {@link ReposWorkingCopy#getPropertiesForFolder(java.io.File)}.
+ * <p>
+ * Note that it _is_ a default setting to cache passwords.
+ * For most subversion clients this is recommended.
+ * Use {@link ClientConfiguration#setStorePasswords(boolean)} to disable,
+ * but first make sure that the user accepts that setting first
+ * (has to enter password every time if using svn command),
+ * or use a separate configuration folder for the application
+ * (see {@link ManagedWorkingCopy#ManagedWorkingCopy(se.repos.svn.checkout.CheckoutSettings, java.io.File)}).
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$
