@@ -9,8 +9,13 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 import se.repos.svn.SvnIgnorePattern;
+import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
+import se.repos.svn.checkout.ConflictException;
+import se.repos.svn.checkout.ImmutableUserCredentials;
+import se.repos.svn.checkout.InvalidCredentialsException;
 import se.repos.svn.checkout.RepositoryAccessException;
+import se.repos.svn.config.ClientConfiguration;
 import se.repos.svn.config.ConfigurationStateException;
 import se.repos.svn.test.CheckoutSettingsForTest;
 import se.repos.svn.test.TestFolder;
@@ -62,6 +67,19 @@ public class DefaultClientConfigurationIntegrationTest extends TestCase {
 		assertTrue("Should have created a standard config file in " + configFolder, config.exists());
 	}
 	
+	public void testEmptyConfigFolder() {
+		System.out.println("---------- " + super.getName() + " ----------");
+		
+		File configFolder = TestFolder.getNew();
+		CheckoutSettings settings = new CheckoutSettingsForTest();
+		try {
+			new ManagedWorkingCopy(settings, configFolder);
+			fail("Should have failed because the folder does not contain configuration");
+		} catch (ConfigurationStateException e) {
+			// expected
+		}
+	}
+	
 	/**
 	 * This is a tricky scenario:
 	 * SVN client has not been used on this machine before. We want to do a first checkout
@@ -70,10 +88,42 @@ public class DefaultClientConfigurationIntegrationTest extends TestCase {
 	 * <p>
 	 * Can't do checkout directly, because then there is no configuration, and the default is to store passwords.
 	 * Can't change configuration, because this library does not know how to create configuration files.
+	 * @throws ConfigurationStateException 
+	 * @throws RepositoryAccessException 
+	 * @throws ConflictException 
 	 */
-	public void testCheckout_ConfigNew_NoSaveAuth() {
+	public void testCheckout_ConfigNew_NoSaveAuth() throws ConfigurationStateException, RepositoryAccessException, ConflictException {
+		System.out.println("---------- " + super.getName() + " ----------");
 		
+		File configFolder = TestFolder.getNew();
+		configFolder.delete(); // can't have an empty config folder
 		
+		CheckoutSettings settings = new CheckoutSettingsForTest() {
+			boolean first = true;
+			public UserCredentials getLogin() {
+				if (first) { first = false; return super.getLogin(); };
+				return new ImmutableUserCredentials("test", "");
+			}
+		};
+		ManagedWorkingCopy c = new ManagedWorkingCopy(settings, configFolder);
+		
+		// cache passwords is default, so we want to change it before first checkout
+		ClientConfiguration conf = c.getClientConfiguration();
+		conf.setStorePasswords(false);
+		
+		c.checkout();
+		
+		// get a new client with a changed password
+		assertEquals("Should have a new password in settings now", "", settings.getLogin().getPassword());
+		c = new ManagedWorkingCopy(settings, configFolder);
+		
+		// now update should fail
+		try {
+			c.update();
+			fail("Should have thrown InvalidCredentialsException, proving that it did not store the old password");
+		} catch (InvalidCredentialsException e) {
+			// expected
+		}
 	}
 	
 	public void testUnversionedContentsWithIgnores() throws RepositoryAccessException, IOException {

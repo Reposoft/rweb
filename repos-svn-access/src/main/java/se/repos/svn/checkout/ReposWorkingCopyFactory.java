@@ -64,11 +64,12 @@ public abstract class ReposWorkingCopyFactory {
 	 * @throws ConfigurationStateException
 	 */
 	public static ReposWorkingCopy getClient(CheckoutSettings settings, File runtimeConfigurationArea) throws ConfigurationStateException {
-		ClientProvider clientProvider = getClientProvider();
-		ISVNClientAdapter clientAdapter = clientProvider.getSvnClient(runtimeConfigurationArea);
-		
-		ClientConfiguration clientConfiguration = clientProvider.getRuntimeConfiguration(runtimeConfigurationArea);
+		ClientProvider provider = getClientProvider();
+		// need to create the configuration first, because the location should be validated before the client can create contents
+		ClientConfiguration clientConfiguration = provider.getRuntimeConfiguration(runtimeConfigurationArea);
 		logger.info("Using configuration area {}", runtimeConfigurationArea);
+		// create client. if location had not been validated, client could create contents in invalid locations to (SvnKit does not care)
+		ISVNClientAdapter clientAdapter = provider.getSvnClient(runtimeConfigurationArea);
 		
 		return newWorkingCopy(settings, clientAdapter, clientConfiguration);
 	}

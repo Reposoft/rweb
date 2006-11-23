@@ -64,7 +64,9 @@ public class SvnKitClientProvider implements ClientProvider {
 	public ISVNClientAdapter getSvnClient(File configFolder) {
 		ISVNClientAdapter svnClient = getSvnClient();
 		try {
-			svnClient.setConfigDirectory(configFolder);
+			svnClient.setConfigDirectory(configFolder); // With SvnKit, this creates the contents if they do not exist already
+			// ... which is not really desired behaviour, because it means that the choise of configuration folder must be
+			// validated _before_ this method is called (since it is not validated by the method)
 		} catch (SVNClientException e) {
 			throw new RuntimeException("Subversion client did not accept default configuration area " + configFolder, e);
 		}

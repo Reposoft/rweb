@@ -16,6 +16,34 @@ import junit.framework.TestCase;
 
 public class RuntimeConfigurationAreaTest extends TestCase {
 
+	public void testNonExistingFolder() {
+		File testarea = TestFolder.getNew();
+		testarea.delete();
+		
+		//ClientConfiguration conf = null;
+		RuntimeConfigurationArea conf = null;
+		try {
+			conf = new RuntimeConfigurationArea(testarea);
+		} catch (ConfigurationStateException e) {
+			fail("Should be possible to create a configuration instance for a non-existing folder, but got " + e);
+		}
+		
+		try {
+			conf.isStorePasswords();
+			fail("Should have thrown exception because there is no configuration yet, and only svn clients can create the default");
+		} catch (Exception e) {
+			assertEquals("Runtime exception should be caused by the invalidation",
+					ConfigurationStateException.class, e.getCause().getClass());
+		}
+		
+		try {
+			conf.validate();
+			fail("A call to validate proves that configuration is not OK");
+		} catch (ConfigurationStateException e) {
+			// expected
+		}
+	}
+	
 	public void testGlobalIgnore() throws IOException, ConfigurationStateException {
 		File testarea = TestFolder.getNew();
 		assertTrue(testarea.isDirectory());
