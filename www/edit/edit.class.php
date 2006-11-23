@@ -31,7 +31,6 @@ class Edit {
 	var $args = Array(); // command line arguments, properly escaped and surrounded with quotes if needed
 	var $message; // not escaped
 	var $commitWithMessage = false; // allow for example checkout to run without a -m
-	var $result;
 	var $output; // from exec
 	var $returnval; // from exec
 
@@ -129,9 +128,6 @@ class Edit {
 		$cmd = login_getSvnSwitches().' '.$this->getCommand();
 		$this->output = repos_runCommand('svn', $cmd);
 		$this->returnval = array_pop($this->output);
-		if (count($this->output) > 0) {
-			$this->result = $this->output[count($this->output)-1];
-		}
 	}
 	
 	/**
@@ -142,14 +138,19 @@ class Edit {
 	}
 	
 	/**
-	 * @return the output from the svn command
+	 * Resturns the last line of the command, which usually contains
+	 * the conclusion, like "Committed revision 123"
+	 * @return result of the subversion operation, empty string if it gave no output
 	 */
 	function getResult() {
-		return $this->result;
+		if (count($this->output) > 0) {
+			return $this->output[count($this->output)-1];
+		}
+		return '';
 	}
 	
 	/**
-	 * @return the output from the svn command
+	 * @return the output from the svn command, all lines except the return code
 	 */
 	function getOutput() {
 		return $this->output;
@@ -160,7 +161,7 @@ class Edit {
 	 */
 	function getCommittedRevision() {
 		if ($this->isSuccessful()) {
-			$match = ereg('^[a-zA-Z ]+([0-9]+)', $this->result, $rev);
+			$match = ereg('^[a-zA-Z ]+([0-9]+)', $this->getResult(), $rev);
 			return $rev[1];
 		}
 		return null;

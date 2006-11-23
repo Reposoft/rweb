@@ -29,7 +29,7 @@ class EditTest extends UnitTestCase
 	function testExtractRevision() {
 		$edit = new Edit('test');
 		$this->returnval = true;
-		$edit->result = "Committed revision 107.";
+		$edit->output = array("Committed revision 107.");
 		$this->assertEqual('107', $edit->getCommittedRevision());
 	}
 	
