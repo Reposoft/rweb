@@ -14,6 +14,7 @@ if (isset($target)) {
 }
 
 function doAutomerge($source, $target){
+	$p = new Presentation();
 	$sourceUrl = getRepository().$source;	// http://localhost/LocalRepos/branches/test.xml
 	$targetUrl = getRepository().$target;	// http://localhost/LocalRepos/trunk/
 	$targetFolder = getParent($targetUrl);
@@ -56,10 +57,14 @@ function doAutomerge($source, $target){
 	$merge->addArgUrl($sourceUrl);
 	$merge->addArgPath($temporaryWorkingCopy . basename($target));	// temporaryWorkingCopy/test.xml
 	$merge->execute();
+	$mergeCommand = 'svn ' . $merge->getCommand();
 	$mergeResult = $merge->getOutput();
-	
+
 	// Conflict??
-	
+	if (strpos($mergeResult, 'C') === 0){
+		$p->showError("Can not merge files. " . $mergeResult);
+		exit;
+	}
 	
 	// Automaticly resolve conflict
 	
@@ -68,7 +73,7 @@ function doAutomerge($source, $target){
 	$updatefile = toPath($temporaryWorkingCopy . basename($target));
 	$oldsize = filesize($updatefile);
 	$commit = new Edit('commit');
-	$commit->setMessage('File merged');
+	$commit->setMessage($mergeCommand);
 	$commit->addArgPath($temporaryWorkingCopy);
 	$commit->execute();
 	$commitResult = $commit->getOutput();
@@ -78,18 +83,17 @@ function doAutomerge($source, $target){
 		if ($oldsize != filesize($updatefile)) {
 			exec("echo \"\" >> \"$updatefile\"");
 			$commit = new Edit('commit');
-			$commit->setMessage('File merged');
+			$commit->setMessage($mergeCommand);
 			$commit->addArgPath($temporaryWorkingCopy);
 			$commit->execute();
 			$commitResult = $commit->getOutput();
 		}
 	}
 	
-	echo implode("<BR>", $checkoutResult) . "<BR><BR>";
-	echo implode("<BR>", $logResult) . "<BR><BR>";
-	echo implode("<BR>", $mergeResult) . "<BR><BR>";
-	echo implode("<BR>", $commitResult);
-	$p = new Presentation();
+	//echo implode("<BR>", $checkoutResult) . "<BR><BR>";
+	//echo implode("<BR>", $logResult) . "<BR><BR>";
+	//echo implode("<BR>", $mergeResult) . "<BR><BR>";
+	//echo implode("<BR>", $commitResult);
 	$p->display();
 }
 ?>
