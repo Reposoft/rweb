@@ -33,6 +33,9 @@ public interface ClientProvider {
 	 * 
 	 * This operation does the setup of the client,
 	 * so it should be called once and kept throughout the user's work session.
+	 * <p>
+	 * The client will get the default configuration area location, and it is
+	 * assumed that it can create default contents if that location does not exist.
 	 *
 	 * @return A client ready to do svn operations. Never returns null.
 	 * @throws Runtime exception if the client can not be started.
@@ -42,6 +45,9 @@ public interface ClientProvider {
 	
 	/**
 	 * Provides an initialized svnClient with a specified runtime configuration.
+	 * <p>
+	 * This method also makes sure that default configuration is written to the folder
+	 * if it does not already exist.
 	 *
 	 * @param runtimeConfigurationArea The location of the subversion client confg files.
 	 * @return A client ready to do svn operations, with the specified configuration.

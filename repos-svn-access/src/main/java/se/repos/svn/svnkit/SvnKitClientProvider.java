@@ -40,11 +40,25 @@ import se.repos.svn.config.RuntimeConfigurationArea;
  */
 public class SvnKitClientProvider implements ClientProvider {
 
-	public SvnKitClientProvider() throws ClientNotAvaliableException {
+	private static SvnKitClientProvider provider = null;
+	
+	/**
+	 * Factory method, because SvnKit needs a singleton provider
+	 * @return A ready to use svn client factory
+	 * @throws ClientNotAvaliableException if the client library is can not be initialize
+	 */
+	public static SvnKitClientProvider getProvider() throws ClientNotAvaliableException {
+		// avoid org.tigris.subversion.svnclientadapter.SVNClientException: factory for type svnkit already registered
+		if (provider != null) return provider;
+		provider = new SvnKitClientProvider();
+		return provider;
+	}	
+	
+	private SvnKitClientProvider() throws ClientNotAvaliableException {
 		try {
             SvnKitClientAdapterFactory.setup();
         } catch (SVNClientException e) {
-        	throw new ClientNotAvaliableException("Tmate SvnKit is not available or is already registered.", e);
+        	throw new ClientNotAvaliableException("SvnKit is not available or is already registered.", e);
         }
 	}
 	
@@ -64,9 +78,7 @@ public class SvnKitClientProvider implements ClientProvider {
 	public ISVNClientAdapter getSvnClient(File configFolder) {
 		ISVNClientAdapter svnClient = getSvnClient();
 		try {
-			svnClient.setConfigDirectory(configFolder); // With SvnKit, this creates the contents if they do not exist already
-			// ... which is not really desired behaviour, because it means that the choise of configuration folder must be
-			// validated _before_ this method is called (since it is not validated by the method)
+			svnClient.setConfigDirectory(configFolder); // also creates the contents if they do not exist
 		} catch (SVNClientException e) {
 			throw new RuntimeException("Subversion client did not accept default configuration area " + configFolder, e);
 		}
@@ -113,6 +125,6 @@ public class SvnKitClientProvider implements ClientProvider {
 	 */
 	public ClientConfiguration getRuntimeConfiguration(File configurationArea) throws ConfigurationStateException {
 		return new RuntimeConfigurationArea(configurationArea);
-	}	
+	}
 
 }

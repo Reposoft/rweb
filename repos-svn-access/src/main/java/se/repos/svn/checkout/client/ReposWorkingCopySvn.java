@@ -483,7 +483,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	protected boolean hasLocalChanges(File path, ISVNStatus[] statuses, boolean unversionedMeansModification) {
 		// if the argument path is not versioned we will have one line of result
         if (statuses.length == 1
-        	&& statuses[0].getTextStatus()==SVNStatusKind.UNVERSIONED
+        	&& (statuses[0].getTextStatus()==SVNStatusKind.UNVERSIONED || statuses[0].getTextStatus()==SVNStatusKind.NONE)
         	&& isSameFile(path, statuses[0].getFile())) {
         	throw new ResourceNotVersionedException(path);
         }
@@ -713,11 +713,12 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		return SVNStatusKind.IGNORED.equals(status);
 	}
 
+	/**
+	 * Note that it is up to the users of this class to make sure there is a valid configuration
+	 * before calling this method. Usually that is made sure by doing setConfigDir on the
+	 * client adapter (the client providers should test setConfigDir creates the area when empty).
+	 */
 	public ClientConfiguration getClientConfiguration() {
-		// first make sure there is a configuration area
-		// the default client behaviour is to create configuration area on everey operation, even SVN status
-		
-		// now we know that there is configuration, set up 
 		return clientConfiguration;
 	}	
 	

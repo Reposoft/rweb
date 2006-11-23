@@ -17,15 +17,18 @@ package se.repos.svn.svnkit;
 import java.io.File;
 
 import junit.framework.TestCase;
+import se.repos.svn.ClientProvider;
 import se.repos.svn.ClientProvider.ClientNotAvaliableException;
+import se.repos.svn.config.RuntimeConfigurationArea;
 import se.repos.svn.svnkit.SvnKitClientProvider;
+import se.repos.svn.test.TestFolder;
 
 public class SvnKitClientProviderTest extends TestCase {
 
 	public void testGetRuntimeConfigurationArea() {
 		SvnKitClientProvider clientProvider;
 		try {
-			clientProvider = new SvnKitClientProvider();
+			clientProvider = SvnKitClientProvider.getProvider();
 		} catch (ClientNotAvaliableException e) {
 			// the SvnKit library is not required
 			return;
@@ -36,6 +39,34 @@ public class SvnKitClientProviderTest extends TestCase {
 		assertNotNull("Should return configuration area from client lib", area);
 		assertTrue("Folder should exist", area.exists() && area.isDirectory());
 		assertTrue("Configuration area should contain a 'servers' file", new File(area, "servers").exists());
+		
+		// here we have a chance to test our own method for this
+		// (it is not required that they give the same result, but there is currently no good reason why not)
+		File ourown = RuntimeConfigurationArea.getDefaultConfigFolder();
+		assertEquals("Checking the SvnKit method for resoling config folder agains our own", area, ourown);
+	}
+	
+	public void testCreateDefaultConfiguration() {
+		
+		File configFolder = TestFolder.getNew();
+		configFolder.delete(); // can't have an empty config folder
+		
+		ClientProvider provider;
+		try {
+			provider = SvnKitClientProvider.getProvider();
+		} catch (ClientNotAvaliableException e) {
+			// OK, can't test this if javahl is not available
+			e.printStackTrace();
+			System.out.println("Can not test SvnKit client creation, because SvnKit is not available. " + e);
+			return;
+		}
+		
+		assertFalse("This test should start with a non-existing config area folder", configFolder.exists());
+		provider.getSvnClient(configFolder); // calls setConfigDir
+		assertTrue("After the client is initialized with a custom folder, contents should have been created", configFolder.exists());
+		
+		assertTrue("Should find 'config' file", new File(configFolder, "config").exists());
+		assertTrue("Should find 'servers' file", new File(configFolder, "servers").exists());
 	}
 
 }

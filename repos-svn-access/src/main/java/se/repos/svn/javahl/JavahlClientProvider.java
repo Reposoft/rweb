@@ -16,7 +16,16 @@ import se.repos.svn.config.RuntimeConfigurationArea;
 
 public class JavahlClientProvider implements ClientProvider {
 
-	public JavahlClientProvider() throws ClientNotAvaliableException {
+	private static JavahlClientProvider provider = null;
+
+	public static JavahlClientProvider getProvider() throws ClientNotAvaliableException {
+		// avoid org.tigris.subversion.svnclientadapter.SVNClientException: factory for type svnkit already registered
+		if (provider != null) return provider ;
+		provider = new JavahlClientProvider();
+		return provider;
+	}
+	
+	private JavahlClientProvider() throws ClientNotAvaliableException {
 		try {
 			JhlClientAdapterFactory.setup();
 		} catch (SVNClientException e) {
@@ -40,7 +49,7 @@ public class JavahlClientProvider implements ClientProvider {
 		try {
 			svnClient.setConfigDirectory(configFolder);
 		} catch (SVNClientException e) {
-			throw new RuntimeException("Subversion client did not accept default configuration area " + configFolder, e);
+			throw new RuntimeException("Subversion client did not accept configuration area " + configFolder, e);
 		}
 		
 		// the javahl client factory, new SVNClient(), creates an 'auth' folder in base dir for some reason

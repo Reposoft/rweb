@@ -97,10 +97,11 @@ public abstract class ReposWorkingCopyFactory {
 	 * @throws RuntimeException if there is no client library available. This is considered a deployment issue.
 	 */
 	private static ClientProvider getClientProvider() throws RuntimeException {
-		if (clientProvider!=null) return clientProvider; // javachl can not be initialize twice
+		// don't want to run this exception logic more than necessary
+		if (clientProvider!=null) return clientProvider;
 		// we prefer javahl
 		try {
-			clientProvider = new JavahlClientProvider();
+			clientProvider = JavahlClientProvider.getProvider();
 			logger.info("Using Javahl client library. See license: http://subversion.tigris.org/license-1.html");
 			return clientProvider;
 		} catch (ClientNotAvaliableException e) {
@@ -109,7 +110,7 @@ public abstract class ReposWorkingCopyFactory {
 		}
 	    // try the pure java library. it can be installed by simply adding the jar.
 		try {
-			clientProvider = new SvnKitClientProvider();
+			clientProvider = SvnKitClientProvider.getProvider();
 			logger.warn("Using the SvnKit library. For commercial use this requires a license. See http://svnkit.com/.");
 			return clientProvider;
 		} catch (ClientNotAvaliableException e) {

@@ -126,10 +126,14 @@ public class DefaultClientConfigurationIntegrationTest extends TestCase {
 		}
 	}
 	
-	public void testUnversionedContentsWithIgnores() throws RepositoryAccessException, IOException {
+	public void testUnversionedContentsWithIgnores() throws RepositoryAccessException, IOException, ConfigurationStateException {
 		System.out.println("---------- " + super.getName() + " ----------");
+		
+		File configFolder = TestFolder.getNew();
+		configFolder.delete(); // can't have an empty config folder
+		
 		CheckoutSettings settings = new CheckoutSettingsForTest();
-		ManagedWorkingCopy c = new ManagedWorkingCopy(settings);
+		ManagedWorkingCopy c = new ManagedWorkingCopy(settings, configFolder);
 		
 		// checkout should be the operation that sets default settings in the configuration area
 		c.checkout();

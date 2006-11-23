@@ -183,6 +183,12 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		assertTrue("Files ignored by default can be added explicitly", client.isVersioned(tempFile));
 		client.commit("Explicit add needed for names matching the global ignores pattern");
 		// clean up
+		assertFalse(client.hasLocalChanges(f));
+		assertFalse(client.hasLocalChanges(folder));
+		assertFalse(client.hasLocalChanges(tempFolder));
+		assertFalse(client.hasLocalChanges(tempFile));
+		System.out.println("Need to do an update here, but why is that nessecary?");
+		client.update(); // why is this needed?
 		client.delete(f);
 		client.commit(getName() + " clean");
 	}
