@@ -94,7 +94,8 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	/**
 	 * Complete initialization of the client class for one working copy with one user.
 	 * 
-	 * @param clientProvider Used to get the svnClientAdapter and the {@link ClientConfiguration}.
+	 * @param clientAdapter The subversion client library instance
+	 * @param clientConfiguration The runtime configuration area that the clientAdapter uses
 	 * @param settings for the work session, such as the username and password for online operations.
 	 *  Note that username and password can not be changed once the client has been instantiated.
 	 * @param conflictHandler pluggable callback behaviour when conflicts are detected

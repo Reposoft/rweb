@@ -55,8 +55,8 @@ import se.repos.svn.config.ConfigurationStateException;
  * 
  * @author Staffan Olsson (solsson)
  * @version $Id$
- * @see SimpleWorkingCopy for a more automated client
- * @see ReposWorkingCopy for documentation of the standard methods
+ * @see SimpleWorkingCopy A more automated client
+ * @see ReposWorkingCopy Documentation of the standard methods
  */
 public class ManagedWorkingCopy implements ReposWorkingCopy {
 
@@ -90,7 +90,7 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	 * The folder can contain {@link ClientConfiguration} specific to this application.
 	 * @param settings Specifies the user's worksession
 	 * @param runtimeConfigurationArea The non-default configuration area.
-	 *  Folder will be created if it does not exist. If the folder exists alreayd, 
+	 *  Folder will be created if it does not exist. If the folder exists already, 
 	 *  contents will be validated, to verify that it really is configuration area.
 	 * @throws ConfigurationStateException If the configuration area folder exists, but contents are invalid
 	 */

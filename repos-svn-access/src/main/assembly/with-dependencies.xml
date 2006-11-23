@@ -14,10 +14,13 @@ But currently there is a limitation:
             <directory>target/classes</directory>
             <outputDirectory>/</outputDirectory>
         </fileSet>
-        <!-- local dependencies -->
+        <!-- local dependencies don't work, because they can not be unpacked, but we want the license files -->
         <fileSet>
             <directory>lib</directory>
             <outputDirectory>/</outputDirectory>
+			<includes>
+				<include>*LICENSE*</include>
+			</includes>
         </fileSet>
     </fileSets>
     <dependencySets>
