@@ -36,8 +36,13 @@ public class CheckoutSettingsForTest extends AbstractCheckoutSettings {
 
 	// the repository to integration test in. tried in array order.
 	public static final String[] REPOSITORIES = new String[] {
-		"https://localhost/testrepo",
+		"http://localhost/testrepo",
 		"http://test.repos.se/testrepo"
+	};
+	
+	// some tests require HTTPS repository
+	public static final String[] REPOSITORIES_HTTPS = new String[] {
+		"https://localhost/testrepo"
 	};
 	
 	/**
@@ -63,21 +68,24 @@ public class CheckoutSettingsForTest extends AbstractCheckoutSettings {
 	
 	private UserCredentials userCredentials = new ImmutableUserCredentials(USERNAME, PASSWORD);
 	
-	private static String getRepository() {
-		for (int i = 0; i < REPOSITORIES.length; i++) {
+	/**
+	 * Gets first existing URL from a list of candidate repositories.
+	 */
+	private static String getRepository(String[] list) {
+		for (int i = 0; i < list.length; i++) {
 			try {
-				URL u = new URL(REPOSITORIES[i]);
+				URL u = new URL(list[i]);
 				try {
 					u.openConnection().connect();
-					System.out.println("Repository "+REPOSITORIES[i]+" is available. Will be used for integration tests.");
+					System.out.println("Repository "+list[i]+" is available. Will be used for integration tests.");
 				} catch (javax.net.ssl.SSLHandshakeException e) {
-					System.out.println("Repository "+REPOSITORIES[i]+" is available. Certificate must be accepted by the SVN client.");
+					System.out.println("Repository "+list[i]+" is available. Certificate must be accepted by the SVN client.");
 				}
 				return u.toString();
 			} catch (MalformedURLException e) {
-				throw new RuntimeException("Repository "+REPOSITORIES[i]+" is invalid", e);
+				throw new RuntimeException("Repository "+list[i]+" is invalid", e);
 			} catch (IOException e) {
-				System.out.println("Repository "+REPOSITORIES[i]+" is not available, trying next one. Got: " + e.getMessage());
+				System.out.println("Repository "+list[i]+" is not available, trying next one. Got: " + e.getMessage());
 			}
 		}
 		throw new RuntimeException("None of the repositories in REPOSITORIES are available. Can not do integraiton tests.");
@@ -85,10 +93,19 @@ public class CheckoutSettingsForTest extends AbstractCheckoutSettings {
 	
 	/**
 	 * @param projectName identifier for project, will be used as folder name
-	 * @param workingCopyDirectory the root for the working copy, corresponding to {@link #getCheckoutUrl()}
 	 */
 	public CheckoutSettingsForTest() {
-		super(getRepository() + "/" + PROJECT_NAME + "/trunk/" + TEST_FOLDER, 
+		this(false);
+	}
+	
+	/**
+	 * @param projectName identifier for project, will be used as folder name
+	 * @param needSSL true if an SSL repository is required
+	 *  (with a certificate that matches the hostname, but is not signed by trusted CA)
+	 */
+	public CheckoutSettingsForTest(boolean needSSL) {
+		super(getRepository(needSSL ? REPOSITORIES_HTTPS : REPOSITORIES)
+				+ "/" + PROJECT_NAME + "/trunk/" + TEST_FOLDER, 
 				getEmptyTemporaryDirectory());
 	}
 

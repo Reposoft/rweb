@@ -94,8 +94,9 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	/**
 	 * Complete initialization of the client class for one working copy with one user.
 	 * 
-	 * @param clientProvider Used to get the svnClientAdapter and the {@link ClientConfiguration}
-	 * @param settings for the work session, such as the username and password for online operations
+	 * @param clientProvider Used to get the svnClientAdapter and the {@link ClientConfiguration}.
+	 * @param settings for the work session, such as the username and password for online operations.
+	 *  Note that username and password can not be changed once the client has been instantiated.
 	 * @param conflictHandler pluggable callback behaviour when conflicts are detected
 	 * @see #afterPropertiesSet()
 	 */
@@ -130,8 +131,9 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 		// assuming that the same ISVNPromptUserPassword can be used everywhere
 		this.client.addPasswordCallback(getDefaultAuthenticationReply());
 		// provided username and password is what we use all the time, never asking for new
-		client.setUsername(settings.getLogin().getUsername());
-		client.setPassword(settings.getLogin().getPassword());
+		UserCredentials auth = settings.getLogin();
+		client.setUsername(auth.getUsername());
+		client.setPassword(auth.getPassword());
 	}
 
 	/**
@@ -217,7 +219,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 
 	public void checkout() throws RepositoryAccessException {
 		File path = settings.getWorkingCopyFolder();
-		if (path.list().length > 0) throw new IllegalStateException("Can not check out to " + path + " because the folder is not empty.");
+		if (path.exists() && path.list().length > 0) throw new IllegalStateException("Can not check out to " + path + " because the folder is not empty.");
         logger.info("Checking out {} HEAD recursively to {}", settings.getCheckoutUrl(), settings.getWorkingCopyFolder());
         try {
 			client.checkout(
@@ -555,6 +557,12 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	 */
 	protected void validateWorkingCopyContentsAtClientCreation(File workingCopyFolder, RepositoryUrl checkoutUrl)
 			throws IllegalStateException {
+		if (!workingCopyFolder.exists()) {
+			if (!workingCopyFolder.getParentFile().exists()) {
+				throw new IllegalArgumentException("Can not create working copy in a folder that does not exist: " + workingCopyFolder.getParent());
+			}
+			return; // svn clients can checkout to nonexisting folders
+		}
 		if (workingCopyFolder.list().length == 0) {
         	return; // folder is empty, which is ok
         }

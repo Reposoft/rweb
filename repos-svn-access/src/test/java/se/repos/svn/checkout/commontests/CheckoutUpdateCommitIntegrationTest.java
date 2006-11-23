@@ -129,8 +129,8 @@ public class CheckoutUpdateCommitIntegrationTest extends TestCase {
 	public void testInvalidPassword() {
 		CheckoutSettings settings = new CheckoutSettingsForTest() {
 			public UserCredentials getLogin() {
-				//return new ImmutableUserCredentials("test","invalidpassword");
-				return new ImmutableUserCredentials("unknownuser","invalidpassword");
+				return new ImmutableUserCredentials("test","invalidpassword");
+				//return new ImmutableUserCredentials("unknownuser","invalidpassword");
 			}
 		};
 		ReposWorkingCopy client = AllTests.getClient(settings, getName());
@@ -145,6 +145,18 @@ public class CheckoutUpdateCommitIntegrationTest extends TestCase {
 			fail("Should throw the more specific error InvalidCredentialsException");
 		}
 		assertNoAuthGarbage();
+	}
+	
+	public void testCheckoutCreateFolder() {
+		CheckoutSettings settings = new CheckoutSettingsForTest();
+		File path = settings.getWorkingCopyFolder();
+		path.delete();
+		ReposWorkingCopy client = AllTests.getClient(settings, getName());
+		try {
+			client.checkout();
+		} catch (Exception e) {
+			fail("Should be allowed to check out to a folder that does not exist, as long as the parent folder exists");
+		}
 	}
 	
 	private void assertNoAuthGarbage() {

@@ -25,7 +25,12 @@ import se.repos.svn.UserCredentials;
  * Given the svn {@link http://svnbook.red-bean.com/nightly/en/svn.ref.svn.c.checkout.html checkout}
  * command line syntax, this defines a command<br />
  * <code>svn checkout {@see #getLogin()} {@see #getCheckoutUrl()} {@see #getWorkingCopyDirectory()}.
- *
+ * <p>
+ * Normally settings should never change for a client instance. It is the settings given
+ * at instantiation that will be used throught the lifetime of the client. Things like
+ * the working copy path is naturally difficult to change, but also the user credentials
+ * may be cached per client instance.
+ * 
  * @author Staffan Olsson
  * @since 2006-apr-15
  * @version $Id$

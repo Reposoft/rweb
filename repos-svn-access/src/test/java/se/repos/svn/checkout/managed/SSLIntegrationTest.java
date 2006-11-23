@@ -28,7 +28,7 @@ public class SSLIntegrationTest extends TestCase {
 	 * All we need is an SSL host with a self-signed certificate that matches the host name.
 	 * We don't need an account for this host to test certificate handling.
 	 */
-	public static final String HTTPS_REPOSITORY = "https://www.repos.se/sweden/";
+	public static final String HTTPS_URL = "https://www.repos.se/sweden/";
 	
 	public void testCheckout() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SVNClientException {
 		System.out.println("---------- " + super.getName() + " ----------");
@@ -37,7 +37,7 @@ public class SSLIntegrationTest extends TestCase {
 				return new RepositoryUrl() {
 					public SVNUrl getUrl() {
 						try {
-							return new SVNUrl(HTTPS_REPOSITORY);
+							return new SVNUrl(HTTPS_URL);
 						} catch (MalformedURLException e) {
 							fail(e.getMessage());
 							return null;

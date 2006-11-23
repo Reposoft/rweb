@@ -11,6 +11,9 @@ import se.repos.svn.UserCredentials;
  * 
  * Immutable, so that the client can keep the reference to an instance and
  * be sure that the credentials don't change.
+ * It is common that clients can not handle password change within
+ * the same instance. To change password, create new client settings
+ * and then instantiate a new client.
  * 
  * @version $Id$
  */
