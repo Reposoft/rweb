@@ -40,6 +40,8 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 	
 	protected static final Logger logger = LoggerFactory.getLogger(RuntimeConfigurationArea.class);
 	
+	private static File defaultConfigurationAreaFolder = null;
+	
 	private File folder;
 	private boolean validated = false;
 	
@@ -211,9 +213,11 @@ public class RuntimeConfigurationArea implements ClientConfiguration {
 	 * @return the default SVN client configuration area for the user
 	 */
 	public static File getDefaultConfigFolder() {
-		File f = new File(getAppdataFolderForUser(), getSubversionConfigFolderName());
-		logger.info("Default subversion configuration is located in {}", f.getAbsolutePath());
-		return f;
+		// don't want to do this lookup if it is not requested, and don't want to do it more than once
+		if (defaultConfigurationAreaFolder != null) return defaultConfigurationAreaFolder;
+		defaultConfigurationAreaFolder = new File(getAppdataFolderForUser(), getSubversionConfigFolderName());
+		logger.info("Default subversion configuration is located in {}", defaultConfigurationAreaFolder.getAbsolutePath());
+		return defaultConfigurationAreaFolder;
 	}
 	
 	/**

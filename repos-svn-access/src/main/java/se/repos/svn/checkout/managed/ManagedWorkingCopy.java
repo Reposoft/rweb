@@ -91,8 +91,8 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	 * @param settings Specifies the user's worksession
 	 * @param runtimeConfigurationArea The non-default configuration area.
 	 *  Folder will be created if it does not exist. If the folder exists alreayd, 
-	 *  contents will be validated, to check that it is a valid configuration area.
-	 * @throws ConfigurationStateException If the configuration area's contents are invalid
+	 *  contents will be validated, to verify that it really is configuration area.
+	 * @throws ConfigurationStateException If the configuration area folder exists, but contents are invalid
 	 */
 	public ManagedWorkingCopy(CheckoutSettings settings, File runtimeConfigurationArea) throws ConfigurationStateException {
 		this(settings.getWorkingCopyFolder());

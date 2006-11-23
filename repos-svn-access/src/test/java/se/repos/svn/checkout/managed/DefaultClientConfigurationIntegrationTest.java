@@ -4,19 +4,14 @@ package se.repos.svn.checkout.managed;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
 import junit.framework.TestCase;
-
-import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
-import org.tigris.subversion.svnclientadapter.SVNClientException;
-
 import se.repos.svn.SvnIgnorePattern;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.RepositoryAccessException;
-import se.repos.svn.checkout.client.GetClientAdapter;
+import se.repos.svn.config.ConfigurationStateException;
 import se.repos.svn.test.CheckoutSettingsForTest;
 import se.repos.svn.test.TestFolder;
 
@@ -26,16 +21,14 @@ public class DefaultClientConfigurationIntegrationTest extends TestCase {
 			"temp", "Temp", "TEMP", "~*", "Thumbs.db", ".DS_Store"
 	};
 	
-	public void testCheckout() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SVNClientException, RepositoryAccessException {
+	public void testCheckout() throws ConfigurationStateException, RepositoryAccessException {
 		System.out.println("---------- " + super.getName() + " ----------");
 		
-		CheckoutSettings settings = new CheckoutSettingsForTest();
-		ManagedWorkingCopy c = new ManagedWorkingCopy(settings);
-		
-		// get the client instance and set an empty folder as configuration area
-		ISVNClientAdapter client = GetClientAdapter.from(c.getWorkingCopy());
 		File configFolder = TestFolder.getNew();
-		client.setConfigDirectory(configFolder);
+		configFolder.delete(); // can't have an empty config folder
+		
+		CheckoutSettings settings = new CheckoutSettingsForTest();
+		ManagedWorkingCopy c = new ManagedWorkingCopy(settings, configFolder);
 		
 		// checkout should be the operation that sets default settings in the configuration area
 		c.checkout();
@@ -43,11 +36,7 @@ public class DefaultClientConfigurationIntegrationTest extends TestCase {
 		// now the program restarts and next client is instantiated
 		c = null;
 		// (garbage collect and terminate)
-		c = new ManagedWorkingCopy(settings);
-		// get the client adapter again
-		client = GetClientAdapter.from(c.getWorkingCopy());
-		configFolder = TestFolder.getNew();
-		client.setConfigDirectory(configFolder);
+		c = new ManagedWorkingCopy(settings, configFolder);
 		
 		SvnIgnorePattern[] ignores = c.getClientConfiguration().getGlobalIgnores();
 		Set all = new HashSet();
@@ -65,13 +54,12 @@ public class DefaultClientConfigurationIntegrationTest extends TestCase {
 		
 		// client configuration should be stored in the standard file
 		File config = new File(configFolder, "config");
+		assertTrue("Should have created the custom configuraiton folder" + configFolder, configFolder.exists());
 		File[] configContents = configFolder.listFiles();
 		for (int i=0; i<configContents.length; i++) {
 			System.out.println(configContents[i]);
 		}
-		// It looks like setConfigDirectory does not work very well.
-		// It uses the default config directory instead.
-		//assertTrue("Should have created a standard config file in " + configFolder, config.exists());
+		assertTrue("Should have created a standard config file in " + configFolder, config.exists());
 	}
 	
 	/**

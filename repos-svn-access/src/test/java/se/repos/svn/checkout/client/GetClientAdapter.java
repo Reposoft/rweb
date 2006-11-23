@@ -15,6 +15,11 @@ import se.repos.svn.checkout.ReposWorkingCopy;
  */
 public abstract class GetClientAdapter {
 
+	/**
+	 * Get the current client adapter, can be used to set mock backend.
+	 * @param workingCopy used in tests
+	 * @return the svnClientAdapter client
+	 */
 	public static ISVNClientAdapter from(ReposWorkingCopy workingCopy) {
 		return ((ReposWorkingCopySvn) workingCopy).getClientAdapter();
 	}

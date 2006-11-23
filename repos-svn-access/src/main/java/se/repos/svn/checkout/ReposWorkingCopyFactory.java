@@ -65,12 +65,10 @@ public abstract class ReposWorkingCopyFactory {
 	 */
 	public static ReposWorkingCopy getClient(CheckoutSettings settings, File runtimeConfigurationArea) throws ConfigurationStateException {
 		ClientProvider clientProvider = getClientProvider();
-		ISVNClientAdapter clientAdapter = clientProvider.getSvnClient();
-		// need a config area even if it is the default, because it is required for the working copy
-		File configurationArea = clientProvider.getDefaultRuntimeConfigurationArea();
+		ISVNClientAdapter clientAdapter = clientProvider.getSvnClient(runtimeConfigurationArea);
 		
-		ClientConfiguration clientConfiguration = clientProvider.getRuntimeConfiguration(configurationArea);
-		logger.info("Using custom configuration area {}", configurationArea);
+		ClientConfiguration clientConfiguration = clientProvider.getRuntimeConfiguration(runtimeConfigurationArea);
+		logger.info("Using configuration area {}", runtimeConfigurationArea);
 		
 		return newWorkingCopy(settings, clientAdapter, clientConfiguration);
 	}
