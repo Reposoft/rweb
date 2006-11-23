@@ -18,10 +18,15 @@
 // this page is included from other pages: need to do includes relative to __FILE__
 require_once(dirname(__FILE__).'/repos.properties.php');
 
+if (isRequestService()) {
+	require_once(dirname(dirname(__FILE__)).'/lib/json/json.php');
+	header('Content-type: text/plain');
+} else {
 // don't know why the content type is not correct by default
 //use when the namespace-based validator lib has been replaced by a classbased: header('Content-type: application/xhtml+xml; charset=UTF-8');
 header('Content-type: text/html; charset=utf-8');
 // don't set the content type headers in the HTML, because then we can't change to xhtml+xml later
+}
 
 // --- selfchecks ---
 
@@ -108,7 +113,7 @@ class Presentation extends Smarty {
 	}
 	
 	/**
-	 * Customize smarty's trigger_error
+	 * Customize smarty's trigger_error (for internal use, call showError instead)
 	 */
 	function trigger_error($error_msg) {
 		$this->showError($error_msg);
@@ -127,6 +132,9 @@ class Presentation extends Smarty {
 	 * 	default template file name is [script minus .php]_[locale].html
 	 */
 	function display($resource_name = null, $cache_id = null, $compile_id = null) {
+		if (isRequestService()) {
+			return $this->displayInternal();
+		}
 		// set common head tags
 		$this->assign('head', $this->_getThemeHeadTags());
 		$this->assign('referer', $this->getReferer());
@@ -148,6 +156,16 @@ class Presentation extends Smarty {
 		} else {
 			parent::display($resource_name, $cache_id, $compile_id);
 		}
+	}
+	
+	/**
+	 * Presents the assigned variables as a JSON string, and the entire page as text/plain (see the top of this script file).
+	 * Note that it is standard JSON to escape all forward slashes with a backslash.
+	 */
+	function displayInternal() {
+		$data = $this->get_template_vars();
+		$json = new Services_JSON(); // SERVICES_JSON_LOOSE_TYPE?
+		echo $json->encode($data);
 	}
 	
 	function getDefaultTemplate() {

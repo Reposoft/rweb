@@ -35,6 +35,7 @@ define('REPO_KEY', 'repo');
 define('USERNAME_KEY', 'account');
 define('LOCALE_KEY', 'lang');
 define('THEME_KEY', 'style'); // to match stylesheet switcher
+define('WEBSERVICE_KEY', 'serv'); // if this is =1 we know for sure it is an internal request
 
 // parameter conventions
 define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST
@@ -53,7 +54,14 @@ _denyParam(THEME_KEY);
 //if (isset($_GET[REPO_KEY])) trigger_error()
 if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable magic_quotes"); } // tested in server test
 
-
+/**
+ * @return true if the current request is internal, from a server page,
+ * a web service client or an AJAX page
+ */
+function isRequestService() {
+	return isset($_REQUEST[WEBSERVICE_KEY]) && $_REQUEST[WEBSERVICE_KEY]==1;
+	return isRequestInternal();
+}
 
 // ------ local configuration ------
 

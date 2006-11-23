@@ -253,11 +253,32 @@ function getHttpStatusFromHeader($httpStatusHeader) {
 	}
 }
 
-// abstraction for HTTP operation
+/**
+ * Reads the HTTP response headers for a URL.
+ * For a method that handles parameters, see requestService();
+ */
 function getHttpHeaders($targetUrl, $user=null, $pass=null) {
 	if (substr_count($targetUrl, '/')<3) trigger_error("Can not check headers of $targetUrl, because it is not a valid resource", E_USER_ERROR);
 	$headers = my_get_headers($targetUrl, $user, $pass);
 	return $headers;
+}
+
+// ----- web service requests -----
+
+/**
+ * Does a web service GET request.
+ * Authenticates as the logged in user for the call, if needed.
+ * The response page can call isRequestService() to identify
+ * a request from this method.
+ * 
+ * Same as jquery, $.get("test.cgi", { name: "John", time: "2pm" })
+ * @param String $uri the resource from server root, starting with slash
+ * @param String $jsonParams the parameters to the request, as a JSON string
+ * @param String $host optional, if empty the current host will be used
+ * @return String the reponse, or an integer HTTP status code on error
+ */
+function requestService($uri, $jsonParams, $host='') {
+	// TODO add serv=1
 }
 
 // ----- resource URL retreival functionality -----
