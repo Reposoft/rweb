@@ -27,6 +27,7 @@ import se.repos.svn.checkout.ConflictInformation;
 import se.repos.svn.checkout.NotifyListener;
 import se.repos.svn.checkout.ResourceNotVersionedException;
 import se.repos.svn.checkout.client.ReposWorkingCopySvn;
+import se.repos.svn.test.CheckoutSettingsForTest;
 
 import junit.framework.TestCase;
 
@@ -293,9 +294,13 @@ public class ReposWorkingCopySvnTest extends TestCase {
 		conflictControl.replay();
 		
 		ReposWorkingCopySvn w = new ReposWorkingCopySvn();
-		w.setClientAdapter(client);
+		w.setClientAdapter(client, new CheckoutSettingsForTest());
 		w.setConflictHandler(conflict);
 		w.markConflictResolved(info);
+		
+		infoControl.verify();
+		clientControl.verify();
+		conflictControl.verify();
 	}
 	
 	public void testCatchConflictNotResolvedAtCommit() {

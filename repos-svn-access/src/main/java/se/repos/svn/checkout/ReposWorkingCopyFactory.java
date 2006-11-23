@@ -7,7 +7,6 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
-import org.tigris.subversion.svnclientadapter.SVNClientException;
 
 import se.repos.svn.ClientProvider;
 import se.repos.svn.ClientProvider.ClientNotAvaliableException;
@@ -35,70 +34,61 @@ public abstract class ReposWorkingCopyFactory {
 	
 	private static ClientProvider clientProvider = null;
 	
-	//private static File notDefaultConfigurationArea = null;
-
-	private static ReposWorkingCopySvn getNewWorkingCopy(
-			ISVNClientAdapter clientAdapter, 
-			ClientConfiguration clientConfiguration, 
-			CheckoutSettings settings) {
-		logger.info("Creating new working copy client for path {}", settings.getWorkingCopyFolder());
-		return new ReposWorkingCopySvn(
-				clientAdapter,
-				clientConfiguration,
-				settings,
-				new ConflictHandlerStandard());
-	}
-
-	private static ISVNClientAdapter getClientAdapter(ClientProvider clientProvider, CheckoutSettings settings) {
-		return clientProvider.getSvnClient(settings.getLogin());
-	}
-	
     /**
-     * Creates a working copy instance and sets a {@link ConflictHandler} to it.
+     * Creates a working copy instance
      * @param settings User session (url and authentication)
      * @return New client, based on the client adapter returned from ClientProvider.
      * @throws ConfigurationStateException 
      */
 	public static ReposWorkingCopy getClient(CheckoutSettings settings) {
 		ClientProvider clientProvider = getClientProvider();
+		ISVNClientAdapter clientAdapter = clientProvider.getSvnClient();
+		// need a config area even if it is the default, because it is required for the working copy
+		File configurationArea = clientProvider.getDefaultRuntimeConfigurationArea();
+		
 		ClientConfiguration clientConfiguration;
-		File defaultConfigurationArea = clientProvider.getDefaultRuntimeConfigurationArea();
 		try {
-			clientConfiguration = clientProvider.getRuntimeConfiguration(defaultConfigurationArea);
+			clientConfiguration = clientProvider.getRuntimeConfiguration(configurationArea);
 		} catch (ConfigurationStateException e) {
 			throw new RuntimeException("The shared configuration for Subversion clients in this user profile is invalid", e);
 		}
-		ISVNClientAdapter clientAdapter = getClientAdapter(clientProvider, settings);
-		try {
-			// configuration area must be set even if it is the default, otherwise an auth folder will be created in base dir
-			clientAdapter.setConfigDirectory(defaultConfigurationArea);
-		} catch (SVNClientException e) {
-			throw new RuntimeException("Subversion client did not accept default configuration area " + defaultConfigurationArea, e);
-		}
-		ReposWorkingCopySvn wc = getNewWorkingCopy(clientAdapter, clientConfiguration, settings);
-		return wc;
+		
+		return newWorkingCopy(settings, clientAdapter, clientConfiguration);
 	}
 	
 	/**
-	 * 
+	 * Creates a working copy and a client configuration model for a custom folder
 	 * @param settings
 	 * @param runtimeConfigurationArea
 	 * @return
 	 * @throws ConfigurationStateException
 	 */
 	public static ReposWorkingCopy getClient(CheckoutSettings settings, File runtimeConfigurationArea) throws ConfigurationStateException {
-		File configurationArea = runtimeConfigurationArea;
 		ClientProvider clientProvider = getClientProvider();
+		ISVNClientAdapter clientAdapter = clientProvider.getSvnClient();
+		// need a config area even if it is the default, because it is required for the working copy
+		File configurationArea = clientProvider.getDefaultRuntimeConfigurationArea();
+		
 		ClientConfiguration clientConfiguration = clientProvider.getRuntimeConfiguration(configurationArea);
-		ISVNClientAdapter clientAdapter = getClientAdapter(clientProvider, settings);
-		try {
-			// here's the only chance we have to synchronize the actual config-dir with the configuration model
-			clientAdapter.setConfigDirectory(configurationArea);
-			logger.info("Using custom configuration area {}", configurationArea);
-		} catch (SVNClientException e) {
-			throw new ConfigurationStateException("Subversion client did not accept configuration area " + runtimeConfigurationArea, e);
-		}
-		ReposWorkingCopySvn wc = getNewWorkingCopy(clientAdapter, clientConfiguration, settings);
+		logger.info("Using custom configuration area {}", configurationArea);
+		
+		return newWorkingCopy(settings, clientAdapter, clientConfiguration);
+	}
+	
+	/**
+	 * Instantiates a working copy and sets a {@link ConflictHandler} to it.
+	 * @param settings
+	 * @param clientAdapter
+	 * @param clientConfiguration
+	 * @return
+	 */
+	private static ReposWorkingCopy newWorkingCopy(CheckoutSettings settings, ISVNClientAdapter clientAdapter, ClientConfiguration clientConfiguration) {
+		logger.info("Creating new working copy client for path {}", settings.getWorkingCopyFolder());
+		ReposWorkingCopySvn wc = new ReposWorkingCopySvn(
+				clientAdapter,
+				clientConfiguration,
+				settings,
+				new ConflictHandlerStandard());
 		return wc;
 	}
 	

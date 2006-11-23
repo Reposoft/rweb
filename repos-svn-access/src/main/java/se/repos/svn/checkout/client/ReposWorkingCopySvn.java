@@ -95,7 +95,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	 * Complete initialization of the client class for one working copy with one user.
 	 * 
 	 * @param clientProvider Used to get the svnClientAdapter and the {@link ClientConfiguration}
-	 * @param settings for the work session
+	 * @param settings for the work session, such as the username and password for online operations
 	 * @param conflictHandler pluggable callback behaviour when conflicts are detected
 	 * @see #afterPropertiesSet()
 	 */
@@ -104,7 +104,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 			CheckoutSettings settings, 
 			ConflictHandler conflictHandler) {
 		this(); // do required setup
-		setClientAdapter(clientAdapter);
+		setClientAdapter(clientAdapter, settings);
 		setClientConfiguration(clientConfiguration);
 		setCheckoutSettings(settings);
 		setConflictHandler(conflictHandler);
@@ -122,12 +122,16 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
     
     /**
      * @param client the initialized svn client, must be set before any svn operation
+     * @param settings to get the user credentials used from the start
      */
-	void setClientAdapter(ISVNClientAdapter client) {
+	void setClientAdapter(ISVNClientAdapter client, CheckoutSettings settings) {
 		this.client = client;
 		this.addNotifyListener(conflictNotifyListener);
 		// assuming that the same ISVNPromptUserPassword can be used everywhere
 		this.client.addPasswordCallback(getDefaultAuthenticationReply());
+		// provided username and password is what we use all the time, never asking for new
+		client.setUsername(settings.getLogin().getUsername());
+		client.setPassword(settings.getLogin().getPassword());
 	}
 
 	/**

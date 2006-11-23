@@ -25,7 +25,6 @@ import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.tigris.subversion.svnclientadapter.svnkit.SvnKitClientAdapterFactory;
 
 import se.repos.svn.ClientProvider;
-import se.repos.svn.UserCredentials;
 import se.repos.svn.config.ClientConfiguration;
 import se.repos.svn.config.ConfigurationStateException;
 import se.repos.svn.config.RuntimeConfigurationArea;
@@ -62,10 +61,13 @@ public class SvnKitClientProvider implements ClientProvider {
         return svnClient;
 	}
 
-	public ISVNClientAdapter getSvnClient(UserCredentials login) {
+	public ISVNClientAdapter getSvnClient(File configFolder) {
 		ISVNClientAdapter svnClient = getSvnClient();
-		svnClient.setUsername(login.getUsername());
-		svnClient.setPassword(login.getPassword());
+		try {
+			svnClient.setConfigDirectory(configFolder);
+		} catch (SVNClientException e) {
+			throw new RuntimeException("Subversion client did not accept default configuration area " + configFolder, e);
+		}
 		return svnClient;
 	}
 

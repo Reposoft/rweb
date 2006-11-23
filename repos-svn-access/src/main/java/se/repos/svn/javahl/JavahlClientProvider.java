@@ -4,14 +4,12 @@ package se.repos.svn.javahl;
 
 import java.io.File;
 
-import org.tigris.subversion.javahl.SVNClient;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory;
 import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.tigris.subversion.svnclientadapter.javahl.JhlClientAdapterFactory;
 
 import se.repos.svn.ClientProvider;
-import se.repos.svn.UserCredentials;
 import se.repos.svn.config.ClientConfiguration;
 import se.repos.svn.config.ConfigurationStateException;
 import se.repos.svn.config.RuntimeConfigurationArea;
@@ -27,12 +25,23 @@ public class JavahlClientProvider implements ClientProvider {
 	}
 	
 	public ISVNClientAdapter getSvnClient() {
+        // config directory must be set even if it is the default, otherwise credentials can't be saved
+        return getSvnClient(getDefaultRuntimeConfigurationArea());
+	}
+
+	public ISVNClientAdapter getSvnClient(File configFolder) {
 		File auth = new File("auth");
 		boolean authRemove = !auth.exists();
 		
         ISVNClientAdapter svnClient;
 		svnClient = SVNClientAdapterFactory.createSVNClient(
 				JhlClientAdapterFactory.JAVAHL_CLIENT);
+		
+		try {
+			svnClient.setConfigDirectory(configFolder);
+		} catch (SVNClientException e) {
+			throw new RuntimeException("Subversion client did not accept default configuration area " + configFolder, e);
+		}
 		
 		// the javahl client factory, new SVNClient(), creates an 'auth' folder in base dir for some reason
 		if (authRemove && auth.exists()) {
@@ -47,19 +56,6 @@ public class JavahlClientProvider implements ClientProvider {
         }
         
         return svnClient;
-	}
-
-	public ISVNClientAdapter getSvnClient(UserCredentials login) {
-		ISVNClientAdapter svnClient = getSvnClient();
-		try {
-			svnClient.setConfigDirectory(RuntimeConfigurationArea.getDefaultConfigFolder());
-		} catch (SVNClientException e) {
-			// TODO auto-generated
-			throw new RuntimeException("SVNClientException thrown, not handled", e);
-		}
-		svnClient.setUsername(login.getUsername());
-		svnClient.setPassword(login.getPassword());
-		return svnClient;
 	}
 
 	/**

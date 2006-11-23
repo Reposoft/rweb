@@ -12,6 +12,15 @@ import se.repos.svn.config.ConfigurationStateException;
 
 /**
  * Represents a choice of svn client library, and the initialization logic for it.
+ * 
+ * A client created with {@link #getSvnClient()} uses the default Subversion
+ * configuration for the user profile. It is possible, but not at all nessecary,
+ * to see the configuration of that profile by using {@link #getDefaultRuntimeConfigurationArea()}
+ * and {@link #getRuntimeConfiguration(File)}.
+ * <p>
+ * It is also possible to use a custom client configuration, by creating a File
+ * instance pointing to a folder (non-existing or existing with configuration files)
+ * and then use {@link #getSvnClient(File)} and {@link #getRuntimeConfiguration(File)}.
  *
  * @author Staffan Olsson (solsson)
  * @version $Id$
@@ -32,12 +41,13 @@ public interface ClientProvider {
 	ISVNClientAdapter getSvnClient();
 	
 	/**
-	 * Provides an initialized svnClient with user account to the application.
+	 * Provides an initialized svnClient with a specified runtime configuration.
 	 *
-	 * @param login The intended user's login
-	 * @return A client ready to do svn operations for the user
+	 * @param runtimeConfigurationArea The location of the subversion client confg files.
+	 * @return A client ready to do svn operations, with the specified configuration.
+	 * @see #getRuntimeConfiguration(File) for the corresponding configuration model.
 	 */
-	ISVNClientAdapter getSvnClient(UserCredentials login);
+	ISVNClientAdapter getSvnClient(File runtimeConfigurationArea);
 	
 	/**
 	 * Supplies a read-write model of the runtime configuration area for the client.
@@ -49,7 +59,9 @@ public interface ClientProvider {
 	 * but not read the setting.
 	 * Thus, to change configuration directory it must be set in the client adapter,
 	 * and at the same time reflected with a new ClientConfiguration.
-	 * The way to do that is to initialize the client with a custom
+	 * The preferred way is to initiali<ze the client with a custom configuratoin,
+	 * and then never change it. If it must be changed, the existing client instance
+	 * must be updated at the same time as a new configuration is retrieved from this method.
 	 * 
 	 * @return The configuration for the subversion client
 	 */
