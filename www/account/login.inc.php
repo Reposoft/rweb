@@ -278,6 +278,8 @@ function getHttpHeaders($targetUrl, $user=null, $pass=null) {
  * @return String the reponse, or an integer HTTP status code on error
  */
 function requestService($uri, $jsonParams, $host='') {
+	// TODO add method that does not require URI or host, but only the service path in the webapp
+	// TODO probably it is better to use an array of params
 	// TODO add serv=1
 }
 

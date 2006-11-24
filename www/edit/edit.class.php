@@ -3,7 +3,7 @@
 require_once( dirname(dirname(__FILE__))."/account/login.inc.php" );
 require_once( dirname(dirname(__FILE__))."/plugins/validation/validation.inc.php" );
 
-// shared validation rule
+// shared validation rule to check if the name for a new file or folder is valid
 class NewFilenameRule extends Rule {
 	var $_pathPrefix;
 	function NewFilenameRule($fieldname, $pathPrefix='') {
@@ -25,7 +25,26 @@ class NewFilenameRule extends Rule {
 	}
 }
 
-// the repository write operation class
+/**
+ * Present the page with the results of all Edit->show calls,
+ * where the last Edit's success status decides if the page should say error or done
+ */
+function presentEdit(&$presentation, $nextUrl=null, $headline=null, $result=null) {
+	if (!$nextUrl) {
+		$nextUrl = dirname(getTargetUrl()); // parent only if it's a file
+	}
+	$presentation->assign('nexturl',$nextUrl);	
+	$presentation->enableRedirect();
+	$presentation->display(dirname(__FILE__) . '/edit_done.html');
+}
+
+/**
+ * The repository write operation class, representing an SVN operation and the result.
+ * 
+ * An action might consist of serveral Edit operation. Each operation can present the
+ * results to the 'edit done' smarty template.
+ * If the show() function is never called, this class does not need Presentation.class.php to be imported.
+ */ 
 class Edit {
 	var $operation;
 	var $args = Array(); // command line arguments, properly escaped and surrounded with quotes if needed
@@ -168,32 +187,34 @@ class Edit {
 	}
 	
 	/**
-	 * Write the results to a smarty template
-	 * @param smarty initialized template engine
-	 * @param nextUrl the url to go to after the operation. Should be a folder in the repository. If null, referrer is used.
+	 * Present the result of this operation in the Edit smarty template
+	 *
+	 * @param Smarty $smartyTemplate a template that accepts 'assign'
+	 * @param String $summary a custom summary line for this operation
 	 */
-	function present($smarty, $nextUrl = null) {
-		if (!$nextUrl) {
-			$nextUrl = dirname(getTargetUrl()); // parent only if it's a file
-		}
+	function show(&$smartyTemplate, $summary='') {
 		if (strlen($this->getResult()) > 0) {
-			$smarty->assign('result', $this->getResult());
+			$smartyTemplate->assign('result', $this->getResult());
 		} else {
-			$smarty->assign('result', 'Error. Could not read result for the command: ' . $this->getCommand());
+			$smartyTemplate->assign('result', 'Error. Could not read result for the command: ' . $this->getCommand());
 		}
-		$smarty->assign('nexturl',$nextUrl);
-		$smarty->assign('operation',$this->operation);
-		$smarty->assign('revision',$this->getCommittedRevision());
-		$smarty->assign('successful',$this->isSuccessful());
+		$smartyTemplate->assign('operation',$this->operation);
+		$smartyTemplate->assign('revision',$this->getCommittedRevision());
+		$smartyTemplate->assign('successful',$this->isSuccessful());
 		if (!$this->isSuccessful()) {
-			$smarty->assign('output',implode('<br />', $this->output));
+			$smartyTemplate->assign('output',implode('<br />', $this->output));
 		}
-		$smarty->enableRedirect();
-		$smarty->display($this->getDoneTemplate());
 	}
 	
-	function getDoneTemplate() {
-		return dirname(__FILE__) . '/edit_done.html';
+	/**
+	 * Write the results of a single edit operation to a smarty template
+	 * @param smarty initialized template engine
+	 * @param nextUrl the url to go to after the operation. Should be a folder in the repository. If null, referrer is used.
+	 * @deprecated use Edit->show and presentEdit insead, which support multiple edit operations for a page
+	 */
+	function present(&$smarty, $nextUrl = null) {
+		$this->show($smarty);
+		presentEdit($smarty, $nextUrl);
 	}
 
 }

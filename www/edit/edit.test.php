@@ -82,6 +82,5 @@ class EditTest extends UnitTestCase
 
 }
 
-$test = &new EditTest();
-$test->run(new HtmlReporter());
+testrun(new EditTest());
 ?>
