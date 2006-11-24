@@ -4,6 +4,7 @@ define('PARENT_DIR', dirname(rtrim(DIR, DIRECTORY_SEPARATOR)));
 
 require( PARENT_DIR."/conf/Presentation.class.php" );
 require( PARENT_DIR."/edit/edit.class.php" );
+require( dirname(__FILE__)."/mimetype.inc.php");
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 
@@ -48,6 +49,13 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		$edit->addArgUrl($upload->getTargeturl());
 		$edit->setMessage($upload->getMessage());
 		$edit->execute();
+		// detect mime type, if we want to set the property we need to checkout
+		$clientMime = $upload->getType();
+		// need the original filename, $recommend = getSpecificMimetype($newfile, $clientMime);
+		$recommend = getSpecificMimetype($upload->getName(), $clientMime);
+		if ($recommend) {
+			echo('Recommending mime type '.$clientMime); exit;
+		}
 		// clean up
 		deleteFile($newfile);
 		$upload->cleanUp();
