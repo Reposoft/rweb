@@ -29,13 +29,25 @@ class NewFilenameRule extends Rule {
  * Present the page with the results of all Edit->show calls,
  * where the last Edit's success status decides if the page should say error or done
  */
-function presentEdit(&$presentation, $nextUrl=null, $headline=null, $result=null) {
+function presentEdit(&$presentation, $nextUrl=null, $headline=null, $summary=null) {
 	if (!$nextUrl) {
-		$nextUrl = dirname(getTargetUrl()); // parent only if it's a file
+		$nextUrl = dirname(getTargetUrl()); // get the parent folder for a file, and the folder itself for a folder
 	}
-	$presentation->assign('nexturl',$nextUrl);	
+	$presentation->assign('nexturl',$nextUrl);
+	$presentation->assign('headline',$headline);
+	$presentation->assign('summary',$summary);
 	$presentation->enableRedirect();
 	$presentation->display(dirname(__FILE__) . '/edit_done.html');
+}
+
+/**
+ * Used if the current task should be aborted with an error message, and the status from last Edit->show.
+ *
+ * @param unknown_type $presentation
+ * @param unknown_type $errorMessage
+ */
+function presentEditAndExit(&$presentation, $errorMessage=null) {
+	// TODO implement, see use in upload new version
 }
 
 /**
@@ -55,7 +67,8 @@ class Edit {
 
 	/**
 	 * Constructor
-	 * @param subversionOperation svn command line operation, for example mkdir or del
+	 * @param String $subversionOperation svn command line operation, for example mkdir or del.
+	 *  It is recommended to use the long name, like 'list' instead of 'ls' because it is more readable.
 	 */
 	function Edit($subversionOperation) {
 		$this->operation = $subversionOperation;
@@ -118,10 +131,25 @@ class Edit {
 	/**
 	 * Replaces the current arguments array.
 	 * Use addArgument instead if existing arguments should not be removed.
-	 * @param arrArgumentsInOrder The arguments to the command ordered according to the svn reference
+	 * @param boolean $arrArgumentsInOrder The arguments to the command ordered according to the svn reference
 	 */
 	function _setArguments($arrArgumentsInOrder) {
 		$this->args = $arrArgumentsInOrder;
+	}
+	
+	/**
+	 * @return String the subversion command name
+	 */
+	function getOperation() {
+		return $this->operation;
+	}
+	
+	/**
+	 * @return string the log message if this is an operation that commits to the repository, null if not
+	 */
+	function getMessage() {
+		if (!$this->commitWithMessage) return null;
+		return $this->message;
 	}
 	
 	/**
@@ -165,7 +193,7 @@ class Edit {
 		if (count($this->output) > 0) {
 			return $this->output[count($this->output)-1];
 		}
-		return '';
+		return '';//'There was nothing to '.$this->getOperation();
 	}
 	
 	/**
@@ -190,20 +218,23 @@ class Edit {
 	 * Present the result of this operation in the Edit smarty template
 	 *
 	 * @param Smarty $smartyTemplate a template that accepts 'assign'
-	 * @param String $summary a custom summary line for this operation
+	 * @param String $description a custom summary line for this operation, 
+	 *  summary lines will always be visible, use \n as line break
 	 */
-	function show(&$smartyTemplate, $summary='') {
-		if (strlen($this->getResult()) > 0) {
-			$smartyTemplate->assign('result', $this->getResult());
-		} else {
-			$smartyTemplate->assign('result', 'Error. Could not read result for the command: ' . $this->getCommand());
-		}
-		$smartyTemplate->assign('operation',$this->operation);
-		$smartyTemplate->assign('revision',$this->getCommittedRevision());
-		$smartyTemplate->assign('successful',$this->isSuccessful());
-		if (!$this->isSuccessful()) {
-			$smartyTemplate->assign('output',implode('<br />', $this->output));
-		}
+	function show(&$smartyTemplate, $description=null) {
+		$logEntry = array(
+			'result' => $this->getResult(),
+			'operation' => $this->getOperation(),
+			'message' => $this->getMessage(),
+			'successful' => $this->isSuccessful(),
+			'revision' => $this->getCommittedRevision(),
+			'output' => implode("\n", $this->output)
+		);
+		$logEntry['description'] = $description;
+		$smartyTemplate->append('log', $logEntry);
+		
+		// overwrite existing values, so that the last command decides the result
+		$smartyTemplate->assign($logEntry);
 	}
 	
 	/**

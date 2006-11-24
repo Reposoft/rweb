@@ -74,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 			$presentation->trigger_error("Could not read current version of file "
 				.$upload->getTargetUrl().". ".$checkout->getResult(), E_USER_ERROR);
 		}
+		$checkout->show($presentation);
 		// upload file to working copy
 		$filename = $upload->getName();
 		$updatefile = toPath($dir . $filename);
@@ -92,7 +93,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		$diff = new Edit('diff');
 		$diff->addArgPath($updatefile);
 		$diff->execute();
-		$presentation->assign('diff', $diff->getResult());
+		$diff->show($presentation);
+		//not used//$presentation->assign('diff', $diff->getResult());
 		// create the commit command
 		$commit = new Edit('commit');
 		$commit->setMessage($upload->getMessage());
@@ -121,7 +123,11 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 				.' is identical to the current file '.$upload->getName());
 		}
 		// show results
-		$commit->present($presentation, dirname($upload->getTargetUrl()));
+		$commit->show($presentation);
+		// todo present error
+		presentEdit($presentation, dirname($upload->getTargetUrl()), 
+			'New version committed',
+			$upload->getTargetUrl().' is now at revision '.$commit->getCommittedRevision());
 	}
 }
 
