@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>repos.se: Edit {=$target|basename}</title>
-<meta http-equiv="refresh" content="0;url={=$downloadUrl}"/>
+<!-- <meta http-equiv="refresh" content="0;url={=$downloadUrl}"/> -->
 <!--{$head}-->
 </head>
 
@@ -17,6 +17,9 @@
 <div class="filedetails" title="{=$target}"></div>
 <p>A <a href="{=$downloadUrl}">download</a> dialog will appear shortly. Save the file on the local hard drive. When work is completed, use "upload new version" to commit.</p>
 <p><a id="upload" class="action" href="../../upload/?target={=$target}">upload new version</a></p>
+
+<h2>Create personal branch <span class="path" title="{=$target|basename}">/branches/{=$newname}</span></h2>
+<p><a id="branch" class="action" href="{=$pathToCopyForm}?target={=$target}&oldname={=$oldname}&tofolder={=$tofolder}&newname={=$newname}&move=0&message=&submit=Copy">Create Branch</a></p>
 </div>
 <div id="footer"></div>
 </div>
