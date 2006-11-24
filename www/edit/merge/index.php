@@ -3,20 +3,43 @@
 require "../../conf/Presentation.class.php";
 require "../edit.class.php";
 
-$target = getTarget();	// /trunk/test.xml
-$source = '/branches/test.xml';
 
-if (isset($target)) {
-	doAutomerge($source, $target);
+//if (isset($target)) {
+//	doAutomerge($source, $target);
+//} else {
+//	$p = new Presentation();
+//	$p->display();
+//}
+
+// dispatch
+if (isset($_GET[SUBMIT])) {
+	doAutomerge($_GET['branchFile']); 
 } else {
-	$p = new Presentation();
-	$p->display();
+	$target = getTarget();
+	$template = new Presentation();
+	$template->assign('repository', getRepository());
+	$template->assign('target', $target);
+	$template->assign('oldname', basename($target));
+	$template->assign('folder', getParent($target));	
+	$template->assign('branchFileArray', svnList('/branches'));
+	$template->display();
 }
 
-function doAutomerge($source, $target){
+function svnList($listFilesInFolder) {
+	$list = new Edit('list');
+	$repositoryRootUrl = getRepository();
+	$list->addArgUrl($repositoryRootUrl . $listFilesInFolder);
+	$list->execute();
+	$listResult = $list->getOutput();
+	return $listResult;
+}
+
+function doAutomerge($source){
 	$p = new Presentation();
-	$sourceUrl = getRepository().$source;	// http://localhost/LocalRepos/branches/test.xml
-	$targetUrl = getRepository().$target;	// http://localhost/LocalRepos/trunk/
+	$target = substr($source, strrpos($source, "-")+1);
+	$sourcePath = '/branches/'.$source;
+	$sourceUrl = getRepository().$sourcePath;	// http://localhost/LocalRepos/branches/test.xml
+	$targetUrl = getRepository().'/trunk/'.$target;	// http://localhost/LocalRepos/trunk/
 	$targetFolder = getParent($targetUrl);
 	$temporaryWorkingCopy = getTempnamDir('merge');
 
@@ -49,6 +72,10 @@ function doAutomerge($source, $target){
 			}
 		}
 	}
+	if (sizeof($revisionNumber) < 2){
+		$p->showError("No changes have been made in the file.");
+		exit;
+	}
 
 	// Merge source from the older revision to head into working copy
 	// svn merge -r 25:26 http://localhost/LocalRepos/branches/test.xml test.xml
@@ -62,7 +89,7 @@ function doAutomerge($source, $target){
 
 	// Conflict??
 	if (strpos($mergeResult, 'C') === 0){
-		$p->showError("Can not merge files. " . $mergeResult);
+		$p->showError("Damnit, I can not merge these files! " . $mergeResult);
 		exit;
 	}
 	
@@ -73,7 +100,7 @@ function doAutomerge($source, $target){
 	$updatefile = toPath($temporaryWorkingCopy . basename($target));
 	$oldsize = filesize($updatefile);
 	$commit = new Edit('commit');
-	$commit->setMessage($mergeCommand);
+	$commit->setMessage('merge -r '.$revisionNumber[1] . ':' . $revisionNumber[0] . ' ' . $sourcePath);	// svn merge -r 66:67 "http://localhost/LocalRepos/branches/1164368098-test-test.xml" "C:/WINDOWS/TEMP/localhost_2Frepos/merge/174.tmp/test.xml"
 	$commit->addArgPath($temporaryWorkingCopy);
 	$commit->execute();
 	$commitResult = $commit->getOutput();
@@ -94,6 +121,6 @@ function doAutomerge($source, $target){
 	//echo implode("<BR>", $logResult) . "<BR><BR>";
 	//echo implode("<BR>", $mergeResult) . "<BR><BR>";
 	//echo implode("<BR>", $commitResult);
-	$p->display();
+	$commit->present($p, $targetFolder);
 }
 ?>
