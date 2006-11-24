@@ -71,29 +71,29 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		$checkout->addArgPath($dir);
 		$checkout->execute();
 		if (!$checkout->isSuccessful()) {
-			$presentation->trigger_error("Could not read current version of file "
-				.$upload->getTargetUrl().". ".$checkout->getResult(), E_USER_ERROR);
+			$presentation->showError("Could not read current version of file "
+				.$upload->getTargetUrl().". ".$checkout->getResult());
 		}
 		$checkout->show($presentation);
 		// upload file to working copy
 		$filename = $upload->getName();
 		$updatefile = toPath($dir . $filename);
 		if(!file_exists($dir.'/.svn') || !file_exists($updatefile)) {
-			$presentation->trigger_error('Can not read current version of the file named "'
-				.$filename.'" from repository path "'.$repoFolder.'"', E_USER_ERROR);
+			$presentation->showError('Can not read current version of the file named "'
+				.$filename.'" from repository path "'.$repoFolder.'"');
 		}
 		$oldsize = filesize($updatefile);
 		deleteFile($updatefile);
 		$upload->processSubmit($updatefile);
 		if(!file_exists($updatefile)) {
-			$presentation->trigger_error('Could not read uploaded file "'
-				.$filename.'" for operation "'.basename($dir).'"', E_USER_ERROR);
+			$presentation->showError('Could not read uploaded file "'
+				.$filename.'" for operation "'.basename($dir).'"');
 		}
 		// store the diff in the presentation object
 		$diff = new Edit('diff');
 		$diff->addArgPath($updatefile);
 		$diff->execute();
-		$diff->show($presentation);
+		$diff->showOrFail($presentation);
 		//not used//$presentation->assign('diff', $diff->getResult());
 		// create the commit command
 		$commit = new Edit('commit');
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		// commit returns nothing if there are no local changes
 		if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
 			// normal behaviour
-			$presentation->trigger_error('The uploaded file '.$upload->getOriginalFilename()
+			presentEditAndExit($presentation, null, 'The uploaded file '.$upload->getOriginalFilename()
 				.' is identical to the current file '.$upload->getName());
 		}
 		// show results

@@ -43,11 +43,13 @@ function presentEdit(&$presentation, $nextUrl=null, $headline=null, $summary=nul
 /**
  * Used if the current task should be aborted with an error message, and the status from last Edit->show.
  *
- * @param unknown_type $presentation
- * @param unknown_type $errorMessage
+ * @param Smarty $presentation
+ * @param String $errorMessage
  */
-function presentEditAndExit(&$presentation, $errorMessage=null) {
-	// TODO implement, see use in upload new version
+function presentEditAndExit(&$presentation, $nextUrl=null, $errorMessage=null) {
+	if (!$errorMessage) $errorMessage = 'Versioning operation failed';
+	presentEdit($presentation, $nextUrl, $errorMessage);
+	exit;
 }
 
 /**
@@ -216,6 +218,7 @@ class Edit {
 	
 	/**
 	 * Present the result of this operation in the Edit smarty template
+	 * and then returns so that the task can continue.
 	 *
 	 * @param Smarty $smartyTemplate a template that accepts 'assign'
 	 * @param String $description a custom summary line for this operation, 
@@ -235,6 +238,25 @@ class Edit {
 		
 		// overwrite existing values, so that the last command decides the result
 		$smartyTemplate->assign($logEntry);
+	}
+	
+	/**
+	 * Convenience method for versioning operations that rarely fail.
+	 * Calls show, and then if this Edit is not successful it calls
+	 * presentAndEdit with the default error message and nextUrl.
+	 * Use this method to make sure that a complex task does not continue
+	 * if a required step fails, but when there is no reason to write
+	 * custom error handling for the step.
+	 *
+	 * @param Smarty $smartyTemplate a template that accepts 'assign'
+	 * @param String $description a custom summary line for this operation, 
+	 *  summary lines will always be visible, use \n as line break
+	 */
+	function showOrFail(&$smartyTemplate, $description=null) {
+		$this->show($smartyTemplate, $description);
+		if (!$this->isSuccessful()) {
+			presentEditAndExit($smartyTemplate);
+		}
 	}
 	
 	/**
