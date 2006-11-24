@@ -13,7 +13,22 @@
 </div>
 <div id="contents">
 <h1>Merge files</h1>
-<a href="?target=/trunk/test.xml">Run Merge</a>
+<form id="merge" name="merge" method="get" action="#">
+  <fieldset>
+	<legend>Merge files</legend>    
+	<p>
+		<label for="branchFile">Choose file to merge</label>
+		<select name="branchFile" id="branchFile">
+			<!--{foreach from=$branchFileArray item=file}-->
+				<option value="{=$file}">{=$file}</option>
+			<!--{/foreach}-->
+		</select>
+  	<p>
+    	<label for="submit"></label>
+    	<input id="submit" type="submit" name="submit" value="Merge" tabindex="1" />
+  	</p>
+  </fieldset>
+</form>
 </div>
 </div>
 </body>
