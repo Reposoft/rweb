@@ -368,6 +368,7 @@ class ConflicthandlerTest extends UnitTestCase {
 </Workbook>
 ';			
 	}	
+
 	function testExcel2003FunctionResult() {
 		$contents =
 '<?xml version="1.0"?>
