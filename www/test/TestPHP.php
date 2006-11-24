@@ -25,7 +25,8 @@ $testfiles = array(
 'account/login.test.php',
 'edit/edit.test.php',
 'open/start/RepositoryTree.test.php',
-'plugins/validation/Validation.test.php'
+'plugins/validation/Validation.test.php',
+'upload/mimetype.test.php'
 );
 
 function printTestSuite($testfiles) {
