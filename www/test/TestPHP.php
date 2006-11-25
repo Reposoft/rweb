@@ -27,7 +27,8 @@ $testfiles = array(
 'open/start/RepositoryTree.test.php',
 'plugins/validation/Validation.test.php',
 'upload/mimetype.test.php',
-'edit/merge/conflicthandler.test.excel.php'
+'edit/merge/conflicthandler.test.excel.php',
+'open/list/list.test.php'
 );
 
 function printTestSuite($testfiles) {
