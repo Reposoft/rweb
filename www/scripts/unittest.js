@@ -80,23 +80,45 @@ _head.appendChild(d);
 
 
 var testCase = null;
+var loaded = false;
 
 /**
  * Makes sure the test case is executed after all other onload activities.
  */
 function testrun(testCaseInstance) {
 	testCase = testCaseInstance;
-	var _onload = window.onload;
- 	window.onload = function() { _onload(); testexec(); } 
+	if (loaded) testexec();
 }
 
 /**
  * Runs a test case and writes the result to a new div named 'testlog'
  */
 function testexec() {
+	if (testCase == null) console.log('No test case specified. Call testrun(my testcase).');
+	console.log('running testcase');
 	var e = document.createElement('div');
 	e.id = 'testlog';
 	document.getElementsByTagName('body')[0].appendChild(e);
 	testCase.initialize(new HTMLReporter(e));
 	testCase.runTests();	
 }
+
+function testonload() {
+	console.log('page loaded');
+	if (testCase==null) {
+		loaded = true;
+	} else {
+		testexec();
+	}
+}
+
+// use jquery if available
+if (typeof($)=='undefined') {
+	//var _onload = window.onload;
+ 	//window.onload = function() { _onload(); testexec(); };
+ 	// temporary solution 
+ 	window.onload = function() { testonload(); };
+} else {
+	$(document).ready( function() { testonload(); } );
+}
+

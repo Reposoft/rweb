@@ -25,6 +25,16 @@ function autoFillFilename(path) {
 <h1>Upload file</h1>
 <!--{if $isfile}-->
 <p>As a new version of file <span class="path">{=$target}</span>. <a class="action" target="_blank" href="../open/?target={=$target}">open current version</a></p>
+<div class="details" style>
+</div>
+<div class="warning">
+<p>File upload is a convenient feature, but not a real versioning operation.
+It <em>will</em> overwrite the existing file,
+unlike a versioning commit that would check for conflicts first.
+Please check existing contents before uploading,
+to make sure that your local changes are based on the newest version of the shared file.
+</p>
+</div>
 <!--{else}-->
 <p>As a new file in folder {=$target}</p>
 <!--{/if}-->

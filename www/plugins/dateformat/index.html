@@ -49,12 +49,26 @@ function TestDateformat() {
 	};
 	
 	this.testFormatEmpty = function() {
-	
-	}
+		var e = document.createElement('span');
+		e.innerHTML = "";
+		new Dateformat().formatElement(e);
+		this.assertEquals("", e.innerHTML);
+	};
 	
 	this.testFormatTwice = function() {
-	
+		var e = document.createElement('span');
+		var t = "2006-09-07T12:00:00.000Z";
+		e.innerHTML = t;
+		new Dateformat().formatElement(e);
+		// dateformat should set the class 'formatted' when successful
+		this.assertEquals('formatted', e.getAttribute('class'));
+		// now try to format the same tag again
+		var d = e.innerHTML;
+		this.assertTrue(t != d);
+		new Dateformat().formatElement(e);	
+		this.assertEquals(e.innerHTML, d);
 	}
+
 }
 TestDateformat.prototype = new TestCase;
 testrun(new TestDateformat());

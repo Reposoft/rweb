@@ -86,7 +86,6 @@ Date.prototype.toISO8601String = function (format, offset) {
 $(document).ready(function(){
 	d = new Dateformat();
 	$(".datetime").each(function() {
-		if (this.innerHTML == '') return;
 		d.formatElement(this);
 	});
 });
@@ -109,11 +108,14 @@ function Dateformat() {
 	 */
 	this.formatElement = function(texttag) {
 		var d = texttag.innerHTML;
+		if (texttag.hasAttribute('class') && texttag.getAttribute('class').indexOf('formatted')>=0) return;
+		if (d == null || d=='') return;
 		if (!this.isDatetime(d)) {
 			throw "Invalid datetime string in tag " + (texttag.id ? texttag.id : texttag.tagName) + ": " + d;	
 		}
 		var f = this.format(d);
 		texttag.innerHTML = f;
+		$(texttag).addClass('formatted');
 	}
 	
 	/**

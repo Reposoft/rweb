@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>repos.se ReposFileID script test page</title>
+<!-- unit testing -->
+<script type="text/javascript" src="../unittest.js"></script>
+<!-- dependencies -->
+<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
+<!-- the script -->
+<script type="text/javascript" src="fileid.js"></script>
+</head>
+
+<body>
+<h1>Repos FileID</h1>
+<p>Transforms a file or foldername to a valid HTML id attribute value.</p>
+<p>Mimics the behaviour of the <code>getFileId</code> template in <code>repos.xsl</code>.</p>
+<p>Usage: fileid.js should be packed and included in the default head.js.<br />
+Simply call <code>var id = ReposFileID('New folder/')</code>.</p>
+<h2>example folders</h2>
+<p class="fileidtest">folder/</p>
+<p class="fileidtest">New folder/</p>
+<p class="fileidtest">Non-ascii_ü/</p>
+<h2>example files</h2>
+<p class="fileidtest" id="f:file.txt">file.txt</p>
+<h2>unit tests</h2>
+<script type="text/javascript">
+
+function TestFileId() {
+    
+	this.setUp = function() {
+	};
+    
+	this.testSlash = function() {
+		this.assertEquals('folder_', new ReposFileId('folder/').get());
+	};
+	
+	this.testPercent = function() {
+		this.assertEquals('fi_64.txt', new ReposFileId('fi%64.txt').get());
+	};
+	
+	this.testChar = function() {
+		this.assertEquals('f_c3_a6r.txt', new ReposFileId('får.txt').get());
+	};
+	
+	this.testFind = function() {
+		this.assertEquals('file.txt', new ReposFileId('file.txt').find('f').innerHTML);
+	};
+
+}
+TestFileId.prototype = new TestCase;
+testrun(new TestFileId());
+
+</script>
+
+</body>
+</html>

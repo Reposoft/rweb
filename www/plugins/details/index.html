@@ -8,6 +8,8 @@
 <script type="text/javascript" src="details.js"></script>
 <!-- if the dateformat plugin is present, date output will be formatted -->
 <script type="text/javascript" src="../dateformat/dateformat.js"></script>
+<!-- requires the fileid script, which should be found in head.js -->
+<script type="text/javascript" src="../../scripts/fileid/fileid.js"></script>
 <!-- for unit testing -->
 <script type="text/javascript" src="../../scripts/unittest.js"></script>
 </head>
@@ -19,17 +21,21 @@
 <div class="details" title="/demoproject/trunk/public/xmlfile.xml">
 <p>Name: <span class="path"></span></p>
 <p>Size: <span class="size"></span> bytes</p>
-<p>Current revision: <span class="revision"></span>
+<p>Current revision: <span class="revision"></span></p>
 <p>Last edited by: <span class="username"></span></p>
 <p>Last edited: <span class="datetime"></span></p>
 </div>
 
 <h2>Directory listing example</h2>
-<p>&nbsp;</p>
-
+<div id="commandbar"><span class="command">a command</span></div>
+<div id="contents">
+<p id="fullpath">/demoproject/trunk/public/</p>
+<div id="row:website_"><span>website</span></div>
+<div id="row:xmlfile.xml"><span>xmlfile.xml</span></div>
+</div>
 <h2>unit tests</h2>
 <script type="text/javascript">
-/*
+
 function TestDetails() {
     this.name = 'TestDetails';
 
@@ -42,7 +48,7 @@ function TestDetails() {
 }
 TestDetails.prototype = new TestCase;
 testrun(new TestDetails());
-*/
+
 </script>
 
 </body>

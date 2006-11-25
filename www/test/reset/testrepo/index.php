@@ -130,13 +130,29 @@ createFolder($wc."demoproject/");
 createFolder($wc."demoproject/trunk/");
 createFolder($wc."demoproject/trunk/noaccess/");
 createFolder($wc."demoproject/trunk/readonly/");
-createFolder($wc."demoproject/trunk/public/");
 
+// public contents, allows testing without login
+createFolder($wc."demoproject/trunk/public/");
 $publicxml = $wc."demoproject/trunk/public/xmlfile.xml";
 createFileWithContents($publicxml, "<empty-document/>\n");
+createFolder($wc."demoproject/trunk/public/website/");
+$publicstyle = $wc."demoproject/trunk/public/website/styles.css";
+createFileWithContents($publicstyle, "
+body { margin: 15%; color: #223311; }
+a { color: #333399; text-decoration: none; }
+a:hover { text-decoration: underline; }
+");
+$publicindex = $wc."demoproject/trunk/public/website/index.html";
+createFileWithContents($publicindex, "<html>\n<head>\n<title>demoproject's web</title>
+<link href=\"styles.css\" rel=\"stylesheet\" type=\"text/css\" />\n</head>
+<body>\n<h3>Welcome to our website</h3>\n<p>&nbsp;</p>
+<p><small><a href=\"$conflocation/demoproject/trunk/public/\">return to documents</a> &nbsp; | &nbsp; page id: \$Id\$</small></p>\n</html>\n");
 
 setup_svn("add {$wc}*");
 setup_svn("propset svn:mime-type text/xml $publicxml");
+setup_svn("propset svn:mime-type text/css $publicstyle");
+setup_svn("propset svn:mime-type text/html $publicindex");
+setup_svn("propset svn:keywords Id $publicindex");
 
 setup_svn('commit -m "Created users svensson, test and $trickusername, and a shared project" '.$wc);
 
