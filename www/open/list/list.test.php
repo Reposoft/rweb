@@ -1,6 +1,6 @@
 <?php
 
-// TODO not decided if we will use --xml or --verbose for parsing
+// TODO support other formats than xml, and write tests from the samples below
 
 // list a file
 $test1 = '
