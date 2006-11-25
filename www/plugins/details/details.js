@@ -23,6 +23,10 @@ function details_process(e, xml) {
 		$('.revision', e).append($('commit', this).attr('revision'));
 		$('.username', e).append($('commit/author', this).text());
 		$('.datetime', e).append($('commit/date', this).text());
+		// if the dateformat plugin is present, do format
+		$('.datetime', e).each(function() {
+			if (typeof('Dateformat')!='undefined') new Dateformat().formatElement(this);
+		});
 	});
 	e.show();
 }

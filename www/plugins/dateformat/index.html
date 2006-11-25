@@ -47,6 +47,14 @@ function TestDateformat() {
 		this.assertEquals(new Dateformat().format('2006-09-07T16:00:00.123456Z'), formatted1, "Should format all 'datetime' texts on load");
 		this.assertEquals(new Dateformat().format('2006-09-06T20:30:59.000Z'), formatted2, "Should format all 'datetime' texts on load");
 	};
+	
+	this.testFormatEmpty = function() {
+	
+	}
+	
+	this.testFormatTwice = function() {
+	
+	}
 }
 TestDateformat.prototype = new TestCase;
 testrun(new TestDateformat());

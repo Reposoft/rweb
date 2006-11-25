@@ -85,7 +85,8 @@ Date.prototype.toISO8601String = function (format, offset) {
 // ----- Dateformat class -----
 $(document).ready(function(){
 	d = new Dateformat();
-	$(".datetime").each(function(){ 
+	$(".datetime").each(function() {
+		if (this.innerHTML == '') return;
 		d.formatElement(this);
 	});
 });
