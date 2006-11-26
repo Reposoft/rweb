@@ -371,7 +371,7 @@ function isRepositoryUrl($url) {
  * @return String absolute path, folder, existing
  */
 function getSystemTempDir() {
-	$type = "no temp dir resolved";
+	$type = '';
 	if (getenv('TMP')) {
 		$type = 'TMP';
 		$tempdir = getenv('TMP');
@@ -383,7 +383,10 @@ function getSystemTempDir() {
 		$tempdir = getenv('TEMP');
 	} else {
 		$type = 'tempnam';
-		$tmpfile = tempnam('', 'emptytempfile');
+		// suggest a directory that does not exist, so that tempnam uses system temp dir
+		$doesnotexist = 'dontexist'.rand();
+		$tmpfile = tempnam($doesnotexist, 'emptytempfile');
+		if (strpos($tmpfile, $doesnotexist)!==false) trigger_error("Could not get system temp, got: ".$tmpfile);
 		$tempdir = dirname($tmpfile);
 		unlink($tmpfile);
 		if (strlen($tempdir)<4) trigger_error("Attempted to use tempnam() to get system temp dir, but the result is: $tempdir", E_USER_ERROR);

@@ -20,6 +20,7 @@ function getTime() { // still used in backup
 
 // temporary solution, TODO make admin a class that takes a report instance as constructor argument
 $report = new Report();
+function html_start() {} // deprecated
 function debug($message) {global $report; $report->debug($message); }
 function info($message) {global $report; $report->ok($message); }
 function fail($message) {global $report; $report->fail($message); }

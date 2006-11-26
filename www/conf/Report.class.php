@@ -35,8 +35,16 @@ class Report {
 	var $nt = 0; //test cases
 	var $test = false; // true inside a test case
 	
-	function Report($title='Repos system report', $category='') {
-		$this->offline = isOffline();
+	/**
+	 * Creates a new report, which is a new page.
+	 * @param boolean $plaintext Overrides the default detection of offline/online output: true to get plaintext output, false to get html.
+	 */
+	function Report($title='Repos system report', $category='', $plaintext=null) {
+		if (is_null($plaintext)) {
+			$this->offline = isOffline();
+		} else {
+			$this->offline = $plaintext;
+		}
 		$this->_pageStart($title);
 	}
 	
