@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import se.repos.svn.SvnIgnorePattern;
 import se.repos.svn.SvnProxySettings;
+import se.repos.svn.config.file.ServersFile;
 import se.repos.svn.test.TestFolder;
 
 import junit.framework.TestCase;
@@ -146,12 +147,24 @@ public class RuntimeConfigurationAreaTest extends TestCase {
 		
 		// now delete the proxy settings again
 		config.setProxySettings(SvnProxySettings.NOPROXY);
+		
+		// verify with equals
+		config = new RuntimeConfigurationArea(testarea);
+		assertEquals(SvnProxySettings.NOPROXY, config.getProxySettings());
+		
+		// verify file contents (assume that there are no settings in other groups)
 		assertNull("Should not find the host setting anymore",
 				getLine(s, "^http-proxy-host\\s*=\\s*my.proxy.se$"));
-		String nohost = getLine(s, "^http-proxy-host\\s*=\\s*$");
-		String comment = getLine(s, "^#.*http-proxy-host\\s*=.*");
-		assertFalse("Should have set an empty host line, or commented it out",
-				nohost == null && comment==null);
+		assertNull("Should not set an empty host line, because svn can't handle that",
+				getLine(s, "^http-proxy-host\\s*=\\s*$"));
+		// TODO would be nice if it kept the comment. String comment = getLine(s, "^#.*http-proxy-host\\s*=.*");
+		
+		// actually, the directives must be completely gone for the svn client to be able to connect without proxy
+		// (assume that there are no settings in other groups)
+		assertNull("Should not find the host setting anymore", getLine(s, "^http-proxy-host\\s*=.*"));
+		assertNull("Should not find the port setting anymore", getLine(s, "^http-proxy-port\\s*=.*"));
+		assertNull("Should not find the proxy username anymore", getLine(s, "^http-proxy-username\\s*=.*"));
+		assertNull("Should not find the proxy password anymore", getLine(s, "^http-proxy-password\\s*=.*"));
 		
 		TestFolder.cleanUp();
 	}

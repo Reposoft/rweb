@@ -79,10 +79,26 @@ public class ServersFile extends IniFile {
 	 * @param settings the proxy for the given group
 	 */
 	public void setProxySettings(String group, SvnProxySettings settings) {
+		if (SvnProxySettings.NOPROXY.equals(settings)) {
+			removeProxySettings(group);
+			return;
+		}
 		setProxyHost(group, settings.getHost());
 		setProxyPort(group, settings.getPort());
 		if (settings.getUsername() != null) setProxyUsername(group, settings.getUsername());
 		if (settings.getPassword() != null) setProxyPassword(group, settings.getPassword());
+	}
+	
+	/**
+	 * Sets proxy settings to defaults.
+	 */
+	private void removeProxySettings(String group) {
+		IniEditor servers = load();
+		if (servers.hasOption(group, HTTP_PROXY_HOST)) servers.remove(group, HTTP_PROXY_HOST);
+		if (servers.hasOption(group, HTTP_PROXY_PORT)) servers.remove(group, HTTP_PROXY_PORT);
+		if (servers.hasOption(group, HTTP_PROXY_USERNAME)) servers.remove(group, HTTP_PROXY_USERNAME);
+		if (servers.hasOption(group, HTTP_PROXY_PASSWORD)) servers.remove(group, HTTP_PROXY_PASSWORD);
+		save(servers);
 	}
 	
 	private void setProxyHost(String group, String host) {
@@ -115,11 +131,15 @@ public class ServersFile extends IniFile {
 			return SvnProxySettings.NOPROXY;
 		}
 		String host = servers.get(group, HTTP_PROXY_HOST);
+		if (host.length()==0) return SvnProxySettings.NOPROXY;
+		String portString = servers.get(group, HTTP_PROXY_PORT);
 		int port = SvnProxySettings.NOPORT;
-		try {
-			port = Integer.parseInt(servers.get(group, HTTP_PROXY_PORT));
-		} catch (NumberFormatException e) {
-			throw new RuntimeException("Could not parse proxy port value: " + e.getMessage(), e);
+		if (portString != null && portString.length() > 0) {
+			try {
+				port = Integer.parseInt(servers.get(group, HTTP_PROXY_PORT));
+			} catch (NumberFormatException e) {
+				throw new RuntimeException("Could not parse proxy port value: " + e.getMessage(), e);
+			}
 		}
 		SvnProxySettings p = new SvnProxySettings(host, port);
 		if (servers.hasOption(group, HTTP_PROXY_USERNAME)) {
