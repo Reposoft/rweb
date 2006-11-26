@@ -4,9 +4,11 @@ package se.repos.svn.config;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import se.repos.svn.SvnIgnorePattern;
 import se.repos.svn.SvnProxySettings;
@@ -137,13 +139,19 @@ public class RuntimeConfigurationAreaTest extends TestCase {
 		assertEquals(settings, config.getProxySettings());
 		
 		// verify file contents
-		FileReader fr = new FileReader(s);
-		BufferedReader reader = new BufferedReader(fr);
-		String line = null;
-		while ((line=reader.readLine()) != null) {
-			if (line.startsWith("http-proxy-host")) break;
-		}
-		assertNotNull("Should have written the settings to file", line);
+		assertNotNull("Should have written the settings to file", 
+				getLine(s, "^http-proxy-host\\s*=\\s*my.proxy.se$"));
+		assertNotNull("Should have written port",
+				getLine(s, "^http-proxy-port\\s*=\\s*88$"));
+		
+		// now delete the proxy settings again
+		config.setProxySettings(SvnProxySettings.NOPROXY);
+		assertNull("Should not find the host setting anymore",
+				getLine(s, "^http-proxy-host\\s*=\\s*my.proxy.se$"));
+		String nohost = getLine(s, "^http-proxy-host\\s*=\\s*$");
+		String comment = getLine(s, "^#.*http-proxy-host\\s*=.*");
+		assertFalse("Should have set an empty host line, or commented it out",
+				nohost == null && comment==null);
 		
 		TestFolder.cleanUp();
 	}
@@ -187,6 +195,22 @@ public class RuntimeConfigurationAreaTest extends TestCase {
 		} catch (ConfigurationStateException e) {
 			// expected
 		}
+	}
+	
+	/**
+	 * Reads throug a file and returns first line that matches a regex, or null if no lines match
+	 */
+	private String getLine(File fromFile, String regexPattern) throws FileNotFoundException, IOException {
+		Pattern pattern = Pattern.compile(regexPattern);
+		FileReader fr = new FileReader(fromFile);
+		BufferedReader reader = new BufferedReader(fr);
+		String line = null;
+		while ((line=reader.readLine()) != null) {
+			if (pattern.matcher(line).matches()) break;
+		}
+		reader.close();
+		fr.close();
+		return line;
 	}
 
 }
