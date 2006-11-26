@@ -1,0 +1,12 @@
+# DLLs for win32 needed by repos-svn-access-1.2
+# Should be placed in the application folder, where javahl is bundled in the repos jar.
+# Current version is javahl 1.4.2
+
+7aff0baf987847905e82b41fe003d96a *intl3_svn.dll
+7c345da2a199821bfd3af189b278e5ca *libapr.dll
+dc419f5d278f87628549fccb4a9494b5 *libapriconv.dll
+95d5afb4ed25367993a33e9922afaf1f *libaprutil.dll
+e178c3c6f9e905498cf505c5e6d823c4 *libdb44.dll
+8bcc070e26c8b1e3373f212c823ea7fb *libeay32.dll
+f04bd26d9eaa261f284728b35b03eac1 *libsvnjavahl-1.dll
+3975bb3ac5a8c6838a977fd23c36c284 *ssleay32.dll
