@@ -71,6 +71,7 @@ function printForm() {
 	echo('<p><a id="repos1.gif" href="./?check='.urlencode('/repos/style/logo/repos1.gif').'">repos1.gif</a></p>');
 	echo('<p><a id="repos1.png" href="./?check='.urlencode('/repos/style/logo/repos1.png').'">repos1.png</a></p>');
 	echo('<p><a id="global.css" href="./?check='.urlencode('/repos/style/global.css').'">global.css</a></p>');
+	echo('<p><a id="listxml" href=".?check='.urlencode('http://localhost/repos/open/list/?target=/demoproject/trunk/public/xmlfile.xml').'">open/list/</a></p>');
 	echo('<p><a id="back" class="action" href="../">&lt; back</a></p>');
 	foot();
 }

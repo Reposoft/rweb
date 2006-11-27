@@ -40,7 +40,7 @@ function ReposFileId(name) {
 	this._urlescape = function(text) {
 		return text.replace(/[^\w]+/g, function(sub) {
 			return encodeURI(sub).toLowerCase();
-		}).replace(/;/g,'%3b');
+		}).replace(/;/g,'%3b').replace(/#/g,'%23');
 	}
 }
 

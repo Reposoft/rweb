@@ -8,11 +8,21 @@ $url = getTargetUrl();
 if (!$url) trigger_error("'target' must be set");
 
 // XML format
-header('Content-type: text/xml; encoding=utf-8');
 $cmd = 'list --xml '.escapeArgument($url);
-$return = login_svnPassthru($cmd);
-if ($return) {
-	login_handleSvnError($cmd, $return);
+$list = login_svnRun($cmd);
+if (($result=array_pop($list))!=0) {
+	login_handleSvnError($cmd, $result);
+}
+
+header('Content-Type: text/xml; charset=utf-8');
+$size = 0;
+for ($i=0; $i<count($list); $i++) {
+	$size += strlen($list[$i]);
+}
+header('Content-Length: '.$size);
+
+for ($i=0; $i<count($list); $i++) {
+	echo($list[$i]);
 }
 
 ?>
