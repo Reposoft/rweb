@@ -4,8 +4,8 @@
  * Simply add this script to a page together with a div class="details" or a #fullpath and row:fileId entries.
  * @author Staffan Olsson (solsson)
  * Maybe this should be refactored to classes. Can be done anytime because these functions are currently not called from anywere.
+ * $Id$
  */
-
 
 $(document).ready(function() {
 	details_read();
@@ -14,15 +14,12 @@ $(document).ready(function() {
 function details_read() {
 	var e = $('body').find('div.details');
 	if (e.size() > 0) {
-	if (window.console) console.log('request details for /repos/open/list/?target='+encodeURIComponent(e.title()));
-	$.ajax({type:'GET', 
-		url:'/repos/open/list/?target='+encodeURIComponent(e.title()), 
-		dataType:'xml',
-		success:function(xml){ details_write(e, $('/lists/list/entry', xml)); }});
-	}
-	// add command
-	if ($('#fullpath').size() > 0) {
-		$('#commandbar').append('<a id="showdetails" class="command" href="javascript:detailsToggle()">show details</a>');
+		$.get('/repos/open/list/?target='+encodeURIComponent(e.title()), function(xml) {
+				details_write(e, $('/lists/list/entry', xml)); });
+		// add command
+		if ($('#fullpath').size() > 0) {
+			$('#commandbar').append('<a id="showdetails" class="command" href="javascript:detailsToggle()">show details</a>');
+		}
 	}
 }
 
@@ -34,11 +31,12 @@ function details_read() {
 function details_write(e, entry) {
 	entry.each(function(){
 		$('.path', e).append($('name', this).text());
-		var size = $('size', this).text();
-		if (size != null && size.length>0) $('.filesize', e).append(details_formatSize(size)).title(size + ' bytes');
-		$('.revision', e).append($('commit', this).attr('revision'));
 		$('.username', e).append($('commit/author', this).text());
 		$('.datetime', e).append($('commit/date', this).text());
+		// IE can't handle this, waiting for jQuery 1.1 when bug #164 is fixed
+		//$('.revision', e).append($('commit', this).attr('revision'));
+		var size = $('size', this).text();
+		if (size != null && size.length>0) $('.filesize', e).append(details_formatSize(size)).title(size + ' bytes');
 		// if the dateformat plugin is present, do format
 		$('.datetime', e).each(function() {
 			if (typeof('Dateformat')!='undefined') new Dateformat().formatElement(this);
@@ -51,11 +49,7 @@ function details_repository() {
 	//var path = $('body.repository').find('#fullpath');
 	var path = $('#fullpath');
 	if (path.size()==0) return;
-	if (window.console) console.log('request details for ' + encodeURIComponent(path.text()));
-	$.ajax({type:'GET', 
-		url:'/repos/open/list/?target=' + encodeURIComponent(path.text()), 
-		dataType:'xml',
-		success:function(xml){
+	$.get('/repos/open/list/?target='+encodeURIComponent(path.text()), function(xml){
 			$('/lists/list/entry', xml).each(function() {
 				var name = $('name', this).text();
 				if (this.getAttribute('kind')=='dir') name = name + '/';
@@ -66,7 +60,7 @@ function details_repository() {
 				//$('.details',row).hide();
 				details_write(row, $(this));
 			});
-		}});
+		});
 }
 
 /**
