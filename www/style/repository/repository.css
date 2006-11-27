@@ -17,6 +17,18 @@
 #commandbar #createfolder {
 	background-image: url('../commands/16x16/createfolder.png');
 }
+/* details plugin */
+#commandbar #showdetails {
+	background-image: url('../details/details.png');
+}
+div.details {
+	position: relative;
+	left: 3.0em;
+	height: 1.8em;
+}
+div.details span {
+	margin: 0.4em;
+}
 /* directory listing */
 .file {
 	background-image: url('16x16/file.png');
