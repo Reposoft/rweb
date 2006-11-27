@@ -106,7 +106,12 @@ function TestFileId() {
 		this.assertEquals('file.txt', new ReposFileId('file.txt').find('f').innerHTML);
 	};
 
+	this.testFindNull = function() {
+		this.assertEquals(null, new ReposFileId('file.txt').find('hmm'));
+	};
+
 }
+
 TestFileId.prototype = new TestCase;
 testrun(new TestFileId());
 

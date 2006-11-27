@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 <title>repos.se details plugin test page</title>
 <!-- plugins -->
 <script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
@@ -20,7 +20,7 @@
 <h2>Single file example</h2>
 <div class="details" title="/demoproject/trunk/public/xmlfile.xml">
 <p>Name: <span class="path"></span></p>
-<p>Size: <span class="size"></span> bytes</p>
+<p>Size: <span class="filesize"></span></p>
 <p>Current revision: <span class="revision"></span></p>
 <p>Last edited by: <span class="username"></span></p>
 <p>Last edited: <span class="datetime"></span></p>
@@ -34,17 +34,35 @@
 <div id="row:xmlfile.xml"><span>xmlfile.xml</span></div>
 </div>
 <h2>unit tests</h2>
+<p>Note that this page uses AJAX, so it must run from a web server.</p>
 <script type="text/javascript">
 
 function TestDetails() {
-    this.name = 'TestDetails';
+	this.name = 'TestDetails';
+	
+	this.setUp = function() {
+	};
+	
+	this.testFormatSizeBytes = function() {
+		this.assertEquals('1 B', details_formatSize('1'));
+		this.assertEquals('999 B', details_formatSize('999'));
+	};
 
-    this.setUp = function() {
-    };
-    
-    this.testNothing = function() {
-    
-    };
+	this.testFormatSizeKb = function() {
+		this.assertEquals('0.98 kB', details_formatSize('1000'));
+		this.assertEquals('0.99 kB', details_formatSize('1009'));
+		this.assertEquals('1.00 kB', details_formatSize('1029'));
+		this.assertEquals('10.0 kB', details_formatSize('' + (1024 * 10 + 51)));
+		this.assertEquals('99.9 kB', details_formatSize('' + (1024 * 100 - 52)));
+		this.assertEquals('999 kB', details_formatSize('' + (1024 * 1000 - 513)));
+	};
+	
+	this.testFormatSizeMb = function() {
+		this.assertEquals('0.98 MB', details_formatSize('' + (1024 * 1000 - 512)));
+		this.assertEquals('1.00 MB', details_formatSize('' + (1024 * 1024 + 511)));
+		this.assertEquals('100 MB', details_formatSize('' + (1024 * 1024 * 100)));
+		this.assertEquals('1000 MB', details_formatSize('' + (1024 * 1024 * 1000)));
+	};
 }
 TestDetails.prototype = new TestCase;
 testrun(new TestDetails());

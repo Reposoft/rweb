@@ -17,6 +17,7 @@ function ReposFileId(name) {
 	/**
 	 * Returns the element matching the id.
 	 * @param prefix, without ':'
+	 * @return the DOM element with id [prefix]:[file ID], or null if not found
 	 */
 	this.find = function(prefix) {
 		return document.getElementById(prefix + ':' + this.get());
