@@ -16,7 +16,7 @@
 <p>Transforms a file or foldername to a valid HTML id attribute value.</p>
 <p>Mimics the behaviour of the <code>getFileId</code> template in <code>repos.xsl</code>.</p>
 <p>Usage: fileid.js should be packed and included in the default head.js.<br />
-Simply call <code>var id = ReposFileID('New folder/')</code>.</p>
+Simply call <code>var id = new ReposFileID('New folder/').get()</code>.</p>
 <h2>example folders</h2>
 <p class="fileidtest">folder/</p>
 <p class="fileidtest">New folder/</p>
@@ -31,17 +31,56 @@ function TestFileId() {
 	this.setUp = function() {
 	};
     
-	this.testSlash = function() {
+	this.testIdEscape = function() {
+		this.assertEquals('fi_64.txt', new ReposFileId()._idescape('fi%64.txt'));
+		this.assertEquals('a:b.txt', new ReposFileId()._idescape('a:b.txt'));
+		this.assertEquals('a(1).txt', new ReposFileId()._idescape('a(1).txt'));
+		this.assertEquals('~a-b.txt', new ReposFileId()._idescape('~a-b.txt'));
+	};
+	
+	this.testUrlEscapeUtf8 = function() {
+		this.assertEquals('%C3%A5', new ReposFileId()._urlescape('å'));
+		this.assertEquals('%C3%A5', new ReposFileId()._urlescape('ä'));
+		this.assertEquals('%C3%A5', new ReposFileId()._urlescape('ö'));
+		this.assertEquals('%C3%A5', new ReposFileId()._urlescape('ü'));
+	}
+	
+	this.testUrlEscapeCase = function() {
+		// Subversion does lowercase encode of UTF-8 in the 'href' attribute in the browser xml
+		this.assertEquals('Aa%c3%a5', new ReposFileId()._urlescape('Aaå'));
+	}
+	
+	this.testGetFileId = function() {
+		this.assertEquals('file.txt', new ReposFileId('file.txt').get());
 		this.assertEquals('folder_', new ReposFileId('folder/').get());
-	};
-	
-	this.testPercent = function() {
-		this.assertEquals('fi_64.txt', new ReposFileId('fi%64.txt').get());
-	};
-	
-	this.testChar = function() {
+		this.assertEquals('fi.txt', new ReposFileId('fi.txt').get());
 		this.assertEquals('f_c3_a6r.txt', new ReposFileId('får.txt').get());
-	};
+		this.assertEquals('f_c3_a6r_', new ReposFileId('får/').get());
+	}
+	
+	// ---- generally, the 'name' attribute is the same in svn list and mod_dav_svn ----
+	
+	this.testGetFileIdAmp = function() {
+		// both 'svn list' (name) and mod_dav_svn (href) attributes are escaped "&amp"; which is not a valid html id
+		// but unlike other escape sequences it is displayed as "&" in the URL
+		this.assertEquals('a_amp_b', new ReposFileId('a&amp;b').get());
+	}
+	
+	this.testGetFileIdSemicolon = function() {
+		// for ";" in filename, mod_dav_svn returns "%3b" but svn list returns ";"
+		this.assertEquals('%3b', new ReposFileId()._urlescape(';'));
+		this.assertEquals('a_3bb', new ReposFileId('a;b').get());
+	}
+	
+	this.testGetFileIdParenthesis = function() {
+		this.assertEquals('%5b%5d', new ReposFileId()._urlescape('[]'));
+		this.assertEquals('a_5bb_5d', new ReposFileId('a[b]').get());
+	}	
+	
+	this.testGetFileIdBrackets = function() {
+		this.assertEquals('fi(1).txt', new ReposFileId()._urlescape('fi(1).txt'));
+		this.assertEquals('fi_1_.txt', new ReposFileId('fi(1).txt').get());
+	}
 	
 	this.testFind = function() {
 		this.assertEquals('file.txt', new ReposFileId('file.txt').find('f').innerHTML);

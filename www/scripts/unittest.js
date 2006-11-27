@@ -95,7 +95,7 @@ function testrun(testCaseInstance) {
  */
 function testexec() {
 	if (testCase == null) console.log('No test case specified. Call testrun(my testcase).');
-	console.log('running testcase');
+	if (window.console) console.log('running testcase');
 	var e = document.createElement('div');
 	e.id = 'testlog';
 	document.getElementsByTagName('body')[0].appendChild(e);
@@ -104,7 +104,7 @@ function testexec() {
 }
 
 function testonload() {
-	console.log('page loaded');
+	if (window.console) console.log('page loaded');
 	if (testCase==null) {
 		loaded = true;
 	} else {

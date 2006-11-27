@@ -132,6 +132,7 @@
 			</xsl:call-template>
 		</xsl:param>
 		<div id="contents">
+		<span id="fullpath" style="display:none"><xsl:value-of select="$fullpath"/></span>
 		<h2>
 			<a id="home" href="{$home}">
 				<span class="projectname">
@@ -313,7 +314,7 @@
 	<!-- ids should always start with letters, so a prefix like 'f:' is needed -->
 	<xsl:template name="getFileID">
 		<xsl:param name="filename" select="@href"/>
-		<xsl:value-of select="translate($filename,'%/','__')"/>
+		<xsl:value-of select="translate($filename,'%/()@;&amp;','_______')"/>
 	</xsl:template>
 	<!-- *** replace newline with <br> *** -->
 	<xsl:template name="linebreak">
