@@ -20,7 +20,7 @@ $newname = time() . '-' . getReposUser() . '-' . $oldname;
 $p->assign('pathToCopyForm', '../../edit/copy/');
 $p->assign('target', $target);
 $p->assign('oldname', $oldname);
-$p->assign('tofolder', '/branches');
+$p->assign('tofolder', '/branches/');
 $p->assign('newname', $newname);
 $p->display();
 						 
