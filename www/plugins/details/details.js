@@ -16,10 +16,10 @@ function details_read() {
 	if (e.size() > 0) {
 		$.get('/repos/open/list/?target='+encodeURIComponent(e.title()), function(xml) {
 				details_write(e, $('/lists/list/entry', xml)); });
-		// add command
-		if ($('#fullpath').size() > 0) {
-			$('#commandbar').append('<a id="showdetails" class="command" href="javascript:detailsToggle()">show details</a>');
-		}
+	}
+	// add command
+	if ($('#fullpath').size() > 0) {
+		$('#commandbar').append('<a id="showdetails" class="command" href="javascript:detailsToggle()">show details</a>');
 	}
 }
 
@@ -64,7 +64,7 @@ function details_repository() {
 }
 
 /**
- * Adds empty placeholders for common detail entries
+ * Adds empty placeholders for common detail entries (except name, which is probably displayed already)
  * @param e jQuery element to add to
  */
 function details_addtags(e) {
