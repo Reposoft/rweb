@@ -101,6 +101,11 @@ function TestFileId() {
 		this.assertEquals('fi(1).txt', new ReposFileId()._urlescape('fi(1).txt'));
 		this.assertEquals('fi_1_.txt', new ReposFileId('fi(1).txt').get());
 	}
+
+	this.testGetFileId = function() {
+		this.assertEquals('%23', new ReposFileId()._urlescape('#'));
+		this.assertEquals('a_23b', new ReposFileId('a#b').get());
+	}
 	
 	this.testFind = function() {
 		this.assertEquals('file.txt', new ReposFileId('file.txt').find('f').innerHTML);
@@ -108,6 +113,11 @@ function TestFileId() {
 
 	this.testFindNull = function() {
 		this.assertEquals(null, new ReposFileId('file.txt').find('hmm'));
+	};
+	
+	// for a bugfix
+	this.testTrickyFolder = function() {
+		this.assertEquals('a_23aa_a_25a__', new ReposFileId('a#aa@a%a&/').get());
 	};
 
 }

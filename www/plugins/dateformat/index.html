@@ -61,7 +61,8 @@ function TestDateformat() {
 		e.innerHTML = t;
 		new Dateformat().formatElement(e);
 		// dateformat should set the class 'formatted' when successful
-		this.assertEquals('formatted', e.getAttribute('class'));
+		// does not work in IE // this.assertEquals('formatted', e.getAttribute('class'));
+		this.assertTrue($(e).is('.formatted'));
 		// now try to format the same tag again
 		var d = e.innerHTML;
 		this.assertTrue(t != d);

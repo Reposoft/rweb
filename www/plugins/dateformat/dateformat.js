@@ -107,8 +107,8 @@ function Dateformat() {
 	 * @param texttag element containing date time
 	 */
 	this.formatElement = function(texttag) {
+		if ($(texttag).is('.formatted')) return;
 		var d = texttag.innerHTML;
-		if (texttag.hasAttribute('class') && texttag.getAttribute('class').indexOf('formatted')>=0) return;
 		if (d == null || d=='') return;
 		if (!this.isDatetime(d)) {
 			throw "Invalid datetime string in tag " + (texttag.id ? texttag.id : texttag.tagName) + ": " + d;	
