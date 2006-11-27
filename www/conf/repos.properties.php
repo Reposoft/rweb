@@ -705,7 +705,7 @@ function _repos_getFullCommand($commandName, $argumentsString) {
 	} else {
 		$run .= ' '.$argumentsString;
 	}
-	return "$wrapper$run 2>&1";
+	return $wrapper.$run." 2>&1";
 }
 
 /**
