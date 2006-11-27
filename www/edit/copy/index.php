@@ -5,12 +5,13 @@ require( dirname(dirname(__FILE__))."/edit.class.php" );
 // automatic validation
 new Rule('tofolder');
 new FilenameRule('newname');
-// explicit validation
-new NewFilenameRule('newname', $_GET['tofolder']);
+// explicit validation of the destination
+$tofolder = rtrim($_GET['tofolder'], '/').'/';// don't require tailing slash from user;
+new NewFilenameRule('newname', $tofolder);
 
 // dispatch
 if (isset($_GET[SUBMIT])) {
-	svnCopy(); 
+	svnCopy($tofolder); 
 } else {
 	$target = getTarget();
 	$template = new Presentation();
@@ -22,7 +23,7 @@ if (isset($_GET[SUBMIT])) {
 	$template->display();
 }
 
-function svnCopy() {
+function svnCopy($tofolder) {
 	Validation::expect('target', 'tofolder', 'newname', 'move', 'message');
 	if ($_GET['move']==1) {
 		$edit = new Edit('move');
@@ -30,7 +31,6 @@ function svnCopy() {
 		$edit = new Edit('copy');
 	}
 	$oldUrl = getTargetUrl();
-	$tofolder = rtrim($_GET['tofolder'], '/').'/'; // don't require tailing slash from user
 	$newUrl = getRepository().$tofolder.$_GET['newname'];
 	if (isset($_GET['message'])) {
 		$edit->setMessage($_GET['message']);
