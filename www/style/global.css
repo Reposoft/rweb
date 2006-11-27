@@ -71,6 +71,9 @@ code {
 .error {
 	color: #CC3300;
 }
+.filesize {
+		
+}
 /* common page elements, may also be layouted for each tool */
 #workspace {
 }

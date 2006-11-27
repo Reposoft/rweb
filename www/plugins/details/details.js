@@ -13,16 +13,17 @@ $(document).ready(function() {
 
 function details_read() {
 	var e = $('body').find('div.details');
-	if (e.size() == 0) {
-		details_repository();
-		return;
-	}
+	if (e.size() > 0) {
 	if (window.console) console.log('request details for /repos/open/list/?target='+encodeURIComponent(e.title()));
 	$.ajax({type:'GET', 
 		url:'/repos/open/list/?target='+encodeURIComponent(e.title()), 
 		dataType:'xml',
 		success:function(xml){ details_write(e, $('/lists/list/entry', xml)); }});
-	details_repository();
+	}
+	// add command
+	if ($('#fullpath').size() > 0) {
+		$('#commandbar').append('<a class="command" href="javascript:detailsToggle()">show details</a>');
+	}
 }
 
 /**
@@ -62,11 +63,9 @@ function details_repository() {
 				if (row == null) return; // silently skip items that can't be found
 				row = $(row);
 				details_addtags(row);
-				$('.details',row).hide();
+				//$('.details',row).hide();
 				details_write(row, $(this));
 			});
-			// add command
-			$('#commandbar').append('<a class="command" href="javascript:detailsToggle()">show details</a>');
 		}});
 }
 
@@ -92,6 +91,7 @@ function details_formatSize(strBytes) {
 }
 
 function detailsToggle() {
+	details_repository();
 	$('.details').show(); //.toggle();
 }
 
