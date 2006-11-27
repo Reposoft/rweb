@@ -14,7 +14,7 @@ if (isset($_GET[SUBMIT])) {
 	$template->assign('target', $target);
 	$template->assign('oldname', basename($target));
 	$template->assign('folder', getParent($target));	
-	$template->assign('branchFileArray', svnList('/branches'));
+	$template->assign('branchFileArray', svnList('/branches/'));
 	$template->display();
 }
 
@@ -23,8 +23,12 @@ function svnList($listFilesInFolder) {
 	$repositoryRootUrl = getRepository();
 	$list->addArgUrl($repositoryRootUrl . $listFilesInFolder);
 	$list->execute();
-	$listResult = $list->getOutput();
-	return $listResult;
+	if ($list->isSuccessful()){
+		$listResult = $list->getOutput();
+		return $listResult;
+	} else {
+		trigger_error("There are no files to merge." . implode('<br />', $list->getOutput()) , E_USER_ERROR);
+	}
 }
 
 function doAutomerge($sourceFile){
@@ -69,6 +73,7 @@ function doAutomerge($sourceFile){
 	}
 	if (sizeof($revisionNumber) < 2){
 		$p->showError("No changes have been made in the file.");
+		presentEdit($p, $targetFolder);
 		exit;
 	}
 
@@ -84,7 +89,7 @@ function doAutomerge($sourceFile){
 	$merge->show($p);
 	
 	// Conflict??
-	if (strpos($mergeResult, 'C') === 0){
+	if (preg_match($mergeResult, '/^C\s.*/')){
 		$p->showError("Damnit, I can not merge these files! " . $mergeResult);
 		exit;
 	}
