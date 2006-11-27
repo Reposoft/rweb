@@ -1,7 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<!-- it is important that this page is real XML -->
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 <title>repos.se ReposFileID script test page</title>
 <!-- unit testing -->
 <script type="text/javascript" src="../unittest.js"></script>
@@ -9,6 +10,12 @@
 <script type="text/javascript" src="../lib/jquery/jquery.js"></script>
 <!-- the script -->
 <script type="text/javascript" src="fileid.js"></script>
+<style type="text/css">
+.fileid {
+	border: solid 1px silver;
+	margin-left: 2em;
+}
+</style>
 </head>
 
 <body>
@@ -22,8 +29,13 @@ Simply call <code>var id = new ReposFileID('New folder/').get()</code>.</p>
 <p class="fileidtest">New folder/</p>
 <p class="fileidtest">Non-ascii_ü/</p>
 <h2>example files</h2>
-<p class="fileidtest" id="f:file.txt">file.txt</p>
+<p class="fileidtest">file.txt</p>
+<p class="fileidtest">åäö.txt</p>
+<p>When the page is XML or XHTML all &amp; are encoded as &amp;amp;</p>
+<p class="fileidtest">a&amp;b</p>
 <h2>unit tests</h2>
+<p id="f:file.txt" title="used in unit test case" style="display:none">file.txt</p>
+<p id="amp" title="used in unit test case" style="display:none">a&amp;b</p>
 <script type="text/javascript">
 
 function TestFileId() {
@@ -33,16 +45,18 @@ function TestFileId() {
     
 	this.testIdEscape = function() {
 		this.assertEquals('fi_64.txt', new ReposFileId()._idescape('fi%64.txt'));
+		this.assertEquals('fi_64_bc_bc.txt', new ReposFileId()._idescape('fi%64%bc%bc.txt'));
 		this.assertEquals('a:b.txt', new ReposFileId()._idescape('a:b.txt'));
-		this.assertEquals('a(1).txt', new ReposFileId()._idescape('a(1).txt'));
+		this.assertEquals('a_1_.txt', new ReposFileId()._idescape('a(1).txt'));
 		this.assertEquals('~a-b.txt', new ReposFileId()._idescape('~a-b.txt'));
 	};
 	
 	this.testUrlEscapeUtf8 = function() {
-		this.assertEquals('%C3%A5', new ReposFileId()._urlescape('å'));
-		this.assertEquals('%C3%A5', new ReposFileId()._urlescape('ä'));
-		this.assertEquals('%C3%A5', new ReposFileId()._urlescape('ö'));
-		this.assertEquals('%C3%A5', new ReposFileId()._urlescape('ü'));
+		this.assertEquals('%c3%a5', new ReposFileId()._urlescape('å'));
+		this.assertEquals('%c3%a4', new ReposFileId()._urlescape('ä'));
+		this.assertEquals('%c3%b6', new ReposFileId()._urlescape('ö'));
+		this.assertEquals('%c3%bc', new ReposFileId()._urlescape('ü'));
+		this.assertEquals('%c3%a5%c3%bc', new ReposFileId()._urlescape('åü'));
 	}
 	
 	this.testUrlEscapeCase = function() {
@@ -54,8 +68,8 @@ function TestFileId() {
 		this.assertEquals('file.txt', new ReposFileId('file.txt').get());
 		this.assertEquals('folder_', new ReposFileId('folder/').get());
 		this.assertEquals('fi.txt', new ReposFileId('fi.txt').get());
-		this.assertEquals('f_c3_a6r.txt', new ReposFileId('får.txt').get());
-		this.assertEquals('f_c3_a6r_', new ReposFileId('får/').get());
+		this.assertEquals('f_c3_a5r.txt', new ReposFileId('får.txt').get());
+		this.assertEquals('f_c3_a5r_', new ReposFileId('får/').get());
 	}
 	
 	// ---- generally, the 'name' attribute is the same in svn list and mod_dav_svn ----
@@ -63,7 +77,13 @@ function TestFileId() {
 	this.testGetFileIdAmp = function() {
 		// both 'svn list' (name) and mod_dav_svn (href) attributes are escaped "&amp"; which is not a valid html id
 		// but unlike other escape sequences it is displayed as "&" in the URL
-		this.assertEquals('a_amp_b', new ReposFileId('a&amp;b').get());
+		this.assertEquals('a_b', new ReposFileId($('#amp').text()).get());
+	}
+
+	this.testGetFileIdSpace = function() {
+		// for ";" in filename, mod_dav_svn returns "%3b" but svn list returns ";"
+		this.assertEquals('%20', new ReposFileId()._urlescape(' '));
+		this.assertEquals('a_20b', new ReposFileId('a b').get());
 	}
 	
 	this.testGetFileIdSemicolon = function() {
@@ -90,7 +110,34 @@ function TestFileId() {
 TestFileId.prototype = new TestCase;
 testrun(new TestFileId());
 
+$(document).ready( function() {
+	$('.fileidtest').each( function() {
+		$(this).append('<span class="fileid">'+new ReposFileId($(this).text()).get()+'</span>');
+	});
+});
+
 </script>
+<p>Here's one example of mod_dav_svn xml:
+<pre>
+	&lt;dir name=&quot;New folder&quot; href=&quot;New%20folder/&quot; /&gt;
+	&lt;dir name=&quot;a#aa@a%a&amp;&quot; href=&quot;a%23aa@a%25a&amp;/&quot; /&gt;
+	&lt;dir name=&quot;a;b&quot; href=&quot;a%3bb/&quot; /&gt;
+	&lt;dir name=&quot;a[b]&quot; href=&quot;a%5bb%5d/&quot; /&gt;
+	&lt;dir name=&quot;f&amp;&quot; href=&quot;f&amp;/&quot; /&gt;
+	&lt;dir name=&quot;f(1)&quot; href=&quot;f(1)/&quot; /&gt;
+	&lt;dir name=&quot;tårta&quot; href=&quot;t%c3%a5rta/&quot; /&gt;
+</pre>
+And this is the svn list output:
+<pre>
+	&lt;name&gt;New folder&lt;/name&gt;
+	&lt;name&gt;a#aa@a%a&amp;&lt;/name&gt;
+	&lt;name&gt;a;b&lt;/name&gt;
+	&lt;name&gt;a[b]&lt;/name&gt;
+	&lt;name&gt;f&amp;&lt;/name&gt;
+	&lt;name&gt;f(1)&lt;/name&gt;
+	&lt;name&gt;tårta&lt;/name&gt;
+</pre>
+</p>
 
 </body>
 </html>

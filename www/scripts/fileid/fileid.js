@@ -11,7 +11,7 @@ function ReposFileId(name) {
 	this.name = name;
 	
 	this.get = function() {
-		return this._idescape(this._urlescape(this._prepare(name)));
+		return this._idescape(this._urlescape(name));
 	}
 	
 	/**
@@ -23,27 +23,21 @@ function ReposFileId(name) {
 	}
 	
 	/**
-	 * Escapes the trailing slash in folder URLs
-	 */
-	this._prepare = function(text) {
-		return text.replace('/','_');
-	}
-	
-	/**
 	 * Escapes utf-8 escaped url so that it is a valid XHTML id
 	 */
 	this._idescape = function(text) {
-		return text.replace('%','_');
+		// same characters as in the xsl:translate in repos.xsl getFileId template
+		return text.replace(/[%\/\(\)@&]/g,'_');
 	}
 	
 	/**
-	* Subversion 'href' tags are already encoded with escaped utf-8 in the XML,
-	* so we need to mimic that behaviour.
-	 * Escapes text to UTF-8 URL string, so that spaces, slashes,
-	 * and non-ascii chars get one or two %hex values.
+	 * Subversion 'href' tags are already encoded with escaped utf-8 in the XML,
+	 * so we need to mimic that behaviour.
 	 * The AJAX data is UTF-8, and the page is assumed to be UTF-8 too.
 	 */
 	this._urlescape = function(text) {
-		return encodeURI(text);
+		return text.replace(/[^\w]+/g, function(sub) {
+			return encodeURI(sub).toLowerCase();
+		}).replace(/;/g,'%3b');
 	}
 }

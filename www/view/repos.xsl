@@ -314,7 +314,7 @@
 	<!-- ids should always start with letters, so a prefix like 'f:' is needed -->
 	<xsl:template name="getFileID">
 		<xsl:param name="filename" select="@href"/>
-		<xsl:value-of select="translate($filename,'%/()@;&amp;','_______')"/>
+		<xsl:value-of select="translate($filename,'%/()@&amp;','______')"/>
 	</xsl:template>
 	<!-- *** replace newline with <br> *** -->
 	<xsl:template name="linebreak">
