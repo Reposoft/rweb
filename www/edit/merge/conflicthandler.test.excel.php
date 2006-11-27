@@ -132,10 +132,16 @@ class ConflicthandlerTest extends UnitTestCase {
 </Workbook>
 ';		
 		$file = tempfile_create($contents);
+		$this->assertTrue($this->containsLine($file, '/^<<<.*/'), "Just make sure that the file was written to disk, with a conflict");
+		$this->assertTrue($this->containsConflictMarker($file), "Testing the test function");
 		$log = array();
 		$actual = handleConflict_excel2003xml($file, $log);
 		$this->sendMessage($log);
 		$this->assertTrue($actual, "Should have automatically merged LatestAuthor conflict");
+		$this->assertFalse($this->containsConflictMarker($file), "All conflict markers should be gone");
+		$this->assertTrue($this->containsLine($file, '/.*<LastAuthor>test<\/LastAuthor>.*/'),
+			"Should pick the branch author (who's doing the merge) so we get all the authors in the history of the file");
+		$this->assertFalse($this->containsLine($file, '/.*<LastAuthor>A B<\/LastAuthor>.*/'),"Should have removed conflicting author");
 	}
 	
 	function testExcel2003Value() {
@@ -249,11 +255,12 @@ class ConflicthandlerTest extends UnitTestCase {
  </Worksheet>
 </Workbook>
 ';
-			$file = tempfile_create($contents);
+		$file = tempfile_create($contents);
 		$log = array();
 		$actual = handleConflict_excel2003xml($file, $log);
 		$this->sendMessage($log);
-		$this->assertFalse($actual, "Cannot automatically merge value conflicts");			
+		$this->assertFalse($actual, "Cannot automatically merge value conflicts");		
+		$this->assertTrue($this->containsConflictMarker($file), "Should still contain the conflict markers");	
 	}
 
 	function testExcel2003Function() {
@@ -876,6 +883,26 @@ class ConflicthandlerTest extends UnitTestCase {
  </Worksheet>
 </Workbook>
 ';			
+	}
+	
+	
+	// ---- helpers for assertions ----
+	
+	function containsConflictMarker($file) {
+		if ($this->containsLine($file, '/^<<<<<<<.*/')) return true;
+		if ($this->containsLine($file, '/=======^.*/')) return true;
+		if ($this->containsLine($file, '/^>>>>>>>.*/')) return true;
+	}
+	
+	function containsLine($file, $preg) {
+		$fh = fopen($file, 'r');
+		$m = false;
+		while (!feof($fh) && !$m) {
+			$buffer = fgets($fh, 4096);
+			$m = preg_match($preg, $buffer);
+		}
+		fclose($fh);
+		return $m;
 	}
 	
 }
