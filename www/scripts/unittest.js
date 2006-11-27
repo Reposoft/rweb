@@ -79,21 +79,18 @@ d.href = reposPath + "style/docs.css";
 _head.appendChild(d);
 
 
-var testCase = null;
+var testClass = null;
 var loaded = false;
 
 /**
  * Makes sure the test case is executed after all other onload activities.
  * @param testClass the class (which is technically a function) 
  */
-function testrun(testClass) {
-	if (typeof(testClass)=='function') {
-		testClass.prototype = new TestCase;
-		testCase = new testClass();
-	}
-	// until all tests are migrated: support the old argument type, a new instance of the testcase with the prototype set
-	if (typeof(testClass)=='object') {
-		testCase = testClass;
+function testrun(testCaseClass) {
+	if (typeof(testCaseClass)=='function') {
+		testClass = testCaseClass;
+	} else {
+		alert('Call "testrun(MyTestCaseClass);" to run the test at body onload');
 	}
 	if (loaded) testexec();
 }
@@ -102,18 +99,21 @@ function testrun(testClass) {
  * Runs a test case and writes the result to a new div named 'testlog'
  */
 function testexec() {
-	if (testCase == null) console.log('No test case specified. Call testrun(my testcase).');
+	if (testClass == null) console.log('No test case specified. Call testrun(MyTestCaseClass).');
 	if (window.console) console.log('running testcase');
+	// this is the first time we use EcmaUnit code, so that ecmaunit js is not needed when test page is parsed
+	testClass.prototype = new TestCase;
+	testInstance = new testClass();
 	var e = document.createElement('div');
 	e.id = 'testlog';
 	document.getElementsByTagName('body')[0].appendChild(e);
-	testCase.initialize(new HTMLReporter(e));
-	testCase.runTests();	
+	testInstance.initialize(new HTMLReporter(e));
+	testInstance.runTests();	
 }
 
 function testonload() {
 	if (window.console) console.log('page loaded');
-	if (testCase==null) {
+	if (testClass==null) {
 		loaded = true;
 	} else {
 		testexec();
