@@ -84,9 +84,17 @@ var loaded = false;
 
 /**
  * Makes sure the test case is executed after all other onload activities.
+ * @param testClass the class (which is technically a function) 
  */
-function testrun(testCaseInstance) {
-	testCase = testCaseInstance;
+function testrun(testClass) {
+	if (typeof(testClass)=='function') {
+		testClass.prototype = new TestCase;
+		testCase = new testClass();
+	}
+	// until all tests are migrated: support the old argument type, a new instance of the testcase with the prototype set
+	if (typeof(testClass)=='object') {
+		testCase = testClass;
+	}
 	if (loaded) testexec();
 }
 

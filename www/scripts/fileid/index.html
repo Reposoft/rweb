@@ -122,8 +122,7 @@ function TestFileId() {
 
 }
 
-TestFileId.prototype = new TestCase;
-testrun(new TestFileId());
+testrun(TestFileId);
 
 $(document).ready( function() {
 	$('.fileidtest').each( function() {

@@ -64,8 +64,8 @@ function TestDetails() {
 		this.assertEquals('1000 MB', details_formatSize('' + (1024 * 1024 * 1000)));
 	};
 }
-TestDetails.prototype = new TestCase;
-testrun(new TestDetails());
+
+testrun(TestDetails);
 
 </script>
 
