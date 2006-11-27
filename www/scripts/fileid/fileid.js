@@ -6,6 +6,9 @@
  *
  * All HTML ids must start with a letter, so ids must _always_ be prefixed
  * before they are used. The conventions is prefix:id.
+ *
+ * @author Staffan Olsson (solsson)
+ * $Id$
  */
 function ReposFileId(name) {
 	this.name = name;
