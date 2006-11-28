@@ -11,8 +11,8 @@ require '../uncompress.php';
 $repos_package = "simpletest";
 $home = "simpletest.sourceforge.net";
 
-$version = "1.0.1alpha3";
-$archive = "http://heanet.dl.sourceforge.net/sourceforge/simpletest/simpletest_$version.tar.gz";
+$version = "1.0.1beta";
+$archive = "http://belnet.dl.sourceforge.net/sourceforge/simpletest/simpletest_$version.tar.gz";
 
 $basedir = dirname(__FILE__);
 $dir_backslash = rtrim($basedir, DIRECTORY_SEPARATOR);
