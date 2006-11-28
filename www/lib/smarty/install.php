@@ -4,6 +4,10 @@
 <BODY>
 <PRE>
 <?PHP
+if (file_exists('libs/')) {
+	echo 'Smarty libs already installed';
+	exit;
+}
 
 require '../uncompress.php';
 

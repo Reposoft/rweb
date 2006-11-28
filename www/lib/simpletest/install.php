@@ -4,9 +4,13 @@
 <BODY>
 <PRE>
 <?PHP
+if (file_exists('simpletest/')) {
+	echo 'Simpletest is already installed';
+	exit;
+}
+
 require '../uncompress.php';
 // PHP unit testing framework
-
 
 $repos_package = "simpletest";
 $home = "simpletest.sourceforge.net";
