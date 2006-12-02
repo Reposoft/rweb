@@ -2,19 +2,22 @@
 
 require "../../conf/Presentation.class.php";
 require "../edit.class.php";
+require "xmlConflictHandler.php";
 
 
 if (isset($_GET[SUBMIT])) {
 	doAutomerge($_GET['branchFile']); 
 } else {
 	$target = getTarget();
-	echo $target;
 	$template = new Presentation();
 	$template->assign('repository', getRepository());
 	$template->assign('target', $target);
 	$template->assign('oldname', basename($target));
-	$template->assign('folder', getParent($target));	
-	$template->assign('branchFileArray', svnList('/branches/'));
+	$template->assign('folder', getParent($target));
+	if (!$target){
+		trigger_error('Branches folder must be set as target parameter', E_USER_ERROR);
+	}	
+	$template->assign('branchFileArray', svnList($target));
 	$template->display();
 }
 
@@ -23,12 +26,14 @@ function svnList($listFilesInFolder) {
 	$repositoryRootUrl = getRepository();
 	$list->addArgUrl($repositoryRootUrl . $listFilesInFolder);
 	$list->execute();
-	if ($list->isSuccessful()){
-		$listResult = $list->getOutput();
-		return $listResult;
-	} else {
-		trigger_error("There are no files to merge." . implode('<br />', $list->getOutput()) , E_USER_ERROR);
-	}
+	$listResult = $list->getOutput();
+	return $listResult;
+	//if ($list->isSuccessful()){
+	//	$listResult = $list->getOutput();
+	//	return $listResult;
+	//} else {
+	//	trigger_error("There are no files to merge." . implode('<br />', $list->getOutput()) , E_USER_ERROR);
+	//}
 }
 
 function doAutomerge($sourceFile){
@@ -89,14 +94,20 @@ function doAutomerge($sourceFile){
 	$merge->show($p);
 	
 	// Conflict??
-	if (preg_match($mergeResult, '/^C\s.*/')){
-		$p->showError("Damnit, I can not merge these files! " . $mergeResult);
-		exit;
+
+	foreach ($mergeResult as $value){
+		if (strpos($value, 'C ') === 0){
+			$filePath = ltrim(ltrim($value, "C"));
+			$fileContents = file($filePath);
+			resolveConflicts($fileContents);
+			$p->showError("Damnit, I can not merge these files! " . $value);
+			exit;
+		}
 	}
 	
-	// Automaticly resolve conflict
 	
-	
+	// Automatically resolve conflict
+		
 	// Commit working copy
 	$updatefile = toPath($temporaryWorkingCopy . $targetFile);
 	$oldsize = filesize($updatefile);
