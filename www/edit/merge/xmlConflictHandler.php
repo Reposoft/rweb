@@ -2,7 +2,13 @@
 
 
 function resolveConflicts($fileContents){
-	
+	$conflict = findConflict($fileContents);
+	if(!$conflict){
+		echo implode('<br />', $fileContents);
+		exit;
+	} else {
+		chooseMerge($fileContents, $conflict);
+	}
 }
 
 function findConflict($fileContents){
@@ -11,55 +17,59 @@ function findConflict($fileContents){
 		if (strpos($value, '<<<<<<< .working') === 0){
 			$conflictMarker = true;
 		}
+		if ($conflictMarker == true){
+			$conflict[$key] = $value;
+		}
 		if (strpos($value, '>>>>>>> .merge') === 0){
-			$conflict[] = $value;
+			$conflictMarker = false;
 			return $conflict;
 		}
-		if ($conflictMarker == true){
-			$conflict[] = $value;
-		}
 	}
 }
 
 
-function chooseWorking($fileContents){
+function chooseWorking($fileContents, $conflict){
+	$conflictSolved = $conflict;
 	$deleteRow = false;
-	foreach ($fileContents as $key=>$value){
+	foreach ($conflictSolved as $key=>$value){
 		if (strpos($value, '<<<<<<< .working') === 0){
-			unset($fileContents[$key]);
+			unset($conflictSolved[$key]);
 		}
 		if (strpos($value, '=======') === 0){
 			$deleteRow = true;
 		}
 		if (strpos($value, '>>>>>>> .merge') === 0){
-			unset($fileContents[$key]);
+			unset($conflictSolved[$key]);
 			$deleteRow = false;
 		}
 		if ($deleteRow == true){
-			unset($fileContents[$key]);
+			unset($conflictSolved[$key]);
 		}
 	}
-	return $fileContents;
+	array_splice($fileContents, array_shift(array_keys($conflict)), count($conflict), $conflictSolved);
+	resolveConflicts($fileContents);
 }
 
-function chooseMerge($fileContents){
+function chooseMerge($fileContents, $conflict){
+	$conflictSolved = $conflict;
 	$deleteRow = false;
-	foreach ($fileContents as $key=>$value){
+	foreach ($conflictSolved as $key=>$value){
 		if (strpos($value, '<<<<<<< .working') === 0){
-			unset($fileContents[$key]);
+			unset($conflictSolved[$key]);
 			$deleteRow = true;
 		}
 		if (strpos($value, '=======') === 0){
-			unset($fileContents[$key]);
+			unset($conflictSolved[$key]);
 			$deleteRow = false;
 		}
 		if (strpos($value, '>>>>>>> .merge') === 0){
-			unset($fileContents[$key]);
+			unset($conflictSolved[$key]);
 		}
 		if ($deleteRow == true){
-			unset($fileContents[$key]);
+			unset($conflictSolved[$key]);
 		}
 	}
-	return $fileContents;
+	array_splice($fileContents, array_shift(array_keys($conflict)), count($conflict), $conflictSolved);
+	resolveConflicts($fileContents);
 }
 ?>
