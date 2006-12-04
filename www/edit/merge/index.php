@@ -6,7 +6,7 @@ require "xmlConflictHandler.php";
 
 
 if (isset($_GET[SUBMIT])) {
-	doAutomerge($_GET['branchFile']); 
+	doAutomerge($_GET['branchFile']);
 } else {
 	$target = getTarget();
 	$template = new Presentation();
@@ -16,7 +16,7 @@ if (isset($_GET[SUBMIT])) {
 	$template->assign('folder', getParent($target));
 	if (!$target){
 		trigger_error('Branches folder must be set as target parameter', E_USER_ERROR);
-	}	
+	}
 	$template->assign('branchFileArray', svnList($target));
 	$template->display();
 }
@@ -92,26 +92,30 @@ function doAutomerge($sourceFile){
 	$mergeCommand = 'svn ' . $merge->getCommand();
 	$mergeResult = $merge->getOutput();
 	$merge->show($p);
-	
+
 	// Conflict??
 
 	foreach ($mergeResult as $value){
 		if (strpos($value, 'C ') === 0){
 			$filePath = ltrim(ltrim($value, "C"));
 			$fileContents = file($filePath);
-			//if (strpos($fileContents[0], '<?xml') === 0){
-				resolveConflicts($fileContents);
-			//} else {
-			//	$p->showError($value . " does not appear to be valid xml file.");
-			//}
+			if (strpos($fileContents[0], '<?xml') === 0){
+				echo '<pre>';
+				echo htmlentities(implode($fileContents));
+				echo '</pre>';
+				//resolveConflicts($fileContents);
+			} else {
+				$p->showError($value . " does not appear to be valid xml file.");
+				exit;
+			}
 			//$p->showError("Cannot merge files " . $value);
 			//exit;
 		}
 	}
-	
-	
+
+
 	// Automatically resolve conflict
-		
+
 	// Commit working copy
 	$updatefile = toPath($temporaryWorkingCopy . $targetFile);
 	$oldsize = filesize($updatefile);
@@ -132,8 +136,8 @@ function doAutomerge($sourceFile){
 			$commitResult = $commit->getOutput();
 		}
 	}
-	
-	
+
+
 	//echo implode("<BR>", $checkoutResult) . "<BR><BR>";
 	//echo implode("<BR>", $logResult) . "<BR><BR>";
 	//echo implode("<BR>", $mergeResult) . "<BR><BR>";
