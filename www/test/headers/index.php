@@ -21,7 +21,7 @@ $links = array(
 	'listxml' => getWebapp().'open/list/?target=/demoproject/trunk/public/xmlfile.xml',
 	'validationerror' => getWebapp().'plugins/validation/?name=&testuser=123',
 	'validationerror-json' => getWebapp().'plugins/validation/?name=&testuser=123&serv=json',
-	'php-error' => getWebapp().'test/errorhandling/?case=3'
+	'error' => getWebapp().'test/errorhandling/?case=3'
 	);
 
 // can not use 'target' because that is for autologin

@@ -1,0 +1,28 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>repos.se automated test</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">E_USER_ERRORs should result in http status 500, to allow web services</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/repos/test/headers/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>error</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>|HTTP/1.1 500</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
