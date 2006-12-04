@@ -70,7 +70,7 @@ div.test > div.testoutput > acronym {
 	padding-left: 0.4em;
 	padding-right: 0.4em;	
 }
-/* using sweetTitles instead
+/* using tooltip instead
 div.test > div.testoutput > pre {
 	margin-top: -0.2em;
 	width: 1.4em;
@@ -83,3 +83,10 @@ div.test > div.testoutput > pre:hover {
 	height: auto;
 }
 */
+#tooltip {
+	font-size: 82.5%;
+	border: 1px solid #111;
+	background-color: #eee;
+	opacity: 0.85;
+	padding: 3px;
+}

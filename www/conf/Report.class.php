@@ -258,9 +258,7 @@ class Report {
 		$this->_print('<link href="/repos/style/docs.css" rel="stylesheet" type="text/css"/>');
 		// TODO use head.js
 		$this->_print('<script src="/repos/scripts/lib/jquery/jquery.js" type="text/javascript"></script>');
-		$this->_print('<link href="/repos/plugins/titles/sweetTitles.css" rel="stylesheet" type="text/css"/>');
-		$this->_print('<script src="/repos/plugins/titles/addEvent.js" type="text/javascript"></script>');
-		$this->_print('<script src="/repos/plugins/titles/sweetTitles.js" type="text/javascript"></script>');
+		$this->_print('<script src="/repos/plugins/tooltip/tooltip.js" type="text/javascript"></script>');
 		$this->_print("</head>\n");
 		$this->_print("<body>\n");
 		// don't use containers, because then the prowser can not show process as the operation proceeds
@@ -308,7 +306,7 @@ class Report {
 			$('acronym.failed').each( function() {
 				i++;
 				this.innerHTML=''+i;
-				var error = this.getAttribute('tip'); // seems like sweetTitles renames all to tip
+				var error = this.getAttribute('title');
 				var span = document.createElement('span');
 				span.innerHTML = '<small>['+i+'] '+error+'</small>';
 				span.style.display = 'block';
