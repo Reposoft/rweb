@@ -59,8 +59,8 @@ if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable ma
  * a web service client or an AJAX page
  */
 function isRequestService() {
-	return isset($_REQUEST[WEBSERVICE_KEY]) && $_REQUEST[WEBSERVICE_KEY]==1;
-	return isRequestInternal();
+	return isset($_REQUEST[WEBSERVICE_KEY]) && $_REQUEST[WEBSERVICE_KEY]=='json';
+	//return isRequestInternal();
 }
 
 // ------ local configuration ------

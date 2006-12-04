@@ -28,7 +28,8 @@ $testfiles = array(
 'plugins/validation/Validation.test.php',
 'upload/mimetype.test.php',
 'edit/merge/conflicthandler.test.excel.php',
-'open/list/list.test.php'
+'open/list/list.test.php',
+'open/ServiceRequest.test.php'
 );
 
 function printTestSuite($testfiles) {
