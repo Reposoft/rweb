@@ -99,9 +99,13 @@ function doAutomerge($sourceFile){
 		if (strpos($value, 'C ') === 0){
 			$filePath = ltrim(ltrim($value, "C"));
 			$fileContents = file($filePath);
-			resolveConflicts($fileContents);
-			$p->showError("Damnit, I can not merge these files! " . $value);
-			exit;
+			//if (strpos($fileContents[0], '<?xml') === 0){
+				resolveConflicts($fileContents);
+			//} else {
+			//	$p->showError($value . " does not appear to be valid xml file.");
+			//}
+			//$p->showError("Cannot merge files " . $value);
+			//exit;
 		}
 	}
 	
