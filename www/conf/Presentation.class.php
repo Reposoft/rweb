@@ -219,7 +219,7 @@ class Presentation extends Smarty {
 		$template = $this->getLocaleFile(dirname(__FILE__) . '/Error');
 		$this->enableRedirect();
 		$this->assign('headline', $headline);
-		$this->assign('error_msg', $error_msg);
+		$this->assign('error', $error_msg);
 		$this->display($template);
 	}
 	
@@ -232,7 +232,7 @@ class Presentation extends Smarty {
 	function showErrorNoRedirect($error_msg, $headline='An error occurred') {
 		$template = $this->getLocaleFile(dirname(__FILE__) . '/Error');
 		$this->assign('headline', $headline);
-		$this->assign('error_msg', $error_msg);
+		$this->assign('error', $error_msg);
 		$this->display($template);		
 	}
 	
