@@ -21,7 +21,8 @@ echo("<a href=\"?text=n\xc3\xa4d\xc3\xa5\">test non-encoded UTF-8 url: &quot;n\x
 
 echo("-- Reading 'text' query param --\n");
 
-$var = $_GET['text'];
+$var = '';
+if (isset($_GET['text'])) $var = $_GET['text'];
 echo("Value: ".$var."\n");
 echo("(".getchars($var).")\n");
 

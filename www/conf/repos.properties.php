@@ -35,7 +35,7 @@ define('REPO_KEY', 'repo');
 define('USERNAME_KEY', 'account');
 define('LOCALE_KEY', 'lang');
 define('THEME_KEY', 'style'); // to match stylesheet switcher
-define('WEBSERVICE_KEY', 'serv'); // if this is =1 we know for sure it is an internal request
+define('WEBSERVICE_KEY', 'serv'); // html, json, xml or text
 
 // parameter conventions
 define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST

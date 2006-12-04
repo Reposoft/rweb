@@ -3,11 +3,32 @@
 
 require('../../account/login.inc.php');
 
+// quick links to common header checks
+$repo_root = getRepository();
+$links = array(
+	'repository' => $repo_root,
+	'repositorytest' => $repo_root.'/test/trunk/',
+	'repositorypublicfolder' => $repo_root.'/demoproject/trunk/public/',
+	'repositorypublicfile' => $repo_root.'/demoproject/trunk/public/xmlfile.xml',
+	'100bytes.js' => '100bytes.js',
+	'head.js-file' => getWebapp().'scripts/head.js',
+	'head.js-folder' => getWebapp().'scripts/head.js/',
+	'favicon.ico' => '/favicon.ico',
+	'repos.xsl' => getWebapp().'view/repos.xsl',
+	'repos1.gif' => getWebapp().'style/logo/repos1.gif',
+	'repos1.png' => getWebapp().'style/logo/repos1.png',
+	'global.css' => getWebapp().'style/global.css',
+	'listxml' => getWebapp().'open/list/?target=/demoproject/trunk/public/xmlfile.xml',
+	'validationerror' => getWebapp().'plugins/validation/?name=&testuser=123',
+	'validationerror-json' => getWebapp().'plugins/validation/?name=&testuser=123&serv=json',
+	'php-error' => getWebapp().'test/errorhandling/?case=3'
+	);
+
 // can not use 'target' because that is for autologin
 if (isset($_GET['check'])) {
 	printHeaders($_GET['check']);
 } else {
-	printForm();
+	printForm($links);
 }
 
 function printHeaders($target) {
@@ -35,7 +56,7 @@ function printHeaders($target) {
 	echo('<a class="action" href="./">&lt; back</a>');
 }
 
-function printForm() {
+function printForm($links) {
 	head();
 ?>
 <form action="./" method="get">
@@ -58,22 +79,9 @@ function printForm() {
 </form>
 <h3>predefined queries</h3>
 <?php
-	$repo_root = getRepository();
-	echo('<p><a id="repository" href="./?check='.urlencode($repo_root).'">repository root</a></p>');
-	echo('<p><a id="repositorytest" href="./?check='.urlencode($repo_root.'/test/trunk/').'">[repository]/test/trunk/</a></p>');
-	echo('<p><a id="repositorypublicfolder" href="./?check='.urlencode($repo_root.'/demoproject/trunk/public/').'">/demoproject/trunk/public/</a></p>');
-	echo('<p><a id="repositorypublicfile" href="./?check='.urlencode($repo_root.'/demoproject/trunk/public/xmlfile.xml').'">/demoproject/trunk/public/xmlfile.xml</a></p>');
-	echo('<p><a id="100bytes.js" href="./?check=100bytes.js">100bytes.js</a></p>');
-	echo('<p><a id="head.js-file" href="./?check='.urlencode(getWebapp().'scripts/head.js').'">head.js</a></p>');
-	echo('<p><a id="head.js-folder" href="./?check='.urlencode(getWebapp().'scripts/head.js/').'">head.js/</a></p>');
-	echo('<p><a id="favicon.ico" href="./?check='.urlencode('/favicon.ico').'">/favicon.ico</a></p>');
-	echo('<p><a id="repos.xsl" href="./?check='.urlencode('/repos/view/repos.xsl').'">repos.xsl</a></p>');
-	echo('<p><a id="repos1.gif" href="./?check='.urlencode('/repos/style/logo/repos1.gif').'">repos1.gif</a></p>');
-	echo('<p><a id="repos1.png" href="./?check='.urlencode('/repos/style/logo/repos1.png').'">repos1.png</a></p>');
-	echo('<p><a id="global.css" href="./?check='.urlencode('/repos/style/global.css').'">global.css</a></p>');
-	echo('<p><a id="listxml" href=".?check='.urlencode('/repos/open/list/?target=/demoproject/trunk/public/xmlfile.xml').'">open/list/</a></p>');
-	echo('<p><a id="validationerror" href=".?check='.urlencode('/repos/plugins/validation/?name=&filename=&description=&testuser=123').'">validation error</a></p>');
-	echo('<p><a id="validationerror-json" href=".?check='.urlencode('/repos/plugins/validation/?name=&filename=&description=&testuser=123&serv=json').'">validation error JSON</a></p>');
+	foreach ($links as $id => $url) {
+		echo('<a id="'.$id.'" href="./?check='.urlencode($url).'">'.$url.'</a> <small> [#'.$id.']</small><br />');
+	}
 	echo('<p><a id="back" class="action" href="../">&lt; back</a></p>');
 	foot();
 }

@@ -14,7 +14,9 @@ if (!isset($_GET['case'])) {
 	'17: showError at an instance of Presentation.class.php, after "display"' => '?case=17',
 	'23: tigger_error after require repos.properties.php, as JSON' => '?case=23&serv=json',
 	'26: showErrorNoRedirect at an instance of Presentation.class.php, as JSON' => '?case=26&serv=json',
-	'27: showError at an instance of Presentation.class.php, as JSON' => '?case=27&serv=json'
+	'27: showError at an instance of Presentation.class.php, as JSON' => '?case=27&serv=json',
+	'90: output as XML' => '?case=90&serv=xml',
+	'91: output as plain text' => '?case=91&serv=text',
 	);
 	printPage($links);
 	return;
@@ -87,7 +89,24 @@ if ($case==27) {
 	$p->assign('text', 'Hello');
 	$p->showError("Message $case.");
 }
-
+if ($case==90) {
+	require('../../conf/repos.properties.php');
+	// currently there is no framework for presenting xml
+	header('Content-type: text/xml');
+	echo('<?xml version="1.0"?>
+	<message>
+		<case>90</case>
+		<text>Hello</text>
+		');
+	trigger_error("Message $case.", E_USER_ERROR);
+	echo('</message>');
+}
+if ($case==91) {
+	require('../../conf/repos.properties.php');
+	header('Content-type: text/plain');
+	echo("Case 91.\nHello\n");
+	trigger_error("Message $case.", E_USER_ERROR);
+}
 
 echo "<br />\n-- Unexpected: Error handling function did not exit. --";
 
@@ -104,6 +123,7 @@ function printPage($links) {?>
 		$id = substr($name, 0, 2);
 		echo "<a id=\"$id\" href=\"$url\">$name</a><br />\n";
 	}
+	echo('<p><a id="back" class="action" href="../">&lt; back</a></p>');
 	?>
 	</body>
 	</html>
