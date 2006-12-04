@@ -93,13 +93,13 @@ class Validation {
 	 */
 	function expect($requiredFieldsSeparatedByComma) {
 		if (validationRequest()) {
-			trigger_error("This is a validation request ".$_SERVER['QUERY_STRING'].", but no rule has been enforced. Operation aborted.", E_USER_WARNING);
+			_validation_trigger_error("This is a validation request ".$_SERVER['QUERY_STRING'].", but no rule has been enforced. Operation aborted.");
 		}
 		$n = func_num_args();
 		for($i=0; $i<$n; $i++) {
 			$fieldname = func_get_arg($i);
 			if (!array_key_exists($fieldname, $_REQUEST)) {
-				trigger_error("Can not continue because the expected field '$fieldname' is not submitted", E_USER_WARNING);
+				_validation_trigger_error("Can not continue because the expected field '$fieldname' is not submitted");
 			}
 		}
 	}
@@ -128,9 +128,9 @@ class Validation {
 	function _run($rule, $value) {
 		$r = $rule->validate($value);
 		if (!empty($r)) {
-			trigger_error('Error in field "'.$rule->fieldname.'", value "'.$value.'": '.$r
+			_validation_trigger_error('Error in field "'.$rule->fieldname.'", value "'.$value.'": '.$r
 			//." \n(with script support enabled this should have been reported when the form was submitted)"
-			." \n\nClick 'back' and try again.", E_USER_WARNING);
+			." \n\nClick 'back' and try again.");
 		}
 	}
 	/**
@@ -158,6 +158,11 @@ class Validation {
 		$json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
 		return $json->encode($responseArray);		
 	}
+}
+
+function _validation_trigger_error($msg) {
+	header('HTTP/1.1 412 Precondition Failed');
+	trigger_error($msg, E_USER_WARNING);
 }
 
 ?>
