@@ -4,7 +4,9 @@
 function resolveConflicts($fileContents){
 	$conflict = findConflict($fileContents);
 	if(!$conflict){
-		echo implode('<br />', $fileContents);
+		echo '<pre>';
+		echo htmlentities(implode($fileContents));
+		echo '</pre>';
 		exit;
 	} else {
 		chooseMerge($fileContents, $conflict);
