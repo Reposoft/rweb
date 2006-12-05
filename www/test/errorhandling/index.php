@@ -15,6 +15,7 @@ if (!isset($_GET['case'])) {
 	'23: tigger_error after require repos.properties.php, as JSON' => '?case=23&serv=json',
 	'26: showErrorNoRedirect at an instance of Presentation.class.php, as JSON' => '?case=26&serv=json',
 	'27: showError at an instance of Presentation.class.php, as JSON' => '?case=27&serv=json',
+	'60: login_handleSvnError on svn command' => '?case=60',
 	'90: output as XML' => '?case=90&serv=xml',
 	'91: output as plain text' => '?case=91&serv=text',
 	);
@@ -88,6 +89,11 @@ if ($case==27) {
 	$p = new Presentation();
 	$p->assign('text', 'Hello');
 	$p->showError("Message $case.");
+}
+if ($case==60) {
+	// svnRun should be replaced with a command class that can handle output types
+	require('../../account/login.inc.php');
+	login_handleSvnError('svn test --command', 99, array("Message $case."));
 }
 if ($case==90) {
 	require('../../conf/repos.properties.php');

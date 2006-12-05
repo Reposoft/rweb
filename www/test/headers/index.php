@@ -1,7 +1,7 @@
 <?php
 // display the headers of a page in the application
-
 require('../../account/login.inc.php');
+require('../../open/ServiceRequest.class.php');
 
 // quick links to common header checks
 $repo_root = getRepository();
@@ -23,7 +23,7 @@ $links = array(
 	'validationerror-json' => getWebapp().'plugins/validation/?name=&testuser=123&serv=json',
 	'error' => getWebapp().'test/errorhandling/?case=3'
 	);
-
+	
 // can not use 'target' because that is for autologin
 if (isset($_GET['check'])) {
 	printHeaders($_GET['check']);
@@ -40,12 +40,11 @@ function printHeaders($target) {
 		$target = repos_getSelfUrl().$target;
 	}
 	echo("<p><strong>URL: <a check=\"blank\" href=\"$target\">$target</a></strong></p>");
-	if (isset($_GET['auth'])) {
-		echo('<p>Authenticating as &quot;'.getReposUser().'&quot;</p>');
-		$headers = getHttpHeaders($target, getReposUser(), _getReposPass());
-	} else {
-		$headers = getHttpHeaders($target);
-	}
+	if (strContains($target, '?'));
+	
+	$request = new ServiceRequest($target, array(), false);
+	$request->exec();
+	$headers = $request->getResponseHeaders();
 	echo("<pre>");
 	foreach($headers as $h => $v) {
 		echo('|');
@@ -53,6 +52,19 @@ function printHeaders($target) {
 		echo($v."|\n");
 	}
 	echo("</pre>");
+	echo('<p>');
+	echo('<br />HTTP status: '.$request->getHttpStatus());
+	echo('<br />Content type: '.$request->getResponseType());
+	echo('<br />Response time: '.$request->getResponseTime().' s');
+	echo('</p>');
+	if (isset($headers['Content-Length'])) {
+		if ($headers['Content-Length'] == strlen($request->getResponse())) {
+			echo '<p>Content length '.$headers['Content-Length'].' matches response size.</p>';
+		} else {
+			echo '<p class="error">Content length mismatch. Headers says '.$headers['Content-Length']
+				.' but response body is '.strlen($request->getResponse());
+		}
+	}
 	echo('<a class="action" href="./">&lt; back</a>');
 }
 
