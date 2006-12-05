@@ -17,6 +17,24 @@ if (!function_exists('curl_init')) trigger_error('Service calls require the PHP 
 
 define('SERVICE_LOG', 'open/log/');
 
+/**
+ * Does a web service GET request.
+ * Authenticates as the logged in user for the call, if needed.
+ * The response page can call isRequestService() to identify
+ * a request from this method.
+ * 
+ * Same as jquery, $.get("test.cgi", { name: "John", time: "2pm" })
+ * @param String $uri the resource from server root, starting with slash
+ * @param String $jsonParams the parameters to the request, as a JSON string
+ * @param String $host optional, if empty the current host will be used
+ * @return String the reponse, or an integer HTTP status code on error
+ */
+function _deprecated_requestService($uri, $jsonParams, $host='') {
+	// TODO add method that does not require URI or host, but only the service path in the webapp
+	// TODO probably it is better to use an array of params
+	// TODO add serv=1
+}
+// using a class instead
 class ServiceRequest {
 	
 	var $uri;

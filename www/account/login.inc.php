@@ -12,7 +12,7 @@
  * The 'target' is the central concept here, being the identification
  * of a resource, and a URL that the the user has direct access to.
  * - getTarget() returns the absolute path from the repository root.
- * - getTargetURL() returns the absolute URL as the user knows it.
+ * - getTargetUrl() returns the absolute URL as the user knows it.
  * If login passed, use getReposUser() to get the account name.
  * 
  * Repos checks the HTTP headers of this direct access URL,
@@ -263,26 +263,6 @@ function getHttpHeaders($targetUrl, $user=null, $pass=null) {
 	return $headers;
 }
 
-// ----- web service requests -----
-
-/**
- * Does a web service GET request.
- * Authenticates as the logged in user for the call, if needed.
- * The response page can call isRequestService() to identify
- * a request from this method.
- * 
- * Same as jquery, $.get("test.cgi", { name: "John", time: "2pm" })
- * @param String $uri the resource from server root, starting with slash
- * @param String $jsonParams the parameters to the request, as a JSON string
- * @param String $host optional, if empty the current host will be used
- * @return String the reponse, or an integer HTTP status code on error
- */
-function requestService($uri, $jsonParams, $host='') {
-	// TODO add method that does not require URI or host, but only the service path in the webapp
-	// TODO probably it is better to use an array of params
-	// TODO add serv=1
-}
-
 // ----- resource URL retreival functionality -----
 
 /**
@@ -384,6 +364,7 @@ function getRepoRoot($fullUrl,$pathFromRepoRoot) {
  * Target url is resolved from query parameters
  * @param target Optional target path, if not set then getTarget() is used.
  * @return Full url of the file or directory this request targets
+ *  Not urlencoded.
  */
 function getTargetUrl($target=null) {
 	if ($target==null) $target = getTarget();

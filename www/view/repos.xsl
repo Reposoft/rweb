@@ -190,6 +190,7 @@
 		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
 				<a id="open:{$id}" class="action" title="this file can be opened in Repos" href="{$web}open/?target={../@path}/{@href}">open</a>
+				<a id="history:{$id}" class="action" title="go to the file's history" href="{$web}open/log/?target={../@path}/{@href}">history</a>
 				<xsl:if test="$editUrl">
 					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{@href}">rename</a>
 					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={../@path}/{@href}">copy or move</a>

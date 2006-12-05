@@ -4,13 +4,41 @@ require_once(dirname(dirname(dirname(__FILE__))) . "/account/login.inc.php" );
 
 define('STYLESHEET','../../view/log.xsl');
 
+// the resource to log
 $url = getTargetUrl();
-if (isFile($url)) {
-	trigger_error("History for a single file has not been implemented yet");
-	exit;
+$singlefile = false;
+if (isFile($url)) $singlefile = true;
+
+// read request parameters
+function getParameter($name, $default=null) {
+	if (isset($_REQUEST[$name])) return $_REQUEST[$name];
+	return $default;
 }
 
-$cmd = 'log -v --xml --incremental '.escapeArgument($url); // escapeArgument not needed, because it is URLencoded 
+// always use a limit for the number of records, to prevent big transforms
+// if the limit is active (meaning that there are more records than returned) the xml sets the limit attribute
+$limit = getParameter('limit', '100');
+
+// log a revision interval, using integer numbers to flip between log pages
+// revisions must exist for the given target
+$torev = getParameter('torev');
+$fromrev = getParameter('fromrev', '{20000101T0000}');
+
+// log a datetime interval, any dates are accepted as long as from < to
+// REMOVE and use torev and fromrev instead with conventions from 
+// http://svnbook.red-bean.com/nightly/en/svn-book.html#svn.tour.revs.numbers
+$todate = getParameter('todate');
+$fromdate = getParameter('fromdate');
+
+// log only one revision (a changeset)
+$rev = getParameter('rev'); 
+
+$cmd = 'log -v --xml --incremental --limit '.$limit;
+if ($torev) {
+	// reverse order, always return revisions in descending order
+	$cmd .= ' -r '.$torev.':'.$fromrev;
+}
+$cmd .= ' '.escapeArgument($url);
 
 // start output
 
