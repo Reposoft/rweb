@@ -10,10 +10,22 @@ function _getReposPass() {return 'pwd';};
 // -----------
 require("ServiceRequest.class.php");
 
-// response for testing
+// responses for testing
 if (isset($_GET['redirect'])) {
 	header('Location: '.repos_getSelfUrl());
 	echo "redirecting";
+	exit;
+}
+if (isset($_GET['useryes'])) {
+	if (!isset($_SERVER['PHP_AUTH_USER'])) header('HTTP/1.1 401 Unauthorized');
+	if (!isset($_SERVER['PHP_AUTH_PW'])) header('HTTP/1.1 401 Unauthorized');
+	echo "user checked";
+	exit;
+}
+if (isset($_GET['userno'])) {
+	if (isset($_SERVER['PHP_AUTH_USER'])) header('HTTP/1.1 403 Forbidden');
+	if (isset($_SERVER['PHP_AUTH_PW'])) header('HTTP/1.1 403 Forbidden');
+	echo "user checked";
 	exit;
 }
 if (isset($_GET[WEBSERVICE_KEY])) {
@@ -61,7 +73,7 @@ class TestServiceRequest extends UnitTestCase {
 		$service->exec();
 		$this->assertEqual('{"message":"test","user":"tst","pass":"pwd"}', $service->getResponse());
 		$this->assertTrue($service->isOK());
-		$this->assertEqual(200, $service->getHttpStatus());
+		$this->assertEqual(200, $service->getStatus());
 		$this->sendMessage($service->getResponseHeaders());
 	}
 	
@@ -84,7 +96,7 @@ class TestServiceRequest extends UnitTestCase {
 		$service->setResponseTypeDefault();
 		$this->sendMessage("This test hangs in an infinite loop if the internal user agent string is not set.");
 		$service->exec();
-		$this->assertEqual(412, $service->getHttpStatus());
+		$this->assertEqual(412, $service->getStatus());
 	}
 	
 	function testFollowRedirect() {
@@ -92,14 +104,26 @@ class TestServiceRequest extends UnitTestCase {
 		$service = new ServiceRequest(repos_getSelfUrl().'?redirect=1', array());
 		$service->exec();
 		$this->assertEqual(0, $service->getRedirectCount());
-		$this->assertEqual(302, $service->getHttpStatus());
+		$this->assertEqual(302, $service->getStatus());
 		// enable redirect
 		$service = new ServiceRequest(repos_getSelfUrl().'?redirect=1', array());
 		$service->setFollowRedirects();
 		$service->exec();
 		$this->assertEqual(1, $service->getRedirectCount());
-		$this->assertEqual(412, $service->getHttpStatus());		
+		$this->assertEqual(412, $service->getStatus());		
 	}
+	
+	function testAuthentication() {
+		$service = new ServiceRequest(repos_getSelfUrl().'?useryes', array());
+		$service->exec();
+		$this->assertEqual(200, $service->getStatus());
+	}
+
+	function testAuthenticationFalse() {
+		$service = new ServiceRequest(repos_getSelfUrl().'?userno', array(), false);
+		$service->exec();
+		$this->assertEqual(200, $service->getStatus());
+	}	
 	
 }
 

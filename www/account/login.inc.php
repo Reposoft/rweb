@@ -74,7 +74,8 @@ if (getTargetUrl()) {
 /**
  * Redirect to secure URL if current URL is not secure.
  * This should always be done for BASIC authentication.
- * This is skipped if query param SKIP_SSL is set to one 1
+ * This is skipped if query param SKIP_SSL is set to one 1.
+ * Note that this can also be done in the Apache server config.
  */
 function enforceSSL() {
 	if (isset($_GET['SKIP_SSL']) && $_GET['SKIP_SSL'] == 1) {
@@ -236,6 +237,7 @@ function login_getAuthNameFromRepository($targetUrl) {
 
 /**
  * @return the HTTP status code for the URL, with optional user credentials
+ * @deprecated use ServiceRequest class
  */
 function getHttpStatus($targetUrl, $user=null, $pass=null) {
 	$headers = getHttpHeaders($targetUrl, $user, $pass);
@@ -244,6 +246,7 @@ function getHttpStatus($targetUrl, $user=null, $pass=null) {
 
 /**
  * Gets the status code from an HTTP reponse header string like "HTTP/1.1 200 OK" 
+ * @deprecated use ServiceRequest class
  */
 function getHttpStatusFromHeader($httpStatusHeader) {
 	if(ereg('HTTP/1...([0-9]+).*', $httpStatusHeader, $match)) {
@@ -256,6 +259,7 @@ function getHttpStatusFromHeader($httpStatusHeader) {
 /**
  * Reads the HTTP response headers for a URL.
  * For a method that handles parameters, see requestService();
+ * @deprecated use ServiceRequest class
  */
 function getHttpHeaders($targetUrl, $user=null, $pass=null) {
 	if (substr_count($targetUrl, '/')<3) trigger_error("Can not check headers of $targetUrl, because it is not a valid resource", E_USER_ERROR);
@@ -568,34 +572,10 @@ function login_isSSLSupported() {
 	return function_exists('openssl_open');
 }
 
-function HttpClient_get_headers($url, $httpUsername, $httpPassword) {
-	$url_info=parse_url($url);
-	if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
-		if (!login_isSSLSupported()) {
-			trigger_error("Repos error: $url is a secure URL but this server does not have OpenSSL support in PHP.", E_USER_ERROR);
-		}
-		$port = 443;
-		$host = 'ssl://'.$url_info['host'];
-	} else {
-		$port = isset($url_info['port']) ? $url_info['port'] : 80;
-		$host = $url_info['host'];
-	}
-
-	$client = new HttpClient($host, $port);
-	$client->setHeadersOnly(true);
-	$client->setHandleRedirects(false);
-	if ($httpUsername != null) {
-		$client->setAuthorization($httpUsername, $httpPassword);
-	}
-	if (!$client->get($url_info['path'])) {
-		die('An error occurred: '.$client->getError());
-	}
-	return $client->getHeaders();
-}
-
 // PHP5 get_headers function, but with authentication option
 // currently supports only basic auth
 // @param max number of headers, to prevent infinite loop if no eof is sent in the headers response
+// @deprecated use ServiceRequest class
 function my_get_headers($url, $httpUsername, $httpPassword, $max=20) {
    $url_info=parse_url($url);
    if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {

@@ -33,25 +33,59 @@ $fromdate = getParameter('fromdate');
 // log only one revision (a changeset)
 $rev = getParameter('rev'); 
 
-$cmd = 'log -v --xml --incremental --limit '.$limit;
+// set limit +1 to be able to see if there are more entries
+$cmd = 'log -v --xml --incremental --limit '.($limit+1);
 if ($torev) {
 	// reverse order, always return revisions in descending order
 	$cmd .= ' -r '.$torev.':'.$fromrev;
 }
 $cmd .= ' '.escapeArgument($url);
 
-// start output
+// read the log to memory, size is limited and the browser needs the complete xml before rendering anyway
+$log = login_svnRun($cmd);
+if (($ret=array_pop($log))!=0) { login_handleSvnError($cmd, $ret); exit; } // need a real command class that does exist
 
-// Set HTTP output character encoding to SJIS
-//should be configured in server //mb_http_output('UTF-8');
+// count entries
+$size = 0;
+$entries = 0;
+$limited = false;
+$lastrev = 0;
+for ($i=0; $i<count($log); $i++) {
+	$line = $log[$i];
+	if (strBegins($line, '<logentry')) {
+		$entries++;
+		if ($entries > $limit) $limited = true;
+	}
+	if (preg_match('/^\s*revision="(\d+)"/', $line, $matches)) {
+		$lastrev = $matches[1];
+	}
+	if ($limited) {
+		$log[$i] = ''; // unset not needed (would destory loop), empty lines make no difference after logentry
+		$line = '';
+	}
+	$size += strlen($line)+1; // newline will be added
+}
 
-// passthrough with stylesheet
-header('Content-type: text/xml');
-echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-echo '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
-echo "<!-- SVN log for $url -->\n";
-echo '<log repo="'.getRepository().'" path="'.getTarget().'" web="'.getWebapp().'" static="'.getWebappStatic().'">' . "\n";
-$returnvalue = login_svnPassthru($cmd);
-if ($returnvalue) login_handleSvnError($cmd, $returnvalue);
-echo '</log>';
+// build xml
+$head = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
+$head .= '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
+$head .= '<log repo="'.getRepository().'" path="'.getTarget().'" web="'.getWebapp().'" static="'.getWebappStatic().'"';
+if ($limited) $head .= ' limit="'.$limit.'" limitrev="'.$lastrev.'"';
+$head .= ">\n";
+
+$foot = "\n</log>\n"; 
+
+function setContentLength($bytes) {
+	header('Content-Length: '.$bytes);
+}
+function setContentType($mimetype, $charser=null) {
+	header('Content-Type: '.$mimetype);
+}
+
+setContentType('text/xml');
+// not needed? setContentLength($size);
+
+echo $head;
+echo implode("\n", $log);
+echo $foot;
 ?>

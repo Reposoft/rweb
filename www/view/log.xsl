@@ -70,8 +70,14 @@
 	<xsl:template name="contents">
 		<h1>History of <span class="path"><xsl:value-of select="@path"/></span></h1>
 		<div id="contents">
-			<xsl:apply-templates select="error"/>
 			<xsl:apply-templates select="logentry"/>
+			<xsl:if test="@limit">
+				<xsl:call-template name="limit">
+					<xsl:with-param name="url">?target=<xsl:value-of select="@path"/></xsl:with-param>
+					<xsl:with-param name="size" select="@limit"/>
+					<xsl:with-param name="next" select="@limitrev"/>
+				</xsl:call-template>
+			</xsl:if>
 		</div>
 	</xsl:template>
 	<!-- extra info and logos -->
@@ -159,24 +165,14 @@
 			</xsl:if>
 		</div>
 	</xsl:template>
-	<!-- ====== error node, deprecated (remove when login.inc.php svnerror is not used anymore) ======== -->
-	<xsl:template match="error">
-		<xsl:param name="possible-cause"/>
-		<h2 class="error">An error has occured</h2>
+	<!-- links to browse log pages -->
+	<xsl:template name="limit">
+		<xsl:param name="url"/>
+		<xsl:param name="size"/>
+		<xsl:param name="next"/>
 		<p>
-			<xsl:text>Code </xsl:text>
-			<xsl:value-of select="@code"/>
-			<xsl:value-of select="$spacer"/>
-			<xsl:value-of select="$possible-cause"/>
+			<a href="{$url}&amp;torev={$next}&amp;limit={$size}">Show next <xsl:value-of select="$size"/> entries</a>
 		</p>
-		<xsl:apply-templates select="*"/>
-		<!-- finally copy all text contents because there might have been unstructured output before the error occured -->
-		<pre>
-			<xsl:value-of select="/"/>
-		</pre>
-	</xsl:template>
-	<xsl:template match="output">
-		<p><xsl:value-of select="@line"/></p>
 	</xsl:template>
 	<!-- *** replace newline with <br> *** -->
 	<xsl:template name="linebreak">

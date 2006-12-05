@@ -21,7 +21,8 @@ $links = array(
 	'listxml' => getWebapp().'open/list/?target=/demoproject/trunk/public/xmlfile.xml',
 	'validationerror' => getWebapp().'plugins/validation/?name=&testuser=123',
 	'validationerror-json' => getWebapp().'plugins/validation/?name=&testuser=123&serv=json',
-	'error' => getWebapp().'test/errorhandling/?case=3'
+	'error' => getWebapp().'test/errorhandling/?case=3',
+	'logxml' => getWebapp().'open/log/?target=/demoproject/trunk/public/'
 	);
 	
 // can not use 'target' because that is for autologin
@@ -43,6 +44,7 @@ function printHeaders($target) {
 	if (strContains($target, '?'));
 	
 	$request = new ServiceRequest($target, array(), false);
+	$request->setResponseTypeDefault();
 	$request->exec();
 	$headers = $request->getResponseHeaders();
 	echo("<pre>");
@@ -53,12 +55,15 @@ function printHeaders($target) {
 	}
 	echo("</pre>");
 	echo('<p>');
-	echo('<br />HTTP status: '.$request->getHttpStatus());
+	echo('<br />Address: '.$request->getResponseUrl());
+	echo('<br />HTTP status: '.$request->getStatus());
 	echo('<br />Content type: '.$request->getResponseType());
 	echo('<br />Response time: '.$request->getResponseTime().' s');
 	echo('</p>');
 	if (isset($headers['Content-Length'])) {
-		if ($headers['Content-Length'] == strlen($request->getResponse())) {
+		$givenLength = intval($headers['Content-Length']);
+		$actualLengt = $request->getResponseSize(); // strlen($request->getResponse())
+		if ($givenLength == $actualLengt) {
 			echo '<p>Content length '.$headers['Content-Length'].' matches response size.</p>';
 		} else {
 			echo '<p class="error">Content length mismatch. Headers says '.$headers['Content-Length']
@@ -66,6 +71,9 @@ function printHeaders($target) {
 		}
 	}
 	echo('<a class="action" href="./">&lt; back</a>');
+	echo('<p>&nbsp;</p><h3>Response:</h3><small><pre>');
+	echo(htmlspecialchars($request->getResponse()));
+	echo('</pre></small>');
 }
 
 function printForm($links) {

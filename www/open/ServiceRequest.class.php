@@ -165,6 +165,8 @@ class ServiceRequest {
 			curl_setopt($ch, CURLOPT_USERPWD, 
 				rawurlencode($this->_username).':'.rawurlencode($this->_password));
 		}
+		// set preferred response language
+		curl_setopt($ch, CURLOPT_COOKIE, LOCALE_KEY.'=en');
 	}
 	
 	/**
@@ -174,7 +176,7 @@ class ServiceRequest {
 	function _buildUrl() {
 		$url = $this->uri;
 		if (!isAbsolute($url)) $url = getWebapp().$url;
-		if (strpos($url, '?')===false) $url .= '?';
+		$url .= strpos($url, '?') ? '&' : '?';
 		foreach ($this->parameters as $key => $value) {
 			$url .= $key.'='.rawurlencode($value).'&';
 		}
@@ -216,7 +218,7 @@ class ServiceRequest {
 	 *  "412 Precondition Failed" on validation error for the give parameters.
 	 *	 "500 Internal Server Error" if the service generated an error
 	 */
-	function getHttpStatus() {
+	function getStatus() {
 		//return getHttpStatusFromHeader($this->headers[0]);
 		return $this->info['http_code'];
 	}
@@ -225,7 +227,7 @@ class ServiceRequest {
 	 * @return boolean true if HTTP status is 200
 	 */
 	function isOK() {
-		return ($this->getHttpStatus()==200);
+		return ($this->getStatus()==200);
 	}
 	
 	/**
@@ -233,6 +235,14 @@ class ServiceRequest {
 	 */
 	function getResponse() {
 		return $this->response;
+	}
+	
+	/**
+	 * @return The complete URL of the response,
+	 *  which might be different than the original URL if redirects are allowed.
+	 */
+	function getResponseUrl() {
+		return $this->info['url'];
 	}
 	
 	/**
