@@ -21,6 +21,7 @@ $limit = getParameter('limit', '100');
 
 // log a revision interval, using integer numbers to flip between log pages
 // revisions must exist for the given target
+// TODO add validation for revision numbers, some logic for that found in login.inc.php
 $torev = getParameter('torev');
 $fromrev = getParameter('fromrev', '{20000101T0000}');
 
@@ -35,7 +36,9 @@ $rev = getParameter('rev');
 
 // set limit +1 to be able to see if there are more entries
 $cmd = 'log -v --xml --incremental --limit '.($limit+1);
-if ($torev) {
+if ($rev) {
+	$cmd .= ' -r '.$rev;
+} else if ($torev) {
 	// reverse order, always return revisions in descending order
 	$cmd .= ' -r '.$torev.':'.$fromrev;
 }

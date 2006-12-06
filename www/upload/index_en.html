@@ -25,7 +25,10 @@ function autoFillFilename(path) {
 <h1>Upload file</h1>
 <!--{if $isfile}-->
 <p>As a new version of file <span class="path">{=$target}</span>. <a class="action" target="_blank" href="../open/?target={=$target}">open current version</a></p>
-<div class="details" style>
+<div class="details" title="{=$target}" style="display: none">
+Current revision: <span class="revision"></span><br />
+Last modified <span class="datetime"></span> by <span class="username"></span><br />
+Filesize: <span class="filesize"></span><br />
 </div>
 <div class="warning">
 <p>File upload is a convenient feature, but not a real versioning operation.
