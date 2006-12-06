@@ -25,8 +25,8 @@
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<head>
 				<title>
-					<xsl:text>repos.se </xsl:text>
-					<xsl:value-of select="index/@path"/>
+					<xsl:text>repos.se: history of </xsl:text>
+					<xsl:value-of select="log/@path"/>
 				</title>
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 				<!-- if search crawlers has access, contents should not be cached -->
@@ -59,17 +59,21 @@
 	</xsl:template>
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
+		<xsl:param name="repourl">
+			<xsl:value-of select="@repo"/>
+			<xsl:value-of select="substring(@path,0,string-length(@path)-string-length(@file)+1)"/>
+		</xsl:param>
 		<div id="commandbar">
 		<a id="reposbutton">
 			<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		</a>
-		<a id="repository" class="command" href="{@repo}{@path}">return to repository</a>
+		<a id="repository" class="command" href="{$repourl}">return to repository</a>
 		</div>
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="contents">
-		<h1>History of <span class="path"><xsl:value-of select="@path"/></span></h1>
 		<div id="contents">
+			<h1>History of <span id="path" class="path"><xsl:value-of select="@path"/></span></h1>
 			<xsl:apply-templates select="logentry"/>
 			<xsl:if test="@limit">
 				<xsl:call-template name="limit">
@@ -167,13 +171,18 @@
 	</xsl:template>
 	<!-- links to browse log pages -->
 	<xsl:template name="limit">
-		<xsl:param name="url"/>
+		<xsl:param name="url"/><!-- should be target maybe -->
 		<xsl:param name="size"/>
 		<xsl:param name="next"/>
-		<p>
-			<a href="{$url}&amp;torev={$next}&amp;limit={$size}">Show next <xsl:value-of select="$size"/> entries</a>
-		</p>
+		<p>Limited to <xsl:value-of select="$size"/> entries. <a id="next" href="{$url}&amp;torev={$next}&amp;limit={$size}">Show next page.</a></p>
 	</xsl:template>
+	<!-- links to select revisions -->
+	<xsl:template name="limitrev">
+		<!-- TODO
+		  <label for="fromrev">from revision</label><input id="fromrev" type="text" name="fromrev" />
+		  <label for="torev">to newer revision</label><input id="torev" type="text" name="torev" />
+		  <input id="submit" type="submit" name="submit" value="Display" /> -->
+	</xsl:template>	
 	<!-- *** replace newline with <br> *** -->
 	<xsl:template name="linebreak">
 		<xsl:param name="text"/>
