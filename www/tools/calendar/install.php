@@ -48,15 +48,14 @@ rename($extracted_folder.'/phpicalendar', $destination);
 $configfile = $destination.'config.inc.php';
 if (!file_exists($configfile)) trigger_error("Could not find config file $configfile in extracted contents.", E_USER_ERROR);
 $fh = fopen($configfile, 'a');
-fwrite($hf, "<?php
+fwrite($fh, "<?php
 // *** repos ***
 require_once(dirname(dirname(__FILE__)).'/phpicalendar.inc.php');
 // *************
 ?>");
 fclose($fh);
 
-deleteFolder($extracted_folder);
+deleteFolder($extracted_folder.'/');
 
 $report->display();
 ?>
-
