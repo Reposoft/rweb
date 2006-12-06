@@ -8,12 +8,13 @@ require( dirname(dirname(__FILE__)) . "/login.inc.php" );
  * @param String repository, with tailing slash
  */
 function getHomeDir($repository) {
-	$home = $repository . login_encodeUsernameForURL(getReposUser()) . '/trunk/';
+	$user = getReposUser();
+	$home = $repository . login_encodeUsernameForURL($user) . '/trunk/';
 	$exist = login_getFirstNon404Parent($home);
 	// allow one-project-repository
 	if ($exist == $repository) $exist = login_getFirstNon404Parent($repository . 'trunk/');
 	// could not even find the repositor root folder
-	if (!$exist) trigger_error("Could not find a valid URL or parent URL for $home", E_USER_ERROR);
+	if (!$exist) trigger_error("Could not find a home URL for $user. Tried $home and {$repository}trunk/.", E_USER_ERROR);
 	return $exist;
 }
 
@@ -60,7 +61,7 @@ function loginAndRedirectToHomeDir() {
 		// (user does not have access to repository root)
 		if (verifyLogin($home)) {
 			login_setUserSettings();
-			header("Location: " . $home);
+			header("Location: " . getStartUrl($home));
 		} else {
 			showLoginFailed($home);
 		}
@@ -76,6 +77,16 @@ function loginAndRedirectToHomeDir() {
 	} else {
 		showUserLogin();
 	}
+}
+
+/**
+ * Builds the URL to redirect the browser to after login.
+ *
+ * @param String $home the repository home folder of the user, used to verify login
+ * @return String complete URL for redirect
+ */
+function getStartUrl($home) {
+	return getWebapp() . 'open/start/?home='. rawurlencode($home);
 }
 
 loginAndRedirectToHomeDir();

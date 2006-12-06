@@ -156,13 +156,78 @@ setup_svn("propset svn:keywords Id $publicindex");
 
 setup_svn('commit -m "Created users svensson, test and $trickusername, and a shared project" '.$wc);
 
-# PHP mkdir can not handle UTF-8 characters
+// Create a news feed and a calendar in demo project
+
+createFolder($wc."demoproject/messages/");
+$newsfile = $wc."demoproject/messages/news.xml";
+createFileWithContents($newsfile, '<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title>Repos demoproject news</title>
+	<modified>'.date('Y-m-d\TH:i:sO').'</modified>
+	<id>tag:repos.se,demoproject</id>
+	<entry>
+		<title>Reset testers\' repository</title>
+		<id>tag:repos.se,demoproject,'.microtime().'</id>
+		<published>'.date('Y-m-d\TH:i:sO').'</published>
+		<author>
+			 <name>repos.se testuser</name>
+			 <email>test@users.repos.se</email>
+		</author>
+		<content type="xhtml" xml:lang="en"
+		 xml:base="http://www.repos.se/">
+		  <div xmlns="http://www.w3.org/1999/xhtml">
+		    <p>The test repository has been reset. It now has the contents expected by automated tests. Configuration:</p>
+		    <pre>'.htmlspecialchars($conf).'</pre>
+		  </div>
+		</content>
+   </entry>
+	<entry>
+		<title>Check out the refreshed demo project</title>
+		<id>tag:repos.se,demoproject,'.(microtime()+1).'</id>
+		<updated>'.date('Y-m-d\TH:i:sO').'</updated>
+		<link href="'.repos_getSelfRoot().'/testrepo/demoproject/"/>
+		<summary>Repository contents have been reset.</summary>
+	</entry>
+</feed>
+');
+
+createFolder($wc."demoproject/calendar/");
+$calendarfile = $wc."demoproject/calendar/demoproject.ics";
+$now = date('Ymd\THis\Z');
+$later = date('Ymd\THis\Z', time()+3600); 
+createFileWithContents($calendarfile,
+"BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//repos.se//NONSGML repos//EN
+BEGIN:VEVENT
+DTSTART:$now
+DTEND:$later
+SUMMARY:Try the repos repository
+END:VEVENT
+BEGIN:VTODO
+DTSTAMP:$now
+SEQUENCE:2
+UID:uid:repos.se-123456789@
+ORGANIZER:MAILTO:test@users.repos.se
+ATTENDEE;PARTSTAT=ACCEPTED:MAILTO:svensson@users.repos.se
+DUE:$later
+STATUS:NEEDS-ACTION
+SUMMARY:Complete this sample ToDo
+END:VTODO
+END:VCALENDAR
+");
+
+setup_svn("add {$wc}demoproject/messages/");
+setup_svn("add {$wc}demoproject/calendar/");
+setup_svn('commit -m "Created demo news and demo calendar" '.$wc);
+
+// PHP mkdir can not handle UTF-8 characters
 $dir = getTempnamDir();
 setup_svn("import -m \"$trickyusername\" $dir \"file:///$repourl$trickyusername\"");
 setup_svn("import -m \"\" $dir \"file:///$repourl$trickyusername/trunk\"");
 deleteFolder($dir);
 
-# create a base structure in test/trunk/
+// create a base structure in test/trunk/
 $folders = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z");
 $testfolder = $wc."test/trunk/";
 foreach($folders as $dir){
@@ -174,7 +239,7 @@ foreach($folders as $dir){
 setup_svn("add {$wc}test/trunk/fa/");
 setup_svn('commit -m "Created a sample folder structure for user test" '.$wc);
 
-# other repos projects that need to do integration testing have one folder each below
+// other repos projects that need to do integration testing have one folder each below
 createFolder($wc."test/trunk/repos-svn-access/");
 createFileWithContents($wc."test/trunk/repos-svn-access/automated-test-increment.txt", "0");
 

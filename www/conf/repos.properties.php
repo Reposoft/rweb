@@ -23,6 +23,7 @@ function reportError($n, $message, $file, $line) {
 }
 // default error reporting, for errors that occur before presentation is initialized
 function reportErrorText($n, $message, $trace) {
+	if ($n == E_NOTICE && strpos($trace, 'phpicalendar')) return; // phpicalendar not tested with E_ALL
 	if ($n!=2048) { // E_STRICT not defined in php 4
 		echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>");
 		exit;

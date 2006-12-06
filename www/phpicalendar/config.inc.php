@@ -100,7 +100,6 @@ $apache_map['user4'] = array('');			// Example: $apache_map['username'] = array(
 // add more lines as necessary
 
 // *** repos ***
-define('PATH_ROOT', str_repeat('../',substr_count($_SERVER['SCRIPT_FILENAME'],"/")-substr_count(__FILE__,"/")));
-require_once(realpath(PATH_ROOT . 'phpicalendar.inc.php'));
+require_once(dirname(__FILE__).'/phpicalendar.inc.php');
 // *************
 ?>
