@@ -2,7 +2,7 @@
 // Load this config file after the directives in default PHP icalendar contif.inc.php
 
 // repos.se authentication
-require(dirname(dirname(__FILE__))."/account/login.inc.php" );
+require(dirname(dirname(dirname(__FILE__)))."/account/login.inc.php" );
 $username=getReposUser();
 $password=_getReposPass();
 $invalid_login=false;
