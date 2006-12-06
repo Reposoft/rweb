@@ -161,6 +161,7 @@ setup_svn('commit -m "Created users svensson, test and $trickusername, and a sha
 createFolder($wc."demoproject/messages/");
 $newsfile = $wc."demoproject/messages/news.xml";
 createFileWithContents($newsfile, '<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/repos/view/atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 	<title>Repos demoproject news</title>
 	<modified>'.date('Y-m-d\TH:i:sO').'</modified>
@@ -218,6 +219,7 @@ END:VCALENDAR
 ");
 
 setup_svn("add {$wc}demoproject/messages/");
+setup_svn("propset svn:mime-type text/xml $newsfile");
 setup_svn("add {$wc}demoproject/calendar/");
 setup_svn('commit -m "Created demo news and demo calendar" '.$wc);
 

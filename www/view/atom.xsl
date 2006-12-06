@@ -4,13 +4,20 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:atom="http://www.w3.org/2005/Atom">
 	
+	<!-- This stylesheet can be imported from any atom feed file.
+	Browsers like Safari and Firefox2 will use their internal viewer. -->
+	
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
   	
+  	<!-- set to non-empty to transform only contensts of body tag -->
 	<xsl:param name="contentsOnly"></xsl:param>
-	
-	<xsl:param name="theme">/repos</xsl:param><!-- default theme, need to import conf to get theme -->
-  	
+
+	<!-- static contents urls, set to /themes/any/?u= for automatic theme selection -->
+	<xsl:param name="static" select="'/repos/'"/>
+	<xsl:param name="cssUrl"><xsl:value-of select="$static"/>style/</xsl:param>
+	<xsl:param name="cssUrl-pe"><xsl:value-of select="$static"/>themes/pe/style/</xsl:param>
+	  	
 	<xsl:template match="/">
 		<xsl:if test="not($contentsOnly)">
 		<html xmlns="http://www.w3.org/1999/xhtml">
@@ -20,7 +27,12 @@
 					<xsl:value-of select="/atom:feed/atom:title"/>
 				</title>
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-				<link rel="stylesheet" type="text/css" href="{$theme}/style/global.css"/>
+				<!-- default stylesheet -->
+				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
+				<!-- pe stylesheet -->
+				<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}global.css"/>
+				<!-- install the repos script bundle -->
+				<script type="text/javascript" src="{$static}scripts/head.js"></script>
 			</head>
 			<body class="messages">
 				<xsl:apply-templates select="*"/>
@@ -59,7 +71,7 @@
 			</a>
 			<xsl:value-of select="' '"/>
 			<span class="datetime">
-				<xsl:value-of select="atom:updated"/>
+				<xsl:value-of select="atom:published | atom:updated"/>
 			</span>
 		</li>
 	</xsl:template>
@@ -70,21 +82,21 @@
 				<xsl:value-of select="atom:title"/>
 			</h2>
 			<div>
-				<p>
-					<!-- need to use the newline template -->
-					<xsl:value-of select="atom:summary"/>
-				</p>
+				<xsl:if test="atom:link/@href">
+					<p>
+						<a href="{atom:link/@href}">
+							<xsl:value-of select="atom:summary"/><!--  might need to use the newline template -->
+						</a>
+					</p>
+				</xsl:if>
+				<xsl:copy-of select="atom:content"/>
 				<p>
 				<span class="username">
 					<xsl:value-of select="atom:author/atom:name"/>
 				</span>
 				<xsl:value-of select="' '"/>
 				<span class="datetime">
-					<xsl:value-of select="atom:updated"/>
-				</span>
-				<xsl:value-of select="' '"/>
-				<span class="url">
-					<xsl:value-of select="atom:link/@href"/>
+					<xsl:value-of select="atom:published | atom:updated"/>
 				</span>
 				</p>
 			</div>
