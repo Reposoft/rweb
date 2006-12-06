@@ -166,10 +166,10 @@
 		<xsl:param name="n" select="position() - 1"/>
 		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
-				<a id="open:{$id}" class="action" href="{@href}">open</a>
+				<a id="view:{$id}" class="action" href="{@href}">view</a>
 				<xsl:if test="$editUrl">
 					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{@href}">rename</a>
-					<a id="copy:{$id}" class="action"  href="{$editUrl}copy/?target={../@path}/{@href}">copy or move</a>
+					<a id="copy:{$id}" class="action"  href="{$editUrl}copy/?target={../@path}/{@href}">copy</a>
 					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{@href}">delete</a>
 				</xsl:if>
 			</div>
@@ -189,16 +189,16 @@
 		<xsl:param name="n" select="count(/svn/index/dir) + position() - 1"/>
 		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
-				<a id="open:{$id}" class="action" title="this file can be opened in Repos" href="{$web}open/?target={../@path}/{@href}">open</a>
-				<a id="history:{$id}" class="action" title="go to the file's history" href="{$web}open/log/?target={../@path}/{@href}">history</a>
+				<a id="view:{$id}" class="action" href="{$web}open/?target={../@path}/{@href}">view</a>
 				<xsl:if test="$editUrl">
+					<a id="work:{$id}" class="action" href="{$web}open/work/?target={../@path}/{@href}">edit</a>
 					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{@href}">rename</a>
-					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={../@path}/{@href}">copy or move</a>
+					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={../@path}/{@href}">copy</a>
 					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{@href}">delete</a>
 					<span class="action">lock</span>
-					<a id="work:{$id}" class="action" href="{$web}open/work/?target={../@path}/{@href}">edit</a>
 					<a id="upload:{$id}" class="action" href="{$web}upload/?target={../@path}/{@href}">upload changes</a>
 				</xsl:if>
+				<a id="history:{$id}" class="action" href="{$web}open/log/?target={../@path}/{@href}">show history</a>
 			</div>
 			<a id="f:{$id}" class="file-{$filetype} file" href="{@href}">
 				<xsl:value-of select="@name"/>
@@ -208,7 +208,7 @@
 	<!-- extra info and logos -->
 	<xsl:template name="footer">
 		<div id="footer">
-		<span id="resourceversion" class="versiondisplay" style="display:none">repos.se stylesheet version $Id: repos.xsl 1601 2006-09-14 09:09:50Z solsson $</span>
+		<span id="resourceversion" class="versiondisplay" style="display:none">repos.se stylesheet version $URL$ $Rev$</span>
 		<span id="badges">
 		</span>
 		<span class="legal">

@@ -2,7 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>repos.se: Edit {=$target|basename}</title>
-<!-- <meta http-equiv="refresh" content="0;url={=$downloadUrl}"/> -->
 <!--{$head}-->
 </head>
 
@@ -14,12 +13,25 @@
 </div>
 <div class="contents work">
 <h1>Edit <span class="path" title="{=$target|basename}">{=$target}</span></h1>
-<div class="filedetails" title="{=$target}"></div>
-<p>A <a href="{=$downloadUrl}">download</a> dialog will appear shortly. Save the file on the local hard drive. When work is completed, use "upload new version" to commit.</p>
+<div class="details" title="{=$target}" style="display: none">
+Current revision: <span class="revision"></span><br />
+Last modified <span class="datetime"></span> by <span class="username"></span><br />
+Filesize: <span class="filesize"></span><br />
+</div>
+<p>There are different methods for updating a version controlled file.
+<br />- If you will be the only one who makes modifications to the file, you can do the simplest thing: download - modify - upload.
+<br />- If you think that other users will be updating the file too, make a personal copy (a branch) of the file,
+modify the file in the branch, then use the "merge" functionality to add your changes to the common file.
+<br />- If you simply want to view the file, do download below. Or use the filename links in the repository. 
+</p>
+<h2>Download</h2>
+<p><a href="{=$downloadUrl}">Download</a> to your local hard drive. When work is completed, use "upload new version" to commit.</p>
 <p><a id="upload" class="action" href="../../upload/?target={=$target}">upload new version</a></p>
-
-<h2>Create personal branch <span class="path" title="{=$target|basename}">/branches/{=$newname}</span></h2>
-<p><a id="branch" class="action" href="{=$pathToCopyForm}?target={=$target}&oldname={=$oldname}&tofolder={=$tofolder}&newname={=$newname}&move=0&message=&submit=Copy">Create Branch</a></p>
+<p>Upload is good for quick changes in a file that you recently downloaded. For big changes, use a personal branch.</p>
+<h2>Create personal branch</h2>
+<p>Your personal, temporary, copy would be: <span class="path" title="{=$target|basename}">/branches/{=$newname}</span></p>
+<p><a id="branch" class="action" href="{=$pathToCopyForm}?target={=$target}&oldname={=$oldname}&tofolder={=$tofolder}&newname={=$newname}&move=0&message=&submit=Copy">create branch</a></p>
+<p>You will get a link to the branch, and from there you can access the "merge" functionality.</p>
 </div>
 <div id="footer"></div>
 </div>
