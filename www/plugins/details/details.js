@@ -31,18 +31,39 @@ function details_read() {
 function details_write(e, entry) {
 	entry.each(function(){
 		$('.path', e).append($('name', this).text());
-		$('.username', e).append($('commit/author', this).text());
-		$('.datetime', e).append($('commit/date', this).text());
+		var readonly = details_isReadOnly(this);
+		if (readonly) {
+			e.addClass('readonly');
+			$('.username', e).append('(read only)'); // temporary solution
+		} else {
+			$('.username', e).append($('commit/author', this).text());
+			$('.datetime', e).append($('commit/date', this).text());
+		}
 		// IE can't handle this, waiting for jQuery 1.1 when bug #164 is fixed
 		//$('.revision', e).append($('commit', this).attr('revision'));
-		var size = $('size', this).text();
-		if (size != null && size.length>0) $('.filesize', e).append(details_formatSize(size)).title(size + ' bytes');
+		var folder = details_isFolder(this);
+		if (!folder) {
+			var size = $('size', this).text();
+			$('.filesize', e).append(details_formatSize(size)).title(size + ' bytes');
+		}
+		if (details_isLocked(this)) details_writeLock(e, this);
 		// if the dateformat plugin is present, do format
 		$('.datetime', e).each(function() {
 			if (typeof('Dateformat')!='undefined') new Dateformat().formatElement(this);
 		});
 	});
 	e.show();
+}
+
+function details_writeLock(e, entry) {
+	var lock = $('lock', entry);
+	e.addClass('locked');
+	// addtags does not create lock spans
+	var s = $('lock', e);
+	if (s.size() == 0) s = $('<span class="lock"></span>').appendTo(e);
+	s.append('<span class="username">'+ $('owner', lock).text() +'</span>');
+	s.append('<span class="datetime">'+ $('created', lock).text() +'</span>');
+	s.append('<span class="message">'+ $('comment', lock).text() +'</span>');
 }
 
 function details_repository() {
@@ -61,6 +82,10 @@ function details_repository() {
 				details_write(row, $(this));
 			});
 		});
+}
+
+function details_isFolder(entry) {
+	return $('size', entry).size() == 0;
 }
 
 function details_isLocked(entry) {

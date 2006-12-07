@@ -74,6 +74,10 @@ code {
 .filesize {
 		
 }
+.lock {
+	padding-left: 16px;
+	background: url(lock.png) left no-repeat;
+}
 /* common page elements, may also be layouted for each tool */
 #workspace {
 }
