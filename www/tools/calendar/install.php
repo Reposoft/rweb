@@ -1,4 +1,5 @@
-﻿<?php
+<?php
+
 require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
 $report = new Report('install 3rd party tool: PHPiCalendar');
 
