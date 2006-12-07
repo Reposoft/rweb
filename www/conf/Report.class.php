@@ -3,25 +3,44 @@
  * Repos administrative reports.
  *
  * A common interface for scripts that do tests, configuration or sysadmin tasks.
- *
  * Does not do output buffering, because for slow operations we want to report progress.
- * 
- * Passing an array as message means print as block (with <pre> tag in html)
  */
 // TODO count fatal() as exception
 // TODO convert to HTML-entities where needed (without ending up in some kind of wiki syntax). see test reporter.php
-require_once(dirname(__FILE__).'/repos.properties.php');
+
+//not wanted//require_once(dirname(__FILE__).'/repos.properties.php');
 
 // reports may be long running
 set_time_limit(60*5);
 
 $reportDate = date("Y-m-d\TH:i:sO");
 
+/**
+ * @return true if this is PHP running from a command line instead of a web server
+ */
+function isOffline() {
+	// maybe there is some clever CLI detection, but this works too
+	return !isset($_SERVER['REQUEST_URI']);
+}
+
+/**
+ * @return newline character for this OS
+ */
+function getNewline() {
+	if (isOffline() && isWindows()) return "\n\r";
+	else return "\n";
+}
+
 function getReportTime() {
 	global $reportDate;
     return '<span class="datetime">'.$reportDate.'</span>';
 }
 
+/**
+ * Represents the output of the operation, either for web or as text.
+ * All output should go through this class.
+ * Passing array as message means print as block (with <pre> tag in html).
+ */
 class Report {
 
 	var $offline;

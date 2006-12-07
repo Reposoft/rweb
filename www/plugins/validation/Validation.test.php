@@ -1,8 +1,6 @@
 <?php
-
-require("../../lib/simpletest/setup.php");
-
 require("../../conf/Presentation.class.php");
+require("../../lib/simpletest/setup.php");
 
 class MyRule extends Rule {
 	function valid($value) { return ($value=='ohmy'); }

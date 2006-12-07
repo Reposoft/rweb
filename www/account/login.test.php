@@ -1,8 +1,7 @@
 <?php
+require('login.inc.php');
 require("../lib/simpletest/setup.php");
 
-require 'login.inc.php';
- 
 define('TESTHOST', repos_getSelfRoot());
 define('TESTREPO', TESTHOST."/testrepo/");
 //define('TESTREPO', "http://test.repos.se/testrepo/");

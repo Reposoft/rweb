@@ -59,6 +59,10 @@ class TestReport extends UnitTestCase {
 		$this->assertEqual(1, $this->report->no, "should count test pass");
 		$this->assertTrue(strContains($this->report->printed, '='));
 	}
+	
+	function testIsOffline() {
+		$this->assertTrue(isOffline()!==isset($_SERVER['REQUEST_URI']));
+	}
 }
 
 testrun(new TestReport());

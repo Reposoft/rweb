@@ -3,6 +3,11 @@ require("../../lib/simpletest/setup.php");
 
 require(dirname(__FILE__)."/RepositoryTree.class.php");
 
+// mock
+function getRepository() {
+	return 'http://where-we-work.com/my-repo/';
+}
+
 class TestRepositoryTree extends UnitTestCase {
 	
 	var $tempfile;
@@ -17,11 +22,12 @@ class TestRepositoryTree extends UnitTestCase {
 	}
 	
 	function tearDown() {
-		deleteFile($this->tempfile);
+		//deleteFile($this->tempfile);
+		unlink($this->tempfile);
 	}
 
 	function createNewFile() {
-		$this->tempfile = toPath(tempnam(rtrim(getTempDir('test'),'/'), "test-repos-access"));
+		$this->tempfile = tempnam('does-not-exist-asldgjfdlkqjwrekjwer', "test-repos-access"); // TODO use standard repos behaviour
 		$handle = fopen($this->tempfile, "w");
 		fwrite($handle, "[groups]\n");
 		fwrite($handle, "aproject =  svensson, test\n");
@@ -106,7 +112,7 @@ class TestRepositoryTree extends UnitTestCase {
 		$this->assertEqual('', $e[0]->getPath()); // no other paths in ACL have tailing slash
 		$this->assertEqual(true, $e[0]->isReadOnly());
 		// for "/", displayname should be the repository name
-		$this->assertEqual(basename(getRepository()), $e[0]->getDisplayname());
+		$this->assertEqual('my-repo', $e[0]->getDisplayname());
 	}
 
 	function test_getEntryPointsWithAsteriskReadOnlyTrunk() {

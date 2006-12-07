@@ -392,10 +392,6 @@ class TestReposProperties extends UnitTestCase {
 	
 	// ----- portability functions -----
 	
-	function testIsOffline() {
-		$this->assertTrue(isOffline()===!isset($_SERVER['REQUEST_URI']));
-	}
-	
 	function testIsWindows() {
 		if (DIRECTORY_SEPARATOR=='\\') {
 			$this->assertTrue(isWindows());

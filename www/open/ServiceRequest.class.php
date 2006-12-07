@@ -23,6 +23,8 @@ define('SERVICEREQUEST_AGENT', 'Repos service request');
  */
 define('SERVICE_LOG', 'open/log/');
 
+if (!function_exists('getWebapp')) require(dirname(dirname(__FILE__)).'/conf/repos.properties.php');
+
 /**
  * Login functionality is only included if needed 
  */

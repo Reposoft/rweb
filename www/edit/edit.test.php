@@ -1,7 +1,6 @@
 <?php
+require('edit.class.php');
 require("../lib/simpletest/setup.php");
-
-require 'edit.class.php';
  
 class EditTest extends UnitTestCase
 {

@@ -1,7 +1,6 @@
 <?php
-require("../lib/simpletest/setup.php");
-
 require(dirname(__FILE__)."/Presentation.class.php");
+require("../lib/simpletest/setup.php");
 
 class TestPresentation extends UnitTestCase {
 

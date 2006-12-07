@@ -1,7 +1,8 @@
 <?php
-
-require("../../lib/simpletest/setup.php");
 require("conflicthandler.inc.php");
+// TODO get getTempDir in a smaller filesystem abstraction that can be included instead of the entire repos.properties.php
+require("../../conf/repos.properties.php"); // then remove
+require("../../lib/simpletest/setup.php");
 
 function tempfile_create($contents) {
 	$file = getTempDir('testconflict').'excel.xml';

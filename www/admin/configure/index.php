@@ -3,6 +3,9 @@
 $rev = strtr("$Rev$",'$',' ');
 require("../../conf/repos.properties.php" );
 
+// TODO port this to Report presentation
+require("../../conf/Report.class.php" );
+
 // page contents
 $links = array(
 	'index.php' => 'Administration menu',

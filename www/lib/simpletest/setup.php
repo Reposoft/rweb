@@ -1,7 +1,18 @@
 <?php
+// unittest prepare scripts
+// should NOT require repos.properties.php, because we want to be able to mock those functions
+// if the scripts under test use repos.properties.php, they should be imported before this script in the unit test files
+
+error_reporting(E_ALL);
 
 // allow other scripts to detect that they are running from a test case
 define('TEST',$_SERVER['SCRIPT_FILENAME']);
+
+// ----- string helper functions that should have been in php, now copied from repos.properties -----
+if (!function_exists('strBegins')) { function strBegins($str, $sub) { return (substr($str, 0, strlen($sub)) === $sub); } }
+if (!function_exists('strEnds')) { function strEnds($str, $sub) { return (substr($str, strlen($str) - strlen($sub)) === $sub); } }
+if (!function_exists('strContains')) { function strContains($str, $sub) { return (strpos($str, $sub) !== false); } }
+if (!function_exists('strAfter')) { function strAfter($str, $sub) { return (substr($str, strpos($str, $sub) + strlen($sub))); } }
 
 require_once(dirname(__FILE__).'/simpletest/unit_tester.php');
 //require_once(dirname(__FILE__).'/simpletest/reporter.php');
@@ -14,11 +25,12 @@ function testrun(&$testcase) {
 	$testcase->run($reporter);
 }
 
-if (function_exists('reportErrorToUser')) {
-	trigger_error("Could not register custom error handling because the function 'reportErrorToUser' is already defined");
-} else {
-function reportErrorToUser($level, $message, $trace) {
+// custom error handling for unit tests, overres the error handling in repos.properties.php
+
+function reportErrorInTest($n, $message, $file, $line) {
 	global $reporter;
+	$level = $n;
+	$trace = _getStackTrace();
 	if (!isset($reporter->report)) reportErrorText($level, $message, $trace); // report not started yet
 	if ($level == E_USER_ERROR) {
 		$reporter->paintError("Error:   ".$message);
@@ -38,6 +50,21 @@ function reportErrorToUser($level, $message, $trace) {
 		}
 	}
 }
+
+if (!function_exists('_getStackTrace')) {
+	function _getStackTrace() {
+		$o = '';
+		$stack=debug_backtrace();
+		$o .= "file\tline\tfunction\n";
+		for($i=1; $i<count($stack); $i++) { // skip this method call
+			if (isset($stack[$i]["file"]) && $stack[$i]["line"]) {
+		    	$o .= "{$stack[$i]["file"]}\t{$stack[$i]["line"]}\t{$stack[$i]["function"]}\n";
+			}
+		}
+		return $o;
+	}
 }
+
+set_error_handler('reportErrorInTest');
 
 ?>

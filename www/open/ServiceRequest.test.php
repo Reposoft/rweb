@@ -1,13 +1,13 @@
 <?php
 
-require("../lib/simpletest/setup.php");
-
 // -- mock account ---
 function targetLogin() {};
 function isLoggedIn() {return true;};
 function getReposUser() {return 'tst';};
 function _getReposPass() {return 'pwd';};
 // -----------
+
+
 require("ServiceRequest.class.php");
 
 // responses for testing
@@ -43,6 +43,8 @@ if (isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] == SERVICE
 }
 
 // tests
+require("../lib/simpletest/setup.php");
+
 class TestServiceRequest extends UnitTestCase {
 	
 	function testGetUrl() {
