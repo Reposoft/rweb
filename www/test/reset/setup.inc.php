@@ -47,6 +47,7 @@ function setup_svnadmin($command) {
 
 function setup_svn($command) {
 	global $svnargs, $report;
+	$command = setup_customizeCommand($command);
 	$cmd = $svnargs.' '.$command;
 	$result = repos_runCommand('svn', $cmd);
 	if (array_pop($result)) {
@@ -59,6 +60,9 @@ function setup_svn($command) {
 	}	
 }
 
-
+function setup_customizeCommand($command) {
+	// preserve locks set during setup
+	return str_replace('commit ', 'commit --no-unlock ', $command);
+}
 
 ?>

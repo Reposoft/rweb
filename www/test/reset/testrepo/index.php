@@ -135,6 +135,8 @@ createFolder($wc."demoproject/trunk/readonly/");
 createFolder($wc."demoproject/trunk/public/");
 $publicxml = $wc."demoproject/trunk/public/xmlfile.xml";
 createFileWithContents($publicxml, "<empty-document/>\n");
+
+// create a sample intranet
 createFolder($wc."demoproject/trunk/public/website/");
 $publicstyle = $wc."demoproject/trunk/public/website/styles.css";
 createFileWithContents($publicstyle, "
@@ -155,6 +157,13 @@ setup_svn("propset svn:mime-type text/html $publicindex");
 setup_svn("propset svn:keywords Id $publicindex");
 
 setup_svn('commit -m "Created users svensson, test and $trickusername, and a shared project" '.$wc);
+
+// Create a locked file
+$lockedfile = $wc."demoproject/trunk/public/locked-file.txt";
+createFileWithContents($lockedfile, "This file is locked so only one user can change it now.\n");
+setup_svn("add $lockedfile");
+setup_svn('commit -m "Created a file that will soon be locked by the admin user" '.$wc);
+setup_svn('lock -m "Testing lock features. You should not be allowed to modify this file." '.$lockedfile);
 
 // Create a news feed and a calendar in demo project
 

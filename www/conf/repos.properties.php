@@ -170,6 +170,8 @@ repos_getUserLocale();
  */
 function repos_getUserLocale() {
 	global $possibleLocales;
+	static $locale = null;
+	if (!is_null($locale)) return $locale;
 	$locale = 'en'; 
 	if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) $locale = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 	if(array_key_exists(LOCALE_KEY,$_COOKIE)) $locale = $_COOKIE[LOCALE_KEY];
