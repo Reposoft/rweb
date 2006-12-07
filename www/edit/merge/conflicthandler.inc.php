@@ -1,5 +1,5 @@
 <?php
-
+require "xmlConflictHandler.php";
 /**
  * Tries to automatically resolve conflicts according to repos logic.
  *
@@ -38,10 +38,14 @@ function handleConflict($file, &$logChoices) { //, $mine, $older, $yours, &$logC
 function handleConflict_excel2003xml($file, &$log) {
 	// verify that it is an excel file, return false otherwise
 	
-	
 	// resolve conflict, return
-	$log[] = 'Not implemented';
-	return false;
+	$contents = file($file);
+	$result = resolveConflicts($contents, $log);
+	$fh = fopen($file, 'w');
+	fwrite($fh, implode("\n", $contents));
+	fclose($fh);
+	//print_r(file($file));
+	return $result;
 }
 
 

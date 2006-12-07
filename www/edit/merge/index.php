@@ -77,7 +77,7 @@ function doAutomerge($sourceFile){
 		}
 	}
 	if (sizeof($revisionNumber) < 2){
-		$p->showError("No changes have been made in the file.");
+		$p->showError("No changes have been made to the file.");
 		presentEdit($p, $targetFolder);
 		exit;
 	}
@@ -100,13 +100,17 @@ function doAutomerge($sourceFile){
 			$filePath = ltrim(ltrim($value, "C"));
 			$fileContents = file($filePath);
 			if (strpos($fileContents[0], '<?xml') === 0){
-				echo '<pre>';
-				echo htmlentities(implode($fileContents));
-				echo '</pre>';
+				//echo '<pre>';
+				//echo htmlentities(implode($fileContents));
+				//echo '</pre>';
 				//resolveConflicts($fileContents);
-			} else {
-				$p->showError($value . " does not appear to be valid xml file.");
-				exit;
+				$result = resolveConflicts($fileContents);
+				if (!$result){
+					echo 'aja baja';
+				}
+			//} else {
+				//$p->showError($value . " does not appear to be valid xml file.");
+				//exit;
 			}
 			//$p->showError("Cannot merge files " . $value);
 			//exit;
