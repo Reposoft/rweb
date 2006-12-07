@@ -57,5 +57,13 @@ fclose($fh);
 
 deleteFolder($extracted_folder.'/');
 
+// delete the sample calendars bundled with phpicalendar
+deleteFile($destination.'calendars/Home.ics');
+deleteFile($destination.'calendars/US Holidays.ics');
+deleteFile($destination.'calendars/Work.ics');
+
+// untar leaves a strange @LongLink file
+deleteFile($dir.'/@LongLink');
+
 $report->display();
 ?>
