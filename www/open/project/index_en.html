@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>repos.se repository access</title>
+<title>repos.se project contents</title>
 <!--{$head}-->
 </head>
 
@@ -15,17 +15,12 @@
 <a class="command" href="/?logout" id="logout">log out</a>
 </div>
 <div id="contents">
-<h1><span class="username">{=$userfullname}</span> start</h1>
-<!--{foreach from=$entrypoints item=entry}-->
+<h1><span class="path">{=$project}</span> start</h1>
+<!--{foreach from=$tools key=name item=path}-->
 <div class="row n{=cycle values=0,1,2,3}">
-<!--{if $entry->isReadOnly()}-->
-<a class="folder readonly" href="../project/?target={=$entry->getPath()}/">{=$entry->getDisplayname()}</a>
-<!--{else}-->
-<a class="folder" href="../project/?target={=$entry->getPath()}/">{=$entry->getDisplayname()}</a>
-<!--{/if}-->
-<!-- todo: class groupaccess -->
+<a class="folder" href="{=$repo}/{=$project}/{=$path}">{=$name}</a>
 <div class="actions">
-<a class="action" href="{=$repo}{=$entry->getPath()}/trunk/">open files</a>
+<a class="action" href="../?target=/{=$project}/{=$path}">open tool</a>
 </div>
 </div>
 <!--{/foreach}-->
