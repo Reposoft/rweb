@@ -63,6 +63,14 @@ function details_repository() {
 		});
 }
 
+function details_isLocked(entry) {
+	return $('lock', entry).size() > 0;
+}
+
+function details_isReadOnly(entry) {
+	return $('commit/author', entry).size() == 0;
+}
+
 /**
  * Adds empty placeholders for common detail entries (except name, which is probably displayed already)
  * @param e jQuery element to add to
