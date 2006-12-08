@@ -13,6 +13,12 @@
  * {= ... }
  * 
  * Cache settings are defined in te include file.
+ * 
+ * Presentation can not use the functions from /account, so user settings must be read from cookies.
+ * Presentation is for all webapp pages, except administration reports.
+ * 
+ * @package conf
+ * @see Report class, used for unit tests and administration reports. Does not require repos.properties.php.
  */
 
 // this page is included from other pages: need to do includes relative to __FILE__

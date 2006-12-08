@@ -4,8 +4,8 @@
  * A project in the repository is defined as a folder that contains a "trunk/" folder.
  */
 
-require('../../conf/repos.properties.php');
-require('../../account/login.inc.php');
+if (!function_exists('getRepository')) require('../../conf/repos.properties.php');
+if (!function_exists('getTarget')) require('../../account/login.inc.php');
 require('../ServiceRequest.class.php');
 require('../../conf/Presentation.class.php');
 

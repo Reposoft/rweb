@@ -66,8 +66,8 @@ define('ACCESS_FILE', ADMIN_ACCOUNT.'/trunk/admin/repos-access');
 
 define('URL_FOPEN_TIMEOUT', 10);
 
-// automatic login if a target is specified the standard way
-if (getTargetUrl()) {
+// do automatic login if a target is specified the standard way
+if (isTargetSet()) {
 	targetLogin();
 }
 
@@ -284,37 +284,6 @@ function login_decodeQueryParam($array, $name) {
 }
 
 /**
- * @return path from repository root, ending with '/', non alphanumerical characters except '/' encoded
- * @deprecated only getTarget is needed
- */
-function getPath() {
-	trigger_error("getPath() is deprecated. Use getTarget() and isFolder() instead.", E_USER_ERROR);
-	if(!isset($_GET['path'])) return false;
-	$path = login_decodeQueryParam($_GET,'path');
-    $path = rtrim($path,'/').'/';
-	return $path;
-}
-
-/**
- * @return filename if defined, false if the target is not a file
- * @deprecated only getTarget is needed
- */
-function getFile() {
-	trigger_error("getFile() is deprecated. Use getTarget() and isFile() instead.", E_USER_ERROR);
-	if (isset($_GET['file'])) {
-		return login_decodeQueryParam($_GET,'file');
-	}
-	// check if target has been set explicitly (this is in close cooperation with getTarget so we don't get a loop)
-	if (isset($_GET['target'])) {
-		$file = basename(login_decodeQueryParam($_GET,'target'));
-		if (strlen($file) > 0) {
-			return $file;
-		}
-	}
-	return false;
-}
-
-/**
  * @return true if the target is a file, false if it is a folder or undefined
  * @deprecated use isFile($path) directly instead
  */
@@ -323,15 +292,20 @@ function isTargetFile() {
 }
 
 /**
+ * @return true if there is a target parameter
+ */
+function isTargetSet() {
+	return isset($_REQUEST['target']);
+}
+
+/**
  * Target is the absolute url of a repository resource, from repository root
  * (thus starting with '/')
  * @return target in repository from query paramters WITH tailing slash if it is a directory, false if 'target' is not set
  */
 function getTarget() {
-	if(!isset($_REQUEST['target'])) {
-		return false;
-	}
-    return login_decodeQueryParam($_REQUEST,'target');
+	if(!isTargetSet()) trigger_error('This page is expected to have a "target", but the parameter was not set.');
+	return login_decodeQueryParam($_REQUEST,'target');
 }
 
 /**

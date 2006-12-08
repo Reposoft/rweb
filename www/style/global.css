@@ -78,6 +78,12 @@ code {
 	padding-left: 16px;
 	background: url(lock.png) left no-repeat;
 }
+.warning {
+	width: 80%;
+	border: 1px dotted #cc9999;
+	padding-left: 40px;
+	background: url(warning.png) left no-repeat;
+}
 /* common page elements, may also be layouted for each tool */
 #workspace {
 }
