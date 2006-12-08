@@ -375,7 +375,13 @@ class ConflicthandlerTest extends UnitTestCase {
  </Worksheet>
 </Workbook>
 ';			
-	}	
+		$file = tempfile_create($contents);
+		$log = array();
+		$actual = handleConflict_excel2003xml($file, $log);
+		$this->sendMessage($log);
+		$this->assertFalse($actual, "Cannot automatically merge modified formulas");		
+		$this->assertTrue($this->containsConflictMarker($file), "Should still contain the conflict markers");	
+}	
 
 	function testExcel2003FunctionResult() {
 		$contents =
@@ -488,6 +494,17 @@ class ConflicthandlerTest extends UnitTestCase {
  </Worksheet>
 </Workbook>
 ';			
+		$file = tempfile_create($contents);
+		$this->assertTrue($this->containsLine($file, '/^<<<.*/'), "Just make sure that the file was written to disk, with a conflict");
+		$this->assertTrue($this->containsConflictMarker($file), "Testing the test function");
+		$log = array();
+		$actual = handleConflict_excel2003xml($file, $log);
+		$this->sendMessage($log);
+		$this->assertTrue($actual, "Should have automatically merged calculated results of identical functions");
+		$this->assertFalse($this->containsConflictMarker($file), "All conflict markers should be gone");
+		$this->assertTrue($this->containsLine($file, '/.*<Data ss:Type="Number">4<.*/'),
+			"Should pick the trunk value of function");
+		$this->assertFalse($this->containsLine($file, '/.*<Data ss:Type="Number">5<.*/'),"Should have removed the branch value");
 	}
 		
 	function testExcel2003ValueFunction() {
