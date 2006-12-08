@@ -1,4 +1,12 @@
 <?php
+/**
+ * Test tool that checks the HTTP headers of any URL.
+ * 
+ * The suggested links have ids used in various integration test cases.
+ * 
+ * @package test
+ */
+
 // display the headers of a page in the application
 require('../../account/login.inc.php');
 require('../../open/ServiceRequest.class.php');

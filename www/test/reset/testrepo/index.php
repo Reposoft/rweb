@@ -1,4 +1,15 @@
 <?php
+/**
+ * Creates a test repository with a known initial state, that all the integration tests can use.
+ * 
+ * This script should be able to set up all the testing possibilities for the full repos funcitonality,
+ * which means that it will be big. It is allowed to add contents at any time,
+ * but not to change existing setu, because tests might depend on it.
+ * 
+ * Run the complete intergation test suite before and after modifications in this script.
+ * 
+ * @package test
+ */
 
 require(dirname(dirname(__FILE__)).'/setup.inc.php');
 

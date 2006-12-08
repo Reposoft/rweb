@@ -1,6 +1,9 @@
 <?php
 /**
- * Debug and visualize repos configuration
+ * Debug and visualize repos configuration.
+ * 
+ * @author Staffan Olsson (solsson)
+ * @package conf
  */
 
 // default configuration includes, the way they should be referenced in php files

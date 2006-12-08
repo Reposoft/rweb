@@ -18,7 +18,7 @@
  * Presentation is for all webapp pages, except administration reports.
  * 
  * @package conf
- * @see Report class, used for unit tests and administration reports. Does not require repos.properties.php.
+ * @see Report, the class used for unit tests and administration reports. Does not require repos.properties.php.
  */
 
 // this page is included from other pages: need to do includes relative to __FILE__

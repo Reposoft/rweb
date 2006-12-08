@@ -1,4 +1,10 @@
 <?php
+/**
+ * Creates a page that tests browser functionality to verify if it is sufficient for repos.
+ * 
+ * @package test
+ */
+
 header('Content-type: text/xml; charset=UTF-8');
 
 // there is a nice extension for firefox to view cookies in page info: https://addons.mozilla.org/firefox/315/

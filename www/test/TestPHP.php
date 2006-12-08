@@ -17,6 +17,12 @@
 <table id="suiteTable" class="rows" width="100%" border="0">
 	<tbody>
 <?php
+/**
+ * The test suite for php unit tests.
+ * 
+ * @package test
+ */
+
 $testfiles = array(
 'test/server/TestServerSettings.php',
 'conf/repos.properties.test.php',

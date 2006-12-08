@@ -1,7 +1,8 @@
 <?php
-
 /**
  * Administration from command line
+ * 
+ * @package admin
  */
  
 require( dirname(__FILE__) . '/repos-backup.inc.php' );

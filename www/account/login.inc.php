@@ -58,12 +58,6 @@
  */
 require_once(dirname(dirname(__FILE__)) . '/conf/repos.properties.php');
 
-// admin account identification (used for example to add extra post-commit operation in upload)
-define('ADMIN_ACCOUNT', 'administrator');
-// the versioned access control files (copied to the location given by repos.properties when changed)
-define('ACCOUNTS_FILE', ADMIN_ACCOUNT.'/trunk/admin/repos-users');
-define('ACCESS_FILE', ADMIN_ACCOUNT.'/trunk/admin/repos-access');
-
 define('URL_FOPEN_TIMEOUT', 10);
 
 // do automatic login if a target is specified the standard way
@@ -333,10 +327,11 @@ function getRevision($rev = false) {
  * @param String pathFromRepoRoot the resource path, absolute from repository root
  * @return repository url (to root) with no tailing slash.
  *   Returns false if url is empty or if path is not part of url. 
- */
+ * @deprecated not used
 function getRepoRoot($fullUrl,$pathFromRepoRoot) {
 	return substr($fullUrl, 0 , strpos($fullUrl, $pathFromRepoRoot));
 }
+ */
 
 /**
  * Target url is resolved from query parameters

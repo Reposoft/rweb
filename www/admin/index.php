@@ -1,4 +1,10 @@
 <?php
+/**
+ * Presents a brief overview of the system status.
+ * 
+ * @package admin
+ */
+
 require( dirname(dirname(__FILE__)) . '/conf/Report.class.php' );
 require( dirname(__FILE__) . '/admin.inc.php' );
 

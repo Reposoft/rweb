@@ -1,11 +1,13 @@
 <?php
-require_once( dirname(dirname(__FILE__)) . "/conf/repos.properties.php" );
-require_once( dirname(dirname(__FILE__)) . "/conf/Report.class.php" );
-
 /**
  * This file contains helper functions for backup administration (such as file name resolution).
  * It also contains a small library to make HTML output from a batch job.
+ * 
+ * @package admin
  */
+
+require_once( dirname(dirname(__FILE__)) . "/conf/repos.properties.php" );
+require_once( dirname(dirname(__FILE__)) . "/conf/Report.class.php" );
 
 // --- output functions ---
 

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Creates a nearly empty repository, with the bare minimum needed to run repos.
+ * 
+ * @package test
+ */
 
 require(dirname(dirname(__FILE__)).'/setup.inc.php');
 

@@ -9,6 +9,8 @@
  * 
  * Allows the commands "svn" and "svnadmin", using the path resolution from repos.properties.php
  * On windows, the PATH to SVN and SVNADMIN has to be defined in the SYSTEMPATH, not in the USERPATH
+ * 
+ * @package test
  */
 
 require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');

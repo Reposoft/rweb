@@ -1,4 +1,9 @@
 <?php
+/**
+ * Web based access to backup operations.
+ * 
+ * @package admin
+ */
 
 require('../repos-backup.inc.php');
 

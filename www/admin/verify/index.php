@@ -1,4 +1,10 @@
 <?php
+/**
+ * Web based access to the backup verification routines.
+ * Call this script's url from a scheduler to get regular verification.
+ * 
+ * @package admin
+ */
 
 require('../repos-backup.inc.php' );
 

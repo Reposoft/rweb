@@ -1,4 +1,10 @@
 <?php
+/**
+ * Assists creation of web server configuration for repos.
+ * 
+ * @package admin
+ */
+
 // svn propset svn:keywords "Rev" configuration.php
 $rev = strtr("$Rev$",'$',' ');
 require("../../conf/repos.properties.php" );

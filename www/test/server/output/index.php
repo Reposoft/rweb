@@ -1,4 +1,9 @@
 <?php
+/**
+ * Tests the HTTP response handling.
+ * 
+ * @package test
+ */
 
 require('../../../conf/Report.class.php');
 

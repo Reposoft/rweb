@@ -4,6 +4,8 @@
  *
  * Behaviour is configurable in the file
  * ../../repos-conf/repos.properties
+ * 
+ * @package conf
  */
 
 $_repos_config = parse_ini_file( _getPropertiesFile(), false );

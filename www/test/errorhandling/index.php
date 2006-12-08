@@ -1,4 +1,11 @@
 <?php
+/**
+ * Lists all the different error handling scenarios that can occur in repos (and that we know of).
+ * 
+ * Integration tests may use this page to assert proper error handling.
+ * 
+ * @package test
+ */
 
 if (!isset($_GET['case'])) {
 	$links = array(

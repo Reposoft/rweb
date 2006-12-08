@@ -1,4 +1,10 @@
 <?php
+/**
+ * Handles the configuration of the repos server's internal Subversion client,
+ * that runs all the versioning operations.
+ * 
+ * @package admin
+ */
 
 require('../../conf/Report.class.php');
 require('../../account/login.inc.php');

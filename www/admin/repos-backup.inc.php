@@ -1,7 +1,8 @@
 <?php
-
 /**
  * Functions for reading and writing an ordered list of incremental SVN dumpfiles
+ *
+ * @package admin
  */
 
 require( dirname(__FILE__) . '/admin.inc.php' );

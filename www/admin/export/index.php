@@ -1,12 +1,14 @@
 <?php
-// This is a work in progress. not usable yet.
-
 /**
+ * This is a work in progress. not usable yet.
+ * 
  * --- Incremental repository export ---
  * Designed to run after every commit, for exmaple from post-commit hook.
  * Does a minimum export by analyzing verbose log of HEAD revision.
  * Also deletes files according to the last commit.
  * For full export specify 'full' on the command line or query parameter full=1
+ * 
+ * @package admin
  */
 
 require( dirname(__FILE__) . '/repos-admin.inc.php' );

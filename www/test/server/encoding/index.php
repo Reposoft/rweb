@@ -1,4 +1,10 @@
 <?php
+/**
+ * A quite raw script that tests different aspects of the server's character encoding.
+ * More of an experiment than a test case.
+ * 
+ * @package test
+ */
 
 //mb_internal_encoding("UTF-8");
 
