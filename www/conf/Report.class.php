@@ -5,6 +5,8 @@
  * A common interface for scripts that do tests, configuration or sysadmin tasks.
  * Does not do output buffering, because for slow operations we want to report progress.
  * 
+ * PHP scripts should require this class or the Report class, depending on the type of output they produce.
+ * 
  * @package conf
  * @see Presentation, for user contents.
  */

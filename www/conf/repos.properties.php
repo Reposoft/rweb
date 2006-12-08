@@ -5,6 +5,10 @@
  * Behaviour is configurable in the file
  * ../../repos-conf/repos.properties
  * 
+ * Output (headers AND response) is controlled by either Report or Presentation.
+ * 
+ * @see Report
+ * @see Presentation
  * @package conf
  */
 

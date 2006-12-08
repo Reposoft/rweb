@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><templates><template autoinsert="true" context="newPhp" deleted="false" description="PHP file with script documentation" enabled="true" id="org.eclipse.php.ui.editor.templates.newPhp.author" name="New PHP file">&lt;?php
+/**
+ *
+ *
+ * @package
+ */
+ 
+ 
+
+?&gt;
+</template><template autoinsert="true" context="newPhp" deleted="false" description="Testcase using the PHP simpletest framework" enabled="true" name="New PHP testcase">&lt;?php&#13;
+// define any mock behaviour, the script under test might have "if(!function_defined('F') require('F.php')&#13;
+&#13;
+// import the script under test&#13;
+&#13;
+// import testing framework, see http://www.lastcraft.com/simple_test.php&#13;
+require("../lib/simpletest/setup.php");&#13;
+&#13;
+class TestX extends UnitTestCase {&#13;
+&#13;
+	function setUp() {&#13;
+		&#13;
+	}&#13;
+	&#13;
+	function testA() {&#13;
+		&#13;
+	}&#13;
+	&#13;
+}&#13;
+&#13;
+testrun(new TestX());&#13;
+?&gt;&#13;
+</template></templates>

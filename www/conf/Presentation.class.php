@@ -1,21 +1,11 @@
 <?php
 /**
  * Represents the generation of a web page.
- * Extends smarty framework, so use the same syntax as any smarty teplate
- *
- * Does the following assigns for every page:
- * head = all shared head tags, place a <!--{head}--> in the <head> of the template
- * referer = the HTTP referer url, if there is one
- * userhome = a place where the current user always can go, if there is no other way out
- *
- * Allows two different markup delimiters:
- * <!--{ ... }-->
- * {= ... }
- * 
- * Cache settings are defined in te include file.
  * 
  * Presentation can not use the functions from /account, so user settings must be read from cookies.
  * Presentation is for all webapp pages, except administration reports.
+ * 
+ * PHP scripts should require this class or the Report class, depending on the type of output they produce.
  * 
  * @package conf
  * @see Report, the class used for unit tests and administration reports. Does not require repos.properties.php.
@@ -78,6 +68,20 @@ function repos_getUserTheme($user = '') {
 // -------- the template class ------------
 require(dirname(dirname(__FILE__)).'/lib/smarty/smarty.inc.php' );
 
+/**
+ * Extends smarty framework, to provide a customized presentation engine with well known syntax.
+ *
+ * Does the following assigns for every page:
+ * head = all shared head tags, place a <!--{head}--> in the <head> of the template
+ * referer = the HTTP referer url, if there is one
+ * userhome = a place where the current user always can go, if there is no other way out
+ *
+ * Allows two different markup delimiters:
+ * <!--{ ... }-->
+ * {= ... }
+ * 
+ * Cache settings are defined in te include file.
+ */
 class Presentation extends Smarty {
 
 	var $redirectBeforeDisplay = false;
