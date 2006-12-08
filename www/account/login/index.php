@@ -1,4 +1,10 @@
 <?php
+/**
+ * Provides HTTP basic login, with authentication, 
+ * verified by forwarding the credentials to a repository resource.
+ * 
+ * @package account
+ */
 require( dirname(dirname(dirname(__FILE__))) . "/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__)) . "/login.inc.php" );
 

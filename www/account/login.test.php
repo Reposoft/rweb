@@ -63,21 +63,6 @@ class Login_include_Test extends UnitTestCase {
 		//"https%3A%2F%2Fwww.repos.se%2Fsweden%2Fsvensson%2Ftrunk%2F"
 	}
 	
-	// status code
-	function testgetHttpStatusFromHeader() {
-		$this->assertEqual(200, getHttpStatusFromHeader("HTTP/1.1 200 OK"));
-		$this->assertNotEqual(20, getHttpStatusFromHeader("HTTP/1.1 200 OK"));
-		$this->assertNoErrors();
-		$this->assertEqual("301", getHttpStatusFromHeader("HTTP/1.1 301 Moved Permanently"));
-		$this->assertNoErrors();
-		$this->assertEqual(401, getHttpStatusFromHeader("HTTP/1.1 401 Authorization Required"));
-		$this->assertEqual("401", getHttpStatusFromHeader("HTTP/1.1 401 Authorization Required"));
-		$this->assertNoErrors();
-		$this->assertEqual(403, getHttpStatusFromHeader("HTTP/1.1 403 Forbidden"));
-		$this->assertEqual("403", getHttpStatusFromHeader("HTTP/1.1 403 Forbidden"));
-		$this->assertNoErrors();		
-	}
-	
 	// getTargetUrl should return false if target can not be automatically resolved
 	function testGetTargetUrlFalse() {
 		$this->assertEqual(false, getTargetUrl());

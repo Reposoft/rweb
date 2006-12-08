@@ -277,4 +277,16 @@ class ServiceRequest {
 	
 }
 
+/**
+ * Gets the status code from an HTTP reponse header string like "HTTP/1.1 200 OK" 
+ * @deprecated this funcitonality is built into the cURL extension.
+function getHttpStatusFromHeader($httpStatusHeader) {
+	if(ereg('HTTP/1...([0-9]+).*', $httpStatusHeader, $match)) {
+		return $match[1];
+	} else {
+		trigger_error("Could not get HTTP status code for header: ".$httpStatusHeader, E_USER_ERROR);
+	}
+}
+ */
+
 ?>

@@ -6,7 +6,7 @@
  * Does not do output buffering, because for slow operations we want to report progress.
  * 
  * @package conf
- * @see Presentation class, for user contents.
+ * @see Presentation, for user contents.
  */
 // TODO count fatal() as exception
 // TODO convert to HTML-entities where needed (without ending up in some kind of wiki syntax). see test reporter.php

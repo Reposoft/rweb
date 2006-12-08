@@ -1,6 +1,17 @@
 <?php
-// HTTP authentication logout probably needs to be done in server root
-// simply include this file from ?logout flow in root index.php
+/**
+ * Provides HTTP authentication logout.
+ * 
+ * This is not really a supported feature in HTTP authentications,
+ * so we need to trick browsers to dropping the credentials.
+ * 
+ * HTTP authentication logout probably needs to be done in server root
+ * simply include this file from ?logout flow in root index.php
+ * 
+ * @package account
+ */
+// 
+// 
 
 require( dirname(dirname(dirname(__FILE__))) . "/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__)) . "/login.inc.php" );

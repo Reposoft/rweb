@@ -127,6 +127,22 @@ class TestServiceRequest extends UnitTestCase {
 		$this->assertEqual(200, $service->getStatus());
 	}	
 	
+	/* this test is for a method that is no longer used
+	function testgetHttpStatusFromHeader() {
+		$this->assertEqual(200, getHttpStatusFromHeader("HTTP/1.1 200 OK"));
+		$this->assertNotEqual(20, getHttpStatusFromHeader("HTTP/1.1 200 OK"));
+		$this->assertNoErrors();
+		$this->assertEqual("301", getHttpStatusFromHeader("HTTP/1.1 301 Moved Permanently"));
+		$this->assertNoErrors();
+		$this->assertEqual(401, getHttpStatusFromHeader("HTTP/1.1 401 Authorization Required"));
+		$this->assertEqual("401", getHttpStatusFromHeader("HTTP/1.1 401 Authorization Required"));
+		$this->assertNoErrors();
+		$this->assertEqual(403, getHttpStatusFromHeader("HTTP/1.1 403 Forbidden"));
+		$this->assertEqual("403", getHttpStatusFromHeader("HTTP/1.1 403 Forbidden"));
+		$this->assertNoErrors();		
+	}
+	*/
+	
 }
 
 testrun(new TestServiceRequest());

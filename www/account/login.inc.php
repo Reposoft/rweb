@@ -55,10 +55,10 @@
  * This script produces HTTP headers, so it must be included before
  * any other output. The script does not print anything to the output stream,
  * it uses trigger_error on unexpected conditions.
+ * 
+ * @package account
  */
 require_once(dirname(dirname(__FILE__)) . '/conf/repos.properties.php');
-
-define('URL_FOPEN_TIMEOUT', 10);
 
 // do automatic login if a target is specified the standard way
 if (isTargetSet()) {
@@ -236,18 +236,6 @@ function login_getAuthNameFromRepository($targetUrl) {
 function getHttpStatus($targetUrl, $user=null, $pass=null) {
 	$headers = getHttpHeaders($targetUrl, $user, $pass);
 	return getHttpStatusFromHeader($headers[0]);
-}
-
-/**
- * Gets the status code from an HTTP reponse header string like "HTTP/1.1 200 OK" 
- * @deprecated use ServiceRequest class
- */
-function getHttpStatusFromHeader($httpStatusHeader) {
-	if(ereg('HTTP/1...([0-9]+).*', $httpStatusHeader, $match)) {
-		return $match[1];
-	} else {
-		trigger_error("Could not get HTTP status code for header: ".$httpStatusHeader, E_USER_ERROR);
-	}
 }
 
 /**
@@ -539,56 +527,6 @@ function login_handleSvnError($executedcmd, $errorcode, $output = Array()) {
  */
 function login_isSSLSupported() {
 	return function_exists('openssl_open');
-}
-
-// PHP5 get_headers function, but with authentication option
-// currently supports only basic auth
-// @param max number of headers, to prevent infinite loop if no eof is sent in the headers response
-// @deprecated use ServiceRequest class
-function my_get_headers($url, $httpUsername, $httpPassword, $max=20) {
-   $url_info=parse_url($url);
-   if (isset($url_info['scheme']) && $url_info['scheme'] == 'https') {
-   	if (!login_isSSLSupported()) {
-		trigger_error("Repos error: $url is a secure URL but this server does not have OpenSSL support in PHP.", E_USER_ERROR);
-	}
-	   $port = 443;
-	   @$fp=fsockopen('ssl://'.$url_info['host'], $port, $errno, $errstr, URL_FOPEN_TIMEOUT);
-   } else {
-	   $port = isset($url_info['port']) ? $url_info['port'] : 80;
-	   @$fp=fsockopen($url_info['host'], $port, $errno, $errstr, URL_FOPEN_TIMEOUT);
-   }
-   if($fp) {
-	   stream_set_timeout($fp, URL_FOPEN_TIMEOUT);
-	   $head = "HEAD ".@$url_info['path'];
-	   if (isset($url_info['query'])) $head .= "?".@$url_info['query'];
-	   $head .= " HTTP/1.0\r\nHost: ".@$url_info['host']."\r\n";
-	   if (strlen($httpUsername) > 0) {
-		$authString = 'Authorization: Basic '.base64_encode("$httpUsername:$httpPassword");
-		$head .= $authString."\r\n";
-	   }
-	   $head .= "\r\n";
-	   fputs($fp, $head);
-	   //echo("----- http headers sent -----\n$head\n-------------------------\n");
-	   while(!feof($fp) && $max-- > 0) {
-		   if($header=trim(fgets($fp, 1024))) {
-				   $sc_pos = strpos( $header, ':' );
-				   if( $sc_pos === false ) {
-					   $headers[0] = $header;
-				   } else {
-					   $label = substr( $header, 0, $sc_pos );
-					   $value = substr( $header, $sc_pos+1 );
-					   $headers[$label] = trim($value);
-				   }
-		   }
-	   }
-	   if (count($headers) < 1) {
-	   	trigger_error("Repos error: could not get authentication requirements from $url", E_USER_ERROR);
-	   }
-	   return $headers;
-   }
-   else {
-   	trigger_error("Repos error: could not connect to target $url", E_USER_ERROR);
-   }
 }
 
 // set a cookie to tell javascripts which user this is

@@ -1,6 +1,8 @@
 <?php
 /**
- * ideas for keeping the ACL version controlled
+ * Ideas for keeping the ACL version controlled.
+ * 
+ * @package account
  */
 
 // admin account identification (used for example to add extra post-commit operation in upload)
