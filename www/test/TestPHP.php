@@ -35,7 +35,8 @@ $testfiles = array(
 'upload/mimetype.test.php',
 'edit/merge/conflicthandler.test.excel.php',
 'open/list/list.test.php',
-'open/ServiceRequest.test.php'
+'open/ServiceRequest.test.php',
+'edit/merge/xmlConflictHandler.test.php'
 );
 
 function printTestSuite($testfiles) {
