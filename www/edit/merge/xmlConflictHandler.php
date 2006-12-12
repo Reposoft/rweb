@@ -26,13 +26,45 @@ function resolveConflicts(&$fileContents, &$log){
  * @param Conflict $conflict instance that should be updated with selected resolve strategy
  */
 function markAutoResolve(&$conflict) {
-	//$conflict->g
 	if ($conflict->isType(CONFLICT_EXCEL_TABLE)) {
-			
-	} else {
-		// for example header contents
-		$conflict->setResolveToMerge();
+		$isFormulaConflictArray = preg_grep('/<Cell([^>]+)Formula="([^>]+)"([^>]+)?>/', $conflict->getBoth());
+		//print_r($isFormulaConflictArray);
+		if (count($isFormulaConflictArray) > 1) {
+			preg_match('/<Cell([^>]+)Formula="([^>]+)"([^>]+)?>/', $isFormulaConflictArray[0], $matchGroup);
+			$formulaWorking = $matchGroup[2];
+			preg_match('/<Cell([^>]+)Formula="([^>]+)"([^>]+)?>/', $isFormulaConflictArray[1], $matchGroup);
+			$formulaMerge = $matchGroup[2];
+			if ($formulaWorking != $formulaMerge){
+				// formula conflict - not allowed to change formulas
+				return false;
+			} else {
+				$isDataConflictArray = preg_grep('/<Data([^>]+)>.*<\/Data>/', $conflict->getBoth());
+				if (count($isDataConflictArray) > 1) {
+					preg_match('/<Data([^>]+)>(.*)<\/Data>/', $isDataConflictArray[0], $matchGroup);
+					$dataWorking = $matchGroup[2];
+					preg_match('/<Data([^>]+)>(.*)<\/Data>/', $isDataConflictArray[1], $matchGroup);
+					$dataMerge = $matchGroup[2];
+					if ($dataWorking != $dataMerge){
+						// data conflict - data has changed - choose working
+						$conflict->setResolveToWorking();
+						return;
+					}
+				}
+			}
+		}
+		return false;	
 	}
+	if (count(preg_grep("/<LastAuthor>/", $conflict->getWorking())) > 0) {
+		$conflict->setResolveToMerge();
+		return;
+	}
+	if (count(preg_grep("/<Company>/", $conflict->getWorking())) > 0) {
+		$conflict->setResolveToWorking();
+		return;
+	}
+	
+	// default
+	$conflict->setResolveToMerge();
 }
 
 /**
@@ -67,7 +99,7 @@ function findConflict(&$fileContents, &$log){
 			if ($tableMarker == true){
 				$conflictMarker->setType(CONFLICT_EXCEL_TABLE);
 				// Every exception to no conflicts inside table rule should be here
-				if (count(preg_grep("/<Cell.*Formula.*>/", $conflict)) != 0){
+				if (count(preg_grep('/<Cell([^>]+)Formula="([^>]+)"([^>]+)?>/i', $conflict)) != 0){
 					$conflictMarker->setType(CONFLICT_EXCEL_FORMULA);
 					//chooseWorking($fileContents, $conflict, $log);
 					//return resolveConflicts($fileContents, $log);
@@ -233,6 +265,10 @@ class Conflict {
 	
 	function getMerge() {
 		return $this->merge;
+	}
+	
+	function getBoth() {
+		return array_merge_recursive($this->getWorking(), $this->getMerge());
 	}
 	
 	/**

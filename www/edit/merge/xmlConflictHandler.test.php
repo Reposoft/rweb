@@ -69,6 +69,51 @@ merge
 		
 		$this->assertFalse($c->isResolved(), "generally we can not solve conflict in excel table");
 	}
+	
+	function testmarkLastAuthor() {
+		$c = new Conflict(0);
+		$c->working = array('  <LastAuthor>test</LastAuthor>');
+		$c->merge = array('  <LastAuthor>bamse</LastAuthor>');
+		
+		markAutoResolve($c);
+		
+		$this->assertTrue($c->isResolved());
+		$this->assertEqual(array('  <LastAuthor>bamse</LastAuthor>'), $c->getResolvedLines());
+	}
+
+	function testmarkCompany() {
+		$c = new Conflict(0);
+		$c->working = array('  <Company>A</Company>');
+		$c->merge = array('  <Company>B</Company>');
+		
+		markAutoResolve($c);
+		
+		$this->assertTrue($c->isResolved());
+		$this->assertEqual(array('  <Company>A</Company>'), $c->getResolvedLines());
+	}
+	
+	function testmarkIdenticalFunctions() {
+		$c = new Conflict(0);
+		$c->setType(CONFLICT_EXCEL_TABLE);
+		$c->working = array('<Cell ss:Formula="=R[-2]C[-1]:RC[-1]"><Data ss:Type="Number">4</Data></Cell>');
+		$c->merge = array('<Cell ss:Formula="=R[-2]C[-1]:RC[-1]"><Data ss:Type="Number">5</Data></Cell>');
+		
+		markAutoResolve($c);
+		
+		$this->assertTrue($c->isResolved());
+		$this->assertEqual(array('<Cell ss:Formula="=R[-2]C[-1]:RC[-1]"><Data ss:Type="Number">4</Data></Cell>'), $c->getResolvedLines());
+	}
+	
+	function testmarkModifiedFunctions() {
+		$c = new Conflict(0);
+		$c->setType(CONFLICT_EXCEL_TABLE);
+		$c->working = array('<Cell ss:Formula="=R[-2]C[-1]:RC[-1]"><Data ss:Type="Number">4</Data></Cell>');
+		$c->merge = array('<Cell ss:Formula="=R[-3]C[-1]:RC[-1]"><Data ss:Type="Number">4</Data></Cell>');
+		
+		markAutoResolve($c);
+		
+		$this->assertFalse($c->isResolved());
+	}
 }
 
 testrun(new TestXmlConflictHandler());
