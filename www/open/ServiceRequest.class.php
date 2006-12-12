@@ -69,7 +69,7 @@ class ServiceRequest {
 	 *  Unlike the login(url) function, this class does not attempt to detect if the url requires login.
 	 * @return ServiceRequest which might be further configured with set* methods
 	 */
-	function ServiceRequest($service, $parameters, $authenticate=true) {
+	function ServiceRequest($service, $parameters=array(), $authenticate=true) {
 		$this->uri = $service;
 		$this->parameters = $parameters;
 		if ($authenticate) $this->_enableAuthentication();

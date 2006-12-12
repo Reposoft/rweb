@@ -6,7 +6,7 @@
 
 if (!function_exists('getRepository')) require('../../conf/repos.properties.php');
 if (!function_exists('getTarget')) require('../../account/login.inc.php');
-require('../ServiceRequest.class.php');
+if (!class_exists('ServiceRequest')) require('../ServiceRequest.class.php');
 require('../../conf/Presentation.class.php');
 
 // tool id => resource to check

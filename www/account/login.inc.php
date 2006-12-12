@@ -59,6 +59,7 @@
  * @package account
  */
 require_once(dirname(dirname(__FILE__)) . '/conf/repos.properties.php');
+if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/ServiceRequest.class.php');
 
 // do automatic login if a target is specified the standard way
 if (isTargetSet()) {
@@ -168,14 +169,11 @@ function login_getFirstNon404Parent($url, &$status) {
 function login_getResourceType($target) {
 	$url = getTargetUrl($target);
 	if (substr_count($url, '://')!=1) trigger_error("The URL \"$url\" is invalid", E_USER_WARNING); // remove when not frequent error
-	if (isLoggedIn()) {
-		$user = getReposUser();
-		$pass = _getReposPass();
-		$headers = getHttpHeaders($url, $user, $pass);
-	} else {
-		$headers = getHttpHeaders($url);
-	}
-	$s = getHttpStatusFromHeader($headers[0]);
+	$request = new ServiceRequest($target);
+	$request->setSkipBody();
+	$request->exec();
+	$s = $request->getStatus();
+	$headers = $request->getResponseHeaders();
 	if ($s==301 && $headers['Location']==$url.'/') return 1;
 	if ($s==404) return 0;
 	if ($s==403) return -1;
@@ -217,11 +215,13 @@ function getAuthName($targetUrl) {
  * Returns false if the targetUrl does not request authenticatoin
  */
 function login_getAuthNameFromRepository($targetUrl) {
-	$headers = getHttpHeaders($targetUrl);
-	$s = getHttpStatusFromHeader($headers[0]);
-	if ($s!='401') {
+	$s = new ServiceRequest($targetUrl, array(), false);
+	$s->setSkipBody();
+	$s->exec();
+	if ($s->getStatus()!=401) {
 		return false;
 	}
+	$headers = $s->getResponseHeaders();
 	$auth = $headers['WWW-Authenticate'];
 	if(ereg('realm="([^"]*)"', $auth, $regs)) {
 		return $regs[1];
@@ -231,22 +231,26 @@ function login_getAuthNameFromRepository($targetUrl) {
 
 /**
  * @return the HTTP status code for the URL, with optional user credentials
- * @deprecated use ServiceRequest class
+ * @deprecated use ServiceRequest class, user and password parameter to this method is no longer effective
  */
 function getHttpStatus($targetUrl, $user=null, $pass=null) {
-	$headers = getHttpHeaders($targetUrl, $user, $pass);
-	return getHttpStatusFromHeader($headers[0]);
+	$s = new ServiceRequest($targetUrl);
+	$s->setSkipBody();
+	$s->exec();
+	return $s->getStatus();
 }
 
 /**
  * Reads the HTTP response headers for a URL.
  * For a method that handles parameters, see requestService();
- * @deprecated use ServiceRequest class
+ * @deprecated use ServiceRequest class directly, user and password parameter to this method is no longer effective
  */
 function getHttpHeaders($targetUrl, $user=null, $pass=null) {
 	if (substr_count($targetUrl, '/')<3) trigger_error("Can not check headers of $targetUrl, because it is not a valid resource", E_USER_ERROR);
-	$headers = my_get_headers($targetUrl, $user, $pass);
-	return $headers;
+	$s = new ServiceRequest($targetUrl);
+	$s->setSkipBody();
+	$s->exec();
+	return $s->getResponseHeaders();
 }
 
 // ----- resource URL retreival functionality -----
