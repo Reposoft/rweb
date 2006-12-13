@@ -102,5 +102,26 @@ function login_handleSvnError($executedcmd, $errorcode, $output = Array()) {
 	echo "</error>\n";
 }
 
+/**
+ * Runs an SVN command that results in text output (repository information).
+ * 
+ * Content type can be either text/plain or text/xml.
+ * 
+ * @see SvnOpenFile for reading file contents
+ */
+class SvnOpen {
+	
+	/**
+	 * Creates the command representatino.
+	 *
+	 * @param String $subversionOperation like list or info
+	 * @param boolean $asXml set to true to add the --xml parameter (allowed only if the svn command accepts it)
+	 * @return SvnOpen
+	 */
+	function SvnOpen($subversionOperation, $asXml=false) {
+		
+	}
+	
+}
 
 ?>
