@@ -10,6 +10,12 @@ $lastCommand = null;
 function _command_run($cmd, $argsString) {
 	global $lastCommand;
 	$lastCommand = "$cmd $argsString";
+	return array(0, 'output');
+}
+
+function _getLastCommand() {
+	global $lastCommand;
+	return $lastCommand;
 }
 
 class TestCommand extends UnitTestCase {
@@ -94,7 +100,35 @@ class TestCommand extends UnitTestCase {
 	   	$c .= dechex($ord)." ";
 		}
 		return $c;
-	}	
+	}
+
+	function testArgumentOrder() {
+		$c = new Command('svn');
+		$c->addArgOption("1");
+		$c->addArg("2");
+		$c->addArgOption("3");
+		$c->addArgOption("4");
+		$c->addArg("5");
+		$c->exec();
+		$this->sendMessage(_getLastCommand());
+		$this->assertTrue(strpos(_getLastCommand(), '1') < strpos(_getLastCommand(), '2'));	
+		$this->assertTrue(strpos(_getLastCommand(), '2') < strpos(_getLastCommand(), '3'));
+		$this->assertTrue(strpos(_getLastCommand(), '3') < strpos(_getLastCommand(), '4'));
+		$this->assertTrue(strpos(_getLastCommand(), '4') < strpos(_getLastCommand(), '5'));
+	}
+	
+	function testArgumentEscape() {
+		$c = new Command('svn');
+		$c->addArgOption("1");
+		$c->addArg("2");
+		$c->addArg("3");
+		$c->exec();
+		$this->sendMessage(_getLastCommand());
+		$this->assertTrue(strpos(_getLastCommand(), ' 1 '), "Option arguments should not be escaped");				
+		$this->assertTrue(strpos(_getLastCommand(), ' "2" '), "Non-option arguments should be escaped");
+		$this->assertEqual(0, $c->getExitcode());
+		$this->assertEqual(array('output'), $c->getOutput());	
+	}
 	
 }
 

@@ -92,7 +92,7 @@ function _escapeWindowsVariables($arg) {
  * @param everything that should be after the blankspace following the command, safely encoded already
  * @returns stdout and stderr output from the command, one array element per row. 
  *   Last element is the return code (use array_pop to remove).
- * @deprecated use the Command class
+ * @deprecated use the Command class, currently this is called as the final step from the command class
  */
 function repos_runCommand($commandName, $argumentsString) {
 	exec(_repos_getFullCommand($commandName, $argumentsString), $output, $returnvalue);
@@ -169,9 +169,16 @@ class Command {
 	 * Options can not contain whitespace.
 	 *
 	 * @param String $option command line element that does not need quoting or encoding.
+	 * @param String $value to add a value right after the option (with a whitespace between)
+	 * @param boolean $valueNeedsEscape false if it is safe to append the value without escaping
+	 *  (appropriate where the value can not be altered by a user)
 	 */
-	function addArgOption($option) {
+	function addArgOption($option, $value='', $valueNeedsEscape=true) {
 		$this->_addArgument($option);
+		if (strlen($value)>0) {
+			if ($valueNeedsEscape) $this->addArg($value);
+			$this->addArgOption($value);
+		}
 	}
 	
 	/**
@@ -212,7 +219,7 @@ class Command {
 	 * @return int the exit code, generally 0 if successful
 	 */
 	function exec() {
-		$this->output = repos_runCommand($this->operation, $this->_getArgumenstString());
+		$this->output = _command_run($this->operation, $this->_getArgumentsString());
 		$this->exitcode = array_pop($this->output);
 		return $this->exitcode;
 	}

@@ -12,7 +12,7 @@
  * 
  * @package test
  */
-
+require(dirname(dirname(dirname(__FILE__))).'/conf/Command.class.php');
 require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
 $report = new Report('set up test repository');
 
@@ -30,28 +30,25 @@ $conffile = $test . "admin/testrepo.conf";
 $here=dirname(__FILE__);
 $svnargs="--config-dir " . rtrim($here, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "test-svn-config-dir";
 
-// one call to escapeArgument needed as long as the excape check is enabled in repos.properties
-escapeArgument("info");
-
 $report->info("To use this repository, do \"Include $conffile\" from a conf-file and restart Apache.");
 
 function setup_svnadmin($command) {
 	global $svnargs, $report;
 	$cmd = $svnargs.' '.$command;
-	$result = repos_runCommand('svnadmin', $cmd);
+	$result = _command_run('svnadmin', $cmd);
 	if (array_pop($result)) {
 		$report->fail("svnadmin command failed: $command");
 	} else {
 		$report->ok("Successfully executed svnadmin command: $command");
 		$report->debug($result);
-	}	
+	}
 }
 
 function setup_svn($command) {
 	global $svnargs, $report;
 	$command = setup_customizeCommand($command);
 	$cmd = $svnargs.' '.$command;
-	$result = repos_runCommand('svn', $cmd);
+	$result = _command_run('svn', $cmd);
 	if (array_pop($result)) {
 		$report->fail("Svn command failed: $command");
 	} elseif (count($result)==0) {

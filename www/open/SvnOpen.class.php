@@ -25,7 +25,7 @@ if (!file_exists(SVN_CONFIG_DIR)) trigger_error('Svn config folder '.SVN_CONFIG_
  */
 function login_svnRun($cmd) {
 	$svnCommand = login_getSvnSwitches().' '.$cmd;
-	$result = repos_runCommand('svn', $svnCommand);
+	$result = _command_run('svn', $svnCommand);
 	return $result;
 }
 
@@ -79,11 +79,11 @@ function login_svnPassthruFileHtml($targetUrl, $revision=0) {
 }
 
 /**
- * @return Mandatory arguments to the svn command
+ * @return Mandatory arguments to the svn command, safe for command line (config dir path is escaped)
  */
 function login_getSvnSwitches() {
 	$auth = '--username='.escapeArgument(getReposUser()).' --password='.escapeArgument(_getReposPass()).' --no-auth-cache';
-	$options = '--non-interactive --config-dir '.escapeArgument(SVN_CONFIG_DIR);
+	$options = '--non-interactive --config-dir '.Command::_escapeArgument(SVN_CONFIG_DIR);
 	return $auth.' '.$options;
 }
 
@@ -106,6 +106,7 @@ function login_handleSvnError($executedcmd, $errorcode, $output = Array()) {
 
 /**
  * @return revision number from parameters (safe as command argument), false if not set
+ * @deprecated not used, does not allow  ranges or dates
  */
 function getRevision($rev = false) {
 	if (!$rev) {
@@ -129,6 +130,7 @@ function getRevision($rev = false) {
  * 
  * Content type can be either text/plain or text/xml.
  * 
+ * @see Command for the basic functionality
  * @see SvnOpenFile for reading file contents
  */
 class SvnOpen {
@@ -143,19 +145,46 @@ class SvnOpen {
 	 * @return SvnOpen
 	 */
 	function SvnOpen($subversionOperation, $asXml=false) {
-		$command;
+		$this->command = new Command('svn');
+		$this->_addSvnOptions();
+		$this->command->addArgOption($subversionOperation);
+		if ($asXml) $this->command->addArgOption('--xml');
+	}
+	
+	function _addSvnOptions() {
+		$this->command->addArgOption(login_getSvnSwitches());
 	}
 	
 	function addArgUrl($url) {
-		
+		$this->command->addArg($url);	
 	}
 	
 	function addArgRevision($revision) {
-		
+		$this->command->addArgOption('-r', $revision);
 	}
 	
 	function addArgRevisionRange($revisionRange) {
-		
+		$this->addArgRevision($revisionRange);
+	}
+	
+	function addArgOption($option, $value='', $valueNeedsEscape=true) {
+		$this->command->addArgOption($option, $value, $valueNeedsEscape);
+	}
+	
+	function exec() {
+		return $this->command->exec();
+	}
+	
+	function getExitcode() {
+		return $this->command->getExitcode();
+	}
+	
+	function getOutput() {
+		return $this->command->getOutput();
+	}
+	
+	function getContentLength() {
+		return $size->command->getContentLength();
 	}
 	
 }

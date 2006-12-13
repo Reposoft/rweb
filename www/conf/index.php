@@ -9,6 +9,7 @@
 // default configuration includes, the way they should be referenced in php files
 require_once( dirname(__FILE__) . '/repos.properties.php' );
 require_once( dirname(dirname(__FILE__)) . '/account/login.inc.php' );
+require_once( dirname(__FILE__) . '/Command.class.php' );
 
 // configuration index settings
 $sections = array(
@@ -263,9 +264,9 @@ function debug() {
 	echo "\n==== Server variables ===\n";
 	print_r($_SERVER);
 	echo "\n==== Command line environment ===\n";
-	escapeArgument('dummy');
-	$output = repos_runCommand('env','');
-	print_r($output);
+	$command = new Command('env');
+	$command->exec();
+	print_r($command->output);
 	echo "</pre>\n";
 }
 

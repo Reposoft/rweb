@@ -61,9 +61,6 @@
 require_once(dirname(dirname(__FILE__)) . '/conf/repos.properties.php');
 if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/ServiceRequest.class.php');
 
-// currently we include the old svn functions from here, to convert transparently
-require(dirname(dirname(__FILE__)).'/open/SvnOpen.class.php');
-
 // do automatic login if a target is specified the standard way
 if (isTargetSet()) {
 	targetLogin();

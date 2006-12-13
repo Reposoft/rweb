@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(dirname(dirname(__FILE__))) . "/account/login.inc.php" );
+require_once(dirname(dirname(__FILE__)) . "/SvnOpen.class.php" );
 
 define('STYLESHEET','../../view/log.xsl');
 
@@ -34,19 +34,25 @@ $fromdate = getParameter('fromdate');
 // log only one revision (a changeset)
 $rev = getParameter('rev'); 
 
+$command = new SvnOpen('log', true);
+$command->addArgOption('-v');
+$command->addArgOption('--incremental');
 // set limit +1 to be able to see if there are more entries
-$cmd = 'log -v --xml --incremental --limit '.($limit+1);
+$command->addArgOption('--limit', $limit+1, false); // limit is a number, if not this will be an empty string (so it's safe)
 if ($rev) {
-	$cmd .= ' -r '.$rev;
+	$command->addArgRevision($rev);
 } else if ($torev) {
 	// reverse order, always return revisions in descending order
-	$cmd .= ' -r '.$torev.':'.$fromrev;
+	$command->addArgRevisionRange($torev.':'.$fromrev);
 }
-$cmd .= ' '.escapeArgument($url);
+
+$command->addArgUrl($url);
 
 // read the log to memory, size is limited and the browser needs the complete xml before rendering anyway
-$log = login_svnRun($cmd);
-if (($ret=array_pop($log))!=0) { login_handleSvnError($cmd, $ret); exit; } // need a real command class that does exist
+$result = $command->exec();
+
+if ($result!=0) { login_handleSvnError($cmd, $ret); exit; } // need a real command class that does exist
+$log = $command->getOutput();
 
 // count entries
 $size = 0;
@@ -79,6 +85,7 @@ $head .= ">\n";
 
 $foot = "\n</log>\n"; 
 
+// TODO move to some generic place and define constants for content types
 function setContentLength($bytes) {
 	header('Content-Length: '.$bytes);
 }
