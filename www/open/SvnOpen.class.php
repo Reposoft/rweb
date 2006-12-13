@@ -156,6 +156,7 @@ class SvnOpen {
 	}
 	
 	function addArgUrl($url) {
+		$url = urlEncodeNames($url); // allow UTF-8 characters in url on windows too (or do we get problems with this)
 		$this->command->addArg($url);	
 	}
 	
