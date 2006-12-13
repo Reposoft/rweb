@@ -1,5 +1,7 @@
 <?php
 
+// TODO move this to SvnOpen's parsing of svn info instead
+
 // TODO support other formats than xml, and write tests from the samples below
 
 // list a file

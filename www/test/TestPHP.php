@@ -35,6 +35,7 @@ $testfiles = array(
 'plugins/validation/Validation.test.php',
 'upload/mimetype.test.php',
 'edit/merge/conflicthandler.test.excel.php',
+'open/SvnOpen.test.php',
 'open/list/list.test.php',
 'open/ServiceRequest.test.php',
 'edit/merge/xmlConflictHandler.test.php'

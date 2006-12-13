@@ -147,6 +147,43 @@ class SvnEditTest extends UnitTestCase
 			$this->sendMessage("test user is not logged in, so this test is skipped");
 		}
 	}
+	
+	function testIsHttpHeadersForFolder() {
+		$h = '
+		|HTTP/1.1 200 OK|
+		|Date: Wed, 04 Oct 2006 19:20:44 GMT|
+		|Server: Apache/2.0.59 (Win32) SVN/1.4.0 PHP/5.1.6 DAV/2|
+		|Last-Modified: Wed, 04 Oct 2006 19:17:23 GMT|
+		|ETag: W/"1//demoproject/trunk/public"|
+		|Accept-Ranges: bytes|
+		|Connection: close|
+		|Content-Type: text/xml|
+		'; // copied from the headers test
+		foreach(explode('|', $h) as $row) {
+			if (strContains($row, 'HTTP/1.')) $headers = array($row);
+			if (strContains($row, ':')) { $r = explode(':', $row); $headers[$r[0]] = trim($r[1]); }
+		}
+		$this->assertTrue(_isHttpHeadersForFolder($headers), "folder headers: $h");
+	}
+		
+	function testIsHttpHeadersForFolderFile() {
+		$h = '
+		|HTTP/1.1 200 OK|
+		|Date: Thu, 05 Oct 2006 08:55:52 GMT|
+		|Server: Apache/2.0.59 (Win32) SVN/1.4.0 PHP/5.1.6 DAV/2|
+		|Last-Modified: Thu, 05 Oct 2006 07:37:59 GMT|
+		|ETag: "1//demoproject/trunk/public/xmlfile.xml"|
+		|Accept-Ranges: bytes|
+		|Content-Length: 17|
+		|Connection: close|
+		|Content-Type: text/xml|
+		'; // copied from the headers test
+		foreach(explode('|', $h) as $row) {
+			if (strContains($row, 'HTTP/1.')) $headers = array($row);
+			if (strContains($row, ':')) { $r = explode(':', $row); $headers[$r[0]] = trim($r[1]); }
+		}
+		$this->assertFalse(_isHttpHeadersForFolder($headers), "file headers: $h");
+	}
 
 }
 
