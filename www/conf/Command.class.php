@@ -99,7 +99,6 @@ function _escapeWindowsVariables($arg) {
  * @deprecated use the Command class, currently this is called as the final step from the command class
  */
 function repos_runCommand($commandName, $argumentsString) {
-	echo(_repos_getFullCommand($commandName, $argumentsString)); exit;
 	exec(_repos_getFullCommand($commandName, $argumentsString), $output, $returnvalue);
 	$output[] = $returnvalue;
 	return $output;
@@ -181,8 +180,11 @@ class Command {
 	function addArgOption($option, $value=null, $valueNeedsEscape=true) {
 		$this->_addArgument($option);
 		if (!is_null($value)) {
-			if ($valueNeedsEscape) $this->addArg($value);
-			$this->addArgOption($value);
+			if ($valueNeedsEscape) {
+				$this->addArg($value);
+			} else {
+				$this->addArgOption($value);	
+			}
 		}
 	}
 	

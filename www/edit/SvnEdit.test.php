@@ -2,33 +2,53 @@
 require('SvnEdit.class.php');
 require("../lib/simpletest/setup.php");
  
-class EditTest extends UnitTestCase
+$lastCommand = null;
+$nextOutput = array('output');
+$nextExitcode = 0;
+function _command_run($cmd, $argsString) {
+	global $lastCommand, $nextOutput, $nextExitcode;
+	$lastCommand = "$cmd $argsString";
+	return array_merge($nextOutput, array($nextExitcode));
+}
+
+function _getLastCommand() {
+	global $lastCommand;
+	return $lastCommand;
+}
+
+function _setNextExitcode($int) {
+	global $nextExitcode;
+	$nextExitcode = $int;
+}
+
+function _setNextOutput($arr) {
+	global $nextOutput;
+	$nextOutput = $arr;
+}
+
+class SvnEditTest extends UnitTestCase
 {
 
 	function testIsSuccessfulUsingDIRCommand() {
-		$edit = new SvnEdit('test');
-		// most systems support the 'dir' command
-		exec('dir', $output, $edit->returnval);
+		_setNextExitcode(0);
+		$edit = new SvnEdit('info');
+		$edit->exec();
 		$this->assertTrue($edit->isSuccessful());
 	}
 	
 	function testIsSuccessfulFalse() {
-		$edit = new SvnEdit('test');
-		// most systems support the 'dir' command
-		exec('thiscommanddoesnotexist', $output, $edit->returnval);
+		_setNextExitcode(99);
+		$edit = new SvnEdit('info');
+		$edit->exec();
+		$this->assertEqual(99, $edit->getExitcode(), "test setup error, should use mock value. %s");
 		$this->assertFalse($edit->isSuccessful());
 	}
 
-	function testIsSuccessfulZero() {
-		$edit = new SvnEdit('test');
-		$edit->returnval = 0;
-		$this->assertTrue($edit->isSuccessful());
-	}
-
 	function testExtractRevision() {
-		$edit = new SvnEdit('test');
-		$this->returnval = true;
-		$edit->output = array("Committed revision 107.");
+		_setNextExitcode(0);
+		_setNextOutput(array("Committed revision 107."));
+		$edit = new SvnEdit('info');
+		$edit->exec();
 		$this->assertEqual('107', $edit->getCommittedRevision());
 	}
 	
@@ -36,41 +56,58 @@ class EditTest extends UnitTestCase
 	 * Only some of the command arguments should be escaped, so escaping must be done per argument type.
 	 */
 	function testAddArgument() {
-		$edit = new SvnEdit('test');
+		$edit = new SvnEdit('info');
 		$edit->addArgPath('arg1');
-		$this->assertEqual('"arg1"', $edit->args[0]);
 		$edit->addArgOption('arg_');
-		$this->assertEqual('"arg1"', $edit->args[0]);
-		$this->assertEqual('arg_', $edit->args[1]);
+		$edit->exec();
+		$this->assertPattern('/"arg1" arg_/', _getLastCommand());
+	}
+	
+	function testAddArgumentPath() {
 		// file and path should only be escaped, not converted with toPath or toShellEncoding
+		$edit = new SvnEdit('info');
 		$edit->addArgPath('\temp\file.txt');
 		$edit->addArgFilename("file\xc3\xa5.txt");
-		$this->assertEqual("\"\\\\temp\\\\file.txt\"", $edit->args[2]);
-		$this->assertEqual("\"file\xc3\xa5.txt\"", $edit->args[3]);
+		$edit->exec();
+		$this->assertTrue(strpos(_getLastCommand(), "\"\\\\temp\\\\file.txt\""));
+		$this->assertTrue(strpos(_getLastCommand(), "\"file\xc3\xa5.txt\""));
 	}
 	
 	function testPercentInFilename(){
-		$edit = new SvnEdit('test');
+		$edit = new SvnEdit('info');
+		// internally, urls are not encoded, but they need to be on the command line
 		$edit->addArgUrl('http://www.where-we-work.com/%procent%');
-		$this->assertEqual('"http://www.where-we-work.com/%25procent%25"', $edit->args[0]);
+		$edit->exec();
+		$this->assertTrue(strpos(_getLastCommand(), '"http://www.where-we-work.com/%25procent%25"'));
 	}
 	
 	function testCommand() {
 		// actually we shouldnt care much about what the command looks like, but here's one test to help
-		$edit = new SvnEdit('import');
+		$edit = new SvnEdit('info');
 		$edit->setMessage('msg');
 		$edit->addArgFilename('file.txt');
 		$edit->addArgUrl('https://my.repo/file.txt');
-		$cmd = $edit->getCommand();
-		$this->assertEqual('import -m "msg" "file.txt" "https://my.repo/file.txt"', $cmd);
+		$edit->exec();
+		$this->assertPattern('/info "file.txt" "https:\/\/my.repo\/file.txt"/', _getLastCommand());
+		$this->assertTrue(strpos(_getLastCommand(),' -m "msg"'));
+		$this->assertFalse(strpos(_getLastCommand(),' msg'), "message must be encoded");
+	}
+	
+	function testImportCommand() {
+		$edit = new SvnEdit('import');
+		$edit->setMessage('msg');
+		$edit->addArgPath('a/temp/folder/');
+		$edit->addArgUrl('http://www.where-we-work.com/');
+		$edit->exec();
+		$this->assertFalse(strpos(_getLastCommand(), ' msg'));
 	}
 	
 	function testCommandEscape() {
 		if (substr(PHP_OS, 0, 3) != 'WIN') {
 			$edit = new SvnEdit('" $(ls)');
 			$edit->setMessage('msg " `ls` \'ls\' \ " | rm');
-			$cmd = $edit->getCommand();
-			$this->assertEqual('\" \$\(ls\) -m "msg \" \`ls\` \'ls\' \\\\ \" | rm"', $cmd);
+			$edit->exec();
+			$this->assertTrue(strpos(_getLastCommand(), '\" \$\(ls\) -m "msg \" \`ls\` \'ls\' \\\\ \" | rm"'));
 		}
 	}
 	
@@ -113,5 +150,5 @@ class EditTest extends UnitTestCase
 
 }
 
-testrun(new EditTest());
+testrun(new SvnEditTest());
 ?>

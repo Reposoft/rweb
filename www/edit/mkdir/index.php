@@ -30,7 +30,7 @@ function createNewFolder($name, $message) {
 	$dir = tmpdir();
 	$edit = new SvnEdit('import');
 	$edit->setMessage($message);
-	$edit->addArgPath($dir, true);
+	$edit->addArgPath($dir);
 	$edit->addArgUrl($newurl);
 	$edit->exec();
 	deleteFolder($dir);

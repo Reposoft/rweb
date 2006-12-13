@@ -230,7 +230,11 @@ class SvnEdit {
 	 * @return true if operation completed successfuly
 	 */
 	function isSuccessful() {
-		return $this->command->getExitcode() == 0;
+		return $this->getExitcode() == 0;
+	}
+	
+	function getExitcode() {
+		return $this->command->getExitcode();
 	}
 	
 	/**
