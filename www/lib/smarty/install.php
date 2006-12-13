@@ -10,9 +10,8 @@ if (file_exists('libs/')) {
 }
 
 require '../uncompress.php';
-
 $home = "http://smarty.php.net";
-$version = "2.6.14";
+$version = "2.6.16";
 $archive = "$home/distributions/Smarty-$version.tar.gz";
 $file = "Smarty-$version";
 

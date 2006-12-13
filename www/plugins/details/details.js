@@ -39,8 +39,7 @@ function details_write(e, entry) {
 			$('.username', e).append($('commit/author', this).text());
 			$('.datetime', e).append($('commit/date', this).text());
 		}
-		// IE can't handle this, waiting for jQuery 1.1 when bug #164 is fixed
-		//$('.revision', e).append($('commit', this).attr('revision'));
+		$('.revision', e).append($('commit', this).attr('revision'));
 		var folder = details_isFolder(this);
 		if (!folder) {
 			var size = $('size', this).text();
