@@ -1,7 +1,7 @@
 <?php
 
 require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
-require( dirname(dirname(__FILE__))."/edit.class.php" );	
+require( dirname(dirname(__FILE__))."/SvnEdit.class.php" );	
 
 // automatic validation
 new FilenameRule('name');
@@ -28,11 +28,11 @@ function createNewFolder($name, $message) {
 	$template = new Presentation();
 	$newurl = getTargetUrl().$name;
 	$dir = tmpdir();
-	$edit = new Edit('import');
+	$edit = new SvnEdit('import');
 	$edit->setMessage($message);
 	$edit->addArgPath($dir, true);
 	$edit->addArgUrl($newurl);
-	$edit->execute();
+	$edit->exec();
 	deleteFolder($dir);
 	$edit->present($template, getTargetUrl());
 }

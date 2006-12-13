@@ -30,7 +30,7 @@ $testfiles = array(
 'conf/Report.test.php',
 'conf/Command.test.php',
 'account/login.test.php',
-'edit/edit.test.php',
+'edit/SvnEdit.test.php',
 'open/start/RepositoryTree.test.php',
 'plugins/validation/Validation.test.php',
 'upload/mimetype.test.php',

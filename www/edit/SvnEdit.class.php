@@ -5,7 +5,7 @@
 
 // TODO rename to SvnEdit.class.php, delegate to SvnOpen, add getCommittedRevision
 // common functionality in the edit tools
-require_once( dirname(dirname(__FILE__))."/account/login.inc.php" );
+require_once( dirname(dirname(__FILE__))."/open/SvnOpen.class.php" );
 require_once( dirname(dirname(__FILE__))."/plugins/validation/validation.inc.php" );
 
 // getResourceType was only used from here, so we'll keep it here until it has found a nice home
@@ -133,21 +133,22 @@ function presentEditAndExit(&$presentation, $nextUrl=null, $errorMessage=null) {
  * results to the 'edit done' smarty template.
  * If the show() function is never called, this class does not need Presentation.class.php to be imported.
  */ 
-class Edit {
-	var $operation;
-	var $args = Array(); // command line arguments, properly escaped and surrounded with quotes if needed
+class SvnEdit {
+	/**
+	 * @var SvnOpen
+	 */
+	var $command;
+	
 	var $message; // not escaped
 	var $commitWithMessage = false; // allow for example checkout to run without a -m
-	var $output; // from exec
-	var $returnval; // from exec
 
 	/**
 	 * Constructor
 	 * @param String $subversionOperation svn command line operation, for example mkdir or del.
 	 *  It is recommended to use the long name, like 'list' instead of 'ls' because it is more readable.
 	 */
-	function Edit($subversionOperation) {
-		$this->operation = $subversionOperation;
+	function SvnEdit($subversionOperation) {
+		$this->command = new SvnOpen($subversionOperation);
 	}
 	
 	/**
@@ -166,52 +167,39 @@ class Edit {
 	 *  Filenames and paths are expected to be properly command-line or URL encoded (this function does not know which)
 	 */
 	function addArgFilename($pathElement) {
-		// rawurlencode does not work with filenames because there might be UTF-8 characters in it like umlauts
-		// manually escape the characters that are allowed in filenames but not for retreival
-		$this->_addArgument(escapeArgument($pathElement));
+		$this->command->addArgPath($pathElement);
 	}
 	
 	/**
 	 * @param name absolute or relative path with slashes
 	 *  Path is expected to be properly adapted to the OS already (see toPath and toShellEncoding)
 	 */
-	function addArgPath($name) {
-		$this->_addArgument(escapeArgument($name));
+	function addArgPath($path) {
+		$this->command->addArgPath($path);
 	}
 
 	/**
 	 * @param url complete url
 	 */	
 	function addArgUrl($url) {
-		// urlEncodeNames does not work for write operation because there might be UTF-8 characters like umlauts
-		$url = urlEncodeNames($url);
-		$this->_addArgument(escapeArgument($url));
+		$this->command->addArgUrl($url);
 	}
 	
 	/**
 	 * @param option command line switch, will be added to commandline without encoding or quotes
 	 */	
-	function addArgOption($option) {
-		$this->_addArgument($option);
-	}
-
-	/**
-	 * Append an command line argument last in the current arguments list
-	 * @param The argument, should be appropriately encoded
-	 *  (for example urlencoding for a new filename from input box)
-	 */
-	function _addArgument($nextArgument) {
-		$this->args[] = $nextArgument;
+	function addArgOption($option, $value=null, $valueNeedsEscape=true) {
+		$this->command->addArgOption($option, $value, $valueNeedsEscape);
 	}
 
 	/**
 	 * Replaces the current arguments array.
 	 * Use addArgument instead if existing arguments should not be removed.
 	 * @param boolean $arrArgumentsInOrder The arguments to the command ordered according to the svn reference
-	 */
 	function _setArguments($arrArgumentsInOrder) {
 		$this->args = $arrArgumentsInOrder;
 	}
+	 */
 	
 	/**
 	 * @return String the subversion command name
@@ -229,35 +217,20 @@ class Edit {
 	}
 	
 	/**
-	 * @return the subversion operation command line (the portion after 'svn')
-	 */
-	function getCommand() {
-		// command and message
-		$cmd = escapeCommand($this->operation);
-		if ($this->commitWithMessage) { // commands expecting a message need this even if it is empty
-			$cmd .= ' -m '.escapeArgument($this->message);
-		}
-		// arguments, already encoded
-		foreach ($this->args as $arg) {
-			$cmd .= ' '.$arg;
-		}
-		return $cmd;
-	}
-	
-	/**
 	 * Runs the operation securely (no risk for shell command injection)
 	 */
-	function execute() {
-		$cmd = login_getSvnSwitches().' '.$this->getCommand();
-		$this->output = repos_runCommand('svn', $cmd);
-		$this->returnval = array_pop($this->output);
+	function exec() {
+		if ($this->commitWithMessage) { // commands expecting a message need this even if it is empty
+			$this->command->addArgOption('-m', $this->message);
+		}
+		return $this->command->exec();
 	}
 	
 	/**
 	 * @return true if operation completed successfuly
 	 */
 	function isSuccessful() {
-		return $this->returnval == 0;
+		return $this->command->getExitcode() == 0;
 	}
 	
 	/**
@@ -266,17 +239,16 @@ class Edit {
 	 * @return result of the subversion operation, empty string if it gave no output
 	 */
 	function getResult() {
-		if (count($this->output) > 0) {
-			return $this->output[count($this->output)-1];
-		}
-		return '';//'There was nothing to '.$this->getOperation();
+		$o = $this->getOutput();
+		if (count($o) > 0) return $o[count($o)-1];
+		return '';
 	}
 	
 	/**
 	 * @return the output from the svn command, all lines except the return code
 	 */
 	function getOutput() {
-		return $this->output;
+		return $this->command->getOutput();
 	}
 	
 	/**
@@ -305,7 +277,7 @@ class Edit {
 			'message' => $this->getMessage(),
 			'successful' => $this->isSuccessful(),
 			'revision' => $this->getCommittedRevision(),
-			'output' => implode("\n", $this->output)
+			'output' => implode("\n", $this->getOutput())
 		);
 		$logEntry['description'] = $description;
 		$smartyTemplate->append('log', $logEntry);

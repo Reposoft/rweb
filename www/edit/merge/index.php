@@ -1,7 +1,7 @@
 <?php
 
 require "../../conf/Presentation.class.php";
-require "../edit.class.php";
+require "../SvnEdit.class.php";
 require "xmlConflictHandler.php";
 
 
@@ -22,10 +22,10 @@ if (isset($_GET[SUBMIT])) {
 }
 
 function svnList($listFilesInFolder) {
-	$list = new Edit('list');
+	$list = new SvnEdit('list');
 	$repositoryRootUrl = getRepository();
 	$list->addArgUrl($repositoryRootUrl . $listFilesInFolder);
-	$list->execute();
+	$list->exec();
 	$listResult = $list->getOutput();
 	return $listResult;
 	//if ($list->isSuccessful()){
@@ -48,20 +48,20 @@ function doAutomerge($sourceFile){
 	// Checkout target folder to a temporary working copy
 	// svn checkout http://localhost/LocalRepos/trunk/ temporaryWorkingCopy
 
-	$checkout = new Edit('checkout');
+	$checkout = new SvnEdit('checkout');
 	$checkout->addArgOption('--non-recursive');
 	$checkout->addArgUrl($targetFolder);
 	$checkout->addArgPath($temporaryWorkingCopy);
-	$checkout->execute();
+	$checkout->exec();
 	$checkoutResult = $checkout->getOutput();
 	$checkout->show($p);
 
 	// Get older revision of source (the revision when the branch was made)
 	// svn log --stop-on-copy http://localhost/LocalRepos/branches/test.xml
-	$log = new Edit('log');
+	$log = new SvnEdit('log');
 	$log->addArgOption('--stop-on-copy');
 	$log->addArgUrl($sourceUrl);
-	$log->execute();
+	$log->exec();
 	$logResult = $log->getOutput();
 	$log->show($p);
 	foreach ($logResult as $key => $value){
@@ -84,11 +84,11 @@ function doAutomerge($sourceFile){
 
 	// Merge source from the older revision to head into working copy
 	// svn merge -r 25:26 http://localhost/LocalRepos/branches/test.xml test.xml
-	$merge = new Edit('merge');
+	$merge = new SvnEdit('merge');
 	$merge->addArgOption('-r ' . $revisionNumber[1] . ':' . $revisionNumber[0]);
 	$merge->addArgUrl($sourceUrl);
 	$merge->addArgPath($temporaryWorkingCopy . $targetFile);	// temporaryWorkingCopy/test.xml
-	$merge->execute();
+	$merge->exec();
 	$mergeCommand = 'svn ' . $merge->getCommand();
 	$mergeResult = $merge->getOutput();
 	$merge->show($p);
@@ -123,20 +123,20 @@ function doAutomerge($sourceFile){
 	// Commit working copy
 	$updatefile = toPath($temporaryWorkingCopy . $targetFile);
 	$oldsize = filesize($updatefile);
-	$commit = new Edit('commit');
+	$commit = new SvnEdit('commit');
 	$commit->setMessage('merge -r '.$revisionNumber[1] . ':' . $revisionNumber[0] . ' ' . $source);	// svn merge -r 66:67 "http://localhost/LocalRepos/branches/1164368098-test-test.xml" "C:/WINDOWS/TEMP/localhost_2Frepos/merge/174.tmp/test.xml"
 	$commit->addArgPath($temporaryWorkingCopy);
-	$commit->execute();
+	$commit->exec();
 	$commitResult = $commit->getOutput();
 	// Seems that there is a problem with svn 1.3.0 and 1.3.1 that it does not always see the update on a replaced file
 	//  remove this block when we don't need to support svn versions onlder than 1.3.2
 	if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
 		if ($oldsize != filesize($updatefile)) {
 			exec("echo \"\" >> \"$updatefile\"");
-			$commit = new Edit('commit');
+			$commit = new SvnEdit('commit');
 			$commit->setMessage($mergeCommand);
 			$commit->addArgPath($temporaryWorkingCopy);
-			$commit->execute();
+			$commit->exec();
 			$commitResult = $commit->getOutput();
 		}
 	}

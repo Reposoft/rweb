@@ -135,6 +135,10 @@ function getRevision($rev = false) {
  */
 class SvnOpen {
 	
+	/**
+	 * The command instance that we delegate to (preferred over subclassing).
+	 * @var Command
+	 */
 	var $command;
 	
 	/**
@@ -155,9 +159,19 @@ class SvnOpen {
 		$this->command->addArgOption(login_getSvnSwitches());
 	}
 	
+	/**
+	 * @param String $url full http or https URL, not urlencoded
+	 */
 	function addArgUrl($url) {
 		$url = urlEncodeNames($url); // allow UTF-8 characters in url on windows too (or do we get problems with this)
 		$this->command->addArg($url);	
+	}
+	
+	/**
+	 * @param String $path filename or valid local path
+	 */
+	function addArgPath($path) {
+		$this->command->addArg($path);
 	}
 	
 	function addArgRevision($revision) {
@@ -168,7 +182,7 @@ class SvnOpen {
 		$this->addArgRevision($revisionRange);
 	}
 	
-	function addArgOption($option, $value='', $valueNeedsEscape=true) {
+	function addArgOption($option, $value=null, $valueNeedsEscape=true) {
 		$this->command->addArgOption($option, $value, $valueNeedsEscape);
 	}
 	

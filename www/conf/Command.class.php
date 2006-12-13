@@ -6,8 +6,12 @@
  * The PHP code is actually only a thin wrapper for running subversion commands
  * and system administration commands on the server.
  * 
- * All command line operations should be controlled by this class or one of its subclasses.
+ * All command line operations should be controlled by this class.
+ * Pages normally use one of the classes that delegate to this class.
  * 
+ * @see SvnOpen
+ * @see SvnOpenFile
+ * @see SvnEdit
  * @package conf
  */
 
@@ -95,6 +99,7 @@ function _escapeWindowsVariables($arg) {
  * @deprecated use the Command class, currently this is called as the final step from the command class
  */
 function repos_runCommand($commandName, $argumentsString) {
+	echo(_repos_getFullCommand($commandName, $argumentsString)); exit;
 	exec(_repos_getFullCommand($commandName, $argumentsString), $output, $returnvalue);
 	$output[] = $returnvalue;
 	return $output;
@@ -173,9 +178,9 @@ class Command {
 	 * @param boolean $valueNeedsEscape false if it is safe to append the value without escaping
 	 *  (appropriate where the value can not be altered by a user)
 	 */
-	function addArgOption($option, $value='', $valueNeedsEscape=true) {
+	function addArgOption($option, $value=null, $valueNeedsEscape=true) {
 		$this->_addArgument($option);
-		if (strlen($value)>0) {
+		if (!is_null($value)) {
 			if ($valueNeedsEscape) $this->addArg($value);
 			$this->addArgOption($value);
 		}

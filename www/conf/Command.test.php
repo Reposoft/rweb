@@ -130,6 +130,17 @@ class TestCommand extends UnitTestCase {
 		$this->assertEqual(array('output'), $c->getOutput());	
 	}
 	
+	function testArgOptionWithValue() {
+		$c = new Command('svn');
+		$c->addArgOption('-r', '1:2');
+		$c->exec();
+		$this->assertTrue(strpos(_getLastCommand(), ' -r "1:2"'), "Should add the escaped option value by default");
+		$c = new Command('svn');
+		$c->addArgOption('-r', '1:2', false);
+		$c->exec();
+		$this->assertTrue(strpos(_getLastCommand(), ' -r 1:2'), "Should not escape option value now");
+	}
+	
 }
 
 testrun(new TestCommand());

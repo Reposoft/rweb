@@ -1,6 +1,6 @@
 <?php
 require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
-require( dirname(dirname(__FILE__))."/edit.class.php" );
+require( dirname(dirname(__FILE__))."/SvnEdit.class.php" );
 
 // automatic validation
 new Rule('folder');
@@ -27,7 +27,7 @@ if (isset($_GET[SUBMIT])) {
 
 function svnRename() {
 	Validation::expect('target', 'folder', 'newname', 'message');
-	$edit = new Edit('move');
+	$edit = new SvnEdit('move');
 	$oldUrl = getTargetUrl();
 	$newUrl = getRepository().$_GET['folder'].$_GET['newname'];
 	if (isset($_GET['message'])) {
@@ -35,7 +35,7 @@ function svnRename() {
 	}
 	$edit->addArgUrl($oldUrl);
 	$edit->addArgUrl($newUrl);
-	$edit->execute();
+	$edit->exec();
 	$edit->present(new Presentation());
 }
 ?>

@@ -3,7 +3,7 @@ define('DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
 define('PARENT_DIR', dirname(rtrim(DIR, DIRECTORY_SEPARATOR)));
 
 require( PARENT_DIR."/conf/Presentation.class.php" );
-require( PARENT_DIR."/edit/edit.class.php" );
+require( PARENT_DIR."/edit/SvnEdit.class.php" );
 require( dirname(__FILE__)."/mimetype.inc.php");
 // and here's where the login_getMimeType function is currently
 require( dirname(dirname(__FILE__))."/open/SvnOpenFile.class.php");
@@ -46,11 +46,11 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		Validation::expect('name');
 		$newfile = toPath(tempnam(rtrim(getTempDir('upload'),'/'), ''));
 		$upload->processSubmit($newfile);
-		$edit = new Edit('import');
+		$edit = new SvnEdit('import');
 		$edit->addArgPath($newfile);
 		$edit->addArgUrl($upload->getTargeturl());
 		$edit->setMessage($upload->getMessage());
-		$edit->execute();
+		$edit->exec();
 		// detect mime type, if we want to set the property we need to checkout
 		$clientMime = $upload->getType();
 		// need the original filename, $recommend = getSpecificMimetype($newfile, $clientMime);
@@ -67,11 +67,11 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		$dir = getTempnamDir('upload'); // same tempdir as create, but subfolder
 		$repoFolder = dirname($upload->getTargetUrl());
 		// check out existing files
-		$checkout = new Edit('checkout');
+		$checkout = new SvnEdit('checkout');
 		$checkout->addArgOption('--non-recursive');
 		$checkout->addArgUrl($repoFolder);
 		$checkout->addArgPath($dir);
-		$checkout->execute();
+		$checkout->exec();
 		if (!$checkout->isSuccessful()) {
 			$presentation->showError("Could not read current version of file "
 				.$upload->getTargetUrl().". ".$checkout->getResult());
@@ -92,26 +92,26 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 				.$filename.'" for operation "'.basename($dir).'"');
 		}
 		// store the diff in the presentation object
-		$diff = new Edit('diff');
+		$diff = new SvnEdit('diff');
 		$diff->addArgPath($updatefile);
-		$diff->execute();
+		$diff->exec();
 		$diff->showOrFail($presentation);
 		//not used//$presentation->assign('diff', $diff->getResult());
 		// create the commit command
-		$commit = new Edit('commit');
+		$commit = new SvnEdit('commit');
 		$commit->setMessage($upload->getMessage());
 		$commit->addArgPath($dir);
 		//exit;
-		$commit->execute();
+		$commit->exec();
 		// Seems that there is a problem with svn 1.3.0 and 1.3.1 that it does not always see the update on a replaced file
 		//  remove this block when we don't need to support svn versions onlder than 1.3.2
 		if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
 			if ($oldsize != filesize($updatefile)) {
 				exec("echo \"\" >> \"$updatefile\"");
-				$commit = new Edit('commit');
+				$commit = new SvnEdit('commit');
 				$commit->setMessage($upload->getMessage());
 				$commit->addArgPath($dir);
-				$commit->execute();
+				$commit->exec();
 			}
 		}
 		// clean up

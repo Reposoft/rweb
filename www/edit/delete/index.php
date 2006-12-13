@@ -1,6 +1,6 @@
 <?php
 require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
-require( dirname(dirname(__FILE__))."/edit.class.php" );
+require( dirname(dirname(__FILE__))."/SvnEdit.class.php" );
 
 if (isset($_GET[SUBMIT])) {
 	Validation::expect('message');
@@ -18,10 +18,10 @@ if (isset($_GET[SUBMIT])) {
 // it is also allowed in templates for presentation, but not in field values
 
 function delete($message) {
-	$edit = new Edit('delete');
+	$edit = new SvnEdit('delete');
 	$edit->setMessage($message);
 	$edit->addArgUrl(getTargetUrl());
-	$edit->execute();
+	$edit->exec();
 	$edit->present(new Presentation(), dirname(rtrim(getTargetUrl(),'/')));
 }
 ?>

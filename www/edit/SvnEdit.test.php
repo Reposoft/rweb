@@ -1,32 +1,32 @@
 <?php
-require('edit.class.php');
+require('SvnEdit.class.php');
 require("../lib/simpletest/setup.php");
  
 class EditTest extends UnitTestCase
 {
 
 	function testIsSuccessfulUsingDIRCommand() {
-		$edit = new Edit('test');
+		$edit = new SvnEdit('test');
 		// most systems support the 'dir' command
 		exec('dir', $output, $edit->returnval);
 		$this->assertTrue($edit->isSuccessful());
 	}
 	
 	function testIsSuccessfulFalse() {
-		$edit = new Edit('test');
+		$edit = new SvnEdit('test');
 		// most systems support the 'dir' command
 		exec('thiscommanddoesnotexist', $output, $edit->returnval);
 		$this->assertFalse($edit->isSuccessful());
 	}
 
 	function testIsSuccessfulZero() {
-		$edit = new Edit('test');
+		$edit = new SvnEdit('test');
 		$edit->returnval = 0;
 		$this->assertTrue($edit->isSuccessful());
 	}
 
 	function testExtractRevision() {
-		$edit = new Edit('test');
+		$edit = new SvnEdit('test');
 		$this->returnval = true;
 		$edit->output = array("Committed revision 107.");
 		$this->assertEqual('107', $edit->getCommittedRevision());
@@ -36,7 +36,7 @@ class EditTest extends UnitTestCase
 	 * Only some of the command arguments should be escaped, so escaping must be done per argument type.
 	 */
 	function testAddArgument() {
-		$edit = new Edit('test');
+		$edit = new SvnEdit('test');
 		$edit->addArgPath('arg1');
 		$this->assertEqual('"arg1"', $edit->args[0]);
 		$edit->addArgOption('arg_');
@@ -50,14 +50,14 @@ class EditTest extends UnitTestCase
 	}
 	
 	function testPercentInFilename(){
-		$edit = new Edit('test');
+		$edit = new SvnEdit('test');
 		$edit->addArgUrl('http://www.where-we-work.com/%procent%');
 		$this->assertEqual('"http://www.where-we-work.com/%25procent%25"', $edit->args[0]);
 	}
 	
 	function testCommand() {
 		// actually we shouldnt care much about what the command looks like, but here's one test to help
-		$edit = new Edit('import');
+		$edit = new SvnEdit('import');
 		$edit->setMessage('msg');
 		$edit->addArgFilename('file.txt');
 		$edit->addArgUrl('https://my.repo/file.txt');
@@ -67,7 +67,7 @@ class EditTest extends UnitTestCase
 	
 	function testCommandEscape() {
 		if (substr(PHP_OS, 0, 3) != 'WIN') {
-			$edit = new Edit('" $(ls)');
+			$edit = new SvnEdit('" $(ls)');
 			$edit->setMessage('msg " `ls` \'ls\' \ " | rm');
 			$cmd = $edit->getCommand();
 			$this->assertEqual('\" \$\(ls\) -m "msg \" \`ls\` \'ls\' \\\\ \" | rm"', $cmd);
