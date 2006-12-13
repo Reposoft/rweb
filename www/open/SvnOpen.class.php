@@ -112,7 +112,7 @@ function login_handleSvnError($executedcmd, $errorcode, $output = Array()) {
 class SvnOpen {
 	
 	/**
-	 * Creates the command representatino.
+	 * Creates the command representation.
 	 *
 	 * @param String $subversionOperation like list or info
 	 * @param boolean $asXml set to true to add the --xml parameter (allowed only if the svn command accepts it)

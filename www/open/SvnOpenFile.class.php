@@ -2,9 +2,9 @@
 /**
  *
  *
- * @package
+ * @package open
  */
- 
+
 /**
  * Returns the mime type for a file in the repository.
  * If revision is HEAD (which it is when the second argument is omited)
@@ -52,7 +52,9 @@ function _login_getMimeTypeProperty($targetUrl, $revision) {
  * First does "svn info" to check that the file exists.
  * That tells you if it is readonly or if it is locked.
  * 
- *
+ * When getContents or a send* method is called, an "svn cat" is executed.
+ * To use only the file information without actually reading the file,
+ * instantiate the class but don't call any of these methods.
  */
 class SvnOpenFile {
 	
@@ -79,14 +81,37 @@ class SvnOpenFile {
 		// svn info
 	}
 	
+	/**
+	 * Note that read-only is not a versioned property (it is caused by apache configuration).
+	 * For all revisions that are not HEAD, this method has to return 'true'.
+	 * To detect read-only for files, inspect "svn info --xml" and check if commit autor and date are missing.
+	 * To detect read-only for folders, we need to try a webdav operation like PUT.
+	 */
 	function isReadOnly() {
 		// svn info
 	}
 	
 	// should we really have all that lock stuff here?
+	// yes probably, since it is in svn invo
 	
 	function isLocked() {
 		// svn info
+	}
+	
+	/**
+	 * Reads the contents of the file to... hmmm... might be binary
+	 *
+	 */
+	function getContents() {
+		
+	}
+	
+	/**
+	 * Reads the contents of the file to a string array, one item per line, without newlines.
+	 *
+	 */
+	function getContentsText() {
+		
 	}
 	
 	/**

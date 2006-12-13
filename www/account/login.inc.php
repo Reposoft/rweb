@@ -165,32 +165,6 @@ function login_getFirstNon404Parent($url, &$status) {
 }
 
 /**
- * Tries a resource path in current HEAD, for the current user, returning status code.
- * @param $target the path in the current repository; accepts folder names without tailing slash.
- * @return 0 = does not exist, -1 = access denied, 1 = folder, 2 = file, boolean FALSE if undefined
- */
-function login_getResourceType($target) {
-	$url = getTargetUrl($target);
-	if (substr_count($url, '://')!=1) trigger_error("The URL \"$url\" is invalid", E_USER_WARNING); // remove when not frequent error
-	$request = new ServiceRequest($target);
-	$request->setSkipBody();
-	$request->exec();
-	$s = $request->getStatus();
-	$headers = $request->getResponseHeaders();
-	if ($s==301 && $headers['Location']==$url.'/') return 1;
-	if ($s==404) return 0;
-	if ($s==403) return -1;
-	if ($s==200) return _isHttpHeadersForFolder($headers) ? 1 : 2;
-	return false;
-}
-
-function _isHttpHeadersForFolder($headers) {
-	// make headers test to validate that this works
-	if (!$headers['Content-Type']='text/xml') return false;
-	return !isset($headers['Content-Length']);
-}
-
-/**
  * @return the url with username:password
  */
 function _getLoginUrl($urlWithoutLogin) {

@@ -191,36 +191,6 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertEqual(200, $status);
 	}
 	
-	function testGetResourceTypeNonExisting() {
-		$url = '/demoproject/trunk/public/does-not-exist-adsferqwerw/';
-		$this->assertEqual(0, login_getResourceType($url));
-		$this->assertTrue(login_getResourceType($url)==false);
-		$this->assertFalse(login_getResourceType($url)===false);
-	}
-
-	function testGetResourceTypeFolder() {
-		$url = '/demoproject/trunk/public/';
-		$this->assertEqual(1, login_getResourceType($url));
-		$this->assertTrue(login_getResourceType($url)==true); // it does exist
-		$this->assertFalse(login_getResourceType($url)===true); // never returns boolean true
-	}
-
-	function testGetResourceTypeFolderNoSlash() {
-		$url = '/demoproject/trunk/public'; // must be able to accept folders without tailing slash (for svn log --xml output)
-		$this->assertEqual(1, login_getResourceType($url));
-		$this->assertTrue(login_getResourceType($url)==true); // it does exist
-		$this->assertFalse(login_getResourceType($url)===true); // never returns boolean true
-	}
-	
-	function testGetResourceTypeFolderWithTestUser() {
-		if (isLoggedIn() && getReposUser()=='test') {
-		$url = '/test/trunk';
-		$this->assertEqual(1, login_getResourceType($url));
-		} else {
-			$this->sendMessage("test user is not logged in, so this test is skipped");
-		}
-	}
-	
 	function testIsHttpHeadersForFolder() {
 		$h = '
 		|HTTP/1.1 200 OK|

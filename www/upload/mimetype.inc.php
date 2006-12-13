@@ -59,7 +59,7 @@ $mimetypedefaults = array(
 
 
 function getSpecificMimetype_xml($file, $suggestedType) {
-	// TODO
+	// TODO detect excel 2003 xml and return excel mimetype
 	return false;
 }
 

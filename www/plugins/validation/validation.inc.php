@@ -7,10 +7,11 @@
 
 require_once(dirname(dirname(dirname(__FILE__))).'/lib/json/json.php');
 
+// Validation class uses this array to store all instantiated Rules
 $_validation_rules=array();
 
 /**
- * @return true if this request is only for validation of a field
+ * @return true if this request is _only_ for validation of a field
  */
 function validationRequest() {
 	return array_key_exists('validation', $_GET);
@@ -18,6 +19,8 @@ function validationRequest() {
 
 /**
  * Represents a syntactic rule for a field.
+ * 
+ * It may be a form field or a service parameter.
  * 
  * Custom rules should extend this class and override valid($value).
  * 
