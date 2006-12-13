@@ -191,7 +191,7 @@ class Edit {
 	/**
 	 * @param option command line switch, will be added to commandline without encoding or quotes
 	 */	
-	function addArgOption($option, $safe=false) {
+	function addArgOption($option) {
 		$this->_addArgument($option);
 	}
 

@@ -28,6 +28,7 @@ $testfiles = array(
 'conf/repos.properties.test.php',
 'conf/Presentation.test.php',
 'conf/Report.test.php',
+'conf/Command.test.php',
 'account/login.test.php',
 'edit/edit.test.php',
 'open/start/RepositoryTree.test.php',

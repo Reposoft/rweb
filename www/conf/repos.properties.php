@@ -616,117 +616,6 @@ function urlEncodeNames($url) {
 	return $encoded;
 }
 
-// Commands are the first element on the command line and can not be enclosed in quotes
-function escapeCommand($command) {
-	return escapeshellcmd($command);
-}
-
-// Encloses an argument in quotes and escapes any quotes within it
-function escapeArgument($argument) {
-	if (isWindows()) {
-		return _escapeArgumentWindows($argument);
-	} else {
-		return _escapeArgumentNix($argument);
-	}
-}
-	
-function _escapeArgumentNix($arg) {
-	// Shell metacharacters are: & ; ` ' \ " | * ? ~ < > ^ ( ) [ ] { } $ \n \r (WWW Security FAQ [Stein 1999, Q37])
-	// Use escapeshellcmd to make argument safe for command line
-	// (double qoutes around the string escapes: *, ?, ~, ', &, <, >, |, (, )
-	$arg = preg_replace('/(\s+)/',' ',$arg);
-	$arg = str_replace("\\","\\\\", $arg);
-	$arg = str_replace("\x0A", " ", $arg);
-	$arg = str_replace("\xFF", " ", $arg);
-	$arg = str_replace('"','\"', $arg);
-	$arg = str_replace('$','\$', $arg);
-	$arg = str_replace('`','\`', $arg);
-	// ! is a metacharacter in strings, but only in interactive mode
-	//$arg = str_replace('!','\!', $arg);
-	return '"'.$arg.'"'; // The quotes are very important because they escape many characters that are not escaped here
-	// #&;`|*?~<>^()[]{}$\, \x0A  and \xFF. ' and "
-}
-
-function _escapeArgumentWindows($arg) {
-	$arg = preg_replace('/(\s+)/',' ',$arg);
-	$arg = str_replace('"','""', $arg);
-	$arg = str_replace("\\","\\\\", $arg); // double backslashes needed when inside quotes, for example in --config-dir
-	// windows uses % to get variable names, which can be used to read system properties.
-	if(strContains($arg, '%')) {
-		$arg = _escapeWindowsVariables($arg);
-	}
-	return '"'.$arg.'"';
-}
-
-// if windows sees %abc%, it checks if abc is an environment variables. \% prevents this but adds the backslash to the string.
-function _escapeWindowsVariables($arg) {
-	//$arg = str_replace('%','#', $arg);
-	$i = strpos($arg, '%');
-	if ($i === false) return $arg;
-	$j = strpos($arg, '%', $i+1);
-	if ($j === false) return $arg;
-	if ($j > $i+1 && getenv(substr($arg, $i+1, $j-$i-1))) {
-		return substr($arg, 0, $j).'#'._escapeWindowsVariables(substr($arg,$j+1));
-	} else {
-		return substr($arg, 0, $j)._escapeWindowsVariables(substr($arg,$j));
-	}
-}
-
-/**
- * Executes a given comman on the command line.
- * This function does not deal with security. Everything must be properly escaped.
- * @param a command like 'whoami'
- * @param everything that should be after the blankspace following the command, safely encoded already
- * @returns stdout and stderr output from the command, one array element per row. 
- *   Last element is the return code (use array_pop to remove).
- */
-function repos_runCommand($commandName, $argumentsString) {
-	exec(_repos_getFullCommand($commandName, $argumentsString), $output, $returnvalue);
-	$output[] = $returnvalue;
-	return $output;
-}
-
-/**
- * Executes a given comman on the command line and does passthru on the output
- * @param a command like 'whoami'
- * @param everything that should be after the blankspace following the command, safely encoded already
- * @returns the return code of the execution. Any messages have been passed through.
- */
-function repos_passthruCommand($commandName, $argumentsString) {
-	passthru(_repos_getFullCommand($commandName, $argumentsString), $returnvalue);
-	return $returnvalue;
-}
-
-/**
- * Compiles the exact string to run on the command line
- */
-function _repos_getFullCommand($commandName, $argumentsString) {
-	$run = getCommand($commandName);
-	$argumentsString = toShellEncoding($argumentsString);
-	$wrapper = _repos_getScriptWrapper();
-	if (strlen($wrapper)>0) {
-		// make one argument (to the wrapper) of the entire command
-		// the arguments in the argumentsString are already escaped and surrounded with quoutes where needed
-		// existing single quotes must be adapted for shell
-		$run = " '".$run.' '.str_replace("'","'\\''",$argumentsString).' 2>&1'."'";
-	} else {
-		$run .= ' '.$argumentsString;
-	}
-	return "$wrapper$run 2>&1";
-}
-
-/**
- * Might be nessecary to run all commands through a script that sets up a proper execution environment
- * for example locale for subversion.
- * @return wrapper script name if needed, or empty string if not needed
- */
-function _repos_getScriptWrapper() {
-	if (isWindows()) {
-		return '';
-	}
-	return _getConfigFolder().'reposrun.sh';
-}
-
 // ------ functions to keep scripts portable -----
 
 /**
@@ -806,7 +695,7 @@ function _getStackTrace() {
 
 /**
  * @return true if scripts should run self-test
- * @deprecated use phpunit instead. remove when admin scripts no longer use this.
+ * @deprecated use simpletest instead. remove when admin scripts no longer use this.
  */
 function isTestRun() {
 	global $argv;

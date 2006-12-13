@@ -8,6 +8,8 @@
 // use test mocks if they define global function targetLogin()
 if (!function_exists('targetLogin')) require(dirname(dirname(__FILE__)).'/account/login.inc.php');
 
+if (!class_exists('Command')) require(dirname(dirname(__FILE__)).'/conf/Command.class.php');
+
 // TODO delegate command processing to Command.class.php
 
 // *** Subversion client usage ***
@@ -103,6 +105,26 @@ function login_handleSvnError($executedcmd, $errorcode, $output = Array()) {
 }
 
 /**
+ * @return revision number from parameters (safe as command argument), false if not set
+ */
+function getRevision($rev = false) {
+	if (!$rev) {
+		if(!isset($_GET['rev'])) {
+			return false;
+		}
+		$rev = $_GET['rev'];
+	}
+	if (is_numeric($rev)) {
+		return $rev;
+	}
+	$accepted = array('HEAD');
+	if (in_array($rev, $accepted)) {
+		return $rev;
+	}
+	trigger_error("Error. Revision number '$rev' is not valid.", E_USER_ERROR);
+}
+
+/**
  * Runs an SVN command that results in text output (repository information).
  * 
  * Content type can be either text/plain or text/xml.
@@ -110,6 +132,8 @@ function login_handleSvnError($executedcmd, $errorcode, $output = Array()) {
  * @see SvnOpenFile for reading file contents
  */
 class SvnOpen {
+	
+	var $command;
 	
 	/**
 	 * Creates the command representation.
@@ -119,6 +143,18 @@ class SvnOpen {
 	 * @return SvnOpen
 	 */
 	function SvnOpen($subversionOperation, $asXml=false) {
+		$command;
+	}
+	
+	function addArgUrl($url) {
+		
+	}
+	
+	function addArgRevision($revision) {
+		
+	}
+	
+	function addArgRevisionRange($revisionRange) {
 		
 	}
 	

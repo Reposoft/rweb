@@ -272,26 +272,6 @@ function getTarget() {
 }
 
 /**
- * @return revision number from parameters (safe as command argument), false if not set
- */
-function getRevision($rev = false) {
-	if (!$rev) {
-		if(!isset($_GET['rev'])) {
-			return false;
-		}
-		$rev = $_GET['rev'];
-	}
-	if (is_numeric($rev)) {
-		return $rev;
-	}
-	$accepted = array('HEAD');
-	if (in_array($rev, $accepted)) {
-		return $rev;
-	}
-	trigger_error("Error. Revision number '$rev' is not valid.", E_USER_ERROR);
-}
-
-/**
  * @param String fullUrl the URL of a repository resource
  * @param String pathFromRepoRoot the resource path, absolute from repository root
  * @return repository url (to root) with no tailing slash.

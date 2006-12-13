@@ -5,6 +5,8 @@
  * @package open
  */
 
+define('HEAD','HEAD');
+
 /**
  * Returns the mime type for a file in the repository.
  * If revision is HEAD (which it is when the second argument is omited)
@@ -16,8 +18,8 @@
  * @return the mime type string, or false if unknown (suggesting application/x-unknown)
  * @deprecated use SvnOpenFile class instead
  */
-function login_getMimeType($targetUrl, $revision='HEAD') {
-	if ($revision!='HEAD') {
+function login_getMimeType($targetUrl, $revision=HEAD) {
+	if ($revision!=HEAD) {
 		return login_getMimeTypeProperty($targetUrl, $revision);
 	}
 	$headers = getHttpHeaders($targetUrl, getReposUser(), _getReposPass());
@@ -57,6 +59,22 @@ function _login_getMimeTypeProperty($targetUrl, $revision) {
  * instantiate the class but don't call any of these methods.
  */
 class SvnOpenFile {
+	
+	/**
+	 * Tries to access the file and saves the info but does not read the contents yet.
+	 *
+	 * @param String $path file path, absolute from repository root
+	 * @param String $revision interger revision number or string revision range, svn syntax
+	 * @return SvnOpenFile
+	 */
+	function SvnOpenFile($path, $revision=HEAD) {
+		$this->_readInfo();
+	}
+	
+	function _readInfo() {
+		$info = new SvnOpen('info', true);
+		
+	}
 	
 	function getMimeType() {
 		// 1: If HEAD, simply get the headers from apache

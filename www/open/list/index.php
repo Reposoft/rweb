@@ -1,6 +1,6 @@
 <?php
-// get the details of a file and return as XML, JSON or HTML
-require( dirname(dirname(dirname(__FILE__)))."/account/login.inc.php" );
+// get the details of a file or folder and return as XML
+require( dirname(dirname(__FILE__))."/SvnOpen.class.php" );
 
 // format could be specified as paramter
 
