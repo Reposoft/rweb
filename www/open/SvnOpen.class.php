@@ -109,7 +109,7 @@ function login_handleSvnError($executedcmd, $errorcode, $output = Array()) {
 
 /**
  * @return revision number from parameters (safe as command argument), false if not set
- * @deprecated not used, does not allow  ranges or dates
+ * @deprecated use RevisionRule instead
  */
 function getRevision($rev = false) {
 	if (!$rev) {
@@ -138,7 +138,7 @@ class RevisionRule extends Rule {
 	}
 	
 	function valid($value) {
-		if (is_numeric($value) && $value>=0) return true;
+		if (is_numeric($value) && $value >=0 ) return true;
 		if ($value == HEAD) return true;
 		if (strpos($value,'{')==0 && strrpos($value, '}')==strlen($value)-1) return true;
 		// no other keywords than HEAD accepted

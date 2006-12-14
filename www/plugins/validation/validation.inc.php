@@ -75,6 +75,7 @@ class Rule {
 	 * Validates a field value according to the rule, and returns the error message if invalid.
 	 * Also sets the $value field.
 	 * Default implementation calls Rule->valid($value).
+	 * It is best to only override valid($value). If overriding this method, make sure it sets _value field if valud.
 	 * @param String $value the value to check
 	 * @return String error message if invalid, null if valid (use empty() to check)
 	 */
@@ -148,7 +149,7 @@ class Validation {
 	/**
 	 * Adds a new rule to the rules hash.
 	 */
-	function _add($rule) {
+	function _add(&$rule) {
 		global $_validation_rules;
 		$f = $rule->fieldname;
 		if (array_key_exists($f, $_REQUEST)) {
@@ -167,7 +168,7 @@ class Validation {
 	 * @param Rule $rule to run
 	 * @param String $value to be validated by the rule
 	 */
-	function _run($rule, $value) {
+	function _run(&$rule, $value) {
 		$r = $rule->validate($value);
 		if (!empty($r)) {
 			_validation_trigger_error('Error in field "'.$rule->fieldname.'", value "'.$value.'": '.$r
@@ -180,7 +181,7 @@ class Validation {
 	 * @param Rule $rule to run
 	 * @param String $value to be validated by the rule
 	 */
-	function _respond($rule, $value) {
+	function _respond(&$rule, $value) {
 		$response = array('id'=>$rule->fieldname, 'value'=>$value);
 		$r = $rule->validate($value);
 		if (empty($r)) {
@@ -204,7 +205,7 @@ class Validation {
 
 function _validation_trigger_error($msg) {
 	if (headers_sent()) {
-		trigger_error($msg . '(Page error: headers have already been sent, so HTTP 412 could not be set)', E_USER_WARNING);
+		trigger_error($msg . ' (Unexpected: headers have already been sent, so HTTP 412 could not be set)', E_USER_WARNING);
 		return; 
 	}
 	header('HTTP/1.1 412 Precondition Failed');

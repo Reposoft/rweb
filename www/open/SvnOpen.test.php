@@ -51,10 +51,12 @@ class TestSvnOpen extends UnitTestCase {
 	function testRevisionRuleAuto() {
 		$_REQUEST['rev'] = "12";
 		$r = new RevisionRule();
+		$this->assertEqual(12, $r->getValue());
 		
 		$_REQUEST['rev'] = "-1";
 		$this->expectError();
 		$r = new RevisionRule();
+		$this->assertNull($r->getValue());
 		
 		unset($_REQUEST['rev']);
 	}
@@ -62,6 +64,7 @@ class TestSvnOpen extends UnitTestCase {
 	function testRevisionRuleCustomField() {
 		$_REQUEST['fromrev'] = "12";
 		$r = new RevisionRule('fromrev', 'my error');
+		$this->assertEqual(12, $r->getValue());
 		
 		unset($_REQUEST['fromrev']);
 	}
