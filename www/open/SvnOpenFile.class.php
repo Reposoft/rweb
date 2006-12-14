@@ -6,8 +6,6 @@
  */
 if (!class_exists('SvnOpen')) require(dirname(__FILE__).'/SvnOpen.class.php');
 
-define('HEAD','HEAD');
-
 /**
  * Returns the mime type for a file in the repository.
  * If revision is HEAD (which it is when the second argument is omited)
@@ -61,7 +59,21 @@ function login_getMimeTypeProperty($targetUrl, $revision) {
  */
 class SvnOpenFile {
 	
+	/**
+	 * The absolute path from repository root
+	 * @var String
+	 */
+	var $path;
+	/**
+	 * The complete URL
+	 * @var String
+	 */
 	var $url;
+	/**
+	 * The revision number (if this is not set, number has not been identified from the revision string yet)
+	 * @var int
+	 */
+	var $revision;
 	
 	/**
 	 * Tries to access the file and saves the info but does not read the contents yet.
@@ -71,26 +83,18 @@ class SvnOpenFile {
 	 * @return SvnOpenFile
 	 */
 	function SvnOpenFile($path, $revision=HEAD) {
-		$url = getRepository().$path;
-		$revision = $revision;
-		$this->_readInfo();
-	}
-	
-	function _readInfo() {
-		$info = new SvnOpen('info', true);
-		$info->addArgUrl($url);
+		$this->path = $path;
+		$this->url = getRepository().$path;
 		
+		if ($revision==HEAD) {
+			$r = $this->_readInfoHttp();
+		} else {
+			$r = $this->_readInfoSvn($revision);
+		}
+		if (!$r) trigger_error("Could not read file information for '$path' revision $revision in repository ".getRepository(), E_USER_ERROR);
 	}
 	
-	function _readInfoSvn() {
-		
-	}
-	
-	function _readInfoHttp() {
-		// http can not read the actual revision number for HEAD
-	}
-	
-	function getMimeType() {
+	function getContentType() {
 		// 1: If HEAD, simply get the headers from apache
 		// 2: If revision != head, get the svn:mime-type property
 		// 3: If revision != head, guess the mime type for relevant (common) extensions, use default if not
@@ -185,6 +189,32 @@ class SvnOpenFile {
 	 * @return int status code
 	 */
 	function getStatus() {
+		
+	}
+	
+	/**
+	 * Reads all file information with a 
+	 *
+	 * @param unknown_type $revision
+	 * @return unknown
+	 */
+	function _readInfoSvn($revision) {
+		$info = new SvnOpen('info', true);
+		$info->addArgRevision($revision);
+		$info->addArgUrl($url);
+		$info->exec();
+		print_r($info->getOutput());
+		return true;
+	}
+	
+	function _readInfoHttp() {
+		// http can not read the actual revision number for HEAD
+		
+		
+		return true;
+	}
+	
+	function _readActualRevisionNumber($revision=HEAD) {
 		
 	}
 	

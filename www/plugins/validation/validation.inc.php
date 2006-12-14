@@ -2,10 +2,33 @@
 /**
  * Simple PHP validation plugin for repos.se.
  * 
- * To use this for client side validation, the HTML must mark which fields are required.
+ * PHP code usage
+ * - to validate a request parameter if it is set, and do nothing iif not set
+ * <code>
+ * new MyRule('paramname');	// stops page execution if field exists but is invalid
+ * // --- or ---
+ * $rule = new MyRule('paramname');	
+ * $value = $rule->getValue(); 	// to get the field value when validation is successful
+ * </code>
+ * 
+ * - to validate that a request parameter really is set, and make sure it has been validated with a rule
+ * <code>Validation::expect('field1', 'field2' ... );	// stops page execution if not all exist and are valid
+ * 
+ * If client side validation is used: field1, field2 ... should also be marked 'required' in the form.
+ * 
+ * This means that you never need to call Rule->validate.
+ * Simply instantiate the rule and tell the Validation engine if the field is required.
+ * 
+ * @package validation
  */
 
+// this class is not dependent on any specific Repos functionality
 require_once(dirname(dirname(dirname(__FILE__))).'/lib/json/json.php');
+
+/**
+ * The request parameter that identifies a request as _only_ validation, no processing.
+ */
+define('VALIDATION_KEY', 'validation');
 
 // Validation class uses this array to store all instantiated Rules
 $_validation_rules=array();
@@ -14,7 +37,7 @@ $_validation_rules=array();
  * @return true if this request is _only_ for validation of a field
  */
 function validationRequest() {
-	return array_key_exists('validation', $_GET);
+	return array_key_exists(VALIDATION_KEY, $_GET);
 }
 
 /**
@@ -27,15 +50,18 @@ function validationRequest() {
  * Note that rules are applied in the order they are instantiated,
  * validation rules that involve many fields can be created by 
  * defining rules that have references to each other.
+ * If rules are called using AJAX from a form, in wrong order, they 
+ * can return something like "The 'name' parameter must be set first".
  * 
  * The default rule checks that the field has a non-empty value.
  */
 class Rule {
 	var $_message;
 	var $fieldname;
+	var $_value = null; // set if validation passes
 	/**
 	 * Creates a rule instance for a field in the current page.
-	 * Subclasses with their own constructor must call $this->Rule($fieldname, $message);
+	 * Subclasses with their own constructor must call <code>$this->Rule($fieldname, $message);</code>
 	 *  in their constructor, AFTER setting fields that validate depends on.
 	 * @param String $fieldname the parameter name when the field value is received
 	 * @param String $message the error message if validation fails, defaults to "This is a required field"
@@ -47,10 +73,12 @@ class Rule {
 	}
 	/**
 	 * Validates a field value according to the rule, and returns the error message if invalid.
+	 * Also sets the $value field.
+	 * Default implementation calls Rule->valid($value).
 	 * @param String $value the value to check
 	 * @return String error message if invalid, null if valid (use empty() to check)
 	 */
-	function validate($value) { if (!$this->valid($value)) {return $this->_message;} }
+	function validate($value) { if ($this->valid($value)) { $this->_value=$value; return null; } else { return $this->_message; } }
 	/**
 	 * Represents the actual validation logic.
 	 * 
@@ -59,11 +87,19 @@ class Rule {
 	 * to have different messages for different types of errors,
 	 * which leaves this function undefined.
 	 * 
+	 * Default implementation is a "required field" check, returning false if value is empty. 
+	 * 
 	 * @param String $value the value to check
 	 * @return true if valid, false if invalid
 	 */
 	function valid($value) { return !empty($value); }
+	/**
+	 * Allows calling code to get the validated value without using the superglobal arrays.
+	 * @return mixed the parameter value, if valid, null if not
+	 */
+	function getValue() { return $this->_value; }
 }
+
 /**
  * Creates a validation rule from an 'ereg' family regular expression.
  *
@@ -79,6 +115,7 @@ class RuleEreg extends Rule {
 		return ereg($this->regex, $value);
 	}
 }
+
 /**
  * The validation library, with static functions for applying rules.
  *
@@ -88,6 +125,8 @@ class RuleEreg extends Rule {
  * This enforces two things:
  * 1. Each expected field exists, so there will be no undefined index errors.
  * 2. All submitted fields that have a matching Rule instance have been validated according to the rule.
+ * To create a custom validation rule, simply subclass Rule and instantiate.
+ * @see Rule
  */
 class Validation {
 	/**
@@ -164,6 +203,10 @@ class Validation {
 }
 
 function _validation_trigger_error($msg) {
+	if (headers_sent()) {
+		trigger_error($msg . '(Page error: headers have already been sent, so HTTP 412 could not be set)', E_USER_WARNING);
+		return; 
+	}
 	header('HTTP/1.1 412 Precondition Failed');
 	trigger_error($msg, E_USER_WARNING);
 }

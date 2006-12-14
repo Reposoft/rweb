@@ -16,7 +16,7 @@ $repos_package = "simpletest";
 $home = "simpletest.sourceforge.net";
 
 $version = "1.0.1beta";
-$archive = "http://belnet.dl.sourceforge.net/sourceforge/simpletest/simpletest_$version.tar.gz";
+$archive = "http://switch.dl.sourceforge.net/sourceforge/simpletest/simpletest_$version.tar.gz";
 
 $basedir = dirname(__FILE__);
 $dir_backslash = rtrim($basedir, DIRECTORY_SEPARATOR);
@@ -42,6 +42,17 @@ $filename = $extracted_folder.".tar";
 uncompressTAR( $filename, null, null );
 
 unlink($filename);  // delete the tar file
+
+// delete the docs and test folder
+System::deleteFolder($dir.'/simpletest/docs/');
+System::deleteFolder($dir.'/simpletest/test/');
+
+// As long as we want to be compatible with PHP 4, exceptions are syntax errors. remove the code from simpletest.
+$exceptionsfile = $dir.'/simpletest/exceptions.php';
+if (!file_exists($exceptionsfile)) trigger_error("Could not locate $exceptionsfile, download must have failed.");
+$fh = fopen($exceptionsfile, 'w');
+fwrite($fh, "<?php /* removed by repos because it was not PHP4 compatible */ ?>");
+fclose($fh);
 
 ?>
 </PRE>

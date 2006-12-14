@@ -1,5 +1,5 @@
 <?php
-require( dirname(dirname(__FILE__))."/account/login.inc.php" );
+require( dirname(__FILE__)."/SvnOpenFile.class.php" );
 
 // get file to open
 
@@ -10,7 +10,21 @@ $type = substr($url, strrpos($url, '.') + 1);
 if ($type=='ics') {
 		setcookie("repos-calendar", $url, time()+3600, '/');
 	header("Location: ".getWebapp()."tools/calendar/");
-} else {
-        header("Location: ".getConfig('repo_root')."$url");
+	exit;
 }
+
+new RevisionRule();
+
+Validation::expect('target', 'name', 'message');
+if (isset($_GET['rev'])) {
+	$rev = $_GET['rev'];
+		
+}
+
+$file = new SvnOpenFile(getTarget());
+
+
+
+// go directly to the resource in repository // header("Location: ".getConfig('repo_root')."$url");
+
 ?>

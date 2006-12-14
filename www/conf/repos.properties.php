@@ -46,6 +46,7 @@ define('WEBSERVICE_KEY', 'serv'); // html, json, xml or text
 define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST
 
 // --- application selfcheck, can be removed in releases (integration tests should check these things) ---
+// TODO move to System class, togehter with other generic helper functions. this script should deal with configuration only.
 if (!isset($_repos_config['repositories'])) trigger_error("No repositories configured");
 if (!isset($_repos_config['repos_web'])) trigger_error("Repos web applicaiton root not specified in configuration");
 if (!isFolder($_repos_config['repos_web'])) trigger_error("repos_web must be a folder (should end with '/')");

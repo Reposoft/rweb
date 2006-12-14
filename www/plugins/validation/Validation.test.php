@@ -78,10 +78,10 @@ class TestValidation extends UnitTestCase {
 	
 	function testValidateDirectlyWhenRuleIsCreated() {
 		$_REQUEST['myfield'] = '';
+		$this->expectError(new PatternExpectation('/Error.*myfield/'), 'The "myfield" parameter is set, so when the validation rule is created it should validate directly. %s');
 		$r = new Rule('myfield');
 		$this->sendMessage("If a rule is defined and a matching parameter is given, it should be validated directly.");
-		$this->assertError();
-		if ($r->valid('')) $this->fail("Seems that the default rule did not validate correctly.");
+		// verify that validation rule works: if ($r->valid('')) $this->fail("Test error. The default rule does not validate correctly.");
 		unset($_REQUEST['myfield']);
 	}
 	
@@ -128,6 +128,13 @@ class TestValidation extends UnitTestCase {
 		fclose($handle);
 		
 		$this->assertEqual($expected, $json->decode($result));
+	}
+	
+	function testValidateGetValue() {
+		$rule = new MyRule('name');
+		$this->assertEqual(null, $rule->getValue(), 'Value should be null before field is validated. %s');
+		$rule->validate('ohmy');
+		$this->assertEqual('ohmy', $rule->getValue(), 'Value should be set when validation has completed. %s');
 	}
 	
 }

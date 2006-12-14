@@ -6,7 +6,7 @@
  * but it will login only if 'target' is set (see the targetLogin concept) or if
  * the service says authorization required.
  * 
- * @package Open
+ * @package open
  * @author Staffan Olsson (solsson)
  * @version $Id$
  */

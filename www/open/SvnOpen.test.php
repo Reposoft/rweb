@@ -37,6 +37,35 @@ class TestSvnOpen extends UnitTestCase {
 		unset($_SERVER['PHP_AUTH_PW']);
 	}
 	
+	function testRevisionRuleNumeric() {
+		$r = new RevisionRule();		
+		$this->assertEqual('', $r->validate("12"));
+		$this->assertEqual('', $r->validate("0"));
+		$this->assertEqual('', $r->validate("HEAD"));
+		$this->assertEqual('', $r->validate("{2006-01-10}"));
+		$this->assertPattern('/[Nn]ot.*valid/', $r->validate("-1"));
+		$this->assertPattern('/[Nn]ot.*valid/', $r->validate("BASE"));
+		$this->assertPattern('/[Nn]ot.*valid/', $r->validate("{2006-12-10"));
+	}
+	
+	function testRevisionRuleAuto() {
+		$_REQUEST['rev'] = "12";
+		$r = new RevisionRule();
+		
+		$_REQUEST['rev'] = "-1";
+		$this->expectError();
+		$r = new RevisionRule();
+		
+		unset($_REQUEST['rev']);
+	}
+	
+	function testRevisionRuleCustomField() {
+		$_REQUEST['fromrev'] = "12";
+		$r = new RevisionRule('fromrev', 'my error');
+		
+		unset($_REQUEST['fromrev']);
+	}
+	
 	// some things are tested through the SvnEdit class
 	
 }

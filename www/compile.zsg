@@ -10,7 +10,7 @@
  <LicensingMode value="0" />
  <ProductName value="" />
  <ObfuscationLevel value="2" />
- <BlacklistedFunctions value="SimpleReporter,1:Smarty,1:UnitTestCase,1:" />
+ <BlacklistedFunctions value="assert*,1:expectError,1:sendMessage,1:SimpleReporter,1:Smarty,1:UnitTestCase,1:" />
  <AppendHeaderInformation comment="Trial encode from repos.se" append="yes" value="yes" code="echo &quot;zend omptimizer must be installed&quot;; exit;" />
  <DisableCompHeader value="no" />
  <ShortTags value="no" />

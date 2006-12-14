@@ -9,6 +9,9 @@
 if (!function_exists('targetLogin')) require(dirname(dirname(__FILE__)).'/account/login.inc.php');
 
 if (!class_exists('Command')) require(dirname(dirname(__FILE__)).'/conf/Command.class.php');
+if (!class_exists('Rule')) require(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php');
+
+define('HEAD','HEAD');
 
 // TODO delegate command processing to Command.class.php
 
@@ -123,6 +126,25 @@ function getRevision($rev = false) {
 		return $rev;
 	}
 	trigger_error("Error. Revision number '$rev' is not valid.", E_USER_ERROR);
+}
+
+/**
+ * Validates revision (number or string) parameters.
+ */
+class RevisionRule extends Rule {
+	
+	function RevisionRule($fieldname='rev', $message='Not a valid revision number') {	
+		$this->Rule($fieldname, $message);
+	}
+	
+	function valid($value) {
+		if (is_numeric($value) && $value>=0) return true;
+		if ($value == HEAD) return true;
+		if (strpos($value,'{')==0 && strrpos($value, '}')==strlen($value)-1) return true;
+		// no other keywords than HEAD accepted
+		return false;
+	}
+	
 }
 
 /**

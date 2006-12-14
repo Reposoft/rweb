@@ -3,6 +3,8 @@
 // should NOT require repos.properties.php, because we want to be able to mock those functions
 // if the scripts under test use repos.properties.php, they should be imported before this script in the unit test files
 
+// see http://simpletest.sourceforge.net/ for documentation
+
 error_reporting(E_ALL);
 
 // allow other scripts to detect that they are running from a test case

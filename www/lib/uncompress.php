@@ -1,5 +1,9 @@
 <?PHP
 
+// TODO create a generic install helper script, with these functions and also help for download
+
+require (dirname(dirname(__FILE__)).'/conf/System.class.php');
+
 /*
 	extract GZ archive
 	arg 1 is an absolute path to a gz archive
