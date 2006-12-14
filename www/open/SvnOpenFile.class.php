@@ -84,7 +84,7 @@ class SvnOpenFile {
 	 */
 	function SvnOpenFile($path, $revision=HEAD) {
 		$this->path = $path;
-		$this->url = getRepository().$path;
+		$this->url = SvnOpenFile::getRepository().$path;
 		
 		if ($revision==HEAD) {
 			$r = $this->_readInfoHttp();
@@ -92,6 +92,34 @@ class SvnOpenFile {
 			$r = $this->_readInfoSvn($revision);
 		}
 		if (!$r) trigger_error("Could not read file information for '$path' revision $revision in repository ".getRepository(), E_USER_ERROR);
+	}
+	
+	/**
+	 * @return the repository root url without trailing slash
+	 * @static
+	 */
+	function getRepository() {
+		return getRepository();
+	}
+	
+	function getFilename() {
+		return basename($this->path);
+	}
+	
+	function getPath() {
+		return $this->path;
+	}
+	
+	function getFolder() {
+		return getParent($this->path);
+	}
+	
+	function getUrl() {
+		return $this->url;
+	}
+	
+	function getFolderUrl() {
+		return SvnOpenFile::getRepository();
 	}
 	
 	function getContentType() {
@@ -174,7 +202,7 @@ class SvnOpenFile {
 	
 	/**
 	 * Sends this file without headers, for embedding into page.
-	 * htmlescape?
+	 * If the file is html or xml, it will be escaped for viewing as text.
 	 */
 	function sendInline() {
 		// where do we get the current content type header? just assume that it is correct? throw error if not correct?

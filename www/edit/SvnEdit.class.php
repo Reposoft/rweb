@@ -34,6 +34,35 @@ function _isHttpHeadersForFolder($headers) {
 	return !isset($headers['Content-Length']);
 }
  
+// ---- standard rules that the pages can instantiate ----
+
+/**
+ * Shared validation rule representing file- or foldername.
+ * 
+ * Not required field. Use Validation::expect(...) to require.
+ * 
+ * Basically same rules as in windows, but max 50 characters, 
+ * no \/:*?"<> or |.
+ * 
+ * @package edit
+ */
+class FilenameRule extends RuleEreg {
+	var $required;
+	function FilenameRule($fieldname, $required='true') {
+		$this->required = $required;
+		$this->RuleEreg($fieldname, 
+			'may not contain any of the characters \/:*?<>|! or quotes', 
+			'^[^\\/:*?<>|\'"!]+$');
+	}
+	function validate($value) {
+		if (empty($value)) return $this->required ? 'This is a required field' : null;
+		if ($value=='.') return 'The name "." is not a valid filename';
+		if ($value=='..') return 'The name ".." is not a valid filename';
+		if (strlen($value) > 50) return "max length 50";
+		return parent::validate($value);
+	}
+}
+
 /**
  * Shared validation rule to check if the name for a new file or folder is valid
  * 
@@ -99,6 +128,8 @@ class FolderWriteAccessRule extends Rule {
 	}
 }
 
+// ---- presentation support ----
+
 /**
  * Present the page with the results of all Edit->show calls,
  * where the last Edit's success status decides if the page should say error or done
@@ -125,6 +156,8 @@ function presentEditAndExit(&$presentation, $nextUrl=null, $errorMessage=null) {
 	presentEdit($presentation, $nextUrl, $errorMessage);
 	exit;
 }
+
+// ---- the class ----
 
 /**
  * The repository write operation class, representing an SVN operation and the result.

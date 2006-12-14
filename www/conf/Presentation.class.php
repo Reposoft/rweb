@@ -11,8 +11,10 @@
  * @see Report, the class used for unit tests and administration reports. Does not require repos.properties.php.
  */
 
-// this page is included from other pages: need to do includes relative to __FILE__
-require_once(dirname(__FILE__).'/repos.properties.php');
+/**
+ * All user presentation pages need repos.properties.php, but test pages should be able to mock it
+ */
+if (!function_exists('getRepository')) require(dirname(__FILE__).'/repos.properties.php');
 
 if (isRequestService()) {
 	require_once(dirname(dirname(__FILE__)).'/lib/json/json.php');
@@ -24,37 +26,7 @@ header('Content-type: text/html; charset=utf-8');
 // don't set the content type headers in the HTML, because then we can't change to xhtml+xml later
 }
 
-// --- selfchecks ---
-
-// ------ form validation support -------
-require_once(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php');
-
-// ---- standard rules that the pages can instantiate ----
-
-/**
- * Shared validation rule representing file- or foldername.
- * 
- * Not required field. Use Validation::expect(...) to require.
- * 
- * Basically same rules as in windows, but max 50 characters, 
- * no \/:*?"<> or |.
- */
-class FilenameRule extends RuleEreg {
-	var $required;
-	function FilenameRule($fieldname, $required='true') {
-		$this->required = $required;
-		$this->RuleEreg($fieldname, 
-			'may not contain any of the characters \/:*?<>|! or quotes', 
-			'^[^\\/:*?<>|\'"!]+$');
-	}
-	function validate($value) {
-		if (empty($value)) return $this->required ? 'This is a required field' : null;
-		if ($value=='.') return 'The name "." is not a valid filename';
-		if ($value=='..') return 'The name ".." is not a valid filename';
-		if (strlen($value) > 50) return "max length 50";
-		return parent::validate($value);
-	}
-}
+// TODO setHeader, setContentType, getContentType - same functions as in Report.class.php, define constants ...
 
 // -------- user settings from cookies ---------
 

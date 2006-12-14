@@ -13,17 +13,20 @@ if ($type=='ics') {
 	exit;
 }
 
-new RevisionRule();
+$revisionRule = new RevisionRule();
 
-Validation::expect('target', 'name', 'message');
-if (isset($_GET['rev'])) {
-	$rev = $_GET['rev'];
-		
+$rev = $revisionRule->getValue();
+
+$file = null;
+if ($rev) {
+	$file = new SvnOpenFile(getTarget(), $rev);		
+} else {
+	$file = new SvnOpenFile(getTarget());
 }
 
-$file = new SvnOpenFile(getTarget());
-
-
+$p = new Presentation();
+$p->assign_by_ref('file', $file);
+$p->display();
 
 // go directly to the resource in repository // header("Location: ".getConfig('repo_root')."$url");
 

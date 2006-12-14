@@ -30,15 +30,16 @@ $testfiles = array(
 'conf/Report.test.php',
 'conf/Command.test.php',
 'account/login.test.php',
-'edit/SvnEdit.test.php',
-'open/start/RepositoryTree.test.php',
-'plugins/validation/Validation.test.php',
-'upload/mimetype.test.php',
-'edit/merge/conflicthandler.test.excel.php',
 'open/SvnOpen.test.php',
-'open/list/list.test.php',
+'open/SvnOpenFile.test.php',
 'open/ServiceRequest.test.php',
-'edit/merge/xmlConflictHandler.test.php'
+'open/start/RepositoryTree.test.php',
+'open/list/list.test.php',
+'edit/SvnEdit.test.php',
+'edit/merge/conflicthandler.test.excel.php',
+'edit/merge/xmlConflictHandler.test.php',
+'plugins/validation/Validation.test.php',
+'upload/mimetype.test.php'
 );
 
 function printTestSuite($testfiles) {
