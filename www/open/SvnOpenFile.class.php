@@ -4,6 +4,7 @@
  *
  * @package open
  */
+if (!class_exists('SvnOpen')) require(dirname(__FILE__).'/SvnOpen.class.php');
 
 define('HEAD','HEAD');
 
@@ -37,7 +38,7 @@ function login_getMimeType($targetUrl, $revision=HEAD) {
  * @return String mime type, or false if property not set.
  * @deprecated use SvnOpenFile class instead
  */
-function _login_getMimeTypeProperty($targetUrl, $revision) {
+function login_getMimeTypeProperty($targetUrl, $revision) {
 	$url = $targetUrl.'@'.$revision;
 	$cmd = 'propget svn:mime-type '.escapeArgument($url);
 	$result = login_svnRun($cmd);
@@ -60,6 +61,8 @@ function _login_getMimeTypeProperty($targetUrl, $revision) {
  */
 class SvnOpenFile {
 	
+	var $url;
+	
 	/**
 	 * Tries to access the file and saves the info but does not read the contents yet.
 	 *
@@ -68,12 +71,23 @@ class SvnOpenFile {
 	 * @return SvnOpenFile
 	 */
 	function SvnOpenFile($path, $revision=HEAD) {
+		$url = getRepository().$path;
+		$revision = $revision;
 		$this->_readInfo();
 	}
 	
 	function _readInfo() {
 		$info = new SvnOpen('info', true);
+		$info->addArgUrl($url);
 		
+	}
+	
+	function _readInfoSvn() {
+		
+	}
+	
+	function _readInfoHttp() {
+		// http can not read the actual revision number for HEAD
 	}
 	
 	function getMimeType() {
@@ -83,14 +97,20 @@ class SvnOpenFile {
 		// never look at file contents, too comlicated and we don't want to require fileinfo extension
 	}
 	
-	function getContentType() {
-		// same as mime type, right?
-	}
-	
 	function getContentLength() {
 		// svn info
 	}
+
+	/**
+	 * @return boolean true if this file is the HEAD
+	 */
+	function isLatestRevision() {
+		
+	}
 	
+	/**
+	 * @return int the revision number. if revision is HEAD, this is the newest revision number.
+	 */
 	function getRevisionNumber() {
 		// svn info
 	}

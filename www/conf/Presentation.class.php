@@ -110,7 +110,7 @@ class Presentation {
 		$this->smarty->caching = CACHING;
 		if (!CACHING) {
 			$this->smarty->force_compile = true;
-			// allow SMARTY_DEBUG query string parameter
+			// allow SMARTY_DEBUG query string parameter TODO remove in production
 			$this->smarty->debugging_ctrl = 'URL';
 		}
 		
@@ -165,6 +165,27 @@ class Presentation {
 	function assign_by_ref($tpl_var, &$value) {
 		$this->smarty->assign_by_ref($tpl_var, $value);
 	}
+	
+	/**
+	 * appends values to template variables
+	 *
+	 * @param array|string $tpl_var the template variable name(s)
+	 * @param mixed $value the value to append
+	 */
+	function append($tpl_var, $value=null, $merge=false) {
+		$this->smarty->append($tpl_var, $value, $merge);	
+	}
+	
+	/**
+	 * appends values to template variables by reference
+	 *
+	 * @param string $tpl_var the template variable name
+	 * @param mixed $value the referenced value to append
+	 */
+	function append_by_ref($tpl_var, &$value, $merge=false) {
+	    $this->smarty->append_by_ref($tpl_var, $value, $merge);
+	}
+
 	
 	/**
 	 * executes & returns or displays the template results

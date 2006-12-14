@@ -1,5 +1,4 @@
 <?php
-// TODO convert to the same concept as 'cat'
 require_once(dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require_once(dirname(dirname(__FILE__))."/SvnOpen.class.php" );
 
@@ -14,10 +13,10 @@ $revto = $_GET['revto'];
 // TODO use SvnOpenFile to check that the mime type is ok for diffing (if not view both or something)
 
 $command = new SvnOpen('diff');
-//$command->addArgRevisionRange($revfrom.':'.$revto);
-//$command->addArgUrl($url);
-$command->addArgUrl($url.'@'.$revfrom);
-$command->addArgUrl($url.'@'.$revto);
+// using peg revision to identify the object, and operativer revision to select the diff
+// this operation assumes that the two given revision numbers are for the same object (no moves inbetween)
+$command->addArgRevisionRange($revfrom.':'.$revto);
+$command->addArgUrlPeg($url, $revfrom);
 
 $p = new Presentation();
 $p->assign('target', $url);
@@ -34,7 +33,7 @@ if (!empty($referer) && strContains($referer, '/open/log/')) {
 }
 
 $diffarray = $command->exec();
-if($command->getExitcode()) trigger_error("Could not read 'diff' for $url revision $revfrom to $revto");
+if($command->getExitcode()) trigger_error("Could not read 'diff' for $url revision $revfrom to $revto. ".implode("\n", $command->getOutput()));
 $p->assign('diff', implode("\n",$command->getOutput()));
 
 $p->display();

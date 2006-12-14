@@ -168,6 +168,17 @@ class SvnOpen {
 	}
 	
 	/**
+	 * Uniquely identifies an object in subversion, for a url (history) that may have contained different objects.
+	 * See http://svnbook.red-bean.com/nightly/en/svn-book.html#svn.advanced.pegrevs
+	 * @param String $url the URL, just like addArgUrl
+	 * @param int|String $revision, the revision number to append as URL@PEG-REV
+	 */
+	function addArgUrlPeg($url, $revision) {
+		$url = urlEncodeNames($url).'@'.$revision;
+		$this->command->addArg($url);
+	}
+	
+	/**
 	 * @param String $path filename or valid local path
 	 */
 	function addArgPath($path) {

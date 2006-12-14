@@ -1,6 +1,6 @@
 <?php
 require_once( dirname(dirname(dirname(__FILE__))) . "/conf/Presentation.class.php" );
-require_once( dirname(dirname(dirname(__FILE__))) . "/account/login.inc.php" );
+require_once(dirname(dirname(__FILE__))."/SvnOpenFile.class.php" );
 
 $url = getTargetUrl();
 if(!isFile($url)) {
