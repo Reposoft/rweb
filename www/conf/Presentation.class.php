@@ -71,6 +71,9 @@ require(dirname(dirname(__FILE__)).'/lib/smarty/smarty.inc.php' );
 /**
  * Extends smarty framework, to provide a customized presentation engine with well known syntax.
  *
+ * This class only delegates to its internal Smarty instance,
+ * so the inferface is limited to the functions mirrored from Smarty.
+ * 
  * Does the following assigns for every page:
  * head = all shared head tags, place a <!--{head}--> in the <head> of the template
  * referer = the HTTP referer url, if there is one
@@ -82,8 +85,14 @@ require(dirname(dirname(__FILE__)).'/lib/smarty/smarty.inc.php' );
  * 
  * Cache settings are defined in te include file.
  */
-class Presentation extends Smarty {
+class Presentation {
 
+	/**
+	 * The template we delegate to, with a subset of the functions.
+	 * @var Smarty
+	 */
+	var $smarty;
+	
 	var $redirectBeforeDisplay = false;
 	var $extraStylesheets = array();
 
@@ -96,20 +105,22 @@ class Presentation extends Smarty {
 	
 	// constructor
 	function Presentation() {
-		$this->caching = CACHING;
+		$this->smarty = new Smarty();
+		
+		$this->smarty->caching = CACHING;
 		if (!CACHING) {
-			$this->force_compile = true;
+			$this->smarty->force_compile = true;
 			// allow SMARTY_DEBUG query string parameter
-			$this->debugging_ctrl = 'URL';
+			$this->smarty->debugging_ctrl = 'URL';
 		}
 		
-		$this->template_dir = CACHE_DIR.'templates/';
-		$this->compile_dir = CACHE_DIR.'templates_c/';
-		$this->config_dir = CACHE_DIR.'configs/';
-		$this->cache_dir = CACHE_DIR.'cache/';
+		$this->smarty->template_dir = CACHE_DIR.'templates/';
+		$this->smarty->compile_dir = CACHE_DIR.'templates_c/';
+		$this->smarty->config_dir = CACHE_DIR.'configs/';
+		$this->smarty->cache_dir = CACHE_DIR.'cache/';
 	
-		$this->left_delimiter = LEFT_DELIMITER;
-		$this->right_delimiter = RIGHT_DELIMITER;
+		$this->smarty->left_delimiter = LEFT_DELIMITER;
+		$this->smarty->right_delimiter = RIGHT_DELIMITER;
 		
 		// enforce singleton rule, but only after delimiters and such things has been configures (otherwise the error template might be invalid)
 		if (isset($GLOBALS['_presentationInstance'])) {
@@ -118,8 +129,8 @@ class Presentation extends Smarty {
 		$GLOBALS['_presentationInstance'] = $this;
 		
 		// register the prefilter
-		$this->register_prefilter('Presentation_useCommentedDelimiters');
-		$this->load_filter('pre', 'Presentation_useCommentedDelimiters');
+		$this->smarty->register_prefilter('Presentation_useCommentedDelimiters');
+		$this->smarty->load_filter('pre', 'Presentation_useCommentedDelimiters');
 	}
 	
 	/**
@@ -129,10 +140,42 @@ class Presentation extends Smarty {
 		$this->showError($error_msg);
 		// if showError causes an internal trigger_error, we should end up here
 		echo ("<!-- PHP error message: \n\n");
-		parent::trigger_error($error_msg);
+		$this->smarty->trigger_error($error_msg);
 		echo ("\n-->\n");
 		// we never want to continue after error
 		exit;
+	}
+	
+	/**
+	 * assigns values to template variables
+	 *
+	 * @param array|string $tpl_var the template variable name(s)
+	 * @param mixed $value the value to assign
+	 */
+	function assign($tpl_var, $value = null) {
+		$this->smarty->assign($tpl_var, $value);	
+	}
+	
+	/**
+    * assigns values to template variables by reference
+    *
+    * @param string $tpl_var the template variable name
+    * @param mixed $value the referenced value to assign
+    */
+	function assign_by_ref($tpl_var, &$value) {
+		$this->smarty->assign_by_ref($tpl_var, $value);
+	}
+	
+	/**
+	 * executes & returns or displays the template results
+	 *
+	 * @param string $resource_name
+	 * @param string $cache_id
+	 * @param string $compile_id
+	 * @param boolean $display
+	 */
+	function fetch($resource_name, $cache_id = null, $compile_id = null, $display = false) {
+		return $this->smarty->fetch($resource_name, $cache_id, $compile_id, $display);	
 	}
 	
 	/**
@@ -164,7 +207,7 @@ class Presentation extends Smarty {
 			$nexturl = getWebapp() . 'view/?result=' . basename($file);
 			header("Location: $nexturl");
 		} else {
-			parent::display($resource_name, $cache_id, $compile_id);
+			$this->smarty->display($resource_name, $cache_id, $compile_id);
 		}
 	}
 	
@@ -173,7 +216,7 @@ class Presentation extends Smarty {
 	 * Note that it is standard JSON to escape all forward slashes with a backslash.
 	 */
 	function displayInternal() {
-		$data = $this->get_template_vars();
+		$data = $this->smarty->get_template_vars();
 		$json = new Services_JSON(); // SERVICES_JSON_LOOSE_TYPE?
 		echo $json->encode($data);
 	}
@@ -244,15 +287,6 @@ class Presentation extends Smarty {
 		$this->assign('headline', $headline);
 		$this->assign('error', $error_msg);
 		$this->display($template);		
-	}
-	
-	/**
-	 * "$this->display" but resolves template name automatically
-	 * @deprecated display with no parameter works the same way
-	 */
-	function show() {
-		trigger_error("show() should be replaced with display()");
-		$this->display($template);
 	}
 	
 	/**
