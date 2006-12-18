@@ -39,9 +39,9 @@ function svnList($listFilesInFolder) {
 function doAutomerge($sourceFile){
 	$p = new Presentation();
 	$targetFile = substr($sourceFile, strrpos($sourceFile, "-")+1);
-	$source = '/branches/'.$sourceFile;
+	$source = '/demoproject/branches/'.$sourceFile;
 	$sourceUrl = getRepository().$source;	// http://localhost/LocalRepos/branches/test.xml
-	$targetUrl = getRepository().'/trunk/'.$targetFile;	// http://localhost/LocalRepos/trunk/
+	$targetUrl = getRepository().'/demoproject/trunk/public/'.$targetFile;	// http://localhost/LocalRepos/trunk/
 	$targetFolder = getParent($targetUrl);
 	$temporaryWorkingCopy = getTempnamDir('merge');
 
@@ -53,7 +53,6 @@ function doAutomerge($sourceFile){
 	$checkout->addArgUrl($targetFolder);
 	$checkout->addArgPath($temporaryWorkingCopy);
 	$checkout->exec();
-	$checkoutResult = $checkout->getOutput();
 	$checkout->show($p);
 
 	// Get older revision of source (the revision when the branch was made)
@@ -62,7 +61,6 @@ function doAutomerge($sourceFile){
 	$log->addArgOption('--stop-on-copy');
 	$log->addArgUrl($sourceUrl);
 	$log->exec();
-	$logResult = $log->getOutput();
 	$log->show($p);
 	foreach ($logResult as $key => $value){
 		$revisionPointStart = strpos($value, 'r');
@@ -89,31 +87,32 @@ function doAutomerge($sourceFile){
 	$merge->addArgUrl($sourceUrl);
 	$merge->addArgPath($temporaryWorkingCopy . $targetFile);	// temporaryWorkingCopy/test.xml
 	$merge->exec();
-	$mergeCommand = 'svn ' . $merge->getCommand();
-	$mergeResult = $merge->getOutput();
 	$merge->show($p);
 
 	// Conflict??
 
 	foreach ($mergeResult as $value){
 		if (strpos($value, 'C ') === 0){
-			$filePath = ltrim(ltrim($value, "C"));
-			$fileContents = file($filePath);
+			$filePath = $temporaryWorkingCopy . $targetFile;
+			$fileContents = array_map('rtrim', file($filePath));
 			if (strpos($fileContents[0], '<?xml') === 0){
-				//echo '<pre>';
-				//echo htmlentities(implode($fileContents));
-				//echo '</pre>';
-				//resolveConflicts($fileContents);
 				$result = resolveConflicts($fileContents);
 				if (!$result){
-					echo 'aja baja';
+					$p->showError("Cannot merge files " . $value);
+					exit;
+				} else {
+					$fh = fopen($filePath, 'w');
+					fwrite($fh, implode("\r\n", $fileContents));
+					fclose($fh);
+					$resolved = new Command('svn');
+					$resolved->addArgOption('resolved');
+					$resolved->addArg($filePath);
+					$resolved->exec();
 				}
-			//} else {
-				//$p->showError($value . " does not appear to be valid xml file.");
-				//exit;
+			} else {
+				$p->showError($value . " does not appear to be valid xml file.");
+				exit;
 			}
-			//$p->showError("Cannot merge files " . $value);
-			//exit;
 		}
 	}
 
@@ -127,7 +126,6 @@ function doAutomerge($sourceFile){
 	$commit->setMessage('merge -r '.$revisionNumber[1] . ':' . $revisionNumber[0] . ' ' . $source);	// svn merge -r 66:67 "http://localhost/LocalRepos/branches/1164368098-test-test.xml" "C:/WINDOWS/TEMP/localhost_2Frepos/merge/174.tmp/test.xml"
 	$commit->addArgPath($temporaryWorkingCopy);
 	$commit->exec();
-	$commitResult = $commit->getOutput();
 	// Seems that there is a problem with svn 1.3.0 and 1.3.1 that it does not always see the update on a replaced file
 	//  remove this block when we don't need to support svn versions onlder than 1.3.2
 	if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
@@ -137,15 +135,9 @@ function doAutomerge($sourceFile){
 			$commit->setMessage($mergeCommand);
 			$commit->addArgPath($temporaryWorkingCopy);
 			$commit->exec();
-			$commitResult = $commit->getOutput();
 		}
 	}
 
-
-	//echo implode("<BR>", $checkoutResult) . "<BR><BR>";
-	//echo implode("<BR>", $logResult) . "<BR><BR>";
-	//echo implode("<BR>", $mergeResult) . "<BR><BR>";
-	//echo implode("<BR>", $commitResult);
 	$commit->show($p);
 	presentEdit($p, $targetFolder);
 }

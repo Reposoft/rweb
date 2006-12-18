@@ -9,14 +9,26 @@ function resolveConflicts(&$fileContents, &$log){
 	if (count($conflicts) === 0){
 		return true;
 	}
-	foreach ($conflicts as $c) {
-		markAutoResolve($c);
+	
+	foreach ($conflicts as $key => $value) {
+		markAutoResolve($conflicts[$key]);
 		// abort if there is at least one conflict that can not be autoresolved
-		if (!$c->isResolved()) return false;
+		if (!$conflicts[$key]->isResolved()) return false;
 	}
 	// now we know we can solve all conflicts automatically
+	
+	$offset = 0;	// when array_splice is used we always remove some lines from $fileContents array and
+					// that causes our $conflicts array to point to wrong lines in $fileContents array.
+					// this is why we need to adjust our values for start-, limit- and endLine every time
+					// we remove lines from $fileContents array. 
 	foreach ($conflicts as $c) {
-		array_splice($fileContents, $c->getStartLine(), $c->getEndLine() - $c->getStartLine() + 1, $c->getResolvedLines());
+		$c->startLine = $c->startLine - $offset;	// calculate new values for conflict markers
+		$c->limitLine = $c->limitLine - $offset;
+		$c->endLine = $c->endLine - $offset;
+		$conflictLinesLength = $c->getEndLine() - $c->getStartLine() + 1;	// get the size of the conflict
+		$resolvedLinesLength = sizeof($c->getResolvedLines());				// get the size of the resolved conflict
+		$offset = $offset + $conflictLinesLength - $resolvedLinesLength;	// calculate new offset
+		array_splice($fileContents, $c->getStartLine(), $conflictLinesLength, $c->getResolvedLines());
 	}
 	// all conflicts replaced with selected contents
 	return true;
@@ -27,23 +39,22 @@ function resolveConflicts(&$fileContents, &$log){
  */
 function markAutoResolve(&$conflict) {
 	if ($conflict->isType(CONFLICT_EXCEL_TABLE)) {
-		$isFormulaConflictArray = preg_grep('/<Cell([^>]+)Formula="([^>]+)"([^>]+)?>/', $conflict->getBoth());
-		//print_r($isFormulaConflictArray);
+		$isFormulaConflictArray = preg_grep('/<([^>]+)?Cell([^>]+)Formula="([^>]+)"([^>]+)?>/', $conflict->getBoth());
 		if (count($isFormulaConflictArray) > 1) {
-			preg_match('/<Cell([^>]+)Formula="([^>]+)"([^>]+)?>/', $isFormulaConflictArray[0], $matchGroup);
-			$formulaWorking = $matchGroup[2];
-			preg_match('/<Cell([^>]+)Formula="([^>]+)"([^>]+)?>/', $isFormulaConflictArray[1], $matchGroup);
-			$formulaMerge = $matchGroup[2];
+			preg_match('/<([^>]+)?Cell([^>]+)Formula="([^>]+)"([^>]+)?>/', $isFormulaConflictArray[0], $matchGroup);
+			$formulaWorking = $matchGroup[3];
+			preg_match('/<([^>]+)?Cell([^>]+)Formula="([^>]+)"([^>]+)?>/', $isFormulaConflictArray[1], $matchGroup);
+			$formulaMerge = $matchGroup[3];
 			if ($formulaWorking != $formulaMerge){
 				// formula conflict - not allowed to change formulas
 				return false;
 			} else {
-				$isDataConflictArray = preg_grep('/<Data([^>]+)>.*<\/Data>/', $conflict->getBoth());
+				$isDataConflictArray = preg_grep('/<([^>]+)?Data([^>]+)>([^<>])<\/([^>]+)?Data>/', $conflict->getBoth());
 				if (count($isDataConflictArray) > 1) {
-					preg_match('/<Data([^>]+)>(.*)<\/Data>/', $isDataConflictArray[0], $matchGroup);
-					$dataWorking = $matchGroup[2];
-					preg_match('/<Data([^>]+)>(.*)<\/Data>/', $isDataConflictArray[1], $matchGroup);
-					$dataMerge = $matchGroup[2];
+					preg_match('/<([^>]+)?Data([^>]+)>([^<>])<\/([^>]+)?Data>/', $isDataConflictArray[0], $matchGroup);
+					$dataWorking = $matchGroup[3];
+					preg_match('/<([^>]+)?Data([^>]+)>([^<>])<\/([^>]+)?Data>/', $isDataConflictArray[1], $matchGroup);
+					$dataMerge = $matchGroup[3];
 					if ($dataWorking != $dataMerge){
 						// data conflict - data has changed - choose working
 						$conflict->setResolveToWorking();
@@ -65,6 +76,10 @@ function markAutoResolve(&$conflict) {
 	
 	// default
 	$conflict->setResolveToMerge();
+}
+
+function tableExceptions(){
+	
 }
 
 /**
@@ -101,17 +116,13 @@ function findConflict(&$fileContents, &$log){
 				// Every exception to no conflicts inside table rule should be here
 				if (count(preg_grep('/<Cell([^>]+)Formula="([^>]+)"([^>]+)?>/i', $conflict)) != 0){
 					$conflictMarker->setType(CONFLICT_EXCEL_FORMULA);
-					//chooseWorking($fileContents, $conflict, $log);
-					//return resolveConflicts($fileContents, $log);
 				}
 				$log[] = 'Conflict inside the table';
 				//return false;
 			}
-			// done with this conflict, save it and proceed to nexr
+			// done with this conflict, save it and proceed to next
 			$conflict[] = $conflictMarker;
 			$conflictMarker = false;
-			//chooseMerge($fileContents, $conflict, $log);
-			//return resolveConflicts($fileContents, $log);
 		}
 		else if ($conflictMarker){
 			$log[] = "Line $key is inside conflict";
@@ -124,61 +135,6 @@ function findConflict(&$fileContents, &$log){
 	return $conflict;
 }
 
-/**
- * 
- * @param Conflict $conflict the conflict instance
- */
-function chooseWorking(&$fileContents, $conflict, &$log){
-	
-	/*
-	$conflictSolved = $conflict;
-	$deleteRow = false;
-	foreach ($conflictSolved as $key=>$value){
-		if (strpos($value, '<<<<<<< .working') === 0){
-			unset($conflictSolved[$key]);
-			$log[] = 'Chosing the value from the trunk';
-		}
-		if (strpos($value, '=======') === 0){
-			$deleteRow = true;
-		}
-		if (strpos($value, '>>>>>>> .merge') === 0){
-			unset($conflictSolved[$key]);
-			$deleteRow = false;
-		}
-		if ($deleteRow == true){
-			unset($conflictSolved[$key]);
-		}
-	}
-	*/
-	//array_splice($fileContents, array_shift(array_keys($conflict)), count($conflict), $conflictSolved);
-}
-
-function chooseMerge(&$fileContents, $conflict, &$log){
-	array_splice($fileContents, $conflict->getStartLine(), $conflict->getEndLine() - $conflict->getStartLine() + 1, $conflict->getMerge());
-	return; 
-	
-	$conflictSolved = $conflict;
-	$deleteRow = false;
-	foreach ($conflictSolved as $key=>$value){
-		if (strpos($value, '<<<<<<< .working') === 0){
-			unset($conflictSolved[$key]);
-			$deleteRow = true;
-		}
-		if (strpos($value, '=======') === 0){
-			unset($conflictSolved[$key]);
-			$deleteRow = false;
-			$log[] = 'Chosing the value from the branch';
-		}
-		if (strpos($value, '>>>>>>> .merge') === 0){
-			unset($conflictSolved[$key]);
-		}
-		if ($deleteRow == true){
-			unset($conflictSolved[$key]);
-		}
-	}
-
-	array_splice($fileContents, array_shift(array_keys($conflict)), count($conflict), $conflictSolved);
-}
 
 /**
  * Represents a generic conflict as a result of a merge operation.
@@ -197,6 +153,7 @@ class Conflict {
 	
 	// false until someone says this conflict can be resolved
 	var $resolve = false;
+	
 	
 	/**
 	 * Enter description here...
