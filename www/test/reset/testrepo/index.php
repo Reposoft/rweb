@@ -268,6 +268,11 @@ createFileWithContents($wc."test/trunk/repos-svn-access/automated-test-increment
 setup_svn("add {$wc}test/trunk/repos-svn-access/");
 setup_svn('commit -m "Added integration testing folders for other repos projects" '.$wc);
 
+// import big files and folders
+$importsFolder = dirname(__FILE__);
+setup_svn("import -m \"Created sample images\" $importsFolder/images \"file:///$repourl/demoproject/trunk/public/images\"");
+
+// setup done
 $report->info('<a href="'.$conflocation.'/test/trunk/">Log in to test account</a>');
 
 $report->display();
