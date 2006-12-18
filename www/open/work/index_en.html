@@ -29,9 +29,13 @@ modify the file in the branch, then use the "merge" functionality to add your ch
 <p><a id="upload" class="action" href="../../upload/?target={=$target}">upload new version</a></p>
 <p>Upload is good for quick changes in a file that you recently downloaded. For big changes, use a personal branch.</p>
 <h2>Create personal branch</h2>
-<p>Your personal, temporary, copy would be: <span class="path" title="{=$target|basename}">/branches/{=$newname}</span></p>
-<p><a id="branch" class="action" href="{=$pathToCopyForm}?target={=$target}&oldname={=$oldname}&tofolder={=$tofolder}&newname={=$newname}&move=0&message=&submit=Copy">create branch</a></p>
-<p>You will get a link to the branch, and from there you can access the "merge" functionality.</p>
+<!--{if not $tofolder}-->
+    <p>The file you wish to branch has to be in trunk directory</p>
+<!--{else}-->
+    <p>Your personal, temporary, copy would be: <span class="path" title="{=$target|basename}">/branches/{=$newname}</span></p>
+	<p><a id="branch" class="action" href="{=$pathToCopyForm}?target={=$target}&oldname={=$oldname}&tofolder={=$tofolder}&newname={=$newname}&move=0&message={=$message}&submit=Copy">create branch</a></p>
+	<p>You will get a link to the branch, and from there you can access the "merge" functionality.</p>
+<!--{/if}-->
 </div>
 <div id="footer"></div>
 </div>
