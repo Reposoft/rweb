@@ -1,4 +1,5 @@
 <?php
+require(dirname(dirname(__FILE__)).'/conf/Presentation.class.php');
 require( dirname(__FILE__)."/SvnOpenFile.class.php" );
 
 // get file to open

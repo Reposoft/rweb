@@ -158,7 +158,7 @@ a:hover { text-decoration: underline; }
 $publicindex = $wc."demoproject/trunk/public/website/index.html";
 createFileWithContents($publicindex, "<html>\n<head>\n<title>demoproject's web</title>
 <link href=\"styles.css\" rel=\"stylesheet\" type=\"text/css\" />\n</head>
-<body>\n<h3>Welcome to our website</h3>\n<p>&nbsp;</p>
+<body>\n<img src=\"../images/a.jpg\"/><h3>Welcome to our website</h3>\n<p>&nbsp;</p>
 <p><small><a href=\"$conflocation/demoproject/trunk/public/\">return to documents</a> &nbsp; | &nbsp; page id: \$Id\$</small></p>\n</html>\n");
 
 setup_svn("add {$wc}*");
@@ -270,7 +270,7 @@ setup_svn('commit -m "Added integration testing folders for other repos projects
 
 // import big files and folders
 $importsFolder = dirname(__FILE__);
-setup_svn("import -m \"Created sample images\" $importsFolder/images \"file:///$repourl/demoproject/trunk/public/images\"");
+setup_svn("import -m \"Created sample images\" $importsFolder/images \"file:///{$repourl}demoproject/trunk/public/images\"");
 
 // setup done
 $report->info('<a href="'.$conflocation.'/test/trunk/">Log in to test account</a>');

@@ -77,7 +77,7 @@ function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) 
 	// in windows file has not been compressed in the first command
 	if ( isWindows() ) {
 		$success = gzipInternal($tmpfile,"$path.gz");
-		deleteFile($tmpfile);
+		deleteFile(toPath($tmpfile));
 		if ( ! $success ) return false;
 	}
 	createMD5("$path.gz");

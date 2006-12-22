@@ -1,6 +1,8 @@
 <?php
 /**
  * Operations that result in a new revision in the repository.
+ * 
+ * @package edit
  */
 
 // TODO rename to SvnEdit.class.php, delegate to SvnOpen, add getCommittedRevision
