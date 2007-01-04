@@ -45,6 +45,7 @@ function getReportTime() {
  * Represents the output of the operation, either for web or as text.
  * All output should go through this class.
  * Passing array as message means print as block (with <pre> tag in html).
+ * Output should end with a call to the display() method.
  */
 class Report {
 
@@ -191,11 +192,11 @@ class Report {
 	/**
 	 * Fatal error causes output to end and script to exit.
 	 * It is assumed that fatal errors are handled manually by the administrator.
-	 * @deprecated use error($message) instead, and the reporter might chose to quit the operation
-	 * TODO remove when backup scripts don't need it
 	 */
 	function fatal($message, $code = 1) {
 		$this->error( $message );
+		$this->display();
+		exit($code);
 	}
 	
 	function hasErrors() {
@@ -289,7 +290,12 @@ class Report {
 		//$this->_print("<div id=\"workspace\">\n");
 		//$this->_print("<div id=\"contents\">\n");
 		
-		$this->_print('<div id="commandbar"><a class="command" href="/repos/conf/">config</a><a class="command" href="/repos/admin/">admin</a><a  class="command" href="/repos/test/">test</a></div>');
+		$this->_print('<div id="commandbar">');
+		$this->_print('<a class="command" href="/repos/conf/">config</a>');
+		$this->_print('<a class="command" href="/repos/admin/">admin</a>');
+		$this->_print('<a  class="command" href="/repos/test/">test</a>');
+		$this->_print('<a  class="command" href="/repos/admin/size/">size</a>');
+		$this->_print('</div>');
 		
 		$this->_print("<h1>$title</h1>\n");
 		$this->_print('<p><span class="datetime">'.getReportTime().'</span></p>');

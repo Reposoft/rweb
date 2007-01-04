@@ -661,6 +661,8 @@ function getCommand($command) {
 			return 'whoami';
 		case 'env':
 			return ( isWindows() ? 'set' : USRBIN . 'env' );
+		case 'du':
+			return ( isWindows() ? false : USRBIN . 'du' );
 	}
 	return "\"Error: Repos does not support command '$command'\"";
 }
@@ -668,6 +670,9 @@ function getCommand($command) {
 // ----- internal functions -----
 
 function _getConfigFolder() {
+	$d = dirname(dirname(dirname(dirname(__FILE__)))).DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR;
+	if (file_exists($d)) return $d;
+	// old location
 	return dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'repos-config'.DIRECTORY_SEPARATOR;
 }
 

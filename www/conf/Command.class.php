@@ -16,7 +16,8 @@
  */
 
 // include repos.properties.php only if repos_runCommand is not defined (to allow mocks for testing)
-if (!function_exists('isWindows')) require(dirname(__FILE__).'/repos.properties.php');
+if (!class_exists('System')) require(dirname(__FILE__).'/System.class.php');
+if (!function_exists('_repos_getScriptWrapper')) require(dirname(__FILE__).'/repos.properties.php');
 // TODO require only the System functions instead, and move runCommand functions to this class
 
 // the actual command execution, can be mocked

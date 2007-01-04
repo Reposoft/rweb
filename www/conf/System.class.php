@@ -24,9 +24,12 @@ class System {
 	 * @static 
 	 */
 	function deleteFolder($folder) {
-		deleteFolder($folder);
+		return deleteFolder($folder);
 	}
 	
+	function isWindows() {
+		return isWindows();
+	}
 }
 
 ?>
