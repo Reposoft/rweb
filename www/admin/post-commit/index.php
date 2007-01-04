@@ -26,7 +26,7 @@ $c->addArg($path);
 $c->exec();
 
 $export = array(
-	'administration/trunk/repos-access' => $home.'admin/repos-access'
+	'administration/trunk/repos-access' => getConfig('admin_folder').getConfig('access_file')
 );
 
 $pattern = '/^([ADU_])([U\s])\s+(.*)/';
