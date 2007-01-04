@@ -29,7 +29,7 @@ function isOffline() {
 }
 
 /**
- * @return newline character for this OS
+ * @return newline character for this OS, or always \n if output is web
  */
 function getNewline() {
 	if (isOffline() && isWindows()) return "\n\r";

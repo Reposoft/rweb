@@ -30,6 +30,14 @@ class System {
 	function isWindows() {
 		return isWindows();
 	}
+
+	/**
+	 * @return newline character for this OS
+	 */
+	function getNewline() {
+		if (System::isWindows()) return "\n\r";
+		else return "\n";
+	}
 }
 
 ?>

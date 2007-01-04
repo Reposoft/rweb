@@ -44,8 +44,8 @@ if (!file_exists($test)) createFolder($test);
 if (!file_exists($admin)) {
 	createFolder($admin);
 } else {
-	deleteFile($userfile);
-	deleteFile($aclfile);
+	if (file_exists($userfile)) deleteFile($userfile);
+	if (file_exists($aclfile)) deleteFile($aclfile);
 	//may have symlinks to it, so we don't want to delete//deleteFile($conffile);
 }
 createFolder($repo);
@@ -57,6 +57,16 @@ createFolder($wc);
 $report->info("Running: svnadmin create \"$repo\"");
 
 setup_svnadmin("create $repo");
+
+// Add hook scripts
+$postcommit = 'post-commit';
+if (System::isWindows()) $postcommit .= '.bat';
+$rootfolder = dirname(dirname(dirname(dirname(__FILE__)))).'/_root/';
+copy("{$rootfolder}hooks/$postcommit", "{$repo}hooks/$postcommit");
+chmod("{$repo}hooks/$postcommit", '0764');
+if (!file_exists($admin.'hooks.php')) {
+	copy("{$rootfolder}repos-config/hooks.php", $admin.'hooks.php');
+}
 
 // Too tricky for apache passwd file //$trickyusername = "Åke Mühl-Ägg";
 $trickyusername = "Sv@n s-on";
@@ -84,9 +94,14 @@ if (createFileWithContents($userfile, $users, true)) {
 $report->info("create ACL");
 $acl = "
 [groups]
+administrators = test
 demoproject = svensson, test, $trickyusername
 
 [/]
+@administrators = rw
+
+[/administration]
+@administrators = rw
 
 [/svensson]
 svensson = rw
@@ -147,10 +162,17 @@ if (createFileWithContents($conffile, $conf, true, true)) {
 	$report->fail("Could not create apache config file $conffile");
 }
 
-# check out working copy and create base structure
+// check out working copy and create base structure
 $repourl = $repo;
 
 setup_svn("co file:///$repourl $wc");
+
+// create administration folder
+createFolder($wc."administration/");
+createFolder($wc."administration/trunk/");
+// and copy the access file to the administration area for use with hooks
+$repositoryacl = $wc.'administration/trunk/repos-access';
+copy($aclfile, $repositoryacl);
 
 //system("$svn co file://$repourl $test/wc/");
 createFolder($wc."svensson/");
@@ -184,6 +206,7 @@ createFileWithContents($publicindex, "<html>\n<head>\n<title>demoproject's web</
 <p><small><a href=\"$conflocation/demoproject/trunk/public/\">return to documents</a> &nbsp; | &nbsp; page id: \$Id\$</small></p>\n</html>\n");
 
 setup_svn("add {$wc}*");
+setup_svn("propset svn:eol-style native $repositoryacl");
 setup_svn("propset svn:mime-type text/xml $publicxml");
 setup_svn("propset svn:mime-type text/css $publicstyle");
 setup_svn("propset svn:mime-type text/html $publicindex");

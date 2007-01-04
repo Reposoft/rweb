@@ -40,6 +40,7 @@ function setup_svnadmin($command) {
 	$cmd = $svnargs.' '.$command;
 	$result = _command_run('svnadmin', $cmd);
 	if (array_pop($result)) {
+		$report->debug($result);
 		$report->fail("svnadmin command failed: $command");
 	} else {
 		$report->ok("Successfully executed svnadmin command: $command");

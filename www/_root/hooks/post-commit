@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# POST-COMMIT HOOK
+#
+# The post-commit hook is invoked after a commit.  Subversion runs
+# this hook by invoking a program (script, executable, binary, etc.)
+# named 'post-commit' (for which this file is a template) with the 
+# following ordered arguments:
+#
+#   [1] REPOS-PATH   (the path to this repository)
+#   [2] REV          (the number of the revision just committed)
+#
+
+REPO="$1"
+REV="$2"
+
+#commit-email.pl "$REPO" "$REV" commit-watchers@example.org
+#log-commit.py --repository "$REPO" --revision "$REV"
+
+#CHANGED=$(/usr/bin/svnlook changed -r $REV /srv/www/vhosts/repos.se/test/repo)
+
+cd "$REPO"
+cd ..
+cd admin
+/usr/bin/php hooks.php post-commit $REPO $REV > /dev/null 2>&1 &
