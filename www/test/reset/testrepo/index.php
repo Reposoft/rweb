@@ -13,20 +13,46 @@
 
 require(dirname(dirname(__FILE__)).'/setup.inc.php');
 
+// this script has been modified so that it can reset an existing repository
+// without a complete delete of its home path
+
 $repo = $test . "repo/";
 $admin = $test . "admin/";
 $backup = $test . "backup/";
 
-if (file_exists($test)) {
-	$report->info("Deleting old test repository folder $test");
-	deleteFolder($test);
+$userfile = $test . "admin/repos-users";
+$aclfile = $test . "admin/repos-access";
+
+// the working copy where the initial state is created
+$wc = $test . "wc/";
+
+if (file_exists($repo)) {
+	$report->info("Deleting old test repository folder $repo");
+	// repositories usually have write protected contents
+	chmod($repo.'format', 0755);
+	chmod($repo.'db/format', 0755);
+	deleteFolder($repo);
+}
+
+if (file_exists($backup)) {
+	$report->info("Deleting old test backup folder $backup");
+	deleteFolder($backup);
 }
 
 $report->info("create test repository folder with repo/ admin/ and backup/");
-createFolder($test);
+if (!file_exists($test)) createFolder($test);
+if (!file_exists($admin)) {
+	createFolder($admin);
+} else {
+	deleteFile($userfile);
+	deleteFile($aclfile);
+	//may have symlinks to it, so we don't want to delete//deleteFile($conffile);
+}
 createFolder($repo);
-createFolder($admin);
 createFolder($backup);
+
+if (file_exists($wc)) deleteFolder($wc);
+createFolder($wc);
 
 $report->info("Running: svnadmin create \"$repo\"");
 
@@ -49,7 +75,6 @@ if (isWindows()) { // MD5
 	$usersencoding = 'MD5';
 }
 
-$userfile = $test . "admin/repos-users";
 if (createFileWithContents($userfile, $users, true)) {
 	$report->ok("Successfully created user account file $userfile with $usersencoding encoded passwords");
 } else {
@@ -57,7 +82,6 @@ if (createFileWithContents($userfile, $users, true)) {
 }
 
 $report->info("create ACL");
-$aclfile = $test . "admin/repos-access";
 $acl = "
 [groups]
 demoproject = svensson, test, $trickyusername
@@ -102,7 +126,7 @@ SVNIndexXSLT \"/repos/view/repos.xsl\"
 SVNPath {$test}repo/
 SVNAutoversioning on
 # user accounts from password file
-AuthName \"$test_repository_folder\"
+AuthName \"Test repository. Contents might be reset at any time.\"
 AuthType Basic
 AuthUserFile $userfile
 Require valid-user
@@ -117,15 +141,13 @@ Satisfy Any
 	Header add Cache-Control \"no-cache\"
 </Location>
 ";
-if (createFileWithContents($conffile, $conf, true)) {
+if (createFileWithContents($conffile, $conf, true, true)) {
 	$report->ok("Successfully created apache config file $conffile");
 } else {
 	$report->fail("Could not create apache config file $conffile");
 }
 
 # check out working copy and create base structure
-$wc = $test . "wc/";
-createFolder($wc);
 $repourl = $repo;
 
 setup_svn("co file:///$repourl $wc");

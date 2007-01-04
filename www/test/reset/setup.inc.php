@@ -17,13 +17,16 @@ require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
 $report = new Report('set up test repository');
 
 // name the temp dir where the repository will be. This dir will be removed recursively.
-$test_repository_folder="test.repos.se";
+//$test_repository_folder="test.repos.se";
 
 // can not use the repos temp dir because it can be deleted anytime
 //$test = getTempDir($test_repository_folder);
-$test = getSystemTempDir().$test_repository_folder.'/';
+//$test = getSystemTempDir().$test_repository_folder.'/';
+$test = getConfig('home_path');
 
 // the apache config file to include from the subversion host
+// generated config does not contain a VirtualHost directive,
+//  so the file must be included from within a virtual host (or the default host)
 $conffile = $test . "admin/testrepo.conf";
 
 # environment setup, should be valid for both 'svn' and 'svnadmin'

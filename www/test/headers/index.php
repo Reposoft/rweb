@@ -8,8 +8,8 @@
  */
 
 // display the headers of a page in the application
-require('../../account/login.inc.php');
 require('../../open/ServiceRequest.class.php');
+require('../../account/login.inc.php');
 
 // quick links to common header checks
 $repo_root = getRepository();

@@ -548,17 +548,17 @@ function deleteFile($file) {
 /**
  * Instead of createFile() and fopen+fwrite+fclose.
  */
-function createFileWithContents($absolutePath, $contents, $convertToWindowsNewlineOnWindows=false) {
+function createFileWithContents($absolutePath, $contents, $convertToWindowsNewlineOnWindows=false, $overwrite=false) {
 	if (!isFile($absolutePath)) {
 		trigger_error("Path $absolutePath is not a file."); return false;
 	}
-	if (file_exists($absolutePath)) {
+	if (file_exists($absolutePath) && !$overwrite) {
 		trigger_error("Path $absolutePath already exists. Delete it first."); return false;
 	}
 	if ($convertToWindowsNewlineOnWindows) {
-		$file = fopen($absolutePath, 'xt');	
+		$file = fopen($absolutePath, 'wt');	
 	} else {
-		$file = fopen($absolutePath, 'x');
+		$file = fopen($absolutePath, 'w');
 	}
 	$b = fwrite($file, $contents);
 	fclose($file);
@@ -581,6 +581,12 @@ function _chmodWritable($absolutePath) {
  * Therefore we throw an error and do exit.
  */
 function _authorizeFilesystemModify($path) {
+	// test and demo repository
+	$home = getConfig('home_path');
+	if ($home && getConfig('allow_reset')==1) {
+		if (strBegins($path, $home)) return true;
+	}
+	// generic rules
 	if (!isAbsolute($path)) {
 		trigger_error("Security error: local write not allowed in \"$path\". It is not absolute.");// exit;
 	}
