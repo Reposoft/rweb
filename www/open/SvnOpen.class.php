@@ -83,6 +83,7 @@ function login_svnPassthruFileHtml($targetUrl, $revision=0) {
 
 /**
  * @return Mandatory arguments to the svn command, safe for command line (config dir path is escaped)
+ * @deprecated should be done only by the SvnOpen command
  */
 function login_getSvnSwitches() {
 	$auth = '--username='.escapeArgument(getReposUser()).' --password='.escapeArgument(_getReposPass()).' --no-auth-cache';
@@ -93,6 +94,7 @@ function login_getSvnSwitches() {
 /**
  * Renders error message as XML if SVN command fails. Use trigger_error for normal error message.
  * @TODO output as XHTML tags, so that the output can be used both in XSL and HTML pages
+ * @deprecated should be handled by SvnOpen command
  */
 function login_handleSvnError($executedcmd, $errorcode, $output = Array()) {
 	echo "<error code=\"$errorcode\">\n";
@@ -235,6 +237,89 @@ class SvnOpen {
 		return $size->command->getContentLength();
 	}
 	
+}
+
+$info2 = '<?xml version="1.0"?>
+<info>
+<entry
+   kind="file"
+   path="php-templates.xml"
+   revision="17">
+<url>http://localhost/testrepo/demoproject/trunk/php-templates.xml</url>
+<repository>
+<root>http://localhost/testrepo</root>
+<uuid>8f625040-5a68-5746-9b6d-4d3e05d10a73</uuid>
+</repository>
+<commit
+   revision="9">
+<author>test</author>
+<date>2006-12-13T17:28:19.057156Z</date>
+</commit>
+
+<lock>
+<token>opaquelocktoken:935a41cc-526f-1d41-b1ae-f1e3f9e9afb7</token>
+<owner>test</owner>
+<comment>solsson (which is the system username from office application)</comment>
+<created>2006-12-14T15:36:43.193200Z</created>
+<expires>2006-12-14T15:39:25.193200Z</expires>
+</lock>
+</entry>
+</info>';
+
+$list2 = '<?xml version="1.0"?>
+<lists>
+<list
+   path="http://localhost/testrepo/demoproject/trunk/php-templates.xml">
+<entry
+   kind="file">
+<name>php-templates.xml</name>
+<size>291</size>
+<commit
+   revision="20">
+<author>svensson</author>
+<date>2006-12-14T15:48:32.553209Z</date>
+</commit>
+</entry>
+</list>
+</lists>';
+
+define('SVN_KIND_FOLDER', 1);
+define('SVN_KIND_FILE', 2);
+
+/**
+ * Models a verbose svn info call.
+ * To get info for a folder: do "svn info --xml path"
+ * To get info for a file (including size): to "svn list --xml path)"
+ */
+class SvnInfo extends SvnOpen {
+	var $kind;
+	var $name;
+	// the first revision number is the latest in that part of the repository, it is usually not helpful
+	var $url;
+	var $repository;
+	var $revision;
+	var $author;
+	var $date;
+	var $lock;
+	var $size;
+	
+	function SvnInfo($path) {
+		
+	}
+	
+	function _parse($xmlArray) {
+		
+	}
+	
+	
+}
+
+class SvnLock {
+	var $token;
+	var $owner;
+	var $comment;
+	var $created;
+	var $expires;
 }
 
 ?>

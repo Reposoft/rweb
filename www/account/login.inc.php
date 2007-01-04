@@ -58,7 +58,7 @@
  * 
  * @package account
  */
-require_once(dirname(dirname(__FILE__)) . '/conf/repos.properties.php');
+if (!function_exists('getRepository')) require(dirname(dirname(__FILE__)).'/conf/repos.properties.php');
 if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/ServiceRequest.class.php');
 
 // do automatic login if a target is specified the standard way

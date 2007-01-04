@@ -87,7 +87,8 @@ class SvnOpenFile {
 		$this->url = SvnOpenFile::getRepository().$path;
 		
 		if ($revision==HEAD) {
-			$r = $this->_readInfoHttp();
+			//$r = $this->_readInfoHttp();
+			$r = $this->_readInfoSvn(HEAD);
 		} else {
 			$r = $this->_readInfoSvn($revision);
 		}
@@ -202,11 +203,19 @@ class SvnOpenFile {
 	
 	/**
 	 * Sends this file without headers, for embedding into page.
-	 * If the file is html or xml, it will be escaped for viewing as text.
+	 * If HTML or XML is to be used in a text area, it should be read with this method.
 	 */
 	function sendInline() {
 		// where do we get the current content type header? just assume that it is correct? throw error if not correct?
 	}
+	
+	/**
+	 * Sends the file without headers, escaped as html.
+	 * Escaping method is based on the format. If there is no known escape method for the content type, sendInline is used.
+	 */
+	function sendInlineHtml() {
+		// where do we get the current content type header? just assume that it is correct? throw error if not correct?
+	}	
 	
 	/**
 	 * The equivalent of an HTTP status code when accessing this file.
@@ -227,11 +236,28 @@ class SvnOpenFile {
 	 * @return unknown
 	 */
 	function _readInfoSvn($revision) {
-		$info = new SvnOpen('info', true);
+		$info = new SvnOpen('list', true);
 		$info->addArgRevision($revision);
-		$info->addArgUrl($url);
+		$info->addArgUrl($this->url);
 		$info->exec();
-		print_r($info->getOutput());
+		return $this->_parseInfoXml($info->getOutput());
+	}
+	
+	/**
+	 * Enter description here...
+	 *
+	 * @param unknown_type $xmlArray
+	 * @return array assocuative
+	 */
+	function _parseListXml($xmlArray) {
+		echo('<pre>'.implode("\n", $xmlArray).'</pre>');
+		$parsed = array();
+		$p = array(
+			''
+		);
+		foreach ($xmlArray as $line) {
+			
+		}
 		return true;
 	}
 	

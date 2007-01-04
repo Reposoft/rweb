@@ -13,7 +13,7 @@
 
 // currently we simply delegate to repos.properties.php functions so that the transition can be done gradually
 // TODO remove all the system functions from repos.properties.php
-require(dirname(__FILE__).'/repos.properties.php'); // TODO remove this import
+require_once(dirname(__FILE__).'/repos.properties.php'); // TODO remove this import
 
 class System {
 	
