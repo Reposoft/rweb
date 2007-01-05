@@ -90,12 +90,38 @@ function notifyAdministrator($text) {
 // --- backup support
 
 /**
- * @return valid filename representing an absolute repository path
+ * Creates a filename prefix for bakup files
+ * @return valid filename representing an absolute repository path, ending with "-"
  */
 function getPrefix($repository) {
 	if ( ':'==substr($repository,1,1) )
 		$repository = substr($repository,2);
-	return ( "svnrepo" . rtrim(strtr($repository, "/\\", "--"),"-") . "-" );
+	// return ( "svnrepo" . rtrim(strtr($repository, "/\\", "--"),"-") . "-" );
+	return 'repos-'.getRepositoryName($repository).'-';
+}
+
+/**
+ * Guesses a repository name based on the location in the file system.
+ *
+ * @param String $repository the local repository path, absolute
+ * @return String suggested name of repository, for use in backup file names
+ */
+function getRepositoryName($repository) {
+	if ( ':'==substr($repository,1,1) )
+		$repository = substr($repository,2);
+	$nonsignificant = array('repo');
+	$parts = explode('/', strtr($repository, "\\", "/"));
+	for ($i = count($parts)-1; $i>=0; $i--) {
+		if (strlen($parts[$i]) < 1) continue;
+		if (in_array(strtolower($parts[$i]), $nonsignificant)) continue;
+		return _cleanUpName($parts[$i]);
+	}
+	// unlikely but possible, best guess is full path
+	return _cleanUpName(trim(strtr($repository, "/\\", "--"),"-"));
+}
+
+function _cleanUpName($filename) {
+	return strtolower(strtr($filename, ' ', '_'));
 }
 
 /**
