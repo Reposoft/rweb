@@ -7,7 +7,7 @@
  */
 
 require('../../conf/Report.class.php');
-require('../../account/login.inc.php');
+require('../../open/SvnOpen.class.php');
 
 $report = new Report("Repos SVN client configuration");
 

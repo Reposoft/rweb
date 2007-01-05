@@ -21,6 +21,16 @@ require_once(dirname(__FILE__).'/simpletest/unit_tester.php');
 // using our own custom HtmlReporter, TestReporter and SelectiveReporter
 require_once(dirname(__FILE__).'/reporter.php');
 
+// don't force test cases to cooperate with repos.properties.php
+if (!function_exists('reportErrorText')) {
+	function reportErrorText($n, $message, $trace) {
+		if ($n!=2048) { // E_STRICT not defined in php 4
+			echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>");
+			exit;
+		}
+	}
+}
+
 $reporter = new HtmlReporter();
 function testrun(&$testcase) {
 	global $reporter;

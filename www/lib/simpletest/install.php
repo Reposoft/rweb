@@ -50,10 +50,11 @@ System::deleteFolder($dir.'/simpletest/test/');
 // As long as we want to be compatible with PHP 4, exceptions are syntax errors. remove the code from simpletest.
 $exceptionsfile = $dir.'/simpletest/exceptions.php';
 if (!file_exists($exceptionsfile)) trigger_error("Could not locate $exceptionsfile, download must have failed.");
-$fh = fopen($exceptionsfile, 'w');
-fwrite($fh, "<?php /* removed by repos because it was not PHP4 compatible */ ?>");
-fclose($fh);
-
+if (substr(phpversion(),0,1)=='4') {
+	$fh = fopen($exceptionsfile, 'w');
+	fwrite($fh, "<?php /* removed by repos because it was not PHP4 compatible */ ?>");
+	fclose($fh);
+}
 ?>
 </PRE>
 </BODY>
