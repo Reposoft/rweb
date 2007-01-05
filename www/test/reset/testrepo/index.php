@@ -63,7 +63,7 @@ $postcommit = 'post-commit';
 if (System::isWindows()) $postcommit .= '.bat';
 $rootfolder = dirname(dirname(dirname(dirname(__FILE__)))).'/_root/';
 copy("{$rootfolder}hooks/$postcommit", "{$repo}hooks/$postcommit");
-chmod("{$repo}hooks/$postcommit", '0764');
+chmod("{$repo}hooks/$postcommit", 0764);
 if (!file_exists($admin.'hooks.php')) {
 	copy("{$rootfolder}repos-config/hooks.php", $admin.'hooks.php');
 }

@@ -5,7 +5,7 @@
 <PRE>
 <?PHP
 if (file_exists('simpletest/')) {
-	echo 'Simpletest is already installed';
+	echo 'Simpletest is already installed, done.';
 	exit;
 }
 

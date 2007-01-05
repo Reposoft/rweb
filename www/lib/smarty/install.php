@@ -5,7 +5,7 @@
 <PRE>
 <?PHP
 if (file_exists('libs/')) {
-	echo 'Smarty libs already installed';
+	echo 'Smarty libs already installed, done.';
 	exit;
 }
 
