@@ -12,12 +12,17 @@
 <p>Repos components are as separated as possible. The unit tests for components are usually in the same folder as the code.</p>
 <p><a href="../">return to repos startpage</a></p>
 <h2>Automated test suites</h2>
+<p>The "run" links will execute the test suite in the current browser and post the results</p>
 <ul>
 <li><a href="browsercheck/" accesskey="b"><u>B</u>rowser test for new users</a></li>
-<li><a href="selenium/TestRunner.html?test=..%2FTestSystem.html&resultsUrl=..%2Fpostresults%2F" accesskey="c"><u>C</u>onfiguration test</a></li>
-<li><a href="selenium/TestRunner.html?test=..%2FTestSuite.html&resultsUrl=..%2Fpostresults%2F" accesskey="a"><u>A</u>utomated System Test</a></li>
-<li><a href="selenium/TestRunner.html?test=..%2FTestPHP.php&resultsUrl=..%2Fpostresults%2F" accesskey="p"><u>P</u>HP unit test suite</a></li>
-<li><a href="selenium/TestRunner.html?test=..%2F..%2Fscripts%2FTestJavascript.php&resultsUrl=..%2Fpostresults%2F" accesskey="j"><u>J</u>avascripts unit tests</a></li>
+<li><a href="selenium/TestRunner.html?test=..%2FTestSystem.html" accesskey="c"><u>C</u>onfiguration test</a>
+<small><a href="selenium/TestRunner.html?test=..%2FTestSystem.html&auto=true&resultsUrl=..%2Fpostresults%2F">run</a></small></li>
+<li><a href="selenium/TestRunner.html?test=..%2FTestSuite.html" accesskey="a"><u>A</u>utomated System Test</a>
+<small><a href="selenium/TestRunner.html?test=..%2FTestSuite.html&auto=true&resultsUrl=..%2Fpostresults%2F">run</a></small></li>
+<li><a href="selenium/TestRunner.html?test=..%2FTestPHP.php" accesskey="p"><u>P</u>HP unit test suite</a>
+<small><a href="selenium/TestRunner.html?test=..%2FTestPHP.php&auto=true&resultsUrl=..%2Fpostresults%2F">run</a></small></li>
+<li><a href="selenium/TestRunner.html?test=..%2F..%2Fscripts%2FTestJavascript.php" accesskey="j"><u>J</u>avascripts unit tests</a>
+<small><a href="selenium/TestRunner.html?test=..%2F..%2Fscripts%2FTestJavascript.php&auto=true&resultsUrl=..%2Fpostresults%2F">run</a></small></li>
 </ul>
 <p>Note that tests assume the web application to be located at <code>[current host]/repos/</code>.</p>
 <p>Some test cases reveal server details. They only modify the test repository,
