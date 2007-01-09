@@ -230,8 +230,9 @@ class Presentation {
 			$this->isRedirectBeforeDisplay()) {
 			// TODO how to get PHP errors and warnings into the result page instead of before the redirect
 			$file = tempnam(getTempDir('pages'),'');
+			$pagecontents = $this->fetch($resource_name, $cache_id, $compile_id);
 			$handle = fopen($file, "w");
-			fwrite($handle, $this->fetch($resource_name, $cache_id, $compile_id));
+			fwrite($handle, $pagecontents);
 			fclose($handle);
 			// should be handled by the root page, but on the same hostso getWebapp() can not be used
 			$nexturl = getWebapp() . 'view/?result=' . basename($file);
