@@ -156,44 +156,6 @@ function strEnds($str, $sub) { return (substr($str, strlen($str) - strlen($sub))
 function strContains($str, $sub) { return (strpos($str, $sub) !== false); }
 function strAfter($str, $sub) { return (substr($str, strpos($str, $sub) + strlen($sub))); }
 
-// ----- user settings, maybe this should be in account instead -----
-
-$possibleLocales = array(
-	'sv' => 'Svenska',
-	'en' => 'English',
-	'de' => 'Deutsch'
-	);
-	
-// locales might require setting a cookie, which requires headers,
-//  which must be sent before anything else, 
-//  so we run the function directly when the file is included
-repos_getUserLocale();
-	
-/**
- * Resolve locale code from: 1: GET, 2: SESSION, 3: browser
- * @return two letter language code, lower case
- */
-function repos_getUserLocale() {
-	global $possibleLocales;
-	static $locale = null;
-	if (!is_null($locale)) return $locale;
-	$locale = 'en'; 
-	if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) $locale = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-	if(array_key_exists(LOCALE_KEY,$_COOKIE)) $locale = $_COOKIE[LOCALE_KEY];
-	if(array_key_exists(LOCALE_KEY,$_GET)) $locale = $_GET[LOCALE_KEY];
-	// validate that the locale exists
-	if( !isset($possibleLocales[$locale]) ) {
-		$locale = array_shift(array_keys($possibleLocales));
-	}
-	// save and return
-	if (!isset($_COOKIE[LOCALE_KEY])) {
-		setcookie(LOCALE_KEY,$locale,0,'/');
-	} else {
-		$_COOKIE[LOCALE_KEY] = $locale;
-	}
-	return $locale;	
-}
-
 // ----- logic for the repos naming conventions for path -----
 
 /**
@@ -582,9 +544,10 @@ function _chmodWritable($absolutePath) {
  */
 function _authorizeFilesystemModify($path) {
 	// test and demo repository
-	$home = getConfig('home_path');
-	if ($home && getConfig('allow_reset')==1) {
-		if (strBegins($path, $home)) return true;
+	if (getConfig('allow_reset')==1) {
+		if (strBegins($path, getConfig('admin_folder'))) return true;
+		if (strBegins($path, getConfig('backup_folder'))) return true;
+		if (strBegins($path, getConfig('local_path'))) return true;
 	}
 	// generic rules
 	if (!isAbsolute($path)) {

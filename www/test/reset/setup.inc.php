@@ -22,12 +22,20 @@ $report = new Report('set up test repository');
 // can not use the repos temp dir because it can be deleted anytime
 //$test = getTempDir($test_repository_folder);
 //$test = getSystemTempDir().$test_repository_folder.'/';
-$test = getConfig('home_path');
+$allow = getConfig('allow_reset');
+if ($allow != 1) $report->fatal('Not allowed to reset this repository. Set allow_reset = 1 in config file');
+
+$repo = getConfig('local_path');
+$admin = getConfig('admin_folder');
+$backup = getConfig('backup_folder');
+
+$userfile = $admin . getConfig('users_file');
+$aclfile = $admin . getConfig('access_file');
 
 // the apache config file to include from the subversion host
 // generated config does not contain a VirtualHost directive,
 //  so the file must be included from within a virtual host (or the default host)
-$conffile = $test . "admin/testrepo.conf";
+$conffile = $admin . "testrepo.conf";
 
 # environment setup, should be valid for both 'svn' and 'svnadmin'
 $here=dirname(__FILE__);

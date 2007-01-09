@@ -56,13 +56,15 @@ function dump($repository, $backupPath, $fileprefix) {
 }
 
 /**
- * @param backupPath no tailing slash
+ * @param String $backupPath the folder that contains backup file, with trailing slash
+ * @param String $repository the local repository path, with trailing slash
+ * @param String $fileprefix first part of the filename of dumpfiles
  * @return true if successful, in which case there is a $backupPath/$fileprefix[revisions].svndump.gz file
  */
 function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) {
 	$extension = ".svndump";
 	$filename = getFilename( $fileprefix, $fromrev, $torev ) . $extension;
-	$path = $backupPath . DIRECTORY_SEPARATOR . $filename;
+	$path = $backupPath . $filename;
 	$command = getCommand("svnadmin") . " dump $repository --revision $fromrev:$torev --incremental --deltas";
 	$tmpfile = tempnam(TEMP_DIR, "svn");
 	if ( isWindows() )
@@ -152,7 +154,7 @@ function verifyMD5($path) {
 	$ok = true;
 	foreach ( $sums as $file => $md5 ) {
 		if ( ! file_exists( $path . DIRECTORY_SEPARATOR . $file ) ) {
-			error( "File $file listed in MD5SUMS file does not exist in $path" );
+			error( "File $file listed in MD5 sums file does not exist in $path" );
 			continue;
 		}
 		$sum = md5_file( $path . DIRECTORY_SEPARATOR . $file );
@@ -183,12 +185,21 @@ function verifyFileMD5($path) {
 }
 
 /**
+ * @param String backup folder with trailing slash
+ * @return String the full path to the default MD5-sums file
+ */
+function _getMD5File($folder) {
+	// windows applications like md5summer expect a file extension
+	return $folder . "repos-backup.md5";
+}
+
+/**
  * Get stored MD5 sums for directory as array
- * @param dir PAth with no tailing slash.
+ * @param dir Path with no trailing slash.
  * @return alla MD5 sums in file as array filename=>md5sum
  */
 function getMD5sums($dir) {
-	$sumsfile = $dir . DIRECTORY_SEPARATOR . "MD5SUMS";
+	$sumsfile = _getMD5File($dir . DIRECTORY_SEPARATOR);
 	if ( ! file_exists( $sumsfile ) )
 		error( "There is no MD5SUMS file in directory $dir" );
 	$sums = file( $sumsfile );
@@ -206,7 +217,7 @@ function getMD5sums($dir) {
  * @return the md5 sum
  */
 function createMD5($file) {
-	$sumsfile = dirname($file) . "/MD5SUMS";
+	$sumsfile = _getMD5File(dirname($file) . "/");
 	if ( ! file_exists($file) )
 		fatal("File '$file' does not exist. Cannot do md5sum.");
 	$hash = md5_file( $file );

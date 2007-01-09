@@ -13,18 +13,8 @@
 
 require(dirname(dirname(__FILE__)).'/setup.inc.php');
 
-// this script has been modified so that it can reset an existing repository
-// without a complete delete of its home path
-
-$repo = $test . "repo/";
-$admin = $test . "admin/";
-$backup = $test . "backup/";
-
-$userfile = $test . "admin/repos-users";
-$aclfile = $test . "admin/repos-access";
-
 // the working copy where the initial state is created
-$wc = $test . "wc/";
+$wc = getTempDir('test-wc');
 
 if (file_exists($repo)) {
 	$report->info("Deleting old test repository folder $repo");
@@ -40,7 +30,6 @@ if (file_exists($backup)) {
 }
 
 $report->info("create test repository folder with repo/ admin/ and backup/");
-if (!file_exists($test)) createFolder($test);
 if (!file_exists($admin)) {
 	createFolder($admin);
 } else {
@@ -138,7 +127,7 @@ $conf = "
 <Location $conflocation>
 DAV svn
 SVNIndexXSLT \"/repos/view/repos.xsl\"
-SVNPath {$test}repo/
+SVNPath {$repo}
 SVNAutoversioning on
 # user accounts from password file
 AuthName \"Test repository. Contents might be reset at any time.\"
@@ -319,6 +308,9 @@ setup_svn("import -m \"Created sample images\" $importsFolder/images \"file:///{
 
 // setup done
 $report->info('<a href="'.$conflocation.'/test/trunk/">Log in to test account</a>');
+
+// clean up
+deleteFolder($wc);
 
 $report->display();
 ?>

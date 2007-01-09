@@ -1,6 +1,7 @@
 <?php
 /**
- * Administration from command line
+ * Administration from command line.
+ * All paths arguments use native directory separators and may or may not end with one.
  * 
  * @package admin
  */
@@ -12,37 +13,36 @@ define("EXIT_ABNORMAL", 1);
 // default return code is 0, used by the exit call after the commands 
 $ok = true;
 
-// Command line mode
 $args = count( $argv ) - 1;
 if ( $args == 0 || eregi("-*help",$argv[1])>0 ) {
-	echo "\n";
-	echo "Repos.se administration, backup script version " . BACKUP_SCRIPT_VERSION . "\n";
-	echo "\n";
-	echo "Usage:\n";
-	echo "php " . __FILE__ . " command [parameters]\n";
-	echo "Supported commands are: dump, load, verify, verifyMD5\n";
-	echo "To get syntax help, write only the command name.";
-	echo "\n";
+	$report->info("");
+	$report->info("Repos.se administration, backup script version " . BACKUP_SCRIPT_VERSION);
+	$report->info("");
+	$report->info("Usage:");
+	$report->info("php " . __FILE__ . " command [parameters]");
+	$report->info("Supported commands are: dump, load, verify, verifyMD5");
+	$report->info("To get syntax help, write only the command name.");
+	$report->info("");
 } elseif ( $argv[1] == "dump" ) {
 	if ($args != 3 || eregi("-*help",$argv[2])>0 )
-		echo "Usage: dump repository-path backup-path\nPaths should have no tailing slash\n";
+		$report->info("Usage: dump repository-path backup-path");
 	else
-		dump($argv[2], $argv[3], getPrefix($argv[2]));
+		dump(readPath($argv[2]), readPath($argv[3]), getPrefix($argv[2]));
 } elseif ( $argv[1] == "load" ) {
 	if ($args < 3 || eregi("-*help",$argv[2])>0 )
-		echo "Load backup files into existing repository.\nUsage: load repository-path backup-path [prefix]\nDefault prefix is derived from repository path.\nPaths should have no tailing slash\n";
+		$report->info("Load backup files into existing repository.\nUsage: load repository-path backup-path [prefix]\nDefault prefix is derived from repository path.");
 	else
-		load($argv[2], $argv[3], isset($argv[4]) ? $argv[4] : getPrefix($argv[2]));
+		load(readPath($argv[2]), readPath($argv[3]), isset($argv[4]) ? $argv[4] : getPrefix($argv[2]));
 } elseif ( $argv[1] == "verify" ) {
 	if ($args != 2 || eregi("-*help",$argv[2])>0 )
-		echo "Verify repository.\nUsage: verify repository-path\nPaths should have no tailing slash\n";
+		$report->info("Verify repository.\nUsage: verify repository-path");
 	else
-		verify($argv[2]);
+		verify(readPath($argv[2]));
 } elseif ( $argv[1] == "verifyMD5" ) {
 	if ($args != 2 || eregi("-*help",$argv[2])>0 )
-		echo "Verify that each entry in MD5SUMS file has a matching file.\nUsage: verifyMD5 backup-path\nPaths should have no tailing slash\n Exit code 0 <=> all checksums OK.";
+		$report->info("Verify that each entry in MD5 sums file has a matching file.\nUsage: verifyMD5 backup-path\n Exit code 0 <=> all checksums OK.");
 	else
-		$ok = verifyMD5($argv[2]);
+		$ok = verifyMD5(readPath($argv[2]));
 } elseif ( $argv[1] == "htmlStart" ) {
 	// admin feature. Print headers to show the command output as html file.
 	html_start(date("Y-m-d H:i:s"));
@@ -52,5 +52,9 @@ if ($ok)
 	exit (EXIT_OK);
 else
 	exit (EXIT_ABNORMAL);
+	
+function readPath($argument) {
+	return rtrim(rtrim($argument, '/'),"\\").DIRECTORY_SEPARATOR;
+}
 
 ?>

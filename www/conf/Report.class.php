@@ -15,6 +15,11 @@
 
 // do not force the use of shared functions //require_once(dirname(__FILE__).'/repos.properties.php');
 
+// same function as in Presentation
+function setupResponse() {
+	// no headers needed, might be in offline mode
+}
+
 // reports may be long running
 set_time_limit(60*5);
 
@@ -70,6 +75,7 @@ class Report {
 		} else {
 			$this->offline = $plaintext;
 		}
+		setupResponse();
 		$this->_pageStart($title);
 	}
 	

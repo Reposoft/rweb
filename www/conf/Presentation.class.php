@@ -11,6 +11,12 @@
  * @see Report, the class used for unit tests and administration reports. Does not require repos.properties.php.
  */
 
+// function called before any other output or headers
+// TODO setHeader, setContentType, getContentType - same functions as in Report.class.php, define constants ...
+function setupResponse() {
+	repos_getUserLocale();
+}
+
 /**
  * All user presentation pages need repos.properties.php, but test pages should be able to mock it
  */
@@ -26,8 +32,6 @@ header('Content-type: text/html; charset=utf-8');
 // don't set the content type headers in the HTML, because then we can't change to xhtml+xml later
 }
 
-// TODO setHeader, setContentType, getContentType - same functions as in Report.class.php, define constants ...
-
 // -------- user settings from cookies ---------
 
 function repos_getUserTheme($user = '') {
@@ -35,6 +39,37 @@ function repos_getUserTheme($user = '') {
 	$style = $_COOKIE[THEME_KEY];
 	if ($style=='repos') return ''; // default stylesheet title is 'repos'
 	return "themes/$style/";
+}
+
+$possibleLocales = array(
+	'sv' => 'Svenska',
+	'en' => 'English',
+	'de' => 'Deutsch'
+	);
+	
+/**
+ * Resolve locale code from: 1: GET, 2: SESSION, 3: browser
+ * @return two letter language code, lower case
+ */
+function repos_getUserLocale() {
+	global $possibleLocales;
+	static $locale = null;
+	if (!is_null($locale)) return $locale;
+	$locale = 'en'; 
+	if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) $locale = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+	if(array_key_exists(LOCALE_KEY,$_COOKIE)) $locale = $_COOKIE[LOCALE_KEY];
+	if(array_key_exists(LOCALE_KEY,$_GET)) $locale = $_GET[LOCALE_KEY];
+	// validate that the locale exists
+	if( !isset($possibleLocales[$locale]) ) {
+		$locale = array_shift(array_keys($possibleLocales));
+	}
+	// save and return
+	if (!isset($_COOKIE[LOCALE_KEY])) {
+		setcookie(LOCALE_KEY,$locale,0,'/');
+	} else {
+		$_COOKIE[LOCALE_KEY] = $locale;
+	}
+	return $locale;	
 }
 
 // -------- the template class ------------
@@ -77,6 +112,8 @@ class Presentation {
 	
 	// constructor
 	function Presentation() {
+		setupResponse();
+		
 		$this->smarty = new Smarty();
 		
 		$this->smarty->caching = CACHING;
