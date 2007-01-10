@@ -8,7 +8,6 @@
 
 // default configuration includes, the way they should be referenced in php files
 require_once( dirname(__FILE__) . '/repos.properties.php' );
-require_once( dirname(dirname(__FILE__)) . '/account/login.inc.php' );
 require_once( dirname(__FILE__) . '/Command.class.php' );
 
 // configuration index settings
@@ -18,13 +17,12 @@ $sections = array(
 	'requiredFiles' => 'Checking configuration paths',
 	'dependencies' => 'Required command line tools',
 	'repository' => 'Checking local repository',
-	'requiredUrls' => 'Checking URLs',
 	'localeSettings' => 'Checking locales for the web server\'s command line',
 	// disabled becaus it contains server data // 'debug' => 'Debug info'
 	);
 // validating configuration
 $links = array(
-	'../logout.php' => 'Log out',
+	'/?logout' => 'Log out',
 	'../admin/configure/' => 'System configuration help',
 	'../admin/' => 'Administration',
 	'../test/' => 'Automated tests',
@@ -42,11 +40,11 @@ $requiredConfig = array(
 $requiredFiles = array(
 	getConfig('admin_folder') . getConfig('users_file') => 'File for usernames and passwords',
 	getConfig('admin_folder') . getConfig('access_file') => 'File for subversion access control',
-	getConfig('admin_folder') . getConfig('export_file') => 'File for repository export paths',
+	//not used//getConfig('admin_folder') . getConfig('export_file') => 'File for repository export paths',
 	getConfig('backup_folder') => 'Local path for storage of backup'
 	);
 $dependencies = array(
-	'svn' => '--version --config-dir '.SVN_CONFIG_DIR,
+	'svn' => '--version ', //--config-dir '.SVN_CONFIG_DIR,
 	'svnlook' => '--version',
 	'svnadmin' => '--version',
 	'gzip' => '--version',
@@ -56,20 +54,6 @@ $dependencies = array(
 $repository = array(
 	getCommand('svnlook') . ' youngest ' . getConfig('local_path') => "Local path contains repository revision: "
 );
-
-
-// checking urls needed for repository access
-$rurl = getRepository().'/';
-$realm = $rurl;
-if (strlen($realm)<1) trigger_error('repo_realm not set in configuration', E_USER_WARNING);
-//$aurl = str_replace("://","://" . getReposUser() . ":" .  _getReposPass() . "@", getRepository());
-//$uurl = $aurl.'/'.getReposUser();
-//$lurl = ereg_replace("://[^/<>[:space:]]+[[:alnum:]]/","://localhost/", getRepository());
-if ( getWebapp()==getRepository() )
-	echo "Warning: repos_web is same as repository - mixing static resources and repository";
-	
-$requiredUrls = array( getWebapp() => 'Acces to static contents ' . getWebapp());
-$requiredUrls[$rurl] = 'Anonymous acces to the repository ' . getRepository() . '. Note that this should be the same address locally as external, same host as ServerName in apache.';
 
 // run the diagnostics page
 html_start();	
@@ -101,7 +85,7 @@ function html_start($title='Repos configuration info') {
 }
 
 function html_end() {
-	echo "</body></html>";
+	echo "<hr/></body></html>";
 }
 
 function line_start($text='') {
@@ -205,30 +189,25 @@ function repository() {
 	}
 }
 
-function requiredUrls() {
-	global $requiredUrls;
-	foreach ( $requiredUrls as $url => $descr ) {
-		line_start($descr);
-		$headers = getHttpHeaders($url);
-		$s = getHttpStatusFromHeader($headers[0]);
-		if (strEnds($url, '/repos/')) {
-			if ($s == 200) {
-				sayOK($headers[0]);
-			} else {
-				sayFailed($headers[0]." (Expecting HTTP status 200 for the webapp)");
-			}	
-		} else {
-			if ($s == 401) {
-				sayOK($headers[0]);
-			} else {
-				sayFailed($headers[0]." (Should be 401 Authorization required)");
+function localeSettings() {
+	if(System::isWindows()) {
+		exec('mode con codepage', $localeOutput);
+		line_start('Windows console');
+		$supported = array(850, 1252);
+		$pattern = '/\s*(.*):\s*(\d+)\s*/';
+		foreach ($localeOutput as $line) {
+			if (preg_match($pattern, $line, $matches)) {
+				line_start($matches[1]);
+				$codepage = $matches[2];
+				if (in_array($codepage, $supported)) {
+					sayOK($codepage);
+				} else {
+					sayFailed($codepage);
+				}
 			}
 		}
-		line_end();
+		return;
 	}
-}
-
-function localeSettings() {
 	exec('locale', $localeOutput);
 	$locales = Array();
 	foreach ($localeOutput as $locale) {
@@ -241,33 +220,6 @@ function localeSettings() {
 		}
 		line_end();
 	}
-}
-
-// Debug output, does nothing
-function debug() {
-	echo "<pre>\n";
-	echo "==== Test retrieval of credentials ===";
-	echo "\nUsername = ";
-	//echo $repos_authentication['user'];
-	echo getReposUser();
-	echo "\nPassword = ";
-	echo str_repeat("*", strlen(_getReposPass()));
-	//echo $repos_authentication['pass'];
-	echo "\nBASIC string = ";
-	echo getReposAuth();
-	//echo $repos_authentication['auth'];
-	echo "\n";
-	// Display info about current repos configuration
-	echo "\n==== Configuration file ===\n";
-	global $repos_config;
-	print_r($repos_config);
-	echo "\n==== Server variables ===\n";
-	print_r($_SERVER);
-	echo "\n==== Command line environment ===\n";
-	$command = new Command('env');
-	$command->exec();
-	print_r($command->output);
-	echo "</pre>\n";
 }
 
 ?>

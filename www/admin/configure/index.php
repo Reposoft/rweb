@@ -6,7 +6,7 @@
  */
 
 // svn propset svn:keywords "Rev" configuration.php
-$rev = strtr("$Rev$",'$',' ');
+$rev = strtr('$Rev$','$',' ');
 require("../../conf/repos.properties.php" );
 
 // TODO port this to Report presentation
