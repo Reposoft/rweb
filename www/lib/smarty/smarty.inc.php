@@ -1,7 +1,8 @@
 <?php
 // this file is not needed anymore. simply instantiate Presentation.
 if (!file_exists(dirname(__FILE__).'/libs/')) {
-	trigger_error("Smarty 'libs' folder has not been installed");
+	$pathToLib = repos_getSelfUrl() . 'repos/lib';
+	trigger_error("Smarty 'libs' folder has not been installed. Go to $pathToLib to install it.");
 }
 require(dirname(__FILE__).'/libs/Smarty.class.php');
 
