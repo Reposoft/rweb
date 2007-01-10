@@ -110,17 +110,23 @@ function repos_runCommand($commandName, $argumentsString) {
  */
 function _repos_getFullCommand($commandName, $argumentsString) {
 	$run = getCommand($commandName);
+	// detect output redirection to file (path must be surrounded with quotes)
+	$tofile = preg_match('/^.*>>?\s+".*"\s*$/', $argumentsString);
+	$redirect = ''; // extra output redirection
+	if (!$tofile) $redirect = ' 2>&1';
+	// take care of encoding and wrapping, arguments have already been escaped
 	$argumentsString = toShellEncoding($argumentsString);
 	$wrapper = _repos_getScriptWrapper();
 	if (strlen($wrapper)>0) {
 		// make one argument (to the wrapper) of the entire command
 		// the arguments in the argumentsString are already escaped and surrounded with quoutes where needed
 		// existing single quotes must be adapted for shell
-		$run = " '".$run.' '.str_replace("'","'\\''",$argumentsString).' 2>&1'."'";
+		$run = " '".$run.' '.str_replace("'","'\\''",$argumentsString).$redirect."'";
 	} else {
 		$run .= ' '.$argumentsString;
 	}
-	return "$wrapper$run 2>&1";
+	// don't redirect output if > or >>, because that is expected to be stdout
+	return "$wrapper$run$redirect";
 }
 
 /**
@@ -157,7 +163,7 @@ class Command {
 	
 	// after exec
 	var $output;
-	var $exitcode;
+	var $exitcode = null;
 	
 	/**
 	 * @param String $commandName the command without arguments, for example "grep" or "ls"
@@ -196,6 +202,19 @@ class Command {
 	 */
 	function addArg($argument) {
 		$this->_addArgument($this->_escapeArgument($argument));
+	}
+	
+	/**
+	 * Redirect STDOUT to a file instead of output to this instance.
+	 * Using an output file, STDERR will not be accessible because
+	 * no other output redirection will be used with the command.
+	 *
+	 * @param String $absolutePath full path to the writable file (or nonexisting file in writable folder)
+	 * @param boolean $append set to true to use >> instead of >
+	 */
+	function setOutputToFile($absolutePath, $append=false) {
+		// the quotes are expected by run method to detect output redirection
+		$this->addArgOption($append ? '>>' : '>', $absolutePath, true);
 	}
 	
 	/**
@@ -255,10 +274,12 @@ class Command {
 	// --- run when exec has completed ---
 	
 	function getExitcode() {
+		if (is_null($this->exitcode)) trigger_error('Command not executed yet', E_USER_ERROR);
 		return $this->exitcode;
 	}
 	
 	function getOutput() {
+		if (is_null($this->exitcode)) trigger_error('Command not executed yet', E_USER_ERROR);
 		return $this->output;
 	}
 	

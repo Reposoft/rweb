@@ -6,9 +6,11 @@
  */
 
 require( dirname(__FILE__) . '/admin.inc.php' );
+require( dirname(dirname(__FILE__)) . '/conf/Command.class.php' );
 
-define('TEMP_DIR',"/tmp");
-define('BACKUP_SCRIPT_VERSION',"\$LastChangedRevision$");
+define('TEMP_DIR',getTempDir('backup'));
+define('BACKUP_SCRIPT_VERSION','$LastChangedRevision$');
+define('BACKUP_SIZE', 100*1024*1024); // recommended unpacked size of dump files
 
 /**
  * Create a repository in the given local path
@@ -56,6 +58,9 @@ function dump($repository, $backupPath, $fileprefix) {
 }
 
 /**
+ * Creates backup archive(s) for a revision interval in the repository.
+ * When the dumpfile size exceeds BACKUP_SIZE, the current contents will be
+ * compressed and a new file is started.
  * @param String $backupPath the folder that contains backup file, with trailing slash
  * @param String $repository the local repository path, with trailing slash
  * @param String $fileprefix first part of the filename of dumpfiles
@@ -63,25 +68,35 @@ function dump($repository, $backupPath, $fileprefix) {
  */
 function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) {
 	$extension = ".svndump";
-	$filename = getFilename( $fileprefix, $fromrev, $torev ) . $extension;
-	$path = $backupPath . $filename;
-	$command = getCommand("svnadmin") . " dump $repository --revision $fromrev:$torev --incremental --deltas";
-	$tmpfile = tempnam(TEMP_DIR, "svn");
-	if ( isWindows() )
-		$command .=  " > $tmpfile";
-	else
-		$command .= " | gzip -9 > $path.gz";
-	$output = array();
-	$return = 0;
-	exec($command, $output, $return);
-	if ( $return != 0 )
-		return false;
-	// in windows file has not been compressed in the first command
-	if ( isWindows() ) {
-		$success = gzipInternal($tmpfile,"$path.gz");
-		deleteFile(toPath($tmpfile));
-		if ( ! $success ) return false;
+	// get a new empty file
+	$tmpfile = tempnam(rtrim(TEMP_DIR,'/'), "svn");
+	touch($tmpfile);
+	// dump every revision separately and check size after each operation
+	for ($i = $fromrev; $i<=$torev; $i++) {
+		$command = new Command('svnadmin');
+		$command->addArgOption('dump');
+		$command->addArgOption('--revision '.$i);
+		$command->addArgOption('--incremental');
+		//not wanted, see svnbook//$command->addArgOption('--deltas');
+		$command->addArg($repository);
+		$command->setOutputToFile($tmpfile, true);
+		$command->exec();
+		if ($command->getExitcode()) fatal("Could not dump repository contents.");
+		clearstatcache(); // so that size is not cached
+		$size = filesize($tmpfile);
+		if ($size > BACKUP_SIZE && $i < $torev) {
+			// split into several dumpfiles
+			$filename = getFilename( $fileprefix, $fromrev, $torev ) . $extension;
+			return packageDumpfile($tmpfile, $backupPath.getFilename($fileprefix, $fromrev, $i).$extension) 
+				&& dumpIncrement($backupPath, $repository, $fileprefix, $i+1, $torev);
+		}
 	}
+	return packageDumpfile($tmpfile, $backupPath.getFilename($fileprefix, $fromrev, $torev).$extension);
+}
+
+function packageDumpfile($tmpfile, $path) {
+	$success = gzipInternal($tmpfile,"$path.gz");
+	deleteFile(toPath($tmpfile));
 	createMD5("$path.gz");
 	return true;
 }
@@ -240,7 +255,7 @@ function loadDumpfile($file,$loadcommand) {
 		return 1;
 	}
 	$command = '';
-	$tmpfile = tempnam(TEMP_DIR, "svn");
+	$tmpfile = toPath(tempnam(rtrim(TEMP_DIR,'/'), "svn"));
 	if ( isWindows() ) {
 		if ( ! gunzipInternal($file,$tmpfile) ) fatal("Could not extract file $file");
 		$command = "$loadcommand < $tmpfile";
@@ -260,7 +275,7 @@ function loadDumpfile($file,$loadcommand) {
  * @return true if successful, meaning there is now another file. false on any error
  */
 function gunzipInternal($compressedfile, $tofile) {
-	$fp = fopen($tofile, "w") ;
+	$fp = fopen($tofile, "w");
 	if ( ! $fp ) return false;
 	$zp = gzopen($compressedfile, "r");
 	$sum = 0;

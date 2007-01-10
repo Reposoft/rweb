@@ -24,10 +24,12 @@ if (file_exists($repo)) {
 	deleteFolder($repo);
 }
 
+/* not wanted, there is a risk that this operation is done by mistake (and allowed in config by mistake)
 if (file_exists($backup)) {
 	$report->info("Deleting old test backup folder $backup");
 	deleteFolder($backup);
 }
+*/
 
 $report->info("create test repository folder with repo/ admin/ and backup/");
 if (!file_exists($admin)) {

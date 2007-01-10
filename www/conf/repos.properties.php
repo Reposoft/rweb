@@ -374,7 +374,7 @@ function getSystemTempDir() {
  * Manages the common temp dir for repos-php. Temp is organized in subfolders per operation.
  * This method returns an existing temp folder; to get a new empty folder use getTempnamDir.
  * @param subdir optional category within the temp folder, no slashes
- * @return absolute path to the temp dir, ending with slash or backslash
+ * @return absolute path to the temp dir, ending with slash
  */
 function getTempDir($subdir=null) {
 	// Get temporary directory
