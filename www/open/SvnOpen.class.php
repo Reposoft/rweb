@@ -140,6 +140,7 @@ class RevisionRule extends Rule {
 	}
 	
 	function valid($value) {
+		if (!$value) return true; // Use Validation::expect to require a valud
 		if (is_numeric($value) && $value >=0 ) return true;
 		if ($value == HEAD) return true;
 		if (strpos($value,'{')==0 && strrpos($value, '}')==strlen($value)-1) return true;
@@ -232,6 +233,10 @@ class SvnOpen {
 	
 	function exec() {
 		return $this->command->exec();
+	}
+	
+	function passthru() {
+		return $this->command->passthru();
 	}
 	
 	function getExitcode() {

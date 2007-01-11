@@ -259,7 +259,7 @@ class Command {
 	 */
 	function passthru() {
 		$this->output = array();
-		$this->exitcode = repos_passthruCommand($this->operation, $this->_getArgumenstString());
+		$this->exitcode = repos_passthruCommand($this->operation, $this->_getArgumentsString());
 		return $this->exitcode;
 	}
 	

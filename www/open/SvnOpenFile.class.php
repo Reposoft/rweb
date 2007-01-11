@@ -101,6 +101,7 @@ class SvnOpenFile {
 	 * @return SvnOpenFile
 	 */
 	function SvnOpenFile($path, $revision=HEAD) {
+		if ($revision == null) $revision = HEAD; // allow value directly from RevisionRule->getValue
 		$this->path = $path;
 		$this->url = SvnOpenFile::getRepository().$path;
 		$this->_revision = $revision;
@@ -160,7 +161,7 @@ class SvnOpenFile {
 	}
 	
 	function getFolderUrl() {
-		return $this->getRepository().$this->getFolder();
+		return $this->getRepository().$this->getFolderPath();
 	}
 
 	/**
@@ -193,11 +194,11 @@ class SvnOpenFile {
 	function isWritable() {
 		if (!$this->isLatestRevision()) return false;
 		// TODO what method should be used?
-		// curl -I -u test:test -X CHECKOUT http://localhost/testrepo/demoproject/trunk/readonly/
+		// curl -I -u test:test -X PROPPATCH http://localhost/testrepo/demoproject/trunk/readonly/
 		$r = new ServiceRequest($this->getUrl());
-		$r->setCustomHttpMethod('PUT');
+		$r->setCustomHttpMethod('PROPPATCH');
 		$r->exec();
-		return ($r->getStatus() != 403);
+		return ($r->getStatus() != 403); // 400 if user has write access, so no modifications made
 	}
 	
 	/**
@@ -366,9 +367,14 @@ class SvnOpenFile {
 	/**
 	 * Sends this file without headers, for embedding into page.
 	 * If HTML or XML is to be used in a text area, it should be read with this method.
+	 * This method assumes that access has been verified already, so it simply runs the 'cat' command.
 	 */
 	function sendInline() {
-		// where do we get the current content type header? just assume that it is correct? throw error if not correct?
+		$open = new SvnOpen('cat');
+		$open->addArgUrlPeg($this->getUrl(), $this->getRevision());
+		if ($open->passthru()) {
+			// failed, but there is nothing we can do about that now
+		}
 	}
 	
 	/**
