@@ -10,8 +10,7 @@
  * 
  * @package account
  */
-// 
-// 
+header('Cache-Control: no-cache');
 
 require( dirname(dirname(dirname(__FILE__))) . "/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__)) . "/login.inc.php" );

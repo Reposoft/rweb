@@ -31,10 +31,10 @@ function details_read() {
 function details_write(e, entry) {
 	entry.each(function(){
 		$('.path', e).append($('name', this).text());
-		var readonly = details_isReadOnly(this);
-		if (readonly) {
-			e.addClass('readonly');
-			$('.username', e).append('(read only)'); // temporary solution
+		var noaccess = details_isNoaccess(this);
+		if (noaccess) {
+			e.addClass('noaccess');
+			$('.username', e).append('(no access)'); // temporary solution
 		} else {
 			$('.username', e).append($('commit/author', this).text());
 			$('.datetime', e).append($('commit/date', this).text());
@@ -91,7 +91,7 @@ function details_isLocked(entry) {
 	return $('lock', entry).size() > 0;
 }
 
-function details_isReadOnly(entry) {
+function details_isNoaccess(entry) {
 	return $('commit/author', entry).size() == 0;
 }
 

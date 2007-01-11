@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>View {=$file.filename}</title>
+<!--{$head}-->
+</head>
+<body>
+<!--  some actions can be set to display:none on repository page, because they are here instead -->
+<h1><span class="path">{=$file.filename}</span> <span class="revision">{=$file.revision}</span></h1>
+<div id="actions">
+<!--{if $file.isLatestRevision}-->
+<p>
+This is the current version of the file,
+{=if $file.isWritable} which you can also <a href="../edit/?target={=$target}&rev={=$rev}">edit</a>.
+{=else} and you have read access only.
+{=/if}
+{=if $file.isLockedByThisUser} The file is currently locked by you, so other users can not edit it.{=/if}
+{=if $file.isLockedBySomeoneElse} The file is currently locked by 
+<span class="username">{=$file.lockOwner}</span>, so you can not edit it.{=/if}
+</p>
+<!--{else}-->
+<p>This is an old version of the file. You can also <a href="?target={=$target}">view current version</a>.</p>
+<!--{/if}-->
+<h2>View file</h2>
+<p>
+{=if $file.size gt 102400}
+This file is bigger than 100 kb, so we recommend <a href="download/?target={=$target}&rev={=$rev}">dowload</a>.
+{=elseif $file.type eq 'text/html'}
+This is an HTML file, so we recommend <a href="show/?target={=$target}&rev={=$rev}">View in browser</a>.
+{=elseif $file.typeDiscrete eq 'text'}
+This is file is plain text, so we recommend <a href="read/?target={=$target}&rev={=$rev}">Read in page</a>.
+{=/if}
+</p>
+<h3><a href="show/?target={=$target}&rev={=$rev}">View in browser</a></h3>
+<p>This shows the file in the current window. It is good for text files, HTML and images.
+Depending on your browser, it may also work for file types like pdf, documents and spreadsheets.</p>
+<h3><a href="download/?target={=$target}&rev={=$rev}">Dowload</a></h3>
+<p>Download this file to your hard drive. The revision number {=$file.revision}
+will be appended to the filename, so you know which version it is.</p>
+<h3><a href="read/?target={=$target}&rev={=$rev}">Read in page</a></h3>
+<p>Read the file's contents in a web page. This is like View in browser, but with menus.
+This works for text files. If the file is a binary file, like a word document,
+you will see only a long line of characters.</p>
+<h3><a href="log/?target={=$target}&rev={=$rev}">View history</a></h3>
+<p>View the commits that this file has been involved in.</p>
+<h3>Other methods</h3>
+<!--{if $file.isLatestRevision}-->
+<p>Many modern programs can use URLs to open files directly from the net. The address (the absolute URL) is:
+<br /><code>{=$file.url}</code></p>
+<p>Office documents can usually be edited directly.
+Paste the URL into the "open" dialog in word or excel, 
+and when you save it will automatically be committed to repository.</p>
+<!--{else}-->
+This is not the latest version of the file, so you can not use the URL to access it.
+You need to use a version control (Subversion) client like Repos.
+<!--{/if}-->
+</div>
+<div id="filedetails">
+<h2>File details</h2>
+<p>Content type: <span>{=$file.type}</span></p>
+<p>Size in bytes: <span class="filesize">{=$file.size}</span></p>
+<p>Version number: <span class="revision">{=$file.revision}</span></p>
+<p>Last edited by: <span class="username">{=$file.author}</span></p>
+<p>Last edited at: <span class="datetime">{=$file.date}</span></p>
+</div>
+</body>
+</html>

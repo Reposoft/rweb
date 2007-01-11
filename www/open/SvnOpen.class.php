@@ -179,6 +179,15 @@ class SvnOpen {
 		if ($asXml) $this->command->addArgOption('--xml');
 	}
 	
+	/**
+	 * All svn requests are made as the current authenticated user.
+	 * @return String username
+	 * @static 
+	 */
+	function getAuthenticatedUser() {
+		return getReposUser();
+	}
+	
 	function _addSvnOptions() {
 		$this->command->addArgOption(login_getSvnSwitches());
 	}

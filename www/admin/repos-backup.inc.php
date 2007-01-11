@@ -94,10 +94,31 @@ function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) 
 	return packageDumpfile($tmpfile, $backupPath.getFilename($fileprefix, $fromrev, $torev).$extension);
 }
 
-function packageDumpfile($tmpfile, $path) {
-	$success = gzipInternal($tmpfile,"$path.gz");
-	deleteFile(toPath($tmpfile));
+/**
+ * Compress dumpfile and validate that the compressed contents are same as the original file.
+ *
+ * @param unknown_type $tmpfile
+ * @param unknown_type $path
+ * @return unknown
+ */
+function packageDumpfile($tempfile, $path) {
+	clearstatcache();
+	$size = filesize($tempfile);
+	$originalmd5 = _calculateMD5($tempfile);
+	// the only thing we really need to do, rest is verification
+	$pack = gzipInternal($tempfile,"$path.gz");
+	if (!$pack) fatal("Backup file $tempfile is empty or could not be compressed to $path.gz.");
+	if ($size != $pack) warn("Dumpfile is $size bytes but wrote $pack to compressed target.");
 	createMD5("$path.gz");
+	// uncompress to validate
+	$back = gunzipInternal("$path.gz", $tempfile);
+	if (!$back) error("Could not unpack the compressed file $path.gz");
+	if ($size != $back) warn("Dumpfile was $size bytes but uncompressed contents are $back.");
+	$samemd5 = _calculateMD5($tempfile);
+	if ($originalmd5 != $samemd5) error("MD5 sum for original contents does not match unpacked.");
+	info("Compressed ".basename($path)." with original MD5 sum ".$originalmd5);
+	// done
+	deleteFile(toPath($tempfile));
 	return true;
 }
 
@@ -235,13 +256,17 @@ function createMD5($file) {
 	$sumsfile = _getMD5File(dirname($file) . "/");
 	if ( ! file_exists($file) )
 		fatal("File '$file' does not exist. Cannot do md5sum.");
-	$hash = md5_file( $file );
+	$hash = _calculateMD5( $file );
 	if ($fp = fopen($sumsfile, 'a')) {
          fwrite($fp, $hash . "  " . basename($file) . "\n");
 		 fclose($fp);
    	} else {
 		fatal("Could not append to sums file $sumsFile");
 	}
+}
+
+function _calculateMD5($file) {
+	return md5_file( $file );
 }
 
 /**
@@ -272,7 +297,7 @@ function loadDumpfile($file,$loadcommand) {
 /**
  * Gunzip file using php functions
  * Does not remove original file
- * @return true if successful, meaning there is now another file. false on any error
+ * @return bytes read (uncompressed) if successful, meaning $tofile is updated, false on error
  */
 function gunzipInternal($compressedfile, $tofile) {
 	$fp = fopen($tofile, "w");
@@ -292,14 +317,14 @@ function gunzipInternal($compressedfile, $tofile) {
 		fclose($fp);
 		return false;
 	}
-	return true;   
+	return $sum;   
 }
 
 /**
  * Compress file with gzip.
  * @param originalfile Full path of uncompressed file.
  * @param tofile Full path of target file, must be different than original.
- * @return true if successful, meaning there is now another file. false on any error
+ * @return bytes written (uncompressed) if successful, meaning there is now another file, false on error
  */
 function gzipInternal($originalfile, $tofile) {
 	$fp = fopen($originalfile, "r") ;
@@ -319,6 +344,6 @@ function gzipInternal($originalfile, $tofile) {
 		fclose($fp);
 		return false;
 	}
-	return true;
+	return $sum;
 }
 ?>

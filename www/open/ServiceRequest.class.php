@@ -51,6 +51,7 @@ class ServiceRequest {
 	// option flags changed with set* functions
 	var $followRedirects = false;
 	var $skipBody = false;
+	var $customMethod = null;
 	
 	// response storage
 	var $headers = array();
@@ -128,6 +129,15 @@ class ServiceRequest {
 	}
 	
 	/**
+	 * Allow a diffrent method than GET
+	 * @param String $method uppdercase POST, PROPGET, PUT, CHECKOUT ...
+	 */
+	function setCustomHttpMethod($method) {
+		$this->customMethod = $method;
+		return $this;
+	}
+	
+	/**
 	 * Launches the request, synchronously, and returns this instance when done.
 	 * The get* and is* functions of the instance can be used only after exec().
 	 *
@@ -155,6 +165,9 @@ class ServiceRequest {
 	 * @param resource $ch the current cURL instance handle
 	 */
 	function _customize($ch) {
+		if ($this->customMethod) {
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->customMethod);
+		}
 		if ($this->followRedirects) {
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 			curl_setopt($ch, CURLOPT_MAXREDIRS, false);

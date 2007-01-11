@@ -1,10 +1,10 @@
 <?php
 /**
- *
- *
  * @package open
+ * @version $Id$
  */
 if (!class_exists('SvnOpen')) require(dirname(__FILE__).'/SvnOpen.class.php');
+if (!class_exists('ServiceRequest')) require(dirname(__FILE__).'/ServiceRequest.class.php');
 
 /**
  * Returns the mime type for a file in the repository.
@@ -37,10 +37,12 @@ function login_getMimeType($targetUrl, $revision=HEAD) {
  * @deprecated use SvnOpenFile class instead
  */
 function login_getMimeTypeProperty($targetUrl, $revision) {
-	$url = $targetUrl.'@'.$revision;
-	$cmd = 'propget svn:mime-type '.escapeArgument($url);
-	$result = login_svnRun($cmd);
-	if (array_pop($result)) trigger_error("Could not find the file '$targetUrl' revision $revision in the repository.", E_USER_ERROR );
+	$cmd = new SvnOpen('propget');
+	$cmd->addArgOption('svn:mime-type');
+	$cmd->addArgUrlPeg($targetUrl, $revision);
+	$cmd->exec();
+	if ($cmd->getExitcode()) trigger_error("Could not find the file '$targetUrl' revision $revision in the repository.", E_USER_ERROR );
+	$result = $cmd->getOutput();
 	if (count($result) == 0) { // mime type property not set, return default
 		return false;
 	}
@@ -60,23 +62,39 @@ function login_getMimeTypeProperty($targetUrl, $revision) {
 class SvnOpenFile {
 	
 	/**
-	 * The absolute path from repository root
+	 * The absolute path from repository root.
 	 * @var String
 	 */
 	var $path;
 	/**
-	 * The complete URL
+	 * The complete URL.
 	 * @var String
 	 */
 	var $url;
 	/**
-	 * The revision number (if this is not set, number has not been identified from the revision string yet)
-	 * @var int
+	 * The revision that will be read, as given to the constructor.
+	 * @var String|int HEAD or an integer revision number
 	 */
-	var $revision;
+	var $_revision;
+	/**
+	 * The array of metadata, if read.
+	 * @var array[String]
+	 */
+	var $file = null;
+	/**
+	 * Headers of the url in repository HEAD.
+	 * @var array[String] header name (without ':') => trimmed value
+	 */
+	var $head = null;
+	/**
+	 * Status for lat http call to url.
+	 * @var int Status code, or 0 if no call has been made.
+	 */
+	var $headStatus = 0;
 	
 	/**
-	 * Tries to access the file and saves the info but does not read the contents yet.
+	 * Sets the vital information: path, url and revision string.
+	 * Actual calls for data are being made (and cached) when requested with get* and is* methods.
 	 *
 	 * @param String $path file path, absolute from repository root
 	 * @param String $revision interger revision number or string revision range, svn syntax
@@ -85,14 +103,29 @@ class SvnOpenFile {
 	function SvnOpenFile($path, $revision=HEAD) {
 		$this->path = $path;
 		$this->url = SvnOpenFile::getRepository().$path;
-		
-		if ($revision==HEAD) {
-			//$r = $this->_readInfoHttp();
-			$r = $this->_readInfoSvn(HEAD);
-		} else {
-			$r = $this->_readInfoSvn($revision);
-		}
-		if (!$r) trigger_error("Could not read file information for '$path' revision $revision in repository ".getRepository(), E_USER_ERROR);
+		$this->_revision = $revision;
+	}
+	
+	/**
+	 * Called first in every method that requires metadata
+	 */
+	function _read() {
+		if (!is_null($this->file)) return;
+		$this->file = $this->_readInfoSvn();
+		if (is_null($this->file)) trigger_error("Could not read file information for '$path' revision $revision in repository ".getRepository(), E_USER_ERROR);
+	}
+	
+	/**
+	 * Called first in every method that needs the current HTTP headers of the file's URL
+	 */
+	function _head() {
+		if ($this->headStatus > 0) return;
+		$s = new ServiceRequest($this->url);
+		$s->setSkipBody();
+		$s->exec();
+		$this->headStatus = $s->getStatus();
+		$this->head = $s->getResponseHeaders();
+		if ($this->headStatus == 0) trigger_error("Could not access repository using url ".$this->url.". Might be a temporary error.", E_USER_ERROR);
 	}
 	
 	/**
@@ -103,6 +136,13 @@ class SvnOpenFile {
 		return getRepository();
 	}
 	
+	/**
+	 * @return the username of the account used to access the file
+	 */
+	function getAuthenticatedUser() {
+		return SvnOpen::getAuthenticatedUser();
+	}
+	
 	function getFilename() {
 		return basename($this->path);
 	}
@@ -111,7 +151,7 @@ class SvnOpenFile {
 		return $this->path;
 	}
 	
-	function getFolder() {
+	function getFolderPath() {
 		return getParent($this->path);
 	}
 	
@@ -120,53 +160,176 @@ class SvnOpenFile {
 	}
 	
 	function getFolderUrl() {
-		return SvnOpenFile::getRepository();
-	}
-	
-	function getContentType() {
-		// 1: If HEAD, simply get the headers from apache
-		// 2: If revision != head, get the svn:mime-type property
-		// 3: If revision != head, guess the mime type for relevant (common) extensions, use default if not
-		// never look at file contents, too comlicated and we don't want to require fileinfo extension
-	}
-	
-	function getContentLength() {
-		// svn info
+		return $this->getRepository().$this->getFolder();
 	}
 
 	/**
-	 * @return boolean true if this file is the HEAD
+	 * Try to figure out if the revision is the latest,
+	 * which is only trivial if revision was given as HEAD.
+	 * @return boolean true if this file is the newest revision
 	 */
 	function isLatestRevision() {
-		
+		if ($this->_revision==HEAD) return true;
+		// need to check the current response code
+		$this->_head();
+		$r = $this->_getHeadRevisionFromETag();
+		if ($r !== false) {
+			if ($r < $this->_revision) trigger_error("Invalid revision number $this->_revision, higher than last commit but not HEAD");
+			return $r == $this->_revision;
+		}
+		// it is unlikely that we come this far
+		trigger_error("Could not read revision number of the latest version from repository.", E_USER_ERROR);
+		// TODO call _file then return false if sizes don't match
+		// TODO final: either parse dates and compare or do an svn list call on HEAD and compare revisions
 	}
 	
-	/**
-	 * @return int the revision number. if revision is HEAD, this is the newest revision number.
-	 */
-	function getRevisionNumber() {
-		// svn info
-	}
-	
-	function getLastModified() {
-		// svn info
-	}
 	
 	/**
 	 * Note that read-only is not a versioned property (it is caused by apache configuration).
-	 * For all revisions that are not HEAD, this method has to return 'true'.
-	 * To detect read-only for files, inspect "svn info --xml" and check if commit autor and date are missing.
-	 * To detect read-only for folders, we need to try a webdav operation like PUT.
-	 */
-	function isReadOnly() {
-		// svn info
+	 * For all revisions that are _not_ HEAD, this method has to return 'false'.
+	 * To detect read-only for files or folders, it is also possible to 
+	 *  inspect "svn info --xml [parent folder]" and check if commit autor and date are missing.
+	 */	
+	function isWritable() {
+		if (!$this->isLatestRevision()) return false;
+		// TODO what method should be used?
+		// curl -I -u test:test -X CHECKOUT http://localhost/testrepo/demoproject/trunk/readonly/
+		$r = new ServiceRequest($this->getUrl());
+		$r->setCustomHttpMethod('PUT');
+		$r->exec();
+		return ($r->getStatus() != 403);
 	}
 	
-	// should we really have all that lock stuff here?
-	// yes probably, since it is in svn invo
+	/**
+	 * Checks if the file still exists, and the user still has read access to it.
+	 * Note that this is not a "peg revision" check, so it might be a different file at the same URL.
+	 */
+	function isReadableInHead() {
+		if ($this->isLatestRevision()) return true;
+		$this->_head();
+		return ($this->headStatus == 200);
+	}
 	
+	/**
+	 * Subversion usually puts the revision number in the ETag header.
+	 * @return the revision number if found, boolean false if not
+	 *  (if revision number can be 0, use ===)
+	 */
+	function _getHeadRevisionFromETag() {
+		$this->_head();
+		if (!array_key_exists('ETag', $this->head)) return false;
+		$etag = $this->head['ETag'];
+		$pattern = '/^"(\d+)\/\//';
+		if (preg_match($pattern, $etag, $matches)) return $matches[1];
+		return false;
+	}
+	
+	/**
+	 * @return the mimetype (or best guess) of the file,
+	 *  can be used as value in ContentType header.
+	 */
+	function getType() {
+		// 1: If HEAD, simply get the headers from apache
+		if ($this->isLatestRevision()) return $this->_getMimeTypeFromHttpHeaders();
+		// 2: If revision != head, get the svn:mime-type property
+		$prop = login_getMimeTypeProperty($this->getUrl(), $this->getRevision());
+		if ($prop) return $prop;
+		// 3: If revision != head, guess the mime type for relevant (common) extensions, use default if not
+		// if it exists in HEAD we're lucky
+		if ($this->isReadableInHead()) return $this->_getMimeTypeFromHttpHeaders();
+		// never look at file contents, too complicated and we don't want to require fileinfo extension
+		trigger_error("Could not find content type for this file.", E_USER_ERROR);
+	}
+	
+	function _getMimeTypeFromHttpHeaders() {
+		$this->_head();
+		if (isset($this->head['Content-Type'])) {
+			if ($pos = strpos($this->head['Content-Type'], ';')) {
+				return trim(substr($this->head['Content-Type'], 0, $pos));
+			}
+			return $this->head['Content-Type'];
+		}
+	}
+	
+	/**
+	 * @return String the "discrete-type" part of the mime type: 
+	 * "text" / "image" / "audio" / "video" / "application" /  "message" / "multipart"
+	 */
+	function getTypeDiscrete() {
+		$t = $this->getType();
+		$s = strpos($t,'/');
+		if (!$s) trigger_error("This file has an invalid MIME type '$t'.");
+		return substr($t, 0, $s);
+	}
+	
+	/**
+	 * @return the size of the file in bytes
+	 */
+	function getSize() {
+		$this->_read();
+		return $this->file['size'];
+	}
+	
+	/**
+	 * This is _not_ a getter for the '_revision' field, which may have value HEAD.
+	 * @return int Integer revision number, even for HEAD.
+	 */
+	function getRevision() {
+		$this->_read();
+		return $this->file['revision'];
+	}
+	
+	/**
+	 * @return String Last modified, in xsd:dateTime timestamp format
+	 */
+	function getDate() {
+		$this->_read();
+		return $this->file['date'];
+	}
+	
+	/**
+	 * @return String Username, author in last commit
+	 */
+	function getAuthor() {
+		$this->_read();
+		return $this->file['author'];
+	}
+
 	function isLocked() {
-		// svn info
+		$this->_read();
+		return array_key_exists('lockowner', $this->file);
+	}
+	
+	function isLockedByThisUser() {
+		if (!$this->isLocked()) return false;
+		return ($this->getLockOwner() == $this->getAuthenticatedUser());
+	}
+	
+	function isLockedBySomeoneElse() {
+		if (!$this->isLocked()) return false;
+		return ($this->getLockOwner() != $this->getAuthenticatedUser());
+	}
+	
+	function getLockOwner() {
+		if (!$this->isLocked()) return false;
+		return $this->file['lockowner'];
+	}
+	
+	/**
+	 * @return String xsd:dateTime formatted timestamp for when the lock was created
+	 */
+	function getLockCreated() {
+		if (!$this->isLocked()) return false;
+		return $this->file['lockcreated'];
+	}
+	
+	/**
+	 * @return String lock message, "" if missing or empty, false if not locked
+	 */
+	function getLockComment() {
+		if (!$this->isLocked()) return false;
+		if (!array_key_exists('lockcomment', $this->file)) return '';
+		return $this->file['lockcomment'];
 	}
 	
 	/**
@@ -195,7 +358,6 @@ class SvnOpenFile {
 	
 	/**
 	 * Sends this file with a save-as box (attachment header) and content size.
-	 *
 	 */
 	function sendAttachment() {
 		
@@ -226,50 +388,69 @@ class SvnOpenFile {
 	 * @return int status code
 	 */
 	function getStatus() {
-		
+		if ($this->isLatestRevision()) {
+			$this->_head();
+			return $this->headStatus;
+		}
+		$this->_read();
+		// no error, assume ok
+		return 200;
 	}
 	
 	/**
 	 * Reads all file information with a 
-	 *
-	 * @param unknown_type $revision
-	 * @return unknown
+	 * @return array[String] metadata name=>value
 	 */
-	function _readInfoSvn($revision) {
+	function _readInfoSvn() {
 		$info = new SvnOpen('list', true);
-		$info->addArgRevision($revision);
+		$info->addArgRevision($this->_revision);
 		$info->addArgUrl($this->url);
 		$info->exec();
-		return $this->_parseInfoXml($info->getOutput());
+		return $this->_parseListXml($info->getOutput());
 	}
 	
 	/**
-	 * Enter description here...
+	 * Parses the result of svn list --xml to an associative array
 	 *
-	 * @param unknown_type $xmlArray
-	 * @return array assocuative
+	 * @param array[String] $xmlArray
+	 * @return array[String] metadata entry name => value
 	 */
 	function _parseListXml($xmlArray) {
-		echo('<pre>'.implode("\n", $xmlArray).'</pre>');
 		$parsed = array();
-		$p = array(
-			''
+		$patternsInOrder = array(
+			'path' => '/path="([^"]+)"/',
+			'kind' => '/kind="([^"]+)"/',
+			'name' => '/<name>([^<]+)</',
+			'size' => '/<size>(\d+)</',
+			'revision' => '/revision="(\d+)"/',
+			'author' => '/<author>([^<]+)</',
+			'date' => '/<date>([^<]+)</',
+			'locktoken' => '/<token>([^<]+)</',
+			'lockowner' => '/<owner>([^<]+)</',
+			'lockcomment' => '/<comment>([^<]+)</',
+			'lockcreated' => '/<created>([^<]+)</',
 		);
-		foreach ($xmlArray as $line) {
-			
+		list($n, $p) = each($patternsInOrder);
+		for ($i=0; $i<count($xmlArray); $i++) {
+			if (preg_match($p, $xmlArray[$i], $matches)) {
+				$parsed[$n] = $matches[1];
+				if(!(list($n, $p) = each($patternsInOrder))) break;
+			} else if ($n == 'lockcomment') { // optional entry
+				list($n, $p) = each($patternsInOrder);
+				$i--;
+			}
 		}
-		return true;
+		return $parsed;
 	}
 	
+	/**
+	 * Not used currently
+	 *
+	 * @return unknown
+	 */
 	function _readInfoHttp() {
 		// http can not read the actual revision number for HEAD
-		
-		
 		return true;
-	}
-	
-	function _readActualRevisionNumber($revision=HEAD) {
-		
 	}
 	
 }

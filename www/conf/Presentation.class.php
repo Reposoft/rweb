@@ -90,6 +90,9 @@ require(dirname(dirname(__FILE__)).'/lib/smarty/smarty.inc.php' );
  * <!--{ ... }-->
  * {= ... }
  * 
+ * Also adds a prefilter that allows dot notation for objects
+ * <code>..$foo.bar} {$foo.isBar..</code> becomes <code>..$foo->getBar()} {$foo->isBar()..<code>
+ * 
  * Cache settings are defined in te include file.
  */
 class Presentation {
@@ -140,6 +143,8 @@ class Presentation {
 		// register the prefilter
 		$this->smarty->register_prefilter('Presentation_useCommentedDelimiters');
 		$this->smarty->load_filter('pre', 'Presentation_useCommentedDelimiters');
+		$this->smarty->register_prefilter('Presentation_useDotNotationForObjects');
+		$this->smarty->load_filter('pre', 'Presentation_useDotNotationForObjects');
 	}
 	
 	/**
@@ -397,7 +402,16 @@ function Presentation_useCommentedDelimiters($tpl_source, &$smarty)
 	$patterns[1] = '/}-->/';
 	$replacements[0] = LEFT_DELIMITER;
 	$replacements[1] = RIGHT_DELIMITER;
-    return preg_replace($patterns,$replacements,$tpl_source);
+   return preg_replace($patterns,$replacements,$tpl_source);
+}
+
+function Presentation_useDotNotationForObjects($tpl_source, &$smarty)
+{
+	$patterns[0] = '/\$(\w+)\.is(\w+)/';
+	$patterns[1] = '/\$(\w+)\.(\w+)/';
+	$replacements[0] = '$$1->is$2()';
+	$replacements[1] = '$$1->get$2()'; // would be good to uppercase first letter of $2
+	return preg_replace($patterns,$replacements,$tpl_source);
 }
 
 // plug in to repos.properties.php's error handling solution

@@ -10,7 +10,7 @@
  */
 define('REPOS_WEB_LOCAL', dirname(__FILE__) . '/repos/');
 
-// HTTP/1.1 disable caching
+// disable caching in this page because it redirects
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 // HTTP/1.0 disable caching
