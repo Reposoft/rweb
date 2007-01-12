@@ -4,20 +4,22 @@
  *
  * @package test
  */
+define('COOKIE_TESTCASE', 'suite_testcase');
+define('COOKIE_TESTCASE_N', 'suite_n');
 
 if (isset($_GET['testcase'])) {
 	$testcase = urldecode($_GET['testcase']);
 	$n = 100;
 	if (isset($_GET['n'])) $n = $_GET['n'];	
-	setcookie('repos_test_testcase', $testcase);
-	setcookie('repos_test_n', $n);	
+	setcookie(COOKIE_TESTCASE, $testcase);
+	setcookie(COOKIE_TESTCASE_N, $n);	
 	header('Location: /repos/test/selenium/TestRunner.html?test=..%2FPerformance.php&auto=true&resultsUrl=..%2Fpostresults%2F');
 	exit;
 } else {
-	if (!isset($_COOKIE['repos_test_testcase'])) trigger_error("'testcase' parameter required");
-	if (!isset($_COOKIE['repos_test_n'])) trigger_error("'repos_test_n' cookie required with testcase cookie");
-	$testcase = $_COOKIE['repos_test_testcase'];
-	$n = $_COOKIE['repos_test_n'];
+	if (!isset($_COOKIE[COOKIE_TESTCASE])) trigger_error("'testcase' parameter required");
+	if (!isset($_COOKIE[COOKIE_TESTCASE_N])) trigger_error("'repos_test_n' cookie required with testcase cookie");
+	$testcase = $_COOKIE[COOKIE_TESTCASE];
+	$n = $_COOKIE[COOKIE_TESTCASE_N];
 }
 
 $tests = array();

@@ -1,21 +1,52 @@
 <?php
 /**
+ * (c) repos.se
  * Results URL for selenium test runner.
  * 
  * @package test
  */
+// use preconfigured smarty
+require('../../lib/smarty/smarty.inc.php');
+// settings
+define('COOKIE_TESTCASE', 'suite_testcase');
+define('COOKIE_TESTCASE_N', 'suite_n');
+
 header("Content-type: text/plain");
 
-$name = date('Y-m-d_His');
+$run_id = date('Y-m-d_His');
 $logpath = dirname(dirname(dirname(dirname(__FILE__)))).'/testresults/';
-$logfile = $logpath.$name;
+$logfile = $logpath.$run_id;
+
+// test suite
+if (!isset($_SERVER['HTTP_REFERER'])) { echo "No referer, abort."; exit; }
+$suite = $_SERVER['HTTP_REFERER'];
+
+// get test suite id
+$testsuite_pattern ='/test=[\.\/]*(?:%2F)*([^&]+)/';
+if (!preg_match($testsuite_pattern, $suite, $matches)) {
+	echo("Could not find test=TestSuiteName in test runner referrer $suite"); exit;
+}
+$suite = $matches[1];
+
+// dynamic test suites: take name from cookie
+if (strtolower($suite) == strtolower('Performance.php')) {
+	if (!isset($_COOKIE[COOKIE_TESTCASE])) {
+		echo("Dynamic test suite, but could not find cookie ".COOKIE_TESTCASE);
+		exit;
+	}
+	$suite = $_COOKIE[COOKIE_TESTCASE];
+	if (isset($_COOKIE[COOKIE_TESTCASE_N])) $suite .= '_x'.$_COOKIE[COOKIE_TESTCASE_N]; 
+}
+
+// make a valid html id
+$id = strtr($suite, '%/()@', '_____');
 
 // client information
 $client = array(
 'browser' => $_SERVER["HTTP_USER_AGENT"],
 'address' => $_SERVER["REMOTE_ADDR"],
-'local' => isset($_SERVER["IS_LOCAL_CLIENT"]), // defined by repos server config
-'admin' => isset($_SERVER["IS_ADMIN_CLIENT"]) // defined by repos server config
+'local' => isset($_SERVER["IS_LOCAL_CLIENT"]), // defined by server config
+'admin' => isset($_SERVER["IS_ADMIN_CLIENT"]) // defined by server config
 );
 
 if (isset($_SERVER["REMOTE_USER"])) {
@@ -29,7 +60,7 @@ if (isset($_SERVER["PHP_AUTH_USER"])) {
 	$client['reposuser'] = '';
 }
 
-// repos server variables
+// server variables
 $server = array(
 'hostname' => $_SERVER["HTTP_HOST"],
 'address' => $_SERVER["SERVER_ADDR"],
@@ -37,7 +68,7 @@ $server = array(
 'phpversion' => phpversion()
 );
 
-$result = '';
+$result = $id.":\n";
 foreach($server as $key => $value) {
 	$result .= '[server:'.$key.']: '.$value."\n";
 }
@@ -48,6 +79,7 @@ foreach($_REQUEST as $key => $value) {
 	$result .= '['.$key.']: '.$value."\n";
 }
 
+// ---- write results ----
 if (touch($logfile)) {
 	$h = fopen($logfile,'w');
 	fwrite($h, $result);
@@ -56,7 +88,7 @@ if (touch($logfile)) {
 	$email = $_SERVER["SERVER_ADMIN"];
 	if (strpos($email, '@')===false) $email = 'admin@repos.se';
 	mail($email,
-		"Test results $name",
+		"Test results $run_id",
 		"You get these mails because test results could not be written to $logfile\n\n".
 		$result);
 }
