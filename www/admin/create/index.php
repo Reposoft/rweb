@@ -25,6 +25,8 @@ if ($command->getExitcode()) {
 	info("Successfully created empty repository in $repodir");
 }
 
+$report->info('Return to <a id="admin" href="../">admin</a> or <a if="load" href="../load/">load backup</a>.');
+
 html_end();
 
 ?>

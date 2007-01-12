@@ -14,36 +14,9 @@
 require(dirname(dirname(__FILE__)).'/setup.inc.php');
 
 // the working copy where the initial state is created
-$wc = getTempDir('test-wc');
+$wc = setup_getTempWorkingCopy();
 
-if (file_exists($repo)) {
-	$report->info("Deleting old test repository folder $repo");
-	// repositories usually have write protected contents
-	chmod($repo.'format', 0755);
-	chmod($repo.'db/format', 0755);
-	deleteFolder($repo);
-}
-
-/* not wanted, there is a risk that this operation is done by mistake (and allowed in config by mistake)
-if (file_exists($backup)) {
-	$report->info("Deleting old test backup folder $backup");
-	deleteFolder($backup);
-}
-*/
-
-$report->info("create test repository folder with repo/ admin/ and backup/");
-if (!file_exists($admin)) {
-	createFolder($admin);
-} else {
-	if (file_exists($userfile)) deleteFile($userfile);
-	if (file_exists($aclfile)) deleteFile($aclfile);
-	//may have symlinks to it, so we don't want to delete//deleteFile($conffile);
-}
-createFolder($repo);
-createFolder($backup);
-
-if (file_exists($wc)) deleteFolder($wc);
-createFolder($wc);
+setup_deleteCurrent();
 
 $report->info("Running: svnadmin create \"$repo\"");
 
@@ -59,28 +32,8 @@ if (!file_exists($admin.'hooks.php')) {
 	copy("{$rootfolder}repos-config/hooks.php", $admin.'hooks.php');
 }
 
-// Too tricky for apache passwd file //$trickyusername = "Åke Mühl-Ägg";
-$trickyusername = "Sv@n s-on";
-
-$report->info("create user database, base64 or MD5 encoded using htpasswd");
-$users =
-"svensson:rrE3/9iLvCoFU\n". //password 'medel'
-"test:n8F28qRYJJ4Q6\n". //password 'test'
-"$trickyusername:UjhsQAWhDE0UY\n"; //password 'test'
-$usersencoding = 'base64';
-if (isWindows()) { // MD5
-	$users = 
-	"svensson:\$apr1\$h03.....\$vSQzcy3gId0sKgc/JvRCs.\n".
-	"test:\$apr1\$Sy2.....\$zF88UPXW6Q0dG3BRHOQ2m0\n".
-	"$trickyusername:\$apr1\$QT......\$Ce3c7V78FmQ1hyJhp3h6o/\n";
-	$usersencoding = 'MD5';
-}
-
-if (createFileWithContents($userfile, $users, true)) {
-	$report->ok("Successfully created user account file $userfile with $usersencoding encoded passwords");
-} else {
-	$report->fail("Could not create user account file $userfile");
-}
+$trickyusername = 'Sv@n s-on'; // same as in createTestUsers, kept because it is needed futher down
+setup_createTestUsers();
 
 $report->info("create ACL");
 $acl = "
@@ -116,42 +69,22 @@ $trickyusername = rw
 @demoproject = rw
 * = r
 ";
-if (createFileWithContents($aclfile, $acl, true)) {
+if (createFileWithContents($aclfile, $acl, true, true)) {
 	$report->ok("Successfully created subversion ACL file $aclfile");
 } else {
 	$report->fail("Could not create subversion ACL file $aclfile");
 }
 
-$report->info("create apache 2.2 config");
-
-$conflocation = '/testrepo';
-$conf = "
-<Location $conflocation>
-DAV svn
-SVNIndexXSLT \"/repos/view/repos.xsl\"
-SVNPath {$repo}
-SVNAutoversioning on
-# user accounts from password file
-AuthName \"Test repository. Contents might be reset at any time.\"
-AuthType Basic
-AuthUserFile $userfile
-Require valid-user
-# standard SVN access control
+setup_createApacheLocation(
+'# standard SVN access control
 AuthzSVNAccessFile $aclfile
 # allow public access to * = r folders
-Satisfy Any
-</Location>
-
-# disable caching for directory listing, because ETag seems not 100% compatible with firefox
+Satisfy Any',
+"# disable caching for directory listing, because ETag seems not 100% compatible with firefox
 <Location ~ \"^$conflocation/.*/$\">
 	Header add Cache-Control \"no-cache\"
-</Location>
-";
-if (createFileWithContents($conffile, $conf, true, true)) {
-	$report->ok("Successfully created apache config file $conffile");
-} else {
-	$report->fail("Could not create apache config file $conffile");
-}
+</Location>"
+);
 
 // check out working copy and create base structure
 $repourl = $repo;
@@ -216,6 +149,10 @@ setup_svn('lock -m "Testing lock features. You should not be allowed to modify t
 
 createFolder($wc."demoproject/messages/");
 $newsfile = $wc."demoproject/messages/news.xml";
+$contents = new Command('svnlook');
+$contents->addArgOption('tree');
+$contents->addArg($repo);
+$contents->exec();
 createFileWithContents($newsfile, '<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="/repos/view/atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
@@ -233,8 +170,8 @@ createFileWithContents($newsfile, '<?xml version="1.0" encoding="utf-8"?>
 		<content type="xhtml" xml:lang="en"
 		 xml:base="http://www.repos.se/">
 		  <div xmlns="http://www.w3.org/1999/xhtml">
-		    <p>The test repository has been reset. It now has the contents expected by automated tests. Configuration:</p>
-		    <pre>'.htmlspecialchars($conf).'</pre>
+		    <p>The test repository has been reset.</p>
+		    <pre>'.implode("\n",$contents->getOutput()).'</pre>
 		  </div>
 		</content>
    </entry>
@@ -308,11 +245,13 @@ setup_svn('commit -m "Added integration testing folders for other repos projects
 $importsFolder = dirname(__FILE__);
 setup_svn("import -m \"Created sample images\" $importsFolder/images \"file:///{$repourl}demoproject/trunk/public/images\"");
 
-// setup done
-$report->info('<a href="'.$conflocation.'/test/trunk/">Log in to test account</a>');
-
 // clean up
 deleteFolder($wc);
+
+// setup done
+setup_reloadApacheIfPossible();
+
+$report->info('<a href="'.$conflocation.'/test/trunk/">Log in to test account</a>');
 
 $report->display();
 ?>

@@ -6,21 +6,15 @@
 </head>
 
 <body>
-<div id="workspace">
 <div id="commandbar">
-<!--{if $logurl}-->
-<a id="history" class="command" href="{=$logurl}">back to history</a>
-<!--{/if}-->
-<a id="repository" class="command" href="{=$repository}">return to repository</a>
-<a id="download" class="command" href="{=$dowloandUrl}">download</a>
+<a id="repository" class="command" href="{=$file.folderUrl}">return to repository</a>
 </div>
 <div class="contents cat">
-<h1><span class="path" title="{=$target|basename} version number {=$revision}">{=$target}</span> <span class="revision" title="version number {=$revision}">{=$revision}</span></h1>
+<h1><span class="path" title="{=$file.filename}, version {=$file.revision}">{=$target}</span> <span class="revision">{=$file.revision}</span></h1>
 <pre>
-{=$targetpeg|login_svnPassthruFileHtml}
+{=$file->sendInlineHtml()}
 </pre>
 </div>
 <div id="footer"></div>
-</div>
 </body>
 </html>

@@ -334,34 +334,21 @@ class SvnOpenFile {
 	}
 	
 	/**
-	 * Reads the contents of the file to... hmmm... might be binary
-	 *
+	 * Reads the contents of the file to a string of characters, even if it is binary
 	 */
 	function getContents() {
-		
+		// TODO this might need a lot of memory
+		return implode("\n", $this->getContents());
 	}
 	
 	/**
 	 * Reads the contents of the file to a string array, one item per line, without newlines.
-	 *
 	 */
 	function getContentsText() {
-		
-	}
-	
-	/**
-	 * Writes this file to the browser, assuming that no other output is sent.
-	 * Used to show file to the user, or for example to use an image in an img tag.
-	 */
-	function sendResponse() {
-		
-	}
-	
-	/**
-	 * Sends this file with a save-as box (attachment header) and content size.
-	 */
-	function sendAttachment() {
-		
+		$open = new SvnOpen('cat');
+		$open->addArgUrlPeg($this->getUrl(), $this->getRevision());
+		$open->exec();
+		return $open->getOutput();
 	}
 	
 	/**
@@ -382,7 +369,15 @@ class SvnOpenFile {
 	 * Escaping method is based on the format. If there is no known escape method for the content type, sendInline is used.
 	 */
 	function sendInlineHtml() {
-		// where do we get the current content type header? just assume that it is correct? throw error if not correct?
+		// TODO there is currently no efficient passthru with filter,
+		// so the show page must limit size so that we don't use up all memory
+		if ($this->getSize()>102400) trigger_error("Can not convert file bigger than 100 kb to HTML.", E_USER_ERROR);
+		$text = $this->getContentsText();
+		$lines = count($text);
+		for ($i=0; $i<$lines; $i++) {
+			echo(htmlentities($text[$i]));
+			echo("\n");
+		}
 	}	
 	
 	/**

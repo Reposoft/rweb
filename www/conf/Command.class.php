@@ -110,6 +110,7 @@ function repos_runCommand($commandName, $argumentsString) {
  */
 function _repos_getFullCommand($commandName, $argumentsString) {
 	$run = getCommand($commandName);
+	if ($run === false) $run = $commandName; // expect that it was validated in Command class.
 	// detect output redirection to file (path must be surrounded with quotes)
 	$tofile = preg_match('/^.*>>?\s+".*"\s*$/', $argumentsString);
 	$redirect = ''; // extra output redirection
@@ -169,8 +170,15 @@ class Command {
 	 * @param String $commandName the command without arguments, for example "grep" or "ls"
 	 * @return Command
 	 */
-	function Command($commandName) {
-		// TODO validate that the command is allowed and do the equivalent of getCommand (but from System class)
+	function Command($commandName, $validate=true) {
+		if (!$validate) {
+			if (!strContains($_SERVER['SCRIPT_FILENAME'], '/test/')) {
+				trigger_error("Only test scripts can run commands that are not validated", E_USER_ERROR);
+			}
+		} else if (System::getCommand($commandName) === false) { 
+			trigger_error("Security error: command '$commandName' is not valid on this patform.", E_USER_ERROR);
+		}
+		// currently only the name is stored, and the command is retreived again at exec
 		$this->operation = $commandName;
 	}
 	

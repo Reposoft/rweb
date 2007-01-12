@@ -42,15 +42,17 @@ Depending on your browser, it may also work for file types like pdf, documents a
 <h3><a href="download/?target={=$target}&rev={=$rev}">Dowload</a></h3>
 <p>Download this file to your hard drive. The revision number {=$file.revision}
 will be appended to the filename, so you know which version it is.</p>
+{=if $file.size lte 102400}
 <h3><a href="read/?target={=$target}&rev={=$rev}">Read in page</a></h3>
 <p>Read the file's contents in a web page. This is like View in browser, but with menus.
 This works for text files. If the file is a binary file, like a word document,
 you will see only a long line of characters.</p>
+{=/if}
 <h3><a href="log/?target={=$target}&rev={=$rev}">View history</a></h3>
 <p>View the commits that this file has been involved in.</p>
 <h3>Other methods</h3>
 <!--{if $file.isLatestRevision}-->
-<p>Many modern programs can use URLs to open files directly from the net. The address (the absolute URL) is:
+<p>Many modern programs can use URLs to open files directly from the server. The address (the absolute URL) is:
 <br /><code>{=$file.url}</code></p>
 <p>Office documents can usually be edited directly.
 Paste the URL into the "open" dialog in word or excel, 

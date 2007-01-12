@@ -375,6 +375,7 @@ function getSystemTempDir() {
  * This method returns an existing temp folder; to get a new empty folder use getTempnamDir.
  * @param subdir optional category within the temp folder, no slashes
  * @return absolute path to the temp dir, ending with slash
+ * @deprecated use System::getApplicationTemp instead
  */
 function getTempDir($subdir=null) {
 	// Get temporary directory
@@ -403,23 +404,29 @@ function getTempDir($subdir=null) {
  * Like PHP's tempname() but creates a folder instead
  * @param subdir optional parent dir name for the new dir, no slashes
  * @return a newly created folder, with tailing slash
+ * @deprecated use System::getTempFolder() instead
  */
 function getTempnamDir($subdir=null) {
        // Use PHP's tmpfile function to create a temporary
        // directory name. Delete the file and keep the name.
-       $tempname = tempnam(rtrim(getTempDir($subdir),'/'), '');
+       $tempname = _getTempFile($subdir);
        $tempname = toPath($tempname);
        if (!$tempname)
-               return false;
+               return false; // TODO trigger error
 
        if (!unlink($tempname))
-               return false;
+               return false; // TODO trigger error
 
        // Create the temporary directory and returns its name.
        if (mkdir($tempname))
                return $tempname.'/';
 
        return false;
+}
+
+// for delegation from System and deprecated getTempnamDir
+function _getTempFile($subdir=null) {
+	return tempnam(rtrim(getTempDir($subdir),'/'), '');
 }
 
 /**
@@ -611,6 +618,7 @@ function toShellEncoding($string) {
  * Get the execute path of the subversion command line tools used for repository administration
  * @param Command name, i.e. 'svnadmin'.
  * @return Command line command, false if the command shouldn't be needed in current OS. Error message starting with 'Error:' if command name is not supported.
+ * @deprecated use System::getCommand
  */
 function getCommand($command) {
 	if ( ! defined('USRBIN') )
@@ -633,7 +641,7 @@ function getCommand($command) {
 		case 'du':
 			return ( isWindows() ? false : USRBIN . 'du' );
 	}
-	return "\"Error: Repos does not support command '$command'\"";
+	return false;
 }
 
 // ----- internal functions -----
