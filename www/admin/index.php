@@ -76,7 +76,7 @@ that are newer than the latest backup <span class="revision"><?php echo($lastrev
 <p>Regular automated backups is preferred, but you can also <a href="backup/">run incremental backup manually</a>.</p>
 </td>
 <?php } else if ($headrev < $lastrev) { ?>
-<p>There are more revisions in the backup than in the repository. You can manually <a href="load/">load new backup files into repository</a>.</p>
+<p>There are more revisions in the backup than in the repository. You can manually <a id="load" href="load/">load new backup files into repository</a>.</p>
 <?php } ?>
 </table>
 <p><a id="verify" href="verify/" class="action">Verify current backup files</a></p>

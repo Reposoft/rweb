@@ -13,7 +13,7 @@ $report->debug("Locking the repository until backup is complete."); // TODO do w
 //$repourl = getRepository();
 $repodir = getConfig('local_path');
 if ( !isRepository($repodir) )
-	fatal("repository '$repourl' is not available locally");
+	fatal("repository '$repodir' is not available locally");
 $backupdir = getConfig( 'backup_folder' );
 $backupprefix = getPrefix( $repodir );
 
