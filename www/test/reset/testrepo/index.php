@@ -249,9 +249,9 @@ setup_svn("import -m \"Created sample images\" $importsFolder/images \"file:///{
 deleteFolder($wc);
 
 // setup done
-setup_reloadApacheIfPossible();
-
-$report->info('<a href="'.$conflocation.'/test/trunk/">Log in to test account</a>');
+$report->info('<a href="../restart/">Restart apache to activate new configuration</a>');
+$report->info('<a href="'.$conflocation.'/test/trunk/">Directly to repository test account</a>');
+$report->info('<a href="/?login">Repos login</a>');
 
 $report->display();
 ?>

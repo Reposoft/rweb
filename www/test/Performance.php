@@ -47,7 +47,10 @@ for ($i=0; $i<$n; $i++) {
 <body>
 <table id="suiteTable" class="rows" width="100%">
 	<tbody>
-	<tr><td><b>repos performance test</b></td></tr>
+	<tr><th>repos performance test</th></tr>
+	<tr>
+	  <td><a href="reset/TestReset.html">reset testrepo</a></td>
+	</tr>
 <?php foreach ($tests as $case) {
 	echo("<tr>
 	  <td><a href=\"$case\">$case</a></td>

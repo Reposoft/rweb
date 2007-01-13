@@ -115,26 +115,13 @@ class Presentation {
 		return new Presentation();
 	}
 	
-	// constructor
+	/**
+	 * Constructor initializes a Smarty instance and adds custom filders.
+	 */
 	function Presentation() {
 		setupResponse();
 		
-		$this->smarty = new Smarty();
-		
-		$this->smarty->caching = CACHING;
-		if (!CACHING) {
-			$this->smarty->force_compile = true;
-			// allow SMARTY_DEBUG query string parameter TODO remove in production
-			$this->smarty->debugging_ctrl = 'URL';
-		}
-		
-		$this->smarty->template_dir = CACHE_DIR.'templates/';
-		$this->smarty->compile_dir = CACHE_DIR.'templates_c/';
-		$this->smarty->config_dir = CACHE_DIR.'configs/';
-		$this->smarty->cache_dir = CACHE_DIR.'cache/';
-	
-		$this->smarty->left_delimiter = LEFT_DELIMITER;
-		$this->smarty->right_delimiter = RIGHT_DELIMITER;
+		$this->smarty = smarty_getInstance();
 		
 		// enforce singleton rule, but only after delimiters and such things has been configures (otherwise the error template might be invalid)
 		if (isset($GLOBALS['_presentationInstance'])) {

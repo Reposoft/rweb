@@ -11,22 +11,21 @@ require('../../lib/smarty/smarty.inc.php');
 define('COOKIE_TESTCASE', 'suite_testcase');
 define('COOKIE_TESTCASE_N', 'suite_n');
 
-header("Content-type: text/plain");
-
-$run_id = date('Y-m-d_His');
+$runid = date('Y-m-d_His');
 $logpath = dirname(dirname(dirname(dirname(__FILE__)))).'/testresults/';
-$logfile = $logpath.$run_id;
+$logfile = $logpath.$runid;
 
 // test suite
 if (!isset($_SERVER['HTTP_REFERER'])) { echo "No referer, abort."; exit; }
-$suite = $_SERVER['HTTP_REFERER'];
+$url = $_SERVER['HTTP_REFERER'];
 
-// get test suite id
-$testsuite_pattern ='/test=[\.\/]*(?:%2F)*([^&]+)/';
-if (!preg_match($testsuite_pattern, $suite, $matches)) {
+// get host and uri to the test home, and name of the testsuite
+$testsuite_pattern ='/^([^?]+test\/)(?:selenium\/TestRunner\.html)\?.*test=[\.\/]*(?:%2F)*([^&]+)/';
+if (!preg_match($testsuite_pattern, $url, $matches)) {
 	echo("Could not find test=TestSuiteName in test runner referrer $suite"); exit;
 }
-$suite = $matches[1];
+$testurl = $matches[1];
+$suite = $matches[2];
 
 // dynamic test suites: take name from cookie
 if (strtolower($suite) == strtolower('Performance.php')) {
@@ -35,11 +34,15 @@ if (strtolower($suite) == strtolower('Performance.php')) {
 		exit;
 	}
 	$suite = $_COOKIE[COOKIE_TESTCASE];
-	if (isset($_COOKIE[COOKIE_TESTCASE_N])) $suite .= '_x'.$_COOKIE[COOKIE_TESTCASE_N]; 
+	$url = $testurl.$suite.'?testcase='.$suite;
+	if (isset($_COOKIE[COOKIE_TESTCASE_N])) {
+		$suite .= '_x'.$_COOKIE[COOKIE_TESTCASE_N]; 
+		$url .= '&n='.$_COOKIE[COOKIE_TESTCASE_N];
+	}
 }
 
 // make a valid html id
-$id = strtr($suite, '%/()@', '_____');
+$suiteid = strtr($suite, '%/()@', '_____');
 
 // client information
 $client = array(
@@ -68,7 +71,7 @@ $server = array(
 'phpversion' => phpversion()
 );
 
-$result = $id.":\n";
+$result = $suiteid.":\n";
 foreach($server as $key => $value) {
 	$result .= '[server:'.$key.']: '.$value."\n";
 }
@@ -78,6 +81,19 @@ foreach($client as $key => $value) {
 foreach($_REQUEST as $key => $value) {
 	$result .= '['.$key.']: '.$value."\n";
 }
+
+// --- create Smarty page ---
+$s = smarty_getInstance();
+
+$s->assign('data', $result);
+$s->assign('runid', $runid);
+$s->assign('suite', $suite);
+$s->assign('suiteid', $suiteid);
+$s->assign('url', $url);
+// arrays
+$s->assign('server', $server);
+
+$s->display(dirname(__FILE__).'/testrun.html');
 
 // ---- write results ----
 if (touch($logfile)) {
@@ -93,6 +109,6 @@ if (touch($logfile)) {
 		$result);
 }
 
-echo($result);
+//echo($result);
 
 ?>
