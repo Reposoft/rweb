@@ -347,7 +347,7 @@ class SvnEdit {
 	/**
 	 * Write the results of a single edit operation to a smarty template
 	 * @param smarty initialized template engine
-	 * @param nextUrl the url to go to after the operation. Should be a folder in the repository. If null, referrer is used.
+	 * @param nextUrl the absolute url to go to after the operation. Should be a folder in the repository. If null, referrer is used.
 	 * @deprecated use Edit->show and presentEdit insead, which support multiple edit operations for a page
 	 */
 	function present(&$smarty, $nextUrl = null) {

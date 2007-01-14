@@ -2,11 +2,9 @@
 define('DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
 define('PARENT_DIR', dirname(rtrim(DIR, DIRECTORY_SEPARATOR)));
 
-require( PARENT_DIR."/conf/Presentation.class.php" );
-require( PARENT_DIR."/edit/SvnEdit.class.php" );
-require( dirname(__FILE__)."/mimetype.inc.php");
-// and here's where the login_getMimeType function is currently
-require( dirname(dirname(__FILE__))."/open/SvnOpenFile.class.php");
+require("../../conf/Presentation.class.php" );
+require("../SvnEdit.class.php" );
+require("../../open/SvnOpenFile.class.php");
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 
@@ -33,12 +31,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
 	$template->assign('isfile',$isfile);
 	$template->assign('target',$target);
-	if (isset($_GET['text'])) {
-		$template->assign('targeturl', getTargetUrl());
-		$template->display($template->getLocaleFile(dirname(__FILE__).'/index-text'));
-	} else {
-		$template->display();
-	}
+	$template->assign('targeturl', getTargetUrl());
+	$template->display();
 } else {
 	$presentation = new Presentation();
 	$upload = new Upload('userfile');

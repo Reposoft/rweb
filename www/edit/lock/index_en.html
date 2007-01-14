@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Lock {=$target|basename}</title>
+<!--{$head}-->
+</head>
+
+<body>
+<div id="workspace">
+<div id="commandbar">
+<a id="repository" class="command" href="{=$repository|urlEncodeNames}">return to repository</a>
+</div>
+<div id="contents">
+<h1>Lock <span class="filename">{=$target|basename}</span>?</h1>
+<form id="lock" name="lock" method="get" action="#">
+	<fieldset>
+	<legend>lock</legend>
+    <input name="target" type="hidden" id="target" value="{=$target}" />
+  <p>
+    <label for="name">lock</label>
+    <input id="name" name="name" type="text" value="{=$target}" disabled="disabled" size="40"/>
+  </p>  
+  <p>
+    <label for="message">message to other users</label>
+    <textarea id="message" name="message" cols="30" rows="2" tabindex="1"></textarea>
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" type="submit" name="submit" value="Lock" tabindex="2" />
+  </p>
+  </fieldset>
+</form>
+</div>
+</div>
+</body>
+</html>

@@ -334,6 +334,14 @@ class SvnOpenFile {
 	}
 	
 	/**
+	 * @return boolean true if svn:needs-lock is set (to any value) on this file
+	 */
+	function isNeedsLock() {
+		// TODO implement
+		return false;
+	}
+	
+	/**
 	 * @return boolean true if this is a branch
 	 *  (currently meaning that it lives in /branches/) 
 	 */

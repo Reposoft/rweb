@@ -43,8 +43,8 @@ div.editlog > pre {
 <p>An error occurred:<br/>
 <em>{=$result}</em></p>
 <!--{/if}-->
-
-<p><a class="action" href="{=$nexturl|urlEncodeNames}">return to repository</a></p>
+<!-- urlEncodeNames does not work here if there is query params -->
+<p><a class="action" href="{=$nexturl}">return to repository</a></p>
 
 <!--{if $revision}-->
 <!-- not supported in release 1.0: Need to know the target folder here to be able to show the log.

@@ -50,7 +50,7 @@ the system will identify which lines you changed,
 and <span title="combine changes in a file with a different version of the file">merge</span>
 those changes with the existing contents to create a new version.
 </p>
-<h3>Download and lock</h3>
+<h3>Download and <a href="lock/?target={=$target}">lock</a></h3>
 <p>
 For <span title="files stored in a non-text format created and read by a specific application">binary</span>
 files, version control is not as efficient as with text files.
@@ -79,13 +79,13 @@ Your personal, temporary, copy would be:
 <span class="path">/branches/{=$file,revision}-{=$file,authenticatedUser}-{=$file,filename}</span>
 You will get a link to the branch, and from there you can access the "merge" functionality.</p>
 <!--{/if}-->
-</p>
 {=if not $file,isLocked}
-<h3>Lock file</h3>
+<h3><a href="lock/?target={=$target}">Lock file</a></h3>
 <p>You can always lock a file to make it read-only for everyone else.</p>
 {=elseif $file,isLockedByThisUser}
-<h3>Unlock file</h3>
-<p>The file
+<h3><a href="unlock/?target={=$target}">Unlock file</a></h3>
+<p>This file is locked by you. If you are not working with it,
+you can unlock it so that others are able to edit it.</p>
 {=/if}
 <!--{/if}-->
 </div>

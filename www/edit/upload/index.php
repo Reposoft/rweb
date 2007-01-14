@@ -1,12 +1,13 @@
 <?php
-define('DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
-define('PARENT_DIR', dirname(rtrim(DIR, DIRECTORY_SEPARATOR)));
-
-require( PARENT_DIR."/conf/Presentation.class.php" );
-require( PARENT_DIR."/edit/SvnEdit.class.php" );
-require( dirname(__FILE__)."/mimetype.inc.php");
+/**
+ * Upload new version of file
+ * @package edit
+ */
+require("../../conf/Presentation.class.php");
+require("../SvnEdit.class.php");
+require("mimetype.inc.php");
 // and here's where the login_getMimeType function is currently
-require( dirname(dirname(__FILE__))."/open/SvnOpenFile.class.php");
+require("../../open/SvnOpenFile.class.php");
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 

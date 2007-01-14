@@ -41,12 +41,6 @@ to make sure that your local changes are based on the newest version of the shar
 <!--{else}-->
 <p>As a new file in folder {=$target}</p>
 <!--{/if}-->
-<!--{if $isfile && $istext}-->
-<p>The current verison is a text file, so it is also possible to <a id="textedit" class="action" href="./?target={=$target}&text">copy-paste your local file's contents</a></p>
-<!--{/if}-->
-<!--{if !$isfile}-->
-<p>It is also possible to <a id="textedit" class="action" href="./?target={=$target}&text">copy-paste your local file's contents</a></p>
-<!--{/if}-->
 <form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
 <fieldset>
   <legend>Upload to repos.se</legend>
