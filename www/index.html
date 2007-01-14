@@ -76,8 +76,8 @@ function setNewsStyles() {
 <style type="text/css">
 body {
  background: #CCCC99;
- padding-left: 2px;
- margin: 2px;
+ padding-left: 0px;
+ margin: 0px;
 }
 #banner {
 	height:104px;
@@ -92,15 +92,17 @@ body {
 	display: table-row;
 }
 #contents {
-	border-right: 2px dotted #5B7900; 
-	border-left: 2px dotted #5B7900; 
-	background: #ffffff; 
-	margin-right: auto;
+	width: 760px; 
+	height: auto; 
+	margin: 0; 
+	padding:10px;
+	border-left: 2px dotted #5B7900;
+	border-right: 2px dotted #5B7900;
+	background: #ffffff;
+	color: #000000;
+	text-align: left;
 	margin-left: auto;
-	position: relative;
-	width: 760px;
-	display: table-cell;
-	float: left;
+	margin-right: auto;
 }
 #news {
 	position: absolute;
@@ -146,7 +148,7 @@ body {
 	</th>
   </tr>
   <tr align="center">
-  	<td id="explain" colspan="4" style="padding:16px; ">Repos &auml;r ett s&auml;tt att lagra, &auml;ndra och dela filer. Det fungerar som en vanlig mapp i datorn, men tar ocks&aring; vara p&aring; filernas historik. Via repos.se n&aring;r alla samma mappar i ett enkelt webbgränssnitt.</td>
+  	<td id="explain" colspan="4" style="border-left: 0px; border-right: 0px; padding:16px; ">Repos &auml;r ett s&auml;tt att lagra, &auml;ndra och dela filer. Det fungerar som en vanlig mapp i datorn, men tar ocks&aring; vara p&aring; filernas historik. Via repos.se n&aring;r alla samma mappar i ett enkelt webbgränssnitt.</td>
   </tr>
   <tr>
     <th scope="col" align="left">Allt arbete sparas </th>
@@ -155,17 +157,17 @@ body {
     <th scope="col" align="left">Samarbete</th>
   </tr>
   <tr valign="top">
-    <td width="25%"><p>Har du r&aring;kat svara fel p&aring; fr&aring;gan &quot;Vill du spara &auml;ndringar&quot;? F&ouml;rlorat en dags arbete?  </p>
+    <td width="25%" style="border-left: 0px;"><p>Har du r&aring;kat svara fel p&aring; fr&aring;gan &quot;Vill du spara &auml;ndringar&quot;? F&ouml;rlorat en dags arbete?  </p>
     <p>Du vill alltid spara det du gjort. Du vill kunna ångra en ändring. Du vill korta ner dokument men ibland återgå till det du raderat.</p></td>
     <td width="25%"><p>Har du filer p&aring; flera datorer? I en delad katalog? P&aring; ett fickminne? Kanske p&aring; mailen ocks&aring;? </p>
     <p>Du beh&ouml;ver en p&aring;litlig lagringsplats som n&aring;s via Internet, och n&auml;r du &auml;ndrat i en fil ska det sparas d&auml;r. </p></td>
     <td width="25%"><p>Du kan argumenten. Man ska g&ouml;ra backup. Men hur kul &auml;r det?</p>
     <p>Den idealiska backupen sk&ouml;ter sig sj&auml;lv varje dag och finns kvar &auml;ven om alla datorer och lagringsmedia i huset f&ouml;rsvinner. Den ing&aring;r i Repos.</p></td>
-    <td width="25%"><p>Jod&aring;, det &auml;r samma visa &ouml;verallt. Du delar ut dokumentet. N&aring;gon g&ouml;r en &auml;ndring och mailar till dig. N&aring;gon annan g&ouml;r en &auml;ndring, men i originaldokumentet...</p>
+    <td width="25%" style="border-right: 0px;"><p>Jod&aring;, det &auml;r samma visa &ouml;verallt. Du delar ut dokumentet. N&aring;gon g&ouml;r en &auml;ndring och mailar till dig. N&aring;gon annan g&ouml;r en &auml;ndring, men i originaldokumentet...</p>
     <p>Det finns smidigare s&auml;tt.</p></td>
   </tr>
   <tr>
-  	<td colspan="4" align="center" >
+  	<td colspan="4" align="center" style="border-left: 0px; border-right: 0px;">
 		<a id="login" href="/?login" title="Ditt Repos">Logga in</a> &nbsp; | &nbsp; <a href="scripts/styleswitch/">Välj skal innan inloggning</a> &nbsp; | &nbsp; <a href="docs/about/">Demo</a> &nbsp; | &nbsp; <a href="mailto:info@repos.se">Kontakta oss</a>
   </tr>
 </table>
