@@ -141,7 +141,7 @@ class Login_include_Test extends UnitTestCase {
 		// test demo account authentication to repository root (no access there)
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = 'test';
-		$url = TESTREPO;
+		$url = TESTREPO.'/demoproject/trunk/noaccess/';
 		$this->assertEqual(false, verifyLogin($url));
 	}
 	
@@ -152,7 +152,7 @@ class Login_include_Test extends UnitTestCase {
 	}
 	
 	function testGetHttpHeadersAuth() {	
-		$headers = getHttpHeaders(TESTREPO);
+		$headers = getHttpHeaders(TESTREPO.'/demoproject/trunk/noaccess/');
 		$this->assertTrue(count($headers) > 0);
 		$this->assertEqual("HTTP/1.1 403 Forbidden", $headers[0]);
 	}
@@ -173,7 +173,7 @@ class Login_include_Test extends UnitTestCase {
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = 'test';
 		// user "test" does not have access to repository root
-		$headers = getHttpHeaders(TESTREPO);
+		$headers = getHttpHeaders(TESTREPO.'/demoproject/trunk/noaccess/');
 		$this->assertTrue(count($headers) > 0);
 		// with a valid username, but no access according to ACL, we expect to see an access denied page
 		$this->sendMessage("Subversion 1.2.x seems to return wrong code for folder that authenticated user can't access.");

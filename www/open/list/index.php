@@ -1,4 +1,9 @@
 <?php
+/**
+ * Returns 'svn list' for webservice calls,
+ * for example to the details plugin
+ */
+
 // get the details of a file or folder and return as XML
 require( dirname(dirname(__FILE__))."/SvnOpen.class.php" );
 

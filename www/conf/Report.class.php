@@ -16,8 +16,10 @@
 // do not force the use of shared functions //require_once(dirname(__FILE__).'/repos.properties.php');
 
 // same function as in Presentation
-function setupResponse() {
-	// no headers needed, might be in offline mode
+if (!function_exists('setupResponse')) {
+	function setupResponse() {
+		// no headers needed, might be in offline mode
+	}
 }
 
 // reports may be long running

@@ -34,7 +34,6 @@ $testfiles = array(
 'open/SvnOpenFile.test.php',
 'open/ServiceRequest.test.php',
 'open/start/RepositoryTree.test.php',
-'open/list/list.test.php',
 'edit/SvnEdit.test.php',
 'edit/merge/conflicthandler.test.excel.php',
 'edit/merge/xmlConflictHandler.test.php',

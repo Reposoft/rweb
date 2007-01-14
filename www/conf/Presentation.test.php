@@ -21,31 +21,7 @@ class TestPresentation extends UnitTestCase {
 		$this->assertEqual(function_exists('reportErrorToUser'),
 			"Presentation class should define a custom error reporting function as defined in repos.properties.php");
 	}
-	
-	function testFilenameRule() {
-		$r = new FilenameRule('file');
-		$this->assertNull($r->validate('abc.txt'));
-		$this->assertEqual('This is a required field', $r->validate(''));
-		$this->assertNull($r->validate(str_repeat('a', 50)));
-		$this->assertNotNull($r->validate(str_repeat('a', 51)), "max length 50");
-		$this->sendMessage("Message on validate 'a\"': ".$r->validate('a"'));
-		$this->assertNotNull($r->validate('a"'), 'double quote not allowed in filename');
-		$this->assertNotNull($r->validate('a*'), '* not allowed in filename');
-	}
-	
-	function testFilenameRuleSpecialCases() {
-		$r = new FilenameRule('file');
-		$this->assertNotNull($r->validate('.'));
-		$this->assertNotNull($r->validate('..'));
-	}
-	
-	function testFilenameRuleNotRequired() {
-		$r = new FilenameRule('file', false);
-		$this->assertNull($r->validate(''));
-		$this->assertNull($r->validate('abc.txt'));
-		$this->sendMessage("Error on invalid characters: ".$r->validate('a\\/'));
-		$this->assertNotNull($r->validate('a\\/'));
-	}
+
 }
 
 testrun(new TestPresentation());

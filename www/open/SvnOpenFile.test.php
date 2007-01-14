@@ -103,9 +103,12 @@ class TestSvnOpenFile extends UnitTestCase {
 		$a = $file->_parseListXml($list);
 		$this->assertEqual('opaquelocktoken:93061e3e-98df-404d-9380-2f821a73bfc9', $a['locktoken']);
 		$this->assertEqual('test', $a['lockowner']);
-		$this->assertEqual('', $file->getLockComment()); // empty same as no message
 		$this->assertEqual('2007-01-11T07:33:55.350755Z', $a['lockcreated']);
-	}	
+		$this->assertFalse(isset($a['lockcomment']));
+		// see that it translates to empty message
+		$file->file = $a;
+		$this->assertEqual('', $file->getLockComment());
+	}
 	
 	function testGetRevisionNumberFromETag() {
 		$headers = array(

@@ -9,7 +9,7 @@
 require('../../conf/Report.class.php');
 require('../../open/SvnOpen.class.php');
 
-$report = new Report("Repos SVN client configuration");
+$report = new Report("Repos internal SVN client configuration");
 
 $r = getRepository();
 $rurl = parse_url($r);
@@ -34,6 +34,7 @@ if (file_exists($config)) {
 	$report->fail("Could not locate client runtime config file $config");
 }
 
+print_r($config);
 $configuration = parse_ini_file($config, true);
 
 foreach ($configuration as $g => $c) {

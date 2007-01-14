@@ -20,6 +20,27 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
+	<td>|Content-Length: 100|</td>
+	<td></td>
+</tr>
+<tr title="this script is in the test folder so it should not be cached">
+	<td>verifyTextPresent</td>
+	<td>|Cache-Control: no-cache|</td>
+	<td></td>
+</tr>
+
+<tr>
+	<td>open</td>
+	<td>/repos/test/headers/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>head.js-file</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
 	<td>|HTTP/1.1 200 OK|</td>
 	<td></td>
 </tr>
@@ -28,14 +49,9 @@
 	<td>|Content-Type: application/x-javascript|</td>
 	<td></td>
 </tr>
-<tr>
+<tr title="like all static contents, javascripts should be cached 24hrs">
 	<td>verifyTextPresent</td>
-	<td>|Content-Length: 100|</td>
-	<td></td>
-</tr>
-<tr title="this script is in the test folder so it should not be cached">
-	<td>verifyTextPresent</td>
-	<td>|Cache-Control: no-cache|</td>
+	<td>|Cache-Control: max-age=86400|</td>
 	<td></td>
 </tr>
 </tbody></table>
