@@ -334,6 +334,31 @@ class SvnOpenFile {
 	}
 	
 	/**
+	 * @return boolean true if this is a branch
+	 *  (currently meaning that it lives in /branches/) 
+	 */
+	function isBranch() {
+		$pattern = "/\/branches\//";
+		return preg_match($pattern, $this->getPath());
+	}
+	
+	/**
+	 * @return String the path of the source this file was copied from
+	 */
+	function getBranchedFromPath() {
+		// TODO need to use log to find this
+		return '(branch tracking not implemented)';
+	}
+	
+	/**
+	 * @return int the revision of the source for the "svn copy"
+	 */
+	function getBranchedFromRevision() {
+		// TODO need to use log to find this
+		return -1;
+	}
+	
+	/**
 	 * Reads the contents of the file to a string of characters, even if it is binary
 	 */
 	function getContents() {
