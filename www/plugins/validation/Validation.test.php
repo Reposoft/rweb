@@ -1,5 +1,5 @@
 <?php
-require("../../conf/Presentation.class.php");
+require("validation.inc.php");
 require("../../lib/simpletest/setup.php");
 
 class MyRule extends Rule {
@@ -95,10 +95,7 @@ class TestValidation extends UnitTestCase {
 	}
 	
 	function testValidateFieldUsingAJAX() {
-		$url = repos_getSelfUrl();
-		$this->sendMessage("This test has URL $url, file is ".basename(__FILE__));
-		if (!strEnds($url, basename(__FILE__))) $this->fail("Can not get URL of this test, aborting AJAX test.");
-		$url = getParent($url).'?validation&name=somename';
+		$url = dirname($_SERVER['SCRIPT_URI']).'/?validation&name=somename';
 		$this->sendMessage("Request url: $url");
 		//$handle = fsockopen($url, 80, $errno, $errstr, 5); // seems to require special php config
 		$handle = fopen($url, 'r');
@@ -121,8 +118,7 @@ class TestValidation extends UnitTestCase {
 		$expect = "{id: 'testuser', value: 'tes', success: false, msg: '$errormsg'}";
 		$json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
 		$expected = $json->decode($expect);
-		
-		$url = getParent(repos_getSelfUrl()).'?validation&testuser=tes';
+		$url = dirname($_SERVER['SCRIPT_URI']).'?validation&testuser=tes';
 		$handle = fopen($url, 'r');
 		$result = fgets($handle);
 		fclose($handle);

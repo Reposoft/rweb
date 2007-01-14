@@ -10,6 +10,11 @@ require(dirname(__FILE__)."/SvnOpenFile.class.php" );
 
 // get file to open
 $url = getTargetUrl();
+if (strEnds($url, '/')) {
+	header('Location: '.$url);
+	exit;
+}
+
 $type = substr($url, strrpos($url, '.') + 1);
 
 // iCalendar files

@@ -1,8 +1,8 @@
 <?php
 require("mimetype.inc.php");
 // TODO get getTempDir in a smaller filesystem abstraction that can be included instead of the entire repos.properties.php
-require("../conf/repos.properties.php"); // then remove
-require("../lib/simpletest/setup.php");
+require("../../conf/repos.properties.php"); // then remove
+require("../../lib/simpletest/setup.php");
 
 // this is our custom filetype handler for testing
 function getSpecificMimetype_ir2($file, $suggestedType) {

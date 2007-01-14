@@ -2,10 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
 <title>{=$runid} {=$suiteid}</title>
 <!-- optional css at report target location, can @include global.css -->
-<link href="testrun.css" rel="stylesheet" type="text/css" />
+<link href="testrun.css" rel="stylesheet" type="text/css"></link>
 <!-- colors for selenium result classes -->
 <style type="text/css">
 .status_done { background-color: #eeffdd; }
@@ -40,7 +40,7 @@
 {=$se.suite}
 </div>
 {=foreach from=$tables key=k item=table}
-<div id="t{=$k} class="table testcase">
+<div id="t{=$k}" class="table testcase">
 <a name="t{=$k}"/>
 {=$table}
 </div>

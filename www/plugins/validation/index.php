@@ -2,9 +2,15 @@
 /** form validation logic for repos
  * see test page for documentation
  */
+require('validation.inc.php');
 
-// the validation API is imported by the Presentation class
-require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
+/**
+ * Filename rule is in SvnEdit script
+ */
+require('../../edit/SvnEdit.class.php');
+
+require('../../conf/Presentation.class.php');
+
 
 // define custom validation rules
 class TestUsernameRule extends RuleEreg {

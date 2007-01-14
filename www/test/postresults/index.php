@@ -89,7 +89,7 @@ $suitetable = $_REQUEST['suite'];
 $testpattern = '/<td>.*<a.*href="([^"]{6,}")/'; // assume max 999 tables 
 for ($i = 1; $i<=$_REQUEST['numTestTotal']; $i++) {
 	if (preg_match($testpattern, $suitetable, $matches)) {
-		$suitetable = str_replace($matches[1], "#t$i\" title=\"$matches[1]}", $suitetable);
+		$suitetable = str_replace($matches[1], "#t$i\" title=\"$matches[1]\"", $suitetable);
 	}
 }
 // delete everything after end of table
