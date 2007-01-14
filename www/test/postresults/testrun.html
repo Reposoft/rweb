@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>{=$runid} {=$suiteid}</title>
+<!-- optional css at report target location, can @include global.css -->
+<link href="testrun.css" rel="stylesheet" type="text/css" />
+<!-- colors for selenium result classes -->
+<style type="text/css">
+.status_done { background-color: #eeffdd; }
+.status_passed { background-color: #ddffbb; }
+.status_failed { background-color: #ffddbb; }
+</style>
+</head>
+<body>
+<h1 id="suite">{=$suite}</h1>
+<p>Testrun: {=$runid}, suite: {=$suiteid}</p>
+<p><a id="url" href="{=$url}" target="_blank">{=$url}</a></p>
+<h2>Server hosting the test suite</h2>
+{=foreach from=$server key=k item=v}
+<div><span class="label">{=$k}:</span> {=$v}</div>
+{=/foreach}
+<h2>Client running the test suite</h2>
+{=foreach from=$client key=k item=v}
+<div><span class="label">{=$k}:</span> {=$v}</div>
+{=/foreach}
+<h2>Test suite execution results</h2>
+<div><span class="label">Selenium version:</span> {=$se.selenium_version}</div>
+<div><span class="label">Number of tests:</span> {=$se.numTestTotal}</div>
+<div><span class="label">Total time:</span> {=$se.totalTime}</div>
+<div><span class="label">Result:</span> {=$se.result}</div>
+<div><span class="label">Passed tests:</span> {=$se.numTestPasses}</div>
+<div><span class="label">Failed tests:</span> {=$se.numTestFailures}</div>
+<div><span class="label">Commands passed:</span> {=$se.numCommandPasses}</div>
+<div><span class="label">Commands failed:</span> {=$se.numCommandFailures}</div>
+<div><span class="label">Command errors:</span> {=$se.numCommandErrors}</div>
+<h2>Test tables</h2>
+<div class="table suite">
+{=$se.suite}
+</div>
+{=foreach from=$tables key=k item=table}
+<div id="t{=$k} class="table testcase">
+<a name="t{=$k}"/>
+{=$table}
+</div>
+{=/foreach}
+</body>
+</html>
