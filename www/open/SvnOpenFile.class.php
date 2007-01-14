@@ -138,7 +138,7 @@ class SvnOpenFile {
 	}
 	
 	/**
-	 * @return the username of the account used to access the file
+	 * @return String the username of the account used to access the file
 	 */
 	function getAuthenticatedUser() {
 		return SvnOpen::getAuthenticatedUser();

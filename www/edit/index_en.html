@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Edit {=$file,filename} {=$file,revision}</title>
+<!--{$head}-->
+</head>
+<body>
+<div id="commandbar">
+<a id="repository" class="command" href="{=$file,folderUrl}">return to repository</a>
+</div>
+<h1><span class="path">{=$file,filename}</span> <span class="revision">{=$file,revision}</span></h1>
+<div id="info">
+<p>If you only need to read the file, not modify it, go to <a href="../open/?target={=$target}&rev={=$rev}">view</a>.</p> 
+<!--{if not $file,isLatestRevision}-->
+<p>This is an old version of the file. It can not be edited.
+You may <a href="../edit/?target={=$target}">edit current version of {=$file,filename}</a>.</p>
+<!--{elseif not $file,isWritable}-->
+<p>You have only read access to this file. Contact the user administrator to get write access.</p>
+<!--{elseif $file,isLockedBySomeoneElse}-->
+<p>You can not edit the file, because it is currently locked by 
+<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}.
+The file will be unlocked when a new version is available.
+</p>
+<!--{else}-->
+<p>You may edit this files. That will result in a new version with a higher version number.
+Using the current version number <span class="revision">{=$file,revision}</span>, 
+you can always refer to the file as it is now.</p>
+</div>
+<div id="actions">
+<h2>Edit</h2>
+{=if $file,isLockedByThisUser}
+<p>The file is locked by you. We recommend you <a href="../upload/?target={=$target}">Upload new version</a>.</p>
+{=elseif $file,typeDiscrete eq 'text' and $file,size lt 10240}
+<p>This is a small text file. We recommend you 
+<a href="../upload/?text&target={=$target}">Edit in Repos</a>.</p>
+{=elseif $file,typeDiscrete eq 'text'}
+<p>This is a text file. There is no need to lock it.
+<a href="../open/download/?target={=$target}&rev={=$rev}">Download</a>,
+edit on your computer, then <a href="../upload/?target={=$target}">upload new version</a>.</p>
+{=else}
+<p>This is a binary or unknown fileformat. We recommend you Download and lock.</p>
+{=/if}
+<h3><a href="../open/download/?target={=$target}&rev={=$rev}">Download, modify, upload</a></h3>
+<p>
+<span title="files stored as lines of text that can be viewed in any text editor">Text files</span> 
+can be edited by many users at the same time, and when you upload the new version
+the system will identify which lines you changed, 
+and <span title="combine changes in a file with a different version of the file">merge</span>
+those changes with the existing contents to create a new version.
+</p>
+<h3>Download and lock</h3>
+<p>
+For <span title="files stored in a non-text format created and read by a specific application">binary</span>
+files, version control is not as efficient as with text files.
+The difference between two versions can not be expressed as a
+<span title="the difference between two versions, expressed as only the lines that have changed">diff</span>,
+so each change must be based on the previous version.
+This means that only one user at a time can work with the file.
+</p>
+<h3><a href="../upload/?target={=$target}">Upload new version</a></h3>
+<p>
+If you have already downloaded and edited the file, upload your changes to create a new verison.
+</p>
+<h3><a href="../upload/?target={=$target}&text">Edit in Repos</a></h3>
+<p>
+Plain text documents and HTML can be conveniently edited in your browser.
+No locking is needed, and when you save it creates a new version of the file.
+</p>
+<h3>Create personal branch</h3>
+<p>
+...
+</p>
+{=if not $file,isLocked}
+<h3>Lock file</h3>
+<p>You can always lock a file to make it read-only for everyone else.</p>
+{=elseif $file,isLockedByThisUser}
+<h3>Unlock file</h3>
+<p>The file
+{=/if}
+<!--{/if}-->
+</div>
+<div id="filedetails">
+<h2>File details</h2>
+<p>Content type: <span>{=$file,type}</span></p>
+<p>Size in bytes: <span class="filesize">{=$file,size}</span></p>
+<p>Version number: <span class="revision">{=$file,revision}</span></p>
+<p>Last edited by: <span class="username">{=$file,author}</span></p>
+<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
+</div>
+<div id="footer"></div>
+</body>
+</html>

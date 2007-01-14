@@ -1,4 +1,10 @@
 <?php
+/**
+ * Displays a page that describes the different viewing options.
+ * It would be possible to have different template HTML
+ * for different MIME types, but currently it is the same template for all.
+ * @package open
+ */
 require(dirname(dirname(__FILE__)).'/conf/Presentation.class.php');
 require(dirname(__FILE__)."/SvnOpenFile.class.php" );
 

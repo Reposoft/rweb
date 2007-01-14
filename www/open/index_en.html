@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>View {=$file,filename}</title>
+<title>View {=$file,filename} {=$file,revision}</title>
 <!--{$head}-->
 </head>
 <body>
@@ -12,20 +12,22 @@
 </div>
 <!--  some actions can be set to display:none on repository page, because they are here instead -->
 <h1><span class="path">{=$file,filename}</span> <span class="revision">{=$file,revision}</span></h1>
-<div id="actions">
+<div id="info">
 <!--{if $file,isLatestRevision}-->
 <p>
 This is the current version of the file,
-{=if $file,isWritable} which you can also <a href="../edit/?target={=$target}&rev={=$rev}">edit</a>.
+{=if $file,isWritable} which you can <a href="../edit/?target={=$target}&rev={=$rev}">edit</a>.
 {=else} and you have read access only.
 {=/if}
 {=if $file,isLockedByThisUser} The file is currently locked by you, so other users can not edit it.{=/if}
 {=if $file,isLockedBySomeoneElse} The file is currently locked by 
-<span class="username">{=$file,lockOwner}</span>, so you can not edit it.{=/if}
+<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}.{=/if}
 </p>
 <!--{else}-->
 <p>This is an old version of the file. You can also <a href="?target={=$target}">view current version</a>.</p>
 <!--{/if}-->
+</div>
+<div id="actions">
 <h2>View file</h2>
 <p>
 {=if $file,size gt 102400}

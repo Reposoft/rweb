@@ -191,14 +191,15 @@
 			<div class="actions">
 				<a id="view:{$id}" class="action" href="{$web}open/?target={../@path}/{@href}">view</a>
 				<xsl:if test="$editUrl">
-					<a id="work:{$id}" class="action" href="{$web}open/work/?target={../@path}/{@href}">edit</a>
+					<a id="edit:{$id}" class="action" href="{$editUrl}?target={../@path}/{@href}">edit</a>
 					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{@href}">rename</a>
 					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={../@path}/{@href}">copy</a>
 					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{@href}">delete</a>
-					<span class="action">lock</span>
+					<!-- 
 					<a id="upload:{$id}" class="action" href="{$web}upload/?target={../@path}/{@href}">upload changes</a>
+					 -->
 				</xsl:if>
-				<a id="history:{$id}" class="action" href="{$web}open/log/?target={../@path}/{@href}">show history</a>
+				<a id="history:{$id}" class="action" href="{$web}open/log/?target={../@path}/{@href}">view history</a>
 			</div>
 			<a id="f:{$id}" class="file-{$filetype} file" href="{@href}">
 				<xsl:value-of select="@name"/>
