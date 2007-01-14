@@ -69,7 +69,7 @@ $trickyusername = rw
 @demoproject = rw
 * = r
 ";
-if (createFileWithContents($aclfile, $acl, true, true)) {
+if (createFileWithContents($aclfile, $acl, false, true)) {
 	$report->ok("Successfully created subversion ACL file $aclfile");
 } else {
 	$report->fail("Could not create subversion ACL file $aclfile");
