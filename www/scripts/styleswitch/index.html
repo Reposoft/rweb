@@ -14,23 +14,23 @@
 </head>
 
 <body>
-<div id="workspace">
 <div id="commandbar">
 <a id="repository" class="command" href="/?login">go to repository</a>
 </div>
 <div id="contents">
-	<h1>Javascript stylesheet switcher</h1>
-	<p>Select a theme by clicking the link:</p>
+	<h1>Switch style</h1>
 	<ul>
 		<li><a href="serversideSwitch.html?style=repos" rel="repos" class="styleswitch">Repos</a> - this is the default</li>
 		<li><a href="serversideSwitch.html?style=pe" rel="pe" class="styleswitch">Project Engine</a> - used for the integeration with <a target="_blank" href="http://www.projectengine.nu/">Project Engine</a></li>
 	</ul>
-	<p>When selection is done: <a class="action" href="/?login">proceed to login</a>.</p>
-	<p>If the menu images flicker in Internet Explorer, your browser needs <a target="_blank" href="http://support.microsoft.com/?scid=kb;en-us;823727&spid=2073&sid=global">this fix from Microsoft</a>.
-	Simply paste <code>javascript:void(document.execCommand("BackgroundImageCache",false,true))</code> into the address bar.</p>
-	<p>In Firefox, you can select style any time using the Page style menu.</p>
+	<p><a class="action" href="/?login">proceed to login</a>.</p>
+	<p>&nbsp;</p>
+	<small>
+	<p>Cookies must be enabled for your browser to remember the selection.<br />
+	In Firefox, you can select style any time using the Page style menu.</p>
 	<p><small>Using <a target="_blank" href="http://www.kelvinluck.com/article/switch-stylesheets-with-jquery">jquery stylesheet switcher from kelvinluck.com</a>
 	version 25/08/2006. <a target="_blank" href="styleswitch.js">source</a></small></p>
+	</small>
 </div>
 </body>
 </html>

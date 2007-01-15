@@ -43,7 +43,7 @@ to make sure that your local changes are based on the newest version of the shar
 <!--{/if}-->
 <form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
 <fieldset>
-  <legend>Upload to repos.se</legend>
+  <legend>Upload to repos</legend>
   <input type="hidden" name="target" value="{=$target}"/>
   <p>
     <label for="userfile">local file</label>
@@ -53,13 +53,34 @@ to make sure that your local changes are based on the newest version of the shar
   </p>
   <p>
     <label for="currentname">name in repository</label>
-	<!--{if $isfile}-->
+	 <!--{if $isfile}-->
     <input type="text" id="currentname" name="currentname" value="{=$target|basename}" disabled="disabled" size="40" />
-	<!--{else}-->
-	<input type="text" id="name" name="name" size="40" class="required" tabindex="2" />
-	<input type="hidden" id="create" name="create" value="yes"/>
-	<!--{/if}-->
+    <!--{else}-->
+	 <input type="text" id="name" name="name" size="40" class="required" tabindex="2" />
+	 <input type="hidden" id="create" name="create" value="yes"/>   
+    <!--{/if}-->
   </p>
+  <!--{if $isfile}-->
+  <p title="the version of the file when it was downloaded">
+    <label for="fromrev">based on version</label>
+    {=foreach from=$log key=r item=e}
+    	<input type="radio" name="fromrev" value="{=$r}" /><span class="revision">{=$r}</span> 
+    	<span class="username">{=$e.user}</span> <span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span><br />
+    {=/foreach}
+    <!-- <input type="text" id="fromrev" name="fromrev" maxlength="10" size="15"/> -->
+  </p>
+  {=if $file,isLockedByThisUser}
+  <p>
+  	 <label for="unlock">unlock at commit</label>
+  	 <input type="checkbox" id="unlock" name="unlock"/>
+  </p>
+  {=/if}
+  <!--{else}-->
+  <p>
+  	 <label for="needslock">should be locked before edit</label>
+  	 <input type="checkbox" id="needslock" name="needslock"/>
+  </p>
+  <!--{/if}-->
   <p>
     <label for="message">history text</label>
     <textarea id="message" name="message" cols="40" rows="2" tabindex="3"></textarea>
