@@ -41,8 +41,8 @@ pre {
 code {
 	font-size: 1.1em;
 }
-/* the attribute css selectors are not supported by IE6 */
-acronym, abbr, span[title], span.has-title {
+/* <abbr> not supported by IE6 */
+acronym, span.explain {
 	cursor: help;
 	border-bottom: 1px dotted #000066;
 }

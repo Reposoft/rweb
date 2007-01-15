@@ -14,7 +14,7 @@ $(document).ready(function() {
 function details_read() {
 	var e = $('body').find('div.details');
 	if (e.size() > 0) {
-		$.get('/repos/open/list/?target='+encodeURIComponent(e.title()), function(xml) {
+		$.get('/repos/open/list/?target='+encodeURIComponent(e.attr("title")), function(xml) {
 				details_write(e, $('/lists/list/entry', xml)); });
 	}
 	// add command

@@ -16,6 +16,12 @@ new FilenameRule("name");
 new NewFilenameRule("name", getTarget());
 
 if ($_SERVER['REQUEST_METHOD']=='GET') {
+	showUploadForm();
+} else {
+	processUpload();
+}
+	
+function showUploadForm() {
 	$template = new Presentation();
 	$target = getTarget();
 	$targeturl = getTargetUrl();
@@ -40,7 +46,9 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	} else {
 		$template->display();
 	}
-} else {
+}
+
+function processUpload() {
 	$presentation = new Presentation();
 	$upload = new Upload('userfile');
 	if ($upload->isCreate()) {
