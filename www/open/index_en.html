@@ -15,13 +15,14 @@
 <div id="info">
 <!--{if $file,isLatestRevision}-->
 <p>
-This is the current version of the file,
-{=if $file,isWritable} which you can <a href="../edit/?target={=$target}&rev={=$rev}">edit</a>.
-{=else} and you have read access only.
+This is the current version of the file.
+{=if not $file,isWritable} You have read access only.
+{=elseif $file,isLockedByThisUser} The file is currently locked by you, so other users can not edit it.
+{=elseif $file,isLockedBySomeoneElse} The file is currently locked by 
+<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}.
+{=else}
+You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 {=/if}
-{=if $file,isLockedByThisUser} The file is currently locked by you, so other users can not edit it.{=/if}
-{=if $file,isLockedBySomeoneElse} The file is currently locked by 
-<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}.{=/if}
 </p>
 <!--{else}-->
 <p>This is an old version of the file. You can also <a href="?target={=$target}">view current version</a>.</p>

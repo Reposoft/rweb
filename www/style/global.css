@@ -9,11 +9,8 @@ body {
 }
 /* resume with em font sizes relative to the above */
 a {
-	color: #000066;
+	color: #003399;
 	text-decoration: none;
-}
-p > a {
-	border-bottom: 1px dotted #000066;
 }
 table p {
 	margin-top: 0.5em;
@@ -34,6 +31,7 @@ h3 {
 	font-weight: normal;
 	margin-bottom: 3px;
 	font-size: 1.1em;
+	letter-spacing: 0.1em;
 }
 pre {
 	font-size: 1.2em;
@@ -42,6 +40,11 @@ pre {
 }
 code {
 	font-size: 1.1em;
+}
+/* the attribute css selectors are not supported by IE6 */
+acronym, abbr, span[title], span.has-title {
+	cursor: help;
+	border-bottom: 1px dotted #000066;
 }
 /* layout of version control concepts, these are usually span tags */
 .path {

@@ -63,6 +63,7 @@ if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable ma
 /**
  * @return true if the current request is internal, from a server page,
  * a web service client or an AJAX page
+ * @see ServiceRequest
  */
 function isRequestService() {
 	return isset($_REQUEST[WEBSERVICE_KEY]) && $_REQUEST[WEBSERVICE_KEY]=='json';
@@ -130,6 +131,8 @@ function getWebapp() {
  * If uncertain, use getWebapp instead of this function
  * 
  * @return String webapp root URL to static resources like images, ending with slash
+ * @deprecated use getWebapp. If HTTPS is required for _all_ resources, getWebapp will return https,
+ *  if not then redirection is done by the apache server
  */
 function getWebappStatic() {
 	if ($w = _getConfig('repos_static')) {
@@ -339,6 +342,7 @@ function isRepositoryUrl($url) {
 /**
  * Platform independen way of getting the server's temp folder.
  * @return String absolute path, folder, existing
+ * @deprecated use System::getApplicationTemp instead, this functionality should be in System
  */
 function getSystemTempDir() {
 	$type = '';
@@ -435,6 +439,7 @@ function _getTempFile($subdir=null) {
  * such as the temp dir and the repos folder.
  * Note that the path should be encoded with the local shell encoding, see toPath.
  * @param String $folder absolute path, with tailing DIRECTORY_SEPARATOR like all folders
+ * @deprecated use System::deleteFolder
  */
 function deleteFolder($folder) {
 	_authorizeFilesystemModify($folder);
@@ -473,6 +478,7 @@ function deleteFolder($folder) {
 
 /**
  * replaces touch().
+ * @deprecated use System::createFile
  */
 function createFile($absolutePath) {
 	_authorizeFilesystemModify($absolutePath);
@@ -484,6 +490,7 @@ function createFile($absolutePath) {
 
 /**
  * replaces mkdir().
+ * @deprecated use System::createFolder
  */
 function createFolder($absolutePath) {
 	_authorizeFilesystemModify($absolutePath);
@@ -496,6 +503,7 @@ function createFolder($absolutePath) {
 /**
  * replaces unlink().
  * @param String $file absolute path to file
+ * @deprecated use System::deleteFile
  */
 function deleteFile($file) {
 	_authorizeFilesystemModify($file);
@@ -516,6 +524,7 @@ function deleteFile($file) {
 
 /**
  * Instead of createFile() and fopen+fwrite+fclose.
+ * @deprecated use System::createFileWithContents
  */
 function createFileWithContents($absolutePath, $contents, $convertToWindowsNewlineOnWindows=false, $overwrite=false) {
 	if (!isFile($absolutePath)) {
@@ -597,6 +606,7 @@ function urlEncodeNames($url) {
 
 /**
  * @return true if script is running on windows OS, false for anything else
+ * @deprecated use System::isWindows
  */
 function isWindows() {
 	return ( substr(PHP_OS, 0, 3) == 'WIN' );
@@ -606,6 +616,7 @@ function isWindows() {
  * Converts a string from internal encoding to the encoding used for file names and commands.
  * @param String $string the value with internal encoding (same as no encoding)
  * @return String the same value encoded as the OS expects it on the command line
+ * @deprecated use System::toShellEncoding
  */
 function toShellEncoding($string) {
 	if (isWindows()) {
@@ -674,14 +685,4 @@ function _getStackTrace() {
 	return $o;
 }
 
-// ------ unit testing support -----
-
-/**
- * @return true if scripts should run self-test
- * @deprecated use simpletest instead. remove when admin scripts no longer use this.
- */
-function isTestRun() {
-	global $argv;
-	return ( (isset($argv[1]) && $argv[1]=='unitTest') || isset($_GET['unitTest']) );
-}
 ?>

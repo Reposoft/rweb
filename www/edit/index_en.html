@@ -12,7 +12,7 @@
 </div>
 <h1><span class="path">{=$file,filename}</span> <span class="revision">{=$file,revision}</span></h1>
 <div id="info">
-<p>If you only need to read the file, not modify it, go to <a href="../open/?target={=$target}&rev={=$rev}">view</a>.</p> 
+<p>If you only need to read the file, not edit it, go to <a href="../open/?target={=$target}&rev={=$rev}">view</a>.</p> 
 <!--{if not $file,isLatestRevision}-->
 <p>This is an old version of the file. It can not be edited.
 You may <a href="../edit/?target={=$target}">edit current version of {=$file,filename}</a>.</p>
@@ -21,7 +21,7 @@ You may <a href="../edit/?target={=$target}">edit current version of {=$file,fil
 <!--{elseif $file,isLockedBySomeoneElse}-->
 <p>You can not edit the file, because it is currently locked by 
 <span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}.
-The file will be unlocked when a new version is available.
+The file will be unlocked when a new version is committed.
 </p>
 <!--{else}-->
 <p>You may edit this files. That will result in a new version with a higher version number.
@@ -50,7 +50,7 @@ the system will identify which lines you changed,
 and <span title="combine changes in a file with a different version of the file">merge</span>
 those changes with the existing contents to create a new version.
 </p>
-<h3>Download and <a href="lock/?target={=$target}">lock</a></h3>
+<h3><a href="lock/?target={=$target}&download">Lock and Download</a></h3>
 <p>
 For <span title="files stored in a non-text format created and read by a specific application">binary</span>
 files, version control is not as efficient as with text files.

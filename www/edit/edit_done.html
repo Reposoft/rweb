@@ -12,6 +12,9 @@ div.editlog > pre {
 	color: gray;
 }
 </style>
+<!--{if $redirect}-->
+<meta http-equiv="refresh" content="1;url={=$redirect}" />
+<!--{/if}-->
 </head>
 
 <body>
@@ -44,8 +47,10 @@ div.editlog > pre {
 <em>{=$result}</em></p>
 <!--{/if}-->
 <!-- urlEncodeNames does not work here if there is query params -->
-<p><a class="action" href="{=$nexturl}">return to repository</a></p>
-
+<p><a href="{=$nexturl}">return to repository</a></p>
+<!--{if $redirect}-->
+<p><small>You should be automatically redirected to <a href="{=$redirect}">{=$redirect}</a></small></p>
+<!--{/if}-->
 <!--{if $revision}-->
 <!-- not supported in release 1.0: Need to know the target folder here to be able to show the log.
 <p>This commit created a <a href="../log/?rev={=$revision}">changeset {=$revision}</a>, containing the difference from the previous version. It is possible to <a href="../undo/?rev={=$revision}">undo change {=$revision}</a>.</p>

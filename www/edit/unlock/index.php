@@ -14,6 +14,6 @@ $template = new Presentation();
 $unlock = new SvnEdit('unlock');
 $unlock->addArgUrl($targeturl);
 $unlock->exec();
-$unlock->present($template, getWebapp().'edit/?target='.getTarget());
+$unlock->present($template, getParent($targeturl));
 
 ?>
