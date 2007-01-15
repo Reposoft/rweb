@@ -18,6 +18,7 @@ $sections = array(
 	'dependencies' => 'Required command line tools',
 	'repository' => 'Checking local repository',
 	'localeSettings' => 'Checking locales for the web server\'s command line',
+	'resources' => 'Checking local system'
 	// disabled becaus it contains server data // 'debug' => 'Debug info'
 	);
 // validating configuration
@@ -52,7 +53,7 @@ $dependencies = array(
 //	'whoami' => '--version'
 );
 $repository = array(
-	getCommand('svnlook') . ' youngest ' . getConfig('local_path') => "Local path contains repository revision: "
+	System::getCommand('svnlook') . ' youngest ' . getConfig('local_path') => "Local path contains repository revision: "
 );
 
 // run the diagnostics page
@@ -61,6 +62,9 @@ sections();
 html_end();
 
 // --- layout ---
+$passes = 0;
+$fails = 0;
+
 function sections() {
 	global $sections;
 	foreach ( $sections as $fnc=>$name ) {
@@ -85,6 +89,15 @@ function html_start($title='Repos configuration info') {
 }
 
 function html_end() {
+	global $passes, $fails;
+	line_start('Done. ');
+	$result = "$passes passes, ".($fails+0)." fails and 0 exceptions.";
+	if ($fails == 0) {
+		sayOK($result);
+	} else {
+		sayFailed($result);
+	}
+	line_end();
 	echo "<hr/></body></html>";
 }
 
@@ -102,10 +115,14 @@ function line_end() {
 // --- helper functions ---
 
 function sayOK($msg = 'OK') {
+	global $passes;
+	$passes++;
 	?><span style="color:#006600; padding-left:5px; padding-right:5px;"><strong><?php echo $msg ?></strong></span><?php
 }
 
 function sayFailed($msg = 'Failed') {
+	global $fails;
+	$fails++;
 	?><span style="color:#990000; padding-left:5px; padding-right:5px;"><strong><?php echo $msg ?></strong></span><?php
 }
 
@@ -187,6 +204,30 @@ function repository() {
 			sayFailed( $result );
 		line_end($descr);
 	}
+}
+
+function resources() {
+	line_start('Application temp folder: ');
+	$tmp = System::getApplicationTemp();
+	if (!is_dir($tmp)) {
+		sayFailed($tmp . ' is not a folder');
+	} elseif (!is_writable($tmp)) {
+		sayFailed($tmp . ' is not writable');
+	} else {
+		sayOK($tmp . ' exists and is writable');
+	}
+	line_end();
+	
+	line_start('Script wrapper: ');
+	$w = _repos_getScriptWrapper();
+	if (!$w) {
+		sayOK('Not needed on this server');
+	} elseif (!file_exists($w)) {
+		sayFailed($w.' does not exist');
+	} elseif (!is_executable($w)) {
+		sayFailed($w.' is not executable');
+	}
+	line_end();
 }
 
 function localeSettings() {
