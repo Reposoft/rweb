@@ -106,43 +106,52 @@
 				<span class="revision" title="the changeset number (version number)">
 					<xsl:value-of select="@revision"/>
 				</span>
-				<span class="username" title="author">
+				<span id="author:{@revision}" class="username" title="author">
 					<xsl:value-of select="author"/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<span class="datetime" title="date and time of the commit">
+				<span id="datetime:{@revision}" class="datetime" title="date and time of the commit">
 					<xsl:value-of select="date"/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<!-- TODO <a title="{$undo}" class="action" href="{$web}/edit/undo/?rev={@revision}">undo</a> -->
 			</h3>
 			<xsl:if test="string-length(msg) > 0">
-				<div class="message" title="Log message">
+				<div id="message:{@revision}" class="message" title="Log message">
 						<xsl:call-template name="linebreak">
 							<xsl:with-param name="text" select="msg"/>
 						</xsl:call-template>
 				</div>
 			</xsl:if>
 			<xsl:apply-templates select="paths">
-				<xsl:with-param name="revfrom" select="following-sibling::*[1]/@revision"/>
+				<xsl:with-param name="fromrev" select="following-sibling::*[1]/@revision"/>
 			</xsl:apply-templates>
 		</div>
 	</xsl:template>
 	<xsl:template match="paths">
-		<xsl:param name="revfrom"/>
+		<xsl:param name="fromrev"/>
 		<xsl:apply-templates select="path">
-			<xsl:with-param name="revfrom" select="$revfrom"/>
+			<xsl:with-param name="fromrev" select="$fromrev"/>
 		</xsl:apply-templates>
 	</xsl:template>
 	<xsl:template match="paths/path">
-		<xsl:param name="revfrom"/>
+		<xsl:param name="fromrev"/>
+		<xsl:param name="pathid">
+			<xsl:call-template name="getFileID">
+				<xsl:with-param name="filename" select="."/>
+			</xsl:call-template>
+			<xsl:value-of select="../../@revision"/>
+			<xsl:value-of select="@action"/>
+		</xsl:param>
 		<div class="row log-{@action}">
 			<xsl:if test="@action='A'">
 				<span class="path" title="Added {.}">
 					<xsl:value-of select="."/>
 				</span>
-				<xsl:value-of select="$spacer"/>
+				<xsl:if test="not(@copyfrom-path)">
+					<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={../../@revision}&amp;action={@action}">view</a>
+				</xsl:if>
 				<xsl:if test="@copyfrom-path">
+					<xsl:value-of select="$spacer"/>
 					<span class="copied" title="Copied from {@copyfrom-path} version {@copyfrom-rev}">
 						<span class="path">
 							<xsl:value-of select="@copyfrom-path"/>&#160;</span>
@@ -150,22 +159,20 @@
 							<xsl:value-of select="@copyfrom-rev"/>
 						</span>
 					</span>
+					<a id="view:{$pathid}" class="action" href="{$web}open/?target={@copyfrom-path}&amp;rev={@copyfrom-rev}&amp;action={@action}">view</a>
 				</xsl:if>
 			</xsl:if>
 			<xsl:if test="@action='D'">
 				<span class="path" title="Deleted {.}, so it only exists in versions prior to {../../@revision}.">
 					<xsl:value-of select="."/>
 				</span>
+				<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={$fromrev}&amp;action={@action}">view</a>
 			</xsl:if>
 			<xsl:if test="@action='M'">
 				<span class="path" title="Modified {.}">
 					<xsl:value-of select="."/>
 				</span>
-				<div class="actions">
-					<a title="the file as it was before the change" class="action" href="{$web}open/cat/?target={.}&amp;rev={$revfrom}">before</a>
-					<a title="the file after the change" class="action" href="{$web}open/cat/?target={.}&amp;rev={../../@revision}">after</a>
-					<a title="the difference this change made" class="action" href="{$web}open/diff/?target={.}&amp;revfrom={$revfrom}&amp;revto={../../@revision}">show diff</a>
-				</div>
+				<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={../../@revision}&amp;fromrev={$fromrev}&amp;action={@action}">view</a>
 			</xsl:if>
 		</div>
 	</xsl:template>
@@ -198,5 +205,11 @@
 				<xsl:value-of select="$text"/>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+	<!-- make valid HTML id for file or folder, containing [A-Za-z0-9] and [-_.]  -->
+	<!-- ids should always start with letters, so a prefix like 'f:' is needed -->
+	<xsl:template name="getFileID">
+		<xsl:param name="filename" select="@href"/>
+		<xsl:value-of select="translate($filename,'%/()@&amp;','______')"/>
 	</xsl:template>
 </xsl:stylesheet>

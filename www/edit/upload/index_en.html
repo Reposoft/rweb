@@ -4,11 +4,20 @@
 <title>Upload to repos</title>
 <script type="text/javascript">
 function autoFillFilename(path) {
-<!--{if not $isfile}-->
 	var pos = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
-	if (pos > 0) {
-		var filename = path.substring(pos + 1);
-		document.getElementsByName('name')[0].value = filename;
+	if (pos <= 0) return;
+	var filename = path.substring(pos + 1);
+<!--{if not $isfile}-->
+	document.getElementsByName('name')[0].value = filename;
+<!--{else}-->
+	if (filename == document.getElementById('currentname').value) return;
+	var m = filename.match(/-(\d+)\.?\w*$/)
+	if (m.length > 1) var rev = m[1];
+	var button = document.getElementById('fromrev'+rev);
+	if (!button) {
+		alert('From the filename it looks like changes are based on revision '+rev+'. But there is no such revision. Please check that it is the same document.');
+	} else {
+		button.checked = "checked";
 	}
 <!--{/if}-->
 }
@@ -30,6 +39,7 @@ Current revision: <span class="revision"></span><br />
 Last modified <span class="datetime"></span> by <span class="username"></span><br />
 Filesize: <span class="filesize"></span><br />
 </div>
+<!-- fixed, but there is still an option to overwrite 
 <div class="warning">
 <p>File upload is a convenient feature, but not a real versioning operation.
 It <em>will</em> overwrite the existing file,
@@ -38,6 +48,7 @@ Please check existing contents before uploading,
 to make sure that your local changes are based on the newest version of the shared file.
 </p>
 </div>
+ -->
 <!--{else}-->
 <p>As a new file in folder {=$target}</p>
 <!--{/if}-->
@@ -62,12 +73,19 @@ to make sure that your local changes are based on the newest version of the shar
   </p>
   <!--{if $isfile}-->
   <p title="the version of the file when it was downloaded">
-    <label for="fromrev">based on version</label>
-    {=foreach from=$log key=r item=e}
-    	<input type="radio" name="fromrev" value="{=$r}" /><span class="revision">{=$r}</span> 
+    {=foreach from=$log key=r item=e name=log}
+      {=if $smarty.foreach.log.first}
+      <label for="fromrev{=$r}">based on version <span class="revision">{=$r}</span></label>
+      <input id="fromrev{=$r}" type="radio" name="fromrev" value="{=$r}" checked="checked" />
+      {=else}
+      <label for="fromrev{=$r}">&nbsp;<span class="revision">{=$r}</span></label>
+      <input id="fromrev{=$r}" type="radio" name="fromrev" value="{=$r}" />      
+      {=/if}
     	<span class="username">{=$e.user}</span> <span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span><br />
     {=/foreach}
-    <!-- <input type="text" id="fromrev" name="fromrev" maxlength="10" size="15"/> -->
+      <label for="fromrev-1">&nbsp;</label>
+      <input id="fromrev-1" type="radio" name="fromrev" value="-1" />
+      <span>Don't know. Just overwrite the current version.</span>
   </p>
   {=if $file,isLockedByThisUser}
   <p>

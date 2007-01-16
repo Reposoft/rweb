@@ -26,6 +26,8 @@ if ($type=='ics') {
 
 // new handling
 
+// TODO identify folders, even without trailing slash, for example when coming from history
+
 $revisionRule = new RevisionRule();
 
 $rev = $revisionRule->getValue();
