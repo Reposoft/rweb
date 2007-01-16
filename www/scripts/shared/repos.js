@@ -2,18 +2,58 @@
  * Repos shared script logic (c) Staffan Olsson http://www.repos.se
  * Static functions, loaded after prepare and jquery.
  * @version $Id$
- *
- * reportError(error) - handles any error message or exception
  */
 var Repos = {
 
 	// -------------- plugin setup --------------
 	
-	addScript: function(src) {
+	/**
+	 * Adds a javascript to the current page and evaluates it (asynchronously).
+	 * @param src script url from repos root, not starting with slash
+	 * @param loadEventHandler callback function for when the script has been evaluated
+	 * @return the script element that was appended
+	 */
+	addScript: function(src, loadEventHandler) {
 		var s = document.createElement('script');
+		if (loadEventHandler) s.onload = loadEventHandler;
 		s.type = "text/javascript";
-		s.src = src;
+		s.src = Repos.getWebapp() + src;
 		document.getElementsByTagName('head')[0].appendChild(s);
+		return s;
+	},
+
+	/**
+	 * Adds a stylesheet to the current page.
+	 * @param src css url from repos root, not starting with slash
+	 * @return the link element that was appended
+	 * @todo is the appended css accepted by IE6?
+	 */
+	addCss: function(src) {
+		var s = document.createElement('link');
+		s.type = "text/css";
+		s.rel = "stylesheet";
+		s.href = Repos.getWebapp() + src;
+		document.getElementsByTagName('head')[0].appendChild(s);
+		return s;
+	},
+	
+	/**
+	 * Calculates webapp root based on the include path of this script (repos.js or head.js)
+	 * @return String webapp root url with trailing slash
+	 */
+	getWebapp: function() {
+		var tags = document.getElementsByTagName("head")[0].childNodes;
+		var me = /scripts\/head\.js(\??.*)$|scripts\/shared\/repos\.js$/;
+		
+		for (i = 0; i < tags.length; i++) {
+			var t = tags[i];
+			if (!t.tagName) continue;
+			var n = t.tagName.toLowerCase();
+			if (n == 'script' && t.src && t.src.match(me)) // located head.js, save path for future use
+				this.repos_webappRoot = t.src.replace(me, '');
+		}
+		if (!this.repos_webappRoot) return '/repos/'; // best guess
+		return this.repos_webappRoot;
 	},
 
 	// ------------ exception handling ------------

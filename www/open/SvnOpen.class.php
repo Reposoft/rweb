@@ -248,7 +248,7 @@ class SvnOpen {
 	}
 	
 	function getContentLength() {
-		return $size->command->getContentLength();
+		return $this->command->getContentLength();
 	}
 	
 }

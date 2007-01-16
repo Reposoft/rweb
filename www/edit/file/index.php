@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template = new Presentation();
 	$target = getTarget();
 	$targeturl = getTargetUrl();
-	$isfile = isTargetFile();
+	$isfile = isFile($target);
 	if ($isfile) {
 		$mimetype = login_getMimeType($targeturl);
 		if (_canEditAsTextarea($mimetype)) {

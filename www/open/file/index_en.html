@@ -7,10 +7,10 @@
 
 <body>
 <div id="commandbar">
-<a id="repository" class="command" href="{=$file.folderUrl}">return to repository</a>
+<a id="repository" class="command" href="{=$file,folderUrl}">return to repository</a>
 </div>
 <div class="contents cat">
-<h3><span class="path" title="{=$file.filename}, version {=$file.revision}">{=$target}</span> <span class="revision">{=$file,revision}</span></h3>
+<h3><span class="path" title="{=$file.filename}, version {=$file,revision}">{=$target}</span> <span class="revision">{=$file,revision}</span></h3>
 <textarea cols="100" rows="30">
 {=$file->sendInlineHtml()}
 </textarea>

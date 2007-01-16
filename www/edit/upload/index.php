@@ -57,7 +57,7 @@ function showUploadForm() {
 	$target = getTarget();
 	$targeturl = getTargetUrl();
 	// if target is a file then this is upload new version
-	$isfile = isTargetFile();
+	$isfile = isFile($target);
 	if ($isfile) {
 		$file = new SvnOpenFile($target);
 		$template->assign_by_ref('file', $file);

@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>repos.se dateformat plugin test page</title>
-<!-- the script -->
-<script type="text/javascript" src="repos.js"></script>
+<!-- the script, with a realistic url that can be used to find webappRoot -->
+<script type="text/javascript" src="../../scripts/shared/repos.js"></script>
 <!-- unit testing must be imported after Repos, so it can override functions -->
 <script type="text/javascript" src="../unittest.js"></script>
 <!-- dependencies -->
@@ -15,6 +15,8 @@
 <h1>Repos shared script API</h1>
 <ul>
 <li><code>Repos.reportError(error)</code></li>
+<li><code>Repos.addScript(srcFromWebappRoot)</code></li>
+<li><code>Repos.addCss(srcFromWebappRoot)</code></li>
 </ul>
 <h2>unit tests</h2>
 <p>The unit test library overrides Repos.reportError, so it can't be tested, but the surrounding functions can be.</p>
@@ -59,6 +61,29 @@ function TestRepos() {
 	
 	this.testLogError = function() {
 		Repos._logError('repos.js unit test message');
+	}
+	
+	this.testGetWebapp = function() {
+		// Firefox creates an absolute URL: this.assertEquals('../../', Repos.getWebapp());
+		this.assertTrue(/\.\.\/\.\.\/|https?:\/\/.*\/.*\/$/.test(Repos.getWebapp()));
+	}
+
+	this.testAddCss = function() {
+		var e = Repos.addCss('scripts/shared/othercss.css');
+		this.assertEquals('object', typeof(e));
+		this.assertEquals(document.getElementsByTagName('head')[0],e.parentNode);
+	}
+	
+	this.testAddScript = function() {
+		// see http://www.mail-archive.com/discuss@jquery.com/msg10900.html
+		var loadEventHandler = function() {
+			var p = document.createElement('p');
+			p.innerHTML('Callback reports that the added script has loaded');
+			document.getElementsByTagName('body')[0].appendChild(p);
+		}
+		var e = Repos.addScript('scripts/shared/otherscript.js', loadEventHandler);
+		this.assertEquals('object', typeof(e));
+		this.assertEquals(document.getElementsByTagName('head')[0],e.parentNode);
 	}
 	
 }

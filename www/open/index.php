@@ -9,13 +9,22 @@ require(dirname(dirname(__FILE__)).'/conf/Presentation.class.php');
 require(dirname(__FILE__)."/SvnOpenFile.class.php" );
 
 // get file to open
+$target = getTarget();
 $url = getTargetUrl();
-if (strEnds($url, '/')) {
-	header('Location: '.$url);
+
+$revisionRule = new RevisionRule();
+$rev = $revisionRule->getValue();
+
+if (login_isFolder($url)) {
+	if ($rev) {
+		header('Location: '.getWebapp().'open/list/?target='.urlencode($target).'&rev='.$rev);
+	} else {
+		header('Location: '.$url);
+	}
 	exit;
 }
 
-$type = substr($url, strrpos($url, '.') + 1);
+$type = substr($target, strrpos($target, '.') + 1);
 
 // iCalendar files
 if ($type=='ics') {
@@ -24,13 +33,7 @@ if ($type=='ics') {
 	exit;
 }
 
-// new handling
-
 // TODO identify folders, even without trailing slash, for example when coming from history
-
-$revisionRule = new RevisionRule();
-
-$rev = $revisionRule->getValue();
 
 $file = new SvnOpenFile(getTarget(), $rev);
 

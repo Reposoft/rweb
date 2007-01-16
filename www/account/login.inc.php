@@ -130,7 +130,11 @@ function verifyLogin($targetUrl) {
 	if (!$user) {
 		trigger_error('No user credentials given. Can not validate login.', E_USER_ERROR);
 	}
-	$s = getHttpStatus($targetUrl, $user, _getReposPass());
+	$request = new ServiceRequest($targetUrl);
+	$request->setSkipBody();
+	$request->exec();
+	$s = $request->getStatus();
+	if ($s==301) login_followRedirect($targetUrl, $request->getResponseHeaders());
 	// allow authentication with parent if the current target is no longer in the repository
 	if ($s==404) login_getFirstNon404Parent(getParent($targetUrl), $s);
 	// accepted codes
@@ -138,6 +142,20 @@ function verifyLogin($targetUrl) {
 	if ($s==401 || $s==403) return false;
 	trigger_error("The target URL '$targetUrl' can not be used to validate login. Returned HTTP status code '$s'.", E_USER_ERROR);
 	return false;
+}
+
+/**
+ * Mimics redirects from repository for target parameters.
+ * Useful when target is a folder but does not end with slash.
+ */
+function login_followRedirect($fromUrl, $headers) {
+	$location = $headers['Location'];
+	$from = strAfter($fromUrl, getRepository());
+	$to = strAfter($location, getRepository());
+	$url = repos_getSelfUrl().'?'.repos_getSelfQuery();
+	$url = str_replace($from, $to, $url);
+	header('Location: '.$url);
+	exit;
 }
 
 /**
@@ -244,14 +262,6 @@ function login_decodeQueryParam($array, $name) {
 }
 
 /**
- * @return true if the target is a file, false if it is a folder or undefined
- * @deprecated use isFile($path) directly instead
- */
-function isTargetFile() {
-	return (isFile(getTarget()));
-}
-
-/**
  * @return true if there is a target parameter
  */
 function isTargetSet() {
@@ -269,17 +279,6 @@ function getTarget() {
 }
 
 /**
- * @param String fullUrl the URL of a repository resource
- * @param String pathFromRepoRoot the resource path, absolute from repository root
- * @return repository url (to root) with no tailing slash.
- *   Returns false if url is empty or if path is not part of url. 
- * @deprecated not used
-function getRepoRoot($fullUrl,$pathFromRepoRoot) {
-	return substr($fullUrl, 0 , strpos($fullUrl, $pathFromRepoRoot));
-}
- */
-
-/**
  * Target url is resolved from query parameters
  * @param target Optional target path, if not set then getTarget() is used.
  * @return Full url of the file or directory this request targets
@@ -290,6 +289,25 @@ function getTargetUrl($target=null) {
 	if (strlen($target)<1) return false;
     return getRepository() . $target;
 }
+
+/**
+ * Checks if a respository resource is a folder
+ *
+ * @param String $url absolute URL to a svn repository resources
+ * @see System::isFile for checkin paths based on contents
+ */
+function login_isFolder($url) {
+	if (strEnds($url, '/')) return true;
+	$s = new ServiceRequest($url);
+	$s->setSkipBody();
+	$s->exec();
+	if ($s->getStatus() == 301) {
+		$h = $s->getResponseHeaders();
+		return ($h['Location'] == $url.'/');
+	}
+}
+
+// ----- authentication functionality -----
 
 /**
  * Sets the HTTP headers to ask for username and pasword.
