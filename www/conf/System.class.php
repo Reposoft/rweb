@@ -29,6 +29,21 @@ class System {
 		return deleteFolder($folder);
 	}
 	
+	/**
+	 * replaces unlink().
+	 * @param String $file absolute path to file
+	 */
+	function deleteFile($file) {
+		return deleteFile($file);
+	}
+	
+	/**
+	 * Instead of createFile() and fopen+fwrite+fclose.
+	 */
+	function createFileWithContents($absolutePath, $contents, $convertToWindowsNewlineOnWindows=false, $overwrite=false) {
+		return createFileWithContents($absolutePath, $contents, $convertToWindowsNewlineOnWindows, $overwrite);
+	}
+	
 	function isWindows() {
 		return isWindows();
 	}

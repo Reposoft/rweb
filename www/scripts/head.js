@@ -1,6 +1,6 @@
 /**
  * Repos common script logic (c) Staffan Olsson http://www.repos.se
- * @version $Id$
+ * @version $Id: head.js 2309 2007-01-15 08:51:01Z solsson $
  */
 
 // repos: prepare
@@ -24,7 +24,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a
 
 /**
  * Repos fileid (c) 2006 repos.se
- * $Id$
+ * $Id: head.js 2309 2007-01-15 08:51:01Z solsson $
  */
 function ReposFileId(name) {
 	this.name = name;
@@ -112,7 +112,7 @@ function eraseCookie(name)
 /**
  * Repos shared script logic (c) Staffan Olsson http://www.repos.se
  * Static functions, loaded after prepare and jquery.
- * @version $Id$
+ * @version $Id: head.js 2309 2007-01-15 08:51:01Z solsson $
  *
  * reportError(error) - handles any error message or exception
  */
@@ -238,7 +238,7 @@ var Repos = {
 // repos: resourceid
 /**
  * Repos show version number (c) Staffan Olsson http://www.repos.se
- * @version $Id$
+ * @version $Id: head.js 2309 2007-01-15 08:51:01Z solsson $
  */
 
 function ReposResourceId(text) {

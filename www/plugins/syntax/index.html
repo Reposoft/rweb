@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Client-side syntax highlighting plugin</title>
+<!-- dependencies -->
+<script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../scripts/shared/repos.js"></script>
+<!-- dp.SyntaxHighlighter -->
+<link type="text/css" rel="stylesheet" href="../../lib/dpsyntax/dp.SyntaxHighlighter/Styles/SyntaxHighlighter.css"></link>
+<!-- for unit testing -->
+<script type="text/javascript" src="../../scripts/unittest.js"></script>
+</head>
+<body>
+<h1>Client-side syntax highlighting</h1>
+<p>Using <a href="http://www.dreamprojections.com/SyntaxHighlighter/">dp.SyntaxHighlighter</a>.
+See <a href="../../lib/">lib/</a> folder.</p>
+<p><a href="javascript:loadSyntax()">load syntax highlighting</a></p>
+
+<h2>Javascript</h2>
+<textarea rows="4" cols="60" name="myjs" class="js">
+$(document).ready(function() {
+	// wanted $('.syntax') but dp can not handle other classes than its own
+	$('textarea').each(function(i) {
+		dp.SyntaxHighlighter.HighlightAll(this.name);
+	} ); } );
+</textarea>
+
+<h2>PHP</h2>
+<textarea rows="4" cols="60" name="myphp" class="php:nocontrols">
+	function reportErrorText($n, $message, $trace) {
+		if ($n!=2048) { // E_STRICT not defined in php 4
+			echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>");
+			exit;
+		}
+	}
+	set_error_handler('reportError');
+</textarea>
+
+<h2>Html</h2>
+<textarea rows="4" cols="60" name="myhtml" class="html">
+<label for="demo">demo</label>
+<textarea rows="4" cols="60" name="demo">
+../textarea&gt;
+</textarea>
+</textarea>
+
+<hr />
+
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shCore.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushCSharp.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushPhp.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushJScript.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushVb.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushSql.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushDelphi.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushPython.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushRuby.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushCss.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushCpp.js"></script>
+<script class="javascript">
+$(document).ready(function() {
+	$('textarea').each(function(i) {
+		dp.SyntaxHighlighter.HighlightAll(this.name);
+	} ); } );
+</script>
+
+</body>
+</html>

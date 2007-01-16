@@ -4,6 +4,49 @@
 
 require (dirname(dirname(__FILE__)).'/conf/System.class.php');
 
+/**
+ * Downloads a URL to the local hard drive
+ *
+ * @param String $url the file url
+ * @param String $localTargetFile the absolute path to download to, in an existing folder
+ */
+function download($url, $localTargetFile) {
+	$ch = curl_init();
+   curl_setopt($ch, CURLOPT_URL, $url);
+   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, $url);
+   $fh = fopen($localTargetFile, 'w');
+   curl_setopt($ch, CURLOPT_FILE, $fh);
+   curl_exec($ch);
+	curl_close($ch);
+	fclose($fh);
+}
+
+/**
+ * Extracts ZIP to folder
+ *
+ * @param String $sourceFile absolute path for the compressed file
+ * @param String $destination folder to extract to. Will attempt to create it if it does not exist.
+ */
+function decompressZip( $sourceFile, $destination) {
+	if (!strEnds($destination, '/')) $destination .= '/';
+	$zip = zip_open($sourceFile);
+
+	if (!$zip) trigger_error('Could not open zip file '.$sourceFile, E_USER_ERROR);
+	$dir = $destination;
+   while($zip_entry = zip_read($zip)) {
+       $entry = zip_entry_open($zip,$zip_entry);
+       $filename = zip_entry_name($zip_entry);
+       $target_dir = $dir.substr($filename,0,strrpos($filename,'/'));
+       $filesize = zip_entry_filesize($zip_entry);
+       if (is_dir($target_dir) || mkdir($target_dir)) {
+           if ($filesize > 0) {
+               $contents = zip_entry_read($zip_entry, $filesize);
+               System::createFileWithContents($dir.$filename,$contents);
+           }
+       }
+   }
+}
+
 /*
 	extract GZ archive
 	arg 1 is an absolute path to a gz archive

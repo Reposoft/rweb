@@ -10,10 +10,10 @@
 <a id="repository" class="command" href="{=$file.folderUrl}">return to repository</a>
 </div>
 <div class="contents cat">
-<h1><span class="path" title="{=$file.filename}, version {=$file.revision}">{=$target}</span> <span class="revision">{=$file.revision}</span></h1>
-<pre>
+<h3><span class="path" title="{=$file.filename}, version {=$file.revision}">{=$target}</span> <span class="revision">{=$file,revision}</span></h3>
+<textarea cols="100" rows="30">
 {=$file->sendInlineHtml()}
-</pre>
+</textarea>
 </div>
 <div id="footer"></div>
 </body>
