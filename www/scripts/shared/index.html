@@ -78,12 +78,18 @@ function TestRepos() {
 		// see http://www.mail-archive.com/discuss@jquery.com/msg10900.html
 		var loadEventHandler = function() {
 			var p = document.createElement('p');
-			p.innerHTML('Callback reports that the added script has loaded');
+			p.innerHTML = 'Callback reports that the added script has loaded';
 			document.getElementsByTagName('body')[0].appendChild(p);
 		}
 		var e = Repos.addScript('scripts/shared/otherscript.js', loadEventHandler);
 		this.assertEquals('object', typeof(e));
 		this.assertEquals(document.getElementsByTagName('head')[0],e.parentNode);
+	}
+	
+	this.testAddScriptNonExisting = function() {
+		// no warning will be given
+		var e = Repos.addScript('scripts/shared/nonexisting.js');
+		this.assertEquals('object', typeof(e));
 	}
 	
 }

@@ -15,7 +15,9 @@ var Repos = {
 	 */
 	addScript: function(src, loadEventHandler) {
 		var s = document.createElement('script');
-		if (loadEventHandler) s.onload = loadEventHandler;
+		if (typeof(loadEventHandler) != 'undefined') {
+			$(s).load(loadEventHandler); // using jQuery
+		}
 		s.type = "text/javascript";
 		s.src = Repos.getWebapp() + src;
 		document.getElementsByTagName('head')[0].appendChild(s);

@@ -10,7 +10,7 @@
 <!-- dp.SyntaxHighlighter css included here, because Repos.addCss does not work in IE6 -->
 <link type="text/css" rel="stylesheet" href="../../lib/dpsyntax/dp.SyntaxHighlighter/Styles/SyntaxHighlighter.css"></link>
 <!-- the plugin -->
-<script type="text/javascript" src="../../scripts/shared/syntax.js"></script>
+<script type="text/javascript" src="../../plugins/syntax/syntax.js"></script>
 <!-- for unit testing -->
 <script type="text/javascript" src="../../scripts/unittest.js"></script>
 </head>
@@ -21,8 +21,10 @@ See <a href="../../lib/">lib/</a> folder.</p>
 <p><a href="javascript:syntaxHide()">show plain text</a> &nbsp; 
 <a href="javascript:syntaxShow()">show syntax highlighting</a></p>
 
+<p>Textareas are posted unencoded, but contents in the HTML should be with htmlentities</p>
+
 <h2>Javascript</h2>
-<textarea rows="4" cols="60" name="myjs" class="js" readonly="readonly">
+<textarea id="filejs" rows="4" cols="60" name="myjs" class="js" readonly="readonly">
 $(document).ready(function() {
 	// wanted $('.syntax') but dp can not handle other classes than its own
 	$('textarea').each(function(i) {
@@ -31,7 +33,7 @@ $(document).ready(function() {
 </textarea>
 
 <h2>PHP</h2>
-<textarea rows="4" cols="60" name="myphp" class="php:nocontrols" readonly="readonly">
+<textarea id="filephp" rows="4" cols="60" name="myphp" class="php:nocontrols" readonly="readonly">
 	function reportErrorText($n, $message, $trace) {
 		if ($n!=2048) { // E_STRICT not defined in php 4
 			echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>");
@@ -42,7 +44,7 @@ $(document).ready(function() {
 </textarea>
 
 <h2>Html</h2>
-<textarea rows="4" cols="60" name="myhtml" class="html">
+<textarea id="filehtml" rows="4" cols="60" name="myhtml" class="html">
 <label for="demo">demo</label>
 <textarea rows="4" cols="60" name="demo">
 ../textarea&gt;

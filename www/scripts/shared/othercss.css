@@ -1,0 +1,7 @@
+@CHARSET "UTF-8";
+
+p.dynamicallyIncludedClass {
+	letter-spacing: 0.5em;
+	font-weight: bold;
+	color: green;
+}
