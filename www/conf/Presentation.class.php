@@ -72,6 +72,19 @@ function repos_getUserLocale() {
 	return $locale;	
 }
 
+// ------- plugin functionality ----------
+// all plugins should declare a function [name]_getHeadTags($webapp)
+// that returns an array of HTML tags to be added to head, with $webapp as repos url
+
+$_plugins = array();
+function addPlugin($name) {
+	global $plugins;
+	$inc = dirname(dirname(__FILE__))."/plugins/$name/$name.inc.php";
+	if (!file_exists($inc)) trigger_error("The page tried to load a plugin '$name' that does not exist", E_USER_ERROR);
+	require($inc);
+	$plugins[] = $name;
+}
+
 // -------- the template class ------------
 require(dirname(dirname(__FILE__)).'/lib/smarty/smarty.inc.php' );
 
@@ -335,6 +348,7 @@ class Presentation {
 		foreach ($this->extraStylesheets as $css) {
 			$head = $head . $this->_getLinkCssTag($stylePath.$css);
 		}
+		$head = $head . $this->_getPluginHeadTags(getWebappStatic());
 		return $head;
 	}
 	
@@ -348,6 +362,16 @@ class Presentation {
 	
 	function _getLinkCssTag($href) {
 		return '<link href="'.$href.'" rel="stylesheet" type="text/css"></link>';
+	}
+	
+	function _getPluginHeadTags($webapp) {
+		global $plugins;
+		$h = array();
+		foreach ($plugins as $plugin) {
+			$ph = call_user_func($plugin.'_getHeadTags', $webapp);
+			$h = array_merge($ph, $h);
+		}
+		return implode("\n", $h);
 	}
 	
 	/**

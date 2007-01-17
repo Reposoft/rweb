@@ -35,7 +35,7 @@ You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 This file is bigger than 100 kb, so we recommend <a href="download/?target={=$target}&rev={=$rev}">dowload</a>.
 {=elseif $file,type eq 'text/html'}
 This is an HTML file, so we recommend <a href="open/?target={=$target}&rev={=$rev}">open</a>.
-{=elseif $file,typeDiscrete eq 'text'}
+{=elseif $file,isPlaintext}
 This is file is plain text, so we recommend <a href="file/?target={=$target}&rev={=$rev}">View in Repos</a>.
 {=/if}
 </p>

@@ -5,6 +5,7 @@
  */
 require("../../conf/Presentation.class.php" );
 require("../SvnOpenFile.class.php" );
+addPlugin('syntax');
 
 $revisionRule = new RevisionRule();
 $rev = $revisionRule->getValue();

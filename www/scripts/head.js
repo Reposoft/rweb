@@ -108,23 +108,77 @@ function eraseCookie(name)
 }
 // /cookie functions
 
-//repos: shared
+// =================== repos: shared =======================
 /**
- * Repos shared script logic (c) Staffan Olsson http://www.repos.se
+ * Repos shared script logic (c) Staffan Olsson www.repos.se
  * Static functions, loaded after prepare and jquery.
- * @version $Id: head.js 2309 2007-01-15 08:51:01Z solsson $
- *
- * reportError(error) - handles any error message or exception
+ * @version $Id: repos.js 2315 2007-01-17 08:41:13Z solsson $
  */
 var Repos = {
 
 	// -------------- plugin setup --------------
 	
-	addScript: function(src) {
+	loadedPlugins: new Array(),
+	
+	/**
+	 * Adds a javascript to the current page and evaluates it (asynchronously).
+	 * @param src script url from repos root, not starting with slash
+	 * @param loadEventHandler callback function for when the script has been evaluated,
+	 * @return the script element that was appended
+	 */
+	addScript: function(src, loadEventHandler) {
+		var srcUrl = Repos.getWebapp() + src;
+		var state = typeof(Repos.loadedPlugins[srcUrl]);
+		if (state == 'boolean') {
+			loadEventHandler(); // already loaded
+			return;
+		}
+		if (state == 'object') {
+			$(Repos.loadedPlugins[srcUrl]).load(loadEventHandler);
+			return;
+		}
 		var s = document.createElement('script');
+		$(s).load(function(){ Repos.loadedPlugins[this.src] = true; });
+		if (typeof(loadEventHandler) != 'undefined') { $(s).load(loadEventHandler); }
+		Repos.loadedPlugins[srcUrl] = s;
 		s.type = "text/javascript";
-		s.src = src;
+		s.src = srcUrl;
 		document.getElementsByTagName('head')[0].appendChild(s);
+		return s;
+	},
+
+	/**
+	 * Adds a stylesheet to the current page.
+	 * @param src css url from repos root, not starting with slash
+	 * @return the link element that was appended
+	 * @todo is the appended css accepted by IE6?
+	 */
+	addCss: function(src) {
+		var s = document.createElement('link');
+		s.type = "text/css";
+		s.rel = "stylesheet";
+		s.href = Repos.getWebapp() + src;
+		document.getElementsByTagName('head')[0].appendChild(s);
+		return s;
+	},
+	
+	/**
+	 * Calculates webapp root based on the include path of this script (repos.js or head.js)
+	 * @return String webapp root url with trailing slash
+	 */
+	getWebapp: function() {
+		var tags = document.getElementsByTagName("head")[0].childNodes;
+		var me = /scripts\/head\.js(\??.*)$|scripts\/shared\/repos\.js$/;
+		
+		for (i = 0; i < tags.length; i++) {
+			var t = tags[i];
+			if (!t.tagName) continue;
+			var n = t.tagName.toLowerCase();
+			if (n == 'script' && t.src && t.src.match(me)) // located head.js, save path for future use
+				this.repos_webappRoot = t.src.replace(me, '');
+		}
+		if (!this.repos_webappRoot) return '/repos/'; // best guess
+		return this.repos_webappRoot;
 	},
 
 	// ------------ exception handling ------------
@@ -193,17 +247,10 @@ var Repos = {
 	
 	/**
 	 * Shows the error to the user, without requiring attention.
+	 * @deprecated use Repos.error
 	 */
 	_alertError: function(msg) {
-		if (typeof(console) != 'undefined') { // FireBug console
-			console.log(msg);
-		} else if (typeof(window.console) != 'undefined') { // Safari 'defaults write com.apple.Safari IncludeDebugMenu 1'
-			window.console.log(msg);
-		} else if (typeof(Components)!='undefined' && typeof(Component.utils)!='undefined') { // Firefox console
-			Components.utils.reportError(msg);
-		} else { // don't throw exceptions because it disturbs the user, and repos works without javascript too
-			window.status = "Due to a script error the page is not fully functional. Contact support@repos.se for info, error id: " + id;
-		}
+		Repos._log(Repos.loglevel.error, message);
 	},
 	
 	/**
@@ -234,6 +281,39 @@ var Repos = {
 	}
 	
 }
+
+// ------------ logging ------------
+
+Repos.loglevel = {
+	info: 3,
+	warn: 4,
+	error: 5
+}
+
+Repos.info = function(message) {
+	Repos._log(Repos.loglevel.info, message);
+}
+
+Repos.warn = function(message) {
+	Repos._log(Repos.loglevel.warn, message);
+}
+
+Repos.error = function(message) {
+	Repos._log(Repos.loglevel.error, message);
+}
+
+Repos._log = function(level, msg) {
+	if (typeof(console) != 'undefined') { // FireBug console
+		console.log(msg);
+	} else if (typeof(window.console) != 'undefined') { // Safari 'defaults write com.apple.Safari IncludeDebugMenu 1'
+		window.console.log(msg);
+	} else if (typeof(Components)!='undefined' && typeof(Component.utils)!='undefined') { // Firefox console
+		Components.utils.reportError(msg);
+	} else {
+		window.status = "Due to a script error the page is not fully functional. Contact support@repos.se for info, error id: " + id;
+	}
+}
+// =================== repos: shared =======================
 
 // repos: resourceid
 /**

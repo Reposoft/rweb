@@ -1,5 +1,5 @@
 /**
- * Repos shared script logic (c) Staffan Olsson http://www.repos.se
+ * Repos shared script logic (c) Staffan Olsson www.repos.se
  * Static functions, loaded after prepare and jquery.
  * @version $Id$
  */
@@ -7,19 +7,31 @@ var Repos = {
 
 	// -------------- plugin setup --------------
 	
+	loadedPlugins: new Array(),
+	
 	/**
 	 * Adds a javascript to the current page and evaluates it (asynchronously).
 	 * @param src script url from repos root, not starting with slash
-	 * @param loadEventHandler callback function for when the script has been evaluated
+	 * @param loadEventHandler callback function for when the script has been evaluated,
 	 * @return the script element that was appended
 	 */
 	addScript: function(src, loadEventHandler) {
-		var s = document.createElement('script');
-		if (typeof(loadEventHandler) != 'undefined') {
-			$(s).load(loadEventHandler); // using jQuery
+		var srcUrl = Repos.getWebapp() + src;
+		var state = typeof(Repos.loadedPlugins[srcUrl]);
+		if (state == 'boolean') {
+			loadEventHandler(); // already loaded
+			return;
 		}
+		if (state == 'object') {
+			$(Repos.loadedPlugins[srcUrl]).load(loadEventHandler);
+			return;
+		}
+		var s = document.createElement('script');
+		$(s).load(function(){ Repos.loadedPlugins[this.src] = true; });
+		if (typeof(loadEventHandler) != 'undefined') { $(s).load(loadEventHandler); }
+		Repos.loadedPlugins[srcUrl] = s;
 		s.type = "text/javascript";
-		s.src = Repos.getWebapp() + src;
+		s.src = srcUrl;
 		document.getElementsByTagName('head')[0].appendChild(s);
 		return s;
 	},
@@ -124,17 +136,10 @@ var Repos = {
 	
 	/**
 	 * Shows the error to the user, without requiring attention.
+	 * @deprecated use Repos.error
 	 */
 	_alertError: function(msg) {
-		if (typeof(console) != 'undefined') { // FireBug console
-			console.log(msg);
-		} else if (typeof(window.console) != 'undefined') { // Safari 'defaults write com.apple.Safari IncludeDebugMenu 1'
-			window.console.log(msg);
-		} else if (typeof(Components)!='undefined' && typeof(Component.utils)!='undefined') { // Firefox console
-			Components.utils.reportError(msg);
-		} else { // don't throw exceptions because it disturbs the user, and repos works without javascript too
-			window.status = "Due to a script error the page is not fully functional. Contact support@repos.se for info, error id: " + id;
-		}
+		Repos._log(Repos.loglevel.error, message);
 	},
 	
 	/**
@@ -164,4 +169,36 @@ var Repos = {
 		return randomstring;
 	}
 	
+}
+
+// ------------ logging ------------
+
+Repos.loglevel = {
+	info: 3,
+	warn: 4,
+	error: 5
+}
+
+Repos.info = function(message) {
+	Repos._log(Repos.loglevel.info, message);
+}
+
+Repos.warn = function(message) {
+	Repos._log(Repos.loglevel.warn, message);
+}
+
+Repos.error = function(message) {
+	Repos._log(Repos.loglevel.error, message);
+}
+
+Repos._log = function(level, msg) {
+	if (typeof(console) != 'undefined') { // FireBug console
+		console.log(msg);
+	} else if (typeof(window.console) != 'undefined') { // Safari 'defaults write com.apple.Safari IncludeDebugMenu 1'
+		window.console.log(msg);
+	} else if (typeof(Components)!='undefined' && typeof(Component.utils)!='undefined') { // Firefox console
+		Components.utils.reportError(msg);
+	} else {
+		window.status = "Due to a script error the page is not fully functional. Contact support@repos.se for info, error id: " + id;
+	}
 }

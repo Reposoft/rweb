@@ -226,6 +226,16 @@ class SvnOpenFile {
 	}
 	
 	/**
+	 * @return String the filename extension, the part after last ".",
+	 *  empty string if no "." in name, or the only "." is first
+	 */
+	function getExtension() {
+		$pos = strrpos($this->getFilename(), '.');
+		if (!$pos) return '';
+		return substr($this->getFilename(), $pos+1);
+	}
+	
+	/**
 	 * @return the mimetype (or best guess) of the file,
 	 *  can be used as value in ContentType header.
 	 */
@@ -255,12 +265,23 @@ class SvnOpenFile {
 	/**
 	 * @return String the "discrete-type" part of the mime type: 
 	 * "text" / "image" / "audio" / "video" / "application" /  "message" / "multipart"
+	 * @see isPlaintext()
 	 */
 	function getTypeDiscrete() {
 		$t = $this->getType();
 		$s = strpos($t,'/');
 		if (!$s) trigger_error("This file has an invalid MIME type '$t'.");
 		return substr($t, 0, $s);
+	}
+	
+	/**
+	 * @return boolean true if the file contains plain text
+	 */
+	function isPlaintext() {
+		// exceptions
+		if ($this->getType() == 'application/x-javascript') return true;
+		// general rule
+		return ($this->getTypeDiscrete() == 'text');
 	}
 	
 	/**

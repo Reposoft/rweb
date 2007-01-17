@@ -1,38 +1,66 @@
+/**
+ * Repos syntax highlighting plugin (c) repos.se 2006
+ * Using dp.SyntaxHinglighter http://www.dreamprojections.com/SyntaxHighlighter/
+ */
 
-console.log('syntax plugin loading');
+Repos.syntax = new Object();
+/* dp.SyntaxHinglighter library */
+Repos.syntax.dp = new Object();
+Repos.syntax.dp.path = 'lib/dpsyntax/dp.SyntaxHighlighter/';
+/* The available highlighting types, each with its own js */
+Repos.syntax.brush = {
+	php: Repos.syntax.dp.path + 'Scripts/shBrushPhp.js',
+	js: Repos.syntax.dp.path + 'Scripts/shBrushJScript.js',
+	xml: Repos.syntax.dp.path + 'Scripts/shBrushXml.js',
+	css: Repos.syntax.dp.path + 'Scripts/shBrushCss.js'
+};
+/* Maps classes to syntax types, class => brush */
+Repos.syntax.map = new Object();
+Repos.syntax.map["php"] = "php";
+Repos.syntax.map["js"] = "js";
+Repos.syntax.map["xml"] = "xml";
+Repos.syntax.map["html"] = "xml";
+Repos.syntax.map["htm"] = "xml";
+Repos.syntax.map["css"] = "css";
+
+// for(b in Repos.syntax.brush) { Repos.info('syntax "'+b+'": '+Repos.syntax.brush[b]); }
 
 $(document).ready(function() { 
-	syntaxLoad(); 
+	Repos.syntax.load(); 
 } );
 
-function syntaxLoad() {
-	console.log('adding');
-	var path = 'lib/dpsyntax/dp.SyntaxHighlighter/';
-	
-	var c = Repos.addScript(path + 'Scripts/shCore.js');
-	$(c).load(function() { console.log('core loaded') });
-	
-	var b1 = Repos.addScript(path + 'Scripts/shBrushPhp.js');
-	var b2 = Repos.addScript(path + 'Scripts/shBrushJScript.js');
-	var b3 = Repos.addScript(path + 'Scripts/shBrushXml.js');
-	var b4 = Repos.addScript(path + 'Scripts/shBrushCss.js');
-	
-	$(b4).load(
-		syntaxActivateWhenLoaded
+Repos.syntax.load = function() {
+	Repos.info('syntax plugin loading');	
+	Repos.addScript(
+		Repos.syntax.dp.path + 'Scripts/shCore.js',
+		function() { Repos.syntax.activate(); }
 	);
 }
 
-function syntaxActivateWhenLoaded() {
-	if (typeof(dp)=='undefined' || typeof(dp.SyntaxHighlighter)=='undefined') {
-		console.log('reload, wait for SyntaxHighlighter to load');
-		window.setTimeout(syntaxActivateWhenLoaded, 100);
-		return;
-	}
-	console.log('activating syntax highlighting');
-	$('textarea').each(function(i) {
-		console.log('found textarea ' + this.id);
-		dp.SyntaxHighlighter.HighlightAll(this.name);
+Repos.syntax.activate = function() {
+	Repos.info('activating syntax highlighting');
+	$('textarea[@readonly]').each( function() {
+		var textarea = this;
+		Repos.info('Found readonly textarea class="'+textarea.getAttribute('class')+'" name="'+textarea.name+'"');
+		for(type in Repos.syntax.map) {
+			if ($(textarea).is('.'+type)) {
+				var brush = Repos.syntax.map[type];
+				textarea.setAttribute('class',''+brush+':nocontrols');
+				Repos.addScript(
+					Repos.syntax.brush[brush],
+					function() {
+						Repos.syntax.render(textarea); 
+						Repos.info('loading syntax "'+textarea.getAttribute('class')+'" for area "'+textarea.name+'"'); 
+					}
+				);
+				break; // only one syntax per text area
+			}
+		}
 	} );
+}
+
+Repos.syntax.render = function(textarea) {
+	dp.SyntaxHighlighter.HighlightAll(textarea.name);
 }
 
 /*

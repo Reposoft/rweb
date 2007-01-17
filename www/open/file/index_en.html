@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>repos.se: Contents of {=$target|basename}</title>
+<title>repos: Contents of {=$target|basename}</title>
 <!--{$head}-->
 </head>
 
@@ -10,8 +10,9 @@
 <a id="repository" class="command" href="{=$file,folderUrl}">return to repository</a>
 </div>
 <div class="contents cat">
-<h3><span class="path" title="{=$file.filename}, version {=$file,revision}">{=$target}</span> <span class="revision">{=$file,revision}</span></h3>
-<textarea cols="100" rows="30">
+<h3><span class="path" title="{=$file,filename}, version {=$file,revision}">{=$target}</span> <span class="revision">{=$file,revision}</span></h3>
+<!-- on javascript browsers the box will be resized by the syntax plugin -->
+<textarea id="file" cols="82" rows="20" name="file" class="{=$file,extension}" readonly="readonly" >
 {=$file->sendInlineHtml()}
 </textarea>
 </div>
