@@ -28,6 +28,14 @@ The file will be unlocked when a new version is committed.
 Using the current version number <span class="revision">{=$file,revision}</span>, 
 you can always refer to the file as it is now.</p>
 </div>
+<div id="filedetails">
+<h2>File details</h2>
+<p>Content type: <span>{=$file,type}</span></p>
+<p>Size in bytes: <span class="filesize">{=$file,size}</span></p>
+<p>Version number: <span class="revision">{=$file,revision}</span></p>
+<p>Last edited by: <span class="username">{=$file,author}</span></p>
+<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
+</div>
 <div id="actions">
 <h2>Edit</h2>
 {=if $file,isLockedByThisUser}
@@ -88,14 +96,6 @@ You will get a link to the branch, and from there you can access the "merge" fun
 you can unlock it so that others are able to edit it.</p>
 {=/if}
 <!--{/if}-->
-</div>
-<div id="filedetails">
-<h2>File details</h2>
-<p>Content type: <span>{=$file,type}</span></p>
-<p>Size in bytes: <span class="filesize">{=$file,size}</span></p>
-<p>Version number: <span class="revision">{=$file,revision}</span></p>
-<p>Last edited by: <span class="username">{=$file,author}</span></p>
-<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
 </div>
 <div id="footer"></div>
 </body>
