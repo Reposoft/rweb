@@ -28,6 +28,14 @@ You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 <p>This is an old version of the file. You can also <a href="?target={=$target}">view current version</a>.</p>
 <!--{/if}-->
 </div>
+<div id="filedetails">
+<h2>File details</h2>
+<p>Content type: <span>{=$file,type}</span></p>
+<p>Size in bytes: <span class="filesize">{=$file,size}</span></p>
+<p>Version number: <span class="revision">{=$file,revision}</span></p>
+<p>Last edited by: <span class="username">{=$file,author}</span></p>
+<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
+</div>
 <div id="actions">
 <h2>View file</h2>
 <p>
@@ -64,14 +72,6 @@ and when you save it will automatically be committed to repository.</p>
 This is not the latest version of the file, so you can not use the URL to access it.
 You need to use a version control (Subversion) client like Repos.
 <!--{/if}-->
-</div>
-<div id="filedetails">
-<h2>File details</h2>
-<p>Content type: <span>{=$file,type}</span></p>
-<p>Size in bytes: <span class="filesize">{=$file,size}</span></p>
-<p>Version number: <span class="revision">{=$file,revision}</span></p>
-<p>Last edited by: <span class="username">{=$file,author}</span></p>
-<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
 </div>
 <div id="footer"></div>
 </body>
