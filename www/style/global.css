@@ -6,6 +6,7 @@ html {
 body {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
 	font-size: 82.5%;
+	min-width: 600px;
 }
 /* resume with em font sizes relative to the above */
 a {
@@ -230,4 +231,32 @@ div.versiondisplay {
 	position:absolute;
 	bottom:1px;
 	right:1px;
+}
+
+div#info {
+	width: 55%;
+	float: left;
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #000000;
+	background: #CCCC99;
+}
+
+div#actions {
+	width: 55%;
+	float: left;
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #000000;
+	background: #CCCC99;
+}
+
+div#filedetails {
+	width: 40%;
+	height: auto;
+	margin: 5px;
+	padding: 5px;
+	float: right;
+	border: 1px solid #000000;
+	background: #CCCC99;
 }
