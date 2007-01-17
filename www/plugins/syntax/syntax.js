@@ -12,7 +12,8 @@ Repos.syntax.brush = {
 	php: Repos.syntax.dp.path + 'Scripts/shBrushPhp.js',
 	js: Repos.syntax.dp.path + 'Scripts/shBrushJScript.js',
 	xml: Repos.syntax.dp.path + 'Scripts/shBrushXml.js',
-	css: Repos.syntax.dp.path + 'Scripts/shBrushCss.js'
+	css: Repos.syntax.dp.path + 'Scripts/shBrushCss.js',
+	diff: 'plugins/syntax/shBrushDiff.js'
 };
 /* Maps classes to syntax types, class => brush */
 Repos.syntax.map = new Object();
@@ -22,6 +23,7 @@ Repos.syntax.map["xml"] = "xml";
 Repos.syntax.map["html"] = "xml";
 Repos.syntax.map["htm"] = "xml";
 Repos.syntax.map["css"] = "css";
+Repos.syntax.map["diff"] = "diff";
 
 // for(b in Repos.syntax.brush) { Repos.info('syntax "'+b+'": '+Repos.syntax.brush[b]); }
 

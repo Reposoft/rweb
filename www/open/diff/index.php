@@ -1,14 +1,15 @@
 <?php
 require_once(dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require_once(dirname(dirname(__FILE__))."/SvnOpen.class.php" );
+addPlugin('syntax');
 
 $url = getTargetUrl();
-if(empty($url) || !isset($_GET['revfrom']) || !isset($_GET['revto'])) {
-	trigger_error("Argument error: target, 'revfrom' and 'revto' must be specified.");
-	exit;
-}
-$revfrom = $_GET['revfrom'];
-$revto = $_GET['revto'];
+
+Validation::expect('rev', 'fromrev');
+$revRule = new RevisionRule();
+$fromrevRule = new RevisionRule('fromrev');
+$revto = $revRule->getValue();
+$revfrom = $fromrevRule->getValue();
 
 // TODO use SvnOpenFile to check that the mime type is ok for diffing (if not view both or something)
 
@@ -29,7 +30,7 @@ if (!empty($referer) && strContains($referer, '/open/log/')) {
 } else {
 	$existingFolder = login_getFirstNon404Parent(getParent($url), $s);
 	$p->assign('repository', $existingFolder);
-	$p->assign('logurl', '../log/target='.strAfter($existingFolder, getRepository()));
+	$p->assign('logurl', '../log/?target='.strAfter($existingFolder, getRepository()));
 }
 
 $diffarray = $command->exec();

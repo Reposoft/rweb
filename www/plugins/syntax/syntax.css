@@ -7,7 +7,7 @@ http://www.dreamprojections.com/SyntaxHighlighter/
 {
 	font-family: "Courier New" , Courier, mono;
 	font-size: 12px;
-	border: 1px solid #2B91AF;
+	border: 1px dashed #CCCC99;
 	background-color: #fff;
 	width: 99%;
 	overflow: auto;
@@ -28,7 +28,7 @@ http://www.dreamprojections.com/SyntaxHighlighter/
 {
 	margin: 0px 0px 1px 45px; /* 1px bottom margin seems to fix occasional Firefox scrolling */
 	padding: 0px;
-	color: #2B91AF;
+	color: #CCCC99;
 }
 
 .dp-highlighter.nogutter ol
@@ -39,7 +39,7 @@ http://www.dreamprojections.com/SyntaxHighlighter/
 
 .dp-highlighter ol li, .dp-highlighter .columns div
 {
-	border-left: 3px solid #6CE26C;
+	border-left: 3px solid #CCCC99;;
 	background-color: #fff;
 	padding-left: 10px;
 	line-height: 14px;
@@ -217,3 +217,8 @@ http://www.dreamprojections.com/SyntaxHighlighter/
 .dp-cpp .preprocessor { color: #CD00CD; font-weight: bold; }
 .dp-cpp .keyword { color: #5697D9; font-weight: bold; }
 .dp-cpp .datatypes { color: #2E8B57; font-weight: bold; }
+
+.syntax-diff {}
+.syntax-diff .added { color: #009900; }
+.syntax-diff .removed { color: #CC0000; }
+.syntax-diff .nonewline { color: #CCCCCC; }

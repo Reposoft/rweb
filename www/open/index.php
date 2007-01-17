@@ -15,6 +15,10 @@ $url = getTargetUrl();
 $revisionRule = new RevisionRule();
 $rev = $revisionRule->getValue();
 
+// when coming from history 'fromrev' is before the selected commit
+$fromrevRule = new RevisionRule('fromrev');
+$fromrev = $fromrevRule->getValue();
+
 if (login_isFolder($url)) {
 	if ($rev) {
 		header('Location: '.getWebapp().'open/list/?target='.urlencode($target).'&rev='.$rev);
@@ -42,6 +46,7 @@ $p->assign_by_ref('file', $file);
 // for links to other operations we use the original parameters
 $p->assign('rev', $rev);
 $p->assign('target', getTarget());
+if ($fromrev) $p->assign('fromrev', $fromrev);
 // all set
 $p->display();
 

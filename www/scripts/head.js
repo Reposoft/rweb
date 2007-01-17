@@ -112,7 +112,7 @@ function eraseCookie(name)
 /**
  * Repos shared script logic (c) Staffan Olsson www.repos.se
  * Static functions, loaded after prepare and jquery.
- * @version $Id: repos.js 2315 2007-01-17 08:41:13Z solsson $
+ * @version $Id: repos.js 2316 2007-01-17 19:56:22Z solsson $
  */
 var Repos = {
 
@@ -250,7 +250,7 @@ var Repos = {
 	 * @deprecated use Repos.error
 	 */
 	_alertError: function(msg) {
-		Repos._log(Repos.loglevel.error, message);
+		Repos._log(Repos.loglevel.error, msg);
 	},
 	
 	/**

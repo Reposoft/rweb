@@ -139,7 +139,7 @@ var Repos = {
 	 * @deprecated use Repos.error
 	 */
 	_alertError: function(msg) {
-		Repos._log(Repos.loglevel.error, message);
+		Repos._log(Repos.loglevel.error, msg);
 	},
 	
 	/**
