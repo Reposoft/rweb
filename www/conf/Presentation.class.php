@@ -367,8 +367,8 @@ class Presentation {
 	function _getPluginHeadTags($webapp) {
 		global $plugins;
 		$h = array();
-		foreach ($plugins as $plugin) {
-			$ph = call_user_func($plugin.'_getHeadTags', $webapp);
+		for ($i=0; $i<count($plugins); $i++) {
+			$ph = call_user_func($plugins[$i].'_getHeadTags', $webapp);
 			$h = array_merge($ph, $h);
 		}
 		return implode("\n", $h);
