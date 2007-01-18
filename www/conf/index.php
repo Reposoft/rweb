@@ -9,6 +9,7 @@
 // default configuration includes, the way they should be referenced in php files
 require_once( dirname(__FILE__) . '/repos.properties.php' );
 require_once( dirname(__FILE__) . '/Command.class.php' );
+require_once( dirname(dirname(__FILE__)) . '/open/SvnOpen.class.php' ); // To get SVN_CONFIG_DIR
 
 // configuration index settings
 $sections = array(
@@ -39,13 +40,14 @@ $requiredConfig = array(
 	'backup_folder' => 'Local path for storage of backup'
 	);
 $requiredFiles = array(
+	SVN_CONFIG_DIR => '--svn-config-dir parameter value',
 	getConfig('admin_folder') . getConfig('users_file') => 'File for usernames and passwords',
 	getConfig('admin_folder') . getConfig('access_file') => 'File for subversion access control',
 	//not used//getConfig('admin_folder') . getConfig('export_file') => 'File for repository export paths',
 	getConfig('backup_folder') => 'Local path for storage of backup'
 	);
 $dependencies = array(
-	'svn' => '--version ', //--config-dir '.SVN_CONFIG_DIR,
+	'svn' => '--version --config-dir '.SVN_CONFIG_DIR,
 	'svnlook' => '--version',
 	'svnadmin' => '--version',
 	'gzip' => '--version',
@@ -230,6 +232,8 @@ function resources() {
 		sayFailed($w.' does not exist');
 	} elseif (!is_executable($w)) {
 		sayFailed($w.' is not executable');
+	} else {
+		sayOK($w);
 	}
 	line_end();
 }
