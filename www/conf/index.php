@@ -184,7 +184,11 @@ function dependencies() {
 			sayOK('not supported, not required');
 			continue;
 		}
-		exec( "$run $check 2>&1", $output, $retval );
+		$c = new Command($cmd);
+		$c->addArgOption($check);
+		$c->addArgOption('2>&1');
+		$retval = $c->exec();
+		$output = $c->getOutput();
 		if ($retval==0)
 			sayOK( $output[0] );
 		else
@@ -232,11 +236,13 @@ function resources() {
 
 function localeSettings() {
 	if(System::isWindows()) {
-		exec('mode con codepage', $localeOutput);
+		$c = new Command('mode', false);
+		$c->addArgOption('con', 'codepage', false);
+		$c->exec();
 		line_start('Windows console');
 		$supported = array(850, 1252);
 		$pattern = '/\s*(.*):\s*(\d+)\s*/';
-		foreach ($localeOutput as $line) {
+		foreach ($c->getOutput() as $line) {
 			if (preg_match($pattern, $line, $matches)) {
 				line_start($matches[1]);
 				$codepage = $matches[2];
@@ -249,9 +255,10 @@ function localeSettings() {
 		}
 		return;
 	}
-	exec('locale', $localeOutput);
+	$c = new Command('locale', false);
+	$c->exec();
 	$locales = Array();
-	foreach ($localeOutput as $locale) {
+	foreach ($c->getOutput() as $locale) {
 		list($env, $val) = explode('=', $locale);
 		line_start($env);
 		if (strpos($val, "UTF-8")===false) {

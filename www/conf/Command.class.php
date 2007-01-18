@@ -136,7 +136,7 @@ function _repos_getFullCommand($commandName, $argumentsString) {
  * @return wrapper script name if needed, or empty string if not needed
  */
 function _repos_getScriptWrapper() {
-	if (isWindows()) {
+	if (System::isWindows()) {
 		return '';
 	}
 	return _getConfigFolder().'reposrun.sh';
@@ -172,7 +172,7 @@ class Command {
 	 */
 	function Command($commandName, $validate=true) {
 		if (!$validate) {
-			if (!strContains($_SERVER['SCRIPT_FILENAME'], '/test/')) {
+			if (!preg_match('/\/test\/|\/conf\/index.php/', $_SERVER['SCRIPT_FILENAME'])) {
 				trigger_error("Only test scripts can run commands that are not validated", E_USER_ERROR);
 			}
 		} else if (System::getCommand($commandName) === false) { 
