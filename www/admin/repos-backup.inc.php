@@ -67,6 +67,7 @@ function dump($repository, $backupPath, $fileprefix) {
  * @return true if successful, in which case there is a $backupPath/$fileprefix[revisions].svndump.gz file
  */
 function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) {
+	set_time_limit(30*60); // each increment can take 30 minutes to back up
 	$extension = ".svndump";
 	// get a new empty file
 	$tmpfile = tempnam(rtrim(TEMP_DIR,'/'), "svn");
