@@ -4,20 +4,20 @@
 <BODY>
 <PRE>
 <?PHP
-if (file_exists('dp.SyntaxHighlighter/')) {
-	echo 'dp.SyntaxHighlighter is already installed, done.';
+if (file_exists('simpletest/')) {
+	echo 'Simpletest is already installed, done.';
 	exit;
 }
 
 require '../uncompress.php';
 // PHP unit testing framework
 
-$repos_package = "dp.SyntaxHighlighter";
-$home = "http://www.dreamprojections.com/SyntaxHighlighter/";
+$repos_package = "tinymce";
+$home = "http://tinymce.moxiecode.com/";
 
-$version = "1.4.1";
-$archive = "http://www.dreamprojections.com/SyntaxHighlighter/Download.aspx?SyntaxHighlighter_$version.zip";
-$license = "http://www.opensource.org/licenses/lgpl-license.php";
+$version = "2_0_9";
+$archive = "http://downloads.sourceforge.net/tinymce/tinymce_$version.zip?download";
+$license = "http://wiki.moxiecode.com/index.php/TinyMCE:License";
 
 $basedir = dirname(__FILE__);
 $dir = strtr($basedir, "\\", '/');
@@ -29,7 +29,7 @@ if (file_exists($extracted_folder)) {
 	exit;
 }
 
-download($archive, $tmp);
+if(download($archive, $tmp)) echo("Download complete.\n");
 
 decompressZip($tmp, $dir);
 

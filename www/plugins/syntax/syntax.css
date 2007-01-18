@@ -222,3 +222,8 @@ http://www.dreamprojections.com/SyntaxHighlighter/
 .syntax-diff .added { color: #009900; }
 .syntax-diff .removed { color: #CC0000; }
 .syntax-diff .nonewline { color: #CCCCCC; }
+
+.syntax-wiki {}
+.syntax-wiki .heading1 { font-size: large; }
+.syntax-wiki .italics { font-style: italic; }
+.syntax-wiki .bold { font-weight: bold; }

@@ -13,6 +13,7 @@ Repos.syntax.brush = {
 	js: Repos.syntax.dp.path + 'Scripts/shBrushJScript.js',
 	xml: Repos.syntax.dp.path + 'Scripts/shBrushXml.js',
 	css: Repos.syntax.dp.path + 'Scripts/shBrushCss.js',
+	wiki: 'plugins/syntax/shBrushWiki.js',
 	diff: 'plugins/syntax/shBrushDiff.js'
 };
 /* Maps classes to syntax types, class => brush */
@@ -24,6 +25,7 @@ Repos.syntax.map["html"] = "xml";
 Repos.syntax.map["htm"] = "xml";
 Repos.syntax.map["css"] = "css";
 Repos.syntax.map["diff"] = "diff";
+Repos.syntax.map["txt"] = "wiki";
 
 // for(b in Repos.syntax.brush) { Repos.info('syntax "'+b+'": '+Repos.syntax.brush[b]); }
 
