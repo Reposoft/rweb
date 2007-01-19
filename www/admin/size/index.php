@@ -10,7 +10,7 @@ require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
 
 $r = new Report('Storage space used for this repos host');
 
-//$home = getConfig('home_path');
+//$parent = getConfig('home_path');
 $parent = getParent(getConfig('admin_folder'));
 if ($parent != getParent(getConfig('local_path'))
 	|| $parent != getParent(getConfig('backup_folder')))
@@ -23,7 +23,7 @@ if (System::isWindows()) {
 $c = new Command('du');
 $c->addArgOption('-hc');
 $c->addArgOption('--max-depth=1');
-$c->addArg($home);
+$c->addArg($parent);
 $c->exec();
 
 if ($c->getExitcode()!=0) {
@@ -49,7 +49,7 @@ foreach($c->getOutput() as $line) {
 		continue;
 	}
 	$size = $matches[1] . ' ' . $matches[2] . 'b';
-	$name = trim(str_replace($home, '', $matches[3]));
+	$name = trim(str_replace($parent, '', $matches[3]));
 	if (strlen($name) < 2) continue;
 	if ($name == '.svn') continue;
 	if (array_key_exists($name, $expected)) {
