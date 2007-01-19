@@ -11,6 +11,7 @@ require( dirname(dirname(__FILE__)) . '/conf/Command.class.php' );
 define('TEMP_DIR',getTempDir('backup'));
 define('BACKUP_SCRIPT_VERSION','$LastChangedRevision$');
 define('BACKUP_SIZE', 100*1024*1024); // recommended unpacked size of dump files
+define('BACKUP_MAX_TIME', 30*60); // maximum time in seconds for dumping and packing one backup increment (with the above size)
 
 /**
  * Create a repository in the given local path
@@ -67,7 +68,8 @@ function dump($repository, $backupPath, $fileprefix) {
  * @return true if successful, in which case there is a $backupPath/$fileprefix[revisions].svndump.gz file
  */
 function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) {
-	set_time_limit(30*60); // each increment can take 30 minutes to back up
+	set_time_limit(BACKUP_MAX_TIME); // each increment can take 30 minutes to back up
+	$starttime = time();
 	$extension = ".svndump";
 	// get a new empty file
 	$tmpfile = tempnam(rtrim(TEMP_DIR,'/'), "svn");
@@ -88,10 +90,14 @@ function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) 
 		if ($size > BACKUP_SIZE && $i < $torev) {
 			// split into several dumpfiles
 			$filename = getFilename( $fileprefix, $fromrev, $torev ) . $extension;
+			info('Saved '.$size.' bytes in '.(time()-$starttime).' seconds');
+			if ((time()-$starttime) > (BACKUP_MAX_TIME / 3)) fatal("Will not have time to compress and verify within ".BACKUP_MAX_TIME." seconds.");
 			return packageDumpfile($tmpfile, $backupPath.getFilename($fileprefix, $fromrev, $i).$extension) 
 				&& dumpIncrement($backupPath, $repository, $fileprefix, $i+1, $torev);
 		}
 	}
+	info('Saved up to current revision, '.$size.' bytes, in '.(time()-$starttime).' seconds');
+	if ((time()-$starttime) > (BACKUP_MAX_TIME / 3)) fatal("Will not have time to compress and verify within ".BACKUP_MAX_TIME." seconds.");
 	return packageDumpfile($tmpfile, $backupPath.getFilename($fileprefix, $fromrev, $torev).$extension);
 }
 
@@ -103,6 +109,7 @@ function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) 
  * @return unknown
  */
 function packageDumpfile($tempfile, $path) {
+	$starttime = time();
 	clearstatcache();
 	$size = filesize($tempfile);
 	$originalmd5 = _calculateMD5($tempfile);
@@ -117,7 +124,7 @@ function packageDumpfile($tempfile, $path) {
 	if ($size != $back) warn("Dumpfile was $size bytes but uncompressed contents are $back.");
 	$samemd5 = _calculateMD5($tempfile);
 	if ($originalmd5 != $samemd5) error("MD5 sum for original contents does not match unpacked.");
-	info("Compressed ".basename($path)." with original MD5 sum ".$originalmd5);
+	info("Compressed ".basename($path)." with original MD5 sum ".$originalmd5.' in '.(time()-$starttime).' seconds');
 	// done
 	deleteFile(toPath($tempfile));
 	return true;
@@ -156,6 +163,7 @@ function load($repository, $backupPath, $fileprefix) {
 		if ( $head > 0 && $file[1] != $head + 1 )
 			fatal("Revision number gap at $file[0] starting at revision $file[1], repository is at revision " . $head);
 		// read the files into repo
+		set_time_limit(BACKUP_MAX_TIME);
 		$head = $file[2];
 		$return = loadDumpfile($backupPath . DIRECTORY_SEPARATOR . $file[0],LOADCOMMAND);
 		if ($return != 0) {
@@ -172,6 +180,7 @@ function load($repository, $backupPath, $fileprefix) {
  */
 function verify($repository) {
 	define("VERIFYCOMMAND", getCommand('svnadmin') . " verify $repository" );
+	set_time_limit(BACKUP_MAX_TIME);
 	$return = 0;
 	exec( VERIFYCOMMAND, $output, $return );
 	if ( $return == 0 )
@@ -190,6 +199,7 @@ function verifyMD5($path) {
 	$sums = getMD5sums( $path );
 	$ok = true;
 	foreach ( $sums as $file => $md5 ) {
+		set_time_limit(BACKUP_MAX_TIME);
 		if ( ! file_exists( $path . DIRECTORY_SEPARATOR . $file ) ) {
 			error( "File $file listed in MD5 sums file does not exist in $path" );
 			continue;
