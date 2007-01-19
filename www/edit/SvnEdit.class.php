@@ -328,7 +328,7 @@ class SvnEdit {
 			$this->command->addArgOption('-m', $this->message);
 		}
 		$result = $this->command->exec();
-		$this->_show(Presentation::getInstance(), $description);
+		$this->_show($description);
 		return $result;
 	}
 	
@@ -381,11 +381,10 @@ class SvnEdit {
 	 * 
 	 * Called automatically by {@link SvnEdit::exec()}
 	 * 
-	 * @param Smarty $smartyTemplate a template that accepts 'assign'
 	 * @param String $description a custom summary line for this operation, 
 	 *  summary lines will always be visible, use \n as line break
 	 */
-	function _show(&$smartyTemplate, $description=null) {
+	function _show($description=null) {
 		$result = $this->getResult();
 		$logEntry = array(
 			'result' => $this->getResult(),
@@ -396,20 +395,15 @@ class SvnEdit {
 			'output' => implode("\n", $this->getOutput())
 		);
 		$logEntry['description'] = $description;
-		$smartyTemplate->append('log', $logEntry);
-		// overwrite existing values, so that the last command decides the result
-		$smartyTemplate->assign($logEntry);
-	}
-	
-	/**
-	 * Write the results of a single edit operation to a smarty template
-	 * @param smarty initialized template engine
-	 * @param nextUrl the absolute url to go to after the operation. Should be a folder in the repository. If null, referrer is used.
-	 * @deprecated use displayEdit() insead, which support multiple edit operations for a page
-	 */
-	function present(&$smarty, $nextUrl = null) {
-		$this->_show($smarty);
-		displayEdit($smarty, $nextUrl);
+		
+		if (class_exists('Presentation')) {
+			$smartyTemplate = Presentation::getInstance();
+			$smartyTemplate->append('log', $logEntry);
+			// overwrite existing values, so that the last command decides the result
+			$smartyTemplate->assign($logEntry);	
+		} else {
+			// TODO call report?
+		}
 	}
 
 }

@@ -14,6 +14,6 @@ $template = Presentation::getInstance();
 $unlock = new SvnEdit('unlock');
 $unlock->addArgUrl($targeturl);
 $unlock->exec();
-$unlock->present($template, getParent($targeturl));
+displayEdit($template, getParent($targeturl));
 
 ?>

@@ -38,6 +38,6 @@ function svnCopy($tofolder) {
 	$edit->addArgUrl($oldUrl);
 	$edit->addArgUrl($newUrl);
 	$edit->exec();
-	$edit->present(Presentation::getInstance());
+	displayEdit(Presentation::getInstance());
 }
 ?>

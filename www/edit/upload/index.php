@@ -99,7 +99,7 @@ function processNewFile($upload) {
 	deleteFile($newfile);
 	$upload->cleanUp();
 	// show results
-	$edit->present($presentation, dirname($upload->getTargetUrl()));
+	displayEdit($presentation, dirname($upload->getTargetUrl()));
 }
 
 function processNewVersion($upload) {

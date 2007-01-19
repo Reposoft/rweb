@@ -34,7 +34,7 @@ function createNewFolder($name, $message) {
 	$edit->addArgUrl($newurl);
 	$edit->exec();
 	deleteFolder($dir);
-	$edit->present($template, getTargetUrl());
+	displayEdit($template, getTargetUrl());
 }
 
 // Creates a directory with a unique name

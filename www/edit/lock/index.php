@@ -36,7 +36,7 @@ function lock($message) {
 	$lock->exec();
 	$p = Presentation::getInstance();
 	$p->assign('redirect', getWebapp().'open/download/?target='.getTarget());
-	$lock->present($p, getParent($targeturl));
+	displayEdit($p, getParent($targeturl));
 }
 
 ?>
