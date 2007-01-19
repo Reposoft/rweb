@@ -7,7 +7,7 @@ if (isset($_GET[SUBMIT])) {
 	delete($_GET['message']); 
 } else {
 	$target = getTarget();
-	$template = new Presentation();
+	$template = Presentation::getInstance();
 	$template->assign('target', $target);
 	$template->assign('repository', getRepository().getParent($target));
 	$template->display();
@@ -22,6 +22,6 @@ function delete($message) {
 	$edit->setMessage($message);
 	$edit->addArgUrl(getTargetUrl());
 	$edit->exec();
-	$edit->present(new Presentation(), dirname(rtrim(getTargetUrl(),'/')));
+	$edit->present(Presentation::getInstance(), dirname(rtrim(getTargetUrl(),'/')));
 }
 ?>

@@ -52,13 +52,13 @@ if ($case==5) {
 }
 if ($case==6) {
 	require('../../conf/Presentation.class.php');
-	$p = new Presentation();
+	$p = Presentation::getInstance();
 	$p->assign('text', 'Hello');
 	$p->showErrorNoRedirect("Message $case.");
 }
 if ($case==7) {
 	require('../../conf/Presentation.class.php');
-	$p = new Presentation();
+	$p = Presentation::getInstance();
 	$p->assign('text', 'Hello');
 	$p->showError("Message $case.");
 }
@@ -69,14 +69,14 @@ if ($case==13) {
 }
 if ($case==16) {
 	require('../../conf/Presentation.class.php');
-	$p = new Presentation();
+	$p = Presentation::getInstance();
 	$p->assign('text', 'Hello');
 	$p->display();
 	$p->showErrorNoRedirect("Message $case.");
 }
 if ($case==17) {
 	require('../../conf/Presentation.class.php');
-	$p = new Presentation();
+	$p = Presentation::getInstance();
 	$p->assign('text', 'Hello');
 	$p->display();
 	$p->showError("Message $case.");
@@ -87,13 +87,13 @@ if ($case==23) {
 }
 if ($case==26) {
 	require('../../conf/Presentation.class.php');
-	$p = new Presentation();
+	$p = Presentation::getInstance();
 	$p->assign('text', 'Hello');
 	$p->showErrorNoRedirect("Message $case.");
 }
 if ($case==27) {
 	require('../../conf/Presentation.class.php');
-	$p = new Presentation();
+	$p = Presentation::getInstance();
 	$p->assign('text', 'Hello');
 	$p->showError("Message $case.");
 }

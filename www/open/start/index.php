@@ -27,7 +27,7 @@ if (empty($repo)) {
 
 $entrypoints = array_filter($tree->getEntryPoints(), 'shouldShow');
 
-$p = new Presentation();
+$p = Presentation::getInstance();
 $p->addStylesheet('repository/repository.css');
 $p->assign('userfullname',$user);
 $p->assign('repo',$repo);

@@ -12,7 +12,7 @@ $rev = $revisionRule->getValue();
 $file = new SvnOpenFile(getTarget(), $rev);
 
 // show
-$p = new Presentation();
+$p = Presentation::getInstance();
 $p->assign('target', getTarget());
 $p->assign('rev', $rev);
 if ($file->getSize() > 102400) {

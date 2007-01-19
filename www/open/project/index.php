@@ -21,7 +21,7 @@ $tools = array(
 
 $existing = array_filter($tools, 'toolExists');
 
-$p = new Presentation();
+$p = Presentation::getInstance();
 $p->assign('tools', $existing);
 $p->assign('project', getProjectName());
 $p->assign('repo', getRepository());

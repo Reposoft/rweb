@@ -9,7 +9,7 @@ require('../SvnEdit.class.php');
 
 $targeturl = getTargetUrl();
 
-$template = new Presentation();
+$template = Presentation::getInstance();
 
 $unlock = new SvnEdit('unlock');
 $unlock->addArgUrl($targeturl);

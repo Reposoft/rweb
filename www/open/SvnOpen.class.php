@@ -3,6 +3,7 @@
  * Represents a subversion read operation which does not need a working copy.
  * 
  * TODO this is a work in progress. functions are being converted from login.inc.php
+ * @package open
  */
 
 // use test mocks if they define global function targetLogin()
@@ -157,6 +158,7 @@ class RevisionRule extends Rule {
  * 
  * @see Command for the basic functionality
  * @see SvnOpenFile for reading file contents
+ * @package open
  */
 class SvnOpen {
 	

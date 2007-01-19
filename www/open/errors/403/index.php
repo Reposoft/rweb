@@ -5,7 +5,7 @@
 require('../../../conf/Presentation.class.php');
 require('../../../account/login.inc.php');
 
-$p = new Presentation();
+$p = Presentation::getInstance();
 
 $url = repos_getSelfUrl();
 

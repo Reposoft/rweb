@@ -41,7 +41,7 @@ function askForCredentialsBeforeLogout() {
 	if(!$realm) trigger_error("Error: No login realm was found for repository $repo", E_USER_ERROR);
 	askForCredentials($realm);
 	// using cancel page from login
-	$presentation = new Presentation();
+	$presentation = Presentation::getInstance();
 	$presentation->display($presentation->getLocaleFile(dirname(dirname(__FILE__)).'/login/cancel'));
 }
 
@@ -83,7 +83,7 @@ function showAfterLogoutPage() {
 
 function showLoggingOutPage() {
 	$nexturl = getVerifyUrl();
-	$presentation = new Presentation();
+	$presentation = Presentation::getInstance();
 	$presentation->assign('nexturl', $nexturl);
 	$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/index'));
 }
@@ -91,7 +91,7 @@ function showLoggingOutPage() {
 function showCouldNotLogOutPage() {
 	if (strstr ($_SERVER['HTTP_USER_AGENT'], "MSIE")) {
 		// redirect including a password is illegal in IE
-		$presentation = new Presentation();
+		$presentation = Presentation::getInstance();
 		$presentation->assign('nexturl', getAfterLogoutUrl());
 		$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/logout-ie'));
 	} else {

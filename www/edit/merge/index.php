@@ -9,7 +9,7 @@ if (isset($_GET[SUBMIT])) {
 	doAutomerge($_GET['branchFile']);
 } else {
 	$target = getTarget();
-	$template = new Presentation();
+	$template = Presentation::getInstance();
 	$template->assign('repository', getRepository());
 	$template->assign('target', $target);
 	$template->assign('oldname', basename($target));
@@ -37,7 +37,7 @@ function svnList($listFilesInFolder) {
 }
 
 function doAutomerge($sourceFile){
-	$p = new Presentation();
+	$p = Presentation::getInstance();
 	$targetFile = substr($sourceFile, strrpos($sourceFile, "-")+1);
 	$source = '/demoproject/branches/'.$sourceFile;
 	$sourceUrl = getRepository().$source;	// http://localhost/LocalRepos/branches/test.xml

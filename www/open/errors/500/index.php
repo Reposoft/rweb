@@ -4,7 +4,7 @@
  */
 require('../../../conf/Presentation.class.php');
 
-$p = new Presentation();
+$p = Presentation::getInstance();
 
 $url = repos_getSelfUrl();
 

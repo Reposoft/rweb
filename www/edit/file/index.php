@@ -20,7 +20,7 @@ new FilenameRule("name");
 new NewFilenameRule("name", getTarget());
 
 if ($_SERVER['REQUEST_METHOD']=='GET') {
-	$template = new Presentation();
+	$template = Presentation::getInstance();
 	$target = getTarget();
 	$targeturl = getTargetUrl();
 	if (isFile($target)) {

@@ -13,7 +13,7 @@ if (isset($_GET[SUBMIT])) {
 	svnRename(); 
 } else {
 	$target = getTarget();
-	$template = new Presentation();
+	$template = Presentation::getInstance();
 	$template->assign('target', $target);
 	$template->assign('folder', getParent($target));
 	$template->assign('oldname', basename($target));
@@ -36,6 +36,6 @@ function svnRename() {
 	$edit->addArgUrl($oldUrl);
 	$edit->addArgUrl($newUrl);
 	$edit->exec();
-	$edit->present(new Presentation());
+	$edit->present(Presentation::getInstance());
 }
 ?>

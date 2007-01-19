@@ -19,7 +19,7 @@ $command = new SvnOpen('diff');
 $command->addArgRevisionRange($revfrom.':'.$revto);
 $command->addArgUrlPeg($url, $revfrom);
 
-$p = new Presentation();
+$p = Presentation::getInstance();
 $p->assign('target', $url);
 $p->assign('revfrom', $revfrom);
 $p->assign('revto', $revto);

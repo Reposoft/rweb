@@ -2,6 +2,9 @@
 require(dirname(__FILE__)."/Presentation.class.php");
 require("../lib/simpletest/setup.php");
 
+class TestClazz {
+}
+
 class TestPresentation extends UnitTestCase {
 	
 	function TestPresentation() {
@@ -15,7 +18,7 @@ class TestPresentation extends UnitTestCase {
 	}
 	
 	function testAddStylesheet() {
-		$p = new Presentation();
+		$p = Presentation::getInstance();
 		$p->addStylesheet('repository/repository.css');
 		$head = $p->_getAllHeadTags('/mytheme/style/');
 		$x = strpos($head, 'mytheme/style/repository/repository.css');
@@ -29,9 +32,9 @@ class TestPresentation extends UnitTestCase {
 	}
 	
 	function testSingletonCreateTwice() {
-		$p = new Presentation();
-		$this->expectError('Code error. An attempt was made to create a second page instance.');
-		$p2 = new Presentation();
+		$p = Presentation::getInstance();
+		$p2 = Presentation::getInstance();
+		$this->assertReference($p, $p2);
 	}
 
 }

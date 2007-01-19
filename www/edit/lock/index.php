@@ -15,7 +15,7 @@ if (isset($_GET[SUBMIT])) {
 	lock($_GET['message']); 
 } else {
 	$target = getTarget();
-	$template = new Presentation();
+	$template = Presentation::getInstance();
 	$template->assign('target', $target);
 	$template->assign('repository', getRepository().getParent($target));
 	if (isset($_GET['download'])) {
@@ -34,7 +34,7 @@ function lock($message) {
 	}
 	$lock->addArgUrl($targeturl);
 	$lock->exec();
-	$p = new Presentation();
+	$p = Presentation::getInstance();
 	$p->assign('redirect', getWebapp().'open/download/?target='.getTarget());
 	$lock->present($p, getParent($targeturl));
 }

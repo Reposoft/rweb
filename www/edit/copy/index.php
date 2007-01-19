@@ -14,7 +14,7 @@ if (isset($_GET[SUBMIT])) {
 	svnCopy($tofolder); 
 } else {
 	$target = getTarget();
-	$template = new Presentation();
+	$template = Presentation::getInstance();
 	$template->assign('repository', getRepository());
 	$template->assign('target', $target);
 	$template->assign('oldname', basename($target));
@@ -38,6 +38,6 @@ function svnCopy($tofolder) {
 	$edit->addArgUrl($oldUrl);
 	$edit->addArgUrl($newUrl);
 	$edit->exec();
-	$edit->present(new Presentation());
+	$edit->present(Presentation::getInstance());
 }
 ?>

@@ -35,7 +35,7 @@ if (isset($_REQUEST[SUBMIT])) {
 }
 
 function presentForm($message='enter some values and press submit') {
-	$p = new Presentation();
+	$p = Presentation::getInstance();
 	$p->assign('message', $message);
 	$p->display();
 }

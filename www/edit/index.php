@@ -16,7 +16,7 @@ $revisionRule = new RevisionRule();
 $rev = $revisionRule->getValue();
 $file = new SvnOpenFile(getTarget(), $rev);
 
-$p = new Presentation();
+$p = Presentation::getInstance();
 $p->assign_by_ref('file', $file);
 // for links to other operations we use the original parameters
 $p->assign('rev', $rev);

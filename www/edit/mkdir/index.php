@@ -13,7 +13,7 @@ if (isset($_GET[SUBMIT])) {
 	createNewFolder($_GET['name'],$_GET['message']); 
 } else {
 	$target = getTarget();
-	$template = new Presentation();
+	$template = Presentation::getInstance();
 	$template->assign('target', $target);
 	$template->assign('repository', getRepository().$target);
 	$template->display();
@@ -25,7 +25,7 @@ if (isset($_GET[SUBMIT])) {
 
 function createNewFolder($name, $message) {
 	global $folderRule;
-	$template = new Presentation();
+	$template = Presentation::getInstance();
 	$newurl = getTargetUrl().$name;
 	$dir = tmpdir();
 	$edit = new SvnEdit('import');
