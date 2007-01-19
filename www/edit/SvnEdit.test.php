@@ -1,5 +1,6 @@
 <?php
 require('SvnEdit.class.php');
+require('../conf/Presentation.class.php');
 require("../lib/simpletest/setup.php");
  
 $lastCommand = null;
@@ -109,6 +110,20 @@ class SvnEditTest extends UnitTestCase
 			$edit->exec();
 			$this->assertTrue(strpos(_getLastCommand(), '\" \$\(ls\) -m "msg \" \`ls\` \'ls\' \\\\ \" | rm"'));
 		}
+	}
+	
+	function testGetOperation() {
+		$e = new SvnEdit('diff');
+		$this->assertEqual('diff', $e->getOperation());
+	}
+	
+	function testGetArgumentsString() {
+		$c = new SvnEdit('commit');
+		$c->addArgPath('C:/a/');
+		$c->setMessage('m s g');
+		//$this->assertEqual('"C:/a/" -m "m s g"', $c->_getArgumentsString());
+		//message appended upon exec
+		$this->assertEqual('"C:/a/"', $c->_getArgumentsString());
 	}
 	
 	function testNewFilenameRule() {

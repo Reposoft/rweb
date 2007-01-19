@@ -3,9 +3,15 @@ require(dirname(__FILE__)."/Presentation.class.php");
 require("../lib/simpletest/setup.php");
 
 class TestPresentation extends UnitTestCase {
-
+	
 	function TestPresentation() {
 		$this->UnitTestCase();
+	}
+	
+	function setUp() {
+		// bypas the singleton check
+		global $_presentationInstance;
+		$_presentationInstance = null;
 	}
 	
 	function testAddStylesheet() {
@@ -20,6 +26,12 @@ class TestPresentation extends UnitTestCase {
 	function testErrorHandler() {
 		$this->assertEqual(function_exists('reportErrorToUser'),
 			"Presentation class should define a custom error reporting function as defined in repos.properties.php");
+	}
+	
+	function testSingletonCreateTwice() {
+		$p = new Presentation();
+		$this->expectError('Code error. An attempt was made to create a second page instance.');
+		$p2 = new Presentation();
 	}
 
 }

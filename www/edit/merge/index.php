@@ -53,7 +53,6 @@ function doAutomerge($sourceFile){
 	$checkout->addArgUrl($targetFolder);
 	$checkout->addArgPath($temporaryWorkingCopy);
 	$checkout->exec();
-	$checkout->show($p);
 
 	// Get older revision of source (the revision when the branch was made)
 	// svn log --stop-on-copy http://localhost/LocalRepos/branches/test.xml
@@ -61,7 +60,6 @@ function doAutomerge($sourceFile){
 	$log->addArgOption('--stop-on-copy');
 	$log->addArgUrl($sourceUrl);
 	$log->exec();
-	$log->show($p);
 	foreach ($logResult as $key => $value){
 		$revisionPointStart = strpos($value, 'r');
 		$revisionPointEnd = strpos($value, ' | ');
@@ -76,7 +74,7 @@ function doAutomerge($sourceFile){
 	}
 	if (sizeof($revisionNumber) < 2){
 		$p->showError("No changes have been made to the file.");
-		presentEdit($p, $targetFolder);
+		displayEdit($p, $targetFolder);
 		exit;
 	}
 
@@ -87,7 +85,6 @@ function doAutomerge($sourceFile){
 	$merge->addArgUrl($sourceUrl);
 	$merge->addArgPath($temporaryWorkingCopy . $targetFile);	// temporaryWorkingCopy/test.xml
 	$merge->exec();
-	$merge->show($p);
 
 	// Conflict??
 
@@ -138,7 +135,6 @@ function doAutomerge($sourceFile){
 		}
 	}
 
-	$commit->show($p);
-	presentEdit($p, $targetFolder);
+	displayEdit($p, $targetFolder);
 }
 ?>

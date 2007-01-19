@@ -3,19 +3,20 @@
  * Operations that result in a new revision in the repository.
  * 
  * @package edit
+ * @see SvnEdit
+ * @see FilenameRule
+ * @see NewFilenameRule
+ * @see FolderWriteAccessRule
  */
-
-// TODO rename to SvnEdit.class.php, delegate to SvnOpen, add getCommittedRevision
-// common functionality in the edit tools
 require_once( dirname(dirname(__FILE__))."/open/SvnOpen.class.php" );
 require_once( dirname(dirname(__FILE__))."/plugins/validation/validation.inc.php" );
-
-// getResourceType was only used from here, so we'll keep it here until it has found a nice home
 
 /**
  * Tries a resource path in current HEAD, for the current user, returning status code.
  * @param $target the path in the current repository; accepts folder names without tailing slash.
  * @return 0 = does not exist, -1 = access denied, 1 = folder, 2 = file, boolean FALSE if undefined
+ * @package edit
+ * @deprecated REPOS-15, currently it is only used from here
  */
 function login_getResourceType($target) {
 	$url = getTargetUrl($target);
@@ -126,36 +127,72 @@ class FolderWriteAccessRule extends Rule {
 		// try some incomplete cURL webdav write operation, getting a 403 but hopefluly not modifying if OK
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "SEARCH" ) ;
-
+		//TODO see SvnOpenFile->isReadOnly
 	}
 }
 
 // ---- presentation support ----
 
 /**
- * Present the page with the results of all Edit->show calls,
- * where the last Edit's success status decides if the page should say error or done
+ * All 'edit' operations have the same edit_done presentation template,
+ * so they need shared presentation logic.
+ * 
+ * Called after a series of SvnEdit->exec to display the page to the user.
+ * 
+ * The last Edit's success status decides if the page should say error or done.
+ * 
+ * @param Presentation $presentation the page to the user
+ * @param String $nextUrl URL to suggest in the link to next page
+ * @param String $headline The h1 of the resulting page
+ * @param String $summary The final word of the resulting page 
+ * @package edit
+ * @see SvnEdit::show()
  */
-function presentEdit(&$presentation, $nextUrl=null, $headline=null, $summary=null) {
+function displayEdit(&$presentation, $nextUrl=null, $headline=null, $summary=null) {
+	$presentation->assign('target', getTarget());
 	if (!$nextUrl) {
-		$nextUrl = dirname(getTargetUrl()); // get the parent folder for a file, and the folder itself for a folder
+		$nextUrl = dirname(getTargetUrl()).'/'; // get the parent folder for a file, and the folder itself for a folder
 	}
 	$presentation->assign('nexturl',$nextUrl);
 	$presentation->assign('headline',$headline);
 	$presentation->assign('summary',$summary);
 	$presentation->enableRedirect();
+	//exit;
 	$presentation->display(dirname(__FILE__) . '/edit_done.html');
 }
 
 /**
- * Used if the current task should be aborted with an error message, and the status from last Edit->show.
+ * Used if the current task should be aborted with an error message, 
+ * but instead of the standard error page 
+ * show the information from Edit->_show calls.
+ * 
+ * Instead of:
+ * <code>
+ * $edit->exec();
+ * if (!$edit->isSuccessful()) {
+ * displayEdit($presentation, ...);
+ * exit;
+ * }
+ * </code>
+ * you write
+ * <code>
+ * $edit->exec();
+ * if (error) displayEditAndExit(...)
+ * // or 
+ * if ($edit->exec()) displayEditAndExit(...)
+ * </code>
+ * 
+ * Server errors should still be reported with trigger_error('...', E_USER_ERROR);
+ * 
+ * This method is for the special case where the 
  *
  * @param Smarty $presentation
  * @param String $errorMessage
+ * @package edit
  */
-function presentEditAndExit(&$presentation, $nextUrl=null, $errorMessage=null) {
+function displayEditAndExit(&$presentation, $nextUrl=null, $errorMessage=null) {
 	if (!$errorMessage) $errorMessage = 'Versioning operation failed';
-	presentEdit($presentation, $nextUrl, $errorMessage);
+	displayEdit($presentation, $nextUrl, $errorMessage);
 	exit;
 }
 
@@ -164,9 +201,28 @@ function presentEditAndExit(&$presentation, $nextUrl=null, $errorMessage=null) {
 /**
  * The repository write operation class, representing an SVN operation and the result.
  * 
- * An action might consist of serveral Edit operation. Each operation can present the
- * results to the 'edit done' smarty template.
- * If the show() function is never called, this class does not need Presentation.class.php to be imported.
+ * An upload could be a series of edit like:
+ * <code>
+ * $wc = System::getTempFolder('uploads');
+ * $checkout = new SvnEdit('checkout');
+ * ... set arguments ...
+ * $checkout->exec(); // calls _show() after execution
+ * ... copy new file to wc ...
+ * $update = new SvnEdit('update');
+ * ...
+ * $commit = new SvnEdit('commit');
+ * $commit->setMessage("message in log and in result page");
+ * ...
+ * displayEdit($presentation, ...);
+ * </code>
+ * 
+ * For working copy operations that are not 'svn',
+ * or are 'svn' but do not take a --username argument,
+ * use {@link Command}.
+ * 
+ * For svn operations that are part of the application logic
+ * (like checking the properties of a file) and should not be
+ * presented to the user, use {@link SvnOpen}.
  */ 
 class SvnEdit {
 	/**
@@ -240,7 +296,17 @@ class SvnEdit {
 	 * @return String the subversion command name
 	 */
 	function getOperation() {
-		return $this->operation;
+		return $this->command->getOperation();
+	}
+	
+	/**
+	 * The arguments should be handled with care, because they reveal system internals.
+	 * Also this function reconstructs the arguments, repeating the logic from the
+	 * exec call, and then sanitized with regexps, so it is not efficient.
+	 * @return String the custom arguments to the svn operation
+	 */
+	function _getArgumentsString() {
+		return $this->command->_getArgumentsString();
 	}
 	
 	/**
@@ -252,14 +318,18 @@ class SvnEdit {
 	}
 	
 	/**
-	 * Runs the operation securely (no risk for shell command injection)
+	 * Runs the operation securely (no risk for shell command injection).
+	 * Then calls <code>show(Presentation::getInstance())</code>.
+	 * Use SvnOpen instead of SvnEdit for operations that are not meaningful to the user.
 	 * @return int the exit code
 	 */
-	function exec() {
+	function exec($description=null) {
 		if ($this->commitWithMessage) { // commands expecting a message need this even if it is empty
 			$this->command->addArgOption('-m', $this->message);
 		}
-		return $this->command->exec();
+		$result = $this->command->exec();
+		$this->_show(Presentation::getInstance(), $description);
+		return $result;
 	}
 	
 	/**
@@ -284,7 +354,7 @@ class SvnEdit {
 	function getResult() {
 		$o = $this->getOutput();
 		if (count($o) > 0) return $o[count($o)-1];
-		return '';
+		return 'No output from operation '.$this->getOperation();
 	}
 	
 	/**
@@ -308,12 +378,15 @@ class SvnEdit {
 	/**
 	 * Present the result of this operation in the Edit smarty template
 	 * and then returns so that the task can continue.
-	 *
+	 * 
+	 * Called automatically by {@link SvnEdit::exec()}
+	 * 
 	 * @param Smarty $smartyTemplate a template that accepts 'assign'
 	 * @param String $description a custom summary line for this operation, 
 	 *  summary lines will always be visible, use \n as line break
 	 */
-	function show(&$smartyTemplate, $description=null) {
+	function _show(&$smartyTemplate, $description=null) {
+		$result = $this->getResult();
 		$logEntry = array(
 			'result' => $this->getResult(),
 			'operation' => $this->getOperation(),
@@ -324,49 +397,19 @@ class SvnEdit {
 		);
 		$logEntry['description'] = $description;
 		$smartyTemplate->append('log', $logEntry);
-		
 		// overwrite existing values, so that the last command decides the result
 		$smartyTemplate->assign($logEntry);
-	}
-	
-	/**
-	 * Convenience method for versioning operations that rarely fail.
-	 * Calls show, and then if this Edit is not successful it calls
-	 * presentAndEdit with the default error message and nextUrl.
-	 * Use this method to make sure that a complex task does not continue
-	 * if a required step fails, but when there is no reason to write
-	 * custom error handling for the step.
-	 *
-	 * @param Smarty $smartyTemplate a template that accepts 'assign'
-	 * @param String $description a custom summary line for this operation, 
-	 *  summary lines will always be visible, use \n as line break
-	 */
-	function showOrFail(&$smartyTemplate, $description=null) {
-		$this->show($smartyTemplate, $description);
-		if (!$this->isSuccessful()) {
-			presentEditAndExit($smartyTemplate);
-		}
-	}
-	
-	/**
-	 * Reports to the user that the operation failed.
-	 * @param Smarty $smartyTemplate a template that accepts 'assign'
-	 * @param String $description a custom summary line for this operation, 
-	 *  summary lines will always be visible, use \n as line break
-	 */
-	function fail(&$smartyTemplate, $description=null) {
-		presentEditAndExit($smartyTemplate);
 	}
 	
 	/**
 	 * Write the results of a single edit operation to a smarty template
 	 * @param smarty initialized template engine
 	 * @param nextUrl the absolute url to go to after the operation. Should be a folder in the repository. If null, referrer is used.
-	 * @deprecated use Edit->show and presentEdit insead, which support multiple edit operations for a page
+	 * @deprecated use displayEdit() insead, which support multiple edit operations for a page
 	 */
 	function present(&$smarty, $nextUrl = null) {
-		$this->show($smarty);
-		presentEdit($smarty, $nextUrl);
+		$this->_show($smarty);
+		displayEdit($smarty, $nextUrl);
 	}
 
 }

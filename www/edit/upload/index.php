@@ -53,7 +53,7 @@ function getLog($targetUrl) {
 }
 	
 function showUploadForm() {	
-	$template = new Presentation();
+	$template = Presentation::getInstance();
 	$target = getTarget();
 	$targeturl = getTargetUrl();
 	// if target is a file then this is upload new version
@@ -79,7 +79,7 @@ function showUploadForm() {
 }
 
 function processNewFile($upload) {
-	$presentation = new Presentation();
+	$presentation = Presentation::getInstance();
 	Validation::expect('name');
 	$newfile = toPath(tempnam(rtrim(getTempDir('upload'),'/'), ''));
 	$upload->processSubmit($newfile);
@@ -93,7 +93,7 @@ function processNewFile($upload) {
 	// need the original filename, $recommend = getSpecificMimetype($newfile, $clientMime);
 	$recommend = getSpecificMimetype($upload->getName(), $clientMime);
 	if ($recommend) {
-		echo('Recommending mime type '.$clientMime); exit;
+		// TODO echo('Recommending mime type '.$clientMime); exit;
 	}
 	// clean up
 	deleteFile($newfile);
@@ -104,7 +104,7 @@ function processNewFile($upload) {
 
 function processNewVersion($upload) {
 	Validation::expect('fromrev');
-	$presentation = new Presentation();
+	$presentation = Presentation::getInstance();
 	$dir = System::getTempFolder('upload');
 	$repoFolder = dirname($upload->getTargetUrl());
 	// check out existing files of the given revision
@@ -119,7 +119,6 @@ function processNewVersion($upload) {
 		$presentation->showError("Could not read current version of file "
 			.$upload->getTargetUrl().". ".$checkout->getResult());
 	}
-	$checkout->show($presentation);
 	// upload file to working copy
 	$filename = $upload->getName();
 	$updatefile = toPath($dir . $filename);
@@ -134,11 +133,11 @@ function processNewVersion($upload) {
 		$presentation->showError('Could not read uploaded file "'
 			.$filename.'" for operation "'.basename($dir).'"');
 	}
-	// store the diff in the presentation object
-	$diff = new SvnEdit('diff');
+	// check that there is a diff compared to fromrev, should not be displayed to user: use SvnOpen
+	$diff = new SvnOpen('diff');
 	$diff->addArgPath($updatefile);
 	$diff->exec();
-	if ($diff->getExitcode()) $diff->fail($presentation);
+	if ($diff->getExitcode()) trigger_error('Could not read difference between current and uploaded file.', E_USER_WARNING);
 	if (count($diff->getOutput())==0) trigger_error('Uploaded file is identical to the existing.', E_USER_WARNING);
 	// always do update before commit
 	updateAndHandleConflicts($dir, $presentation);
@@ -165,13 +164,11 @@ function processNewVersion($upload) {
 	// commit returns nothing if there are no local changes
 	if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
 		// normal behaviour
-		presentEditAndExit($presentation, null, 'The uploaded file '.$upload->getOriginalFilename()
+		displayEditAndExit($presentation, null, 'The uploaded file '.$upload->getOriginalFilename()
 			.' is identical to the current file '.$upload->getName());
 	}
-	// show results
-	$commit->show($presentation);
-	// todo present error
-	presentEdit($presentation, dirname($upload->getTargetUrl()), 
+	// TODO present as error if any of the operations failed (or did they already exit?)
+	displayEdit($presentation, dirname($upload->getTargetUrl().'/'), 
 		'New version committed',
 		$upload->getTargetUrl().' is now at revision '.$commit->getCommittedRevision());
 }
@@ -186,8 +183,7 @@ function _canEditAsTextarea($mimetype) {
 function updateAndHandleConflicts($workingCopyPath, $presentation) {
 	$update = new SvnEdit('update');
 	$update->addArgPath($workingCopyPath);
-	$update->exec();
-	$update->show($presentation, 'Updating to see if there is conflicts with other new changes');
+	$update->exec('Updating to see if there is conflicts with other new changes');
 	// TODO use conflicthandler to detect conflicts (exit code is still 0 on conflict)
 }
 

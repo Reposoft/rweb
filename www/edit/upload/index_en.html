@@ -12,7 +12,8 @@ function autoFillFilename(path) {
 <!--{else}-->
 	if (filename == document.getElementById('currentname').value) return;
 	var m = filename.match(/-(\d+)\.?\w*$/)
-	if (m.length > 1) var rev = m[1];
+	if (!m || m.length < 2) return; 
+	var rev = m[1];
 	var button = document.getElementById('fromrev'+rev);
 	if (!button) {
 		alert('From the filename it looks like changes are based on revision '+rev+'. But there is no such revision. Please check that it is the same document.');

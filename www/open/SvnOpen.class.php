@@ -166,6 +166,9 @@ class SvnOpen {
 	 */
 	var $command;
 	
+	// store the svn operation for reference
+	var $operation;
+	
 	/**
 	 * Creates the command representation.
 	 *
@@ -174,6 +177,7 @@ class SvnOpen {
 	 * @return SvnOpen
 	 */
 	function SvnOpen($subversionOperation, $asXml=false) {
+		$this->operation = $subversionOperation;
 		$this->command = new Command('svn');
 		$this->_addSvnOptions();
 		$this->command->addArgOption($subversionOperation);
@@ -229,6 +233,32 @@ class SvnOpen {
 	
 	function addArgOption($option, $value=null, $valueNeedsEscape=true) {
 		$this->command->addArgOption($option, $value, $valueNeedsEscape);
+	}
+	
+	/**
+	 * @return String the svn operation for the command
+	 */
+	function getOperation() {
+		return $this->operation;
+	}
+	
+	/**
+	 * The arguments should be handled with care, because they reveal system internals.
+	 * Also this function reconstructs the arguments, repeating the logic from the
+	 * exec call, and then sanitized with regexps, so it is not efficient.
+	 * @return String the custom arguments to the svn operation
+	 */
+	function _getArgumentsString() {
+		$arg = $this->command->_getArgumentsString();
+		return trim(preg_replace(array(
+			'/--username[=\s]+"?[^"]*"?\s+/',
+			'/--password[=\s]+"?[^"]*"?\s+/',
+			'/--no-auth-cache\s+/',
+			'/--non-interactive\s+/',
+			'/--config-dir[=\s]+"?[^"]*"?\s+/',
+			'/'.$this->getOperation().'\s+/'
+		), array('','','','','',''), $arg, 1));
+		// --username="" --password="" --no-auth-cache --non-interactive --config-dir "C:\\srv\\ReposServer\\admin\\svn-config-dir\\
 	}
 	
 	/**

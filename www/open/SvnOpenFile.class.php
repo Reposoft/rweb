@@ -194,6 +194,7 @@ class SvnOpenFile {
 	function isWritable() {
 		if (!$this->isLatestRevision()) return false;
 		// TODO what method should be used?
+		// TODO align with FolderWriteAccessRule in SvnEdit.class.php
 		// curl -I -u test:test -X PROPPATCH http://localhost/testrepo/demoproject/trunk/readonly/
 		$r = new ServiceRequest($this->getUrl());
 		$r->setCustomHttpMethod('PROPPATCH');

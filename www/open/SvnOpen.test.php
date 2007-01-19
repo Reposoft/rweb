@@ -69,7 +69,18 @@ class TestSvnOpen extends UnitTestCase {
 		unset($_REQUEST['fromrev']);
 	}
 	
-	// some things are tested through the SvnEdit class
+	function testGetOperation() {
+		$o = new SvnOpen('diff');
+		$this->assertEqual('diff', $o->getOperation());
+	}
+	
+	function testGetArgumentsString() {
+		$o = new SvnOpen('ls');
+		$o->addArgOption('-r', '1:2', false);
+		$this->assertEqual('-r 1:2', $o->_getArgumentsString());
+		$o->addArgPath('/a/b ls c/');
+		$this->assertEqual('-r 1:2 "/a/b ls c/"', $o->_getArgumentsString());
+	}
 	
 }
 

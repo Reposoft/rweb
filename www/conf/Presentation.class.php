@@ -108,6 +108,12 @@ require(dirname(dirname(__FILE__)).'/lib/smarty/smarty.inc.php' );
  * Comma is used instead of dot so it can be used with the standard Smarty
  * syntax for associative arrays.
  * 
+ * All templates have the following variables, assigned in display():
+ * 'head' - the common head tags.
+ * 'referer' - the http referer, if there is one.
+ * 'userhome' - the place which users can always return to if everything else goes wrong.
+ * 'webapp' - the root URL to Repos, with trainling slash.
+ * 
  * Cache settings are defined in te include file.
  */
 class Presentation {
@@ -121,26 +127,28 @@ class Presentation {
 	var $redirectBeforeDisplay = false;
 	var $extraStylesheets = array();
 
-	// singleton accessor, for occations when it is not known if a Presentation object has already been allocated for the request
-	// static, use Presentation::getInstance()
+	/**
+	 * Singleton accessor, for occations when it is not known if a Presentation object has already been allocated for the request.
+	 * Static, use Presentation::getInstance().
+	 * @static
+	 */ 
 	function getInstance() {
-		if (isset($GLOBALS['_presentationInstance'])) return $GLOBALS['_presentationInstance'];
-		return new Presentation();
+		static $instance;
+		if (!isset($instance)) {
+			$c = __CLASS__;
+			$instance = new $c;
+		}
+		return $instance;
 	}
 	
 	/**
 	 * Constructor initializes a Smarty instance and adds custom filders.
+	 * @private This class is Singleton. Use Presentation::getInstance().
 	 */
 	function Presentation() {
 		setupResponse();
 		
 		$this->smarty = smarty_getInstance();
-		
-		// enforce singleton rule, but only after delimiters and such things has been configures (otherwise the error template might be invalid)
-		if (isset($GLOBALS['_presentationInstance'])) {
-			trigger_error("Code error. An attempt was made to create a second page instance", E_USER_ERROR);
-		}
-		$GLOBALS['_presentationInstance'] = $this;
 		
 		// register the prefilter
 		$this->smarty->register_prefilter('Presentation_useCommentedDelimiters');
@@ -229,11 +237,12 @@ class Presentation {
 		$this->assign('head', $this->_getThemeHeadTags());
 		$this->assign('referer', $this->getReferer());
 		$this->assign('userhome', $this->getUserhome());
+		$this->assign('webapp', getWebapp());
 		// display
 		if (!$resource_name) {
 			$resource_name = $this->getDefaultTemplate();
 		}
-		if (//debug:// false && 
+		if (!headers_sent() && //debug:// false && 
 			$this->isRedirectBeforeDisplay()) {
 			// TODO how to get PHP errors and warnings into the result page instead of before the redirect
 			$file = tempnam(getTempDir('pages'),'');
