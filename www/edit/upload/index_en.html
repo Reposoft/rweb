@@ -84,7 +84,7 @@ to make sure that your local changes are based on the newest version of the shar
     	<span class="username">{=$e.user}</span> <span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span><br />
     {=/foreach}
       <label for="fromrev-1">&nbsp;</label>
-      <input id="fromrev-1" type="radio" name="fromrev" value="-1" />
+      <input id="fromrev-1" type="radio" name="fromrev" value="HEAD" />
       <span>Don't know. Just overwrite the current version.</span>
   </p>
   {=if $file,isLockedByThisUser}
@@ -94,10 +94,12 @@ to make sure that your local changes are based on the newest version of the shar
   </p>
   {=/if}
   <!--{else}-->
+  <!-- not implemented
   <p>
   	 <label for="needslock">should be locked before edit</label>
   	 <input type="checkbox" id="needslock" name="needslock"/>
   </p>
+   -->
   <!--{/if}-->
   <p>
     <label for="message">history text</label>

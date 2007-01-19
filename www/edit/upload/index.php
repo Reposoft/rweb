@@ -103,12 +103,15 @@ function processNewFile($upload) {
 }
 
 function processNewVersion($upload) {
+	Validation::expect('fromrev');
 	$presentation = new Presentation();
-	$dir = getTempnamDir('upload'); // same tempdir as create, but subfolder
+	$dir = System::getTempFolder('upload');
 	$repoFolder = dirname($upload->getTargetUrl());
-	// check out existing files
+	// check out existing files of the given revision
+	$fromrev = $upload->getFromrev();
 	$checkout = new SvnEdit('checkout');
 	$checkout->addArgOption('--non-recursive');
+	if ($fromrev) $checkout->addArgOption('-r', $fromrev, false);
 	$checkout->addArgUrl($repoFolder);
 	$checkout->addArgPath($dir);
 	$checkout->exec();
@@ -135,13 +138,14 @@ function processNewVersion($upload) {
 	$diff = new SvnEdit('diff');
 	$diff->addArgPath($updatefile);
 	$diff->exec();
-	$diff->showOrFail($presentation);
-	//not used//$presentation->assign('diff', $diff->getResult());
+	if ($diff->getExitcode()) $diff->fail($presentation);
+	if (count($diff->getOutput())==0) trigger_error('Uploaded file is identical to the existing.', E_USER_WARNING);
+	// always do update before commit
+	updateAndHandleConflicts($dir, $presentation);
 	// create the commit command
 	$commit = new SvnEdit('commit');
 	$commit->setMessage($upload->getMessage());
 	$commit->addArgPath($dir);
-	//exit;
 	$commit->exec();
 	// Seems that there is a problem with svn 1.3.0 and 1.3.1 that it does not always see the update on a replaced file
 	//  remove this block when we don't need to support svn versions onlder than 1.3.2
@@ -157,7 +161,7 @@ function processNewVersion($upload) {
 	// clean up
 	$upload->cleanUp();
 	// remove working copy
-	deleteFolder($dir);
+	System::deleteFolder($dir);
 	// commit returns nothing if there are no local changes
 	if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
 		// normal behaviour
@@ -174,6 +178,17 @@ function processNewVersion($upload) {
 
 function _canEditAsTextarea($mimetype) {
 	return $mimetype=='text/plain';
+}
+
+/**
+ * Runs svn update in a working copy and reports the result to the user.
+ */
+function updateAndHandleConflicts($workingCopyPath, $presentation) {
+	$update = new SvnEdit('update');
+	$update->addArgPath($workingCopyPath);
+	$update->exec();
+	$update->show($presentation, 'Updating to see if there is conflicts with other new changes');
+	// TODO use conflicthandler to detect conflicts (exit code is still 0 on conflict)
 }
 
 /**
@@ -302,7 +317,8 @@ class Upload {
 		if ($this->isCreate()) {
 			trigger_error('This is a new file and can not be based on a revsion', E_USER_ERROR);
 		} else {
-			return $_POST['fromrev'];
+			$r = new RevisionRule('fromrev');
+			return $r->getValue();
 		}
 	}
 	

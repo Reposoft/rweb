@@ -253,6 +253,7 @@ class SvnEdit {
 	
 	/**
 	 * Runs the operation securely (no risk for shell command injection)
+	 * @return int the exit code
 	 */
 	function exec() {
 		if ($this->commitWithMessage) { // commands expecting a message need this even if it is empty
@@ -268,6 +269,9 @@ class SvnEdit {
 		return $this->getExitcode() == 0;
 	}
 	
+	/**
+	 * @return int the exit code of the operation, normally 0 if successful
+	 */
 	function getExitcode() {
 		return $this->command->getExitcode();
 	}
@@ -342,6 +346,16 @@ class SvnEdit {
 		if (!$this->isSuccessful()) {
 			presentEditAndExit($smartyTemplate);
 		}
+	}
+	
+	/**
+	 * Reports to the user that the operation failed.
+	 * @param Smarty $smartyTemplate a template that accepts 'assign'
+	 * @param String $description a custom summary line for this operation, 
+	 *  summary lines will always be visible, use \n as line break
+	 */
+	function fail(&$smartyTemplate, $description=null) {
+		presentEditAndExit($smartyTemplate);
 	}
 	
 	/**

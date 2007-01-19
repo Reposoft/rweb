@@ -14,33 +14,30 @@ function autoFillFilename(path) {
 <div id="workspace">
 <div id="commandbar">
 <a id="repository" class="command" href="{=$repository|urlEncodeNames}">return to repository</a>
+<a id="view" class="command" target="_blank" href="../../open/file/?target={=$target}&rev={=$file,revision}">view current version</a>
 </div>
 <div id="contents">
-<h1>Paste contents of file</h1>
-<!--{if $isfile}-->
-<p>As a new version of file <span class="path">{=$target}</span> <a class="action" target="_blank" href="../open/?target={=$target}">open current version</a></p>
-<!--{else}-->
-<p>As a new file in folder {=$target}</p>
-<!--{/if}-->
+
 <a name="textform"></a>
-<p>Open the local file in a text editor, such as notepad, and copy the contents to this form.</p>
-<form action="./" method="post" name="formUpload" id="formUpload">
+<form action="../upload/" method="post" name="formUpload" id="formUpload">
 <fieldset>
-  <legend>Upload to repos.se</legend>
+	<!--{if $file}-->
+	<legend>Edit <span class="path">{=$target}</span> {=$file,revision} with type {=$file,type}</legend>
+	<!--{else}-->
+	<legend>Create new file in {=$target}</legend>
+	<!--{/if}-->
   <input type="hidden" name="target" value="{=$target}"/>
   <input type="hidden" name="paste" value="1"/>
-  <p>
-    <label for="usertext">file contents</label> <a class="action" href="#textform" onclick="document.forms[0]['usertext'].value=''">clear contents</a><br />
-	<!--{if $isfile}-->
-    <textarea name="usertext" id="usertext" cols="100" rows="20" tabindex="1">{=$targeturl|login_svnPassthruFile}</textarea>
+	<!--{if $file}-->
+	<input type="hidden" name="fromrev" value="{=$file,revision}"/>
+    <textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1">{=$targeturl|login_svnPassthruFile}</textarea>
 	<!--{else}-->
-	<textarea name="usertext" id="usertext" cols="100" rows="20" tabindex="1"></textarea>
+	<textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1"></textarea>
 	<!--{/if}-->
     <label for="userfile"></label>
-  </p>
   <p>
     <label for="currentname">name in repository</label>
-	<!--{if $isfile}-->
+	<!--{if $file}-->
     <input type="text" id="currentname" name="currentname" value="{=$target|basename}" disabled="disabled" size="40" />
 	<!--{else}-->
 	<input type="text" id="name" name="name" size="40" class="required" tabindex="2" />
@@ -55,6 +52,7 @@ function autoFillFilename(path) {
     <label for="submit"></label>
     <input id="submit" type="submit" name="Submit" value="Save" tabindex="4" />
     <input type="reset" value="Reset to original contents"/>
+    <input type="button" value="Clear contents" onclick="document.forms[0]['usertext'].value=''"/>
   </p>
 </fieldset>
 </form>
