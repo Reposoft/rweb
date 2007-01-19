@@ -14,7 +14,11 @@ function autoFillFilename(path) {
 <div id="workspace">
 <div id="commandbar">
 <a id="repository" class="command" href="{=$repository|urlEncodeNames}">return to repository</a>
+<!--{if $file}-->
 <a id="view" class="command" target="_blank" href="../../open/file/?target={=$target}&rev={=$file,revision}">view current version</a>
+<!--{else}-->
+
+<!--{/if}-->
 </div>
 <div id="contents">
 
@@ -30,7 +34,9 @@ function autoFillFilename(path) {
   <input type="hidden" name="paste" value="1"/>
 	<!--{if $file}-->
 	<input type="hidden" name="fromrev" value="{=$file,revision}"/>
-    <textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1">{=$targeturl|login_svnPassthruFile}</textarea>
+    <textarea name="usertext" id="usertext" class="{=$file,extension}" cols="82" rows="20" tabindex="1">
+    {=$file->sendInlineHtml()}
+    </textarea>
 	<!--{else}-->
 	<textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1"></textarea>
 	<!--{/if}-->

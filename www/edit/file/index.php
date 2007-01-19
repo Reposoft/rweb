@@ -1,10 +1,17 @@
 <?php
+/**
+ * Edit a file in Repos.
+ * Online edit is always based on the revision of the file when the form is loaded.
+ * It is always text files, so it is assumed that no locks exist or are needed.
+ * @package edit
+ */
 define('DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
 define('PARENT_DIR', dirname(rtrim(DIR, DIRECTORY_SEPARATOR)));
 
 require("../../conf/Presentation.class.php" );
 require("../SvnEdit.class.php" );
 require("../../open/SvnOpenFile.class.php");
+addPlugin('edit');
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 

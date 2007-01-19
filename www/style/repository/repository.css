@@ -17,6 +17,9 @@
 #commandbar #createfolder {
 	background-image: url('../commands/16x16/createfolder.png');
 }
+#commandbar #createfile {
+	background-image: url('filetypes/16x16/html.png');
+}
 /* details plugin */
 #commandbar #showdetails {
 	background-image: url('../details/details.png');
