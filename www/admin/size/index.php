@@ -10,13 +10,16 @@ require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
 
 $r = new Report('Storage space used for this repos host');
 
+//$home = getConfig('home_path');
+$parent = getParent(getConfig('admin_folder'));
+if ($parent != getParent(getConfig('local_path'))
+	|| $parent != getParent(getConfig('backup_folder')))
+	$r->fatal('This is not a standard repos host. Admin, local and backup should have same parent folder.');
+
 if (System::isWindows()) {
-	$r->fatal('This feature is not available on Windows servers');
+	$r->fatal('This funtionality is not available on Windows servers');
 }
-
-$home = getConfig('home_path');
-if (!$home) $r->fatal('this is not a standard repos host, home_path not set');
-
+	
 $c = new Command('du');
 $c->addArgOption('-hc');
 $c->addArgOption('--max-depth=1');
