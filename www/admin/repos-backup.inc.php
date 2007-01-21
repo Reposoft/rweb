@@ -165,7 +165,7 @@ function load($repository, $backupPath, $fileprefix) {
 		// read the files into repo
 		set_time_limit(BACKUP_MAX_TIME);
 		$head = $file[2];
-		$return = loadDumpfile($backupPath . DIRECTORY_SEPARATOR . $file[0],LOADCOMMAND);
+		$return = loadDumpfile($backupPath . $file[0],LOADCOMMAND);
 		if ($return != 0) {
 			fatal("Error loading backup file $file[0], returned $return. Repository loading stopped.");
 		}

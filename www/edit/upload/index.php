@@ -138,7 +138,7 @@ function processNewVersion($upload) {
 	$diff->addArgPath($updatefile);
 	$diff->exec();
 	if ($diff->getExitcode()) trigger_error('Could not read difference between current and uploaded file.', E_USER_WARNING);
-	if (count($diff->getOutput())==0) trigger_error('Uploaded file is identical to the existing.', E_USER_WARNING);
+	// can't check now, see the diff problem below // if (count($diff->getOutput())==0) trigger_error('Uploaded file is identical to the existing.', E_USER_WARNING);
 	// always do update before commit
 	updateAndHandleConflicts($dir, $presentation);
 	// create the commit command
@@ -148,6 +148,7 @@ function processNewVersion($upload) {
 	$commit->exec();
 	// Seems that there is a problem with svn 1.3.0 and 1.3.1 that it does not always see the update on a replaced file
 	//  remove this block when we don't need to support svn versions onlder than 1.3.2
+	// Looks like this is a problem on svn 1.4.0 on OpenSuSE too.
 	if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
 		if ($oldsize != filesize($updatefile)) {
 			exec("echo \"\" >> \"$updatefile\"");
