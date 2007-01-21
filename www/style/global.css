@@ -236,46 +236,32 @@ div.versiondisplay {
 	right:1px;
 }
 
-div#info {
-	width: 50%;
+/* --- boxed page layout, for example view and edit --- */
+div.section {
 	height: auto;
-	float: left;
 	margin: 5px;
 	padding: 5px;
-	border: 1px solid #000000;
-	background: #CCCC99;
-	display: block;
+	border: 1px solid #AAAA77;
+	background: #DDDDBB;
+	display: block;	
+}
+
+div#info {
+	width: 50%;
+	float: left;
 }
 
 div#actions {
 	width: 50%;
-	height: auto;
 	float: left;
-	margin: 5px;
-	padding: 5px;
-	border: 1px solid #000000;
-	background: #CCCC99;
-	display: block;
 }
 
 div#filedetails {
 	width: 40%;
-	height: auto;
-	margin: 5px;
-	padding: 5px;
 	float: right;
-	border: 1px solid #000000;
-	background: #CCCC99;
-	display: block;
 }
 
 div#filehistory {
 	width: 40%;
-	height: auto;
-	margin: 5px;
-	padding: 5px;
 	float: right;
-	border: 1px solid #000000;
-	background: #CCCC99;
-	display: block;
 }

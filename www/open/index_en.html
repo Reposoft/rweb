@@ -12,7 +12,7 @@
 </div>
 <!--  some actions can be set to display:none on repository page, because they are here instead -->
 <h1><span class="path">{=$file,filename}</span> <span class="revision">{=$file,revision}</span></h1>
-<div id="info">
+<div id="info" class="section">
 <!--{if $file,isLatestRevision}-->
 <p>
 This is the current version of the file.
@@ -28,7 +28,7 @@ You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 <p>This is an old version of the file. You can also <a href="?target={=$target}">view current version</a>.</p>
 <!--{/if}-->
 </div>
-<div id="filedetails">
+<div id="filedetails" class="section">
 <h2>File details</h2>
 <p>Content type: <span>{=$file,type}</span></p>
 <p>Size in bytes: <span class="filesize">{=$file,size}</span></p>
@@ -36,7 +36,7 @@ You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 <p>Last edited by: <span class="username">{=$file,author}</span></p>
 <p>Last edited at: <span class="datetime">{=$file,date}</span></p>
 </div>
-<div id="actions">
+<div id="actions" class="section">
 <h2>View file</h2>
 <p>
 {=if $file,size gt 102400}

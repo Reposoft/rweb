@@ -338,6 +338,7 @@ class Report {
 	
 	function _toggleError() {
 		?>
+		<p><a href="#" onclick="showErrors()" accesskey="e">show <?php echo($this->ne + $this->nf); ?> <u>e</u>rror messages</a></p>
 		<script type="text/javascript">
 		function showErrors() {
 			var i = 0;
@@ -352,7 +353,6 @@ class Report {
 			});
 		}
 		</script>
-		<p><a href="#" onclick="showErrors()" accesskey="e">show <?php echo($this->ne + $this->nf); ?> <u>e</u>rror messages</a></p>
 		<?php
 	}
 
