@@ -192,6 +192,7 @@ Repos.error = function(message) {
 }
 
 Repos._log = function(level, msg) {
+	// firebug dummy is added to head.js, so we can use console directly
 	if (typeof(console) != 'undefined') { // FireBug console
 		console.log(msg);
 	} else if (typeof(window.console) != 'undefined') { // Safari 'defaults write com.apple.Safari IncludeDebugMenu 1'

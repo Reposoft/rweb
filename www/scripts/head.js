@@ -8,7 +8,17 @@ if (document.documentElement && document.documentElement.namespaceURI && documen
 	document.createElement = function(t) {
 		return document.createElementNS(document.documentElement.namespaceURI, t);
 	};
-} 
+}
+
+// allow firebug calls like console.log from browsers without firebug
+if (!("console" in window) || !("firebug" in console))
+{
+    var names = ["log", "debug", "info", "warn", "error", "assert", "dir", "dirxml",
+    "group", "groupEnd", "time", "timeEnd", "count", "trace", "profile", "profileEnd"];
+    window.console = {};
+    for (var i = 0; i < names.length; ++i)
+        window.console[names[i]] = function() {}
+}
 
 /*
  * jQuery 1.1.1 - New Wave Javascript
@@ -381,13 +391,13 @@ $(document).ready( function() { _showVersion(); } );
 
 // -------- done, load plugins --------
 
-var plugins = new Array( 
+var plugins = [
 'dateformat',
 'details'
-);
+];
 
 $(document).ready( function() {
-	for (i=0; i<plugins.length; i++) {
+	for (var i=0; i<plugins.length; i++) {
 		Repos.addScript('plugins/'+plugins[i]+'/'+plugins[i]+'.js');
 	}
 } );
