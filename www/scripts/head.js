@@ -122,7 +122,7 @@ function eraseCookie(name)
 /**
  * Repos shared script logic (c) Staffan Olsson www.repos.se
  * Static functions, loaded after prepare and jquery.
- * @version $Id: repos.js 2316 2007-01-17 19:56:22Z solsson $
+ * @version $Id: repos.js 2354 2007-01-22 15:20:39Z solsson $
  */
 var Repos = {
 
@@ -138,6 +138,7 @@ var Repos = {
 	 */
 	addScript: function(src, loadEventHandler) {
 		var srcUrl = Repos.getWebapp() + src;
+		if (/:\/\/localhost[:\/]/.test(window.location.href)) srcUrl += '?'+Date.now();
 		var state = typeof(Repos.loadedPlugins[srcUrl]);
 		if (state == 'boolean') {
 			loadEventHandler(); // already loaded
@@ -313,6 +314,7 @@ Repos.error = function(message) {
 }
 
 Repos._log = function(level, msg) {
+	// firebug dummy is added to head.js, so we can use console directly
 	if (typeof(console) != 'undefined') { // FireBug console
 		console.log(msg);
 	} else if (typeof(window.console) != 'undefined') { // Safari 'defaults write com.apple.Safari IncludeDebugMenu 1'
@@ -323,7 +325,7 @@ Repos._log = function(level, msg) {
 		window.status = "Due to a script error the page is not fully functional. Contact support@repos.se for info, error id: " + id;
 	}
 }
-// =================== repos: shared =======================
+// ===================================================
 
 // repos: resourceid
 /**

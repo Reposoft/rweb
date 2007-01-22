@@ -70,7 +70,9 @@ function details_repository() {
 	//var path = $('body.repository').find('#fullpath');
 	var path = $('#fullpath');
 	if (path.size()==0) return;
-	$.get('/repos/open/list/?target='+encodeURIComponent(path.text()), function(xml){
+	var url = '/repos/open/list/?target='+encodeURIComponent(path.text());
+	$.get(url, function(xml){
+			//console.log(url + ': '+$(xml).text());
 			$('/lists/list/entry', xml).each(function() {
 				var name = $('name', this).text();
 				if (this.getAttribute('kind')=='dir') name = name + '/';
