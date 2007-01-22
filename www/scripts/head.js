@@ -388,6 +388,6 @@ var plugins = new Array(
 
 $(document).ready( function() {
 	for (i=0; i<plugins.length; i++) {
-		Repos.addScript('/repos/plugins/'+plugins[i]+'/'+plugins[i]+'.js');
+		Repos.addScript('plugins/'+plugins[i]+'/'+plugins[i]+'.js');
 	}
 } );
