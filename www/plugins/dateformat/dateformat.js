@@ -6,26 +6,29 @@
  * Nice page: http://www.xaprb.com/demos/rx-toolkit/
  * $Id$
  */
- 
+
+
+var dateformat_Reposdate = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.(\d+))?(Z|(([-+])(\d{2}):(\d{2})))/;
+
 // --- extensions to the date class ---
 Date.prototype.setISO8601 = function (string) {
-    var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" +
-        "(T([0-9]{2}):([0-9]{2})(:([0-9]{2})(\.([0-9]+))?)?" +
-        "(Z|(([-+])([0-9]{2}):([0-9]{2})))?)?)?)?";
-    var d = string.match(new RegExp(regexp));
+
+    var d = string.match(new RegExp(dateformat_Reposdate));
 
     var offset = 0;
-    var date = new Date(d[1], 0, 1);
-
-    if (d[3]) { date.setMonth(d[3] - 1); }
-    if (d[5]) { date.setDate(d[5]); }
-    if (d[7]) { date.setHours(d[7]); }
-    if (d[8]) { date.setMinutes(d[8]); }
-    if (d[10]) { date.setSeconds(d[10]); }
-    if (d[12]) { date.setMilliseconds(Number("0." + d[12]) * 1000); }
-    if (d[14]) {
-        offset = (Number(d[16]) * 60) + Number(d[17]);
-        offset *= ((d[15] == '-') ? 1 : -1);
+    
+    // Examples 1997-07-16T19:20:30.45+01:00 / 1997-07-16T19:20:30.203125Z
+    
+    var date = new Date(d[1], 0, 1);		// d[1] = // 1997
+	
+    if (d[2]) { date.setMonth(d[2] - 1); }	// d[2] = 07
+    if (d[3]) { date.setDate(d[3]); }		// d[3] = 16
+    if (d[4]) { date.setHours(d[4]); }		// d[4] = 19
+    if (d[5]) { date.setMinutes(d[5]); }	// d[5] = 20
+    if (d[6]) { date.setSeconds(d[6]); }	// d[6] = 30
+    if (d[11]) {							// d[11] = +01:00 / null
+    	offset = (Number(d[12]) * 60) + Number(d[13]);	// d[15] = +, d[16] = 01, d[17] = 00
+        offset *= ((d[11] == '-') ? 1 : -1);
     }
 
     offset -= date.getTimezoneOffset();
