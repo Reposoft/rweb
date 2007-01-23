@@ -39,12 +39,12 @@ function getLog($targetUrl) {
 	$svnlog->exec();
 	if ($svnlog->getExitcode()) trigger_error("Could not read history for $targetUrl", E_USER_ERROR);
 	$log = $svnlog->getOutput();
-	$pattern = '/^r(\d+)\s+\|\s+(.*)\s+\|\s+(\d{4}-\d{2}-\d{2}).(\d{2}:\d{2}:\d{2})\s([+-]?\d{4})/';
+	$pattern = '/^r(\d+)\s+\|\s+(.*)\s+\|\s+(\d{4}-\d{2}-\d{2}).(\d{2}:\d{2}:\d{2})\s([+-]?\d{2})(\d{2})/';
 	$result = array();
 	for ($i = 0; $i<count($log); $i++) {
 		if (strContains($log[$i],'---')) continue;
 		if (preg_match($pattern, $log[$i], $m)) {
-			$result[$m[1]] = array('rev'=>$m[1], 'user'=>$m[2], 'date'=>$m[3], 'time'=>$m[4], 'z'=>$m[5]); 
+			$result[$m[1]] = array('rev'=>$m[1], 'user'=>$m[2], 'date'=>$m[3], 'time'=>$m[4], 'z'=>$m[5].':'.$m[6]); 
 		} else {
 			trigger_error("invalid log line $i: $log[$i]", E_USER_ERROR);
 		}
