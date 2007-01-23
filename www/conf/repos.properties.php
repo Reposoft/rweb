@@ -651,6 +651,10 @@ function getCommand($command) {
 			return ( isWindows() ? 'set' : USRBIN . 'env' );
 		case 'du':
 			return ( isWindows() ? false : USRBIN . 'du' );
+		case 'curl':
+			return ( isWindows() ? 'curl' : USRBIN . 'curl' );
+		case 'wget':
+			return ( isWindows() ? 'wget' : USRBIN . 'wget' );
 	}
 	return false;
 }

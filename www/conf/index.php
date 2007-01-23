@@ -52,6 +52,8 @@ $dependencies = array(
 	'svnadmin' => '--version',
 	'gzip' => '--version',
 	'gunzip' => '--version',
+	'curl' => '--version',
+	'wget' => '--version'
 //	'whoami' => '--version'
 );
 $repository = array(
@@ -191,10 +193,11 @@ function dependencies() {
 		$c->addArgOption('2>&1');
 		$retval = $c->exec();
 		$output = $c->getOutput();
-		if ($retval==0)
+		if ($retval==0 || ($cmd=='curl' && $retval==2)) {
 			sayOK( $output[0] );
-		else
-			sayFailed( $output[0] );
+		} else {
+			sayFailed( $output[0]. " (got exit code $retval)" );
+		}
 		line_end();
 	}
 }
@@ -268,7 +271,7 @@ function localeSettings() {
 		if (strpos($val, "UTF-8")===false) {
 			sayFailed("$val Not UTF-8, LC_ALL or all other LC and LANG must be UTF-8.");
 		} else {
-			sayOK();
+			sayOK($val);
 		}
 		line_end();
 	}

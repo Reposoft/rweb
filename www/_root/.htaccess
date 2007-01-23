@@ -1,3 +1,7 @@
+# Apache directives for the repos host
+# Not all servers read .htaccess files
+# The directives can also be placed in server conf files
+
 # Bad Request
 ErrorDocument 400 /repos/open/errors/400/
 

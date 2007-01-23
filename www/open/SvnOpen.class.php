@@ -18,7 +18,10 @@ define('HEAD','HEAD');
 
 // *** Subversion client usage ***
 define('SVN_CONFIG_DIR', _getConfigFolder().'svn-config-dir' . DIRECTORY_SEPARATOR);
-if (!file_exists(SVN_CONFIG_DIR)) trigger_error('Svn config folder '.SVN_CONFIG_DIR.' does not exist. Can not run commands.', E_USER_ERROR);
+if (!file_exists(SVN_CONFIG_DIR)) {
+	trigger_error('Config folder for svn commands does not exist. '.
+		'Run \'svn svn --config-dir "'.SVN_CONFIG_DIR.'" info\' to create it.', E_USER_ERROR);
+}
 
 /**
  * Execute svn command like the PHP exec() function

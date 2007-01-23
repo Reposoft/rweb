@@ -6,6 +6,7 @@
  * Testurl: http://test.repos.se/repos/admin/post-commit/?repopath=/srv/www/vhosts/repos.se/test/repo&rev=1
  * 
  * @package admin
+ * @deprecated use sdmin/hooks/ instead
  */
 require('../../conf/Command.class.php');
 
