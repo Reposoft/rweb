@@ -20,44 +20,14 @@ $path = $_GET['repopath'];
 $rev = $_GET['rev'];
 // TODO validate that rev is integer
 
-$c = new Command('svnlook');
-$c->addArgOption('changed');
-$c->addArgOption('-r '.$rev);
-$c->addArg($path);
-$c->exec();
+
 
 $export = array(
 	'administration/trunk/repos-access' => getConfig('admin_folder').getConfig('access_file')
 );
 
-$pattern = '/^([ADU_])([U\s])\s+(.*)/';
-foreach ($c->getOutput() as $change) {
-	preg_match($pattern, $change, $matches);
-	$entry = trim($matches[3]);
-	if (isset($export[$entry]) && ($matches[1] == 'U' || $matches[1] == 'A')) {
-		_exportFile($path, '/'.$entry, $rev, $export[$entry]);	
-	} else {
-		// do nothing
-	}
-}
 
-function _exportFile($repo, $path, $revision, $destinationFromHome) {
-	$c = new Command('svnlook');
-	$c->addArgOption('cat');
-	$c->addArgOption('-r '.$revision);
-	$c->addArg($repo);
-	$c->addArg($path);
-	$c->exec();
-	$out = $c->getOutput();
-	if ($c->getExitcode()) {
-		trigger_error("Could not read committed file $pathFromRoot revision $revision: ".implode("\n",$out), E_USER_ERROR);
-	} else {
-		$handle = fopen($destinationFromHome, 'w');
-		for ($i = 0; $i < count($out); $i++) {
-			fwrite($handle, $out[$i].System::getNewline());
-		}
-		fclose($handle);
-	}
-}
+
+
 
 ?>
