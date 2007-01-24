@@ -84,9 +84,8 @@ setup_svn("co file:///$repourl $wc");
 
 // create administration folder
 createFolder($wc."administration/");
-createFolder($wc."administration/trunk/");
 // and copy the access file to the administration area for use with hooks
-$repositoryacl = $wc.'administration/trunk/repos-access';
+$repositoryacl = $wc.'administration/repos-access';
 copy($aclfile, $repositoryacl);
 
 //system("$svn co file://$repourl $test/wc/");

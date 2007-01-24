@@ -16,11 +16,10 @@
 </div>
 
 <div id="intro" class="section" style="width:70%;">
-<h1><span class="username">{=$userfullname}</span> start</h1>
-<p>You are logged in to Repos as user {=$userfullname}.
+<h1><img src="../../style/logo/repos2.png" border="0" align="absmiddle" width="144" height="36" alt="Repos "/> startpage</h1>
+<p>You are logged in with username <em>{=$userfullname}</em>.
 This starpage lists the projects that you have access to,
-and the tools that could be found for each project.
-The project with your name on it is your personal space.</p>
+and the tools in each project.</p>
 </div>
 
 <!--{foreach from=$entrypoints item=entry}-->
@@ -28,7 +27,8 @@ The project with your name on it is your personal space.</p>
 <div class="section" style="float:left; width:45%;">
 <h2>
 <!-- todo: make a smarter link, trunk/ if existing, project root if no trunk -->
-<span class="projectname">{=$projectname}</span>
+<span class="{=if $projectname eq $userfullname}username{=else}projectname{=/if}">{=$projectname}</span>
+{=if !$entry->getPath()}root{=/if}
 <!-- 
 <a class="folder {=if $entry->isReadOnly()}readonly{=/if}" href="../project/?target={=$entry->getPath()}/">{=$projectname}</a>
  -->

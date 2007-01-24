@@ -11,7 +11,9 @@
  * @return array tool id => resource to check
  */
 function getRepositoryConventionsForTools($projectName) {
+	// note that there can be no projects with names matching these
 	return array(
+	'administration' => 'administration/',
 	'files' => 'trunk/',
 	'branches' => 'branches/',
 	'tasks' => 'tasks/',

@@ -4,9 +4,15 @@ require(dirname(dirname(dirname(__FILE__))).'/account/login.inc.php');
 require(dirname(__FILE__).'/RepositoryTree.class.php');
 require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
 
-// currently this page can not handle paths inside trunk, because it adds /trunk to all entry paths
+/**
+ * Hide "projects" that have no tools,
+ * because they are probably only extra entries in the ACL
+ *
+ * @param RepositoryEntryPoint $entrypoint the ACL entry model
+ * @todo Should we hide everything that is already inside a tool?
+ */
 function shouldShow($entrypoint) {
-	return strpos($entrypoint->getPath(), '/trunk/') === false;
+	return count($entrypoint->getTools()) > 0;
 }
 
 // if the user logged in directly to the repository, we need the cookie to be set
