@@ -22,7 +22,7 @@ setup_deleteCurrent();
 $report->info("Running: svnadmin create \"$repo\"");
 setup_svnadmin("create $repo");
 // currently hooks are not added automatically, proably needs a service call
-$report->info('<a href="../../../admin/hooks/">Create hook scripts</a>');
+$report->info('<a href="../../../admin/hooks/">Manually create hook scripts so that repos-access can be edited online</a>');
 
 // demouser (svensson), test and tricky work together in demoproject
 // administrator does not have a home folder
@@ -91,10 +91,10 @@ copy($aclfile, $repositoryacl);
 //system("$svn co file://$repourl $test/wc/");
 createFolder($wc."svensson/");
 createFolder($wc."svensson/trunk/");
-createFolder($wc."svensson/calendar/");
+//createFolder($wc."svensson/calendar/");
 createFolder($wc."test/");
 createFolder($wc."test/trunk/");
-createFolder($wc."test/calendar/");
+//createFolder($wc."test/calendar/");
 createFolder($wc."demoproject/");
 createFolder($wc."demoproject/trunk/");
 createFolder($wc."demoproject/trunk/noaccess/");

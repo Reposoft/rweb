@@ -34,6 +34,14 @@ $repo = getRepository();
 if (empty($repo)) trigger_error("Can not get repository url", E_USER_ERROR);
 
 $entrypoints = array_filter($tree->getEntryPoints(), 'shouldShow');
+if (count($entrypoints)==0) {
+	trigger_error('This username has not been given access to any folders that match the Repos conventions. '.
+		'Try <a href="'.$repo.'/">repository root</a>.', E_USER_ERROR);
+	// or
+	$p = Presentation::getInstance();
+	$p->assign('entrypoints',$entrypoints); // and use the paths directly
+	$p->display($p->getLocaleFile(dirname(__FILE__) . '/index-notools'));
+}
 
 $p = Presentation::getInstance();
 $p->addStylesheet('repository/repository.css');

@@ -130,6 +130,7 @@ class Presentation {
 	/**
 	 * Singleton accessor, for occations when it is not known if a Presentation object has already been allocated for the request.
 	 * Static, use Presentation::getInstance().
+	 * @return Presentation
 	 * @static
 	 */ 
 	function getInstance() {
