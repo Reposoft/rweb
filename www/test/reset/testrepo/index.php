@@ -23,14 +23,7 @@ $report->info("Running: svnadmin create \"$repo\"");
 setup_svnadmin("create $repo");
 
 // Add hook scripts
-$postcommit = 'post-commit';
-if (System::isWindows()) $postcommit .= '.bat';
-$rootfolder = dirname(dirname(dirname(dirname(__FILE__)))).'/_root/';
-copy("{$rootfolder}hooks/$postcommit", "{$repo}hooks/$postcommit");
-chmod("{$repo}hooks/$postcommit", 0764);
-if (!file_exists($admin.'hooks.php')) {
-	copy("{$rootfolder}repos-config/hooks.php", $admin.'hooks.php');
-}
+$report->info('<a href="../../../admin/hooks/">Create hook scripts</a>');
 
 $trickyusername = 'Sv@n s-on'; // same as in createTestUsers, kept because it is needed futher down
 setup_createTestUsers();

@@ -27,6 +27,8 @@ set_time_limit(60*5);
 
 $reportDate = date("Y-m-d\TH:i:sO");
 
+$reportStartTime = time();
+
 /**
  * @return true if this is PHP running from a command line instead of a web server
  */
@@ -320,11 +322,14 @@ class Report {
 	}
 	
 	function _summary() {
+		global $reportStartTime;
+		$time = time() - $reportStartTime;
 		$class = $this->hasErrors() ? "failed" : "passed";
         $this->_output("<div class=\"testsummary $class\">");
         $this->_output("<strong>" . $this->no . "</strong> passes, ");
         $this->_output("<strong>" . $this->nf . "</strong> fails and ");
-        $this->_output("<strong>" . $this->ne . "</strong> exceptions.");
+        $this->_output("<strong>" . $this->ne . "</strong> exceptions");
+        $this->_output(" in $time seconds.");
         $this->_output("</div>\n");
 	}
 	
