@@ -91,7 +91,8 @@ function _exportFile($repo, $path, $revision, $destination) {
 	} else {
 		$handle = fopen($destination, 'w');
 		for ($i = 0; $i < count($out); $i++) {
-			fwrite($handle, $out[$i].System::getNewline());
+			$p = $out[$i].System::getNewline();
+			fwrite($handle, $p);
 		}
 		fclose($handle);
 		echo ("Exported $path to $destination\n");
