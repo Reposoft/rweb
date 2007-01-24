@@ -1,0 +1,8 @@
+; repository paths that should be exported to local file system
+; Use absolute paths, or paths starting with "admin" "html" "repo" or "backup"
+
+; the ACL
+administration/trunk/repos-access = admin/repos-access
+
+; host startpage, start.html and contents
+administration/trunk/startpage/ = html/

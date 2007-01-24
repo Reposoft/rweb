@@ -43,7 +43,7 @@ $requiredFiles = array(
 	SVN_CONFIG_DIR => '--svn-config-dir parameter value',
 	getConfig('admin_folder') . getConfig('users_file') => 'File for usernames and passwords',
 	getConfig('admin_folder') . getConfig('access_file') => 'File for subversion access control',
-	//not used//getConfig('admin_folder') . getConfig('export_file') => 'File for repository export paths',
+	getConfig('admin_folder') . getConfig('exports_file') => 'File for repository export paths',
 	getConfig('backup_folder') => 'Local path for storage of backup'
 	);
 $dependencies = array(
