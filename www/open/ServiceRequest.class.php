@@ -52,6 +52,7 @@ class ServiceRequest {
 	var $followRedirects = false;
 	var $skipBody = false;
 	var $customMethod = null;
+	var $customHeaders = array();
 	
 	// response storage
 	var $headers = array();
@@ -138,6 +139,14 @@ class ServiceRequest {
 	}
 	
 	/**
+	 * 
+	 */
+	function setRequestHeader($name, $value) {
+		$this->customHeaders[] = $name.': '.$value;
+		return $this;
+	}
+	
+	/**
 	 * Launches the request, synchronously, and returns this instance when done.
 	 * The get* and is* functions of the instance can be used only after exec().
 	 *
@@ -168,6 +177,7 @@ class ServiceRequest {
 		if ($this->customMethod) {
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->customMethod);
 		}
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->customHeaders);
 		if ($this->followRedirects) {
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 			curl_setopt($ch, CURLOPT_MAXREDIRS, false);

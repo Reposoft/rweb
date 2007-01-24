@@ -197,9 +197,9 @@ class SvnOpenFile {
 		// TODO align with FolderWriteAccessRule in SvnEdit.class.php
 		// curl -I -u test:test -X PROPPATCH http://localhost/testrepo/demoproject/trunk/readonly/
 		$r = new ServiceRequest($this->getUrl());
-		$r->setCustomHttpMethod('PROPPATCH');
+		$r->setCustomHttpMethod('LOCK');
 		// How about If-Match and If-Modified-Since to make dummy request that does not cause an entry in the error log?
-		
+		$r->setRequestHeader('If-Match', '"shouldnevermatch"');
 		$r->exec();
 		return ($r->getStatus() != 403); // 400 if user has write access, so no modifications made
 	}
