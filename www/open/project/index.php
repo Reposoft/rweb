@@ -2,23 +2,16 @@
 /**
  * List the available tools for a project.
  * A project in the repository is defined as a folder that contains a "trunk/" folder.
+ * @deprecated this functionality is now found in ../start/ so the page is never needed
  */
 
 if (!function_exists('getRepository')) require('../../conf/repos.properties.php');
 if (!function_exists('getTarget')) require('../../account/login.inc.php');
 if (!class_exists('ServiceRequest')) require('../ServiceRequest.class.php');
 require('../../conf/Presentation.class.php');
+require('../start/RepositoryTree.class.php');
 
-// tool id => resource to check
-$tools = array(
-	'files' => 'trunk/',
-	'branches' => 'branches/',
-	'tasks' => 'tasks/',
-	'news' => 'messages/news.xml',
-	'calendar' => 'calendar/'.getProjectName().'.ics',
-	'nonexisting' => 'dummy/' //just testing
-	);
-
+$tools = getRepositoryConventionsForTools(getProjectName());
 $existing = array_filter($tools, 'toolExists');
 
 $p = Presentation::getInstance();
@@ -29,8 +22,8 @@ $p->display();
 
 function toolExists($path) {
 	$toplevel = getContents();
-	if (in_array(rtrim($path,'/'), $toplevel)) return true;
-	if (strAfter($path, '/')) return urlExists(getProjectUrl().$path);
+	if (in_array($path, $toplevel)) return true;
+	if (strAfter($path, '/')) return urlExists(getRepository().getProject().$path);
 	return false;
 }
 
@@ -41,7 +34,7 @@ function urlExists($url) {
 }
 
 /**
- * @return String project start URL (containing trunk folder)  with leading and trailing slash
+ * @return String project start path (not including 'trunk')  with leading and trailing slash
  */
 function getProject() {
 	static $target = null;
@@ -50,6 +43,9 @@ function getProject() {
 	return $target;
 }
 
+/**
+ * @see RepositoryEntryPont::getDisplayName()
+ */
 function getProjectName() {
 	static $name = null;
 	if (!is_null($name)) return $name;
@@ -58,24 +54,10 @@ function getProjectName() {
 	return $name;
 }
 
-function getProjectUrl() {
-	static $url = null;
-	if (is_null($url)) $url = getRepository() . getProject();
-	return $url;
-}
-
 function getContents() {
 	static $contents = null;
-	if (is_null($contents)) $contents = getContentsFromRepositoryXml(getProjectUrl());
+	if (is_null($contents)) $contents = getRepositoryFolderContents(getProject());
 	return $contents;
-}
-
-function getContentsFromRepositoryXml($url) {
-	$list = new ServiceRequest($url,array());
-	$list->exec();
-	if ($list->getResponseType()!='text/xml') trigger_error("Repository URL $url did not deliver xml.", E_USER_ERROR);
-	preg_match_all('/dir\sname="([^"]+)"/', $list->getResponse(), $matches);
-	return $matches[1];
 }
 
 ?>

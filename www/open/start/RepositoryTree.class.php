@@ -1,4 +1,40 @@
 <?php
+/**
+ * Analyzing the repository structure to list points of entry for a user.
+ * @package open
+ */
+
+/**
+ * Tool naming conventions in repos,
+ * the folders to look for in a project folder.
+ * @param String $projectName not used anymore, all tools are global foldername conventions
+ * @return array tool id => resource to check
+ */
+function getRepositoryConventionsForTools($projectName) {
+	return array(
+	'files' => 'trunk/',
+	'branches' => 'branches/',
+	'tasks' => 'tasks/',
+	'news' => 'messages/',
+	'calendar' => 'calendar/',
+	'nonexisting' => 'dummy/' //just testing
+	);
+}
+
+/**
+ * Quick svn list to get contents for a folder URL
+ *
+ * @param String $path the repository folder with leading and trailing slash
+ * @return array[String] the entries in that folder
+ */
+function getRepositoryFolderContents($path) {
+	$url = getRepository() . $path;
+	$list = new ServiceRequest($url,array());
+	$list->exec();
+	if ($list->getResponseType()!='text/xml') trigger_error("Repository URL $url did not deliver xml.", E_USER_ERROR);
+	preg_match_all('/\shref="([^"]+)"/', $list->getResponse(), $matches);
+	return $matches[1];
+}
 
 /**
  * Represents the starting poins a user has in a repository.
@@ -8,6 +44,7 @@
  * - Does not support groups that contain other groups
  * - Does not support repository prefix
  * - Does not return a marker for where access is denied from a subdir, for example "svensson = " when svensson has access to parent dir
+ * @package open
  */
 class RepositoryTree {
 	
@@ -72,7 +109,7 @@ class RepositoryTree {
 	}
 	
 	/**
-	 * an array of RepositoryEntryPoint for the user in the ACL given to the constructor
+	 * @return an array of RepositoryEntryPoint for the user in the ACL given to the constructor
 	 */
 	function getEntryPoints() {
 		return $this->_entries;
@@ -113,6 +150,7 @@ class RepositoryTree {
 
 /**
  * Immutable representation of a path where the user has access
+ * @package open
  */
 class RepositoryEntryPoint {
 	var $path;
@@ -139,6 +177,18 @@ class RepositoryEntryPoint {
 	}
 	
 	/**
+	 * Checks the entry point url for specific Repos contents
+	 * @return array[String => String] associative array with 'tool id' => 'path relative to entry point'
+	 *  empty array if there are no tools
+	 */
+	function getTools() {
+		$tools = getRepositoryConventionsForTools($this->getDisplayname());
+		$contents = getRepositoryFolderContents($this->getPath().'/');
+		return array_intersect($tools, $contents);
+	}
+	
+	/**
+	 * Checks the ACL for access rights (not the actual server config)
 	 * @return true if the user can not modify this path
 	 * There may still be entry points below rhat are readwrite
 	 */
@@ -154,7 +204,7 @@ class RepositoryEntryPoint {
 	}
 	
 	/**
-	 * @return the path starting with '/' but not ending with one
+	 * @return the path relative to root, starting with '/' but not ending with one
 	 */
 	function getPath() {
 		if ($this->path=='/') return '';

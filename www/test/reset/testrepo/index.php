@@ -15,24 +15,22 @@ require(dirname(dirname(__FILE__)).'/setup.inc.php');
 
 // the working copy where the initial state is created
 $wc = setup_getTempWorkingCopy();
+$trickyusername = 'Sv@n s-on'; // duplicate of that in createTestUsers
 
 setup_deleteCurrent();
 
 $report->info("Running: svnadmin create \"$repo\"");
-
 setup_svnadmin("create $repo");
-
-// Add hook scripts
+// currently hooks are not added automatically, proably needs a service call
 $report->info('<a href="../../../admin/hooks/">Create hook scripts</a>');
 
-$trickyusername = 'Sv@n s-on'; // same as in createTestUsers, kept because it is needed futher down
+// demouser (svensson), test and tricky work together in demoproject
+// administrator does not have a home folder
 setup_createTestUsers();
-
-$report->info("create ACL");
 $acl = "
 [groups]
-administrators = test
-demoproject = svensson, test, $trickyusername
+administrators = admin
+demoproject = svensson, test, $trickyusername, admin
 
 [/]
 @administrators = rw

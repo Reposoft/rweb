@@ -7,32 +7,48 @@
 </head>
 
 <body>
-<div id="workspace">
+
 <div id="commandbar">
 <a id="reposbutton">
 	<img src="../../style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="repos.se content management"/>
 </a>
 <a class="command" href="/?logout" id="logout">log out</a>
 </div>
-<div id="contents">
+
+<div id="intro" class="section" style="width:70%;">
 <h1><span class="username">{=$userfullname}</span> start</h1>
-<!--{foreach from=$entrypoints item=entry}-->
-<div class="row n{=cycle values=0,1,2,3}">
-<!--{if $entry->isReadOnly()}-->
-<a class="folder readonly" href="../project/?target={=$entry->getPath()}/">{=$entry->getDisplayname()}</a>
-<!--{else}-->
-<a class="folder" href="../project/?target={=$entry->getPath()}/">{=$entry->getDisplayname()}</a>
-<!--{/if}-->
-<!-- todo: class groupaccess -->
-<div class="actions">
-<a class="action" href="{=$repo}{=$entry->getPath()}/trunk/">open files</a>
+<p>You are logged in to Repos as user {=$userfullname}.
+This starpage lists the projects that you have access to,
+and the tools that could be found for each project.
+The project with your name on it is your personal space.</p>
 </div>
+
+<!--{foreach from=$entrypoints item=entry}-->
+<!--{assign var='projectname' value=$entry->getDisplayname()}-->
+<div class="section" style="float:left; width:45%;">
+<h2>
+<!-- todo: make a smarter link, trunk/ if existing, project root if no trunk -->
+<span class="projectname">{=$projectname}</span>
+<!-- 
+<a class="folder {=if $entry->isReadOnly()}readonly{=/if}" href="../project/?target={=$entry->getPath()}/">{=$projectname}</a>
+ -->
+</h2>
+<!-- todo: class groupaccess -->
+	<!--{foreach from=$entry->getTools() key=toolid item=toolpath}-->
+	<div class="row n{=cycle values=0,1,2,3}">
+	{=* special cases not handled by open *}
+	{=if $toolid eq news}{=assign var='toolpath' value=`$toolpath`news.xml}{=/if}
+	{=if $toolid eq calendar}{=assign var='toolpath' value=`$toolpath``$projectname`.ics}{=/if}
+	<a class="tool {=$toolid}" href="../?target={=$entry->getPath()}/{=$toolpath}">
+	<img border="0" src="../../style/tools/{=$toolid}.png" hspace="10" align="absmiddle"/>{=$toolid}</a>
+	</div>
+	<!--{/foreach}-->
 </div>
 <!--{/foreach}-->
-</div>
+
 <div id="footer">
 <span id="releaseversion" class="versiondisplay">repos.se $URL$ $Rev$</span>
 </div>
-</div>
+
 </body>
 </html>

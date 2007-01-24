@@ -9,10 +9,13 @@ function shouldShow($entrypoint) {
 	return strpos($entrypoint->getPath(), '/trunk/') === false;
 }
 
+// if the user logged in directly to the repository, we need the cookie to be set
 if (!isLoggedIn()) {
 	header("Location: /?login");
 	exit;
 }
+
+// read the ACL and create a tree for the user
 $user = getReposUser();
 $acl = getConfig('admin_folder').getConfig('access_file');
 if (!is_file($acl)) {
@@ -20,10 +23,9 @@ if (!is_file($acl)) {
 }
 $tree = new RepositoryTree($acl, $user);
 
+// don't know why this is here
 $repo = getRepository();
-if (empty($repo)) {
-	trigger_error("Can not get repository url", E_USER_ERROR);
-}
+if (empty($repo)) trigger_error("Can not get repository url", E_USER_ERROR);
 
 $entrypoints = array_filter($tree->getEntryPoints(), 'shouldShow');
 

@@ -241,12 +241,16 @@ div.section {
 	height: auto;
 	margin: 5px;
 	padding: 5px;
-	border: 1px solid #AAAA77;
-	background: #DDDDBB;
+	border-top: 2px solid #EEEEDD;
+	border-left: 1px solid #EEEEDD;
+	border-bottom: 2px dotted #CCCCBB;
+	border-right: 2px solid #CCCCBB;
 	display: block;	
 }
 
-div#info {
+/* maybe we need something more generic for left and right column */
+
+div#intro {
 	width: 50%;
 	float: left;
 }

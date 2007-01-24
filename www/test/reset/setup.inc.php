@@ -85,21 +85,18 @@ function setup_getTempWorkingCopy() {
 function setup_createTestUsers() {
 	global $userfile, $report;
 
-	$report->info("create user database, base64 or MD5 encoded using htpasswd");
-	$users =
-	"svensson:rrE3/9iLvCoFU\n". //password 'medel'
-	"test:n8F28qRYJJ4Q6\n". //password 'test'
-	//"Sv@n s-on:UjhsQAWhDE0UY\n"; //password 'test'
-	$usersencoding = 'base64';
-	if (isWindows()) { // MD5
-		$users = 
-		"svensson:\$apr1\$h03.....\$vSQzcy3gId0sKgc/JvRCs.\n".
-		"test:\$apr1\$Sy2.....\$zF88UPXW6Q0dG3BRHOQ2m0\n".
-		"Sv@n s-on:\$apr1\$QT......\$Ce3c7V78FmQ1hyJhp3h6o/\n";
-		$usersencoding = 'MD5';
-	}
+	$users = 
+	// demo user svensson:medel
+	'svensson:$apr1$h03.....$vSQzcy3gId0sKgc/JvRCs.'."\n".
+	// test:test
+	'test:$apr1$Sy2.....$zF88UPXW6Q0dG3BRHOQ2m0'."\n".
+	// tricky username, password 'medel' (but still only with Latin1 characters)
+	'Sv@n s-on:$apr1$Q14.....$mwLZfXdpQ56dJ00TMEZPu/'."\n".
+	// admin:admin
+	'admin:$apr1$JW3.....$r0aF2nCj00/Q6I8438Xsm1'."\n";
+	
 	if (createFileWithContents($userfile, $users, true, true)) {
-		$report->ok("Successfully created user account file $userfile with $usersencoding encoded passwords");
+		$report->ok("Successfully created user account file $userfile with MD5 encoded passwords");
 	} else {
 		$report->fail("Could not create user account file $userfile");
 	}
