@@ -99,6 +99,8 @@ createFolder($wc."demoproject/");
 createFolder($wc."demoproject/trunk/");
 createFolder($wc."demoproject/trunk/noaccess/");
 createFolder($wc."demoproject/trunk/readonly/");
+createFileWithContents($wc."demoproject/trunk/readonly/index.html",
+	'<html><body>This file should be write protected (folder is "@demoproject = r" in ACL file).</body></html>');
 
 // public contents, allows testing without login
 createFolder($wc."demoproject/trunk/public/");
