@@ -34,9 +34,8 @@ function autoFillFilename(path) {
   <input type="hidden" name="paste" value="1"/>
 	<!--{if $file}-->
 	<input type="hidden" name="fromrev" value="{=$file,revision}"/>
-    <textarea name="usertext" id="usertext" class="{=$file,extension}" cols="82" rows="20" tabindex="1">
-    {=$file->sendInlineHtml()}
-    </textarea>
+	 {=* textarea must be on one line so it does not insert spaces *}
+    <textarea name="usertext" id="usertext" class="{=$file,extension}" cols="82" rows="20" tabindex="1">{=$file->sendInlineHtml()}</textarea>
 	<!--{else}-->
 	<textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1"></textarea>
 	<!--{/if}-->
