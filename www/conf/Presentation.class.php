@@ -18,6 +18,8 @@
 // All user presentation pages need repos.properties.php, but test pages should be able to mock it.
 if (!function_exists('getRepository')) require(dirname(__FILE__).'/repos.properties.php');
 
+define('PRESENTATION_XTHML', true); // true->application/xhtml+xml, false->text/html
+define('TEMPLATE_CACHING', false); // enable/disable smarty caching
 
 // function called before any other output or headers
 function setupResponse() {
@@ -26,10 +28,13 @@ function setupResponse() {
 	// set the content type header, Presentation can generate json and XHTML
 	if (isRequestService()) {
 		require_once(dirname(dirname(__FILE__)).'/lib/json/json.php');
-		header('Content-type: text/plain');
+		header('Content-Type: text/plain');
 	} else {
-		header('Content-type: application/xhtml+xml; charset=utf-8');
-		// don't set the content type headers in the HTML
+		if (PRESENTATION_XTHML) {
+			header('Content-Type: application/xhtml+xml; charset=utf-8');
+		} else {
+			header('Content-Type: text/html; charset=utf-8');
+		}
 	}
 }
 
@@ -158,9 +163,10 @@ class Presentation {
 		$this->smarty->load_filter('pre', 'Presentation_useCommentedDelimiters');
 		$this->smarty->register_prefilter('Presentation_useDotNotationForObjects');
 		$this->smarty->load_filter('pre', 'Presentation_useDotNotationForObjects');
-		// for use with Content-Type
-		$this->smarty->register_prefilter('Presentation_useXmlEntities');
-		$this->smarty->load_filter('pre', 'Presentation_useXmlEntities');
+		if (PRESENTATION_XTHML) {
+			$this->smarty->register_prefilter('Presentation_useXmlEntities');
+			$this->smarty->load_filter('pre', 'Presentation_useXmlEntities');
+		}
 		// during development:
 		$this->smarty->register_prefilter('Presentation_noExtraContentType');
 		$this->smarty->load_filter('pre', 'Presentation_noExtraContentType');
@@ -218,7 +224,6 @@ class Presentation {
 	function append_by_ref($tpl_var, &$value, $merge=false) {
 	    $this->smarty->append_by_ref($tpl_var, $value, $merge);
 	}
-
 	
 	/**
 	 * executes & returns or displays the template results

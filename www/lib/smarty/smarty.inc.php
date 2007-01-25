@@ -10,8 +10,7 @@ require(dirname(__FILE__).'/libs/Smarty.class.php');
 define('LEFT_DELIMITER', '{='); // to be able to mix with css and javascript
 define('RIGHT_DELIMITER', '}');
 
-// make it possible to disable cache during development
-define('CACHING', false);
+// set the constant TEMPLATE_CACHING to false before include during development: define('TEMPLATE_CACHING', false);
 
 // the four cache subdirectories must be writable by webserver
 define('CACHE_DIR', System::getApplicationTemp('smarty-cache'));
@@ -32,9 +31,13 @@ if (!isset($_COOKIE['SMARTY_DEBUG'])) $_COOKIE['SMARTY_DEBUG'] = 0;
  */
 function smarty_getInstance() {
 	$s = new Smarty();
-		
-	$s->caching = CACHING;
-	if (!CACHING) {
+
+	if (defined('TEMPLATE_CACHING') && TEMPLATE_CACHING===false) {
+		$s->caching = false;
+	} else {
+		$s->caching = true;
+	}
+	if ($s->caching) {
 		$s->force_compile = true;
 		// allow SMARTY_DEBUG query string parameter TODO remove in production
 		$s->debugging_ctrl = 'URL';
