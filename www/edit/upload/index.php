@@ -13,19 +13,24 @@ define('MAX_FILE_SIZE', 1024*1024*10);
 
 // name only exists for new files, not for new version requests
 new FilenameRule("name");
-new NewFilenameRule("name", getTarget());
 
-if ($_SERVER['REQUEST_METHOD']=='GET') {
-	showUploadForm();
+if (!isTargetSet()) {
+	trigger_error("Could not upload file. It is probably larger than ".formatSize(MAX_FILE_SIZE), E_USER_ERROR);
+	exit;
 } else {
-	$upload = new Upload('userfile');
-	if ($upload->isCreate()) {
-		processNewFile($upload);
+	new NewFilenameRule("name", getTarget());
+	
+	if ($_SERVER['REQUEST_METHOD']=='GET') {
+		showUploadForm();
 	} else {
-		processNewVersion($upload);
+		$upload = new Upload('userfile');
+		if ($upload->isCreate()) {
+			processNewFile($upload);
+		} else {
+			processNewVersion($upload);
+		}
 	}
 }
-
 /**
  * Reads a summary of the svn log
  * @return array[int revision => array]
@@ -194,7 +199,7 @@ function updateAndHandleConflicts($workingCopyPath, $presentation) {
  */
 class Upload {
 	var $file_id;
-	
+
 	/**
 	 * Constructor
 	 * @param formFieldName the name of the form field that contains the file
