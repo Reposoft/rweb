@@ -197,4 +197,6 @@ function setup_customizeCommand($command) {
 	return str_replace('commit ', 'commit --no-unlock ', $command);
 }
 
+$result->display();
+
 ?>
