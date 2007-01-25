@@ -35,7 +35,9 @@ div.editlog > pre {
 <!--{foreach item=edit from=$log}-->
 <p>{=$edit.description|nl2br}</p>
 <div class="editlog {=$edit.operation} {=if not $edit.successful}error{=/if}" id="edit{=counter}">
-	<h3>{=$edit.operation} {=$edit.message}{=if $edit.revision}<span class="revision">{=$edit.revision}</span>{=/if}</h3>
+	<h3>{=$edit.operation}
+	{=if $edit.message}:<span class="message">{=$edit.message}</span>{=/if}
+	{=if $edit.revision}<span class="revision">{=$edit.revision}</span>{=/if}</h3>
 	<pre>{=$edit.output}</pre>
 </div>
 <!--{/foreach}-->

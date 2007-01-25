@@ -7,7 +7,7 @@
 <!--{$head}-->
 </head>
 <body>
-<div id="intro">
+<div id="commandbar">
 <a id="repository" class="command" href="{=$file,folderUrl}">return to repository</a>
 </div>
 <h1><span class="path">{=$file,filename}</span> <span class="revision">{=$file,revision}</span></h1>
@@ -50,12 +50,12 @@ edit on your computer, then <a href="upload/?target={=$target}">upload new versi
 {=else}
 <p>This is a binary or unknown fileformat. We recommend you Download and lock.</p>
 {=/if}
-<h3><a href="../open/download/?target={=$target}&rev={=$rev}">Download, modify, upload</a></h3>
+<h3><a href="upload/?target={=$target}&rev={=$rev}&download">Download, modify, upload</a></h3>
 <p>
-<span class="explain" title="files stored as lines of text that can be viewed in any text editor">Text files</span> 
+<span class="explain" title="files stored as lines of text that are human-readable in any text editor, like Notepad">Text files</span> 
 can be edited by many users at the same time, and when you upload the new version
 the system will identify which lines you changed, 
-and <span class="explain" title="combine changes in a file with a different version of the file">merge</span>
+and <span class="explain" title="combine two different changes of the same file into a new version of the file">merge</span>
 those changes with the existing contents to create a new version.
 </p>
 <h3><a href="lock/?target={=$target}&download">Lock and Download</a></h3>

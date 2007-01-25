@@ -70,12 +70,11 @@ function showUploadForm() {
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
 	$template->assign('isfile',$isfile);
 	$template->assign('target',$target);
-	if (isset($_GET['text'])) {
-		$template->assign('targeturl', getTargetUrl());
-		$template->display($template->getLocaleFile(dirname(__FILE__).'/index-text'));
-	} else {
-		$template->display();
+	if (isset($_GET['download'])) {
+		// needs an absolute url for meta refresh
+		$template->assign('download', getWebapp().'open/download/?target='.getTarget());
 	}
+	$template->display();
 }
 
 function processNewFile($upload) {
