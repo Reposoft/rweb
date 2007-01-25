@@ -5,7 +5,7 @@
 <!--{$head}-->
 <style type="text/css">
 div.editlog {
-	border: 1px dashed #CCCC99;
+	border-bottom: 1px dashed #CCCC99;
 }
 div.editlog > pre {
 	border: none;
@@ -35,10 +35,9 @@ div.editlog > pre {
 <!--{foreach item=edit from=$log}-->
 <p>{=$edit.description|nl2br}</p>
 <div class="editlog {=$edit.operation} {=if not $edit.successful}error{=/if}" id="edit{=counter}">
-	<h3>{=$edit.operation}
-	{=if $edit.message}:<span class="message">{=$edit.message}</span>{=/if}
+	<h3>{=$edit.operation}{=if $edit.message}: <span class="message">{=$edit.message}</span>{=/if}
 	{=if $edit.revision}<span class="revision">{=$edit.revision}</span>{=/if}</h3>
-	<pre>{=$edit.output}</pre>
+	<pre>{=$edit.result}{=* not edit.output because it contains system paths*}</pre>
 </div>
 <!--{/foreach}-->
 

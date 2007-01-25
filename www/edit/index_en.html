@@ -18,7 +18,7 @@ You may <a href="../edit/?target={=$target}">edit current version of {=$file,fil
 <!--{elseif not $file,isWritable}-->
 <p>You have only read access to this file. Contact the user administrator to get write access.</p>
 <!--{elseif $file,isLockedBySomeoneElse}-->
-<p>You can not edit the file, because it is currently locked by 
+<p>You can not edit the file, because it is currently <strong>locked</strong> by 
 <span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}.
 The file will be unlocked when a new version is committed.
 </p>
@@ -38,7 +38,7 @@ you can always refer to the file as it is now.</p>
 <div id="actions" class="section">
 <h2>Edit</h2>
 {=if $file,isLockedByThisUser}
-<p>The file is locked by you. We recommend you <a href="upload/?target={=$target}">Upload new version</a>.</p>
+<p>The file is <strong>locked</strong> by you. We recommend you <a href="upload/?target={=$target}">Upload new version</a>.</p>
 {=elseif $file,typeDiscrete eq 'text' and $file,size lt 10240}
 <p>This is a small text file. We recommend you 
 <a href="file/?target={=$target}&text">Edit in Repos</a>.</p>

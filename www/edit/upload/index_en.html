@@ -100,7 +100,9 @@ to make sure that your local changes are based on the newest version of the shar
   {=if $file,isLockedByThisUser}
   <p>
   	 <label for="unlock">unlock at commit</label>
-  	 <input type="checkbox" id="unlock" name="unlock"/>
+  	 <input type="checkbox" id="unlock" name="unlock" checked="checked"/>
+  	 <!-- if lock should be kept, file must be relocked with this comment -->
+  	 <input type="hidden" id="lockcomment" name="lockcomment" value="{=$file,lockComment}"/>
   </p>
   {=/if}
   <!--{else}-->

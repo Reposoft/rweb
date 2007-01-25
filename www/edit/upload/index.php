@@ -106,6 +106,10 @@ function processNewFile($upload) {
 	displayEdit($presentation, dirname($upload->getTargetUrl()));
 }
 
+/**
+ * Commits a new version of an existing file.
+ * @param Upload $upload the file upload handler
+ */
 function processNewVersion($upload) {
 	Validation::expect('fromrev');
 	$presentation = Presentation::getInstance();
@@ -149,6 +153,20 @@ function processNewVersion($upload) {
 	$commit = new SvnEdit('commit');
 	$commit->setMessage($upload->getMessage());
 	$commit->addArgPath($dir);
+	// locks are not set in this working copy -- reclaim
+	if ($upload->isLocked()) {
+		$unlock = new SvnOpen('unlock');
+		$unlock->addArgUrl($upload->getTargetUrl());
+		if ($unlock->exec()) trigger_error("Could not unlock the file for upload. ".implode(",",$unlock->getOutput()), E_USER_ERROR);
+		if (!$upload->getUnlock()) {
+			// acquire the lock again
+			$lock = new SvnEdit('lock');
+			$lock->addArgPath($updatefile);
+			$lock->setMessage($upload->getLockComment());
+			$lock->exec();
+			$commit->addArgOption('--no-unlock');
+		}
+	}
 	$commit->exec();
 	// Seems that there is a problem with svn 1.3.0 and 1.3.1 that it does not always see the update on a replaced file
 	//  remove this block when we don't need to support svn versions onlder than 1.3.2
@@ -171,6 +189,9 @@ function processNewVersion($upload) {
 		// normal behaviour
 		displayEditAndExit($presentation, null, 'The uploaded file '.$upload->getOriginalFilename()
 			.' is identical to the current file '.$upload->getName());
+	}
+	if (!$commit->isSuccessful()) {
+		displayEditAndExit($presentation, null, 'Failed to save file');
 	}
 	// TODO present as error if any of the operations failed (or did they already exit?)
 	displayEdit($presentation, dirname($upload->getTargetUrl().'/'), 
@@ -324,13 +345,36 @@ class Upload {
 	}
 	
 	/**
+	 * @return boolean true if the file is locked by the current user
+	 *  (if it is locked by someone else we should not have this upload)
+	 */
+	function isLocked() {
+		// not working // return array_key_exists('unlock', $_POST);
+		return array_key_exists('lockcomment', $_POST);
+	}
+	
+	/**
 	 * @return boolean true if the user wants to release the lock on the file at commit
 	 */
 	function getUnlock() {
-		if ($this->isCreate()) {
-			trigger_error('This is a new file and is not locked', E_USER_ERROR);
+		if (!$this->isLocked()) {
+			trigger_error('Server error. Falsely assumed that the file is locked.', E_USER_ERROR);
 		} else {
 			return $_POST['unlock'];
+		}
+	}
+	
+	/**
+	 * @return String the lock comment on the file
+	 *  (make sure it should be locked before calling this method, or remove the checks)
+	 */
+	function getLockComment() {
+		if (!$this->isLocked()) {
+			trigger_error('Flow error. Currently locking requires the file to be locked before upload', E_USER_ERROR);
+		} elseif ($this->getUnlock()) {
+			trigger_error('Flow error. The file will be unlocked after commit, so no message is needed');
+		} else {
+			return $_POST['lockcomment'];
 		}
 	}
 }
