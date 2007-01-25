@@ -1,6 +1,8 @@
 <?php
-/** form validation logic for repos
- * see test page for documentation
+/** 
+ * Form validation logic for repos.
+ * This is not really a plugin, because it is tightly integrated with the repos code.
+ * @package conf
  */
 require('validation.inc.php');
 

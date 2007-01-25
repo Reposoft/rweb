@@ -300,11 +300,12 @@ class Report {
 		//$this->_print("<div id=\"workspace\">\n");
 		//$this->_print("<div id=\"contents\">\n");
 		
-		$this->_print('<div id="commandbar">');
-		$this->_print('<a class="command" href="/repos/conf/">config</a>');
-		$this->_print('<a class="command" href="/repos/admin/">admin</a>');
-		$this->_print('<a  class="command" href="/repos/test/">test</a>');
-		$this->_print('<a  class="command" href="/repos/admin/size/">size</a>');
+		$this->_print('<div id="commandbar">'."\n");
+		$this->_print('<a class="command" href="/repos/conf/">config</a>'."\n");
+		$this->_print('<a class="command" href="/repos/admin/">admin</a>'."\n");
+		$this->_print('<a class="command" href="/repos/test/">test</a>'."\n");
+		$this->_print('<a class="command" href="/?login">login</a>'."\n");
+		$this->_print('<a id="logout" class="command" href="/?logout">logout</a>'."\n");
 		$this->_print('</div>');
 		
 		$this->_print("<h1>$title</h1>\n");

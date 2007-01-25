@@ -80,4 +80,9 @@ that are newer than the latest backup <span class="revision"><?php echo($lastrev
 <?php } ?>
 </table>
 <p><a id="verify" href="verify/" class="action">Verify current backup files</a></p>
+<h2>Other tools</h2>
+<p><a id="lib" href="../lib/">3rd party libraries</a></p>
+<p><a id="hooks" href="hooks/">Repository hook scripts</a></p>
+<p><a id="size" href="size/">Storage space used for this Repos host</a></p>
+<p><a id="client" href="client/">Status for internal svn client</a></p>
 <?php html_end() ?>

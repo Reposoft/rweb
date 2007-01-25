@@ -4,14 +4,27 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>Repos automated tests</title>
 <link href="../style/global.css" rel="stylesheet" type="text/css" />
+<link href="../style/docs.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
+<div id="commandbar">
+<!-- same as in Report -->
+<a class="command" href="/repos/conf/">config</a>
+<a class="command" href="/repos/admin/">admin</a>
+<a class="command" href="/repos/test/">test</a>
+<a class="command" href="/?login">login</a>
+<a id="logout" class="command" href="/?logout">logout</a>
+</div>
+
 <h1><img src="../style/logo/repos2.png" alt="repos.se" width="144" height="36" align="absmiddle" /> Integration Testing</h1>
+<div class="section" id="intro">
 <p>This is the startpage for automated and manual tests of repos.</p>
-<p>Repos components are as separated as possible. The unit tests for components are usually in the same folder as the code.</p>
 <p><a href="../">return to repos startpage</a></p>
+</div>
+<div class="section" id="actions">
 <h2>Automated test suites</h2>
+<p><a href="reset/">Reset the test repository</a> before running automated tests.</p>
 <p>The "run" links will execute the test suite in the current browser and post the results</p>
 <ul>
 <li><a href="browsercheck/" accesskey="b"><u>B</u>rowser test for new users</a></li>
@@ -32,7 +45,9 @@
 <p>Note that tests assume the web application to be located at <code>[current host]/repos/</code>.</p>
 <p>Some test cases reveal server details. They only modify the test repository,
 but it could be a good idea to restrict access to this folder to internal hosts.</p>
-<p>View <a href="/testresults/testruns.xml" accesskey="r">test<u>r</u>esults</a>.</p>
+</div>
+<!-- using the #filedetails layout until we have a general concept -->
+<div class="section" id="filedetails">
 <h2>Tools</h2>
 <p>Pages that can be used to access application details</p>
 <p>
@@ -43,9 +58,16 @@ but it could be a good idea to restrict access to this folder to internal hosts.
 <a href="server/output/">output buffer test</a><br />
 </p>
 <h2>Test reports</h2>
-<p>The complete test suite is run on each supported browser.</p>
-<h2>Set up</h2>
-<p><a href="reset/">Reset the test repository</a></p>
+<p>View <a href="/testresults/testruns.xml" accesskey="r">test<u>r</u>esults</a>.
+If the testresults folder exists, results are saved after each 'run'
+along with client information (such as browser and OS).
+</p>
+<h2>Components</h2>
+<p>Repos components are as separated as possible. The unit tests for components are usually in the same folder as the code.</p>
+<p><a href="../scripts/">Javascript shared components</a></p>
+<p><a href="../plugins/">Plugns</a></p>
+<p>Note that these are public locations</p>
+</div>
 </body>
 
 

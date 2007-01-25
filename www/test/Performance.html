@@ -8,10 +8,21 @@
 <link href="../style/docs.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+<div id="commandbar">
+<!-- same as in Report -->
+<a class="command" href="/repos/conf/">config</a>
+<a class="command" href="/repos/admin/">admin</a>
+<a class="command" href="/repos/test/">test</a>
+<a class="command" href="/?login">login</a>
+<a id="logout" class="command" href="/?logout">logout</a>
+</div>
+
 <h1>Performance test cases</h1>
 <p>Results are posted to /testresults</p>
 <p>
 <br/><a href="Performance.php?testcase=repository%2FTestCreateFolder.html&n=1">CreateFolder x 1</a>
+<br/><a href="Performance.php?testcase=repository%2FTestCreateFolder.html&n=10">CreateFolder x 10</a>
+<br/><a href="Performance.php?testcase=repository%2FTestCreateFolder.html&n=100">CreateFolder x 100</a>
 <br/><a href="Performance.php?testcase=admin%2FTestBackup.html&n=10">backup x 10</a>
 </p>
 <p><br/><a class="action" id="back" href="./" target="_top">&lt; back</a></p>
