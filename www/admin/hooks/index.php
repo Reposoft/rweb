@@ -29,6 +29,14 @@ if (isset($_GET['create'])) {
 		trigger_error('Can not execute '.$type.' hook. No Repos function for it.', E_USER_ERROR);
 	}
 	call_user_func($func, $_GET['rev'], $repo);
+} elseif (isset($_GET['test'])) {
+	header('Content-Type: text/plain');
+	$type = $_GET['test'];
+	if (!in_array($type, $known_hooks)) trigger_error($type.' is not a supported hook', E_USER_ERROR);
+	if (!isset($_GET['rev'])) trigger_error('Revision required for hook '.$type, E_USER_ERROR);
+	//if (!isset($_GET['repo'])) trigger_error('Repository path required for hook '.$type, E_USER_ERROR);
+	$repo = getConfig('local_path');
+	testRun($type, $_GET['rev'], $repo);
 } else {
 	showInfo();
 }
@@ -68,6 +76,7 @@ function runHook_post_commit($rev, $path) {
 	$pattern = '/^([ADU_])([U\s])\s+(.*)/';
 	foreach ($c->getOutput() as $change) {
 		preg_match($pattern, $change, $matches);
+		if (!isset($matches[3])) trigger_error('There are no repository changes in revision '.$rev, E_USER_ERROR);
 		$entry = trim($matches[3]);
 		if (isset($approvedEports[$entry]) && ($matches[1] == 'U' || $matches[1] == 'A')) {
 			_exportFile($path, '/'.$entry, $rev, $approvedEports[$entry]);	
@@ -99,8 +108,22 @@ function _exportFile($repo, $path, $revision, $destination) {
 	}
 }
 
+function testRun($type, $rev, $repoPath) {
+	if (!is_numeric($rev)) trigger_error('Rev must be numeric ', E_USER_ERROR);
+	$script = getHookScriptPath($type);
+	// run plain exec so we don't get a controlled environment
+	echo("---- test execution of $type hook ----\n\n");
+	$cmd = "$script \"$repoPath\" $rev"; // like subversion calls it
+	passthru($cmd, $return);
+	if ($return) {
+		echo("\n---- failed with exit code $return ----\n");
+	} else {
+		echo("\n---- no errors reported to caller ----\n");
+	}
+}
+
 /**
- * Derive the 
+ * Derive the local path from folder keywords.
  *
  * @param String $hostFolder keyword folder without trailing slash
  * @return String absolute local path if keyword is recognized
@@ -132,13 +155,19 @@ function showInfo() {
 			$r->info('<a href="?create='.$hook.'">Create '.$hook.' hook</a>');
 		} else {
 			if (checkHookScript($f, $hook, $r)) {
-				// maybe show execution log or something
+				$r->info('<form action="./" method="get"><input type="hidden" name="test" value="'.$hook.'"/>'.
+				'Test this hook with revision <input name="rev" type="text" size="4" value="1"/>'.
+				'<input type="submit" value="execute"/></form>');
 			} else {
 				$r->info('To let Repos create a hook script, delete the existing file.');
 			}
 		}
 	}
 	$r->display();
+}
+
+function showTestCommand($type) {
+	
 }
 
 function getHookScriptPath($type) {
@@ -222,8 +251,12 @@ function createHook($type) {
 
 	// write
 	System::createFileWithContents($f, $hook);
-	
 	$r->ok($type . ' hook script created.');
+	if (chmod($f, 0774)) {
+		$r->ok('Gave execution permission to user and group, readonly for others');
+	} else {
+		$r->warn('Could not set execution permissions on file. Please check that it is executable by web server.');
+	}
 	$r->info('<a href="./">Return to hooks administration</a>');
 	$r->display();
 }
