@@ -77,24 +77,22 @@
 	<xsl:template name="commandbar">
 		<xsl:param name="parentpath">
 			<xsl:choose>
-				<xsl:when test="'if parentpath is empty the up button will be disabled'='no'"></xsl:when>
+				<xsl:when test="string-length($startpage)>0 and not(/svn/index/updir)">
+					<xsl:value-of select="$startpage"/>
+				</xsl:when>
 				<xsl:when test="string-length($startpage)>0 and contains(/svn/index/@path,'/trunk') and substring-after(/svn/index/@path, '/trunk')=''">
 					<xsl:value-of select="$startpage"/>
 				</xsl:when>
-				<xsl:otherwise>../</xsl:otherwise>
+				<xsl:when test="/svn/index/updir">../</xsl:when>
+				<xsl:otherwise></xsl:otherwise>
 			</xsl:choose>
 		</xsl:param>
 		<div id="commandbar">
 		<a id="reposbutton">
 			<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
 		</a>
-		<xsl:if test="/svn/index/updir">
-			<xsl:if test="string-length($parentpath)>0">
-				<a id="parent" class="command translate" href="{$parentpath}">up</a>
-			</xsl:if>
-			<xsl:if test="string-length($parentpath)=0">
-				<span id="parent" class="command translate">up</span>
-			</xsl:if>
+		<xsl:if test="string-length($parentpath)>0">
+			<a id="parent" class="command translate" href="{$parentpath}">up</a>
 		</xsl:if>
 		<xsl:if test="$editUrl">
 			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={@path}/">new folder</a>
