@@ -18,7 +18,11 @@
 // same function as in Presentation
 if (!function_exists('setupResponse')) {
 	function setupResponse() {
-		// no headers needed, might be in offline mode
+		if (isOffline()) {
+			// can not set headers in CLI mode
+		} elseif (isTextmode()) {
+			header('Content-Type: text/plain');
+		}
 	}
 }
 
@@ -35,6 +39,14 @@ $reportStartTime = time();
 function isOffline() {
 	// maybe there is some clever CLI detection, but this works too
 	return !isset($_SERVER['REQUEST_URI']);
+}
+
+/**
+ * @return true if output should be plain text
+ */
+function isTextmode() {
+	return isOffline() || (defined('WEBSERVICE_KEY') && 
+		isset($_REQUEST[WEBSERVICE_KEY]) && $_REQUEST[WEBSERVICE_KEY] != 'html');	
 }
 
 /**
@@ -75,7 +87,7 @@ class Report {
 	 */
 	function Report($title='Repos system report', $category='', $plaintext=null) {
 		if (is_null($plaintext)) {
-			$this->offline = isOffline();
+			$this->offline = isTextmode();
 		} else {
 			$this->offline = $plaintext;
 		}
@@ -251,6 +263,10 @@ class Report {
 	}
 	// writes a message to output no HTML here because it is used both online and offline
 	function _output($message) {
+		// simple and greedy filter in offline mode
+		if ($this->offline) {
+			$message = preg_replace('/<\w.*\/\w*>/', '...', $message);
+		}
 		if (is_array($message)) {
 			$this->_blockstart();
 			$this->_print($this->_formatArray($message));
@@ -326,15 +342,21 @@ class Report {
 		global $reportStartTime;
 		$time = time() - $reportStartTime;
 		$class = $this->hasErrors() ? "failed" : "passed";
+		if ($this->offline) {
+			$this->info("-----------------------------");
+			$this->info("$this->no passes, $this->nf fails and $this->ne exceptions in $time seconds");
+		} else {
         $this->_output("<div class=\"testsummary $class\">");
         $this->_output("<strong>" . $this->no . "</strong> passes, ");
         $this->_output("<strong>" . $this->nf . "</strong> fails and ");
         $this->_output("<strong>" . $this->ne . "</strong> exceptions");
         $this->_output(" in $time seconds.");
         $this->_output("</div>\n");
+		}
 	}
 	
 	function _toggleDebug() {
+		if ($this->offline) return;
 		// thanks to jQuery
 		?>
 		<script type="text/javascript">$('.debug').hide();</script>
@@ -343,6 +365,7 @@ class Report {
 	}
 	
 	function _toggleError() {
+		if ($this->offline) return;
 		?>
 		<p><a href="#" onclick="showErrors()" accesskey="e">show <?php echo($this->ne + $this->nf); ?> <u>e</u>rror messages</a></p>
 		<script type="text/javascript">
