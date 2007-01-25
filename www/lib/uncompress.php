@@ -13,13 +13,13 @@ require (dirname(dirname(__FILE__)).'/conf/System.class.php');
  */
 function download($url, $localTargetFile) {
 	$ch = curl_init();
-   curl_setopt($ch, CURLOPT_URL, $url);
-   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-   curl_setopt($ch, CURLOPT_VERBOSE, 1);
-   $fh = fopen($localTargetFile, 'w');
-   curl_setopt($ch, CURLOPT_FILE, $fh);
-   $result = curl_exec($ch);
-   $info = curl_getinfo($ch);
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch, CURLOPT_VERBOSE, 1);
+	$fh = fopen($localTargetFile, 'w');
+	curl_setopt($ch, CURLOPT_FILE, $fh);
+	$result = curl_exec($ch);
+	$info = curl_getinfo($ch);
 	curl_close($ch);
 	fclose($fh);
 	// verify result
@@ -63,8 +63,7 @@ function decompressZip( $sourceFile, $destination) {
 function uncompressGZ( $srcFileName, $dstFileName, $fileSize ){
 
 	if (!is_writable(dirname($dstFileName))) {
-		trigger_error("Not allowed to write to destination $dstFileName");
-		exit;
+		return false;
 	}
 	
 	if (!$fileSize){
@@ -80,6 +79,7 @@ function uncompressGZ( $srcFileName, $dstFileName, $fileSize ){
 	$fp = fopen( $dstFileName, "w" );
 	fwrite( $fp, $data );
 	fclose( $fp );
+	return true;
 }
 
 /*
@@ -106,8 +106,7 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null ){
 	
 		//  end of the archive consists of 512 nulls
 		if(substr($tar_file,$offset,512) == str_repeat(chr(0),512)){
-			echo "done";
-			break;
+			return true;
 		}
 		
 		/*TARs consist of 512-byte blocks. Each constituent file is preceded by a 512-byte 
@@ -142,12 +141,12 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null ){
 				foreach($newDirArray as $l){
 					$j = $j.$l."/";
 					if (!is_dir($j)){
-						echo "dir: $j\n";
+						//echo "dir: $j\n";
 						mkdir($j);
 					}
 				}
 				if ($_file){
-					echo "Extracted: ".$dstDirectory.$unpdir.$_file."\n";
+					//echo "Extracted: ".$dstDirectory.$unpdir.$_file."\n";
 					$fileFromTar = fopen($dstDirectory.$unpdir.$_file ,"wb");
 					fwrite($fileFromTar,$file_contents);
 					fclose($fileFromTar);
@@ -157,13 +156,13 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null ){
 			foreach($directory_array as $i){
 				$j = $j.$i."/";
 				if (!is_dir($j)){
-					echo $j."\n";
+					//echo $j."\n";
 					mkdir($j);
 				}
 			} 
 			// Create files
 			if ($_file){
-			 	echo $dstDirectory.$file_name."\n";
+			 	//echo $dstDirectory.$file_name."\n";
 				$fileFromTar = fopen($dstDirectory.$file_name,"wb");
 				fwrite($fileFromTar,$file_contents);
 				fclose($fileFromTar);

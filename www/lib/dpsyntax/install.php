@@ -1,15 +1,16 @@
-﻿<HTML>
-<HEAD>
-</HEAD>
-<BODY>
-<PRE>
-<?PHP
+﻿<?PHP
+require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
+require '../uncompress.php';
+
+$report = new Report('Install dp.SyntaxHighlighter');
+
 if (file_exists('dp.SyntaxHighlighter/')) {
-	echo 'dp.SyntaxHighlighter is already installed, done.';
+	$report->ok("dp.SyntaxHighlighter is already installed, done.");
+	$report->display();
 	exit;
 }
 
-require '../uncompress.php';
+
 // PHP unit testing framework
 
 $repos_package = "dp.SyntaxHighlighter";
@@ -24,19 +25,13 @@ $dir = strtr($basedir, "\\", '/');
 $tmp = $dir.'/downloaded.tmp';
 $extracted_folder = "$dir/$repos_package/";
 
-if (file_exists($extracted_folder)) {
-	echo $repos_package.' is already installed, done.';
-	exit;
-}
 
-download($archive, $tmp);
+if(download($archive, $tmp)) $report->info("Download complete.");
 
 decompressZip($tmp, $dir);
 
 System::deleteFile($tmp);
-?>
-Done.
-</PRE>
-</BODY>
-</HTML>
 
+$report->ok("Done.");
+$report->display();
+?>

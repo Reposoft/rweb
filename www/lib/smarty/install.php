@@ -1,33 +1,39 @@
-<HTML>
-<HEAD>
-</HEAD>
-<BODY>
-<PRE>
 <?PHP
+
+require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
+require '../uncompress.php';
+
+$report = new Report('Install Smarty');
+$report->info("Smarty is installing...");
+
 if (file_exists('libs/')) {
-	echo 'Smarty libs already installed, done.';
+	$report->ok("Smarty libs already installed, done.");
+	$report->display();
 	exit;
 }
 
-require '../uncompress.php';
 $home = "http://smarty.php.net";
 $version = "2.6.16";
 $archive = "$home/distributions/Smarty-$version.tar.gz";
-$file = "Smarty-$version";
+$repos_package = "Smarty";
 
 $basedir = dirname(__FILE__);
-$dir_backslash = rtrim($basedir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-$dir = str_replace('\\', '/', $dir_backslash);
+$dir = strtr($basedir, "\\", '/');
+$tmp = $dir.'/downloaded.tmp';
+$tarfile = "$dir/$repos_package.tar";
 
-$file = $dir.$file;
 
+if(download($archive, $tmp)) $report->info("Download complete.");
 /*
 	extract GZ archive
 	arg 1 is an absolute path to a gz archive
 	arg 2 is the extracted file's name
 	arg 3 is optional. default value is 1 000 000 000. it has to be larger than the extracted file 
 */
-uncompressGZ($archive, $file.".tar", 2000000);
+$report->info("Extract archive...");
+if(!uncompressGZ($tmp, $tarfile, 2000000 )) {
+	$report->fatal("Not allowed to write to destination $tarfile");
+}
 
 /*
 	extract TAR archive
@@ -35,9 +41,12 @@ uncompressGZ($archive, $file.".tar", 2000000);
 	arg 2 is the extracted file's name. it is optional. default value is the same path as the tar file
 	arg 3 is optional. it should be used only if a special directory from the tar file is needed.  
 */
-uncompressTAR($file.".tar", null, "libs");
-unlink($file.".tar");  // delete the tar file
+if(uncompressTAR( $tarfile, null, "libs" )) {
+	$report->ok("Archive extracted.");
+}
+System::deleteFile($tmp);
+System::deleteFile($tarfile);
+
+$report->ok("Done.");
+$report->display();
 ?> 
-</PRE>
-</BODY>
-</HTML>

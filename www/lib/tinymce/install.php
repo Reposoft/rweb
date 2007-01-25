@@ -1,15 +1,9 @@
-﻿<HTML>
-<HEAD>
-</HEAD>
-<BODY>
-<PRE>
-<?PHP
-if (file_exists('simpletest/')) {
-	echo 'Simpletest is already installed, done.';
-	exit;
-}
-
+﻿<?PHP
+require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
 require '../uncompress.php';
+$report = new Report('Install TinyMCE');
+
+
 // PHP unit testing framework
 
 $repos_package = "tinymce";
@@ -25,18 +19,16 @@ $tmp = $dir.'/downloaded.tmp';
 $extracted_folder = "$dir/$repos_package/";
 
 if (file_exists($extracted_folder)) {
-	echo $repos_package.' is already installed, done.';
+	$report->ok("$repos_package.' is already installed, done.");
+	$report->display();
 	exit;
 }
 
-if(download($archive, $tmp)) echo("Download complete.\n");
+if(download($archive, $tmp)) $report->info("Download complete.");
 
 decompressZip($tmp, $dir);
 
 System::deleteFile($tmp);
+$report->ok("Done.");
+$report->display();
 ?>
-Done.
-</PRE>
-</BODY>
-</HTML>
-
