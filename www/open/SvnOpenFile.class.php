@@ -50,6 +50,32 @@ function login_getMimeTypeProperty($targetUrl, $revision) {
 }
 
 /**
+ * Convert filesize from bytes to B, kB or MB.
+ *
+ * @param String $Bytes filesize in bytes
+ */
+function formatSize($Bytes) {
+	if ($Bytes < 1000) {
+		return $Bytes . ' B';
+	}
+	$f = 1.0 * $Bytes / 1024;
+	if ($f < 0.995) {
+		return number_format($f,1,".","").' kB';
+	}
+	if ($f < 999.5) {
+		return number_format($f,0,".","").' kB';
+	}
+	$f = $f / 1024;
+	if ($f < 0.995) {
+		return number_format($f,1,".","").' MB';
+	}
+	if ($f < 99.95) {
+		return number_format($f,0,".","").' MB';
+	}
+	return number_format($f,0,".","").' MB';
+}
+
+/**
  * Reads a file directly from the repository, without the need for local temp storage.
  * 
  * First does "svn info" to check that the file exists.
