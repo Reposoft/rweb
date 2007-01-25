@@ -7,30 +7,32 @@
  * 
  * PHP scripts should require this class or the Report class, depending on the type of output they produce.
  * 
+ * Note that for production release,
+ * Smarty caching should be ON (in smarty.inc.php)
+ * and filters disabled.
+ * 
  * @package conf
  * @see Report, the class used for unit tests and administration reports. Does not require repos.properties.php.
  */
 
-// function called before any other output or headers
-// TODO setHeader, setContentType, getContentType - same functions as in Report.class.php, define constants ...
-function setupResponse() {
-	repos_getUserLocale();
-}
-
-/**
- * All user presentation pages need repos.properties.php, but test pages should be able to mock it
- */
+// All user presentation pages need repos.properties.php, but test pages should be able to mock it.
 if (!function_exists('getRepository')) require(dirname(__FILE__).'/repos.properties.php');
 
-if (isRequestService()) {
-	require_once(dirname(dirname(__FILE__)).'/lib/json/json.php');
-	header('Content-type: text/plain');
-} else {
-// don't know why the content type is not correct by default
-//use when the namespace-based validator lib has been replaced by a classbased: header('Content-type: application/xhtml+xml; charset=UTF-8');
-header('Content-type: text/html; charset=utf-8');
-// don't set the content type headers in the HTML, because then we can't change to xhtml+xml later
+
+// function called before any other output or headers
+function setupResponse() {
+	// set cookie headers
+	repos_getUserLocale();
+	// set the content type header, Presentation can generate json and XHTML
+	if (isRequestService()) {
+		require_once(dirname(dirname(__FILE__)).'/lib/json/json.php');
+		header('Content-type: text/plain');
+	} else {
+		header('Content-type: application/xhtml+xml; charset=utf-8');
+		// don't set the content type headers in the HTML
+	}
 }
+
 
 // -------- user settings from cookies ---------
 
@@ -156,6 +158,12 @@ class Presentation {
 		$this->smarty->load_filter('pre', 'Presentation_useCommentedDelimiters');
 		$this->smarty->register_prefilter('Presentation_useDotNotationForObjects');
 		$this->smarty->load_filter('pre', 'Presentation_useDotNotationForObjects');
+		// for use with Content-Type
+		$this->smarty->register_prefilter('Presentation_useXmlEntities');
+		$this->smarty->load_filter('pre', 'Presentation_useXmlEntities');
+		// during development:
+		$this->smarty->register_prefilter('Presentation_noExtraContentType');
+		$this->smarty->load_filter('pre', 'Presentation_noExtraContentType');
 	}
 	
 	/**
@@ -419,12 +427,27 @@ class Presentation {
 	}
 }
 
+function Presentation_noExtraContentType($tpl_source, &$smarty)
+{
+	if (strpos($tpl_source, 'http-equiv="Content-Type"')) {
+		return 'Application error. The template for this page contains Content-Type tag.';	
+	}
+	return $tpl_source;
+}
+
 function Presentation_useCommentedDelimiters($tpl_source, &$smarty)
 {
 	$patterns[0] = '/<!--{/';
 	$patterns[1] = '/}-->/';
 	$replacements[0] = LEFT_DELIMITER;
 	$replacements[1] = RIGHT_DELIMITER;
+   return preg_replace($patterns,$replacements,$tpl_source);
+}
+
+function Presentation_useXmlEntities($tpl_source, &$smarty)
+{
+	$patterns[0] = '/&(?!\w{2,6};)/';
+	$replacements[0] = '&amp;';
    return preg_replace($patterns,$replacements,$tpl_source);
 }
 

@@ -66,7 +66,8 @@ if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable ma
  * @see ServiceRequest
  */
 function isRequestService() {
-	return isset($_REQUEST[WEBSERVICE_KEY]) && $_REQUEST[WEBSERVICE_KEY]=='json';
+	return isset($_REQUEST[WEBSERVICE_KEY])
+		&& in_array($_REQUEST[WEBSERVICE_KEY],array('json','text', 'xml'));
 	//return isRequestInternal();
 }
 

@@ -8,14 +8,14 @@
 <script type="text/javascript">
 function autoFillFilename(path) {
 	var pos = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
-	if (pos <= 0) return;
+	if (0 >= pos) return;
 	var filename = path.substring(pos + 1);
 <!--{if not $isfile}-->
 	document.getElementsByName('name')[0].value = filename;
 <!--{else}-->
 	if (filename == document.getElementById('currentname').value) return;
 	var m = filename.match(/-(\d+)\.?\w*$/)
-	if (!m || m.length < 2) return; 
+	if (!m || 2 > m.length) return; 
 	var rev = m[1];
 	var button = document.getElementById('fromrev'+rev);
 	if (!button) {

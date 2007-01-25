@@ -105,7 +105,7 @@ createFileWithContents($wc."demoproject/trunk/readonly/index.html",
 // public contents, allows testing without login
 createFolder($wc."demoproject/trunk/public/");
 $publicxml = $wc."demoproject/trunk/public/xmlfile.xml";
-createFileWithContents($publicxml, "<empty-document/>\n");
+createFileWithContents($publicxml, "<test-xml/>\n");
 
 // create a sample intranet
 createFolder($wc."demoproject/trunk/public/website/");
