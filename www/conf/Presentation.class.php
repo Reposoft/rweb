@@ -18,8 +18,8 @@
 // All user presentation pages need repos.properties.php, but test pages should be able to mock it.
 if (!function_exists('getRepository')) require(dirname(__FILE__).'/repos.properties.php');
 
-define('PRESENTATION_XTHML', true); // true->application/xhtml+xml, false->text/html
-define('TEMPLATE_CACHING', false); // enable/disable smarty caching
+define('PRESENTATION_XTHML', false); // true->application/xhtml+xml, false->text/html
+define('TEMPLATE_CACHING', getConfig('disable_caching') ? true : false); // enable/disable smarty caching
 
 // function called before any other output or headers
 function setupResponse() {
