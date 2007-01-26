@@ -138,7 +138,7 @@ var Repos = {
 	 */
 	addScript: function(src, loadEventHandler) {
 		var srcUrl = Repos.getWebapp() + src;
-		if (/:\/\/localhost[:\/]/.test(window.location.href)) srcUrl += '?'+Date.now();
+		if (/:\/\/localhost[:\/]/.test(window.location.href)) srcUrl += '?'+Date();
 		var state = typeof(Repos.loadedPlugins[srcUrl]);
 		if (state == 'boolean') {
 			loadEventHandler(); // already loaded
