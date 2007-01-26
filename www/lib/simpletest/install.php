@@ -21,7 +21,7 @@ $tarfile = "$dir/$repos_package.tar";
 
 
 if (file_exists($extracted_folder)) {
-	$report->ok("$repos_package.' is already installed, done.");
+	$report->ok("$repos_package is already installed, done.");
 	$report->display();
 	exit;
 }

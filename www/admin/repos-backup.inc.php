@@ -114,9 +114,10 @@ function packageDumpfile($tempfile, $path) {
 	$size = filesize($tempfile);
 	$originalmd5 = _calculateMD5($tempfile);
 	// the only thing we really need to do, rest is verification
-	$pack = gzipInternal($tempfile,"$path.gz");
+	$pack = gzipInternal($tempfile,"$path.gz.incomplete");
 	if (!$pack) fatal("Backup file $tempfile is empty or could not be compressed to $path.gz.");
 	if ($size != $pack) warn("Dumpfile is $size bytes but wrote $pack to compressed target.");
+	rename("$path.gz.incomplete", "$path.gz");
 	createMD5("$path.gz");
 	// uncompress to validate
 	$back = gunzipInternal("$path.gz", $tempfile);
@@ -222,12 +223,18 @@ function verifyMD5($path) {
  * @return false if sums don't match
  */
 function verifyFileMD5($path) {
-	if ( ! file_exists( $path ) )
+	if ( ! file_exists( $path ) ) {
 		fatal( "File $path does not exist so it can't be verified" );
+	}
 	$sums = getMD5sums(dirname($path));
 	$sum = md5_file( $path );
 	//debug("MD5 for $path (stored): $sum, (".$sums[basename($path)].")");
 	$filename = basename($path);
+	if (!isset($sums["$filename"])) {
+		fatal("There is no MD5 sum for file '$filename'. Backup is probably incomplete. "
+		."The file '$filename' and later files on the primary server should be deleted, "
+		."so the next backup job can create a complete backup.");
+	}
 	return $sums["$filename"] == $sum;
 }
 
