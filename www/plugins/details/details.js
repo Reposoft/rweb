@@ -44,7 +44,7 @@ function details_write(e, entry) {
 		if (!folder) {
 			var size = $('size', this).text();
 			$('.filesize', e).append(details_formatSize(size));
-			$('.filesize', e).title(size + ' bytes');
+			$('.filesize', e).attr('title', size + ' bytes');
 		}
 		if (details_isLocked(this)) details_writeLock(e, this);
 		// if the dateformat plugin is present, do format
