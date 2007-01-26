@@ -121,13 +121,8 @@ class FolderWriteAccessRule extends Rule {
 	 * @param String $targetFolder the folder path in the repository, begins with slash
 	 */
 	function hasWriteAccess($targetFolder) {
-
 		$url = getRepository() . $targetFolder;
-		
-		// try some incomplete cURL webdav write operation, getting a 403 but hopefluly not modifying if OK
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "SEARCH" ) ;
-		//TODO see SvnOpenFile->isReadOnly
+		return _svnResourceIsWritable($url);
 	}
 }
 

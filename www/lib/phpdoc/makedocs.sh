@@ -13,7 +13,7 @@ cd lib
 cd phpdoc
 
 echo $(date) > $REPOS_WEB-docs/docs-report.txt
-phpdoc -t "$REPOS_WEB-docs" -o HTML:frames:default -d "$REPOS_WEB" -i "$REPOS_WEB/lib/*, $REPOS_WEB/test/*, *.test.*" -ti "Repos PHP documentation" >> $REPOS_WEB-docs/docs-report.txt
+nice phpdoc -t "$REPOS_WEB-docs" -o HTML:frames:default -d "$REPOS_WEB" -i "$REPOS_WEB/lib/*, $REPOS_WEB/test/*, *.test.*" -ti "Repos PHP documentation" >> $REPOS_WEB-docs/docs-report.txt
 
 echo $(date) > $REPOS_WEB-docs/docs-test-report.txt
-phpdoc -t "$REPOS_WEB-docs/repos-test-docs" -o HTML:frames:default -f "$REPOS_WEB/test/*, $REPOS_WEB/*.test.*" -i "$REPOS_WEB/lib/*" -ti "Repos PHP test documentation" >> $REPOS_WEB-docs/docs-test-report.txt
+nice phpdoc -t "$REPOS_WEB-docs/repos-test-docs" -o HTML:frames:default -f "$REPOS_WEB/test/*, $REPOS_WEB/*.test.*" -i "$REPOS_WEB/lib/*" -ti "Repos PHP test documentation" >> $REPOS_WEB-docs/docs-test-report.txt

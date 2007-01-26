@@ -20,7 +20,7 @@ define('HEAD','HEAD');
 define('SVN_CONFIG_DIR', _getConfigFolder().'svn-config-dir' . DIRECTORY_SEPARATOR);
 if (!file_exists(SVN_CONFIG_DIR)) {
 	trigger_error('Config folder for svn commands does not exist. '.
-		'Run \'svn svn --config-dir "'.SVN_CONFIG_DIR.'" info\' to create it.', E_USER_ERROR);
+		'Run \'svn --config-dir "'.SVN_CONFIG_DIR.'" info\' to create it.', E_USER_ERROR);
 }
 
 /**
@@ -132,6 +132,24 @@ function getRevision($rev = false) {
 		return $rev;
 	}
 	trigger_error("Error. Revision number '$rev' is not valid.", E_USER_ERROR);
+}
+
+/**
+ * A tricky operation, not supported by svn, is to figure out if a file or folder is writable by
+ * the user, without trying a write operation.
+ * This is our secret.
+ * @param String $url The absolute URL to check.
+ * @return boolean true if the current user has write access to the file or folder (false if read-only)
+ * @package open
+ */
+function _svnResourceIsWritable($url) {
+	$r = new ServiceRequest($url);
+	$r->setCustomHttpMethod('LOCK');
+	// Use If-Match to make dummy request that does not cause an entry in the error log
+	// If the server does not understand this, we'll soon have locked files all over the repository
+	$r->setRequestHeader('If-Match', '"shouldnevermatch"');
+	$r->exec();
+	return ($r->getStatus() != 403);
 }
 
 /**
