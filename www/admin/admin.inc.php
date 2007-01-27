@@ -9,6 +9,8 @@
 require_once( dirname(dirname(__FILE__)) . "/conf/repos.properties.php" );
 require_once( dirname(dirname(__FILE__)) . "/conf/Report.class.php" );
 
+define('TEMP_FILE_EXTENSION', '.temporary');
+
 // --- output functions ---
 
 // override theme function
@@ -162,7 +164,9 @@ function getDirContents($directory, $startsWith="") {
 	$filelist = array();
 	if ($dir = opendir($directory)) {
 	   while (false !== ($file = readdir($dir))) { 
-		   if ( $file != ".." && $file != "." && startsWith($file,$startsWith) ) {
+	   	if ( strEnds($file, TEMP_FILE_EXTENSION)) {
+	   		warn("Backup folder contains unfinished file '$file'");
+	   	} elseif ( $file != ".." && $file != "." && startsWith($file,$startsWith) ) {
 				$filelist[] = $file;
 		   }
 	   }

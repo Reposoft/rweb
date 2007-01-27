@@ -115,10 +115,10 @@ function packageDumpfile($tempfile, $path) {
 	$size = filesize($tempfile);
 	$originalmd5 = _calculateMD5($tempfile);
 	// the only thing we really need to do, rest is verification
-	$pack = gzipInternal($tempfile,"$path.temporary");
+	$pack = gzipInternal($tempfile,'$path'.TEMP_FILE_EXTENSION);
 	if (!$pack) fatal("Backup file $tempfile is empty or could not be compressed to $path.gz.");
 	if ($size != $pack) warn("Dumpfile is $size bytes but wrote $pack to compressed target.");
-	rename("$path.temporary", "$path.gz");
+	rename('$path'.TEMP_FILE_EXTENSION, "$path.gz");
 	createMD5("$path.gz");
 	// uncompress to validate
 	$back = gunzipInternal("$path.gz", $tempfile);
@@ -346,14 +346,17 @@ function gunzipInternal($compressedfile, $tofile) {
  * @return bytes written (uncompressed) if successful, meaning there is now another file, false on error
  */
 function gzipInternal($originalfile, $tofile) {
+	$size = filesize($originalfile);
+	if ($size < 1) fatal("Backup file '$originalfile' is empty. Svn dump must have failed.");
 	$fp = fopen($originalfile, "r") ;
 	if ( ! $fp ) return false;
 	$zp = gzopen($tofile, "w");
 	$sum = 0;
 	if ($zp) {
 		while (!feof($fp)) {
-			$buff1 = fgets ($fp, 4096) ;
-			gzputs($zp, $buff1) ;
+			reportProgress($size, $sum, 4096);
+			$buff1 = fread($fp, 4096);
+			gzputs($zp, $buff1);
 			$sum += strlen($buff1);
 		} 
 		gzclose($zp);
@@ -364,5 +367,23 @@ function gzipInternal($originalfile, $tofile) {
 		return false;
 	}
 	return $sum;
+}
+
+/**
+ * Called before each iteration with the sum of progress in the previous iterations.
+ * Assumes that processing is done in fixed increments of same size.
+ */
+function reportProgress($total, $p, $increment) {
+	global $report;
+	if ($p == 0) { 
+		$report->_linestart();
+		$report->_print('Compressing: '); 
+	}
+	if (floor(50 * $p / $total) < floor(50 * ($p + $increment) / $total)) {
+		$report->_print('#');	
+	}
+	if (($p + $increment) > $total) {
+		$report->_lineend();
+	}
 }
 ?>
