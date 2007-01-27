@@ -342,7 +342,7 @@ class SvnEdit {
 	}
 	
 	/**
-	 * Resturns the last line of the command, which usually contains
+	 * Returns the last line of the command output, which usually contains
 	 * the conclusion, like "Committed revision 123"
 	 * @return result of the subversion operation, empty string if it gave no output
 	 */

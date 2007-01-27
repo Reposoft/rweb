@@ -69,6 +69,7 @@ function dump($repository, $backupPath, $fileprefix) {
  */
 function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) {
 	set_time_limit(BACKUP_MAX_TIME); // each increment can take 30 minutes to back up
+	debug('Time limit for this increment is '.ini_get('max_execution_time').' seconds');
 	$starttime = time();
 	$extension = ".svndump";
 	// get a new empty file
@@ -84,7 +85,7 @@ function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) 
 		$command->addArg($repository);
 		$command->setOutputToFile($tmpfile, true);
 		$command->exec();
-		if ($command->getExitcode()) fatal("Could not dump repository contents.");
+		if ($command->getExitcode()) fatal("Could not read repository $repository. ".implode("\n",$command->getOutput()));
 		clearstatcache(); // so that size is not cached
 		$size = filesize($tmpfile);
 		if ($size > BACKUP_SIZE && $i < $torev) {
@@ -114,10 +115,10 @@ function packageDumpfile($tempfile, $path) {
 	$size = filesize($tempfile);
 	$originalmd5 = _calculateMD5($tempfile);
 	// the only thing we really need to do, rest is verification
-	$pack = gzipInternal($tempfile,"$path.gz.incomplete");
+	$pack = gzipInternal($tempfile,"$path.temporary");
 	if (!$pack) fatal("Backup file $tempfile is empty or could not be compressed to $path.gz.");
 	if ($size != $pack) warn("Dumpfile is $size bytes but wrote $pack to compressed target.");
-	rename("$path.gz.incomplete", "$path.gz");
+	rename("$path.temporary", "$path.gz");
 	createMD5("$path.gz");
 	// uncompress to validate
 	$back = gunzipInternal("$path.gz", $tempfile);
