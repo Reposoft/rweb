@@ -12,15 +12,6 @@ class TestAdmin extends UnitTestCase {
 		
 	}
 	
-	function testStartsWith() {
-		$this->assertEqual(true, startsWith("hepp","") );
-		$this->assertEqual(true, startsWith("hepp","he") );
-		$this->assertEqual(true, startsWith("hepp","hepp") );
-		$this->assertEqual(false, startsWith("","hepp") );
-		$this->assertEqual(false, startsWith("hepp","hopp") );
-		$this->assertEqual(false, startsWith("hep","hepp") );
-	}
-	
 	function testGetRepositoryName() {
 		$this->assertEqual('testrepo', getRepositoryName('/testrepo/repo/'));
 		$this->assertEqual('testrepo', getRepositoryName('/testrepo/repo'));

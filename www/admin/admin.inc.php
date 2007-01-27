@@ -144,15 +144,6 @@ function formatRev($number) {
 }
 
 /**
- * @return true if string starts with the given prefix (case-insensitive). Empty prefix returns true.
- */
-function startsWith($string, $prefix) {
-	if ( strlen($prefix)==0 )
-		return true;
-	return strncasecmp ( $string, $prefix, strlen($prefix) ) == 0;
-}
-
-/**
  * Get files and subdirectories in directory.
  * @param directory Path to check
  * @param startsWith Optional. Include only names that start with this prefix. 
@@ -166,7 +157,7 @@ function getDirContents($directory, $startsWith="") {
 	   while (false !== ($file = readdir($dir))) { 
 	   	if ( strEnds($file, TEMP_FILE_EXTENSION)) {
 	   		warn("Backup folder contains unfinished file '$file'");
-	   	} elseif ( $file != ".." && $file != "." && startsWith($file,$startsWith) ) {
+	   	} elseif ( $file != ".." && $file != "." && strBegins($file,$startsWith) ) {
 				$filelist[] = $file;
 		   }
 	   }

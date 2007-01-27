@@ -354,7 +354,7 @@ function gzipInternal($originalfile, $tofile) {
 	$sum = 0;
 	if ($zp) {
 		while (!feof($fp)) {
-			reportProgress($size, $sum, 4096);
+			reportProgress($size, $sum);
 			$buff1 = fread($fp, 4096);
 			gzputs($zp, $buff1);
 			$sum += strlen($buff1);
@@ -371,19 +371,20 @@ function gzipInternal($originalfile, $tofile) {
 
 /**
  * Called before each iteration with the sum of progress in the previous iterations.
- * Assumes that processing is done in fixed increments of same size.
+ * First time call should be $don=0 to start output.
  */
-function reportProgress($total, $p, $increment) {
+function reportProgress($total, $done) {
 	global $report;
-	if ($p == 0) { 
+	static $last = -1;
+	if ($done == 0) {
+		$last = 0; 
 		$report->_linestart();
-		$report->_print('Compressing: '); 
+		$report->_print('Compressing '); 
 	}
-	if (floor(50 * $p / $total) < floor(50 * ($p + $increment) / $total)) {
-		$report->_print('#');	
+	$now = floor(100 * $done / $total);
+	if ($now > $last && $now % 2 == 0) {
+		$report->_print('.');
 	}
-	if (($p + $increment) > $total) {
-		$report->_lineend();
-	}
+	$last = $now;
 }
 ?>
