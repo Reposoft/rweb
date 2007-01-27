@@ -10,7 +10,7 @@ require( dirname(dirname(__FILE__)) . '/conf/Command.class.php' );
 
 define('TEMP_DIR',getTempDir('backup'));
 define('BACKUP_SCRIPT_VERSION','$LastChangedRevision$');
-define('BACKUP_SIZE', 1*1024*1024); // recommended unpacked size of dump files
+define('BACKUP_SIZE', 100*1024*1024); // recommended unpacked size of dump files
 define('BACKUP_MAX_TIME', 30*60); // maximum time in seconds for dumping and packing one backup increment (with the above size)
 
 /**
@@ -347,6 +347,8 @@ function gunzipInternal($compressedfile, $tofile) {
  */
 function gzipInternal($originalfile, $tofile) {
 	$size = filesize($originalfile);
+	// browser needs a byte once a minute or so to not give up, and server needs a browser to proceed execution
+	$display = ($size > BACKUP_SIZE / 3);
 	if ($size < 1) fatal("Backup file '$originalfile' is empty. Svn dump must have failed.");
 	$fp = fopen($originalfile, "r") ;
 	if ( ! $fp ) return false;
@@ -354,7 +356,7 @@ function gzipInternal($originalfile, $tofile) {
 	$sum = 0;
 	if ($zp) {
 		while (!feof($fp)) {
-			reportProgress($size, $sum);
+			if ($display) reportProgress($size, $sum);
 			$buff1 = fread($fp, 4096);
 			gzputs($zp, $buff1);
 			$sum += strlen($buff1);
@@ -374,21 +376,16 @@ function gzipInternal($originalfile, $tofile) {
  * First time call should be $don=0 to start output.
  */
 function reportProgress($total, $done) {
-	global $report;
 	static $last = -1;
 	if ($done == 0) {
 		$last = 0; 
-		//$report->_linestart();
-		//$report->_print('<br />');
-		$report->_print("\n".'Compressing '); 
+		echo("\n".'Compressing ');
 	}
 	$now = floor(100 * $done / $total);
 	if ($now > $last && $now % 2 == 0) {
-		$report->_print('.');
-		flush();
-		//multiline output, no linestart needed//debug(str_repeat('.', floor($now / 2)));
-		//if ($now == 100) $report->_print('<br />');
-		//sleep(1);
+		echo('.'); // 50 dots (or less) per operation
+		flush(); // even without output buffering, it seems individual important bytes need flushing
+		//won't always occur//if ($now == 100) $report->_print('<br />');
 	}
 	$last = $now;
 }
