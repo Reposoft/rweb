@@ -115,10 +115,10 @@ function packageDumpfile($tempfile, $path) {
 	$size = filesize($tempfile);
 	$originalmd5 = _calculateMD5($tempfile);
 	// the only thing we really need to do, rest is verification
-	$pack = gzipInternal($tempfile,'$path'.TEMP_FILE_EXTENSION);
+	$pack = gzipInternal($tempfile,$path.TEMP_FILE_EXTENSION);
 	if (!$pack) fatal("Backup file $tempfile is empty or could not be compressed to $path.gz.");
 	if ($size != $pack) warn("Dumpfile is $size bytes but wrote $pack to compressed target.");
-	rename('$path'.TEMP_FILE_EXTENSION, "$path.gz");
+	rename($path.TEMP_FILE_EXTENSION, "$path.gz");
 	createMD5("$path.gz");
 	// uncompress to validate
 	$back = gunzipInternal("$path.gz", $tempfile);
