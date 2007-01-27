@@ -27,12 +27,12 @@
     <dependency>
       <groupId>org.tigris.subversion</groupId>
       <artifactId>svnClientAdapter</artifactId>
-      <version>2850</version>
+      <version>2955</version>
     </dependency>
     <dependency>
       <groupId>org.tigris.subversion</groupId>
       <artifactId>javahl</artifactId>
-      <version>1.4.2</version>
+      <version>1.4.3</version>
     </dependency>
     <dependency>
       <groupId>com.svnkit</groupId>

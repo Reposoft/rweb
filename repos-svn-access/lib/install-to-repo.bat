@@ -9,7 +9,7 @@ rem call mvn install:install-file -Dfile=svnClientAdapter.jar -DgroupId=org.tigr
 rem call mvn install:install-file -Dfile=svnjavahl.jar -DgroupId=org.tigris.subclipse -DartifactId=svnant-svnjavahl -Dversion=%VERSION% -Dpackaging=jar
 
 echo Install the jar from the official javahl distribution (download and unzip to this folder)
-set JAVAHL_VERSION=1.4.2
+set JAVAHL_VERSION=1.4.3
 call mvn install:install-file -Dfile=svnjavahl.jar -DgroupId=org.tigris.subversion -DartifactId=javahl -Dversion=%JAVAHL_VERSION% -Dpackaging=jar
 echo libsvnjavahl-1.dll must be distributed separately
 

@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 
 import se.repos.svn.SvnIgnorePattern;
 import se.repos.svn.SvnProxySettings;
-import se.repos.svn.config.file.ServersFile;
 import se.repos.svn.test.TestFolder;
 
 import junit.framework.TestCase;
@@ -157,7 +156,7 @@ public class RuntimeConfigurationAreaTest extends TestCase {
 				getLine(s, "^http-proxy-host\\s*=\\s*my.proxy.se$"));
 		assertNull("Should not set an empty host line, because svn can't handle that",
 				getLine(s, "^http-proxy-host\\s*=\\s*$"));
-		// TODO would be nice if it kept the comment. String comment = getLine(s, "^#.*http-proxy-host\\s*=.*");
+		// Servers file does not use comments. String comment = getLine(s, "^#.*http-proxy-host\\s*=.*");
 		
 		// actually, the directives must be completely gone for the svn client to be able to connect without proxy
 		// (assume that there are no settings in other groups)
