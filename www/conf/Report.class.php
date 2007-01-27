@@ -23,6 +23,7 @@ if (!function_exists('setupResponse')) {
 		} elseif (isTextmode()) {
 			header('Content-Type: text/plain');
 		}
+		// online headers are set in meta tag
 	}
 }
 
@@ -299,14 +300,14 @@ class Report {
 	
 	function _pageStart($title) {
 		if (!$this->offline) {
-		$this->_print('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"');
-		$this->_print(' "http://www.w3.org/TR/html4/loose.dtd">');
-		$this->_print("\n<html>");
+		$this->_print('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"');
+		$this->_print(' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n");
+		$this->_print('<html xmlns="http://www.w3.org/1999/xhtml">'."\n");
 		$this->_print('<head>');
-		$this->_print('<meta http-equiv="Content-Type" content="text/html; charset=utf-8">');
-		$this->_print('<title>Repos administration: ' . $title . '</title>');
-		$this->_print('<link href="/repos/style/global.css" rel="stylesheet" type="text/css"/>');
-		$this->_print('<link href="/repos/style/docs.css" rel="stylesheet" type="text/css"/>');
+		$this->_print('<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>'."\n");
+		$this->_print('<title>Repos administration: ' . $title . '</title>'."\n");
+		$this->_print('<link href="/repos/style/global.css" rel="stylesheet" type="text/css"></link>'."\n");
+		$this->_print('<link href="/repos/style/docs.css" rel="stylesheet" type="text/css"></link>'."\n");
 		// TODO use head.js
 		$this->_print('<script src="/repos/scripts/lib/jquery/jquery.js" type="text/javascript"></script>');
 		$this->_print('<script src="/repos/plugins/tooltip/tooltip.js" type="text/javascript"></script>');

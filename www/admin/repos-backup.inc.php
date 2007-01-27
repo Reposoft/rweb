@@ -10,7 +10,7 @@ require( dirname(dirname(__FILE__)) . '/conf/Command.class.php' );
 
 define('TEMP_DIR',getTempDir('backup'));
 define('BACKUP_SCRIPT_VERSION','$LastChangedRevision$');
-define('BACKUP_SIZE', 100*1024*1024); // recommended unpacked size of dump files
+define('BACKUP_SIZE', 1*1024*1024); // recommended unpacked size of dump files
 define('BACKUP_MAX_TIME', 30*60); // maximum time in seconds for dumping and packing one backup increment (with the above size)
 
 /**
@@ -378,12 +378,17 @@ function reportProgress($total, $done) {
 	static $last = -1;
 	if ($done == 0) {
 		$last = 0; 
-		$report->_linestart();
-		$report->_print('Compressing '); 
+		//$report->_linestart();
+		//$report->_print('<br />');
+		$report->_print("\n".'Compressing '); 
 	}
 	$now = floor(100 * $done / $total);
 	if ($now > $last && $now % 2 == 0) {
 		$report->_print('.');
+		flush();
+		//multiline output, no linestart needed//debug(str_repeat('.', floor($now / 2)));
+		//if ($now == 100) $report->_print('<br />');
+		//sleep(1);
 	}
 	$last = $now;
 }
