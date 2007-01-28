@@ -133,6 +133,13 @@ acronym, span.explain {
 #footer .legal a {
 	color: #556699;
 }
+#footer #url {
+	width: 98%;
+	text-align: center;
+	border: 0px;
+	color: #999999;
+	font-size: smaller;	
+}
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 .command {
 	background-position: left center;
