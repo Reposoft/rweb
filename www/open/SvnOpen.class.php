@@ -149,7 +149,12 @@ function _svnResourceIsWritable($url) {
 	// If the server does not understand this, we'll soon have locked files all over the repository
 	$r->setRequestHeader('If-Match', '"shouldnevermatch"');
 	$r->exec();
-	return ($r->getStatus() != 403);
+	if ($r->getStatus() == 412) return true;
+	if ($r->getStatus() == 403) return false;
+	if ($r->getStatus() == 200) {
+		// unlock before error message?
+	}
+	trigger_error('Server configuration error. Could not check if resource is read-only. Status '.$r->getStatus());
 }
 
 /**

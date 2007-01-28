@@ -348,7 +348,7 @@ function gunzipInternal($compressedfile, $tofile) {
 function gzipInternal($originalfile, $tofile) {
 	$size = filesize($originalfile);
 	// browser needs a byte once a minute or so to not give up, and server needs a browser to proceed execution
-	$display = ($size > BACKUP_SIZE / 3);
+	$display = ($size > BACKUP_SIZE / 10);
 	if ($size < 1) fatal("Backup file '$originalfile' is empty. Svn dump must have failed.");
 	$fp = fopen($originalfile, "r") ;
 	if ( ! $fp ) return false;

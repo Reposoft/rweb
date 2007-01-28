@@ -63,6 +63,11 @@ if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/S
 
 // do automatic login if a target is specified the standard way
 if (isTargetSet()) {
+	// special case for the svn index anomaly that root path is "/" but no other paths have trailing slash
+	if (getTarget() == '//') {
+		header('Location: '.repos_getSelfUrl().'?'.str_replace('=//', '=/', repos_getSelfQuery()));
+		exit;
+	}
 	targetLogin();
 }
 
