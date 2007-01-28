@@ -49,6 +49,7 @@ edit on your computer, then <a href="upload/?target={=$target}">upload new versi
 {=else}
 <p>This is a binary or unknown fileformat. We recommend you Download and lock.</p>
 {=/if}
+{=if not $file,isLockedByThisUser}
 <h3><a href="upload/?target={=$target}&rev={=$rev}&download">Download, modify, upload</a></h3>
 <p>
 <span class="explain" title="files stored as lines of text that are human-readable in any text editor, like Notepad">Text files</span> 
@@ -57,7 +58,7 @@ the system will identify which lines you changed,
 and <span class="explain" title="combine two different changes of the same file into a new version of the file">merge</span>
 those changes with the existing contents to create a new version.
 </p>
-<h3><a href="lock/?target={=$target}&download">Lock and Download</a></h3>
+<h3><a href="lock/?target={=$target}&download">Download with lock</a></h3>
 <p>
 For <span class="explain" title="files stored in a non-text format created and read by a specific application">binary</span>
 files, version control is not as efficient as with text files.
@@ -66,6 +67,7 @@ The difference between two versions can not be expressed as a
 so each change must be based on the previous version.
 This means that only one user at a time can work with the file.
 </p>
+{=/if}
 <h3><a href="upload/?target={=$target}">Upload new version</a></h3>
 <p>
 If you have already downloaded and edited the file, upload your changes to create a new verison.
@@ -77,6 +79,7 @@ No locking is needed, and when you save it creates a new version of the file.
 </p>
 <!--{if not $file,isBranch}-->
 <h3>
+{=* personal branches not in 1.1
 <!-- temporary solution, requires /branches folder in root, which is not fair to the other repository layouts -->
 <a id="branch" href="copy/?target={=$target}&oldname={=$oldname}&tofolder=%2Fbranches%2F&newname={=$file,revision}-{=$file,authenticatedUser}-{=$file,filename}&move=0&message={=$message}&submit=Copy">
 Create personal branch</a></h3>
@@ -85,6 +88,7 @@ without disturbing anyone else. If is useful if you need several days for your c
 Your personal, temporary, copy would be: 
 <span class="path">/branches/{=$file,revision}-{=$file,authenticatedUser}-{=$file,filename}</span>
 You will get a link to the branch, and from there you can access the "merge" functionality.</p>
+*}
 <!--{/if}-->
 {=if not $file,isLocked}
 <h3><a href="lock/?target={=$target}">Lock file</a></h3>
