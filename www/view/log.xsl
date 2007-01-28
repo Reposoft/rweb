@@ -51,11 +51,9 @@
 	</xsl:template>
 	<!-- body contents -->
 	<xsl:template match="log">
-		<div class="workspace">
-			<xsl:call-template name="commandbar"/>
-			<xsl:call-template name="contents"/>
-			<xsl:call-template name="footer"/>
-		</div>
+		<xsl:call-template name="commandbar"/>
+		<xsl:call-template name="contents"/>
+		<xsl:call-template name="footer"/>
 	</xsl:template>
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
@@ -144,9 +142,9 @@
 		</xsl:param>
 		<div class="row log-{@action}">
 			<xsl:if test="@action='A'">
-				<span class="path" title="Added {.}">
+				<a id="open:{$pathid}" class="path file" title="Added {.}" href="{$web}open/open/?target={.}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
-				</span>
+				</a>
 				<xsl:if test="not(@copyfrom-path)">
 					<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={../../@revision}&amp;action={@action}">view</a>
 				</xsl:if>
@@ -169,9 +167,9 @@
 				<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={$fromrev}&amp;action={@action}">view</a>
 			</xsl:if>
 			<xsl:if test="@action='M'">
-				<span class="path" title="Modified {.}">
+				<a id="open:{$pathid}" class="path file" title="Modified {.}" href="{$web}open/open/?target={.}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
-				</span>
+				</a>
 				<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={../../@revision}&amp;fromrev={$fromrev}&amp;action={@action}">view</a>
 			</xsl:if>
 		</div>

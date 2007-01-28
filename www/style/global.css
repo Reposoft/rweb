@@ -89,8 +89,6 @@ acronym, span.explain {
 	background: url(warning.png) left no-repeat;
 }
 /* common page elements, may also be layouted for each tool */
-#workspace {
-}
 #commandbar {
 	background-color: #F0F0EE;
 	border-top: 1px solid #CCCC99;

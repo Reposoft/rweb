@@ -67,11 +67,9 @@
 	</xsl:template>
 	<!-- body contents -->
 	<xsl:template match="index">
-		<div id="workspace">
-			<xsl:call-template name="commandbar"/>
-			<xsl:call-template name="contents"/>
-			<xsl:call-template name="footer"/>
-		</div>
+		<xsl:call-template name="commandbar"/>
+		<xsl:call-template name="contents"/>
+		<xsl:call-template name="footer"/>
 	</xsl:template>
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
@@ -172,7 +170,7 @@
 					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{@href}">delete</a>
 				</xsl:if>
 			</div>
-			<a id="f:{$id}" class="folder" href="{@href}">
+			<a id="open:{$id}" class="folder" href="{@href}">
 				<xsl:value-of select="@name"/>
 			</a>
 		</div>
@@ -198,7 +196,7 @@
 				</xsl:if>
 				<a id="history:{$id}" class="action" href="{$web}open/log/?target={../@path}/{@href}">view history</a>
 			</div>
-			<a id="f:{$id}" class="file-{$filetype} file" href="{@href}">
+			<a id="open:{$id}" class="file-{$filetype} file" href="{@href}">
 				<xsl:value-of select="@name"/>
 			</a>
 		</div>
