@@ -20,7 +20,7 @@ foreach ($_GET as $key => $value) {
 if (!isset($_COOKIE[USERNAME_KEY])) {
 	$theme = '';
 } else {
-	$theme = repos_getUserTheme($_COOKIE[USERNAME_KEY]);
+	$theme = getUserTheme($_COOKIE[USERNAME_KEY]);
 }
 
 if (substr($u, 0, 11)=='settings.js') {

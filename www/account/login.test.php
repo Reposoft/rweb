@@ -2,7 +2,7 @@
 require('login.inc.php');
 require("../lib/simpletest/setup.php");
 
-define('TESTHOST', repos_getSelfRoot());
+define('TESTHOST', getSelfRoot());
 define('TESTREPO', TESTHOST."/testrepo");
 //define('TESTREPO', "http://test.repos.se/testrepo/");
 //define('TESTREPO', "http://alto.optime.se/testrepo/");
@@ -38,7 +38,7 @@ class Login_include_Test extends UnitTestCase {
 	
 	// this belongs to a system configuration test
 	function testGetAuthNameNoAuthAtServerRoot() {
-		$url = repos_getSelfRoot().'/';
+		$url = getSelfRoot().'/';
 		$realm = getAuthName($url);
 		$this->assertEqual(false, $realm);
 	}

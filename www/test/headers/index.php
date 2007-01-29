@@ -43,10 +43,10 @@ if (isset($_GET['check'])) {
 function printHeaders($target) {
 	head();
 	if(strBegins($target, '/')) {
-		$target = repos_getSelfRoot().$target;
+		$target = getSelfRoot().$target;
 	}
 	if(strpos($target,'/')===false) {
-		$target = repos_getSelfUrl().$target;
+		$target = getSelfUrl().$target;
 	}
 	echo("<p><strong>URL: <a check=\"blank\" href=\"$target\">$target</a></strong></p>");
 	if (strContains($target, '?'));

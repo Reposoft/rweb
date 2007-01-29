@@ -161,7 +161,7 @@ function getHttpReferer() {
  * @return The url to the host of this request, 
  * without tailing slash because absolute urls should be appended.
  */
-function repos_getSelfRoot() {
+function getSelfRoot() {
 	$url = 'http';
 	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') $url .= 's';
 	$url .= '://' . $_SERVER['SERVER_NAME'];
@@ -175,23 +175,23 @@ function repos_getSelfRoot() {
 
 /**
  * The current URL without query string
- * Complete url = repos_getSelfUrl().'?'.repos_getSelfQuery();
+ * Complete url = getSelfUrl().'?'.getSelfQuery();
  */
-function repos_getSelfUrl() {
+function getSelfUrl() {
 	$uri = $_SERVER['REQUEST_URI'];
 	$q = strpos($uri, '?');
 	if ($q > 0) {
 		$uri = substr($uri, 0, $q);
 	}
 	// $_SERVER['SCRIPT_NAME'] can not be used because it always contains the filename
-	return repos_getSelfRoot() . $uri;
+	return getSelfRoot() . $uri;
 }
 
 /**
  * Current query string, or empty string if there is no query string
  * @return string
  */
-function repos_getSelfQuery() {
+function getSelfQuery() {
 	if (!isset($_SERVER['QUERY_STRING'])) return '';
 	return $_SERVER['QUERY_STRING'];
 }

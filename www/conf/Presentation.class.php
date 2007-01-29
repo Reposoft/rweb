@@ -26,7 +26,7 @@ define('TEMPLATE_CACHING', getConfig('disable_caching') ? true : false); // enab
 // function called before any other output or headers
 function setupResponse() {
 	// set cookie headers
-	repos_getUserLocale();
+	getUserLocale();
 	// set the content type header, Presentation can generate json and XHTML
 	if (headers_sent()) return;
 	if (isRequestService()) {
@@ -44,7 +44,7 @@ function setupResponse() {
 
 // -------- user settings from cookies ---------
 
-function repos_getUserTheme($user = '') {
+function getUserTheme($user = '') {
 	if (!isset($_COOKIE[THEME_KEY])) return '';
 	$style = $_COOKIE[THEME_KEY];
 	if ($style=='repos') return ''; // default stylesheet title is 'repos'
@@ -61,7 +61,7 @@ $possibleLocales = array(
  * Resolve locale code from: 1: GET, 2: SESSION, 3: browser
  * @return two letter language code, lower case
  */
-function repos_getUserLocale() {
+function getUserLocale() {
 	global $possibleLocales;
 	static $locale = null;
 	if (!is_null($locale)) return $locale;
@@ -294,7 +294,7 @@ class Presentation {
 	 */
 	function getLocaleFile($name,$extension='.html') {
 		global $possibleLocales;
-		$locale = repos_getUserLocale();
+		$locale = getUserLocale();
 		$chosen = $this->getContentsFileInternal($locale,$name,$extension);
 		if (file_exists($chosen)) return $chosen;
 		foreach ($possibleLocales as $lo => $n) {
@@ -360,7 +360,7 @@ class Presentation {
 	}
 	
 	function _getThemeHeadTags() {
-		$theme = repos_getUserTheme();
+		$theme = getUserTheme();
 		$style = getWebappStatic().$theme.'style/';
 		return $this->_getAllHeadTags($style);
 	}

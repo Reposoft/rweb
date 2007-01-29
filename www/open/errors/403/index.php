@@ -7,7 +7,7 @@ require('../../../account/login.inc.php');
 
 $p = Presentation::getInstance();
 
-$url = repos_getSelfUrl();
+$url = getSelfUrl();
 
 // user friendly message only needed for remote clients. prevent multiple getFirstNon404Parent
 if (isRequestInternal()) {

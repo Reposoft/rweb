@@ -12,7 +12,7 @@ require("ServiceRequest.class.php");
 
 // responses for testing
 if (isset($_GET['redirect'])) {
-	header('Location: '.repos_getSelfUrl());
+	header('Location: '.getSelfUrl());
 	echo "redirecting";
 	exit;
 }
@@ -71,7 +71,7 @@ class TestServiceRequest extends UnitTestCase {
 	
 	function testExec() {
 		$service = new ServiceRequest('', array());
-		$service->uri = repos_getSelfUrl();
+		$service->uri = getSelfUrl();
 		$service->exec();
 		$this->assertEqual('{"message":"test","user":"tst","pass":"pwd"}', $service->getResponse());
 		$this->assertTrue($service->isOK());
@@ -80,7 +80,7 @@ class TestServiceRequest extends UnitTestCase {
 	}
 	
 	function testExcecHeadersOnly() {
-		$service = new ServiceRequest(repos_getSelfUrl(), array());
+		$service = new ServiceRequest(getSelfUrl(), array());
 		$service->setSkipBody();
 		$service->exec();
 		$headers = $service->getResponseHeaders();
@@ -94,7 +94,7 @@ class TestServiceRequest extends UnitTestCase {
 	}
 	
 	function testExcecNoService() {
-		$service = new ServiceRequest(repos_getSelfUrl(), array());
+		$service = new ServiceRequest(getSelfUrl(), array());
 		$service->setResponseTypeDefault();
 		$this->sendMessage("This test hangs in an infinite loop if the internal user agent string is not set.");
 		$service->exec();
@@ -103,12 +103,12 @@ class TestServiceRequest extends UnitTestCase {
 	
 	function testFollowRedirect() {
 		// without redirect
-		$service = new ServiceRequest(repos_getSelfUrl().'?redirect=1', array());
+		$service = new ServiceRequest(getSelfUrl().'?redirect=1', array());
 		$service->exec();
 		$this->assertEqual(0, $service->getRedirectCount());
 		$this->assertEqual(302, $service->getStatus());
 		// enable redirect
-		$service = new ServiceRequest(repos_getSelfUrl().'?redirect=1', array());
+		$service = new ServiceRequest(getSelfUrl().'?redirect=1', array());
 		$service->setFollowRedirects();
 		$service->exec();
 		$this->assertEqual(1, $service->getRedirectCount());
@@ -116,13 +116,13 @@ class TestServiceRequest extends UnitTestCase {
 	}
 	
 	function testAuthentication() {
-		$service = new ServiceRequest(repos_getSelfUrl().'?useryes', array());
+		$service = new ServiceRequest(getSelfUrl().'?useryes', array());
 		$service->exec();
 		$this->assertEqual(200, $service->getStatus());
 	}
 
 	function testAuthenticationFalse() {
-		$service = new ServiceRequest(repos_getSelfUrl().'?userno', array(), false);
+		$service = new ServiceRequest(getSelfUrl().'?userno', array(), false);
 		$service->exec();
 		$this->assertEqual(200, $service->getStatus());
 	}

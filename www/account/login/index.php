@@ -36,7 +36,7 @@ function isHttps($repository) {
 }
 
 function showUserLogin() {
-	$nexturl = repos_getSelfUrl() . "?login=user";
+	$nexturl = getSelfUrl() . "?login=user";
 	$presentation = Presentation::getInstance();
 	$presentation->assign('nexturl', $nexturl);
 	$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/index'));
@@ -50,7 +50,7 @@ function showLoginCancelled() {
 
 function showLoginFailed($targetUrl) {
 	//header('HTTP/1.1 401 Unauthorized');
-	$nexturl = repos_getSelfRoot().'/?logout&go='.rawurlencode('?login');
+	$nexturl = getSelfRoot().'/?logout&go='.rawurlencode('?login');
 	$presentation = Presentation::getInstance();
 	$presentation->assign('nexturl', $nexturl);
 	$presentation->assign('start', getParent(getWebapp())); // not the same host if the repository is ssl

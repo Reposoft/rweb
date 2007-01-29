@@ -66,7 +66,7 @@ if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/S
 if (isTargetSet()) {
 	// special case for the svn index anomaly that root path is "/" but no other paths have trailing slash
 	if (getTarget() == '//') {
-		header('Location: '.repos_getSelfUrl().'?'.str_replace('=//', '=/', repos_getSelfQuery()));
+		header('Location: '.getSelfUrl().'?'.str_replace('=//', '=/', getSelfQuery()));
 		exit;
 	}
 	targetLogin();
@@ -85,7 +85,7 @@ function enforceSSL() {
 	if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) {
 		// OK, this is secure, or SSL disabled
 	} else {
-		$secureUrl = str_replace('://','s://', repos_getSelfUrl().'?'.repos_getSelfQuery());
+		$secureUrl = str_replace('://','s://', getSelfUrl().'?'.getSelfQuery());
 		header("Location: $secureUrl");
 		exit;
 	}
@@ -165,7 +165,7 @@ function login_followRedirect($fromUrl, $headers) {
 	$location = $headers['Location'];
 	$from = strAfter($fromUrl, getRepository());
 	$to = strAfter($location, getRepository());
-	$url = repos_getSelfUrl().'?'.repos_getSelfQuery();
+	$url = getSelfUrl().'?'.getSelfQuery();
 	$url = str_replace($from, $to, $url);
 	header('Location: '.$url);
 	exit;

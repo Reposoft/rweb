@@ -171,7 +171,7 @@ System::createFileWithContents($newsfile, '<?xml version="1.0" encoding="utf-8"?
 		<title>Check out the refreshed demo project</title>
 		<id>tag:repos.se,demoproject,'.(microtime()+1).'</id>
 		<updated>'.date('Y-m-d\TH:i:sO').'</updated>
-		<link href="'.repos_getSelfRoot().'/testrepo/demoproject/"/>
+		<link href="'.getSelfRoot().'/testrepo/demoproject/"/>
 		<summary>Repository contents have been reset.</summary>
 	</entry>
 </feed>

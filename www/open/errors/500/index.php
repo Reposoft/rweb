@@ -6,7 +6,7 @@ require('../../../conf/Presentation.class.php');
 
 $p = Presentation::getInstance();
 
-$url = repos_getSelfUrl();
+$url = getSelfUrl();
 
 $p->showError('
 This is a server error that could not be handled automatically, at the URL '.$url.'.

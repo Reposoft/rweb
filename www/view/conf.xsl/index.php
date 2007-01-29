@@ -12,8 +12,8 @@ require(dirname(dirname(dirname(__FILE__))).'/conf/repos.properties.php');
 $conf = array(
 	'repos_web' => getConfig('repos_web'),
 	'repo_url' => getConfig('repo_url'),
-	'lang' => repos_getUserLocale(),
-	'theme' => repos_getUserTheme()
+	'lang' => getUserLocale(),
+	'theme' => getUserTheme()
 );
 foreach($conf as $key => $val) {
 	echo("<xsl:variable name=\"$key\">$val</xsl:variable>\n");

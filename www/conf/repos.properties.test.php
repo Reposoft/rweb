@@ -54,7 +54,7 @@ class TestReposProperties extends UnitTestCase {
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
 		$_SERVER['REQUEST_URI'] = '';
-		$this->assertEqual('http://my.host', repos_getSelfUrl());
+		$this->assertEqual('http://my.host', getSelfUrl());
 	}
 
 	function testGetSelfUrlS() {
@@ -62,7 +62,7 @@ class TestReposProperties extends UnitTestCase {
 		$_SERVER['HTTPS'] = 'on';
 		$_SERVER['SERVER_NAME'] = 'my.host';
 		$_SERVER['REQUEST_URI'] = '/';
-		$this->assertEqual('https://my.host/', repos_getSelfUrl());
+		$this->assertEqual('https://my.host/', getSelfUrl());
 	}
 	
 	function testGetSelfUrlPort() {
@@ -70,7 +70,7 @@ class TestReposProperties extends UnitTestCase {
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
 		$_SERVER['REQUEST_URI'] = '/';
-		$this->assertEqual('http://my.host:123/', repos_getSelfUrl());
+		$this->assertEqual('http://my.host:123/', getSelfUrl());
 	}
 
 	function testGetSelfUrlPortS() {
@@ -78,7 +78,7 @@ class TestReposProperties extends UnitTestCase {
 		$_SERVER['HTTPS'] = 'on';
 		$_SERVER['SERVER_NAME'] = 'my.host';
 		$_SERVER['REQUEST_URI'] = '/';
-		$this->assertEqual('https://my.host:123/', repos_getSelfUrl());
+		$this->assertEqual('https://my.host:123/', getSelfUrl());
 	}
 
 	function testGetSelfUrlFile() {
@@ -86,7 +86,7 @@ class TestReposProperties extends UnitTestCase {
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
 		$_SERVER['REQUEST_URI'] = '/index.html';
-		$this->assertEqual('http://my.host/index.html', repos_getSelfUrl());
+		$this->assertEqual('http://my.host/index.html', getSelfUrl());
 	}
 	
 	function testGetSelfUrlPath() {
@@ -94,7 +94,7 @@ class TestReposProperties extends UnitTestCase {
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
 		$_SERVER['REQUEST_URI'] = '/home/';
-		$this->assertEqual('http://my.host/home/', repos_getSelfUrl());
+		$this->assertEqual('http://my.host/home/', getSelfUrl());
 	}
 	
 	function testGetSelfUrlQ() {
@@ -102,7 +102,7 @@ class TestReposProperties extends UnitTestCase {
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
 		$_SERVER['REQUEST_URI'] = '/test/?';
-		$this->assertEqual('http://my.host/test/', repos_getSelfUrl());
+		$this->assertEqual('http://my.host/test/', getSelfUrl());
 	}
 
 	function testGetSelfUrlQuery() {
@@ -110,7 +110,7 @@ class TestReposProperties extends UnitTestCase {
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
 		$_SERVER['REQUEST_URI'] = '/index.html?variable';
-		$this->assertEqual('http://my.host/index.html', repos_getSelfUrl());
+		$this->assertEqual('http://my.host/index.html', getSelfUrl());
 	}
 
 	function testGetSelfUrlQuery2() {
@@ -118,7 +118,7 @@ class TestReposProperties extends UnitTestCase {
 		unset($_SERVER['HTTPS']);
 		$_SERVER['SERVER_NAME'] = 'my.host';
 		$_SERVER['REQUEST_URI'] = '/test/?variable=value&another';
-		$this->assertEqual('http://my.host/test/', repos_getSelfUrl());
+		$this->assertEqual('http://my.host/test/', getSelfUrl());
 	}
 	
 }
