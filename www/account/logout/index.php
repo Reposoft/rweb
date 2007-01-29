@@ -62,13 +62,13 @@ function doLogoutVoid() {
  */
 function getAfterLogoutUrl() {
 	if (isset($_GET['go'])) {
-		return repos_getSelfRoot().rawurldecode($_GET['go']);
+		return getSelfRoot().rawurldecode($_GET['go']);
 	}
 	return getWebapp();
 }
 
 function getVerifyUrl() {
-	$url = repos_getSelfUrl() . '?logout=verify';
+	$url = getSelfUrl() . '?logout=verify';
 	if (isset($_GET['go'])) {
 		$url .= '&go='.$_GET['go'];
 	}
