@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Repos thumbnails plugin</title>
+<!-- plugins -->
+<script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="thumbnails.js"></script>
+<!-- for unit testing -->
+<script type="text/javascript" src="../../scripts/unittest.js"></script>
+</head>
+<body>
+
+<h1>Repos thumbnailer plugin</h1>
+<p>Thumbnailing is built in as open/thumb/, but not integrated with the urser interface.
+This plugin identifies "open" links and adds thumbnail button.</p>
+<p>Should be possible, in repository view, to click a command that adds thumbnails to all image files in the list,
+even when there are no "thmbnail" classes.</p>
+<p>Might be combined with thickbox to show the image in a popup instead of a new page when clicked.</p>
+<p>If there are many thumbnails on a page, this plugin should do proper queuing, so that the first thumbnail is shown before the next is requested.</p>
+
+<h2>Directly embed in page (no javascript)</h2>
+<img src="../../open/thumb/?target=/demoproject/trunk/public/images/b.gif&rev="/>
+
+<h2>Directory listing</h2>
+<div id="commandbar"><span class="command">some command</span></div>
+<p id="fullpath" title="fullpath (ususally hidden)">/demoproject/trunk/public/images/</p>
+<!--<div id="row:b.ai"><a id="open:b.ai" class="file" href="/demoproject/trunk/public/images/b.ai">b.ai</a></div>-->
+<div id="row:b.png"><a id="open:b.png" class="file" href="/demoproject/trunk/public/images/b.png">b.png</a></div>
+
+<h2>File history (not folder history)</h2>
+
+
+</body>
+</html>
