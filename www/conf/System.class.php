@@ -417,6 +417,8 @@ class System {
 	 * @return String absolute path, folder, existing
 	 */
 	function _getSystemTemp() {
+		static $tempfolder = null;
+		if (!is_null($tempfolder)) return $tempfolder;
 		$type = '';
 		if (getenv('TMP')) {
 			$type = 'TMP';
@@ -443,7 +445,8 @@ class System {
 		$tempdir = rtrim(toPath($tempdir),'/').'/';
 		if (strlen($tempdir) < 4) { trigger_error('Can not get the system temp dir, "'.$tempdir.'" is too short. Method: '.$type, E_USER_ERROR); }
 		
-		return $tempdir;
+		$tempfolder = $tempdir;
+		return $tempfolder;
 	}
 }
 

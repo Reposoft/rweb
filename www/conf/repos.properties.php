@@ -257,11 +257,13 @@ function urlEncodeNames($url) {
  * @return the path to read configuratio file from, usually the same as admin_folder (from properties file in that folder)
  */
 function _getConfigFolder() {
-	$d = dirname(dirname(dirname(dirname(__FILE__)))).DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR;
-	if (file_exists($d)) return $d;
+	static $c = null;
+	if (!is_null($c));return $c;
+	$c = dirname(dirname(dirname(dirname(__FILE__)))).DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR;
+	if (file_exists($c)) return $c;
 	// old location
-	$d = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'repos-config'.DIRECTORY_SEPARATOR;
-	if (file_exists($d)) return $d;
+	$c = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'repos-config'.DIRECTORY_SEPARATOR;
+	if (file_exists($c)) return $c;
 	trigger_error('Could not find configuration file location ../../admin/ or ../repos-config/', E_USER_ERROR);
 }
 
