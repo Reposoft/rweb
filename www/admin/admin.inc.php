@@ -5,7 +5,7 @@
  * 
  * @package admin
  */
-
+require_once( dirname(dirname(__FILE__)) . "/conf/System.class.php" );
 require_once( dirname(dirname(__FILE__)) . "/conf/repos.properties.php" );
 require_once( dirname(dirname(__FILE__)) . "/conf/Report.class.php" );
 
@@ -43,7 +43,7 @@ function html_end($code = 0) {global $report; $report->display(); }
 function isRepository($localPath) {
 	if (!file_exists($localPath))
 		return false;
-	$command = getCommand("svnlook") . " uuid $localPath";
+	$command = System::getCommand("svnlook") . " uuid $localPath";
 	$output = array();
 	$return = 0;
 	$uuid = exec($command, $output, $return);
@@ -57,7 +57,7 @@ function isRepository($localPath) {
  * @return revision number integer
  */
 function getHeadRevisionNumber($repository) {
-	$command = getCommand("svnlook") . " youngest $repository";
+	$command = System::getCommand("svnlook") . " youngest $repository";
 	$output = array();
 	$return = 0;
 	$rev = (int) exec($command, $output, $return);

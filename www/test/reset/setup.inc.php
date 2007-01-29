@@ -74,8 +74,8 @@ function setup_deleteCurrent() {
 function setup_getTempWorkingCopy() {
 	$wc = System::getTempFolder('test-wc');
 
-	if (file_exists($wc)) deleteFolder($wc);
-	createFolder($wc);
+	if (file_exists($wc)) System::deleteFolder($wc);
+	System::createFolder($wc);
 	return $wc;
 }
 

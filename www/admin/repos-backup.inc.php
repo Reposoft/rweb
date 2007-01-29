@@ -8,7 +8,7 @@
 require( dirname(__FILE__) . '/admin.inc.php' );
 require( dirname(dirname(__FILE__)) . '/conf/Command.class.php' );
 
-define('TEMP_DIR',getTempDir('backup'));
+define('TEMP_DIR',System::getApplicationTemp('backup'));
 define('BACKUP_SCRIPT_VERSION','$LastChangedRevision$');
 define('BACKUP_SIZE', 100*1024*1024); // recommended unpacked size of dump files
 define('BACKUP_MAX_TIME', 30*60); // maximum time in seconds for dumping and packing one backup increment (with the above size)
@@ -23,7 +23,7 @@ function create($repository) {
 		debug ("Creating repository directory $repository");
 		mkdir($repository, 0700);
 	}
-	$command = getCommand("svnadmin") . " create $repository";
+	$command = System::getCommand("svnadmin") . " create $repository";
 	$output = array();
 	$return = 0;
 	$result = (int) exec($command, $output, $return);
@@ -128,7 +128,7 @@ function packageDumpfile($tempfile, $path) {
 	if ($originalmd5 != $samemd5) error("MD5 sum for original contents does not match unpacked.");
 	info("Compressed ".basename($path)." with original MD5 sum ".$originalmd5.' in '.(time()-$starttime).' seconds');
 	// done
-	deleteFile(toPath($tempfile));
+	System::deleteFile(toPath($tempfile));
 	return true;
 }
 
@@ -141,7 +141,7 @@ function packageDumpfile($tempfile, $path) {
  * @param fileprefix Filenames up to first revision number, for example "myrepo-" for myrepo-00?-to-0??.svndump.gz
  */
 function load($repository, $backupPath, $fileprefix) {
-	define("LOADCOMMAND",getCommand('svnadmin') . " load $repository");
+	define("LOADCOMMAND",System::getCommand('svnadmin') . " load $repository");
 
 	// validate input
 	if ( strlen($backupPath)<3 )
@@ -181,7 +181,7 @@ function load($repository, $backupPath, $fileprefix) {
  * @return true if repository is valid
  */
 function verify($repository) {
-	define("VERIFYCOMMAND", getCommand('svnadmin') . " verify $repository" );
+	define("VERIFYCOMMAND", System::getCommand('svnadmin') . " verify $repository" );
 	set_time_limit(BACKUP_MAX_TIME);
 	$return = 0;
 	exec( VERIFYCOMMAND, $output, $return );
@@ -304,12 +304,12 @@ function loadDumpfile($file,$loadcommand) {
 		if ( ! gunzipInternal($file,$tmpfile) ) fatal("Could not extract file $file");
 		$command = "$loadcommand < $tmpfile";
 	} else {
-		$command = getCommand('gunzip') . " -c $file | $loadcommand";
+		$command = System::getCommand('gunzip') . " -c $file | $loadcommand";
 	}
 	$return = 0;
 	debug("Executing: $command");
 	exec( $command, $output, $return);
-	deleteFile( $tmpfile );
+	System::deleteFile( $tmpfile );
 	return $return;
 }
 
