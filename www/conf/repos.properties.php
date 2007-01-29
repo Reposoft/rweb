@@ -258,7 +258,7 @@ function urlEncodeNames($url) {
  */
 function _getConfigFolder() {
 	static $c = null;
-	if (!is_null($c));return $c;
+	if (!is_null($c)) return $c;
 	$c = dirname(dirname(dirname(dirname(__FILE__)))).DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR;
 	if (file_exists($c)) return $c;
 	// old location
