@@ -172,7 +172,7 @@ function load($repository, $backupPath, $fileprefix) {
 			fatal("Error loading backup file $file[0], returned $return. Repository loading stopped.");
 		}
 	}
-	info( "Successfuly loaded backup revisions up to " . $head . " into repository $repository." );
+	info( "Successfully loaded backup revisions up to " . $head . " into repository $repository." );
 }
 
 /**

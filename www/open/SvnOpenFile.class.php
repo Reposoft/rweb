@@ -7,55 +7,10 @@ if (!class_exists('SvnOpen')) require(dirname(__FILE__).'/SvnOpen.class.php');
 if (!class_exists('ServiceRequest')) require(dirname(__FILE__).'/ServiceRequest.class.php');
 
 /**
- * Returns the mime type for a file in the repository.
- * If revision is HEAD (which it is when the second argument is omited)
- * the mime type is read from the HTTP header of the repository resource. That gives us defaults
- * based on filename extension, without the need to maintain our ow list.
- * If revision number is not head, login_getMimeTypeProperty is used.
- * @param targetUrl the file
- * @param revision, optional revision number, if not HEAD
- * @return the mime type string, or false if unknown (suggesting application/x-unknown)
- * @deprecated use SvnOpenFile class instead
- */
-function login_getMimeType($targetUrl, $revision=HEAD) {
-	if ($revision!=HEAD) {
-		return login_getMimeTypeProperty($targetUrl, $revision);
-	}
-	$s = new ServiceRequest($taregetUrl);
-	$s->setSkipBody();
-	$s->exec();
-	$headers = $s->getResponseHeaders();
-	if (!isset($headers['Content-Type'])) trigger_error("Could not get content type for target $targetUrl");
-	$c = $headers['Content-Type'];
-	if (strContains($c, ';')) return substr($c, 0, strpos($c, ';'));
-	return $c;
-}
-
-/**
- * Returns the value of the svn:mime-type property of a file with revision number.
- *
- * @param String $targetUrl the file url
- * @param String $revision the revision number, integer or HEAD
- * @return String mime type, or false if property not set.
- * @deprecated use SvnOpenFile class instead
- */
-function login_getMimeTypeProperty($targetUrl, $revision) {
-	$cmd = new SvnOpen('propget');
-	$cmd->addArgOption('svn:mime-type');
-	$cmd->addArgUrlPeg($targetUrl, $revision);
-	$cmd->exec();
-	if ($cmd->getExitcode()) trigger_error("Could not find the file '$targetUrl' revision $revision in the repository.", E_USER_ERROR );
-	$result = $cmd->getOutput();
-	if (count($result) == 0) { // mime type property not set, return default
-		return false;
-	}
-	return $result[0];
-}
-
-/**
  * Convert filesize from bytes to B, kB or MB.
  *
  * @param String $Bytes filesize in bytes
+ * @package open
  */
 function formatSize($Bytes) {
 	if ($Bytes < 1000) {
@@ -268,7 +223,7 @@ class SvnOpenFile {
 		// 1: If HEAD, simply get the headers from apache
 		if ($this->isLatestRevision()) return $this->_getMimeTypeFromHttpHeaders();
 		// 2: If revision != head, get the svn:mime-type property
-		$prop = login_getMimeTypeProperty($this->getUrl(), $this->getRevision());
+		$prop = $this->getMimeTypePropertyValue();
 		if ($prop) return $prop;
 		// 3: If revision != head, guess the mime type for relevant (common) extensions, use default if not
 		// if it exists in HEAD we're lucky
@@ -410,6 +365,23 @@ class SvnOpenFile {
 	function getBranchedFromRevision() {
 		// TODO need to use log to find this
 		return -1;
+	}
+	
+	/**
+	 * Returns the value of the svn:mime-type property of a file with revision number.
+	 * @return String mime type, or false if property not set.
+	 */
+	function getMimeTypePropertyValue() {
+		$cmd = new SvnOpen('propget');
+		$cmd->addArgOption('svn:mime-type');
+		$cmd->addArgUrlPeg($this->getUrl(), $this->getRevision());
+		$cmd->exec();
+		if ($cmd->getExitcode()) trigger_error("Could not find the file '$targetUrl' revision $revision in the repository.", E_USER_ERROR );
+		$result = $cmd->getOutput();
+		if (count($result) == 0) { // mime type property not set, return default
+			return false;
+		}
+		return $result[0];
 	}
 	
 	/**

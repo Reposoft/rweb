@@ -26,12 +26,12 @@ class TestSvnOpen extends UnitTestCase {
 	function testGetSvnSwitches() {
 		$_SERVER['PHP_AUTH_USER'] = 'a b';
 		$_SERVER['PHP_AUTH_PW'] = 'c"d';
-		$this->sendMessage(login_getSvnSwitches());
-		$this->assertTrue(strContains(login_getSvnSwitches(), '--username="a b"'), "Username should be escaped for command line.");
+		$this->sendMessage(_svnopen_getSvnSwitches());
+		$this->assertTrue(strContains(_svnopen_getSvnSwitches(), '--username="a b"'), "Username should be escaped for command line.");
 		if (System::isWindows()) {
-			$this->assertTrue(strContains(login_getSvnSwitches(), '--password="c""d"'), "Password should be escaped for command line.");
+			$this->assertTrue(strContains(_svnopen_getSvnSwitches(), '--password="c""d"'), "Password should be escaped for command line.");
 		} else {
-			$this->assertTrue(strContains(login_getSvnSwitches(), '--password="c\\"d"'), "Password should be escaped for command line.");
+			$this->assertTrue(strContains(_svnopen_getSvnSwitches(), '--password="c\\"d"'), "Password should be escaped for command line.");
 		}
 		unset($_SERVER['PHP_AUTH_USER']);
 		unset($_SERVER['PHP_AUTH_PW']);

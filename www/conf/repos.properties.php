@@ -252,12 +252,17 @@ function urlEncodeNames($url) {
 
 // ----- internal functions -----
 
+/**
+ * This (private) function is needed from Command, SvnOpen and _getPropertiesFile.
+ * @return the path to read configuratio file from, usually the same as admin_folder (from properties file in that folder)
+ */
 function _getConfigFolder() {
-	// TODO use admin_folder
 	$d = dirname(dirname(dirname(dirname(__FILE__)))).DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR;
 	if (file_exists($d)) return $d;
 	// old location
-	return dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'repos-config'.DIRECTORY_SEPARATOR;
+	$d = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'repos-config'.DIRECTORY_SEPARATOR;
+	if (file_exists($d)) return $d;
+	trigger_error('Could not find configuration file location ../../admin/ or ../repos-config/', E_USER_ERROR);
 }
 
 function _getPropertiesFile() {

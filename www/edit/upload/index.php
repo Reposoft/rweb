@@ -6,8 +6,6 @@
 require("../../conf/Presentation.class.php");
 require("../SvnEdit.class.php");
 require("mimetype.inc.php");
-// and here's where the login_getMimeType function is currently
-require("../../open/SvnOpenFile.class.php");
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 

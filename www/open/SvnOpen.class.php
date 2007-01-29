@@ -25,9 +25,9 @@ if (!file_exists(SVN_CONFIG_DIR)) {
 
 /**
  * @return Mandatory arguments to the svn command, safe for command line (config dir path is escaped)
- * @deprecated should be done only by the SvnOpen command
+ * @package open
  */
-function login_getSvnSwitches() {
+function _svnopen_getSvnSwitches() {
 	$auth = '--username='.Command::_escapeArgument(getReposUser()).' --password='.Command::_escapeArgument(_getReposPass()).' --no-auth-cache';
 	$options = '--non-interactive --config-dir '.Command::_escapeArgument(SVN_CONFIG_DIR);
 	return $auth.' '.$options;
@@ -142,7 +142,7 @@ class SvnOpen {
 	}
 	
 	function _addSvnOptions() {
-		$this->command->addArgOption(login_getSvnSwitches());
+		$this->command->addArgOption(_svnopen_getSvnSwitches());
 	}
 	
 	/**
