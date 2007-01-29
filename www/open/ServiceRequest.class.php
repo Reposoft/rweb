@@ -12,6 +12,7 @@
  */
 
 if (!function_exists('curl_init')) trigger_error('Service calls require the PHP "curl" extension');
+// not dependent on the System class, this is only web functions
 
 /**
  * The User-Agent: header contents for requests from this class
@@ -200,7 +201,7 @@ class ServiceRequest {
 	 */
 	function _buildUrl() {
 		$url = $this->uri;
-		if (!isAbsolute($url)) $url = getWebapp().$url;
+		if (!strpos($url,'://')) $url = getWebapp().$url;
 		$url .= strpos($url, '?') ? '&' : '?';
 		foreach ($this->parameters as $key => $value) {
 			$url .= $key.'='.rawurlencode($value).'&';
@@ -244,7 +245,6 @@ class ServiceRequest {
 	 *	 "500 Internal Server Error" if the service generated an error
 	 */
 	function getStatus() {
-		//return getHttpStatusFromHeader($this->headers[0]);
 		return $this->info['http_code'];
 	}
 	
@@ -299,17 +299,5 @@ class ServiceRequest {
 	}
 	
 }
-
-/**
- * Gets the status code from an HTTP reponse header string like "HTTP/1.1 200 OK" 
- * @deprecated this funcitonality is built into the cURL extension.
-function getHttpStatusFromHeader($httpStatusHeader) {
-	if(ereg('HTTP/1...([0-9]+).*', $httpStatusHeader, $match)) {
-		return $match[1];
-	} else {
-		trigger_error("Could not get HTTP status code for header: ".$httpStatusHeader, E_USER_ERROR);
-	}
-}
- */
 
 ?>

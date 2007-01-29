@@ -15,10 +15,8 @@
  * @package conf
  */
 
-// include repos.properties.php only if repos_runCommand is not defined (to allow mocks for testing)
 if (!class_exists('System')) require(dirname(__FILE__).'/System.class.php');
-if (!function_exists('_repos_getScriptWrapper')) require(dirname(__FILE__).'/repos.properties.php');
-// TODO require only the System functions instead, and move runCommand functions to this class
+if (!function_exists('_getConfigFolder')) require(dirname(__FILE__).'/repos.properties.php');
 
 // the actual command execution, can be mocked
 if (!function_exists('_command_run')) {
@@ -41,7 +39,7 @@ function escapeCommand($command) {
  * @deprecated use the Command class
  */
 function escapeArgument($argument) {
-	if (isWindows()) {
+	if (System::isWindows()) {
 		return _escapeArgumentWindows($argument);
 	} else {
 		return _escapeArgumentNix($argument);
@@ -109,14 +107,14 @@ function repos_runCommand($commandName, $argumentsString) {
  * Compiles the exact string to run on the command line
  */
 function _repos_getFullCommand($commandName, $argumentsString) {
-	$run = getCommand($commandName);
+	$run = System::getCommand($commandName);
 	if ($run === false) $run = $commandName; // expect that it was validated in Command class.
 	// detect output redirection to file (path must be surrounded with quotes)
 	$tofile = preg_match('/^.*>>?\s+".*"\s*$/', $argumentsString);
 	$redirect = ''; // extra output redirection
 	if (!$tofile) $redirect = ' 2>&1';
 	// take care of encoding and wrapping, arguments have already been escaped
-	$argumentsString = toShellEncoding($argumentsString);
+	$argumentsString = System::toShellEncoding($argumentsString);
 	$wrapper = _repos_getScriptWrapper();
 	if (strlen($wrapper)>0) {
 		// make one argument (to the wrapper) of the entire command

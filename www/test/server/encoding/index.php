@@ -46,8 +46,9 @@ echoConverted($var, "UTF-8");
 echo("-- use command line --\n");
 
 require('../../../conf/repos.properties.php');
+require('../../../conf/System.class.php');
 
-$tmp = tempnam(str_replace('/','\\',rtrim(getTempDir(),'/')), 'cmdtest');
+$tmp = System::getTempFile('testencoding');
 
 echo("run 'echo $var > $tmp', then passthru file\n");
 //passthru('echo'. " $var > $tmp 2>&1");
@@ -63,7 +64,7 @@ echo($filecontents);
 echo("Detected encoding of contents read from file: ".mb_detect_encoding($filecontents)."\n");
 echo(getchars($filecontents));
 
-//deleteFile(toPath($tmp));
+//System::deleteFile(toPath($tmp));
 echo('</pre></body></html>');
 
 function echoConverted($string, $encoding) {

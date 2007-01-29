@@ -19,9 +19,6 @@ $report = new Report('set up test repository');
 // name the temp dir where the repository will be. This dir will be removed recursively.
 //$test_repository_folder="test.repos.se";
 
-// can not use the repos temp dir because it can be deleted anytime
-//$test = getTempDir($test_repository_folder);
-//$test = getSystemTempDir().$test_repository_folder.'/';
 $allow = getConfig('allow_reset');
 if ($allow != 1) $report->fatal('Not allowed to reset this repository. Set allow_reset = 1 in config file');
 
@@ -58,7 +55,7 @@ function setup_deleteCurrent() {
 		// repositories usually have write protected contents
 		if (file_exists($repo.'format')) chmod($repo.'format', 0755);
 		if (file_exists($repo.'db/format')) chmod($repo.'db/format', 0755);
-		deleteFolder($repo);
+		System::deleteFolder($repo);
 	}
 	
 	$report->info("Create empty repository folder at $repo");
@@ -75,7 +72,7 @@ function setup_deleteCurrent() {
 }
 
 function setup_getTempWorkingCopy() {
-	$wc = getTempDir('test-wc');
+	$wc = System::getTempFolder('test-wc');
 
 	if (file_exists($wc)) deleteFolder($wc);
 	createFolder($wc);
@@ -95,7 +92,7 @@ function setup_createTestUsers() {
 	// admin:admin
 	'admin:$apr1$JW3.....$r0aF2nCj00/Q6I8438Xsm1'."\n";
 	
-	if (createFileWithContents($userfile, $users, true, true)) {
+	if (System::createFileWithContents($userfile, $users, true, true)) {
 		$report->ok("Successfully created user account file $userfile with MD5 encoded passwords");
 	} else {
 		$report->fail("Could not create user account file $userfile");
@@ -120,7 +117,7 @@ function setup_createApacheLocation($extraDirectives='', $extraAfterLocation='')
 	</Location>
 	$extraAfterLocation
 	";
-	if (createFileWithContents($conffile, $conf, true, true)) {
+	if (System::createFileWithContents($conffile, $conf, true, true)) {
 		$report->ok("Successfully created apache config file $conffile");
 	} else {
 		$report->fail("Could not create apache config file $conffile");
@@ -132,7 +129,7 @@ function setup_createApacheLocation($extraDirectives='', $extraAfterLocation='')
 function setup_reloadApacheIfPossible() {
 	global $report, $conflocation;
 	$report->info("Trying to restart Apache2 service");
-	if (isWindows()) {
+	if (System::isWindows()) {
 		$check = new Command('sc', false);
 		$check->addArgOption('query');
 		$check->addArgOption('Apache2');
@@ -154,7 +151,7 @@ function setup_reloadApacheIfPossible() {
 		'sc start Apache2 >NUL'."\n";
 		
 		$bat = System::getApplicationTemp('reset').'restartapache.bat';
-		createFileWithContents($bat, $script, true, true);
+		System::createFileWithContents($bat, $script, true, true);
 		
 		// it is not easy to start a process in the background on windows
 		$WshShell = new COM("WScript.Shell");

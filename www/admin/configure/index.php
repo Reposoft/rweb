@@ -33,7 +33,7 @@ $repodir = getConfig( 'local_path' );
 $reposweb = getWebapp();
 $admindir = getConfig( 'admin_folder' );
 $repouri = ereg_replace("[[:alpha:]]+://[^-/<>[:space:]]+[[:alnum:]/]","/", $repourl);
-$user = exec( getCommand('whoami') );
+$user = exec( System::getCommand('whoami') );
 $self = $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'];
 $date = date("Y-m-d H:i:s");
 $backupdir = getConfig( 'backup_folder' );
@@ -108,13 +108,13 @@ if ( isset($_GET['download']) ) {
 
 function repository() {
     global $repodir;
-	$cmd = getCommand( 'svnadmin' );
+	$cmd = System::getCommand( 'svnadmin' );
 	$user = 'administrator';
 	// create command
 	showHeader("Create repository $repodir accessible for system user $user","#" );
 	line( "mkdir $repodir" );
 	line( "$cmd create $repodir" );
-	if ( ! isWindows() ) {
+	if ( ! System::isWindows() ) {
 		$groups = array();
 		exec( 'groups', $groups );
 		if ( ! isset($groups[0]) )

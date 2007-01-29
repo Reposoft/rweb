@@ -1,5 +1,11 @@
 <?php
+/**
+ * Used to save error reports sent from browser javascript.
+ * (the ambition is good but is it used?)
+ * @package errorlog
+ */
 require(dirname(dirname(__FILE__)).'/conf/repos.properties.php');
+require(dirname(dirname(__FILE__)).'/conf/System.class.php');
 
 // dispatcher
 if ($_SERVER['REQUEST_METHOD']=='POST') {
@@ -13,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 }
 
 function getLogfile() {
-	return getTempDir('errorlog').'errorlog.txt';
+	return System::getApplicationTemp('errorlog').'errorlog.txt';
 }
 
 function clear() {

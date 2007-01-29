@@ -145,82 +145,10 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertEqual(false, verifyLogin($url));
 	}
 	
-	function testGetHttpHeaders() {
-		$headers = getHttpHeaders("http://www.repos.se/repos/");
-		$this->assertTrue(count($headers) > 0);
-		$this->assertEqual("HTTP/1.1 200 OK", $headers[0]);
-	}
-	
-	function testGetHttpHeadersAuth() {	
-		$headers = getHttpHeaders(TESTREPO.'/demoproject/trunk/noaccess/');
-		$this->assertTrue(count($headers) > 0);
-		$this->assertEqual("HTTP/1.1 403 Forbidden", $headers[0]);
-	}
-	
-	// one of the test cases below may fail on for example SuSE 9.1 + Apache 2 + svn 1.2.3 where incorrect header is sent
-	// see the selenium test case for invalid login
-	
-	function testGetHttpHeadersAuthenticationFailed() {
-		$_SERVER['PHP_AUTH_USER'] = 'test';
-		$_SERVER['PHP_AUTH_PW'] = 'qwery';
-		$headers = getHttpHeaders(TESTREPO.'/test/trunk/');
-		$this->assertTrue(count($headers) > 0);
-		// with an invalid username, we expect another login attempt
-		$this->assertEqual("HTTP/1.1 401 Authorization Required", $headers[0]);
-	}
-
-	function testGetHttpHeadersAuthorizationFailed() {
-		$_SERVER['PHP_AUTH_USER'] = 'test';
-		$_SERVER['PHP_AUTH_PW'] = 'test';
-		// user "test" does not have access to repository root
-		$headers = getHttpHeaders(TESTREPO.'/demoproject/trunk/noaccess/');
-		$this->assertTrue(count($headers) > 0);
-		// with a valid username, but no access according to ACL, we expect to see an access denied page
-		$this->sendMessage("Subversion 1.2.x seems to return wrong code for folder that authenticated user can't access.");
-		$this->assertEqual("HTTP/1.1 403 Forbidden", $headers[0]);
-	}
-	
 	function testGetFirstNon404Parent() {
 		$url = login_getFirstNon404Parent(TESTHOST."/repos/adsfawerwreq/does/not/exist.no", $status);
 		$this->assertEqual(TESTHOST."/repos/", $url);
 		$this->assertEqual(200, $status);
-	}
-		
-	// ---------- HTTP header output for different login conditions ---------
-	// not real tests
-	
-	function testGetHttpHeadersStart() {
-		$headers = getHttpHeaders("http://www.repos.se/");
-		echo("---- headers from the repos.se start page ----\n");
-		$this->sendMessage($headers);
-	}
-	
-	function testGetHttpHeadersInsecure() {
-		$headers = getHttpHeaders(TESTREPO);
-		echo("---- no login attempted, should be 401 Authorization Required with realm ----\n");
-		$this->sendMessage($headers);
-	}
-
-	function testGetHttpHeadersInsecureAuth() {
-		$headers = getHttpHeaders(TESTREPO,'nonexistinguser','qwerty');
-		echo("---- login attempted but invalid credentials, should be 401 ----\n");
-		$this->sendMessage($headers);
-	}
-
-	function testGetHttpHeadersInsecureAccessControl() {
-		$headers = getHttpHeaders(TESTREPO,'test','test');
-		echo("---- login ok, but access denied by ACL, should be 403 ----");
-		$this->sendMessage($headers);
-	}	
-	
-	function testGetHttpHeadersSecureAuth() {
-		if(login_isSSLSupported()) {
-			$headers = getHttpHeaders("https://www.repos.se/sweden");
-			echo("---- SSL headers, no login: ----\n");
-			$this->sendMessage($headers);
-		} else {
-			echo("SSL is not supported on this server\n");
-		}
 	}
 	
 }

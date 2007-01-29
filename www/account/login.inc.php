@@ -60,6 +60,7 @@
  */
 if (!function_exists('getRepository')) require(dirname(dirname(__FILE__)).'/conf/repos.properties.php');
 if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/ServiceRequest.class.php');
+// not dependent on the System class, this is only web functions
 
 // do automatic login if a target is specified the standard way
 if (isTargetSet()) {
@@ -141,12 +142,19 @@ function verifyLogin($targetUrl) {
 	$s = $request->getStatus();
 	if ($s==301) login_followRedirect($targetUrl, $request->getResponseHeaders());
 	// allow authentication with parent if the current target is no longer in the repository
-	if ($s==404) login_getFirstNon404Parent(getParent($targetUrl), $s);
+	if ($s==404) login_getFirstNon404Parent(_login_getParentUrl($targetUrl), $s);
 	// accepted codes
 	if ($s==200) return true;
 	if ($s==401 || $s==403) return false;
 	trigger_error("The target URL '$targetUrl' can not be used to validate login. Returned HTTP status code '$s'.", E_USER_ERROR);
 	return false;
+}
+
+/**
+ * @return the parent folder (with trailing slash) for an absolute URL.
+ */
+function _login_getParentUrl($url) {
+	return substr($url, 0, strrpos(rtrim($url,'/'), '/')).'/';
 }
 
 /**
@@ -169,17 +177,11 @@ function login_followRedirect($fromUrl, $headers) {
  * @return the url of a resource that exists, false if none found, same as URL if URL exists
  */
 function login_getFirstNon404Parent($url, &$status) {
-	$user = null;
-	$pass = null;
-	if (isRepositoryUrl($url)) {
-		$user = getReposUser();
-		$pass = _getReposPass();
-	}
-	$status = getHttpStatus($url, $user, $pass);
+	$status = _login_getHttpStatus($url);
 	while ($status==404) {
-		$url = getParent($url);
+		$url = _login_getParentUrl($url);
 		if (!$url) return false;
-		$status = getHttpStatus($url, $user, $pass);
+		$status = _login_getHttpStatus($url);
 	}
 	return $url;
 }
@@ -227,27 +229,14 @@ function login_getAuthNameFromRepository($targetUrl) {
 }
 
 /**
+ * Convenience method to read response headers using the ServiceRequest class
  * @return the HTTP status code for the URL, with optional user credentials
- * @deprecated use ServiceRequest class, user and password parameter to this method is no longer effective
  */
-function getHttpStatus($targetUrl, $user=null, $pass=null) {
+function _login_getHttpStatus($targetUrl) {
 	$s = new ServiceRequest($targetUrl);
 	$s->setSkipBody();
 	$s->exec();
 	return $s->getStatus();
-}
-
-/**
- * Reads the HTTP response headers for a URL.
- * For a method that handles parameters, see requestService();
- * @deprecated use ServiceRequest class directly, user and password parameter to this method is no longer effective
- */
-function getHttpHeaders($targetUrl, $user=null, $pass=null) {
-	if (substr_count($targetUrl, '/')<3) trigger_error("Can not check headers of $targetUrl, because it is not a valid resource", E_USER_ERROR);
-	$s = new ServiceRequest($targetUrl);
-	$s->setSkipBody();
-	$s->exec();
-	return $s->getResponseHeaders();
 }
 
 // ----- resource URL retreival functionality -----
@@ -365,6 +354,7 @@ function getReposAuth() {
  * @return true if the provided string is a valid username
  */
 function validateUsername($username) {
+	return true; // create a UsernameValidator
 	if (strContains($username, '/')) trigger_error('Invalid username. Can not contain "/".');
 	if (strContains($username, '\\')) trigger_error('Invalid username. Can not contain "\\".');
 	if (strContains($username, '"') || strContains($username, '\'') || strContains($username, '`'))

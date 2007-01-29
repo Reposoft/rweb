@@ -85,7 +85,7 @@ function handleCertificateNotTrusted($report) {
 }
 
 function clearAuthenticationConfig($report) {
-	if (deleteFolder(toPath(SVN_CONFIG_DIR.'auth'.DIRECTORY_SEPARATOR))) {
+	if (System::deleteFolder(toPath(SVN_CONFIG_DIR.'auth'.DIRECTORY_SEPARATOR))) {
 		$report->ok("Successfuly deleted authenticatino cache");
 	} else {
 		$report->error("Could not remove authentication cache");
@@ -99,7 +99,7 @@ function clearAuthenticationConfig($report) {
  */
 function acceptCertificate($report, $repository) {
 	// a command without no-auth-cache that is used to probe the certificate
-	$cmd = getCommand('svn').' --config-dir '.SVN_CONFIG_DIR.' info '.$repository;
+	$cmd = System::getCommand('svn').' --config-dir '.SVN_CONFIG_DIR.' info '.$repository;
 	
 	$report->info("Run the following command on the server, and chose to accept certificate permanently:");
 	$report->info("(but don't login, because then the credentials will also be saved)");
@@ -142,8 +142,9 @@ function importCertificateAuthority($report, $caUrl, $name) {
 		$report->error("CA $caUrl is not a valid HTTP URL.");
 		return;
 	}
-	$s = getHttpStatus($caUrl);
-	if ($s == 200) {
+	$s = new ServiceRequest($caUrl);
+	$s->exec();
+	if ($s->getStatus() == 200) {
 		$report->ok("Located CA at URL: $caUrl");
 	} else {
 		$report->error("Could not locate CA at URL: $caUrl. HTTP status $s");
@@ -186,7 +187,7 @@ function downloadFile($url, $localPath) {
 	while (!feof($from)) {
 	  $contents .= fread($from, 8192);
 	}
-	return createFileWithContents($localPath, $contents);
+	return System::createFileWithContents($localPath, $contents);
 }
 
 ?>

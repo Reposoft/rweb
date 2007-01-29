@@ -24,7 +24,7 @@ $acl = '
 [/]
 * = rw
 ';
-if (createFileWithContents($aclfile, $acl, true, true)) {
+if (System::createFileWithContents($aclfile, $acl, true, true)) {
 	$report->ok("Successfully created subversion ACL file $aclfile with full access for all users to all folders");
 } else {
 	$report->fail("Could not create subversion ACL file $aclfile");
@@ -43,7 +43,7 @@ $repourl = $repo;
 setup_svn("co file:///$repourl $wc");
 
 //system("$svn co file://$repourl $test/wc/");
-createFolder($wc."trunk/");
+System::createFolder($wc."trunk/");
 
 setup_svn("add {$wc}trunk/");
 
@@ -52,7 +52,7 @@ setup_svn('commit -m "Created an empty file archive in repository root" '.$wc);
 $report->info('Please note that Apace needs to be restarted. This repostory uses Satisfy All instead of Satisfy Any.');
 
 // clean up
-deleteFolder($wc);
+System::deleteFolder($wc);
 
 setup_reloadApacheIfPossible();
 

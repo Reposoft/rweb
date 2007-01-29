@@ -54,7 +54,7 @@ function isTextmode() {
  * @return newline character for this OS, or always \n if output is web
  */
 function getNewline() {
-	if (isOffline() && isWindows()) return "\n\r";
+	if (isOffline() && System::isWindows()) return "\n\r";
 	else return "\n";
 }
 
@@ -372,7 +372,7 @@ class Report {
 		<script type="text/javascript">
 		function showErrors() {
 			var i = 0;
-			$('acronym.failed').each( function() {
+			$('acronym.failed, acronym.error').each( function() {
 				i++;
 				this.innerHTML=''+i;
 				var error = this.getAttribute('title');

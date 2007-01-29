@@ -60,7 +60,7 @@ $trickyusername = rw
 @demoproject = rw
 * = r
 ";
-if (createFileWithContents($aclfile, $acl, false, true)) {
+if (System::createFileWithContents($aclfile, $acl, false, true)) {
 	$report->ok("Successfully created subversion ACL file $aclfile");
 } else {
 	$report->fail("Could not create subversion ACL file $aclfile");
@@ -83,40 +83,40 @@ $repourl = $repo;
 setup_svn("co file:///$repourl $wc");
 
 // create administration folder
-createFolder($wc."administration/");
+System::createFolder($wc."administration/");
 // and copy the access file to the administration area for use with hooks
 $repositoryacl = $wc.'administration/repos-access';
 copy($aclfile, $repositoryacl);
 
 //system("$svn co file://$repourl $test/wc/");
-createFolder($wc."svensson/");
-createFolder($wc."svensson/trunk/");
-//createFolder($wc."svensson/calendar/");
-createFolder($wc."test/");
-createFolder($wc."test/trunk/");
-//createFolder($wc."test/calendar/");
-createFolder($wc."demoproject/");
-createFolder($wc."demoproject/trunk/");
-createFolder($wc."demoproject/trunk/noaccess/");
-createFolder($wc."demoproject/trunk/readonly/");
-createFileWithContents($wc."demoproject/trunk/readonly/index.html",
+System::createFolder($wc."svensson/");
+System::createFolder($wc."svensson/trunk/");
+//System::createFolder($wc."svensson/calendar/");
+System::createFolder($wc."test/");
+System::createFolder($wc."test/trunk/");
+//System::createFolder($wc."test/calendar/");
+System::createFolder($wc."demoproject/");
+System::createFolder($wc."demoproject/trunk/");
+System::createFolder($wc."demoproject/trunk/noaccess/");
+System::createFolder($wc."demoproject/trunk/readonly/");
+System::createFileWithContents($wc."demoproject/trunk/readonly/index.html",
 	'<html><body>This file should be write protected (folder is "@demoproject = r" in ACL file).</body></html>');
 
 // public contents, allows testing without login
-createFolder($wc."demoproject/trunk/public/");
+System::createFolder($wc."demoproject/trunk/public/");
 $publicxml = $wc."demoproject/trunk/public/xmlfile.xml";
-createFileWithContents($publicxml, "<test-xml/>\n");
+System::createFileWithContents($publicxml, "<test-xml/>\n");
 
 // create a sample intranet
-createFolder($wc."demoproject/trunk/public/website/");
+System::createFolder($wc."demoproject/trunk/public/website/");
 $publicstyle = $wc."demoproject/trunk/public/website/styles.css";
-createFileWithContents($publicstyle, "
+System::createFileWithContents($publicstyle, "
 body { margin: 15%; color: #223311; }
 a { color: #333399; text-decoration: none; }
 a:hover { text-decoration: underline; }
 ");
 $publicindex = $wc."demoproject/trunk/public/website/index.html";
-createFileWithContents($publicindex, "<html>\n<head>\n<title>demoproject's web</title>
+System::createFileWithContents($publicindex, "<html>\n<head>\n<title>demoproject's web</title>
 <link href=\"styles.css\" rel=\"stylesheet\" type=\"text/css\" />\n</head>
 <body>\n<img src=\"../images/a.jpg\"/><h3>Welcome to our website</h3>\n<p>&nbsp;</p>
 <p><small><a href=\"$conflocation/demoproject/trunk/public/\">return to documents</a> &nbsp; | &nbsp; page id: \$Id\$</small></p>\n</html>\n");
@@ -132,20 +132,20 @@ setup_svn('commit -m "Created users svensson, test and $trickusername, and a sha
 
 // Create a locked file
 $lockedfile = $wc."demoproject/trunk/public/locked-file.txt";
-createFileWithContents($lockedfile, "This file is locked so only one user can change it now.\n");
+System::createFileWithContents($lockedfile, "This file is locked so only one user can change it now.\n");
 setup_svn("add $lockedfile");
 setup_svn('commit -m "Created a file that will soon be locked by the admin user" '.$wc);
 setup_svn('lock -m "Testing lock features. You should not be allowed to modify this file." '.$lockedfile);
 
 // Create a news feed and a calendar in demo project
 
-createFolder($wc."demoproject/messages/");
+System::createFolder($wc."demoproject/messages/");
 $newsfile = $wc."demoproject/messages/news.xml";
 $contents = new Command('svnlook');
 $contents->addArgOption('tree');
 $contents->addArg($repo);
 $contents->exec();
-createFileWithContents($newsfile, '<?xml version="1.0" encoding="utf-8"?>
+System::createFileWithContents($newsfile, '<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="/repos/view/atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 	<title>Repos demoproject news</title>
@@ -177,11 +177,11 @@ createFileWithContents($newsfile, '<?xml version="1.0" encoding="utf-8"?>
 </feed>
 ');
 
-createFolder($wc."demoproject/calendar/");
+System::createFolder($wc."demoproject/calendar/");
 $calendarfile = $wc."demoproject/calendar/demoproject.ics";
 $now = date('Ymd\THis\Z');
 $later = date('Ymd\THis\Z', time()+3600); 
-createFileWithContents($calendarfile,
+System::createFileWithContents($calendarfile,
 "BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//repos.se//NONSGML repos//EN
@@ -212,23 +212,23 @@ setup_svn('commit -m "Created demo news and demo calendar" '.$wc);
 $dir = getTempnamDir();
 setup_svn("import -m \"$trickyusername\" $dir \"file:///$repourl$trickyusername\"");
 setup_svn("import -m \"\" $dir \"file:///$repourl$trickyusername/trunk\"");
-deleteFolder($dir);
+System::deleteFolder($dir);
 
 // create a base structure in test/trunk/
 $folders = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z");
 $testfolder = $wc."test/trunk/";
 foreach($folders as $dir){
 	$testfolder .= "f$dir/";
-	createFolder($testfolder);
-	createFileWithContents($testfolder."$dir.txt", "$dir");
+	System::createFolder($testfolder);
+	System::createFileWithContents($testfolder."$dir.txt", "$dir");
 }
 
 setup_svn("add {$wc}test/trunk/fa/");
 setup_svn('commit -m "Created a sample folder structure for user test" '.$wc);
 
 // other repos projects that need to do integration testing have one folder each below
-createFolder($wc."test/trunk/repos-svn-access/");
-createFileWithContents($wc."test/trunk/repos-svn-access/automated-test-increment.txt", "0");
+System::createFolder($wc."test/trunk/repos-svn-access/");
+System::createFileWithContents($wc."test/trunk/repos-svn-access/automated-test-increment.txt", "0");
 
 setup_svn("add {$wc}test/trunk/repos-svn-access/");
 setup_svn('commit -m "Added integration testing folders for other repos projects" '.$wc);
@@ -238,7 +238,7 @@ $importsFolder = dirname(__FILE__);
 setup_svn("import -m \"Created sample images\" $importsFolder/images \"file:///{$repourl}demoproject/trunk/public/images\"");
 
 // clean up
-deleteFolder($wc);
+System::deleteFolder($wc);
 
 // setup done
 $report->info('<a href="../restart/">Restart apache to activate new configuration</a>');

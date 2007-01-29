@@ -1,11 +1,10 @@
 <?php
 require("conflicthandler.inc.php");
-// TODO get getTempDir in a smaller filesystem abstraction that can be included instead of the entire repos.properties.php
-require("../../conf/repos.properties.php"); // then remove
+require("../../conf/System.class.php");
 require("../../lib/simpletest/setup.php");
 
 function tempfile_create($contents) {
-	$file = getTempDir('testconflict').'excel.xml';
+	$file = System::getTempFile('testconflict').'_excel.xml';
 	$f=@fopen($file,"w");
 	if (!$f) {
 	 trigger_error("Could not write contents to temp file ".$file);

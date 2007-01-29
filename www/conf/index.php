@@ -157,7 +157,7 @@ function requiredConfig() {
 function requiredFiles() {
 	global $requiredFiles;
 	line_start("Running as user: ");
-	passthru( getCommand('whoami') );
+	passthru( System::getCommand('whoami') );
 	line_end();
 	foreach ($requiredFiles as $key => $descr) {
 		$exists = file_exists($key);
@@ -182,7 +182,7 @@ function dependencies() {
 	$retval = 0;
 	foreach ( $dependencies as $cmd => $check ) {
 		$output = array();
-		$run = getCommand($cmd);
+		$run = System::getCommand($cmd);
 		line_start("$cmd ($run): ");
 		if (empty($run)) {
 			sayOK('not supported, not required');

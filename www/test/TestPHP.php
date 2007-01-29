@@ -25,6 +25,7 @@
 
 $testfiles = array(
 'test/server/TestServerSettings.php',
+'conf/System.test.php',
 'conf/repos.properties.test.php',
 'conf/Presentation.test.php',
 'conf/Report.test.php',

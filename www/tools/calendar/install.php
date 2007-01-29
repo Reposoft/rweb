@@ -40,7 +40,7 @@ $filename = $extracted_folder.".tar";
 */
 uncompressTAR( $filename, null, null );
 
-deleteFile($filename);  // delete the tar file
+System::deleteFile($filename);  // delete the tar file
 
 // get everything in place
 $destination = $dir.'/phpicalendar/';
@@ -56,15 +56,15 @@ require_once(dirname(dirname(__FILE__)).'/phpicalendar.inc.php');
 ?>");
 fclose($fh);
 
-deleteFolder($extracted_folder.'/');
+System::deleteFolder($extracted_folder.'/');
 
 // delete the sample calendars bundled with phpicalendar
-deleteFile($destination.'calendars/Home.ics');
-deleteFile($destination.'calendars/US Holidays.ics');
-deleteFile($destination.'calendars/Work.ics');
+System::deleteFile($destination.'calendars/Home.ics');
+System::deleteFile($destination.'calendars/US Holidays.ics');
+System::deleteFile($destination.'calendars/Work.ics');
 
 // untar leaves a strange @LongLink file
-deleteFile($dir.'/@LongLink');
+System::deleteFile($dir.'/@LongLink');
 
 $report->display();
 ?>

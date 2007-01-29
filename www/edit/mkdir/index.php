@@ -33,7 +33,7 @@ function createNewFolder($name, $message) {
 	$edit->addArgPath($dir);
 	$edit->addArgUrl($newurl);
 	$edit->exec();
-	deleteFolder($dir);
+	System::deleteFolder($dir);
 	displayEdit($template, getTargetUrl());
 }
 
@@ -42,6 +42,6 @@ function createNewFolder($name, $message) {
 // Returns directory name on success, false otherwise
 function tmpdir()
 {
-	return getTempnamDir('emptyfolders');
+	return System::getTempFolder('emptyfolders');
 }
 ?>

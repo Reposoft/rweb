@@ -43,7 +43,7 @@ function doAutomerge($sourceFile){
 	$sourceUrl = getRepository().$source;	// http://localhost/LocalRepos/branches/test.xml
 	$targetUrl = getRepository().'/demoproject/trunk/public/'.$targetFile;	// http://localhost/LocalRepos/trunk/
 	$targetFolder = getParent($targetUrl);
-	$temporaryWorkingCopy = getTempnamDir('merge');
+	$temporaryWorkingCopy = System::getTempFolder('merge');
 
 	// Checkout target folder to a temporary working copy
 	// svn checkout http://localhost/LocalRepos/trunk/ temporaryWorkingCopy

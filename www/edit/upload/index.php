@@ -85,7 +85,7 @@ function showUploadForm() {
 function processNewFile($upload) {
 	$presentation = Presentation::getInstance();
 	Validation::expect('name');
-	$newfile = toPath(tempnam(rtrim(getTempDir('upload'),'/'), ''));
+	$newfile = System::getTempFile('upload');
 	$upload->processSubmit($newfile);
 	$edit = new SvnEdit('import');
 	$edit->addArgPath($newfile);
@@ -100,7 +100,7 @@ function processNewFile($upload) {
 		// TODO echo('Recommending mime type '.$clientMime); exit;
 	}
 	// clean up
-	deleteFile($newfile);
+	System::deleteFile($newfile);
 	$upload->cleanUp();
 	// show results
 	displayEdit($presentation, dirname($upload->getTargetUrl()));
@@ -135,7 +135,7 @@ function processNewVersion($upload) {
 			.$filename.'" from repository path "'.$repoFolder.'"');
 	}
 	$oldsize = filesize($updatefile);
-	deleteFile($updatefile);
+	System::deleteFile($updatefile);
 	$upload->processSubmit($updatefile);
 	if(!file_exists($updatefile)) {
 		$presentation->showError('Could not read uploaded file "'

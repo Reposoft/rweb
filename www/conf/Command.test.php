@@ -28,10 +28,10 @@ class TestCommand extends UnitTestCase {
 		// common escape rules
 		$this->assertEqual("\"a\\\\b\"", Command::_escapeArgument('a\b'));
 		// rules that depend on OS
-		if (!isWindows()) {
+		if (!System::isWindows()) {
 			$this->assertEqual('"a\"b"', Command::_escapeArgument('a"b'));	
 		}
-		if (isWindows()) {
+		if (System::isWindows()) {
 			$this->assertEqual('"a""b"', Command::_escapeArgument('a"b'));	
 		}
 	}
@@ -40,7 +40,7 @@ class TestCommand extends UnitTestCase {
 		$this->assertEqual('"a%b"', Command::_escapeArgument('a%b'), 'single percent should not be a problem');
 		$this->assertEqual('"a%NOT-AN-ENV-ENTRY%b"', Command::_escapeArgument('a%NOT-AN-ENV-ENTRY%b'),
 			'double percent enclosing something that has not been SET should not be a problem');
-		if (isWindows()) {
+		if (System::isWindows()) {
 			$this->assertTrue(getenv('OS'), 'For this test to work OS must be an environment variable');
 			$this->assertEqual('"a%OS#b"', Command::_escapeArgument('a%OS%b'));
 			$this->assertEqual('"%OS#b%"', Command::_escapeArgument('%OS%b%'));
@@ -52,7 +52,7 @@ class TestCommand extends UnitTestCase {
 	
 	function testGetScriptWrapper() {
 		$this->sendMessage("only relevant on *nix");
-		if (!isWindows()) {
+		if (!System::isWindows()) {
 			$this->assertTrue(file_exists(_repos_getScriptWrapper()), "the script wrapper file "._repos_getScriptWrapper()." does not exist");
 		}
 	}
@@ -72,7 +72,7 @@ class TestCommand extends UnitTestCase {
 		// plain ascii
 		$v = exec("echo nada");
 		$this->assertEqual("nada", $v);
-		if (isWindows()) {
+		if (System::isWindows()) {
 			// Test latin-1.
 			// seems like the echo command is not that great in windows //$v = exec("echo n\xE4d\xE5");
 			//$this->assertEqual('ISO-8859-1', mb_detect_encoding($v, 'UTF-8, ISO-8859-1'));

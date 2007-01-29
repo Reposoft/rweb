@@ -22,7 +22,7 @@ class TestRepositoryTree extends UnitTestCase {
 	}
 	
 	function tearDown() {
-		//deleteFile($this->tempfile);
+		//System::deleteFile($this->tempfile);
 		unlink($this->tempfile);
 	}
 

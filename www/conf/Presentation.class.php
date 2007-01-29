@@ -17,6 +17,8 @@
 
 // All user presentation pages need repos.properties.php, but test pages should be able to mock it.
 if (!function_exists('getRepository')) require(dirname(__FILE__).'/repos.properties.php');
+// The current redirect-after-post solution needs System for temp folder
+if (!class_exists('System')) require(dirname(__FILE__).'/System.class.php');
 
 define('PRESENTATION_XTHML', false); // true->application/xhtml+xml, false->text/html
 define('TEMPLATE_CACHING', getConfig('disable_caching') ? true : false); // enable/disable smarty caching
@@ -26,6 +28,7 @@ function setupResponse() {
 	// set cookie headers
 	repos_getUserLocale();
 	// set the content type header, Presentation can generate json and XHTML
+	if (headers_sent()) return;
 	if (isRequestService()) {
 		require_once(dirname(dirname(__FILE__)).'/lib/json/json.php');
 		header('Content-Type: text/plain');
@@ -258,8 +261,7 @@ class Presentation {
 		}
 		if (!headers_sent() && //debug:// false && 
 			$this->isRedirectBeforeDisplay()) {
-			// TODO how to get PHP errors and warnings into the result page instead of before the redirect
-			$file = tempnam(getTempDir('pages'),'');
+			$file = System::getTempFile('pages');
 			$pagecontents = $this->fetch($resource_name, $cache_id, $compile_id);
 			$handle = fopen($file, "w");
 			fwrite($handle, $pagecontents);

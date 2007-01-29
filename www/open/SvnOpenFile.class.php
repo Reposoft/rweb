@@ -21,7 +21,10 @@ function login_getMimeType($targetUrl, $revision=HEAD) {
 	if ($revision!=HEAD) {
 		return login_getMimeTypeProperty($targetUrl, $revision);
 	}
-	$headers = getHttpHeaders($targetUrl, getReposUser(), _getReposPass());
+	$s = new ServiceRequest($taregetUrl);
+	$s->setSkipBody();
+	$s->exec();
+	$headers = $s->getResponseHeaders();
 	if (!isset($headers['Content-Type'])) trigger_error("Could not get content type for target $targetUrl");
 	$c = $headers['Content-Type'];
 	if (strContains($c, ';')) return substr($c, 0, strpos($c, ';'));
