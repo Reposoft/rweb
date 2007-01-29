@@ -240,7 +240,6 @@ function isRepositoryUrl($url) {
 function urlEncodeNames($url) {
 	$q = strpos($url, '?');
 	if ($q !== false) return urlEncodeNames(substr($url, 0, $q)).'?'.rawurlencode(substr($url, $q+1));
-	//trigger_error("urlEncodeNames is deprecated. Use escapeArgument for command, rawurlencode for query params and htmlspecialchars for presentation.");
 	$parts = explode('/', $url);
 	$i = 0;
 	if (strpos($url, '://')!==false) $i = 3; // don't escape protocol and host

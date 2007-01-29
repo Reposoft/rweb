@@ -7,9 +7,9 @@ require("Command.class.php");
 require("../lib/simpletest/setup.php");
 
 $lastCommand = null;
-function _command_run($cmd, $argsString) {
+function _command_run($cmd) {
 	global $lastCommand;
-	$lastCommand = "$cmd $argsString";
+	$lastCommand = "$cmd";
 	return array(0, 'output');
 }
 

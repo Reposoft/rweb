@@ -44,8 +44,6 @@
  * The credentials will then be empty.
  * 
  * Note that internally, URLs should never be encoded.
- * If a subversion command requires an encoded URL, it should be
- * encoded before it's passed to escapeArgument.
  *
  * Nomenclature throughout the repos PHP solution:
  * 'target' absolute url from repository root to target resource
@@ -138,8 +136,7 @@ function verifyLogin($targetUrl) {
 	}
 	$request = new ServiceRequest($targetUrl);
 	$request->setSkipBody();
-	$request->exec();
-	$s = $request->getStatus();
+	$s = $request->exec();
 	if ($s==301) login_followRedirect($targetUrl, $request->getResponseHeaders());
 	// allow authentication with parent if the current target is no longer in the repository
 	if ($s==404) login_getFirstNon404Parent(_login_getParentUrl($targetUrl), $s);

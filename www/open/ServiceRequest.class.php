@@ -151,7 +151,7 @@ class ServiceRequest {
 	 * Launches the request, synchronously, and returns this instance when done.
 	 * The get* and is* functions of the instance can be used only after exec().
 	 *
-	 * @return ServiceRequest this instance, meaning that the response is received
+	 * @return int the http status code of the response
 	 */
 	function exec() {
 		$ch = curl_init(); 
@@ -166,7 +166,7 @@ class ServiceRequest {
 		$this->response = curl_exec($ch);
 		$this->info = curl_getinfo($ch);
 		curl_close($ch);
-		return $this;
+		return $this->getStatus();
 	}
 	
 	/**
