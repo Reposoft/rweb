@@ -209,7 +209,7 @@ setup_svn("add {$wc}demoproject/calendar/");
 setup_svn('commit -m "Created demo news and demo calendar" '.$wc);
 
 // PHP mkdir can not handle UTF-8 characters
-$dir = getTempnamDir();
+$dir = System::getTempFolder();
 setup_svn("import -m \"$trickyusername\" $dir \"file:///$repourl$trickyusername\"");
 setup_svn("import -m \"\" $dir \"file:///$repourl$trickyusername/trunk\"");
 System::deleteFolder($dir);

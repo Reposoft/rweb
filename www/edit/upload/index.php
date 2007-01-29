@@ -82,6 +82,9 @@ function showUploadForm() {
 	$template->display();
 }
 
+/**
+ * @param Upload $upload
+ */
 function processNewFile($upload) {
 	$presentation = Presentation::getInstance();
 	Validation::expect('name');

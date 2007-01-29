@@ -402,6 +402,9 @@ class System {
 		if (strBegins($path, System::_getSystemTemp())) {
 			return true;
 		}
+		if (strContains($path, 'repos')) {
+			return true;
+		}
 		// assume that the web server host is in some server folder
 		if (strBegins($path, toPath(dirname(dirname(dirname(dirname(__FILE__))))))) {
 			return true;

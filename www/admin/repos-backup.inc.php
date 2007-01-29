@@ -260,7 +260,7 @@ function getMD5sums($dir) {
 	$sums = file( $sumsfile );
 	$ret = array();
 	foreach ( $sums as $line ) {
-		list($md5, $filename) = explode("  ",trim($line)); // note that separator is two spaces
+		list($md5, $filename) = preg_split("/\s[\s\*]/",trim($line));
 		$ret[$filename] = $md5;
 	}
 	return $ret;
@@ -300,7 +300,7 @@ function loadDumpfile($file,$loadcommand) {
 	}
 	$command = '';
 	$tmpfile = toPath(tempnam(rtrim(TEMP_DIR,'/'), "svn"));
-	if ( isWindows() ) {
+	if ( System::isWindows() ) {
 		if ( ! gunzipInternal($file,$tmpfile) ) fatal("Could not extract file $file");
 		$command = "$loadcommand < $tmpfile";
 	} else {

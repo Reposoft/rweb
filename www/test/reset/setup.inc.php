@@ -59,13 +59,13 @@ function setup_deleteCurrent() {
 	}
 	
 	$report->info("Create empty repository folder at $repo");
-	createFolder($repo);
+	System::createFolder($repo);
 	
-	if (!is_dir($backup)) createFolder($backup); else $report->info("Keeping backup in $backup");
+	if (!is_dir($backup)) System::createFolder($backup); else $report->info("Keeping backup in $backup");
 	
 	if (!file_exists($admin)) {
 		$report->info("Creating empty admin folder $admin");
-		createFolder($admin);
+		System::createFolder($admin);
 	} else {
 		$report->info("Using the existing admin folder $admin");
 	}
