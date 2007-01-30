@@ -163,29 +163,31 @@ function setup_reloadApacheIfPossible() {
 
 function setup_svnadmin($command) {
 	global $svnargs, $report;
-	$cmd = $svnargs.' '.$command;
-	$result = _command_run('svnadmin', $cmd);
-	if (array_pop($result)) {
-		$report->debug($result);
+	$cmd = new Command('svnadmin');
+	$cmd->addArgOption($svnargs);
+	$cmd->addArgOption($command);
+	if ($cmd->exec()) {
+		$report->debug($cmd->getOutput());
 		$report->fail("svnadmin command failed: $command");
 	} else {
 		$report->ok("Successfully executed svnadmin command: $command");
-		$report->debug($result);
+		$report->debug($cmd->getOutput());
 	}
 }
 
 function setup_svn($command) {
 	global $svnargs, $report;
 	$command = setup_customizeCommand($command);
-	$cmd = $svnargs.' '.$command;
-	$result = _command_run('svn', $cmd);
-	if (array_pop($result)) {
+	$cmd = new Command('svn');
+	$cmd->addArgOption($svnargs);
+	$cmd->addArgOption($command);
+	if ($cmd->exec()) {
 		$report->fail("Svn command failed: $command");
-	} elseif (count($result)==0) {
+	} elseif (count($cmd->getOutput())==0) {
 		$report->fail("Svn command returned no result: $command");
 	} else {
 		$report->ok("Successfully executed svn command: $command");
-		$report->debug($result);
+		$report->debug($cmd->getOutput());
 	}	
 }
 
