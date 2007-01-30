@@ -52,7 +52,8 @@ function makeTagEntities($str, $useNamedEntities = 1) {
 // Convert ampersands to named or numbered entities.
 // Use regex to skip any that might be part of existing entities.
 function makeAmpersandEntities($str, $useNamedEntities = 1) {
-  return preg_replace("/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,5};)/m", $useNamedEntities ? "&amp;" : "&#38;", $str);
+  return str_replace('&', $useNamedEntities ? "&amp;" : "&#38;", $str);
+  // return preg_replace("/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,5};)/m", $useNamedEntities ? "&amp;" : "&#38;", $str);
 }
 
 	
