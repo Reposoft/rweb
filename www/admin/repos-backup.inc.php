@@ -8,10 +8,13 @@
 require( dirname(__FILE__) . '/admin.inc.php' );
 require( dirname(dirname(__FILE__)) . '/conf/Command.class.php' );
 
-define('TEMP_DIR',System::getApplicationTemp('backup'));
 define('BACKUP_SCRIPT_VERSION','$LastChangedRevision$');
 define('BACKUP_SIZE', 100*1024*1024); // recommended unpacked size of dump files
 define('BACKUP_MAX_TIME', 30*60); // maximum time in seconds for dumping and packing one backup increment (with the above size)
+
+function getNewBackupTempFile() {
+	return System::getTempFile('backup'); // TODO prefix?
+}
 
 /**
  * Create a repository in the given local path
@@ -73,8 +76,7 @@ function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) 
 	$starttime = time();
 	$extension = ".svndump";
 	// get a new empty file
-	$tmpfile = tempnam(rtrim(TEMP_DIR,'/'), "svn");
-	touch($tmpfile);
+	$tmpfile = getNewBackupTempFile();
 	// dump every revision separately and check size after each operation
 	for ($i = $fromrev; $i<=$torev; $i++) {
 		$command = new Command('svnadmin');
@@ -299,7 +301,7 @@ function loadDumpfile($file,$loadcommand) {
 		return 1;
 	}
 	$command = '';
-	$tmpfile = toPath(tempnam(rtrim(TEMP_DIR,'/'), "svn"));
+	$tmpfile = getNewBackupTempFile();
 	if ( System::isWindows() ) {
 		if ( ! gunzipInternal($file,$tmpfile) ) fatal("Could not extract file $file");
 		$command = "$loadcommand < $tmpfile";
