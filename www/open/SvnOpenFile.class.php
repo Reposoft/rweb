@@ -438,10 +438,6 @@ class SvnOpenFile {
 		}
 	}
 	
-	function convertToPlaneText($str) {
-		
-	}
-	
 	/**
 	 * Sends the file without headers, escaped as html.
 	 * Escaping method is based on the format. If there is no known escape method for the content type, sendInline is used.
