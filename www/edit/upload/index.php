@@ -40,7 +40,8 @@ if (!isTargetSet()) {
  * a single fwrite to the file.
  *
  * @param String $postedText the contents from the text area
- * @param String $destinationFile the local working copy file, currently containing the "based-on" revision
+ * @param String $destinationFile the local working copy file,
+ * 	containing the "based-on" revision, or for new files empty
  * @param String $type a type as validated by the 'edit' plugin.
  * @return int the number of bytes in the new version of the file
  * @package edit
