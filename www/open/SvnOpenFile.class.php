@@ -33,6 +33,29 @@ function formatSize($Bytes) {
 	return number_format($f,0,".","").' MB';
 }
 
+// Check if a string is in UTF-8 format
+function isUTF8($str) {
+	if ($str === mb_convert_encoding(mb_convert_encoding($str, "UTF-32", "UTF-8"), "UTF-8", "UTF-32")) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+// Convert common characters to named or numbered entities
+function makeTagEntities($str, $useNamedEntities = 1) {
+  // Note that we should use &apos; for the single quote, but IE doesn't like it
+  $arrReplace = $useNamedEntities ? array('&#39;','&quot;','&lt;','&gt;') : array('&#39;','&#34;','&#60;','&#62;');
+  return str_replace(array("'",'"','<','>'), $arrReplace, $str);
+}
+
+// Convert ampersands to named or numbered entities.
+// Use regex to skip any that might be part of existing entities.
+function makeAmpersandEntities($str, $useNamedEntities = 1) {
+  return preg_replace("/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,5};)/m", $useNamedEntities ? "&amp;" : "&#38;", $str);
+}
+
+	
 /**
  * Reads a file directly from the repository, without the need for local temp storage.
  * 
@@ -415,6 +438,10 @@ class SvnOpenFile {
 		}
 	}
 	
+	function convertToPlaneText($str) {
+		
+	}
+	
 	/**
 	 * Sends the file without headers, escaped as html.
 	 * Escaping method is based on the format. If there is no known escape method for the content type, sendInline is used.
@@ -426,7 +453,13 @@ class SvnOpenFile {
 		$text = $this->getContentsText();
 		$lines = count($text);
 		for ($i=0; $i<$lines; $i++) {
-			echo(htmlentities($text[$i]));
+			//$text[$i] = mb_convert_encoding($text[$i], "UTF-8", "ASCII");
+			if (!isUTF8($text[$i])){
+				$text[$i] = mb_convert_encoding($text[$i], "UTF-8", "ASCII");
+			}
+			$text[$i] = makeAmpersandEntities($text[$i]);
+			$text[$i] = makeTagEntities($text[$i]);
+			echo($text[$i]);
 			echo("\n");
 		}
 	}	
