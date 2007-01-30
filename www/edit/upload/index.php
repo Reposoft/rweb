@@ -5,6 +5,7 @@
  */
 require("../../conf/Presentation.class.php");
 require("../SvnEdit.class.php");
+require("../../open/SvnOpenFile.class.php");
 require("mimetype.inc.php");
 addPlugin('edit');
 

@@ -27,7 +27,7 @@ function autoFillFilename(filename) {
 <div id="contents">
 
 <a name="textform"></a>
-<form action="../upload/" method="post" name="formUpload" id="formUpload">
+<form id="formEdit" action="../upload/" method="post" name="formUpload">
 <fieldset>
 	<!--{if $file}-->
 	<legend>Edit <span class="path">{=$target}</span> {=$file,revision} with type {=$file,type}</legend>
@@ -35,7 +35,7 @@ function autoFillFilename(filename) {
 	<legend>Create new file in {=$target}</legend>
 	<!--{/if}-->
   <input type="hidden" name="target" value="{=$target}"/>
-  <input type="hidden" name="type" value="{=$type}"/>
+  <input type="text" name="type" value="{=$type}" style="display:none"/>
 	<!--{if $file}-->
 	<input type="hidden" name="fromrev" value="{=$file,revision}"/>
 	 {=*
