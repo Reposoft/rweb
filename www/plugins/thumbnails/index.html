@@ -6,6 +6,7 @@
 <title>Repos thumbnails plugin</title>
 <!-- plugins -->
 <script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../scripts/shared/repos.js"></script>
 <script type="text/javascript" src="thumbnails.js"></script>
 <!-- for unit testing -->
 <script type="text/javascript" src="../../scripts/unittest.js"></script>
@@ -31,6 +32,35 @@ even when there are no "thmbnail" classes.</p>
 
 <h2>File history (not folder history)</h2>
 
+<h2>unit tests</h2>
+<script type="text/javascript">
 
+function TestThumbnails() {
+	this.name = 'TestDetails';
+	
+	this.setUp = function() {
+	};
+	
+	this.testGetTargetFromTarget = function() {
+		this.assertEquals('/a/folder/b.jpg',
+			Repos.thumbnails.getTarget('/repos/open/open/?target=/a/folder/b.jpg'));
+		this.assertEquals('/a/folder/b.jpg',
+			Repos.thumbnails.getTarget('http://my.host/repos/open/?target=/a/folder/b.jpg'));
+		this.assertEquals('/a/folder/a%20b.jpg',
+			Repos.thumbnails.getTarget('/repos/open/?target=/a/folder/f%20b.jpg'));
+	};
+	
+	/* possible?
+		/a/folder/b.img
+		http://localhost/a/folder/b.jpg
+		/repos/open/open/?target=/a/folder/now.b&rev=623
+		/repos/open/open/?target=/a/folder/now.b
+	*/
+	
+}
+
+testrun(TestThumbnails);
+
+</script>
 </body>
 </html>
