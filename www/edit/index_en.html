@@ -41,7 +41,7 @@ you can always refer to the file as it is now.</p>
 <p>The file is <strong>locked</strong> by you. We recommend you <a href="upload/?target={=$target}">Upload new version</a>.</p>
 {=elseif $file,typeDiscrete eq 'text' and $file,size lt 10240}
 <p>This is a small text file. We recommend you 
-<a href="file/?target={=$target}&text">Edit in Repos</a>.</p>
+<a href="file/?target={=$target}">Edit in Repos</a>.</p>
 {=elseif $file,typeDiscrete eq 'text'}
 <p>This is a text file. There is no need to lock it.
 <a href="../open/download/?target={=$target}&rev={=$rev}">Download</a>,

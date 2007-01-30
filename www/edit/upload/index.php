@@ -6,11 +6,13 @@
 require("../../conf/Presentation.class.php");
 require("../SvnEdit.class.php");
 require("mimetype.inc.php");
+addPlugin('edit');
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 
 // name only exists for new files, not for new version requests
 new FilenameRule("name");
+new EditTypeRule('type');
 
 if (!isTargetSet()) {
 	trigger_error("Could not upload file. It is probably larger than ".formatSize(MAX_FILE_SIZE), E_USER_ERROR);
@@ -29,6 +31,56 @@ if (!isTargetSet()) {
 		}
 	}
 }
+
+/**
+ * Writes textarea contents to version controlled text file.
+ * Based on the 'type' parameter value, a custom write function "editWriteNewVersion_$type"
+ * is called if it exists. If no custom function is found, the posted string is written with
+ * a single fwrite to the file.
+ *
+ * @param String $postedText the contents from the text area
+ * @param String $destinationFile the local working copy file, currently containing the "based-on" revision
+ * @param String $type a type as validated by the 'edit' plugin.
+ * @return int the number of bytes in the new version of the file
+ * @package edit
+ */
+function editWriteNewVersion($postedText, $destinationFile, $type) {
+	if ($type && function_exists('editWriteNewVersion_'.$type)) {
+		return call_user_func('editWriteNewVersion_'.$type, $postedText, $destinationFile, $type);
+	}
+	return _defaultWriteNewVersion($postedText, $destinationFile);
+}
+
+/**
+ * Writes $postedText as it is to $destinationFile, returns length of $postedText.
+ * @see editWriteNewVersion
+ */
+function _defaultWriteNewVersion($postedText, $destinationFile) {
+	$fp = fopen($destinationFile, 'w+');
+	if ($fp) {
+		fwrite($fp, $postedText);
+		fclose($fp);
+	} else {
+		trigger_error("Couldn't write file contents from the submitted text.", E_USER_ERROR);
+	}
+	return strlen($postedText);
+}
+
+/**
+ * Plaintext documents are _always_ written in UTF-8 with newline at end of file.
+ * We assume that all users have text editors capable of open and resave in UTF-8.
+ *
+ * @param String $postedText the contents from the text area
+ * @param String $destinationFile the local working copy file, currently containing the "based-on" revision
+ * @param String $type a type as validated by the 'edit' plugin.
+ * @return int the number of bytes in the new version of the file
+ * @package edit
+ */
+function editWriteNewVersion_txt($postedText, $destinationFile, $type) {
+	// TODO customize string
+	return _defaultWriteNewVersion($postedText, $destinationFile);
+}
+
 /**
  * Reads a summary of the svn log
  * @return array[int revision => array]
@@ -85,7 +137,7 @@ function showUploadForm() {
  */
 function processNewFile($upload) {
 	$presentation = Presentation::getInstance();
-	Validation::expect('name');
+	Validation::expect('name', 'type');
 	$newfile = System::getTempFile('upload');
 	$upload->processSubmit($newfile);
 	$edit = new SvnEdit('import');
@@ -112,7 +164,7 @@ function processNewFile($upload) {
  * @param Upload $upload the file upload handler
  */
 function processNewVersion($upload) {
-	Validation::expect('fromrev');
+	Validation::expect('fromrev', 'type');
 	$presentation = Presentation::getInstance();
 	$dir = System::getTempFolder('upload');
 	$repoFolder = dirname($upload->getTargetUrl());
@@ -232,7 +284,8 @@ class Upload {
 
 	function processSubmit($destinationFile) {
 		if (isset($_POST['usertext'])) {
-			$this->processPastedContents($destinationFile);
+			$type = isset($_POST['type']) ? $_POST['type'] : '';
+			editWriteNewVersion($_POST['usertext'], $destinationFile, $type);
 			return;
 		}
 		$current = $_FILES[$this->file_id]['tmp_name'];;
@@ -240,18 +293,6 @@ class Upload {
 			// ok
 		} else {
 			trigger_error("Could not access the uploaded file ".$this->getOriginalFilename(), E_USER_ERROR);
-		}
-	}
-	
-	// handle request that is not a file upload, but the contents of a big textarea named 'userfile'
-	function processPastedContents($destinationFile) {
-		$contents = $_POST['usertext'];
-		$fp = fopen($destinationFile, 'w+');
-		if ($fp) {
-			fwrite($fp, $contents);
-			fclose($fp);
-		} else {
-			trigger_error("Couldn't write file contents from the submitted text.", E_USER_ERROR);
 		}
 	}
 	

@@ -18,6 +18,7 @@ define('MAX_FILE_SIZE', 1024*1024*10);
 // name only exists for new files, not for new version requests
 new FilenameRule("name");
 new NewFilenameRule("name", getTarget());
+new EditTypeRule('type'); // type is not required for this page, but it is for the form action page
 
 if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template = Presentation::getInstance();
@@ -33,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
 	$template->assign('target',$target);
 	$template->assign('targeturl', getTargetUrl());
+	$template->assign('type', isset($_GET['type']) ? $_GET['type'] : 'txt');
 	$template->display();
 } else {
 	trigger_error('This form should be posted to ../upload/.', E_USER_ERROR);	
