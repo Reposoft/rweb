@@ -95,7 +95,7 @@
 		<xsl:if test="$editUrl">
 			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={@path}/">new folder</a>
 			<a id="createfile" class="command translate" href="{$editUrl}file/?target={@path}/">new document</a>
-			<a id="upload" class="command translate" href="{$editUrl}upload/?target={@path}/">upload</a>
+			<a id="addfile" class="command translate" href="{$editUrl}upload/?target={@path}/">upload</a>
 		</xsl:if>
 		<!--
 		<a class="command" href="{$web}/tutorials/?show=networkfolder">
