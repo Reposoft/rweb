@@ -50,7 +50,7 @@ edit on your computer, then <a href="upload/?target={=$target}">upload new versi
 <p>This is a binary or unknown fileformat. We recommend you Download and lock.</p>
 {=/if}
 {=if not $file,isLockedByThisUser}
-<h3><a href="upload/?target={=$target}&rev={=$rev}&download">Download, modify, upload</a></h3>
+<h3><a id="download_upload" href="upload/?target={=$target}&rev={=$rev}&download">Download, modify, upload</a></h3>
 <p>
 <span class="explain" title="files stored as lines of text that are human-readable in any text editor, like Notepad">Text files</span> 
 can be edited by many users at the same time, and when you upload the new version
@@ -58,7 +58,7 @@ the system will identify which lines you changed,
 and <span class="explain" title="combine two different changes of the same file into a new version of the file">merge</span>
 those changes with the existing contents to create a new version.
 </p>
-<h3><a href="lock/?target={=$target}&download">Download with lock</a></h3>
+<h3><a id="download_lock" href="lock/?target={=$target}&download">Download with lock</a></h3>
 <p>
 For <span class="explain" title="files stored in a non-text format created and read by a specific application">binary</span>
 files, version control is not as efficient as with text files.
@@ -68,11 +68,11 @@ so each change must be based on the previous version.
 This means that only one user at a time can work with the file.
 </p>
 {=/if}
-<h3><a href="upload/?target={=$target}">Upload new version</a></h3>
+<h3><a id="upload" href="upload/?target={=$target}">Upload new version</a></h3>
 <p>
 If you have already downloaded and edited the file, upload your changes to create a new verison.
 </p>
-<h3><a href="file/?target={=$target}&text">Edit in Repos</a></h3>
+<h3><a id="edit" href="file/?target={=$target}&text">Edit in Repos</a></h3>
 <p>
 Plain text documents and HTML can be conveniently edited in your browser.
 No locking is needed, and when you save it creates a new version of the file.
@@ -91,7 +91,7 @@ You will get a link to the branch, and from there you can access the "merge" fun
 *}
 <!--{/if}-->
 {=if not $file,isLocked}
-<h3><a href="lock/?target={=$target}">Lock file</a></h3>
+<h3><a id="lock" href="lock/?target={=$target}">Lock file</a></h3>
 <p>You can always lock a file to make it read-only for everyone else.</p>
 {=elseif $file,isLockedByThisUser}
 <h3><a href="unlock/?target={=$target}">Unlock file</a></h3>

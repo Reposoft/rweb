@@ -13,6 +13,47 @@ a {
 	color: #003399;
 	text-decoration: none;
 }
+
+a#open {
+	background: url(commands/32x32/open.png) left no-repeat;
+	padding: 10px 0px 10px 40px;
+}
+
+a#download {
+	background: url(commands/32x32/download.png) left no-repeat;
+	padding: 10px 0px 10px 40px;
+}
+
+a#download_upload {
+	background: url(commands/32x32/download_upload.png) left no-repeat;
+	padding: 10px 0px 10px 40px;
+}
+
+a#download_lock {
+	background: url(commands/32x32/download_lock.png) left no-repeat;
+	padding: 10px 0px 10px 40px;
+}
+
+a#edit {
+	background: url(commands/32x32/edit.png) left no-repeat;
+	padding: 10px 0px 10px 40px;
+}
+
+a#upload {
+	background: url(commands/32x32/upload.png) left no-repeat;
+	padding: 10px 0px 10px 40px;
+}
+
+a#lock {
+	background: url(commands/32x32/lock.png) left no-repeat;
+	padding: 10px 0px 10px 40px;
+}
+
+a#view {
+	background: url(commands/32x32/view.png) left no-repeat;
+	padding: 10px 0px 10px 40px;
+}
+
 table p {
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
@@ -250,6 +291,7 @@ div.section {
 	height: auto;
 	margin: 5px;
 	padding: 5px;
+	background-color: #FFFFFF;
 	border-top: 2px solid #EEEEDD;
 	border-left: 1px solid #EEEEDD;
 	border-bottom: 2px dotted #CCCCBB;
