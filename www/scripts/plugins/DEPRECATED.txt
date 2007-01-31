@@ -1,2 +1,0 @@
-details might contain som useful code for popup of URL.
-transform needs sarissa, which is not fast or reliable. use jquery to transform XML instead.
