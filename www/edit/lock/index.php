@@ -36,7 +36,7 @@ function lock($message) {
 	$lock->exec();
 	$p = Presentation::getInstance();
 	if (isset($_GET['download']) && $_GET['download']) {
-		$p->assign('redirect', getWebapp().'open/download/?target='.getTarget());
+		$p->assign('redirect', getWebapp().'open/download/?target='.urlencode(getTarget()));
 	}
 	displayEdit($p, getParent($targeturl));
 }
