@@ -246,7 +246,7 @@ function _login_getHttpStatus($targetUrl) {
  */
 function login_decodeQueryParam($array, $name) {
 	$v = rawurldecode($array[$name]);
-	if (mb_detect_encoding($v, 'UTF-8, ISO-8859-1')=='ISO-8859-1') {
+	if (mb_detect_encoding($v, 'UTF-8', 'ISO-8859-1')=='ISO-8859-1') {
 		trigger_error("The value of parameter '$name' ($v) is not valid UTF-8", E_USER_ERROR);
 	}
 	return $v;

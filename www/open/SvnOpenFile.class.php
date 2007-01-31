@@ -487,7 +487,7 @@ class SvnOpenFile {
 		$info = new SvnOpen('list', true);
 		$info->addArgRevision($this->_revision);
 		$info->addArgUrl($this->url);
-		$info->exec();
+		if($info->exec()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
 		return $this->_parseListXml($info->getOutput());
 	}
 	
