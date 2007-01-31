@@ -376,11 +376,7 @@ function login_setUserSettings() {
 	setcookie(USERNAME_KEY, $user, 0, '/');
 	
 	if (!isset($_COOKIE[THEME_KEY])) {
-		$style = '';
-		// temporarily suggest PE theme for some users
-		if ($user=='svensson' || $user=='pe') { 
-			$style = 'pe';
-		}
+		$style = ''; // default theme is standard
 		setcookie(THEME_KEY, $style, time()+7*24*3600, '/');	
 	}
 }

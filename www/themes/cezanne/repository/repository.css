@@ -1,0 +1,79 @@
+@charset "utf-8";
+/* Layout for the file browser */
+.actions {
+	vertical-align: inherit;
+	display: inline;
+}
+#contents {
+	padding-bottom: 20px;
+}
+/* commands */
+#commandbar #parent {
+	background-image: url('../commands/16x16/parent.png');
+}
+#commandbar #upload {
+	background-image: url('../commands/16x16/attach.png');
+}
+#commandbar #createfolder {
+	background-image: url('../commands/16x16/createfolder.png');
+}
+#commandbar #createfile {
+	background-image: url('filetypes/16x16/html.png');
+}
+/* details plugin */
+#commandbar #showdetails {
+	background-image: url('../details/details.png');
+}
+div.details {
+	position: relative;
+	left: 3.0em;
+	height: 1.8em;
+}
+div.details span {
+	margin: 0.4em;
+}
+/* directory listing */
+.file {
+	background-image: url('16x16/file.png');
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 30px;
+	margin-left: 10px;
+}
+.folder {
+	background-image: url('16x16/folder.png');
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 30px;
+	margin-left: 10px;
+}
+/* filetype icons */
+.file-zip { background-image: url('filetypes/16x16/zip.png');}
+.file-gz { background-image: url('filetypes/16x16/gz.png');}
+.file-sit { background-image: url('filetypes/16x16/sit.png');}
+.file-chm { background-image: url('filetypes/16x16/chm.png');}
+.file-exe { background-image: url('filetypes/16x16/exe.png');}
+.file-html { background-image: url('filetypes/16x16/html.png');}
+.file-htm { background-image: url('filetypes/16x16/htm.png');}
+.file-doc { background-image: url('filetypes/16x16/doc.png');}
+.file-ai { background-image: url('filetypes/16x16/ai.png');}
+.file-bmp { background-image: url('filetypes/16x16/bmp.png');}
+.file-gif { background-image: url('filetypes/16x16/gif.png');}
+.file-jpg { background-image: url('filetypes/16x16/jpg.png');}
+.file-png { background-image: url('filetypes/16x16/png.png');}
+.file-psd { background-image: url('filetypes/16x16/psd.png');}
+.file-tif { background-image: url('filetypes/16x16/tif.png');}
+.file-jar { background-image: url('filetypes/16x16/jar.png');}
+.file-log { background-image: url('filetypes/16x16/log.png');}
+.file-pdf { background-image: url('filetypes/16x16/pdf.png');}
+.file-ps { background-image: url('filetypes/16x16/ps.png');}
+.file-qt { background-image: url('filetypes/16x16/qt.png');}
+.file-sh { background-image: url('filetypes/16x16/sh.png');}
+.file-java { background-image: url('filetypes/16x16/java.png');}
+.file-php { background-image: url('filetypes/16x16/php.png');}
+.file-tmp { background-image: url('filetypes/16x16/tmp.png');}
+.file-txt { background-image: url('filetypes/16x16/txt.png');}
+.file-ics { background-image: url('filetypes/16x16/ics.png');}
+.file-vcf { background-image: url('filetypes/16x16/vcf.png');}
+.file-mpg { background-image: url('filetypes/16x16/mpg.png');}
+.file-sxw { background-image: url('filetypes/16x16/sxw.png');}
