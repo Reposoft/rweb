@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>repos.se dateformat plugin test page</title>
+<title>repos.se ResourceId plugin test page</title>
 <!-- unit testing -->
 <script type="text/javascript" src="../unittest.js"></script>
 <!-- dependencies -->
@@ -16,9 +16,20 @@
 <p>Reads svn:keyword strings and makes them user-readable, like "1.1-dev 1802".</p>
 <h2>examples</h2>
 <p>Automatically converts <code>#resourceversion</code> and <code>#releaseversion</code> if they are defined.</p>
-<p>URL Rev <span id="resourceversion" class="versiondisplay">resourceversion: $URL$ $Rev$</span></p>
-<p>URL <span id="releaseversion" class="versiondisplay">releaseversion: $URL$</span></p>
-<p>Id is not supported: $Id$</p>
+
+<!-- don't set svn:keywords on this page, because that rewrites the test strings -->
+
+<p>resourceversion $URL: https://www.repos.se/data/trunk/www/scripts/resourceid/index.html $ $Rev: 2121 $
+<br /><strong><span id="resourceversion" class="versiondisplay">
+resourceversion $URL: https://www.repos.se/data/trunk/www/resourceid/index.html $ $Rev: 2121 $
+</span></strong></p>
+
+<p>releaseversion $URL: https://www.repos.se/data/branches/repos/my-branch-1.2-RC1/index.html $ $Rev: 2121 $
+<br /><strong><span id="releaseversion" class="versiondisplay">
+releaseversion: $URL: https://www.repos.se/data/branches/repos/my-branch-1.2-RC1/index.html $ $Rev: 2121 $
+</span></strong></p>
+
+<p>Id is not supported: $Id: index.html 2121 2006-11-27 21:08:40Z solsson $</p>
 <h2>unit tests</h2>
 <script type="text/javascript">
 
@@ -55,6 +66,14 @@ function TestResourceId() {
 		assertEquals('1.2 dev', rid.getRelease(), "URL is a branch so should be version + dev");
 		assertEquals('', rid.getRevision(), "There is no Rev");
 	}};
+
+	this.testResourceIdOnlyURL = function() { with(this) {
+		// note the extra subfolder inside branches
+		var testid = ''+X+'URL: https://svn.optime.se/optime/repos/branches/web/repos-1.2/index.html '+X+'';
+		var rid = new ReposResourceId(testid);
+		assertEquals('1.2 dev', rid.getRelease(), "URL is a branch so should be version + dev");
+		assertEquals('', rid.getRevision(), "There is no Rev");
+	}};
 	
 	this.testResourceIdOnlyRev = function() { with(this) {
 		var testid = ''+X+'Rev: 1602 '+X+' only';
@@ -76,16 +95,36 @@ function TestResourceId() {
 		assertEquals('1.2.1', v, "Should not give revision number because this is a tag");
 	}};
 	
-	this.testGetReleaseversion = function() { with(this) {
-		var testid = 'version '+X+'URL: https://svn.optime.se/optime/repos/branches/trunk/index.html '+X+' '+X+'Rev: 1602 '+X+'';
+	this.testGetReleaseversionNoNumber = function() { with(this) {
+		var testid = 'repos.se '+X+'URL: https://svn.optime.se/optime/repos/branches/trunk/index.html '+X+' '+X+'Rev: 1602 '+X+'';
 		var v = _getReleaseVersion(testid);
-		assertEquals('version dev', v, "Should not show revision in 'releaseversion'");
+		assertEquals('repos.se dev', v, "Should not show revision in 'releaseversion'");
+	}};
+
+	this.testGetReleaseversionBeta = function() { with(this) {
+		var testid = 'repos.se '+X+'URL: https://optime.repos.se/data/repos/branches/reposweb-1.1-B2/index.html '+X+' '+X+'Rev: 1602 '+X+'';
+		var v = _getReleaseVersion(testid);
+		assertEquals('repos.se 1.1-B2 dev', v, "Should not show revision in 'releaseversion'");
+	}};
+
+	this.testGetReleaseversionBetaTag = function() { with(this) {
+		var testid = 'version '+X+'URL: https://optime.repos.se/data/repos/tags/repos-web-3.2.1-RC1/index.html '+X+' '+X+'Rev: 1602 '+X+'';
+		var v = _getReleaseVersion(testid);
+		assertEquals('version 3.2.1-RC1', v, "Should not show revision in 'releaseversion'");
 	}};
 	
 	this.testGetResourceversion = function() { with(this) {
 		var testid = ''+X+'URL: https://svn.optime.se/optime/repos/branches/www-1.2/index.html '+X+' '+X+'Rev: 1602 '+X+' now'
 		var v = _getResourceVersion(testid);
 		assertEquals('1.2 dev 1602 now', v, "Should return both release and revision for branch");
+	}};
+	
+	this.testGetReleaseversionURLRev = function() { with(this) {
+		var testid = 'repos.se '
+		+X+'URL: https://optime.repos.se/data/repos/branches/www/reposweb-1.1-B2/open/start/index_en.html $' +
+		+X+'Rev: 2405 $';
+		var v = _getReleaseVersion(testid);
+		assertEquals('repos.se 1.1-B2 dev', v, "Should return both release and revision for branch");		
 	}};
 	
 }

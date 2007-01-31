@@ -2,14 +2,15 @@
  * Repos show version number (c) Staffan Olsson http://www.repos.se
  * @version $Id$
  */
-
+ 
 function ReposResourceId(text) {
 	this.text = text;
+	// the release is the first version number "digits.digits..." up to next /
 	this.getRelease = function() {
 		if (/\/trunk\//.test(this.text)) return 'dev';
-		var b = /\/branches\/[^\/\d]+(\d[^\/]+)/.exec(this.text);
+		var b = /\/branches\/\D+(\d[^\/]+)/.exec(this.text);
 		if (b) return b[1] + ' dev';
-		var t = /\/tags\/[^\/\d]+(\d[\d\.]+)/.exec(this.text);
+		var t = /\/tags\/\D+(\d[^\/]+)/.exec(this.text);
 		if (t) {
 			this.isTag = true;
 			return t[1];

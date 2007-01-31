@@ -108,7 +108,7 @@ function TestFileId() {
 	}
 	
 	this.testFind = function() {
-		this.assertEquals('file.txt', new ReposFileId('file.txt').find('f').innerHTML);
+		this.assertEquals('file.txt', new ReposFileId('file.txt').find('open').innerHTML);
 	};
 
 	this.testFindNull = function() {
