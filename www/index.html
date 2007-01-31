@@ -1,179 +1,185 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<META HTTP-EQUIV="imagetoolbar" CONTENT="no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>repos.se development</title>
-<link href="style/style.css" rel="stylesheet" type="text/css" />
-<link href="style/text.css" rel="stylesheet" type="text/css" />
-<link href="style/links.css" rel="stylesheet" type="text/css" />
-</head>
+<link rel="shortcut icon" href="/favicon.ico">
+<script type="text/javascript">
 
-<body>
-<table width="680" height="768" cellpadding="0" cellspacing="0" class="table_body">
+function getWindowWidth() {
+	return Math.max(document.documentElement.clientWidth, document.body ? document.body.clientWidth : 0);
+}
+
+function getWindowHeight() {
+	return Math.max(document.documentElement.clientHeight, document.body ? document.body.clientHeight : 0);
+}
+
+var winw;
+var winh;
+var maxw = 1200; // maximal widht of the page after addition of dynamic content
+
+function showNews() {
+	return; // this is disabled
+	winw = getWindowWidth();
+	winh = getWindowHeight();
+	if (winw >= 1000) {	
+		frame = document.getElementById('feed');
+		unhideNews();
+	}
+}
+
+function unhideNews() {
+	var w = Math.min(winw, maxw) - 780;
+	var h = winh - 30;
+	frame = document.getElementById('feed');
+	frame.width = w;
+	frame.height = h;
+	if (setNewsStyles()) {
+		frame.style.display = '';
+	}
+	frame.style.display = '';
+}
+
+function setNewsStyles() {
+	var doc = window.frames['feed'].document
+	if (doc.getElementsByTagName('div').length < 1) {
+		console.info ('cant find a document');
+		return false; // probably the browser does not like xml+xslt
+	}
+	// copy this docment's styles to the feed iframe
+	var style = document.getElementsByTagName('style')[0];
+	var head = doc.getElementsByTagName('head')[0];
+	if (typeof(doc.importNode) != 'undefined') {
+		var s2 = doc.importNode(style, true);
+		head.appendChild(s2);
+	} else {
+		var styletext = style.innerHTML;
+		var s2 = doc.createElement('style');
+		s2.setAttribute('type', 'text/css');
+		if (s2.styleSheet) {
+			s2.styleSheet.cssText = styletext;
+		} else {
+			text = doc.createTextNode(styletext);
+			s2.appendChild(text);
+		}
+		head.appendChild(s2);
+	}
+	return true;
+}
+
+// currenlty disabled //Repos.observePluginLoad('transform', showNews);
+</script>
+<!-- the CSS must be placed after the head script so it is not updated according to theme settings -->
+<link href="style/global.css" rel="stylesheet" type="text/css">
+<link href="style/docs.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+body {
+ background: #CCCC99;
+ padding-left: 0px;
+ margin: 0px;
+ margin-top: 10px;
+ min-width: 760px;
+}
+#banner {
+	height:104px;
+	margin: 0px;
+	padding: 0px;
+	background-image:url(style/logo/2005-05-09_19-24-22.jpg);
+	background-position:right;
+	background-repeat:no-repeat;
+}
+/* news */
+#workspace {
+	display: table-row;
+}
+#contents {
+	width: 760px; 
+	height: auto; 
+	margin: 0; 
+	padding:10px;
+	border-left: 2px dotted #5B7900;
+	border-right: 2px dotted #5B7900;
+	border: 2px dotted #5B7900;
+	background: #ffffff;
+	color: #000000;
+	text-align: left;
+	margin-left: auto;
+	margin-right: auto;
+}
+#news {
+	position: absolute;
+	top: 5px;
+	left: 775px;
+	display: table-cell;
+	float: right;
+}
+#feed {
+	border: none;
+}
+/* new contents */
+.messages h1 {
+	font-size: 18px;
+}
+.messages #headlines {
+	display:none;
+}
+.messages h2 {
+	font-size: 14px;
+}
+.messages h3 {
+	font-size: 11px;
+}
+.messages p {
+	font-size: 0.8em;
+}
+.messages .username {
+	display:none;
+}
+.messages .url {
+	display:none;
+}
+</style>
+</head>
+<body onLoad="">
+<div id="contents">
+<table width="760" align="center" class="columns" border="0" cellspacing="0">
   <tr>
-    <td width="20" align="left" valign="top">&nbsp;</td>
-    <td width="640" align="left" valign="top"><table width="640" height="130" border="0" cellpadding="0" cellspacing="0">
-      <tr>
-        <td height="80" align="left" valign="bottom"><table width="640" height="80" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td width="23">&nbsp;</td>
-            <td width="472" align="left" valign="bottom"><img src="style/pics/logo.gif" alt="repos_logo" width="144" height="36" /></td>
-            <td width="10" align="left" valign="bottom"><img src="style/pics/hr_lod.gif" alt="hr" width="3" height="57" /></td>
-            <td width="102" align="right" valign="bottom" class="header">logga in <a href="/?login"><img src="style/pics/arrow_white_bg.gif" alt="arrow" width="31" height="14" border="0" /></a></td>
-            <td width="40">&nbsp;</td>
-          </tr>
-        </table></td>
-      </tr>
-      <tr>
-        <td height="20" align="left" valign="bottom">&nbsp;</td>
-      </tr>
-      <tr>
-        <td height="3"><img src="style/pics/hr_ver.gif" alt="hr" width="632" height="3" /></td>
-      </tr>
-      <tr>
-        <td height="24" align="left" valign="bottom"><table width="640" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td width="23">&nbsp;</td>
-            <!--<td width="54"><a href="./">Hem</a></td>	Width of this cell (54) is added to the last-->
-            <td width="63"><a href="./docs/about/">Demo</a></td>
-            <td width="84"><a href="./scripts/styleswitch/">V&auml;lj skal</a></td>
-            <!--<td width="42"><a href="#">FAQ</a></td> 	Width of this cell (42) is added to the last. (374+54+42=470)-->
-            <td width="470"><a href="mailto:info@repos.se">Kontakta oss</a></td>
-          </tr>
-        </table></td>
-      </tr>
-      <tr>
-        <td height="3"><img src="style/pics/hr_ver.gif" alt="hr" width="632" height="3" /></td>
-      </tr>
-    </table>
-    <br />
-    <table width="645" height="500" border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F4">
-      <tr>
-        <td width="5" height="20" align="left" valign="top">&nbsp;</td>
-        <td width="635" align="left" valign="top">&nbsp;</td>
-        <td width="5" align="left" valign="top">&nbsp;</td>
-      </tr>
-      <tr>
-        <td align="left" valign="top">&nbsp;</td>
-        <td height="210" align="center" valign="top"><table width="618" height="210" border="0" cellpadding="5" cellspacing="0" bgcolor="#FFFFFF" class="table_border">
-          <tr>
-            <td align="left" valign="top"><table width="618" height="210" border="0" cellpadding="0" cellspacing="0">
-              <tr>
-                <td align="left" valign="bottom"><img src="style/pics/folder.png" alt="image" width="187" height="202" /></td>
-                <td align="left" valign="top" bgcolor="#D5E0E0"><table width="400" height="210" border="0" cellpadding="0" cellspacing="0">
-                  <tr>
-                    <td width="40">&nbsp;</td>
-                    <td height="40">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>&nbsp;</td>
-                    <td align="left" valign="top"><span class="header2"><br />versionshantering &Aring;t folket<br />
-                      <br />
-                      <span class="text2">Repos &auml;r ett s&auml;tt att lagra, &auml;ndra och dela filer. Det fungerar som en  vanlig mapp i datorn, men tar ocks&aring; vara p&aring; filernas historik. Via  repos.se n&aring;r alla samma mappar i ett enkelt webbgr&auml;nssnitt.</span><br />
-                      <br />
-                      </span>
-					  <!--<a href="#">L&auml;s mer&nbsp;<img src="style/pics/arrow_blue_bg.gif" alt="arrow" width="31" height="14" border="0" /></a>-->
-					  </td>
-                  </tr>
-                </table></td>
-              </tr>
-            </table></td>
-          </tr>
-        </table></td>
-        <td align="left" valign="top">&nbsp;</td>
-      </tr>
-      <tr>
-        <td height="30" align="left" valign="top">&nbsp;</td>
-        <td align="left" valign="top">&nbsp;</td>
-        <td align="left" valign="top">&nbsp;</td>
-      </tr>
-      <tr>
-        <td align="left" valign="top">&nbsp;</td>
-        <td height="230" align="center" valign="top"><table width="635" height="230" border="0" cellpadding="0" cellspacing="0">
-          <tr align="left" valign="top">
-            <td><table width="155" cellpadding="0" cellspacing="0" class="table_border">
-              <tr>
-                <td height="20" bgcolor="#E9F4C9" class="header">allt arbete sparas</td>
-              </tr>
-              <tr>
-                <td height="150" align="left" valign="top" bgcolor="#FFFFFF" class="text"><br />Har du r&aring;kat svara fel p&aring; fr&aring;gan &quot;Vill du spara &auml;ndringar&quot;? F&ouml;rlorat en dags arbete. <br />
-                  <br />
-                  Du vill alltid spara det du gjort. Du vill kunna &aring;ngra en &auml;ndring. Du vill  korta ner dokument men ibland &aring;terg&aring; till det du raderat.</td>
-              </tr>
-              <tr>
-                <td height="20" align="left" valign="top" bgcolor="#FFFFFF">
-				<!--<a href="#">&nbsp;&nbsp;L&auml;s mer&nbsp;<img src="style/pics/arrow_white_bg.gif" alt="arrow" width="31" height="14" border="0" /></a>-->
-				</td>
-              </tr>
-            </table></td>
-            <td width="4">&nbsp;</td>
-            <td><table width="155" cellpadding="0" cellspacing="0" class="table_border">
-              <tr>
-                <td height="20" bgcolor="#E9F4C9" class="header">alltid &aring;tkomligt</td>
-              </tr>
-              <tr>
-                <td height="150" align="left" valign="top" bgcolor="#FFFFFF" class="text"><br />Har du filer p&aring; flera datorer? I en delad katalog? P&aring; ett fickminne? Kanske p&aring; mailen ocks&aring;? <br />
-                  <br />
-                  Du beh&ouml;ver en p&aring;litlig lagringsplats som n&aring;s via Internet, och n&auml;r du &auml;ndrat i en fil ska det sparas d&auml;r.</td>
-              </tr>
-              <tr>
-                <td height="20" align="left" valign="top" bgcolor="#FFFFFF">
-				<!--<a href="#">&nbsp;&nbsp;L&auml;s mer&nbsp;<img src="style/pics/arrow_white_bg.gif" alt="arrow" width="31" height="14" border="0" /></a>-->
-				</td>
-              </tr>
-            </table></td>
-            <td width="4">&nbsp;</td>
-            <td><table width="155" cellpadding="0" cellspacing="0" class="table_border">
-              <tr>
-                <td height="20" bgcolor="#E9F4C9" class="header">automatisk backup</td>
-              </tr>
-              <tr>
-                <td height="150" align="left" valign="top" bgcolor="#FFFFFF" class="text"><br />Du kan argumenten. Man ska g&ouml;ra backup. Men hur kul &auml;r det? <br />
-                  <br />
-                  Den  idealiska backupen sk&ouml;ter sig sj&auml;lv varje dag och finns kvar &auml;ven om  alla datorer och lagringsmedia i huset f&ouml;rsvinner. Den ing&aring;r i Repos.                  </td>
-              </tr>
-              <tr>
-                <td height="20" align="left" valign="top" bgcolor="#FFFFFF">
-				<!--<a href="#">&nbsp;&nbsp;L&auml;s mer&nbsp;<img src="style/pics/arrow_white_bg.gif" alt="arrow" width="31" height="14" border="0" /></a>-->
-				</td>
-              </tr>
-            </table></td>
-            <td width="4">&nbsp;</td>
-            <td><table width="155" cellpadding="0" cellspacing="0" class="table_border">
-              <tr>
-                <td height="20" bgcolor="#E9F4C9" class="header">samarbete</td>
-              </tr>
-              <tr>
-                <td height="150" align="left" valign="top" bgcolor="#FFFFFF" class="text"><br />Jod&aring;, det &auml;r samma visa &ouml;verallt. Du delar ut dokumentet. N&aring;gon g&ouml;r  en &auml;ndring och mailar till dig. N&aring;gon annan g&ouml;r en &auml;ndring, men i  originaldokumentet... <br />
-                  <br />
-                  Det finns smidigare s&auml;tt.<br />
-                    <br /></td>
-              </tr>
-              <tr>
-                <td height="20" align="left" valign="top" bgcolor="#FFFFFF">
-				<!--<a href="#">&nbsp;&nbsp;L&auml;s mer&nbsp;<img src="style/pics/arrow_white_bg.gif" alt="arrow" width="31" height="14" border="0" /></a>-->
-				</td>
-              </tr>
-            </table></td>
-          </tr>
-        </table></td>
-        <td align="left" valign="top">&nbsp;</td>
-      </tr>
-      <tr>
-        <td height="20" align="left" valign="top">&nbsp;</td>
-        <td align="left" valign="top">&nbsp;</td>
-        <td align="left" valign="top">&nbsp;</td>
-      </tr>
-    </table>
-    <br /></td>
-    <td width="20" align="left" valign="top">&nbsp;</td>
+  	<th id="banner" align="left" valign="middle" colspan="4">
+		<img alt="repos.se" src="style/logo/repos4.png" width="288" height="72" border="0" hspace="16" vspace="16"/>
+		<img alt="Versionshantering åt folket" src="style/logo/bannertext.png" width="424" height="40" border="0" hspace="0" vspace="0" title="Hj&auml;lmaren fr&aring;n kajak. foto: Staffan Olsson."/>
+	</th>
+  </tr>
+  <tr align="center">
+  	<td id="explain" colspan="4" style="border-left: 0px; border-right: 0px; padding:16px; ">Repos &auml;r ett s&auml;tt att lagra, &auml;ndra och dela filer. Det fungerar som en vanlig mapp i datorn, men tar ocks&aring; vara p&aring; filernas historik. Via repos.se n&aring;r alla samma mappar i ett enkelt webbgränssnitt.</td>
   </tr>
   <tr>
-    <td align="left" valign="top">&nbsp;</td>
-    <td align="left" valign="middle"><span class="text">Copyright &copy; Repos</span></td>
-    <td align="left" valign="top">&nbsp;</td>
+    <th scope="col" align="left">Allt arbete sparas </th>
+    <th scope="col" align="left">Alltid &aring;tkomligt</th>
+    <th scope="col" align="left">Automatisk backup </th>
+    <th scope="col" align="left">Samarbete</th>
+  </tr>
+  <tr valign="top">
+    <td width="25%" style="border-left: 0px;"><p>Har du r&aring;kat svara fel p&aring; fr&aring;gan &quot;Vill du spara &auml;ndringar&quot;? F&ouml;rlorat en dags arbete?  </p>
+    <p>Du vill alltid spara det du gjort. Du vill kunna ångra en ändring. Du vill korta ner dokument men ibland återgå till det du raderat.</p></td>
+    <td width="25%"><p>Har du filer p&aring; flera datorer? I en delad katalog? P&aring; ett fickminne? Kanske p&aring; mailen ocks&aring;? </p>
+    <p>Du beh&ouml;ver en p&aring;litlig lagringsplats som n&aring;s via Internet, och n&auml;r du &auml;ndrat i en fil ska det sparas d&auml;r. </p></td>
+    <td width="25%"><p>Du kan argumenten. Man ska g&ouml;ra backup. Men hur kul &auml;r det?</p>
+    <p>Den idealiska backupen sk&ouml;ter sig sj&auml;lv varje dag och finns kvar &auml;ven om alla datorer och lagringsmedia i huset f&ouml;rsvinner. Den ing&aring;r i Repos.</p></td>
+    <td width="25%" style="border-right: 0px;"><p>Jod&aring;, det &auml;r samma visa &ouml;verallt. Du delar ut dokumentet. N&aring;gon g&ouml;r en &auml;ndring och mailar till dig. N&aring;gon annan g&ouml;r en &auml;ndring, men i originaldokumentet...</p>
+    <p>Det finns smidigare s&auml;tt.</p></td>
+  </tr>
+  <tr>
+  	<td colspan="4" align="center" style="border-left: 0px; border-right: 0px;">
+		<a id="login" href="/?login" title="Ditt Repos">Logga in</a> &nbsp; | &nbsp; <a href="scripts/styleswitch/">Välj skal</a> &nbsp; | &nbsp; <a href="docs/about/">Demo</a> &nbsp; | &nbsp; <a href="mailto:info@repos.se">Kontakta oss</a>
   </tr>
 </table>
+</div>
+<!--
+<div id="news">
+<iframe src="/repos/view/external/?url=https://www.repos.se/sweden/staffan/messages.xml" id="feed" name="feed" style="display:none" frameborder="0" scrolling="auto"></iframe>
+</div>
+-->
+<div id="releaseversion" class="versiondisplay" style="display:none">repos.se version $URL$ $Rev$</div>
 </body>
 </html>
