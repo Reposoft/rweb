@@ -20,7 +20,7 @@ Repos.edit.enableMenu = function() {
 }
 
 Repos.edit.isEditPage = function() {
-	return typeof(document.getElementById('editForm')) != 'undefined';
+	return (document.getElementById('formEdit') != null);
 }
 
 Repos.edit.getCurrentType = function() {

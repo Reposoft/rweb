@@ -28,13 +28,16 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		$file = new SvnOpenFile($target);
 		$template->assign_by_ref('file', $file);
 		$template->assign('repository', getParent($targeturl));
+		// old file has type=extension
+		$template->assign('type', $file->getExtension());
 	} else {
 		$template->assign('repository', $targeturl);
+		// new file has a default type wich can be changed with query param
+		$template->assign('type', isset($_GET['type']) ? $_GET['type'] : 'txt');
 	}
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
 	$template->assign('target',$target);
 	$template->assign('targeturl', getTargetUrl());
-	$template->assign('type', isset($_GET['type']) ? $_GET['type'] : 'txt');
 	$template->display();
 } else {
 	trigger_error('This form should be posted to ../upload/.', E_USER_ERROR);	

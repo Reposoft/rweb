@@ -33,9 +33,9 @@ tinyMCE.init({
 }
  
 
-function editWriteNewVersion_html($postedText, $destinationFile, $type) {
+function editWriteNewVersion_html(&$postedText, $destinationFile) {
 	$postedText = preg_replace(
-		'/<(p|br|h1|h2|h3|ul|ol|li)/',
+		'/(?!\n)\s*<(p|br|h1|h2|h3|ul|ol|li)/',
 		"\n<$1",
 		$postedText
 	);

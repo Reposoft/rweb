@@ -46,9 +46,9 @@ if (!isTargetSet()) {
  * @return int the number of bytes in the new version of the file
  * @package edit
  */
-function editWriteNewVersion($postedText, $destinationFile, $type) {
+function editWriteNewVersion(&$postedText, $destinationFile, $type) {
 	if ($type && function_exists('editWriteNewVersion_'.$type)) {
-		return call_user_func('editWriteNewVersion_'.$type, $postedText, $destinationFile, $type);
+		return call_user_func('editWriteNewVersion_'.$type, $postedText, $destinationFile);
 	}
 	return _defaultWriteNewVersion($postedText, $destinationFile);
 }
@@ -57,7 +57,7 @@ function editWriteNewVersion($postedText, $destinationFile, $type) {
  * Writes $postedText as it is to $destinationFile, returns length of $postedText.
  * @see editWriteNewVersion
  */
-function _defaultWriteNewVersion($postedText, $destinationFile) {
+function _defaultWriteNewVersion(&$postedText, $destinationFile) {
 	$fp = fopen($destinationFile, 'w+');
 	if ($fp) {
 		fwrite($fp, $postedText);
@@ -78,8 +78,9 @@ function _defaultWriteNewVersion($postedText, $destinationFile) {
  * @return int the number of bytes in the new version of the file
  * @package edit
  */
-function editWriteNewVersion_txt($postedText, $destinationFile, $type) {
-	// TODO customize string
+function editWriteNewVersion_txt(&$postedText, $destinationFile) {
+	// already made UTF-8 by browser encoding
+	if (!strEnds($postedText, "\n")) $postedText.="\n";
 	return _defaultWriteNewVersion($postedText, $destinationFile);
 }
 
