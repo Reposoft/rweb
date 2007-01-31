@@ -2,6 +2,7 @@
  * Repos syntax highlighting plugin (c) repos.se 2006
  * Using dp.SyntaxHinglighter http://www.dreamprojections.com/SyntaxHighlighter/
  */
+// * Dynamic loading of brushes has been disabled, and can be found in reposweb-1.1-B1 */
 
 Repos.syntax = new Object();
 /* dp.SyntaxHinglighter library */
@@ -34,11 +35,7 @@ $(document).ready(function() {
 } );
 
 Repos.syntax.load = function() {
-	Repos.info('syntax plugin loading');	
-	Repos.addScript(
-		Repos.syntax.dp.path + 'Scripts/shCore.js',
-		function() { Repos.syntax.activate(); }
-	);
+	Repos.syntax.activate();
 }
 
 Repos.syntax.activate = function() {
@@ -50,13 +47,8 @@ Repos.syntax.activate = function() {
 			if ($(textarea).is('.'+type)) {
 				var brush = Repos.syntax.map[type];
 				textarea.setAttribute('class',''+brush+':nocontrols');
-				Repos.addScript(
-					Repos.syntax.brush[brush],
-					function() {
-						Repos.syntax.render(textarea); 
-						Repos.info('loading syntax "'+textarea.getAttribute('class')+'" for area "'+textarea.name+'"'); 
-					}
-				);
+				Repos.syntax.render(textarea); 
+				Repos.info('loading syntax "'+textarea.getAttribute('class')+'" for area "'+textarea.name+'"'); 
 				break; // only one syntax per text area
 			}
 		}
@@ -66,24 +58,3 @@ Repos.syntax.activate = function() {
 Repos.syntax.render = function(textarea) {
 	dp.SyntaxHighlighter.HighlightAll(textarea.name);
 }
-
-/*
-// ../../lib/dpsyntax/dp.SyntaxHighlighter/
-// Styles/SyntaxHighlighter.css
-<script class="javascript" src="Scripts/shCore.js"></script>
-<script class="javascript" src="Scripts/shBrushCSharp.js"></script>
-<script class="javascript" src="Scripts/shBrushPhp.js"></script>
-<script class="javascript" src="Scripts/shBrushJScript.js"></script>
-<script class="javascript" src="Scripts/shBrushJava.js"></script>
-<script class="javascript" src="Scripts/shBrushVb.js"></script>
-<script class="javascript" src="Scripts/shBrushSql.js"></script>
-<script class="javascript" src="Scripts/shBrushXml.js"></script>
-<script class="javascript" src="Scripts/shBrushDelphi.js"></script>
-<script class="javascript" src="Scripts/shBrushPython.js"></script>
-<script class="javascript" src="Scripts/shBrushRuby.js"></script>
-<script class="javascript" src="Scripts/shBrushCss.js"></script>
-<script class="javascript" src="Scripts/shBrushCpp.js"></script>
-<script class="javascript">
-dp.SyntaxHighlighter.HighlightAll('code');
-</script>
-*/

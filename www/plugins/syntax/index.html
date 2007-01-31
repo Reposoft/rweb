@@ -11,6 +11,20 @@
 <script language="javascript" type="text/javascript" src="../../scripts/lib/firebug/firebug.js"></script>
 <!-- dp.SyntaxHighlighter css included here, because Repos.addCss does not work in IE6 -->
 <link type="text/css" rel="stylesheet" href="syntax.css"></link>
+<!-- all the dpSyntaxHighligher scripts, normally loaded dynamically (by php) -->
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shCore.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushCSharp.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushPhp.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushJScript.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushVb.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushSql.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushDelphi.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushPython.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushRuby.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushCss.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushCpp.js"></script>
 <!-- the plugin -->
 <script type="text/javascript" src="../../plugins/syntax/syntax.js"></script>
 <!-- for unit testing -->
@@ -24,7 +38,7 @@ See <a href="../../lib/">lib/</a> folder.</p>
 <a href="javascript:syntaxShow()">show syntax highlighting</a></p>
 <p>Hit Ctrl+Shift+L for the debug console</p>
 <p>Textareas are posted unencoded, but contents in the HTML should be with htmlentities</p>
-
+<p><a href="syntax.test.php">PHP test</a></p>
 <h2>Javascript</h2>
 <textarea id="text:file.js" rows="4" cols="60" name="myjs" class="application_x-javascript js" readonly="readonly">
 $(document).ready(function() {

@@ -134,6 +134,14 @@ class HtmlReporter extends SimpleReporter {
     
     function paintMessage($message) {
     	parent::paintMessage($message);
+    	if (is_array($message)) {
+    		for ($i = 0; $i < count($message); $i++) {
+    			$message[$i] = $this->_htmlEntities($message[$i]);
+    		}
+    	} else {
+    		$message = $this->_htmlEntities($message);
+    	}
+    	// debug method accepts html, but in test results we always want it escapes so that all strings are visible
     	$this->report->debug($message);
     }
 
@@ -154,7 +162,8 @@ class HtmlReporter extends SimpleReporter {
      *    @access protected
      */
     function _htmlEntities($message) {
-        return htmlentities($message, ENT_COMPAT, $this->_character_set);
+        //return htmlentities($message, ENT_COMPAT, $this->_character_set);
+        return htmlspecialchars($message);
     }
     
 	function unCamelCase($str){

@@ -18,6 +18,10 @@
 <li><code>Repos.reportError(error)</code></li>
 <li><code>Repos.addScript(srcFromWebappRoot)</code></li>
 <li><code>Repos.addCss(srcFromWebappRoot)</code></li>
+<p>
+Dynamic loading of scripts and css has been disabled,
+because it was not reliable. Can be found in reposweb-1.1-B1.
+</p>
 </ul>
 <h2>unit tests</h2>
 <p>The unit test library overrides Repos.reportError, so it can't be tested, but the surrounding functions can be.</p>
@@ -77,33 +81,9 @@ function TestRepos() {
 	}
 	
 	this.testAddScript = function() {
-		// see http://www.mail-archive.com/discuss@jquery.com/msg10900.html
-		var loadEventHandler = function() {
-			window.addScript1 = true;
-			var p = document.createElement('p');
-			p.innerHTML = 'Callback reports that the added script has loaded';
-			document.getElementsByTagName('body')[0].appendChild(p);
-			// test load again
-			Repos.addScript('scripts/shared/otherscript.js', 
-				function() { window.addScript11 = true; console.log('second addScript handled'); });
-			if (window.addScript11) console.log('OK: second addScript handler was called synchronously');
-		}
-		var e = Repos.addScript('scripts/shared/otherscript.js', loadEventHandler);
+		var e = Repos.addScript('scripts/shared/otherscript.js');
 		this.assertEquals('object', typeof(e));
 		this.assertEquals(document.getElementsByTagName('head')[0],e.parentNode);
-		// now add the script again and make sure the event is fired immediately
-		this.assertTrue(typeof(window.addScript3)=='undefined');
-		var handler3 = function() {
-			console.log('OK: third addScript handler called');
-			if (typeof(window.addScript1)=='undefined') {
-				console.log('Failed: first load event has not fired yet');
-			} else {
-				window.addScript3 = true;
-			}
-		}
-		Repos.addScript('scripts/shared/otherscript.js', handler3);
-		this.assertTrue(typeof(window.addScript3)!='undefined');
-		// TODO how do we do asynchronous asserts?
 	}
 	
 	this.testAddScriptNonExisting = function() {
