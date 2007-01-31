@@ -2,7 +2,7 @@
 ; Use absolute paths, or paths starting with "admin" "html" "repo" or "backup"
 
 ; the ACL
-administration/repos-access = admin/repos-access
+administration/repos-access.acl = admin/repos-access
 
 ; host startpage, start.html and contents
 administration/startpage/ = html/

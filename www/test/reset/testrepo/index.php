@@ -85,16 +85,17 @@ setup_svn("co file:///$repourl $wc");
 // create administration folder
 System::createFolder($wc."administration/");
 // and copy the access file to the administration area for use with hooks
-$repositoryacl = $wc.'administration/repos-access';
+$repositoryacl = $wc.'administration/repos-access.acl';
 copy($aclfile, $repositoryacl);
 
-//system("$svn co file://$repourl $test/wc/");
+// user accounts, same as in access/create/
 System::createFolder($wc."svensson/");
 System::createFolder($wc."svensson/trunk/");
-//System::createFolder($wc."svensson/calendar/");
+
 System::createFolder($wc."test/");
 System::createFolder($wc."test/trunk/");
-//System::createFolder($wc."test/calendar/");
+
+// project that all test users can access
 System::createFolder($wc."demoproject/");
 System::createFolder($wc."demoproject/trunk/");
 System::createFolder($wc."demoproject/trunk/noaccess/");
