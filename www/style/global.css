@@ -14,52 +14,52 @@ a {
 	text-decoration: none;
 }
 
-a#open {
+div.section#actions a#open {
 	background: url(commands/32x32/open.png) left no-repeat;
 	padding: 10px 0px 10px 40px;
 }
 
-a#download {
+div.section#actions a#download {
 	background: url(commands/32x32/download.png) left no-repeat;
 	padding: 10px 0px 10px 40px;
 }
 
-a#download_upload {
+div.section#actions a#download_upload {
 	background: url(commands/32x32/download_upload.png) left no-repeat;
 	padding: 10px 0px 10px 40px;
 }
 
-a#download_lock {
+div.section#actions a#download_lock {
 	background: url(commands/32x32/download_lock.png) left no-repeat;
 	padding: 10px 0px 10px 40px;
 }
 
-a#edit {
+div.section#actions a#edit {
 	background: url(commands/32x32/edit.png) left no-repeat;
 	padding: 10px 0px 10px 40px;
 }
 
-a#upload {
+div.section#actions a#upload {
 	background: url(commands/32x32/upload.png) left no-repeat;
 	padding: 10px 0px 10px 40px;
 }
 
-a#lock {
+div.section#actions a#lock {
 	background: url(commands/32x32/lock.png) left no-repeat;
 	padding: 10px 0px 10px 40px;
 }
 
-a#url {
+div.section#actions a#use_url {
 	background: url(commands/32x32/url.png) left no-repeat;
 	padding: 10px 0px 10px 40px;
 }
 
-a#history {
+div.section#actions a#history {
 	background: url(commands/32x32/history.png) left no-repeat;
 	padding: 10px 0px 10px 40px;
 }
 
-a#view {
+div.section#actions a#view {
 	background: url(commands/32x32/view.png) left no-repeat;
 	padding: 10px 0px 10px 40px;
 }
