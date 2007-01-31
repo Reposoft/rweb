@@ -54,6 +54,11 @@ a#url {
 	padding: 10px 0px 10px 40px;
 }
 
+a#history {
+	background: url(commands/32x32/history.png) left no-repeat;
+	padding: 10px 0px 10px 40px;
+}
+
 a#view {
 	background: url(commands/32x32/view.png) left no-repeat;
 	padding: 10px 0px 10px 40px;
@@ -302,6 +307,10 @@ div.section {
 	border-bottom: 1px solid #CCCCCC;
 	border-right: 1px solid #CCCCCC;
 	display: block;	
+}
+
+div.section#actions p {
+	padding-left: 40px;
 }
 
 /* maybe we need something more generic for left and right column */

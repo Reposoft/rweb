@@ -63,9 +63,9 @@ will be appended to the filename, so you know which version it is.</p>
 This works for text files. If the file is a binary file, like a word document,
 you will see only a long line of characters.</p>
 {=/if}
-<h3><a href="log/?target={=$target}&rev={=$rev}">View history</a></h3>
+<h3><a id="history" href="log/?target={=$target}&rev={=$rev}">View history</a></h3>
 <p>View the commits that this file has been involved in.</p>
-<h3><a href="#url" onblur="document.getElementById('url').select();"/>Use the URL</a></h3>
+<h3><a id="url" href="#url" onblur="document.getElementById('url').select();"/>Use the URL</a></h3>
 <!--{if $file,isLatestRevision}-->
 <p>The URL is a global ID for the file.
 In e-mails it can be used instead of attachments.
