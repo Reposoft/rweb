@@ -11,8 +11,8 @@
 #commandbar #parent {
 	background-image: url('../commands/16x16/parent.png');
 }
-#commandbar #upload {
-	background-image: url('../commands/16x16/attach.png');
+#commandbar #addfile {
+	background-image: url('../commands/24x24/upload.png');
 }
 #commandbar #createfolder {
 	background-image: url('../commands/16x16/createfolder.png');

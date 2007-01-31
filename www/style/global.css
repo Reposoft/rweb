@@ -189,19 +189,19 @@ acronym, span.explain {
 	background-position: left center;
 	background-repeat: no-repeat;
 	font-size: 82.5%;
-	margin-left: 5px;
-	margin-right: 5px;
+	margin-left: 0px;
+	margin-right: 0px;
 	margin-top: 0px;
 	margin-bottom: 0px;
 	padding-left: 20px;
-	padding-right: 0.2em;
+	padding-right: 0.4em;
 	padding-top: 0.2em;
 	padding-bottom: 0.2em;
 }
 a.command {
 	color: #333333;
-	border-left: 1px solid #f0f0ee;
-	border-right: 1px solid #f0f0ee;
+	border-left: 1px solid #e0e0de;
+	border-right: 1px solid #f9f9f8;
 }
 span.command {
 	color: #BBBBBB;
