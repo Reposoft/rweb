@@ -49,6 +49,11 @@ a#lock {
 	padding: 10px 0px 10px 40px;
 }
 
+a#url {
+	background: url(commands/32x32/url.png) left no-repeat;
+	padding: 10px 0px 10px 40px;
+}
+
 a#view {
 	background: url(commands/32x32/view.png) left no-repeat;
 	padding: 10px 0px 10px 40px;
@@ -292,10 +297,10 @@ div.section {
 	margin: 5px;
 	padding: 5px;
 	background-color: #FFFFFF;
-	border-top: 2px solid #EEEEDD;
-	border-left: 1px solid #EEEEDD;
-	border-bottom: 2px dotted #CCCCBB;
-	border-right: 2px solid #CCCCBB;
+	border-top: 15px solid #E9F4C9;
+	border-left: 1px solid #CCCCCC;
+	border-bottom: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
 	display: block;	
 }
 
