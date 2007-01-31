@@ -129,7 +129,7 @@ function showUploadForm() {
 	$template->assign('target',$target);
 	if (isset($_GET['download'])) {
 		// needs an absolute url for meta refresh
-		$template->assign('download', getWebapp().'open/download/?target='.getTarget());
+		$template->assign('download', getWebapp().'open/download/?target='.urlencode(getTarget()));
 	}
 	$template->display();
 }
