@@ -10,12 +10,34 @@ function syntax_getBrushes() {
 	'/(.*)/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shCore.js',
 	'/\.(php)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushPhp.js',
 	'/\.(js)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushJScript.js',
-	'/\.(xml|htm|html)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushXml.js',
+	'/\.(java)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushJava.js',
+	'/\.(vba?)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushVb.js', // what filetypes for VB?
+	'/\.(sql)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushSql.js',
+	'/\.(py)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushPython.js',
+	'/\.(rb)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushRuby.js',
+	'/\.(cpp)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushCpp.js',
 	'/\.(css)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushCss.js',
+	'/\.(xml|htm|html|xsl|jsp)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushXml.js',
 	'/\.(txt)\b/' => 'plugins/syntax/shBrushWiki.js',
 	'/open\/(diff)\/\?/' => 'plugins/syntax/shBrushDiff.js'
 	);
 }
+
+/*
+ * <script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushCSharp.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushPhp.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushJScript.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushVb.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushSql.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushDelphi.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushPython.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushRuby.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushCss.js"></script>
+<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushCpp.js"></script>
+ * 
+ */
 
 function syntax_getHeadTags($webapp) {
 	$REPOS_SYNTAX_BRUSH = syntax_getBrushes();

@@ -8,16 +8,7 @@ Repos.syntax = new Object();
 /* dp.SyntaxHinglighter library */
 Repos.syntax.dp = new Object();
 Repos.syntax.dp.path = 'lib/dpsyntax/dp.SyntaxHighlighter/';
-/* The available highlighting types, each with its own js */
-Repos.syntax.brush = {
-	php: Repos.syntax.dp.path + 'Scripts/shBrushPhp.js',
-	js: Repos.syntax.dp.path + 'Scripts/shBrushJScript.js',
-	xml: Repos.syntax.dp.path + 'Scripts/shBrushXml.js',
-	css: Repos.syntax.dp.path + 'Scripts/shBrushCss.js',
-	wiki: 'plugins/syntax/shBrushWiki.js',
-	diff: 'plugins/syntax/shBrushDiff.js'
-};
-/* Maps classes to syntax types, class => brush */
+/* Maps classes/types to syntax types, class => brush */
 Repos.syntax.map = new Object();
 Repos.syntax.map["php"] = "php";
 Repos.syntax.map["js"] = "js";
@@ -27,8 +18,6 @@ Repos.syntax.map["htm"] = "xml";
 Repos.syntax.map["css"] = "css";
 Repos.syntax.map["diff"] = "diff";
 Repos.syntax.map["txt"] = "wiki";
-
-// for(b in Repos.syntax.brush) { Repos.info('syntax "'+b+'": '+Repos.syntax.brush[b]); }
 
 $(document).ready(function() { 
 	Repos.syntax.load(); 

@@ -123,36 +123,26 @@ function eraseCookie(name)
 /**
  * Repos shared script logic (c) Staffan Olsson www.repos.se
  * Static functions, loaded after prepare and jquery.
- * @version $Id: repos.js 2354 2007-01-22 15:20:39Z solsson $
+ * @version $Id: repos.js 2456 2007-01-31 12:55:00Z solsson $
  */
 var Repos = {
 
+	/*
+	 Dynamic loading of scripts and css has been disabled,
+	 because it was not reliable. Can be found in reposweb-1.1-B1.
+	 */
+
 	// -------------- plugin setup --------------
-	
-	loadedPlugins: new Array(),
 	
 	/**
 	 * Adds a javascript to the current page and evaluates it (asynchronously).
 	 * @param src script url from repos root, not starting with slash
-	 * @param loadEventHandler callback function for when the script has been evaluated,
 	 * @return the script element that was appended
 	 */
 	addScript: function(src, loadEventHandler) {
 		var srcUrl = Repos.getWebapp() + src;
 		if (/:\/\/localhost[:\/]/.test(window.location.href)) srcUrl += '?'+(new Date().getTime());
-		var state = typeof(Repos.loadedPlugins[srcUrl]);
-		if (state == 'boolean') {
-			loadEventHandler(); // already loaded
-			return;
-		}
-		if (state == 'object') {
-			$(Repos.loadedPlugins[srcUrl]).load(loadEventHandler);
-			return;
-		}
 		var s = document.createElement('script');
-		$(s).load(function(){ Repos.loadedPlugins[this.src] = true; });
-		if (typeof(loadEventHandler) != 'undefined') { $(s).load(loadEventHandler); }
-		Repos.loadedPlugins[srcUrl] = s;
 		s.type = "text/javascript";
 		s.src = srcUrl;
 		document.getElementsByTagName('head')[0].appendChild(s);

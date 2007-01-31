@@ -16,6 +16,7 @@ http://www.dreamprojections.com/SyntaxHighlighter/
 
 .dp-highlighter .bar
 {
+	display: none; /* :nocontrols not working in IE6 */
 	padding-left: 45px;
 }
 
