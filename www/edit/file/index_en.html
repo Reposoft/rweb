@@ -30,7 +30,7 @@ function autoFillFilename(filename) {
 <form id="formEdit" action="../upload/" method="post" name="formUpload">
 <fieldset>
 	<!--{if $file}-->
-	<legend>Edit <span class="path">{=$target}</span> {=$file,revision} with type {=$file,type}</legend>
+	<legend>Edit <a class="file" href="{=$file,url}">{=$target}</a> {=$file,revision} with type {=$file,type}</legend>
 	<!--{else}-->
 	<legend>Create new file in {=$target}</legend>
 	<!--{/if}-->

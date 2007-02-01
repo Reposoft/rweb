@@ -41,7 +41,7 @@ function autoFillFilename(path) {
 Save the file on your hard drive, edit, then upload the new version in the form below.</p>
 <!--{/if}-->
 <!--{if $isfile}-->
-<p>As a new version of file <span class="path">{=$target}</span>. <a class="action" target="_blank" href="../open/?target={=$target}">open current version</a></p>
+<p>As a new version of file <a class="file" href="../open/?target={=$target}">{=$target}</a>.</p>
 <div class="details" title="{=$target}" style="display: none">
 Current revision: <span class="revision"></span><br />
 Last modified <span class="datetime"></span> by <span class="username"></span><br />

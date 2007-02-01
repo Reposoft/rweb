@@ -6,13 +6,13 @@
 </head>
 
 <body>
-<div id="workspace">
 <div id="commandbar">
 <a id="repository" class="command" href="{=$repository|urlEncodeNames}">return to repository</a>
 </div>
-<div id="contents">
 <h1>Delete <span class="filename">{=$target|basename}</span>?</h1>
-<p>After deletion it will not be present in the latest revision, but can always be recovered from the the history for the parent folder <span class="path">{=$target|dirname}</span>.</p>
+<p>After deletion it will not be present in the latest revision, but can always be recovered from the the history for the parent folder
+<span class="folder">{=$target|dirname}/</span>.</p>
+<div class="column">
 <form id="delete" name="delete" method="get" action="#">
 	<fieldset>
 	<legend>delete</legend>
@@ -33,6 +33,7 @@
   </fieldset>
 </form>
 </div>
+<div id="footer">
 </div>
 </body>
 </html>
