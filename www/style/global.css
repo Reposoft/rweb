@@ -6,64 +6,13 @@ html {
 body {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
 	font-size: 82.5%;
-	min-width: 600px;
+	min-width: 980px;
 }
 /* resume with em font sizes relative to the above */
 a {
 	color: #003399;
 	text-decoration: none;
 }
-
-div.section#actions a#open {
-	background: url(commands/32x32/open.png) left no-repeat;
-	padding: 10px 0px 10px 40px;
-}
-
-div.section#actions a#download {
-	background: url(commands/32x32/download.png) left no-repeat;
-	padding: 10px 0px 10px 40px;
-}
-
-div.section#actions a#download_upload {
-	background: url(commands/32x32/download_upload.png) left no-repeat;
-	padding: 10px 0px 10px 40px;
-}
-
-div.section#actions a#download_lock {
-	background: url(commands/32x32/download_lock.png) left no-repeat;
-	padding: 10px 0px 10px 40px;
-}
-
-div.section#actions a#edit {
-	background: url(commands/32x32/edit.png) left no-repeat;
-	padding: 10px 0px 10px 40px;
-}
-
-div.section#actions a#upload {
-	background: url(commands/32x32/upload.png) left no-repeat;
-	padding: 10px 0px 10px 40px;
-}
-
-div.section#actions a#lock {
-	background: url(commands/32x32/lock.png) left no-repeat;
-	padding: 10px 0px 10px 40px;
-}
-
-div.section#actions a#use_url {
-	background: url(commands/32x32/url.png) left no-repeat;
-	padding: 10px 0px 10px 40px;
-}
-
-div.section#actions a#history {
-	background: url(commands/32x32/history.png) left no-repeat;
-	padding: 10px 0px 10px 40px;
-}
-
-div.section#actions a#view {
-	background: url(commands/32x32/view.png) left no-repeat;
-	padding: 10px 0px 10px 40px;
-}
-
 table p {
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
@@ -246,6 +195,42 @@ span.action {
 #commandbar #logout {
 	background-image: url('commands/16x16/logout.png');
 }
+/* common activities, same id as commands */
+#activities h3 a {
+	padding: 10px 0px 10px 40px;
+	background-position: left;
+	background-repeat: no-repeat;
+}
+#activities #open {
+	background-image: url(commands/32x32/open.png);
+}
+#activities #download {
+	background-image: url(commands/32x32/download.png);
+}
+#activities #download_upload {
+	background-image: url(commands/32x32/download_upload.png);
+}
+#activities #download_lock {
+	background-image: url(commands/32x32/download_lock.png);
+}
+#activities #edit {
+	background-image: url(commands/32x32/edit.png);
+}
+#activities #upload {
+	background-image: url(commands/32x32/upload.png);
+}
+#activities #lock {
+	background-image: url(commands/32x32/lock.png);
+}
+#activities #useurl {
+	background-image: url(commands/32x32/url.png);
+}
+#activities #history {
+	background-image: url(commands/32x32/history.png);
+}
+#activities #view {
+	background-image: url(commands/32x32/view.png);
+}
 /* -------- forms ---------
 <form>
 <fieldset>
@@ -309,10 +294,6 @@ div.section {
 	display: block;	
 }
 
-div.section#actions p {
-	padding-left: 40px;
-}
-
 /* maybe we need something more generic for left and right column */
 
 div#intro {
@@ -320,9 +301,13 @@ div#intro {
 	float: left;
 }
 
-div#actions {
+div#activities {
 	width: 50%;
 	float: left;
+}
+
+div#activities p {
+	padding-left: 40px;
 }
 
 div#filedetails {

@@ -5,77 +5,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>repos.se development</title>
 <link rel="shortcut icon" href="/favicon.ico">
-<script type="text/javascript">
-
-function getWindowWidth() {
-	return Math.max(document.documentElement.clientWidth, document.body ? document.body.clientWidth : 0);
-}
-
-function getWindowHeight() {
-	return Math.max(document.documentElement.clientHeight, document.body ? document.body.clientHeight : 0);
-}
-
-var winw;
-var winh;
-var maxw = 1200; // maximal widht of the page after addition of dynamic content
-
-function showNews() {
-	return; // this is disabled
-	winw = getWindowWidth();
-	winh = getWindowHeight();
-	if (winw >= 1000) {	
-		frame = document.getElementById('feed');
-		unhideNews();
-	}
-}
-
-function unhideNews() {
-	var w = Math.min(winw, maxw) - 780;
-	var h = winh - 30;
-	frame = document.getElementById('feed');
-	frame.width = w;
-	frame.height = h;
-	if (setNewsStyles()) {
-		frame.style.display = '';
-	}
-	frame.style.display = '';
-}
-
-function setNewsStyles() {
-	var doc = window.frames['feed'].document
-	if (doc.getElementsByTagName('div').length < 1) {
-		console.info ('cant find a document');
-		return false; // probably the browser does not like xml+xslt
-	}
-	// copy this docment's styles to the feed iframe
-	var style = document.getElementsByTagName('style')[0];
-	var head = doc.getElementsByTagName('head')[0];
-	if (typeof(doc.importNode) != 'undefined') {
-		var s2 = doc.importNode(style, true);
-		head.appendChild(s2);
-	} else {
-		var styletext = style.innerHTML;
-		var s2 = doc.createElement('style');
-		s2.setAttribute('type', 'text/css');
-		if (s2.styleSheet) {
-			s2.styleSheet.cssText = styletext;
-		} else {
-			text = doc.createTextNode(styletext);
-			s2.appendChild(text);
-		}
-		head.appendChild(s2);
-	}
-	return true;
-}
-
-// currenlty disabled //Repos.observePluginLoad('transform', showNews);
-</script>
 <!-- the CSS must be placed after the head script so it is not updated according to theme settings -->
 <link href="style/global.css" rel="stylesheet" type="text/css">
 <link href="style/docs.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="scripts/head.js">
 <style type="text/css">
 body {
- background: #CCCC99;
+ background: #f4f4f4;
  padding-left: 0px;
  margin: 0px;
  margin-top: 10px;
@@ -151,23 +87,29 @@ body {
 	</th>
   </tr>
   <tr align="center">
-  	<td id="explain" colspan="4" style="border-left: 0px; border-right: 0px; padding:16px; ">Repos &auml;r ett s&auml;tt att lagra, &auml;ndra och dela filer. Det fungerar som en vanlig mapp i datorn, men tar ocks&aring; vara p&aring; filernas historik. Via repos.se n&aring;r alla samma mappar i ett enkelt webbgränssnitt.</td>
+  	<td id="explain" colspan="4" style="border-left: 0px; border-right: 0px; padding:16px; ">
+  	Repos <span id="releaseversion" class="versiondisplay">$URL$</span>
+  	</td>
   </tr>
   <tr>
-    <th scope="col" align="left">Allt arbete sparas </th>
-    <th scope="col" align="left">Alltid &aring;tkomligt</th>
-    <th scope="col" align="left">Automatisk backup </th>
+    <th scope="col" align="left">Server status</th>
+    <th scope="col" align="left">Installed libraries</th>
+    <th scope="col" align="left">Current repository</th>
     <th scope="col" align="left">Samarbete</th>
   </tr>
   <tr valign="top">
-    <td width="25%" style="border-left: 0px;"><p>Har du r&aring;kat svara fel p&aring; fr&aring;gan &quot;Vill du spara &auml;ndringar&quot;? F&ouml;rlorat en dags arbete?  </p>
-    <p>Du vill alltid spara det du gjort. Du vill kunna ångra en ändring. Du vill korta ner dokument men ibland återgå till det du raderat.</p></td>
-    <td width="25%"><p>Har du filer p&aring; flera datorer? I en delad katalog? P&aring; ett fickminne? Kanske p&aring; mailen ocks&aring;? </p>
-    <p>Du beh&ouml;ver en p&aring;litlig lagringsplats som n&aring;s via Internet, och n&auml;r du &auml;ndrat i en fil ska det sparas d&auml;r. </p></td>
-    <td width="25%"><p>Du kan argumenten. Man ska g&ouml;ra backup. Men hur kul &auml;r det?</p>
-    <p>Den idealiska backupen sk&ouml;ter sig sj&auml;lv varje dag och finns kvar &auml;ven om alla datorer och lagringsmedia i huset f&ouml;rsvinner. Den ing&aring;r i Repos.</p></td>
-    <td width="25%" style="border-right: 0px;"><p>Jod&aring;, det &auml;r samma visa &ouml;verallt. Du delar ut dokumentet. N&aring;gon g&ouml;r en &auml;ndring och mailar till dig. N&aring;gon annan g&ouml;r en &auml;ndring, men i originaldokumentet...</p>
-    <p>Det finns smidigare s&auml;tt.</p></td>
+    <td width="25%" style="border-left: 0px;">
+    
+    </td>
+    <td width="25%">
+    
+    </td>
+    <td width="25%">
+    
+    </td>
+    <td width="25%" style="border-right: 0px;">
+    
+    </td>
   </tr>
   <tr>
   	<td colspan="4" align="center" style="border-left: 0px; border-right: 0px;">

@@ -35,7 +35,7 @@ You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 <p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
 <p>Content type: <span>{=$file,type}</span></p>
 </div>
-<div id="actions" class="section">
+<div id="activities" class="section">
 <h2>View file</h2>
 <p>
 {=if $file,size gt 102400}
@@ -65,7 +65,7 @@ you will see only a long line of characters.</p>
 {=/if}
 <h3><a id="history" href="log/?target={=$target}&rev={=$rev}">View history</a></h3>
 <p>View the commits that this file has been involved in.</p>
-<h3><a id="use_url" href="#url" onblur="document.getElementById('url').select();"/>Use the URL</a></h3>
+<h3><a id="useurl" href="#url" onblur="document.getElementById('url').select();"/>Use the URL</a></h3>
 <!--{if $file,isLatestRevision}-->
 <p>The URL is a global ID for the file.
 In e-mails it can be used instead of attachments.

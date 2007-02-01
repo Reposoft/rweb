@@ -10,7 +10,7 @@
 <a id="repository" class="command" href="{=$file,folderUrl}">return to repository</a>
 </div>
 <h1><span class="path">{=$file,filename}</span> <span class="revision">{=$file,revision}</span></h1>
-<div id="info" class="section">
+<div id="intro" class="section">
 <p>If you only need to read the file, not edit it, go to <a href="../open/?target={=$target}&rev={=$rev}">view</a>.</p> 
 <!--{if not $file,isLatestRevision}-->
 <p>This is an old version of the file. It can not be edited.
@@ -35,7 +35,7 @@ you can always refer to the file as it is now.</p>
 <p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
 <p>Content type: <span>{=$file,type}</span></p>
 </div>
-<div id="actions" class="section">
+<div id="activities" class="section">
 <h2>Edit</h2>
 {=if $file,isLockedByThisUser}
 <p>The file is <strong>locked</strong> by you. We recommend you <a href="upload/?target={=$target}">Upload new version</a>.</p>
@@ -72,7 +72,7 @@ This means that only one user at a time can work with the file.
 <p>
 If you have already downloaded and edited the file, upload your changes to create a new verison.
 </p>
-<h3><a id="edit" href="file/?target={=$target}&text">Edit in Repos</a></h3>
+<h3><a id="edit" href="file/?target={=$target}">Edit in Repos</a></h3>
 <p>
 Plain text documents and HTML can be conveniently edited in your browser.
 No locking is needed, and when you save it creates a new version of the file.
@@ -99,7 +99,7 @@ You will get a link to the branch, and from there you can access the "merge" fun
 you can unlock it so that others are able to edit it.</p>
 {=/if}
 <!--{/if}-->
-<h3><a id="use_url" href="#url" onblur="document.getElementById('url').select();"/>Use the URL</a></h3>
+<h3><a id="useurl" href="#url" onblur="document.getElementById('url').select();"/>Use the URL</a></h3>
 <!--{if $file,isLatestRevision}-->
 <p>Many modern programs can use URLs to open files directly from the server.</p>
 <p>Office documents can usually be edited directly.
