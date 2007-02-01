@@ -13,7 +13,7 @@ require_once( dirname(dirname(__FILE__)) . '/open/SvnOpen.class.php' ); // To ge
 
 // configuration index settings
 $sections = array(
-	'links' => 'Links',
+	'links' => 'Status of repos.properties',
 	'requiredConfig' => 'Required configuration entries',
 	'requiredFiles' => 'Checking configuration paths',
 	'dependencies' => 'Required command line tools',
@@ -24,11 +24,12 @@ $sections = array(
 	);
 // validating configuration
 $links = array(
-	'/?logout' => 'Log out',
+	'php/TestServerSettings.php' => 'php.ini',
 	'../admin/configure/' => 'System configuration help',
 	'../admin/' => 'Administration',
 	'../test/' => 'Automated tests',
-	'../' => 'startpage'
+	'../' => 'startpage',
+	'/?logout' => 'Log out'
 	);
 $requiredConfig = array(
 	'repos_web' => 'The url of this website',
@@ -228,7 +229,7 @@ function resources() {
 	line_end();
 	
 	line_start('Script wrapper: ');
-	$w = _repos_getScriptWrapper();
+	$w = _command_getScriptWrapper();
 	if (!$w) {
 		sayOK('Not needed on this server');
 	} elseif (!file_exists($w)) {
