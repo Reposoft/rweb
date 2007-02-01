@@ -16,34 +16,34 @@ function ReposResourceId(text) {
 			return t[1];
 		}
 		return '';
-	}
+	};
 	this.getRevision = function() {
 		var rev = /Rev:\s(\d+)/.exec(this.text);
 		if (rev) return rev[1];
 		rev = /Id:\s\S+\s(\d+)/.exec(this.text);
 		if (rev) return rev[1];
 		return '';
-	}
+	};
 	this.getTextBefore = function() {
 		return /(^[^\$]*)/.exec(this.text)[1];
-	}
+	};
 	this.getTextAfter = function() {
 		return /([^\$]*$)/.exec(this.text)[1];
-	}
-}
+	};
+};
 
 // ----- marking screens -----
 _getReleaseVersion = function(versionText) {
 	var rid = new ReposResourceId(versionText);
 	return rid.getTextBefore() + rid.getRelease() + rid.getTextAfter();
-}
+};
 
 _getResourceVersion = function(versionText) {
 	var rid = new ReposResourceId(versionText);
 	var release = rid.getRelease();
 	if (rid.isTag) return rid.getTextBefore() + release + rid.getTextAfter();
 	return rid.getTextBefore() + release + ' ' + rid.getRevision() + rid.getTextAfter();
-}
+};
 
 _showVersion = function() {
 	try {
@@ -58,6 +58,6 @@ _showVersion = function() {
 	} catch (err) {
 		Repos.reportError(err);
 	}
-},
+};
 
 $(document).ready( function() { _showVersion(); } );

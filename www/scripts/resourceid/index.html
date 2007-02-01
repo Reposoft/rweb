@@ -8,7 +8,7 @@
 <!-- dependencies -->
 <script type="text/javascript" src="../lib/jquery/jquery.js"></script>
 <!-- the script -->
-<script type="text/javascript" src="ReposResouceId.js"></script>
+<script type="text/javascript" src="ReposResourceId.js"></script>
 </head>
 
 <body>
@@ -82,7 +82,7 @@ function TestResourceId() {
 		assertEquals('1602', rid.getRevision(), "Should return the revision from Rev");
 	}};
 	
-	this.testResouceIdId = function() { with(this) {
+	this.testResourceIdId = function() { with(this) {
 		var testid = 'repos.se stylesheet version '+X+'Id: repos.xsl 1601 2006-09-14 09:09:50Z solsson '+X+'';
 		var rid = new ReposResourceId(testid);
 		assertEquals('1601', rid.getRevision(),'"Should be able to get revision number from '+X+'Id'+X+' keyword too');
