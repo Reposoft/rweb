@@ -8,7 +8,6 @@ body {
 	font-size: 82.5%;
 	min-width: 980px;
 	margin-top: 0px;
-	background-color: #F4F4F4;
 }
 /* resume with em font sizes relative to the above */
 a {
@@ -92,7 +91,7 @@ acronym, span.explain {
 }
 /* common page elements, may also be layouted for each tool */
 #commandbar {
-	background-color: #E8EFEF;
+	background-color: #ECF1EF;
 	padding: 5px;
 	border-bottom: 1px solid #CCCCCC;
 }
@@ -120,8 +119,8 @@ acronym, span.explain {
 	bottom: 10px;
 	height: 20px;
 	float: left;
-	display: block;
-	border-top: 1px solid #CCCC99;
+	border-top: 1px solid #CCCCCC;
+	background-color: #F4F4F4;
 	color: #999999;
 	font-size: smaller;
 }
@@ -139,6 +138,7 @@ acronym, span.explain {
 	border: 0px;
 	color: #999999;
 	font-size: smaller;	
+	background: none;
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 .command {

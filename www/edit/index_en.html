@@ -9,8 +9,8 @@
 <div id="commandbar">
 <a id="repository" class="command" href="{=$file,folderUrl}">return to repository</a>
 </div>
-<h1><span class="path">{=$file,filename}</span> <span class="revision">{=$file,revision}</span></h1>
 <div id="intro" class="section">
+<h1><span class="path">{=$file,filename}</span> <span class="revision">{=$file,revision}</span></h1>
 <p>If you only need to read the file, not edit it, go to <a href="../open/?target={=$target}&rev={=$rev}">view</a>.</p> 
 <!--{if not $file,isLatestRevision}-->
 <p>This is an old version of the file. It can not be edited.
@@ -28,7 +28,7 @@ Using the current version number <span class="revision">{=$file,revision}</span>
 you can always refer to the file as it is now.</p>
 </div>
 <div id="filedetails" class="section">
-<h2>File details</h2>
+<h3>File details</h3>
 <p>Version number: <span class="revision">{=$file,revision}</span></p>
 <p>Last edited by: <span class="username">{=$file,author}</span></p>
 <p>Last edited at: <span class="datetime">{=$file,date}</span></p>
@@ -111,7 +111,7 @@ You need to use a version control client like Repos.
 <!--{/if}-->
 </div>
 <div id="footer">
-<a name="url"/><input id="url" title="Ctrl+C to copy the URL to clipboard" name="url" type="text" readonly="readonly" value="{=$file,url}" onclick="this.select();"/>
+<a name="url"></a><input id="url" title="Ctrl+C to copy the URL to clipboard" name="url" type="text" readonly="readonly" value="{=$file,url}" onclick="this.select();"/>
 </div>
 </body>
 </html>
