@@ -63,7 +63,7 @@ class ServiceRequest {
 	/**
 	 * Creates the model of a GET request.
 	 *
-	 * @param String $service the intenal service URI, for example "open/log/".
+	 * @param String $service the intenal service URI, for example "open/log/", NOT urlencoded.
 	 *  Use SERVICE_ constants for the repos services.
 	 *  If service starts with '/', or contains '://' it is cosidered an absolute URL instead.
 	 * @param array $parameters [String] query parameters as associative array, _not_ urlencoded
@@ -201,6 +201,7 @@ class ServiceRequest {
 	 */
 	function _buildUrl() {
 		$url = $this->uri;
+		$url = str_replace('%', '%25', $url);	// curl in exec() doesn't encode % signs.
 		if (!strpos($url,'://')) $url = getWebapp().$url;
 		$url .= strpos($url, '?') ? '&' : '?';
 		foreach ($this->parameters as $key => $value) {
