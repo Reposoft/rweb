@@ -158,7 +158,7 @@ var Repos = {
 			randomstring += chars.charAt(rnum);
 		}
 		return randomstring;
-	},
+	}
 	
 };
 
