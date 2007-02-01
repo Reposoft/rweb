@@ -13,6 +13,12 @@ define('COOKIE_TESTCASE_N', 'suite_n');
 
 $runid = date('Y-m-d_His');
 $logpath = dirname(dirname(dirname(dirname(__FILE__)))).'/testresults/';
+if (!file_exists($logpath)) {
+	if (!mkdir($logpath)) {
+		trigger_error('Could not create output folder: '.$logpath);
+	}
+}
+
 $logfile = $logpath.$runid.'.html';
 
 // test suite
@@ -20,12 +26,16 @@ if (!isset($_SERVER['HTTP_REFERER'])) { echo "No referer, abort."; exit; }
 $url = $_SERVER['HTTP_REFERER'];
 
 // get host and uri to the test home, and name of the testsuite
-$testsuite_pattern ='/^([^?]+test\/)(?:selenium\/TestRunner\.html)\?.*test=[\.\/]*(?:%2F)*([^&]+)/';
+$testsuite_pattern = '/.*test=([^&]+)/';
+// for selenium inside test folder, and relative url to test suite:
+//  $testsuite_pattern ='/^([^?]+test\/)(?:selenium\/TestRunner\.html)\?.*test=[\.\/]*(?:%2F)*([^&]+)/';
+//  $testurl = $matches[1];
+//  $suite = $matches[2];
 if (!preg_match($testsuite_pattern, $url, $matches)) {
 	echo("Could not find test=TestSuiteName in test runner referrer $suite"); exit;
 }
-$testurl = $matches[1];
-$suite = $matches[2];
+$testurl = urldecode($matches[1]);
+$suite = urldecode($matches[1]);
 
 // dynamic test suites: take name from cookie
 if (strtolower($suite) == strtolower('Performance.php')) {
