@@ -16,11 +16,15 @@ div.section {
 	margin: 5px;
 	padding: 5px;
 	background-color: #FFFFFF;
-	border-top: 15px solid #E9F4C9;
-	border-left: 1px solid #CCCCCC;
-	border-bottom: 1px solid #CCCCCC;
-	border-right: 1px solid #CCCCCC;
+	border: 2px solid #F4F4F4;
 	display: block;	
+}
+
+div.section h2 {
+	margin: 0px;
+	padding-left: 1em;
+	background-color: #E9F4C9;
+	color: #666633;
 }
 
 /* input box in footer with the full url */

@@ -21,9 +21,10 @@ This startpage lists the projects that you have access to,
 and the tools in each project.</p>
 </div>
 
-<!--{foreach from=$entrypoints item=entry}-->
+<div class="column" style="width: 50%">
+<!--{foreach from=$entrypoints item=entry name=project}-->
 <!--{assign var='projectname' value=$entry->getDisplayname()}-->
-<div class="section" style="float:left; width:45%;">
+<div class="section">
 <h2>
 <!-- todo: make a smarter link, trunk/ if existing, project root if no trunk -->
 <span class="{=if $projectname eq $userfullname}username{=else}projectname{=/if}">{=$projectname}</span>
@@ -43,7 +44,13 @@ and the tools in each project.</p>
 	</div>
 	<!--{/foreach}-->
 </div>
+{=if $smarty.foreach.project.iteration + $smarty.foreach.project.iteration eq $smarty.foreach.project.total
+or $smarty.foreach.project.iteration + $smarty.foreach.project.iteration - 1 eq $smarty.foreach.project.total}
+</div>
+<div class="column" style="width: 50%">
+{=/if}
 <!--{/foreach}-->
+</div>
 
 <div id="footer">
 <span id="releaseversion" class="versiondisplay">repos.se $URL$ $Rev$</span>

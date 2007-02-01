@@ -42,6 +42,7 @@ edit on your computer, then <a href="upload/?target={=$target}">upload new versi
 {=else}
 <p>This is a binary or unknown fileformat. We recommend you Download and lock.</p>
 {=/if}
+
 {=if not $file,isLockedByThisUser}
 <h3><a id="download_upload" href="upload/?target={=$target}&rev={=$rev}&download">Download, modify, upload</a></h3>
 <p>
@@ -70,6 +71,7 @@ If you have already downloaded and edited the file, upload your changes to creat
 Plain text documents and HTML can be conveniently edited in your browser.
 No locking is needed, and when you save it creates a new version of the file.
 </p>
+
 <!--{if not $file,isBranch}-->
 <h3>
 {=* personal branches not in 1.1
@@ -83,6 +85,7 @@ Your personal, temporary, copy would be:
 You will get a link to the branch, and from there you can access the "merge" functionality.</p>
 *}
 <!--{/if}-->
+
 {=if not $file,isLocked}
 <h3><a id="lock" href="lock/?target={=$target}">Lock file</a></h3>
 <p>You can always lock a file to make it read-only for everyone else.</p>
@@ -91,7 +94,7 @@ You will get a link to the branch, and from there you can access the "merge" fun
 <p>This file is locked by you. If you are not working with it,
 you can unlock it so that others are able to edit it.</p>
 {=/if}
-<!--{/if}-->
+
 <h3><a id="useurl" href="#url" onblur="document.getElementById('url').select();"/>Use the URL</a></h3>
 <!--{if $file,isLatestRevision}-->
 <p>Many modern programs can use URLs to open files directly from the server.</p>
@@ -102,11 +105,13 @@ and when you save it will automatically be committed to repository.</p>
 This is not the latest version of the file, so you can not use the URL to access it.
 You need to use a version control client like Repos.
 <!--{/if}-->
+
+<!--{/if}-->
 </div>
 </div>
 <div class="column" style="width: 40%">
 <div id="filedetails" class="section">
-<h3>File details</h3>
+<h2>File details</h2>
 <p>Version number: <span class="revision">{=$file,revision}</span></p>
 <p>Last edited by: <span class="username">{=$file,author}</span></p>
 <p>Last edited at: <span class="datetime">{=$file,date}</span></p>
