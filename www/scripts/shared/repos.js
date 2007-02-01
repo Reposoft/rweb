@@ -25,7 +25,7 @@ var Repos = {
 		s.src = srcUrl;
 		document.getElementsByTagName('head')[0].appendChild(s);
 		return s;
-	},
+	};
 
 	/**
 	 * Adds a stylesheet to the current page.
@@ -40,7 +40,7 @@ var Repos = {
 		s.href = Repos.getWebapp() + src;
 		document.getElementsByTagName('head')[0].appendChild(s);
 		return s;
-	},
+	};
 	
 	/**
 	 * Calculates webapp root based on the include path of this script (repos.js or head.js)
@@ -59,7 +59,7 @@ var Repos = {
 		}
 		if (!this.repos_webappRoot) return '/repos/'; // best guess
 		return this.repos_webappRoot;
-	},
+	};
 
 	// ------------ exception handling ------------
 	
@@ -78,7 +78,7 @@ var Repos = {
 			  "\nFeel free to contact support@repos.se about this error, ID \""+id+"\"." +
 			  "\n\nBecause of the error, this page may not function properly.";
 		Repos._alertError(msg);
-	},
+	};
 	
 	/**
 	 * Takes an error of any type and converts to a message String.
@@ -88,7 +88,7 @@ var Repos = {
 			return Repos._exceptionToString(error);
 		}
 		return ''+error;
-	},
+	};
 	
 	/**
 	 * Converts a caught exception to an error message.
@@ -108,7 +108,7 @@ var Repos = {
 			msg += ') ' + exceptionInstance;
 		}
 		return msg;
-	},
+	};
 	
 	/**
 	 * Sends an error report to the server, if possible.
@@ -123,7 +123,7 @@ var Repos = {
 			window.status = error; // Find out a way to send an error report anyway	
 			return;
 		}
-	},
+	};
 	
 	/**
 	 * Shows the error to the user, without requiring attention.
@@ -131,7 +131,7 @@ var Repos = {
 	 */
 	_alertError: function(msg) {
 		Repos._log(Repos.loglevel.error, msg);
-	},
+	};
 	
 	/**
 	 * collect debug info about the user's environment
@@ -144,7 +144,7 @@ var Repos = {
 		query = 'url='+escape(page)+'&ref='+escape(ref)+'&os='+escape(navigator.userAgent)+'&browsername='+escape(navigator.appName)
 			+'&browserversion='+escape(navigator.appVersion)+'&lang='+escape(navigator.language)+'&syslang='+escape(navigator.systemLanguage);
 		return query;
-	},
+	};
 	
 	/**
 	 * Generate a random character sequence of length 8
@@ -158,9 +158,9 @@ var Repos = {
 			randomstring += chars.charAt(rnum);
 		}
 		return randomstring;
-	}
+	};
 	
-}
+};
 
 // ------------ logging ------------
 
@@ -168,19 +168,19 @@ Repos.loglevel = {
 	info: 3,
 	warn: 4,
 	error: 5
-}
+};
 
 Repos.info = function(message) {
 	Repos._log(Repos.loglevel.info, message);
-}
+};
 
 Repos.warn = function(message) {
 	Repos._log(Repos.loglevel.warn, message);
-}
+};
 
 Repos.error = function(message) {
 	Repos._log(Repos.loglevel.error, message);
-}
+};
 
 Repos._log = function(level, msg) {
 	// firebug dummy is added to head.js, so we can use console directly
@@ -193,4 +193,4 @@ Repos._log = function(level, msg) {
 	} else {
 		window.status = "Due to a script error the page is not fully functional. Contact support@repos.se for info, error id: " + id;
 	}
-}
+};
