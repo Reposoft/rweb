@@ -26,14 +26,14 @@ and the tools in each project.</p>
 <!--{assign var='projectname' value=$entry->getDisplayname()}-->
 <div class="section">
 <h2>
-<!-- todo: make a smarter link, trunk/ if existing, project root if no trunk -->
+<!--{* todo: make a smarter link, trunk/ if existing, project root if no trunk *}-->
 <span class="{=if $projectname eq $userfullname}username{=else}projectname{=/if}">{=$projectname}</span>
 {=if !$entry->getPath()}root{=/if}
-<!-- 
+<!--{* 
 <a class="folder {=if $entry->isReadOnly()}readonly{=/if}" href="../project/?target={=$entry->getPath()}/">{=$projectname}</a>
- -->
+ *}-->
 </h2>
-<!-- todo: class groupaccess -->
+<!--{* todo: class groupaccess *}-->
 	<!--{foreach from=$entry->getTools() key=toolid item=toolpath}-->
 	<div class="row n{=cycle values=0,1,2,3}">
 	{=* special cases not handled by open *}
@@ -47,7 +47,7 @@ and the tools in each project.</p>
 {=if $smarty.foreach.project.iteration + $smarty.foreach.project.iteration eq $smarty.foreach.project.total
 or $smarty.foreach.project.iteration + $smarty.foreach.project.iteration - 1 eq $smarty.foreach.project.total}
 </div>
-<div class="column" style="width: 50%">
+<div class="column" style="width: 49%"><!--{* IE6 does not accept 50% for this column *}-->
 {=/if}
 <!--{/foreach}-->
 </div>
