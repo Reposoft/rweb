@@ -7,6 +7,8 @@ body {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
 	font-size: 82.5%;
 	min-width: 980px;
+	margin-top: 0px;
+	background-color: #F4F4F4;
 }
 /* resume with em font sizes relative to the above */
 a {
@@ -90,9 +92,9 @@ acronym, span.explain {
 }
 /* common page elements, may also be layouted for each tool */
 #commandbar {
-	background-color: #F0F0EE;
-	border-top: 1px solid #CCCC99;
-	height: 1.4em;
+	background-color: #E8EFEF;
+	padding: 5px;
+	border-bottom: 1px solid #CCCCCC;
 }
 #contents {
 	/* overflow: -moz-scrollbars-vertical; */
@@ -143,19 +145,19 @@ acronym, span.explain {
 	background-position: left center;
 	background-repeat: no-repeat;
 	font-size: 82.5%;
-	margin-left: 0px;
+	margin-left: 0.4em;
 	margin-right: 0px;
 	margin-top: 0px;
 	margin-bottom: 0px;
-	padding-left: 20px;
+	padding-left: 30px;
 	padding-right: 0.4em;
-	padding-top: 0.2em;
-	padding-bottom: 0.2em;
+	padding-top: 0.6em;
+	padding-bottom: 0.6em;
+	line-height: 2.3em;
 }
 a.command {
 	color: #333333;
-	border-left: 1px solid #e0e0de;
-	border-right: 1px solid #f9f9f8;
+	border-right: 2px dotted #D5E0E0;
 }
 span.command {
 	color: #BBBBBB;
