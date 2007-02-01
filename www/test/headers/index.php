@@ -8,6 +8,7 @@
  */
 
 // display the headers of a page in the application
+require('../../conf/System.class.php');
 require('../../open/ServiceRequest.class.php');
 require('../../account/login.inc.php');
 
