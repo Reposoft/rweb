@@ -143,6 +143,14 @@ if (!file_exists($datafile)) {
 if (!file_exists($logpath.$xsl) && file_exists($xsl)) {
 	copy($xsl, $logpath.$xsl);
 }
+if (!file_exists($logpath.'index.php')) {
+	$h = fopen($logpath.'index.php', 'w');
+	fwrite($h, '<?php'."\n");
+	fwrite($h, 'header("Cache-Control: no-store, no-cache, must-revalidate");'."\n");
+	fwrite($h, 'header("Location: ".$_SERVER["REQUEST_URI"]."testruns.xml");'."\n");
+	fwrite($h, "?>\n");
+	fclose($h);
+}
 
 // xml result
 $entries = array(
