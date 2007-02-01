@@ -8,7 +8,7 @@
 if (typeof(document.cookie)=='undefined') {
 	$.get("/repos/open/cookie/", 
 	{ name: "style" },
-	function(data){ createCookie('style', data); initSwitch(); } )
+	function(data){ createCookie('style', data); initSwitch(); } );
 } else {
 $(document).ready(function() {
 	initSwitch();
@@ -23,7 +23,7 @@ function initSwitch() {
 	});
 	var c = readCookie('style');
 	if (c) switchStylestyle(c);
-}
+};
 
 function switchStylestyle(styleName)
 {
@@ -33,7 +33,7 @@ function switchStylestyle(styleName)
 		if (this.getAttribute('title') == styleName) this.disabled = false;
 	});
 	createCookie('style', styleName, 365);
-}
+};
 
 // cookie functions http://www.quirksmode.org/js/cookies.html
 function createCookie(name,value,days)
@@ -46,7 +46,7 @@ function createCookie(name,value,days)
 	}
 	else var expires = "";
 	document.cookie = name+"="+value+expires+"; path=/";
-}
+};
 function readCookie(name)
 {	
 	var nameEQ = name + "=";
@@ -58,9 +58,9 @@ function readCookie(name)
 		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
 	}
 	return null;
-}
+};
 function eraseCookie(name)
 {
 	createCookie(name,"",-1);
-}
+};
 // /cookie functions
