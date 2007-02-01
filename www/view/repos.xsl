@@ -204,7 +204,8 @@
 	<!-- extra info and logos -->
 	<xsl:template name="footer">
 		<div id="footer">
-		<span id="resourceversion" class="versiondisplay" style="display:none">repos.se stylesheet version $URL$ $Rev$</span>
+		<span>version <span class="revision"><xsl:value-of select="@rev"/></span> - </span>
+		<span id="resourceversion" class="versiondisplay" style="display:none">repos.se stylesheet $URL$ $Rev$</span>
 		<span id="badges">
 		</span>
 		<span class="legal">

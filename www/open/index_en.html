@@ -27,14 +27,7 @@ You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 <p>This is an old version of the file. You can also <a href="?target={=$target}">view current version</a>.</p>
 <!--{/if}-->
 </div>
-<div id="filedetails" class="section">
-<h3>File details</h3>
-<p>Version number: <span class="revision">{=$file,revision}</span></p>
-<p>Last edited by: <span class="username">{=$file,author}</span></p>
-<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
-<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
-<p>Content type: <span>{=$file,type}</span></p>
-</div>
+<div class="column" style="width: 60%">
 <div id="activities" class="section">
 <h2>View file</h2>
 <p>
@@ -75,6 +68,17 @@ In many programs you can open the URL directly, without downloading the file fir
 This is not the latest version of the file, so you can not use the URL to access it.
 You need to use a version control (Subversion) client like Repos.
 <!--{/if}-->
+</div>
+</div>
+<div class="column" style="width: 40%">
+<div id="filedetails" class="section">
+<h2>File details</h2>
+<p>Version number: <span class="revision">{=$file,revision}</span></p>
+<p>Last edited by: <span class="username">{=$file,author}</span></p>
+<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
+<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
+<p>Content type: <span>{=$file,type}</span></p>
+</div>
 </div>
 <div id="footer">
 <a name="url"></a><input id="url" title="Ctrl+C to copy the URL to clipboard" name="url" type="text" readonly="readonly" value="{=$file,url}" onclick="this.select();"/>

@@ -2,6 +2,13 @@
 /* CSS for Repos pages with forms or columns or both */
 div#intro {
 	width: 100%;
+	margin: 5px;
+	padding: 5px;
+}
+
+div.column {
+	display: inline;
+	float: left;
 }
 
 div.section {
@@ -16,24 +23,6 @@ div.section {
 	display: block;	
 }
 
-div#activities {
-	width: 50%;
-	float: left;
-}
-
-div#activities p {
-	padding-left: 40px;
-}
-
-div#filedetails {
-	width: 40%;
-	float: right;
-}
-
-div#filehistory {
-	width: 40%;
-	float: right;
-}
 /* input box in footer with the full url */
 #footer #url {
 	width: 98%;
@@ -44,6 +33,9 @@ div#filehistory {
 	background: none;
 }
 /* common activities, same id as commands */
+div#activities p {
+	padding-left: 40px;
+}
 #activities h3 a {
 	padding: 10px 0px 10px 40px;
 	background-position: left;

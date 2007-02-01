@@ -27,14 +27,7 @@ The file will be unlocked when a new version is committed.
 Using the current version number <span class="revision">{=$file,revision}</span>, 
 you can always refer to the file as it is now.</p>
 </div>
-<div id="filedetails" class="section">
-<h3>File details</h3>
-<p>Version number: <span class="revision">{=$file,revision}</span></p>
-<p>Last edited by: <span class="username">{=$file,author}</span></p>
-<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
-<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
-<p>Content type: <span>{=$file,type}</span></p>
-</div>
+<div class="column" style="width: 60%">
 <div id="activities" class="section">
 <h2>Edit</h2>
 {=if $file,isLockedByThisUser}
@@ -109,6 +102,17 @@ and when you save it will automatically be committed to repository.</p>
 This is not the latest version of the file, so you can not use the URL to access it.
 You need to use a version control client like Repos.
 <!--{/if}-->
+</div>
+</div>
+<div class="column" style="width: 40%">
+<div id="filedetails" class="section">
+<h3>File details</h3>
+<p>Version number: <span class="revision">{=$file,revision}</span></p>
+<p>Last edited by: <span class="username">{=$file,author}</span></p>
+<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
+<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
+<p>Content type: <span>{=$file,type}</span></p>
+</div>
 </div>
 <div id="footer">
 <a name="url"></a><input id="url" title="Ctrl+C to copy the URL to clipboard" name="url" type="text" readonly="readonly" value="{=$file,url}" onclick="this.select();"/>
