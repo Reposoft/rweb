@@ -2,19 +2,122 @@
 /**
  * Batch operations on the ACL in the repository administration folder.
  * 
- * create=[username]
- * delete=[username]
+ * ?create=[username]
+ * ?delete=[username]
+ * 
+ * Combined with admin/create/ and admin/password/ this should be all
+ * that is needed to create a user account.
  * 
  * @package account
  */
 
-define('ACCESS_FILE', '/administration/repos-access.acl');
+define('ADMIN_FOLDER', '/administration/');
+define('ACCESS_FILE', 'repos-access.acl');
 
 require('../../open/SvnOpenFile.class.php');
+require('../../edit/SvnEdit.class.php');
+require('../../conf/Presentation.class.php');
 
-$file = new SvnOpenFile(ACCESS_FILE);
+$file = new SvnOpenFile(ADMIN_FOLDER.ACCESS_FILE);
 
 if ($file->getStatus()!=200) trigger_error('This account does not have access to the ACL', E_USER_ERROR);
 
+$wc = System::getTempFolder('acl');
+
+$checkout = new SvnEdit('checkout');
+$checkout->addArgUrl(getParent($file->getUrl()));
+$checkout->addArgPath($wc);
+if ($checkout->exec('Checked out current ACL')) {
+	trigger_error('User not created. Could not check out current ACL.', E_USER_ERROR);
+}
+
+$acl = $wc.ACCESS_FILE;
+
+// select operation
+if (isset($_GET['create'])) {
+	$username = $_GET['create'];
+	aclCreateUser($username, $acl);
+	aclCommit($wc, "Created access for new account '$username' to personal folder.");
+}
+if (isset($_GET['delete'])) {
+	$username = $_GET['delete'];
+	aclDeleteUser($username, $acl);
+	aclCommit($wc, "Deleted access control for folder '/$username'.");
+}
+
+System::deleteFolder($wc);
+
+$next = getTargetUrl(ADMIN_FOLDER);
+displayEdit(Presentation::getInstance(), $next);
+
+// shared commit changes logic
+function aclCommit($wc, $commitMessage) {
+	$update = new SvnEdit('update');
+	$update->addArgPath($wc);
+	$update->exec('Checked for conflicts');
+	$commit = new SvnEdit('commit');
+	$commit->addArgPath($wc);
+	$commit->setMessage($commitMessage);
+	$commit->exec('Updated ACL committed');
+}
+
+/**
+ * Adds a user to the ACL (with no group memberships)
+ *
+ * @param String $username the username to create
+ * @param String $aclFile the path to the subversion ACL file
+ */
+function aclCreateUser($username, $aclFile) {
+	if (!file_exists($aclFile)) trigger_error("Can not access checked out file $aclFile");
+	if (aclUserExists($username, $aclFile)) trigger_error("User $username already exists", E_USER_ERROR);
+	$nl = System::getNewline();
+	$f = fopen($aclFile, 'a');
+	fwrite($f, "$nl");
+	fwrite($f, "[/$username]$nl");
+	fwrite($f, "$username = rw$nl");
+	fclose($f);
+}
+
+/**
+ * Adds a user to the ACL (with no group memberships)
+ *
+ * @param String $username the username to create
+ * @param String $aclFile the path to the subversion ACL file
+ */
+function aclDeleteUser($username, $aclFile) {
+	if (!file_exists($aclFile)) trigger_error("Can not access checked out file $aclFile");
+	if (aclUserExists($username, $aclFile)) trigger_error("User $username already exists", E_USER_ERROR);
+	_aclDeletePath("/$username", $aclFile);
+}
+
+function _aclDeletePath($path, $aclFile) {
+	$tmp = fopen($aclFile.".tmp", 'w');
+	$f = fopen($aclFile, 'r');
+	$cut = false;
+	while (!feof($f)) {
+        $buffer = fgets($f, 4096);
+        if ($cut && preg_match('/^\[.*\]/', $buffer)) {
+        		$cut = false;
+        }
+        if (preg_match('/^\['.preg_quote($path,'/').'\]\s*/', $buffer)) {
+        		$cut = true;
+        }
+        if (!$cut) fwrite($tmp, $buffer);
+   }
+	fclose($f);
+	fclose($tmp);
+	System::deleteFile($aclFile);
+	rename($aclFile.".tmp", $aclFile);
+}
+
+/**
+ * Checks if user already exists in ACL
+ *
+ * @param String $username the username to create
+ * @param String $aclFile the path to the subversion ACL file
+ */
+function aclUserExists($username, $aclFile) {
+	return false;
+}
 
 ?>

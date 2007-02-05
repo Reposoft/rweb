@@ -135,10 +135,10 @@ class System {
 	}
 
 	/**
-	 * @return newline character for this OS
+	 * @return newline character for this OS, the one used by subversion with "svn:eol-style native".
 	 */
 	function getNewline() {
-		if (System::isWindows()) return "\n\r";
+		if (System::isWindows()) return "\r\n";
 		else return "\n";
 	}
 	

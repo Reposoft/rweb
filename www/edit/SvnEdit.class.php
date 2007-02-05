@@ -144,8 +144,11 @@ class FolderWriteAccessRule extends Rule {
  * @see SvnEdit::show()
  */
 function displayEdit(&$presentation, $nextUrl=null, $headline=null, $summary=null) {
-	$presentation->assign('target', getTarget());
+	if (isTargetSet()) {
+		$presentation->assign('target', getTarget());
+	}
 	if (!$nextUrl) {
+		if (!isTargetSet()) trigger_error("Server error. No target, nextUrl required.", E_USER_ERROR);
 		$nextUrl = dirname(getTargetUrl()).'/'; // get the parent folder for a file, and the folder itself for a folder
 	}
 	$presentation->assign('nexturl',$nextUrl);

@@ -153,7 +153,7 @@ System::createFileWithContents($newsfile, '<?xml version="1.0" encoding="utf-8"?
 	<modified>'.date('Y-m-d\TH:i:sO').'</modified>
 	<id>tag:repos.se,demoproject</id>
 	<entry>
-		<title>Reset testers\' repository</title>
+		<title>Testers\' repository was reset</title>
 		<id>tag:repos.se,demoproject,'.microtime().'</id>
 		<published>'.date('Y-m-d\TH:i:sO').'</published>
 		<author>
@@ -163,20 +163,14 @@ System::createFileWithContents($newsfile, '<?xml version="1.0" encoding="utf-8"?
 		<content type="xhtml" xml:lang="en"
 		 xml:base="http://www.repos.se/">
 		  <div xmlns="http://www.w3.org/1999/xhtml">
-		    <p>The test repository has been reset.</p>
+		    <p>The test repository has been reset. Check '.getSelfRoot().'/testrepo/demoproject/</p>
 		    <pre>'.implode("\n",$contents->getOutput()).'</pre>
 		  </div>
 		</content>
    </entry>
-	<entry>
-		<title>Check out the refreshed demo project</title>
-		<id>tag:repos.se,demoproject,'.(microtime()+1).'</id>
-		<updated>'.date('Y-m-d\TH:i:sO').'</updated>
-		<link href="'.getSelfRoot().'/testrepo/demoproject/"/>
-		<summary>Repository contents have been reset.</summary>
-	</entry>
 </feed>
 ');
+// don't use a <link> to the repository because then the client requests login when reading the feed
 
 System::createFolder($wc."demoproject/calendar/");
 $calendarfile = $wc."demoproject/calendar/demoproject.ics";
