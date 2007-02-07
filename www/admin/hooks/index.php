@@ -7,7 +7,8 @@
 require('../../conf/repos.properties.php');
 require('../../conf/System.class.php');
 require('../../conf/Report.class.php');
-require('../../conf/Command.class.php');
+if (!class_exists('Command')) require('../../conf/Command.class.php');
+require('export.inc.php');
 
 $known_hooks = array(
 	'post-commit'
@@ -44,28 +45,23 @@ if (isset($_GET['create'])) {
 // ---- the supported hook scripts ----
 // Note that the output will be passed to the subversion client.
 
-function runHook_post_commit($rev, $path) {
-	// validation
+function runHook_post_commit($rev, $repo) {
 	if (!is_numeric($rev)) trigger_error('Hooks require a numeric revision number.', E_USER_ERROR);
-	if (!isAbsolute($path)) trigger_error('Repository path must be absolute.', E_USER_ERROR);
+	if (!isAbsolute($repo)) trigger_error('Repository path must be absolute.', E_USER_ERROR);
 	
-	// do the exports specified by config file
-	if (!getConfig('exports_file')) trigger_error('No exports defined. Set "exports_file" in repos.properties.');
-	$exports_file = getConfig('admin_folder').getConfig('exports_file');
-	
-	$exports = parse_ini_file($exports_file);
-	$approvedEports = array();
-	foreach ($exports as $src => $target) {
-		if (isAbsolute($target)) {
-			trigger_error('For security reasons, export targets must start with recognized keywords.', E_USER_ERROR);
-		} else {
-			$p = strpos($target, '/');
-			$folder = substr($target, 0, $p);
-			$target = getRealPath($folder) . substr($target, $p+1);
-			$approvedEports[$src] = $target;
-		}
-	}
-	
+	$changes = hooksGetChanges($rev, $repo);
+	if (getConfig('access_file')) exportAdministration($rev, $repo, $changes);
+	if (getConfig('exports_file')) exportOptional($rev, $repo, $changes);
+	// user must be exported last, if password is changed
+	if (getConfig('users_file')) exportUsers($rev, $repo, $changes);
+}
+
+/**
+ * Uses svnlook to list the changes in a revision.
+ * @return array [path with no leading slash] => [ADUP] (where P=property change)
+ */
+function hooksGetChanges($rev, $path) {
+	$changes = array();
 	// get the changes of the revision
 	$c = new Command('svnlook');
 	$c->addArgOption('changed');
@@ -78,34 +74,11 @@ function runHook_post_commit($rev, $path) {
 		preg_match($pattern, $change, $matches);
 		if (!isset($matches[3])) trigger_error('There are no repository changes in revision '.$rev, E_USER_ERROR);
 		$entry = trim($matches[3]);
-		if (isset($approvedEports[$entry]) && ($matches[1] == 'U' || $matches[1] == 'A')) {
-			_exportFile($path, '/'.$entry, $rev, $approvedEports[$entry]);	
-		} else {
-			// do nothing
-		}
+		$change = $matches[1];
+		if (strpos('ADU', $change)===false) $change = 'P'; // for property
+		$changes[$entry] = $change;
 	}
-	
-}
-
-function _exportFile($repo, $path, $revision, $destination) {
-	$c = new Command('svnlook');
-	$c->addArgOption('cat');
-	$c->addArgOption('-r '.$revision);
-	$c->addArg($repo);
-	$c->addArg($path);
-	$c->exec();
-	$out = $c->getOutput();
-	if ($c->getExitcode()) {
-		trigger_error("Could not read committed file $path revision $revision: ".implode("\n",$out), E_USER_ERROR);
-	} else {
-		$handle = fopen($destination, 'w');
-		for ($i = 0; $i < count($out); $i++) {
-			$p = $out[$i].System::getNewline();
-			fwrite($handle, $p);
-		}
-		fclose($handle);
-		echo ("Exported $path to $destination\n");
-	}
+	return $changes;
 }
 
 function testRun($type, $rev, $repoPath) {
@@ -116,30 +89,11 @@ function testRun($type, $rev, $repoPath) {
 	$cmd = "$script \"$repoPath\" $rev"; // like subversion calls it
 	passthru($cmd, $return);
 	if ($return) {
+		// the hook is either not installed or returned error
 		echo("\n---- failed with exit code $return ----\n");
 	} else {
 		echo("\n---- no errors reported to caller ----\n");
 	}
-}
-
-/**
- * Derive the local path from folder keywords.
- *
- * @param String $hostFolder keyword folder without trailing slash
- * @return String absolute local path if keyword is recognized
- */
-function getRealPath($hostFolder) {
-	$known_folders = array(
-		'admin' => getConfig('admin_folder'),
-		'html' => toPath(dirname(dirname(dirname(dirname(__FILE__)))).'/'),
-		'backup' => getConfig('backup_folder'),
-		'repo' => getConfig('local_path')
-	);
-	if (!array_key_exists($hostFolder, $known_folders)) {
-		trigger_error("Export target '$target' is not recognized.", E_USER_ERROR);
-		exit; // for the sake of security
-	}
-	return $known_folders[$hostFolder];
 }
 
 // ------------------------------------
@@ -157,7 +111,8 @@ function showInfo() {
 			if (checkHookScript($f, $hook, $r)) {
 				$r->info('<form action="./" method="get"><input type="hidden" name="test" value="'.$hook.'"/>'.
 				'Test this hook with revision <input name="rev" type="text" size="4" value="1"/>'.
-				'<input type="submit" value="execute"/></form>');
+				'<input type="submit" value="execute"/></form>'.
+				'<p>Note that if you test with an old revision, newer configuration will be overwritten.</p>');
 			} else {
 				$r->info('To let Repos create a hook script, delete the existing file.');
 			}

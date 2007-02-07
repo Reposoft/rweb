@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Create a new repos user</title>
+<!--{$head}-->
+</head>
+
+<body>
+<div id="commandbar">
+<a id="repository" class="command" href="{=$repository|urlEncodeNames}">return to repository</a>
+</div>
+<div id="contents">
+<h1>Create user</h1>
+<form id="createFolder" name="createFolder" method="get" action="#">
+  <fieldset>
+  <legend>Create user</legend>
+  <input name="target" type="hidden" id="target" value="{=$target}" />
+  <p>
+    <label for="username">username</label>
+    <input name="username" type="text" id="username" size="40" class="required" tabindex="1" />
+  </p>
+  <p>
+    <label for="email">e-mail (used for the 'lost password' functionality)</label>
+    <input name="email" type="text" id="email" size="40" tabindex="2" />
+  </p>
+  <p>
+    <label for="fullname">full name (for reference by administrators)</label>
+    <input name="fullname" type="text" id="fullname" size="40" tabindex="3" />
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" name="submit" type="submit" value="Create" tabindex="3" />
+  </p>
+  </fieldset>
+</form>
+</div>
+</body>
+</html>

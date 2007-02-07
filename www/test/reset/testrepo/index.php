@@ -88,6 +88,24 @@ System::createFolder($wc."administration/");
 $repositoryacl = $wc.'administration/repos-access.acl';
 copy($aclfile, $repositoryacl);
 
+// create start page that matches the sample repos-exports
+System::createFolder($wc."administration/startpage/");
+System::createFileWithContents($wc."administration/startpage/start.html",
+'<html><head>
+<title>Test host startpage</title>
+<link href="/documents.css" rel="stylesheet" type="text/css"></link>
+</head><body><center>
+<h3>Welcome to another Repos testing host</h3>
+<p><a href="/?login">login</a> | <a href="repos/admin/">admin</a> | <a href="repos/test/">test</a></p>
+</center></body></html>
+');
+System::createFileWithContents($wc."administration/startpage/documents.css",
+'h1 { font-family: sans-serif; }
+h2 { font-family: sans-serif; }
+h3 { font-family: sans-serif; }
+p { font-family: serif; }
+');
+
 define('REPOSITORY_USER_FILE_NAME', 'repos-password.htp');
 // user accounts, same as in access/create/
 System::createFolder($wc."svensson/");
@@ -127,7 +145,7 @@ a:hover { text-decoration: underline; }
 ");
 $publicindex = $wc."demoproject/trunk/public/website/index.html";
 System::createFileWithContents($publicindex, "<html>\n<head>\n<title>demoproject's web</title>
-<link href=\"styles.css\" rel=\"stylesheet\" type=\"text/css\" />\n</head>
+<link href=\"styles.css\" rel=\"stylesheet\" type=\"text/css\"></link>\n</head>
 <body>\n<img src=\"../images/a.jpg\"/><h3>Welcome to our website</h3>\n<p>&nbsp;</p>
 <p><small><a href=\"$conflocation/demoproject/trunk/public/\">return to documents</a> &nbsp; | &nbsp; page id: \$Id\$</small></p>\n</html>\n");
 
