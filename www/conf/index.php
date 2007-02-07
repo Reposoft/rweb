@@ -19,7 +19,8 @@ $sections = array(
 	'dependencies' => 'Required command line tools',
 	'repository' => 'Checking local repository',
 	'localeSettings' => 'Checking locales for the web server\'s command line',
-	'resources' => 'Checking local system'
+	'resources' => 'Checking local system',
+	'serverVariables' => 'Custom apache configuration passed on to Repos'
 	// disabled becaus it contains server data // 'debug' => 'Debug info'
 	);
 // validating configuration
@@ -59,6 +60,11 @@ $dependencies = array(
 );
 $repository = array(
 	System::getCommand('svnlook') . ' youngest ' . getConfig('local_path') => "Local path contains repository revision: "
+);
+$serverVariables = array(
+	'REPOS_PRIMARY' => 1,
+	'IS_LOCAL_CLIENT' => 1,
+	'IS_ADMIN_CLIENT' => 1
 );
 
 // run the diagnostics page
@@ -274,6 +280,19 @@ function localeSettings() {
 		} else {
 			sayOK($val);
 		}
+		line_end();
+	}
+}
+
+function serverVariables() {
+	global $serverVariables;
+	foreach ( $serverVariables as $command => $expect ) {
+		line_start($command);
+		$result = $_SERVER[$command];
+		if ($result == $expect)
+			sayOK( $result );
+		else
+			sayFailed( $result );
 		line_end();
 	}
 }
