@@ -84,12 +84,12 @@ function setup_createTestUsers() {
 
 	$users = 
 	// demo user svensson:medel
-	'svensson:$apr1$h03.....$vSQzcy3gId0sKgc/JvRCs.'."\n".
+	'svensson:$apr1$h03.....$vSQzcy3gId0sKgc/JvRCs.:Testuser Svensson:test@repos.se'."\n".
 	// test:test
-	'test:$apr1$Sy2.....$zF88UPXW6Q0dG3BRHOQ2m0'."\n".
+	'test:$apr1$Sy2.....$zF88UPXW6Q0dG3BRHOQ2m0:Testuser Test:test@repos.se'."\n".
 	// tricky username, password 'medel' (but still only with Latin1 characters)
-	'Sv@n s-on:$apr1$Q14.....$mwLZfXdpQ56dJ00TMEZPu/'."\n".
-	// admin:admin
+	'Sv@n s-on:$apr1$Q14.....$mwLZfXdpQ56dJ00TMEZPu/:Sv@n s-on:test@repos.se'."\n".
+	// admin:admin, no name or email
 	'admin:$apr1$JW3.....$r0aF2nCj00/Q6I8438Xsm1'."\n";
 	
 	if (System::createFileWithContents($userfile, $users, true, true)) {

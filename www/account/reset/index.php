@@ -12,10 +12,12 @@
 require('../../conf/Presentation.class.php');
 require('../../account/account.inc.php');
 
+$username = accountGetUsernameRequiredRule();
+$email = accountGetEmailRequiredRule();
 
 if (isset($_GET[SUBMIT])) {
 	Validation::expect('username', 'email');
-	userResetPassword($_GET['username'], $_GET['email']);
+	userResetPassword($username->getValue(), $email->getValue());
 } else {
 	$template = Presentation::getInstance();
 	$template->display();

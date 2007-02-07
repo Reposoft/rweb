@@ -20,6 +20,30 @@ define('REPOSITORY_USER_FILE_NAME', 'repos-password.htp');
 
 // TODO validation Rules
 
+function accountGetUsernameRequiredRule($fieldname='username') {
+	return new RuleEreg('username', "Need a valid username.", '.+'); // our current username limitation
+}
+
+function accountGetEmailRequiredRule($fieldname='email') {
+	return new RuleEreg('email', "Need a valid e-mail address.", '.+@.+\.[a-z]+');
+}
+
+/**
+ * @return String the Full Name part of the password entry, empty string if not set
+ */
+function accountGetFullName($authFileLine) {
+	list($user, $pass, $full, $email) = explode(":", $authFileLine, 4);
+	return $full;
+}
+
+/**
+ * @return String the email part of the password entry, empty string if not set
+ */
+function accountGetEmail($authFileLine) {
+	list($user, $pass, $full, $email) = explode(":", $authFileLine, 4);
+	return $email;
+}
+
 /**
  * Runs the server password command to create a new auth file line.
  * @return String the BASIC auth line <code>username:MD5(pwd)</code>, with no trailing newline
@@ -50,10 +74,10 @@ function resetPassword($username, $email='') {
 	
 	$pattern = preg_quote($username, '/').':[^:]+';
 	if ($email) { // require matching email
-		$pattern .= ':[^:]*:'.preg_quote($email); // note that this also matches empty email if colons are there
+		$pattern .= ':[^:]*:'.preg_quote($email).'\n?$'; // note that this also matches empty email if colons are there
 	}
 	$pattern = '/^'.$pattern.'/';
-	
+
 	$tempfile = System::getTempFile('admin');
 	$tmp = fopen($tempfile, 'w');
 	$f = fopen(USERS_PATH, 'r');
@@ -62,7 +86,8 @@ function resetPassword($username, $email='') {
         $buffer = fgets($f);
         if (preg_match($pattern, $buffer)) {
         		$found = true;
-        		$buffer = "$pass\n"; // TODO email and full name not preserved
+        		$pass .= ':'.accountGetFullName(trim($buffer)).':'.accountGetEmail(trim($buffer));
+        		$buffer = "$pass\n";
         }
         fwrite($tmp, $buffer);
    }
@@ -86,5 +111,7 @@ function getRandomPassword($username) {
 	// TODO real randomizer
 	return strtolower(substr(base64_encode(microtime()), 2, 8));
 }
+
+
 
 ?>

@@ -131,7 +131,8 @@ class RuleEreg extends Rule {
  */
 class Validation {
 	/**
-	 * Validate a list of required fields
+	 * Validate a list of required fields.
+	 * Note that this does not mean that each field value must be set (see class description).
 	 * @param unknown_type $requiredFieldsSeparatedByComma
 	 */
 	function expect($requiredFieldsSeparatedByComma) {
