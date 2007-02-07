@@ -95,7 +95,7 @@ function _aclDeletePath($path, $aclFile) {
 	$f = fopen($aclFile, 'r');
 	$cut = false;
 	while (!feof($f)) {
-        $buffer = fgets($f, 4096);
+        $buffer = fgets($f);
         if ($cut && preg_match('/^\[.*\]/', $buffer)) {
         		$cut = false;
         }

@@ -320,6 +320,7 @@ class Report {
 		$this->_print('<div id="commandbar">'."\n");
 		$this->_print('<a class="command" href="/repos/conf/">config</a>'."\n");
 		$this->_print('<a class="command" href="/repos/admin/">admin</a>'."\n");
+		$this->_print('<a class="command" href="/repos/admin/accounts/">accounts</a>'."\n");
 		$this->_print('<a class="command" href="/repos/test/">test</a>'."\n");
 		$this->_print('<a class="command" href="/?login">login</a>'."\n");
 		$this->_print('<a id="logout" class="command" href="/?logout">logout</a>'."\n");

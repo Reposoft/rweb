@@ -93,7 +93,8 @@ div#activities p {
 fieldset {
 	border:2px solid #CCCC99;
 	border-collapse:collapse;
-	padding:2em;
+	padding: 1em;
+	margin: 1em;
 }
 legend {
 	background-color:#CCCC99;

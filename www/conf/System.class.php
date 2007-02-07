@@ -11,7 +11,7 @@
  * @package conf
  */
 
-// shared functionality included from both repos.properties.php and simpletest/setup.php
+define('USRBIN', '/usr/bin/');
 
 // ----- string helper functions that should have been in php -----
 function strBegins($str, $sub) { return (substr($str, 0, strlen($sub)) === $sub); }
@@ -223,8 +223,9 @@ class System {
 	 * @return Command line command, false if the command shouldn't be needed in current OS. Error message starting with 'Error:' if command name is not supported.
 	 */
 	function getCommand($command) {
-		if ( ! defined('USRBIN') )
-			define( 'USRBIN', "/usr/bin/" );
+		if ($c = System::_getSpecialCommand($command)) {
+			return $c;
+		}
 		$w = System::isWindows();
 		switch($command) {
 			case 'svn':
@@ -248,6 +249,11 @@ class System {
 			case 'wget':
 				return ( $w ? 'wget' : USRBIN . 'wget' );
 		}
+		return false;
+	}
+	
+	function _getSpecialCommand($name) {
+		if ($name == 'htpasswd') return 'C:/srv/ReposServer/apache/bin/htpasswd.exe';
 		return false;
 	}
 	

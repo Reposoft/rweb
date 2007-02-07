@@ -73,7 +73,7 @@ class RepositoryTree {
 	* Helper for the constructor
 	 * @return two-dimensional associative array with ACL[section][entry]
 	 */
-	function _parseToAcl($aclFile, $username) {
+	function _parseToAcl($aclFile) {
 		if (!file_exists($aclFile)) {
 			trigger_error("the ACL file does not exist", E_USER_ERROR);
 		}

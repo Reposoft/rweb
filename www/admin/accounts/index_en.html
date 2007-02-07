@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Repos administration: user accounts</title>
+<!--{$head}-->
+</head>
+<body>
+
+<div id="commandbar">
+<a class="command" href="../">admin</a>
+</div>
+
+<div id="intro">
+<h1>Account administration</h1>
+<p>Repos user accounts are stored in the repository. Each user has a personal folder.
+These folders can be kept private (with access denied even for members of the administration group).
+If a user has lost the password, the user's settings are not longer accessible.
+But through this page, a user's password can be temporarily reset so that the user can update the settings.
+</p>
+<p>The /admin folder in Repos normally has access allowed only for certain client addresses,
+unlike the repository /administration folder, which is controlled by the ACL.
+This page admin/accounts/ is currently only restricted on IPs.
+It would be simple to verify access in the repository too.
+</p>
+</div>
+
+<div class="column" style="width: 60%">
+<div class="section">
+<h2>Tools</h2>
+
+<h3>Reset user password</h3>
+<p>This creates a temporary password for the user,
+which you as administrator can hand over (it will not be e-mailed).
+Normally users should handle this on their own, having a valid e-mail address in settiongs.
+</p>
+<form action="../accountreset/" method="get">
+<p><label for="username">username</label><input type="text" id="username" name="username" />
+<input type="submit" name="submit" value="Reset"/></p>
+</form>
+
+<h3>Revert user password</h3>
+<p>Use this operation to manually restore a password that has been reset by mistake.
+It is the same operation that Repos does when a user commits changes to the settings file.
+The login details from the repository are exported to the server,
+so the new password becomes effective.
+</p>
+<form action="../accountrevert/" method="get">
+<p><label for="username">username</label><input type="text" id="username" name="username" />
+<input type="submit" name="submit" value="Reset"/></p>
+</form>
+
+<h3><a id="usercreate" href="../../account/create/">Create a user account</a></h3>
+<p>This operation requires login to the repository administration area (with write access).
+Being inside repos/admin/, it also requires an administration client. That is because
+the number of users in Repos is relevant to the licensing.
+</p>
+
+<h3><a id="userdelete" href="../../account/delete/">Delete user account</a></h3>
+<p>Deletes the account's folder in repository root,
+deletes the entries in the ACL, and deletes any group memberships in the ACL.
+</p>
+</div>
+</div>
+
+<div class="column" style="width: 40%">
+<div id="filedetails" class="section">
+
+</div>
+</div>
+
+<div id="footer">
+</div>
+</body>
+</html>
