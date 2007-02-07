@@ -32,13 +32,31 @@ tinyMCE.init({
 	);
 }
  
-
+/**
+ * Make a text document in HTML format suitable for simple version control.
+ * 
+ * TODO If the HTML is posted as only body-contents, and a previous version exists,
+ * the document headers will be copied from the previous version.
+ * If there is no previous headers, standard XHTML 1.0 strict headers will be created.
+ * 
+ * This function always uses line-feed-only newlines.
+ * Most HTML edistors on windows will accept that.
+ *
+ * @param String $postedText the document contents as valid XHTML 1.0 strict
+ * @param String $destinationFile the current file
+ */
 function editWriteNewVersion_html(&$postedText, $destinationFile) {
+	// newline before selected start tags
 	$postedText = preg_replace(
 		'/(?!\n)\s*<(p|br|h1|h2|h3|ul|ol|li)/',
 		"\n<$1",
 		$postedText
 	);
+	// newline after text sentences
+	// TODO support tag directly after "." with no space
+	$postedText = preg_replace('/(\w\.\s+)([A-Z0-9<])/', 
+		"$1\n$2",
+		$postedText);
 	// use plaintext write
 	editWriteNewVersion_txt($postedText, $destinationFile, $type);
 }
