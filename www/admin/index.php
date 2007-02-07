@@ -85,4 +85,20 @@ that are newer than the latest backup <span class="revision"><?php echo($lastrev
 <p><a id="hooks" href="hooks/">Repository hook scripts</a></p>
 <p><a id="size" href="size/">Storage space used for this Repos host</a></p>
 <p><a id="client" href="client/">Status for internal svn client</a></p>
+<!-- TODO move these to separate page and include with ajax box -->
+<div class="section">
+<h2>Server information</h2>
+<p>Primary server: <?php echo($_SERVER['REPOS_PRIMARY'] ? 'yes' : 'no'); ?></p>
+</div>
+<div class="section">
+<h2>Client information</h2>
+<p>Address: <?php echo($_SERVER['REMOTE_ADDR']); ?></p>
+<p>Repos local: <?php echo($_SERVER['IS_LOCAL_CLIENT'] ? 'yes' : 'no'); ?></p>
+<p>Repos admin: <?php echo($_SERVER['IS_ADMIN_CLIENT'] ? 'yes' : 'no'); ?></p>
+</div>
+<div class="section">
+<h2>Repository administration</h2>
+<!-- as ajax box? -->
+<p><a href="<?php echo($repourl.'/administration/'); ?>" target="_blank">Log in to administration area</a></p>
+</div>
 <?php html_end() ?>
