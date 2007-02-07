@@ -12,6 +12,10 @@ define('SERVICE_EDIT_COPY', 'edit/copy/');
  */
 class ServiceRequestEdit extends ServiceRequest {
 	
+	function ServiceRequestEdit($service, $parameters=array(), $authenticate=true) {
+		$this->ServiceRequest($service, $parameters, $authenticate);
+	}
+	
 	/**
 	 * Reads the revision number from the response.
 	 *

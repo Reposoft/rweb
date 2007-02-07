@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Repos administration: user accounts</title>
+<!--{$head}-->
+</head>
+<body>
+
+<div id="commandbar">
+<a class="command" href="../">admin</a>
+</div>
+
+<div id="intro">
+<h1>Your Repos account</h1>
+<p>Login details are stored in your private folder.
+The password is encrypted and can never be extracted from the password file,
+not even by the system administrator.
+</p>
+<p>E-mail address is not required,
+but it is needed if you want to be able to use the <a href="../reset/" target="_blank">reset password</a> functionality.
+</div>
+
+<div class="column" style="width: 60%">
+<div class="section">
+<h2>Repos account settings</h2>
+<form action="#" method="post">
+<fieldset>
+  <legend>view or edit</legend>
+  <p>
+    <label for="username">username</label>
+    <input type="text" disabled="disabled" value="{=$username}" class="required" size="40" />
+    <input type="hidden" name="username" id="username" value="{=$username}"/>
+  </p>
+  <p>
+    <label for="fullname">full name</label>
+    <input type="text" name="fullname" id="fullname" value="{=$fullname}" size="40"/>
+  </p>  
+  <p>
+    <label for="email">e-mail address</label>
+    <input type="text" name="email" id="email" value="{=$email}" size="40"/>
+  </p>
+  <p>
+    <label for="password">new password</label>
+    <input type="password" name="password" id="password" value="" size="30"/>
+  </p>
+  <p>
+    <label for="passwordrepeat">repeat password</label>
+    <input type="password" name="passwordrepeat" id="passwordrepeat" value="" size="30"/>
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" type="submit" name="submit" value="Update settings" />
+  </p>
+  <p>Leave the password boxes empty if you only want to change name or e-mail.</p>
+</fieldset>
+</form>
+</div>
+</div>
+
+<div class="column" style="width: 40%">
+<div id="filedetails" class="section">
+<h2>Password file details</h2>
+<p>Version number: <span class="revision">{=$file,revision}</span></p>
+<p>Last edited by: <span class="username">{=$file,author}</span></p>
+<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
+<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
+<p>Content type: <span>{=$file,type}</span></p>
+</div>
+
+<div class="section">
+<h2>Password policy</h2>
+<p>This Repos installation does not have a password policy.
+You can enter any password that is at least 6 characters.
+Please keep in mind that hackers may try to guess passwords for usernames.
+A general recommendation is that the password should countain a mix of uppercase
+and lowercase letters and at least one digit or special character.
+</div>
+</div>
+
+
+
+<div id="footer">
+</div>
+</body>
+</html>

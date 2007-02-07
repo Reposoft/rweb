@@ -88,12 +88,21 @@ System::createFolder($wc."administration/");
 $repositoryacl = $wc.'administration/repos-access.acl';
 copy($aclfile, $repositoryacl);
 
+define('REPOSITORY_USER_FILE_NAME', 'repos-password.htp');
 // user accounts, same as in access/create/
 System::createFolder($wc."svensson/");
 System::createFolder($wc."svensson/trunk/");
+System::createFolder($wc."svensson/administration/");
+System::createFileWithContents($wc."svensson/administration/".REPOSITORY_USER_FILE_NAME,
+	'svensson:$apr1$h03.....$vSQzcy3gId0sKgc/JvRCs.:Testuser Svensson:test@repos.se'."\n"
+);
 
 System::createFolder($wc."test/");
 System::createFolder($wc."test/trunk/");
+System::createFolder($wc."test/administration/");
+System::createFileWithContents($wc."test/administration/".REPOSITORY_USER_FILE_NAME,
+	'test:$apr1$Sy2.....$zF88UPXW6Q0dG3BRHOQ2m0:Testuser Test:test@repos.se'."\n"
+);
 
 // project that all test users can access
 System::createFolder($wc."demoproject/");

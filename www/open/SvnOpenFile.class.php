@@ -380,7 +380,7 @@ class SvnOpenFile {
 	 */
 	function getBranchedFromPath() {
 		// TODO need to use log to find this
-		return '(branch tracking not implemented)';
+		trigger_error('(branch tracking not implemented)', E_USER_ERROR);
 	}
 	
 	/**
@@ -413,7 +413,7 @@ class SvnOpenFile {
 	 */
 	function getContents() {
 		// TODO this might need a lot of memory
-		return implode("\n", $this->getContents());
+		return implode("\n", $this->getContentsText());
 	}
 	
 	/**

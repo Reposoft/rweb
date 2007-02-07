@@ -28,6 +28,11 @@ if (login_isFolder($url)) {
 	exit;
 }
 
+// temporary plugin strategy for password files, see account.inc.php
+if (!$rev && strEnds($target, 'repos-password.htp')) {
+	header('Location: '.getWebapp().'account/password/?target='.urlencode($target));
+}
+
 $type = substr($target, strrpos($target, '.') + 1);
 
 // iCalendar files

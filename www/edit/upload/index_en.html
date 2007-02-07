@@ -94,8 +94,8 @@ to make sure that your local changes are based on the newest version of the shar
       <span class="username">{=$e.user}</span> <span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span><br />
       {=/if}
     {=/foreach}
-      <label for="fromrev-1">&nbsp;</label>
-      <input id="fromrev-1" type="radio" name="fromrev" value="HEAD" />
+      <label for="fromrevHEAD">&nbsp;</label>
+      <input id="fromrevHEAD" type="radio" name="fromrev" value="HEAD" />
       <span>Don't know. Just overwrite the current version.</span>
   </p>
   {=if $file,isLockedByThisUser}
