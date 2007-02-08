@@ -4,6 +4,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Repos thumbnails plugin</title>
+<!-- test page needs taget -->
+<script type="text/javascript">
+	if (window.location.search.length == 0) {
+		window.location.href = window.location.href + '?target=/demoproject/trunk/public/images/b.jpg&rev=8';
+	}
+</script>
 <!-- plugins -->
 <script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="../../scripts/shared/repos.js"></script>
@@ -23,6 +29,12 @@ even when there are no "thmbnail" classes.</p>
 
 <h2>Directly embed in page (no javascript)</h2>
 <img src="../../open/thumb/?target=/demoproject/trunk/public/images/b.gif&rev="/>
+
+<h2>div#intro with a class="file"</h2>
+<div id="intro">
+<a href="/testrepo/demoproject/trunk/public/images/b.jpg">b.jpg</a>
+<p>This kind of div is used in View and Edit pages. View is reached directly from history.</p>
+</div>
 
 <h2>Directory listing</h2>
 <div id="commandbar"><span class="command">some command</span></div>
@@ -46,7 +58,7 @@ function TestThumbnails() {
 			Repos.thumbnails.getTarget('/repos/open/open/?target=/a/folder/b.jpg'));
 		this.assertEquals('/a/folder/b.jpg',
 			Repos.thumbnails.getTarget('http://my.host/repos/open/?target=/a/folder/b.jpg'));
-		this.assertEquals('/a/folder/a%20b.jpg',
+		this.assertEquals('/a/folder/f%20b.jpg',
 			Repos.thumbnails.getTarget('/repos/open/?target=/a/folder/f%20b.jpg'));
 	};
 	
@@ -56,6 +68,24 @@ function TestThumbnails() {
 		/repos/open/open/?target=/a/folder/now.b&rev=623
 		/repos/open/open/?target=/a/folder/now.b
 	*/
+	
+	this.testGetRev = function() {
+		this.assertEquals('1234567', Repos.thumbnails.getRev('.../open/?target=a.b&rev=1234567'));
+		this.assertEquals('2', Repos.thumbnails.getRev('.../open/?rev=2&target=c.d'));
+		this.assertEquals('HEAD', Repos.thumbnails.getRev('.../e.jpg?rev=HEAD'));
+		this.assertEquals('', Repos.thumbnails.getRev('/open/?rev=&target=a.b'));
+		this.assertEquals('', Repos.thumbnails.getRev('/open/?target=a.b'));
+	};
+	
+	this.testGetSrc = function() {
+		this.assertEquals('/repos/open/thumb/?target=a.jpg&rev=12345',
+			Repos.thumbnails.getSrc('a.jpg', 12345));
+	};
+	
+	this.testGetSrcNoImage = function() {
+		this.assertEquals(false,
+			Repos.thumbnails.getSrc('a.bin', ''));
+	}
 	
 }
 

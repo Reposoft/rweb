@@ -27,6 +27,15 @@ div.section h2 {
 	color: #666633;
 }
 
+/* thumbnail plugin, see THUMB_SIZE in open/thumb/ */
+#intro div.thumbnail {
+	width: 120px;
+	display: inline;
+	float: left;
+	text-align: center;
+	margin-right: 1em;
+}
+
 /* input box in footer with the full url */
 #footer #url {
 	width: 98%;

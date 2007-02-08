@@ -1,29 +1,59 @@
 
-$(document).ready(function() {
-	Repos.thumbnails.init();
-} );
-
 Repos.thumbnails = new Object();
 
 Repos.thumbnails.init  = function() {
-	$('.file').each(function() {
-		// TODO disqualify non-images (anything that open/thumb/ can't process)
-		Repos.thumbnails.add(this);
-	} );
-}
+	Repos.thumbnails.initIntro();
+	// Repos.thumbnails.initRepository();
+	// Repos.thumbnails.initLog();
+};
 
-Repos.thumbnails.add = function(aTag) {
-	console.log('thumbnailing image '+aTag.id);
-	var src = aTag.getAttribute('href');
-	var p
-	// tod handle liks to open/file/ (with target already) too
-	$(aTag).append('<img src="/repos/open/thumb/?target='+aTag.getAttribute('href')+'"/>');
-}
+Repos.thumbnails.initIntro = function() {
+	if ($('#intro').size()==0) return;
+	if (window.location.search.length==0) return;
+	var href = window.location.search;
+	var target = Repos.thumbnails.getTarget(href);
+	var rev = Repos.thumbnails.getRev(href);
+	var src = Repos.thumbnails.getSrc(target, rev);
+	if (!src) return;
+	$('#intro').prepend('<div class="thumbnail"><img src="'+src+'" border="0"/></div>');
+};
+
+Repos.thumbnails.initRepository = function() {
+	$('a.file').each(function() {
+		var href = aTag.getAttribute('href');
+		var target = Repos.thumbnails.getTarget(href);
+		var rev = Repos.thumbnails.getRev(href);
+		var src = Repos.thumbnails.getSrc(target, rev);
+		if (!src) return;
+		$(aTag).append('<img src="'+src+'" border="0" />');
+	} );
+};
+
+Repos.thumbnails.initLog = function() {
+};
+
+Repos.thumbnails.getSrc = function(target, rev) {
+	if (!target) return false;
+	if (!/\.(jpg|png|gif|svg)$/.test(target)) {
+		return false;
+	}
+	return '/repos/open/thumb/?target='+target+'&rev='+rev;
+};
 
 Repos.thumbnails.getTarget = function(href) {
-	return '';
-}
+	var m = /[\?&]target=([^&]+)/.exec(href);
+	if (m && m.length > 1) return m[1];
+	
+	return false; // no good target found
+};
 
 Repos.thumbnails.getRev = function(href) {
-	return '';
-}
+	var m = /[\?&]rev=([^&]+)/.exec(href);
+	if (m && m.length > 1) return m[1];
+	return ''; // still a valid query parameter
+};
+
+// or should it be onload so that other resources load first?
+$(document).ready(function() {
+	Repos.thumbnails.init();
+} );
