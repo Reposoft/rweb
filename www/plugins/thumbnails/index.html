@@ -13,9 +13,10 @@
 <!-- plugins -->
 <script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="../../scripts/shared/repos.js"></script>
-<script type="text/javascript" src="thumbnails.js"></script>
 <!-- for unit testing -->
 <script type="text/javascript" src="../../scripts/unittest.js"></script>
+<!-- css is loaded dynamically by unittest.js, so thumbnails will be loaded last -->
+<script type="text/javascript" src="thumbnails.js"></script>
 </head>
 <body>
 
@@ -33,7 +34,7 @@ even when there are no "thmbnail" classes.</p>
 <h2>div#intro with a class="file"</h2>
 <div id="intro">
 <a href="/testrepo/demoproject/trunk/public/images/b.jpg">b.jpg</a>
-<p>This kind of div is used in View and Edit pages. View is reached directly from history.</p>
+<p>This kind of div is used in View and Edit pages. It shows old revisions, because view is reached directly from history.</p>
 </div>
 
 <h2>Directory listing</h2>
@@ -43,6 +44,11 @@ even when there are no "thmbnail" classes.</p>
 <div id="row:b.png"><a id="open:b.png" class="file" href="/demoproject/trunk/public/images/b.png">b.png</a></div>
 
 <h2>File history (not folder history)</h2>
+
+<h2>Error message as image</h2>
+<p><img src="../../open/thumb/?target=/demoproject/trunk/nonexisting.gif"/>
+Paste the image url in new window to get text error.
+</p>
 
 <h2>unit tests</h2>
 <script type="text/javascript">
