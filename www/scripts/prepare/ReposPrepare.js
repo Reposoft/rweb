@@ -1,5 +1,5 @@
 /**
- * Repos script prepare (c) Staffan Olsson http://www.repos.se
+ * Repos script prepare (c) 2006 Staffan Olsson www.repos.se
  * @version $Id$
  */
  

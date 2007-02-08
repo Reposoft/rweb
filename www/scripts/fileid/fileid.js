@@ -1,14 +1,14 @@
 /**
- * (c) 2006 repos.se
+ * Repos tag IDs (c) 2006 Staffan Olsson www.repos.se
+ * $Id$
+ */
+/**
  * Converts file or folder names for URLs to IDs,
  * to give the exact same result as Subversion's UTF-8 urlencode in the svn index XML
  * combined with the getFileId template in repos.xsl.
  *
  * All HTML ids must start with a letter, so ids must _always_ be prefixed
  * before they are used. The conventions is prefix:id.
- *
- * @author Staffan Olsson (solsson)
- * $Id$
  */
 function ReposFileId(name) {
 	this.name = name;

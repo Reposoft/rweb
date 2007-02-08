@@ -1,13 +1,20 @@
 /**
- * Repos shared script logic (c) Staffan Olsson www.repos.se
- * Static functions, loaded after prepare and jquery.
+ * Repos shared script logic (c) 2006 Staffan Olsson www.repos.se
  * @version $Id$
  */
 var Repos = {
 
+	// Static functions, loaded after prepare and jquery.
+
 	/*
 	 Dynamic loading of scripts and css has been disabled,
 	 because it was not reliable. Can be found in reposweb-1.1-B1.
+	 
+	 Anyway, it seems like $(document).ready() in plugins work even
+	 if they are loaded dynamically. So the only limitation is that
+	 3rd party libs must be loaded in page head.
+	 
+	 And how about $().load()?
 	 */
 
 	// -------------- plugin setup --------------

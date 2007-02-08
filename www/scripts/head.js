@@ -1,16 +1,14 @@
 /**
- * Repos common script logic (c) Staffan Olsson http://www.repos.se
+ * Repos common script logic (c) 2006 Staffan Olsson www.repos.se
  * @version $Id: head.js 2309 2007-01-15 08:51:01Z solsson $
  */
-
-// repos: prepare
 if (document.documentElement && document.documentElement.namespaceURI && document.createElementNS) {
 	document.createElement = function(t) {
 		return document.createElementNS(document.documentElement.namespaceURI, t);
 	};
 }
+
 // ===================================================
-// allow firebug calls like console.log from browsers without firebug
 if (!("console" in window) || !("firebug" in console))
 {
     var names = ["log", "debug", "info", "warn", "error", "assert", "dir", "dirxml",
@@ -36,7 +34,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a
 
 // ===================================================
 /**
- * Repos fileid (c) 2006 repos.se
+ * Repos fileid (c) 2006 Staffan Olsson repos.se
  * $Id: head.js 2309 2007-01-15 08:51:01Z solsson $
  */
 function ReposFileId(name) {
@@ -67,7 +65,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a
 
 // ===================================================
 /**
- * Repos shared script logic (c) Staffan Olsson www.repos.se
+ * Repos shared script logic (c) 2006 Staffan Olsson www.repos.se
  * Static functions, loaded after prepare and jquery.
  * @version $Id: repos.js 2497 2007-02-01 16:56:00Z ermin $
  */
@@ -75,7 +73,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a
 
 // ===================================================
 /**
- * Repos show version number (c) Staffan Olsson http://www.repos.se
+ * Repos show version number (c) 2006 Staffan Olsson www.repos.se
  * @version $Id: ReposResouceId.js 2466 2007-01-31 14:53:40Z solsson $
  */
 eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('4 h(5){0.5=5;0.g=4(){6(/\\/J\\//.x(0.5))2\'n\';9 b=/\\/y\\/\\D+(\\d[^\\/]+)/.8(0.5);6(b)2 b[1]+\' n\';9 t=/\\/z\\/\\D+(\\d[^\\/]+)/.8(0.5);6(t){0.l=A;2 t[1]}2\'\'};0.o=4(){9 7=/B:\\s(\\d+)/.8(0.5);6(7)2 7[1];7=/C:\\s\\F+\\s(\\d+)/.8(0.5);6(7)2 7[1];2\'\'};0.c=4(){2/(^[^\\$]*)/.8(0.5)[1]};0.e=4(){2/([^\\$]*$)/.8(0.5)[1]}};r=4(f){9 3=u h(f);2 3.c()+3.g()+3.e()};k=4(f){9 3=u h(f);9 i=3.g();6(3.l)2 3.c()+i+3.e();2 3.c()+i+\' \'+3.o()+3.e()};p=4(){G{$(\'#H\').j(4(){0.a=r(0.a);0.v.q=\'\'});$(\'#K\').j(4(){0.a=k(0.a);0.v.q=\'\'})}I(m){L.w(m)}};$(E).M(4(){p()});',49,49,'this||return|rid|function|text|if|rev|exec|var|innerHTML||getTextBefore||getTextAfter|versionText|getRelease|ReposResourceId|release|each|_getResourceVersion|isTag|err|dev|getRevision|_showVersion|display|_getReleaseVersion|||new|style|reportError|test|branches|tags|true|Rev|Id||document|S|try|releaseversion|catch|trunk|resourceversion|Repos|ready'.split('|'),0,{}))
@@ -85,7 +83,8 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a
 
 var plugins = [
 'dateformat',
-'details'
+'details',
+'thumbnails'
 ];
 
 $(document).ready( function() {
