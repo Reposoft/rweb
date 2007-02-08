@@ -103,6 +103,7 @@ function details_isNoaccess(entry) {
  * @param e jQuery element to add to
  */
 function details_addtags(e) {
+ 	$(e).find('div.details').remove(); // allow refresh
 	e.append('<div class="details"><span class="revision"></span><span class="datetime"></span><span class="username"></span><span class="filesize"></span></div>');
 }
 
@@ -120,6 +121,9 @@ function details_formatSize(strBytes) {
 }
 
 function detailsToggle() {
+	$('#commandbar').find('#showdetails').each( function() {
+		this.href = '#'; // TODO show load animation and disable command
+	} );
 	details_repository();
 	$('.details').show(); //.toggle();
 }
