@@ -118,6 +118,24 @@ function getRepository() {
 }
 
 /**
+ * Same as getRepository, but returns a proper href URL for the current user.
+ * 
+ * Normally the configugured repository is plain HTTP, but users on
+ * external network use SSL. This means that if links are generated
+ * using getRepository(), users get a 301/302 redirect for each request.
+ * Where this causes trouble, use this URL instead.
+ * 
+ * @return the repository root for browser navigation, no trailing slash.
+ */
+function getRepositoryURL() {
+	$r = getRepository();
+	if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) {
+		return str_replace('http:', 'https:', $r);
+	}
+	return $r;
+}
+
+/**
  * Returns the URL to the root folder of the web application.
  * Can be a complete URL with host and path, as well as an absolute URL from server root.
  * 
