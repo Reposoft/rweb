@@ -33,16 +33,15 @@
 	- These rules are void if there is a 'trunk', 'branches' or 'tags' in the parent path of the folder
 	-  (so that it is legal to make a folder named 'tags' inside a project).
 	- Of course these rules only apply to this web client, they are not enforced in the repository.
-	- Implementing this affects the choise of $parentpath and the places where we check for $editUrl.
+	- Implementing this affects the choice of $parentpath and the places where we check for $editUrl.
 	-->
-	<!-- followConversions-->
 	<!-- document skeleton -->
 	<xsl:template match="/">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<head>
 				<title>
-					<xsl:text>repos.se </xsl:text>
-					<xsl:value-of select="index/@path"/>
+					<xsl:text>repos: </xsl:text>
+					<xsl:value-of select="/svn/index/@path"/>
 				</title>
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 				<!-- if search crawlers has access, contents should not be cached -->
@@ -97,16 +96,6 @@
 			<a id="createfile" class="command translate" href="{$editUrl}file/?target={@path}/">new document</a>
 			<a id="addfile" class="command translate" href="{$editUrl}upload/?target={@path}/">add file</a>
 		</xsl:if>
-		<!--
-		<a class="command" href="{$web}/tutorials/?show=networkfolder">
-			<xsl:call-template name="showbutton">
-				<xsl:with-param name="filetype" select="'_windowsfolder'"/>
-			</xsl:call-template>open folder</a>
-		<a class="command" href="{$web}/tutorials/?show=checkout">
-			<xsl:call-template name="showbutton">
-				<xsl:with-param name="filetype" select="'_tortoisefolder'"/>
-			</xsl:call-template>check out</a>
-		-->
 		<a id="history" class="command translate" href="{$web}open/log/?target={@path}/">folder history</a>
 		<a id="refresh" class="command translate" href="#" onclick="window.location.reload( true )">refresh</a>
 		<a id="logout" class="command translate" href="/?logout">logout</a>
@@ -128,24 +117,24 @@
 				<xsl:with-param name="url" select="$folders"/>
 			</xsl:call-template>
 		</xsl:param>
+		<xsl:param name="projectname">
+			<xsl:call-template name="getProjectName"/>
+		</xsl:param>
+		<xsl:param name="pathlinks">
+			<xsl:call-template name="getFolderPathLinks">
+				<xsl:with-param name="folders" select="$folders"/>
+			</xsl:call-template>
+		</xsl:param>
 		<div id="contents">
 		<span id="fullpath" style="display:none"><xsl:value-of select="$fullpath"/></span>
 		<h2>
 			<a id="home" href="{$home}">
 				<span class="projectname">
-					<xsl:call-template name="getProjectName"/>
+					<xsl:value-of select="$projectname"/>
 				</span>
 			</a>
 			<xsl:value-of select="$spacer"/>
-			<xsl:call-template name="getFolderPathLinks">
-				<xsl:with-param name="folders" select="$folders"/>
-			</xsl:call-template>
-			<!-- rev not asked for by users: <xsl:if test="@rev">
-			<xsl:value-of select="$spacer"/>
-				<span class="revision">
-					<xsl:value-of select="@rev"/>
-				</span>
-			</xsl:if> -->
+			<xsl:copy-of select="$pathlinks"/>
 		</h2>
 		<xsl:apply-templates select="dir">
 			<xsl:sort select="@name"/>
@@ -309,25 +298,9 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- make valid HTML id for file or folder, containing [A-Za-z0-9] and [-_.]  -->
-	<!-- ids should always start with letters, so a prefix like 'f:' is needed -->
+	<!-- ids should always start with letters, so a prefix like 'file:' must be prepended -->
 	<xsl:template name="getFileID">
 		<xsl:param name="filename" select="@href"/>
 		<xsl:value-of select="translate($filename,'%/()@&amp;','______')"/>
-	</xsl:template>
-	<!-- *** replace newline with <br> *** -->
-	<xsl:template name="linebreak">
-		<xsl:param name="text"/>
-		<xsl:choose>
-			<xsl:when test="contains($text, '&#10;')">
-				<xsl:value-of select="substring-before($text, '&#10;')"/>
-				<br/>
-				<xsl:call-template name="linebreak">
-					<xsl:with-param name="text" select="substring-after($text, '&#10;')"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="$text"/>
-			</xsl:otherwise>
-		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>
