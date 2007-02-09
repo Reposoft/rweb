@@ -54,12 +54,14 @@ if (isset($_GET['create'])) {
 function runHook_post_commit($rev, $repo) {
 	if (!is_numeric($rev)) trigger_error('Hooks require a numeric revision number.', E_USER_ERROR);
 	if (!isAbsolute($repo)) trigger_error('Repository path must be absolute.', E_USER_ERROR);
-	
 	$changes = hooksGetChanges($rev, $repo);
 	if (getConfig('access_file')) exportAdministration($rev, $repo, $changes);
 	if (getConfig('exports_file')) exportOptional($rev, $repo, $changes);
 	// user must be exported last, if password is changed
-	if (getConfig('users_file')) exportUsers($rev, $repo, $changes);
+	if (getConfig('users_file')) {
+		sleep(5); // password update operation needs to complete before hook is executed
+		exportUsers($rev, $repo, $changes);
+	}
 }
 
 /**
@@ -195,7 +197,10 @@ function createHook($type) {
 		$hook .= "rem Integration with Repos\r\n";
 		$hook .= 'set REV=%2'."\r\n";
 		//$hook .= 'set REPO=%1'."\r\n";
-		$hook .= getHookCommand($type, '%REV%')."\r\n";
+		$cmd = 'start /B '.getHookCommand($type, '%REV%')." 1>NUL 2>NUL\r\n";
+		// seems like "start /B" does not work with windows + svn 1.3+
+		$hook .= 'REM '.$cmd;
+		$hook .= str_replace('curl -s', 'wget -q -b --output-document=-', $cmd);
 	} else {
 		$hook .= "#!/bin/sh\n";
 		$hook .= "# Integration with Repos\n";
