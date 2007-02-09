@@ -57,8 +57,23 @@ function editWriteNewVersion_html(&$postedText, $destinationFile) {
 	$postedText = preg_replace('/(\w\.\s+)([A-Z0-9<])/', 
 		"$1\n$2",
 		$postedText);
+	// texts coming from smarty have only body contents
+	if (!preg_match('<html.*<body.*</body>.*</html>')) {
+		// TODO use existing html if new version
+		// put the contents in the Repos template
+		$postedText = editGetNewDocument($postedText);
+	}
 	// use plaintext write
 	editWriteNewVersion_txt($postedText, $destinationFile, $type);
+}
+
+function editGetNewDocument($bodyContents) {
+	$template = dirname(__FILE__).'/template_en.html';
+	$p = smarty_getInstance();
+	$p->assign('title', 'text');
+	$p->assign('generator', 'Repos');
+	$p->assign('body', $bodyContents);
+	return $p->fetch($template);
 }
 
 ?>

@@ -5,7 +5,7 @@ addPlugin('syntax');
 
 $url = getTargetUrl();
 
-Validation::expect('revto', 'revfrom');
+Validation::expect('rev', 'fromrev');
 $revRule = new RevisionRule();
 $fromrevRule = new RevisionRule('fromrev');
 $revto = $revRule->getValue();
