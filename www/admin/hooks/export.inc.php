@@ -28,9 +28,9 @@ function _exportUserPassword($username) {
 	$r = new ServiceRequest($url, array('username'=>$username), false);
 	$r->exec();
 	if ($r->isOK()) {
-		echo("Successfully exported password for user $username\n");
+		hookOutput("Successfully exported password for user $username\n");
 	} else {
-		echo("Error for user $username: ".$r->getResponse()."\n");
+		hookOutput("Error for user $username: ".$r->getResponse()."\n");
 	}
 }
 
@@ -127,7 +127,7 @@ function _exportFile($repo, $path, $revision, $destination) {
 			fwrite($handle, $p);
 		}
 		fclose($handle);
-		echo ("Exported $path to $destination\n");
+		hookOutput("Exported $path to $destination\n");
 	}
 }
  

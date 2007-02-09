@@ -8,6 +8,12 @@ require('../../conf/repos.properties.php');
 require('../../conf/System.class.php');
 require('../../conf/Report.class.php');
 if (!class_exists('Command')) require('../../conf/Command.class.php');
+
+// there might be special requirements for output from hook scripts
+function hookOutput($echo) {
+	echo($echo);
+}
+
 require('export.inc.php');
 
 $known_hooks = array(
@@ -85,14 +91,14 @@ function testRun($type, $rev, $repoPath) {
 	if (!is_numeric($rev)) trigger_error('Rev must be numeric ', E_USER_ERROR);
 	$script = getHookScriptPath($type);
 	// run plain exec so we don't get a controlled environment
-	echo("---- test execution of $type hook ----\n\n");
+	hookOutput("---- test execution of $type hook ----\n\n");
 	$cmd = "$script \"$repoPath\" $rev"; // like subversion calls it
 	passthru($cmd, $return);
 	if ($return) {
 		// the hook is either not installed or returned error
-		echo("\n---- failed with exit code $return ----\n");
+		hookOutput("\n---- failed with exit code $return ----\n");
 	} else {
-		echo("\n---- no errors reported to caller ----\n");
+		hookOutput("\n---- no errors reported to caller ----\n");
 	}
 }
 
@@ -196,7 +202,7 @@ function createHook($type) {
 		$hook .= 'REV="$2"'."\n";
 		//$hook .= 'REPO="$1"'."\n";
 		// using non-blocking call to save on concurrent apache threads
-		$hook .= getHookCommand($type, '$REV')." &\n";
+		$hook .= getHookCommand($type, '$REV')." >> /dev/null 2>&1 &\n";
 	}
 	
 	if (!is_writable(dirname($f))) {

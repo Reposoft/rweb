@@ -90,8 +90,10 @@ function savePassword($filecontents, $message) {
 	$commit->setMessage($message);
 	$commit->exec('New passwor file committed');
 	displayEdit(Presentation::getInstance());
+	// during the commit, if the new password is changed from a post-commit hook
+	// the transaction will not complete, because of the error:
+	// svn: DELETE of '/data/!svn/act/...': authorization failed
 }
-
 
 // doesn't seem to work that well
 function savePasswordUsingService($filecontents, $message) {
