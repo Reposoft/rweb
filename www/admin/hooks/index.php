@@ -200,8 +200,6 @@ function createHook($type) {
 		$cmd = getHookCommand($type, '%REV%')." 1>NUL 2>NUL\r\n";
 		// seems like "start /B" does not work with windows + svn 1.3+
 		// 'wget -q -b --output-document=-' does not work either
-		$cmd = 'HookStart '.$cmd;
-		installHookStartForWindows(dirname($f).'/');
 		$hook .= $cmd;
 	} else {
 		$hook .= "#!/bin/sh\n";
@@ -225,6 +223,17 @@ function createHook($type) {
 	} else {
 		$r->warn('Could not set execution permissions on file. Please check that it is executable by web server.');
 	}
+	
+	// workaround for windows background problem, see installHookStartForWindows
+	if (true && System::isWindows()) {
+		$hooksFolder = strtr(dirname($f).'/', '/', '\\');
+		$run = $hooksFolder.'post-commit-run.bat';
+		$wrap = $hooksFolder.'HookStart.exe '.$run.' %1 %2'."\r\n";
+		installHookStartForWindows($hooksFolder);
+		rename($f, $run);
+		System::createFileWithContents($f, "@echo off\r\n".$wrap);
+	}
+	
 	$r->info('<a href="./">Return to hooks administration</a>');
 	$r->display();
 }
@@ -239,7 +248,7 @@ function installHookStartForWindows($hooksFolder) {
 	$fh = gzopen(dirname(__FILE__).'/HookStart.exe.gz', 'rb');
 	$contents = fread($fh, 4096);
 	fclose($fh);
-	System::createFileWithContents($hookstartExe, $contents);
+	System::createFileWithContents(toPath($hookstartExe), $contents);
 	$md5 = md5_file($hookstartExe);
 	if ($md5 != $hookstartMd5) echo 'Could not install HookStart.exe, invalid md5';
 }
