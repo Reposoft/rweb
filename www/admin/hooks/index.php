@@ -155,7 +155,7 @@ function checkHookScript($path, $scriptType, $report) {
 	$fh = fopen($path, 'r');
 	while (!feof($fh)) {
 		$buffer = fgets($fh);
-		if (preg_match('/^'.preg_quote($cmd,'/').'?/', $buffer)) {
+		if (preg_match('/'.strtr(preg_quote($cmd,'/').'/','"','.'), $buffer)) {
 			$report->ok($scriptType . ' hook contains the Repos integration command.');
 			fclose($fh);
 			return true;
@@ -197,10 +197,12 @@ function createHook($type) {
 		$hook .= "rem Integration with Repos\r\n";
 		$hook .= 'set REV=%2'."\r\n";
 		//$hook .= 'set REPO=%1'."\r\n";
-		$cmd = 'start /B '.getHookCommand($type, '%REV%')." 1>NUL 2>NUL\r\n";
+		$cmd = getHookCommand($type, '%REV%')." 1>NUL 2>NUL\r\n";
 		// seems like "start /B" does not work with windows + svn 1.3+
-		$hook .= 'REM '.$cmd;
-		$hook .= str_replace('curl -s', 'wget -q -b --output-document=-', $cmd);
+		// 'wget -q -b --output-document=-' does not work either
+		$cmd = 'HookStart '.$cmd;
+		installHookStartForWindows(dirname($f).'/');
+		$hook .= $cmd;
 	} else {
 		$hook .= "#!/bin/sh\n";
 		$hook .= "# Integration with Repos\n";
@@ -225,6 +227,21 @@ function createHook($type) {
 	}
 	$r->info('<a href="./">Return to hooks administration</a>');
 	$r->display();
+}
+
+/**
+ * using HookStart.exe from http://svn.haxx.se/users/archive-2006-07/0375.shtml
+ */
+function installHookStartForWindows($hooksFolder) {
+	$hookstartMd5 = '8faf004ec60f78d76d4489418c73274d';
+	$hookstartExe = $hooksFolder.'HookStart.exe';
+	if (file_exists($hookstartExe)) return; 
+	$fh = gzopen(dirname(__FILE__).'/HookStart.exe.gz', 'rb');
+	$contents = fread($fh, 4096);
+	fclose($fh);
+	System::createFileWithContents($hookstartExe, $contents);
+	$md5 = md5_file($hookstartExe);
+	if ($md5 != $hookstartMd5) echo 'Could not install HookStart.exe, invalid md5';
 }
 
 ?>
