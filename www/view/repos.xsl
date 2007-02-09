@@ -66,30 +66,57 @@
 	</xsl:template>
 	<!-- body contents -->
 	<xsl:template match="index">
-		<xsl:call-template name="commandbar"/>
-		<xsl:call-template name="contents"/>
+		<xsl:param name="fullpath" select="concat(/svn/index/@path,'/')"/>
+		<xsl:param name="tool">
+			<xsl:call-template name="getToolPath">
+				<xsl:with-param name="path" select="$fullpath"/>
+			</xsl:call-template>
+		</xsl:param>
+		<xsl:param name="folders" select="substring($fullpath, string-length($tool)+2)"/>
+		<xsl:param name="homelink">
+			<xsl:call-template name="getReverseUrl">
+				<xsl:with-param name="url" select="$folders"/>
+			</xsl:call-template>
+		</xsl:param>
+		<xsl:param name="projectname">
+			<xsl:call-template name="getProjectName"/>
+		</xsl:param>
+		<xsl:param name="pathlinks">
+			<xsl:call-template name="getFolderPathLinks">
+				<xsl:with-param name="folders" select="$folders"/>
+			</xsl:call-template>
+		</xsl:param>
+		<xsl:call-template name="commandbar">
+			<xsl:with-param name="parentlink">
+				<xsl:choose>
+					<xsl:when test="string-length($startpage)>0 and $pathlinks='/'">
+						<xsl:value-of select="$startpage"/>
+					</xsl:when>
+					<xsl:when test="string-length($startpage)>0 and not($tool)">
+						<xsl:value-of select="$startpage"/>
+					</xsl:when>
+					<xsl:when test="/svn/index/updir">../</xsl:when>
+					<xsl:otherwise></xsl:otherwise>
+				</xsl:choose>
+			</xsl:with-param>
+		</xsl:call-template>
+		<xsl:call-template name="contents">
+			<xsl:with-param name="tool" select="$tool"/>
+			<xsl:with-param name="homelink" select="$homelink"/>
+			<xsl:with-param name="projectname" select="$projectname"/>
+			<xsl:with-param name="pathlinks" select="$pathlinks"/>
+		</xsl:call-template>
 		<xsl:call-template name="footer"/>
 	</xsl:template>
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
-		<xsl:param name="parentpath">
-			<xsl:choose>
-				<xsl:when test="string-length($startpage)>0 and not(/svn/index/updir)">
-					<xsl:value-of select="$startpage"/>
-				</xsl:when>
-				<xsl:when test="string-length($startpage)>0 and contains(/svn/index/@path,'/trunk') and substring-after(/svn/index/@path, '/trunk')=''">
-					<xsl:value-of select="$startpage"/>
-				</xsl:when>
-				<xsl:when test="/svn/index/updir">../</xsl:when>
-				<xsl:otherwise></xsl:otherwise>
-			</xsl:choose>
-		</xsl:param>
+		<xsl:param name="parentlink"/>
 		<div id="commandbar">
 		<a id="reposbutton">
 			<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
 		</a>
-		<xsl:if test="string-length($parentpath)>0">
-			<a id="parent" class="command translate" href="{$parentpath}">up</a>
+		<xsl:if test="string-length($parentlink)>0">
+			<a id="parent" class="command translate" href="{$parentlink}">up</a>
 		</xsl:if>
 		<xsl:if test="$editUrl">
 			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={@path}/">new folder</a>
@@ -105,30 +132,15 @@
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="contents">
-		<xsl:param name="fullpath" select="concat(/svn/index/@path,'/')"/>
-		<xsl:param name="trunk">
-			<xsl:call-template name="getTrunkPath">
-				<xsl:with-param name="path" select="$fullpath"/>
-			</xsl:call-template>
-		</xsl:param>
-		<xsl:param name="folders" select="substring($fullpath, string-length($trunk)+2)"/>
-		<xsl:param name="home">
-			<xsl:call-template name="getReverseUrl">
-				<xsl:with-param name="url" select="$folders"/>
-			</xsl:call-template>
-		</xsl:param>
-		<xsl:param name="projectname">
-			<xsl:call-template name="getProjectName"/>
-		</xsl:param>
-		<xsl:param name="pathlinks">
-			<xsl:call-template name="getFolderPathLinks">
-				<xsl:with-param name="folders" select="$folders"/>
-			</xsl:call-template>
-		</xsl:param>
+		<xsl:param name="fullpath"/>
+		<xsl:param name="tool"/>
+		<xsl:param name="projectname"/>
+		<xsl:param name="homelink"/>
+		<xsl:param name="pathlinks"/>
 		<div id="contents">
 		<span id="fullpath" style="display:none"><xsl:value-of select="$fullpath"/></span>
 		<h2>
-			<a id="home" href="{$home}">
+			<a id="home" href="{$homelink}">
 				<span class="projectname">
 					<xsl:value-of select="$projectname"/>
 				</span>
@@ -253,7 +265,7 @@
 	</xsl:template>
 	<!-- get the mandatory part of the repository, like /project/trunk. Dos not support branches yet. -->
 	<!-- if 'trunk' is not a part of the path, or is the first part, return the first path element -->
-	<xsl:template name="getTrunkPath">
+	<xsl:template name="getToolPath">
 		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
 		<xsl:param name="this" select="substring-before(substring($path, 2), '/')"/>
 		<xsl:value-of select="$this"/>
@@ -264,7 +276,7 @@
 			<xsl:when test="not(contains($path, '/'))">
 			</xsl:when>
 			<xsl:when test="string-length($this)>0 and contains($path, '/trunk')">
-				<xsl:call-template name="getTrunkPath">
+				<xsl:call-template name="getToolPath">
 					<xsl:with-param name="path" select="substring-after($path,$this)"/>
 				</xsl:call-template>
 			</xsl:when>
