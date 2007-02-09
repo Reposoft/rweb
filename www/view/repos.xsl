@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <!--
-  ==== repos.se: Subversion directory listing layout ====
-  To be set as SVNIndexXSLT in repository conf.
-  Used at all directory levels, so urls must be absolute.
-  (c) Staffan Olsson
+  ==== Repos Subversion directory listing layout ====
+  Used as SVNIndexXSLT in repository configuration.
+  (c) 2005-2007 Staffan Olsson www.repos.se
 
   Note that browser transformations only work if the
   stylesheet is read from the same domain as the XML
@@ -220,11 +219,6 @@
 		<xsl:value-of select="../@version"/>
 		<xsl:text>&#160;</xsl:text>
 		</span>
-		<!-- quay button not used right now
-		<span>
-			<xsl:text>&#160;</xsl:text>
-			<a id="quayButton"></a>
-		</span> -->
 		</div>
 	</xsl:template>
 	<!-- get the root folder name -->
@@ -271,11 +265,11 @@
 		<xsl:value-of select="$this"/>
 		<xsl:value-of select="'/'"/>
 		<xsl:choose>
-			<xsl:when test="contains($this, 'trunk')">
+			<xsl:when test="contains($this, 'trunk') or contains($this, 'administration')">
 			</xsl:when>
 			<xsl:when test="not(contains($path, '/'))">
 			</xsl:when>
-			<xsl:when test="string-length($this)>0 and contains($path, '/trunk')">
+			<xsl:when test="string-length($this)>0 and (contains($path, '/trunk') or contains($path, '/administration'))">
 				<xsl:call-template name="getToolPath">
 					<xsl:with-param name="path" select="substring-after($path,$this)"/>
 				</xsl:call-template>
