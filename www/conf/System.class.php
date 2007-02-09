@@ -405,7 +405,8 @@ class System {
 		if (!isAbsolute($path)) {
 			trigger_error("Security error: local write not allowed in \"$path\". It is not absolute.", E_USER_ERROR);
 		}
-		if (strBegins($path, System::_getSystemTemp())) {
+		$tmp = System::_getSystemTemp(); // segfault if inside strBegins
+		if (strBegins($path, $tmp)) {
 			return true;
 		}
 		if (strContains($path, 'repos')) {

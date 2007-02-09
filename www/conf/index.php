@@ -288,11 +288,15 @@ function serverVariables() {
 	global $serverVariables;
 	foreach ( $serverVariables as $command => $expect ) {
 		line_start($command);
-		$result = $_SERVER[$command];
-		if ($result == $expect)
-			sayOK( $result );
-		else
-			sayFailed( $result );
+		if (!isset($_SERVER[$command])) {
+			sayFailed('Variable not found');
+		} else {
+			$result = $_SERVER[$command];
+			if ($result == $expect)
+				sayOK( $result );
+			else
+				sayFailed( $result );
+		}
 		line_end();
 	}
 }
