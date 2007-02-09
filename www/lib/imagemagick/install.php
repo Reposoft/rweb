@@ -22,7 +22,7 @@ $repos_package = "ImageMagick";
 $home = "http://www.imagemagick.org/";
 
 $version = "6.3.2";
-$versiondl = "$version-3-Q16";
+$versiondl = "$version-4-Q16";
 $archive = "http://www.imagemagick.org/download/binaries/ImageMagick-$versiondl-windows-dll.exe";
 $license = "http://www.imagemagick.org/script/license.php";
 $report->info("ImageMagick license: $license");
