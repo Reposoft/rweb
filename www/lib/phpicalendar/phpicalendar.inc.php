@@ -2,16 +2,15 @@
 // Load this config file after the directives in default PHP icalendar contif.inc.php
 
 // repos.se authentication
-require(dirname(dirname(dirname(__FILE__)))."/account/login.inc.php" );
-$username=getReposUser();
-$password=_getReposPass();
-$invalid_login=false;
+$username= isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
+$password= isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
+$webapp='/repos/';
 
 // repos.se custom settings
 $language 				= 'Swedish';		// Language support - 'English', 'Polish', 'German', 'French', 'Dutch', 'Danish', 'Italian', 'Japanese', 'Norwegian', 'Spanish', 'Swedish', 'Portuguese', 'Catalan', 'Traditional_Chinese', 'Esperanto', 'Korean'
 $week_start_day 		= 'Monday';			// Day of the week your week starts on
 $timezone 				= '';				// Set timezone. Read TIMEZONES file for more information
-$default_path			= getWebapp() + 'phpicalendar/phpicalendar'; // The HTTP URL to the PHP iCalendar directory, ie. http://www.example.com/phpicalendar
+$default_path			= $webapp + 'lib/phpicalendar/phpicalendar'; // The HTTP URL to the PHP iCalendar directory, ie. http://www.example.com/phpicalendar
 $charset				= 'UTF-8';			// Character set your calendar is in, suggested UTF-8, or iso-8859-1 for most languages.
 
 // Yes/No questions --- 'yes' means Yes, anything else means no. 'yes' must be lowercase.
@@ -23,7 +22,8 @@ $tmp_dir				= '/tmp';			// The temporary directory on your system (/tmp is fine 
 $webcal_hours			= '24';				// Number of hours to cache webcals. Setting to '0' will always re-parse webcals.
 
 // The calendar to view
-$r_auth = $username . ':' . $password . '@';
+$r_auth = '';
+if ($username) $r_auth = $username . ':' . $password . '@';
 $cal = $_COOKIE['repos-calendar'];
 $list_webcals[0] = substr_replace($cal, "$r_auth", strpos($cal,'://')+3, 0);
 

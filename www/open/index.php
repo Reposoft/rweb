@@ -33,15 +33,6 @@ if (!$rev && strEnds($target, 'repos-password.htp')) {
 	header('Location: '.getWebapp().'account/password/?target='.urlencode($target));
 }
 
-$type = substr($target, strrpos($target, '.') + 1);
-
-// iCalendar files
-if ($type=='ics') {
-		setcookie("repos-calendar", $url, time()+3600, '/');
-	header("Location: ".getWebapp()."tools/calendar/");
-	exit;
-}
-
 // TODO identify folders, even without trailing slash, for example when coming from history
 
 $file = new SvnOpenFile(getTarget(), $rev);

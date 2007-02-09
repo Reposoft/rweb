@@ -24,7 +24,7 @@ function download($url, $localTargetFile) {
 	fclose($fh);
 	// verify result
 	echo ("Got $info[url] with status $info[http_code] after $info[redirect_count] redirects.\n");
-	echo ("Downloaded $info[size_download] of type '$info[content_type]' in $info[total_time] seconds.\n");
+	echo ("Downloaded $info[size_download] bytes of type '$info[content_type]' in $info[total_time] seconds.\n");
 	return $result;
 }
 

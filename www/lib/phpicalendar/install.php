@@ -4,43 +4,32 @@ require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
 $report = new Report('install 3rd party tool: PHPiCalendar');
 
 if (file_exists('phpicalendar/')) {
-	trigger_error("phpicalendar already installed", E_USER_WARNING);
+	$report->ok("phpicalendar already installed, done.");
+	$report->display();
 	exit;
 }
 
 require('../../lib/uncompress.php');
-// PHP unit testing framework
 
 $repos_package = "phpicalendar";
 $home = "phpicalendar.sourceforge.net";
 
 $version = "2.22";
-$archive = "http://heanet.dl.sourceforge.net/sourceforge/phpicalendar/phpicalendar-$version.tgz";
+$archive = "http://downloads.sourceforge.net/phpicalendar/phpicalendar-$version.zip";
 
 $basedir = dirname(__FILE__);
-$dir_backslash = rtrim($basedir, DIRECTORY_SEPARATOR);
-$dir = str_replace('\\', '/', $dir_backslash);
+$dir = strtr($basedir, "\\", '/');
+$tmp = $dir.'/downloaded.tmp';
+
 $extracted_folder = "$dir/$repos_package-$version";
 
-/*
-	extract GZ archive
-	arg 1 is an absolute path to a gz archive
-	arg 2 is the extracted file's name
-	arg 3 is optional. default value is 1 000 000 000. it has to be larger than the extracted file 
-*/
-uncompressGZ($archive, $extracted_folder.".tar", 2000000 );
+if(download($archive, $tmp)) $report->info("Download complete.");
 
-$filename = $extracted_folder.".tar";
+decompressZip($tmp, $dir);
 
-/*
-	extract TAR archive
-	arg 1 is an absolute path to a gz archive
-	arg 2 is the extracted file's name. it is optional. default value is the same path as the tar file
-	arg 3 is optional. it should be used only if a special directory from the tar file is needed.  
-*/
-uncompressTAR( $filename, null, null );
+System::deleteFile($tmp);
 
-System::deleteFile($filename);  // delete the tar file
+$report->info('Decompress OK.');
 
 // get everything in place
 $destination = $dir.'/phpicalendar/';
@@ -64,7 +53,10 @@ System::deleteFile($destination.'calendars/US Holidays.ics');
 System::deleteFile($destination.'calendars/Work.ics');
 
 // untar leaves a strange @LongLink file
-System::deleteFile($dir.'/@LongLink');
+if (file_exists($dir.'/@LongLink')) System::deleteFile($dir.'/@LongLink');
+if (file_exists($dir.'/__MACOSX')) unlink($dir.'/__MACOSX'); // very strange symlink kind of thing
+
+$report->ok('Installed PHPiCalendar and added custom configuration, done.');
 
 $report->display();
 ?>

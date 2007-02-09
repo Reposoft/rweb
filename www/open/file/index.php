@@ -6,6 +6,7 @@
 require("../../conf/Presentation.class.php" );
 require("../SvnOpenFile.class.php" );
 addPlugin('syntax');
+addPlugin('calendar');
 
 $revisionRule = new RevisionRule();
 $rev = $revisionRule->getValue();
