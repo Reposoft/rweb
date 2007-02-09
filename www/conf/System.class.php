@@ -253,7 +253,18 @@ class System {
 	}
 	
 	function _getSpecialCommand($name) {
-		if ($name == 'htpasswd') return 'C:/srv/ReposServer/apache/bin/htpasswd.exe';
+		if ($name == 'htpasswd') {
+			// on linux it is usually installed with apache2
+			if (!System::isWindows()) return USRBIN . 'htpasswd2';
+			// on windows with repos ENV set we assume repos server
+			if (isset($_SERVER['REPOS_PRIMARY'])) {
+				$docroot = strtr($_SERVER['DOCUMENT_ROOT'],'/','\\');
+				$apache = dirname($docroot)."\\apache\\bin\\";
+				return "{$apache}htpasswd.exe";
+			}
+			// if not assume it is in PATH
+			return 'htpasswd';
+		}
 		return false;
 	}
 	
