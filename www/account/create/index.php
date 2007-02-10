@@ -12,10 +12,15 @@ if (isset($_GET[SUBMIT])) {
 	$username = $_GET['username'];
 	$email = $_GET['email'];
 	$fullname = $_GET['fullname'];
-	$password = ''.$username; // TODO generate password
+	$password = getRandomPassword($username);
+	
 	accountCreateUserFolder(getTargetUrl(), $username, $password, $email, $fullname);
-	// TODO redirect to account/acl/?create=username
+	
+	// folders created, redirect to create ACL entries
+	$p = Presentation::getInstance();
+	$p->assign('redirect', getWebapp().'account/acl/?create='.urlencode($username));
 	displayEdit(Presentation::getInstance());
+	
 } else {
 	$p = Presentation::getInstance();
 	$p->assign('target', '/'); // users are created in repository root
@@ -36,6 +41,7 @@ function accountCreateUserFolder($rootUrl, $username, $password, $email='', $ful
 	// create local user setup
 	$folder = System::getTempFolder('account');
 	$trunk = mkdir($folder.'trunk/');
+	$administration = mkdir($trunk.'administration/');
 	
 	// create user file contents
 	$pass = accountGetEncryptedPassword($username, $password);
@@ -43,7 +49,7 @@ function accountCreateUserFolder($rootUrl, $username, $password, $email='', $ful
 	$pass .= ":$fullname";
 	$pass .= ":$email";
 	$pass .= "\n";
-	System::createFileWithContents($folder.REPOSITORY_USER_FILE_NAME, $pass);
+	System::createFileWithContents($administration.REPOSITORY_USER_FILE_NAME, $pass);
 	
 	// structure created, do import
 	$url = "$rootUrl$username/";

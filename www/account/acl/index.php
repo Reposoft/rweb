@@ -48,7 +48,9 @@ if (isset($_GET['delete'])) {
 System::deleteFolder($wc);
 
 $next = getTargetUrl(ADMIN_FOLDER);
-displayEdit(Presentation::getInstance(), $next);
+$p = Presentation::getInstance();
+$p->assign('target', $file->getPath()); // assigned by the other edit pages for commandbar
+displayEdit($p, $next);
 
 // shared commit changes logic
 function aclCommit($wc, $commitMessage) {

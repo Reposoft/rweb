@@ -89,10 +89,13 @@ function savePassword($filecontents, $message) {
 	$commit->addArgPath($wc);
 	$commit->setMessage($message);
 	$commit->exec('New passwor file committed');
+	
+	$p = Presentation::getInstance();
+	$p->assign('redirect', '/?logout');
+	
 	displayEdit(Presentation::getInstance());
-	// during the commit, if the new password is changed from a post-commit hook
-	// the transaction will not complete, because of the error:
-	// svn: DELETE of '/data/!svn/act/...': authorization failed
+	// Mau cause error "svn: DELETE of '/data/!svn/act/...': authorization failed"
+	// if the new password is enforced by a post-commit hook that the commit waits for
 }
 
 // doesn't seem to work that well
