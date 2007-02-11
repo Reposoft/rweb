@@ -185,19 +185,19 @@ span.action {
 	background-image: url('commands/16x16/back.png');
 }
 #commandbar #repository {
-	background-image: url('commands/16x16/repository.png');
+	background-image: url('commands/24x24/repository.png');
 }
 #commandbar #history {
-	background-image: url('commands/16x16/history.png');
+	background-image: url('commands/24x24/history.png');
 }
 #commandbar #download {
 	background-image: url('commands/16x16/download.png');
 }
 #commandbar #refresh {
-	background-image: url('commands/16x16/refresh.png');
+	background-image: url('commands/24x24/refresh.png');
 }
 #commandbar #logout {
-	background-image: url('commands/16x16/logout.png');
+	background-image: url('commands/24x24/logout.png');
 }
 /* visible version numbers, #releaseversion or #resourceversion */
 .versiondisplay {
