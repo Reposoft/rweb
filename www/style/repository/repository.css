@@ -9,20 +9,20 @@
 }
 /* commands */
 #commandbar #parent {
-	background-image: url('../commands/16x16/parent.png');
+	background-image: url('../commands/24x24/parent.png');
 }
 #commandbar #addfile {
 	background-image: url('../commands/24x24/upload.png');
 }
 #commandbar #createfolder {
-	background-image: url('../commands/16x16/createfolder.png');
+	background-image: url('../commands/24x24/createfolder.png');
 }
 #commandbar #createfile {
-	background-image: url('filetypes/16x16/html.png');
+	background-image: url('../commands/24x24/createfile.png');
 }
 /* details plugin */
 #commandbar #showdetails {
-	background-image: url('../details/details.png');
+	background-image: url('../commands/24x24/details.png');
 }
 div.details {
 	position: relative;
