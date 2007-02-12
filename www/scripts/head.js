@@ -37,23 +37,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a
  * Repos fileid (c) 2006 Staffan Olsson repos.se
  * $Id: head.js 2309 2007-01-15 08:51:01Z solsson $
  */
-function ReposFileId(name) {
-	this.name = name;
-	this.get = function() {
-		return this._idescape(this._urlescape(name));
-	}
-	this.find = function(prefix) {
-		return document.getElementById(prefix + ':' + this.get());
-	}
-	this._idescape = function(text) {
-		return text.replace(/[%\/\(\)@&]/g,'_');
-	}
-	this._urlescape = function(text) {
-		return text.replace(/[^\w]+/g, function(sub) {
-			return encodeURI(sub).toLowerCase();
-		}).replace(/;/g,'%3b').replace(/#/g,'%23');
-	}
-}
+eval(function(p,a,c,k,e,d){e=function(c){return c.toString(36)};if(!''.replace(/^/,String)){while(c--){d[c.toString(a)]=k[c]||c.toString(a)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('1 d(3){0.3=3;0.9=1(){2 0.a(0.7(3))};0.j=1(8){2 f.i(8+\':\'+0.9())};0.a=1(4){2 4.5(/[%\\/\\(\\)@&]/g,\'b\')};0.7=1(4){2 4.5(/[^\\e]+/g,1(6){2 k(6).c()}).5(/;/g,\'%h\').5(/#/g,\'%l\')}};',22,22,'this|function|return|name|text|replace|sub|_urlescape|prefix|get|_idescape|_|toLowerCase|ReposFileId|w|document||3b|getElementById|find|encodeURI|23'.split('|'),0,{}))
 
 // ===================================================
 /**
