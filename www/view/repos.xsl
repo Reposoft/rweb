@@ -100,6 +100,7 @@
 			</xsl:with-param>
 		</xsl:call-template>
 		<xsl:call-template name="contents">
+			<xsl:with-param name="fullpath" select="$fullpath"/>
 			<xsl:with-param name="tool" select="$tool"/>
 			<xsl:with-param name="homelink" select="$homelink"/>
 			<xsl:with-param name="projectname" select="$projectname"/>
