@@ -217,7 +217,7 @@ function processNewVersion($upload) {
 		if (!$upload->getUnlock()) {
 			// acquire the lock again
 			$lock = new SvnEdit('lock');
-			$lock->addArgPath($updatefile);
+			$lock->addArgPath($dir . $filename);
 			$lock->setMessage($upload->getLockComment());
 			$lock->exec();
 			$commit->addArgOption('--no-unlock');
