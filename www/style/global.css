@@ -182,7 +182,7 @@ span.action {
 }
 /* common commands */
 #commandbar #back {
-	background-image: url('commands/16x16/back.png');
+	background-image: url('commands/24x24/back.png');
 }
 #commandbar #repository {
 	background-image: url('commands/24x24/repository.png');
