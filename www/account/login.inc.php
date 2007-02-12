@@ -160,8 +160,8 @@ function _login_getParentUrl($url) {
  */
 function login_followRedirect($fromUrl, $headers) {
 	$location = $headers['Location'];
-	$from = strAfter($fromUrl, getRepository());
-	$to = strAfter($location, getRepository());
+	$from = substr($fromUrl, strlen(getRepository()));
+	$to = substr($location, strlen(getRepository()));
 	$url = getSelfUrl().'?'.getSelfQuery();
 	$url = str_replace($from, $to, $url);
 	header('Location: '.$url);

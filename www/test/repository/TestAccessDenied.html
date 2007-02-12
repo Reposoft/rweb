@@ -43,6 +43,26 @@
 	<td>5000</td>
 	<td></td>
 </tr>
+<tr title="Simple case. If this operation takes very long time, it might be that the error page does not identify internal requests properly, when it checks all parents">
+	<td>open</td>
+	<td>/testrepo/demoproject/trunk/noaccess/a/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Access Denied</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>link=*/testrepo/demoproject/trunk/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>setTimeout</td>
+	<td>10000</td>
+	<td></td>
+</tr>
 <tr title="If this operation takes very long time, it might be that the error page does not identify internal requests properly, when it checks all parents">
 	<td>open</td>
 	<td>/testrepo/demoproject/trunk/noaccess/a/b/c/d/e/f/g/h/i/j/k/</td>

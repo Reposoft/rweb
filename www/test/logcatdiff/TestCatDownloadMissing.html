@@ -10,7 +10,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/repos/open/cat/?target=/test/trunk/does/not/exist.txt&rev=HEAD&open</td>
+	<td>/repos/open/file/?target=/test/trunk/does/not/exist.txt&rev=HEAD&open</td>
 	<td></td>
 </tr>
 <tr>
@@ -26,6 +26,11 @@
 <tr>
 	<td>assertElementPresent</td>
 	<td>css=a#repository</td>
+	<td></td>
+</tr>
+<tr title="should not be the subversion error message">
+	<td>assertTextNotPresent</td>
+	<td>svn:</td>
 	<td></td>
 </tr>
 </tbody></table>
