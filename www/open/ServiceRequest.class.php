@@ -15,11 +15,6 @@ if (!function_exists('curl_init')) trigger_error('Service calls require the PHP 
 // not dependent on the System class, this is only web functions
 
 /**
- * The User-Agent: header contents for requests from this class
- */
-define('SERVICEREQUEST_AGENT', 'Repos service request');
-
-/**
  * Predefined services
  */
 define('SERVICE_LOG', 'open/log/');

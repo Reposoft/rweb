@@ -49,6 +49,12 @@ define('WEBSERVICE_KEY', 'serv'); // html, json, xml or text
 // parameter conventions
 define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST
 
+/**
+ * The User-Agent: header contents for internal requests
+ * @see isRequestInternal()
+ */
+define('SERVICEREQUEST_AGENT', 'Repos service request');
+
 // --- application selfcheck, can be removed in releases (integration tests should check these things) ---
 if (!isset($_repos_config['repositories'])) trigger_error("No repositories configured");
 if (!isset($_repos_config['repos_web'])) trigger_error("Repos web applicaiton root not specified in configuration");
@@ -58,17 +64,6 @@ _denyParam(USERNAME_KEY);
 _denyParam(LOCALE_KEY);
 _denyParam(THEME_KEY);
 if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable magic_quotes"); } // tested in server test
-
-/**
- * @return true if the current request is internal, from a server page,
- * a web service client or an AJAX page
- * @see ServiceRequest
- */
-function isRequestService() {
-	return isset($_REQUEST[WEBSERVICE_KEY])
-		&& in_array($_REQUEST[WEBSERVICE_KEY],array('json','text', 'xml'));
-	//return isRequestInternal();
-}
 
 // ------ local configuration ------
 
@@ -216,7 +211,7 @@ function getSelfQuery() {
 
 /**
  * 
- * @return boolean true if the current client is local REMOTE_ADDR
+ * @return boolean true if the current client is local REMOTE_ADDR (IP is 127.0.0.1)
  */
 function isRequestLocal() {
 	return isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']=='127.0.0.1';
@@ -229,9 +224,19 @@ function isRequestLocal() {
 function isRequestInternal() {
 	if (isRequestLocal()) { // assumes we're not mirrored and don't use a proxy
 		// this is not proper identification, but at least it does not return true for any normal browser
-		return !isset($_SERVER['HTTP_USER_AGENT']);
+		return !isset($_SERVER['HTTP_USER_AGENT']) || $_SERVER['HTTP_USER_AGENT'] == SERVICEREQUEST_AGENT;
 	}
 	return false;
+}
+
+/**
+ * @return true if the current request is for contents, not a user page
+ * @see ServiceRequest
+ * @see isRequestInternal()
+ */
+function isRequestService() {
+	return isset($_REQUEST[WEBSERVICE_KEY])
+		&& in_array($_REQUEST[WEBSERVICE_KEY],array('json','text', 'xml'));
 }
 
 /**
