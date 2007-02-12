@@ -18,7 +18,7 @@ if (!isRepositoryUrl($url)) {
 
 require('../../../account/login.inc.php');
 
-if (isRequestInternal()) {
+if (isRequestService()) {
 	$p->showErrorNoRedirect('Could not find resource '.$url, '404 Page Not Found');
 	exit;
 }

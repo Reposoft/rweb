@@ -49,12 +49,6 @@ define('WEBSERVICE_KEY', 'serv'); // html, json, xml or text
 // parameter conventions
 define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST
 
-/**
- * The User-Agent: header contents for internal requests
- * @see isRequestInternal()
- */
-define('SERVICEREQUEST_AGENT', 'Repos service request');
-
 // --- application selfcheck, can be removed in releases (integration tests should check these things) ---
 if (!isset($_repos_config['repositories'])) trigger_error("No repositories configured");
 if (!isset($_repos_config['repos_web'])) trigger_error("Repos web applicaiton root not specified in configuration");
@@ -210,33 +204,36 @@ function getSelfQuery() {
 }
 
 /**
- * 
- * @return boolean true if the current client is local REMOTE_ADDR (IP is 127.0.0.1)
- */
-function isRequestLocal() {
-	return isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']=='127.0.0.1';
-}
-
-/**
- * This web application runs an intenal HTTP client that is needed to check status codes of pages
- * @return boolean true if the current request is from our own HTTP client
- */
-function isRequestInternal() {
-	if (isRequestLocal()) { // assumes we're not mirrored and don't use a proxy
-		// this is not proper identification, but at least it does not return true for any normal browser
-		return !isset($_SERVER['HTTP_USER_AGENT']) || $_SERVER['HTTP_USER_AGENT'] == SERVICEREQUEST_AGENT;
-	}
-	return false;
-}
-
-/**
+ * Identifies service requests (requests for non-html output).
+ * Note that this does not work on error pages, because they don't get the query string.
  * @return true if the current request is for contents, not a user page
  * @see ServiceRequest
  * @see isRequestInternal()
  */
 function isRequestService() {
-	return isset($_REQUEST[WEBSERVICE_KEY])
-		&& in_array($_REQUEST[WEBSERVICE_KEY],array('json','text', 'xml'));
+	if (isRequestNoBody()) return true;
+	if (!isset($_REQUEST[WEBSERVICE_KEY])) {
+		// ErrorDocument in repository might not get the proper superglobals
+		if (strpos($_SERVER['REQUEST_URI'], 'serv=') > 0) return true;
+		return false;
+	}
+	return in_array($_REQUEST[WEBSERVICE_KEY],
+		array('json','text','xml'));
+}
+
+/**
+ * @return boolean true if HEAD method request
+ */
+function isRequestNoBody() {
+	return $_SERVER['REQUEST_METHOD']=='HEAD';
+}
+
+/**
+ * 
+ * @return boolean true if the current client is local REMOTE_ADDR (IP is 127.0.0.1)
+ */
+function isRequestLocal() {
+	return isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']=='127.0.0.1';
 }
 
 /**

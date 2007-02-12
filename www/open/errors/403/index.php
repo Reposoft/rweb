@@ -10,7 +10,7 @@ $p = Presentation::getInstance();
 $url = getSelfUrl();
 
 // user friendly message only needed for remote clients. prevent multiple getFirstNon404Parent
-if (isRequestInternal()) {
+if (isRequestService()) {
 	$p->showErrorNoRedirect('Access denied for resouce '.$url,'403 Forbidden');
 	exit;
 }
