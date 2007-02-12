@@ -1,0 +1,53 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>TestCopyFolder</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestCopyFolder</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/repos/edit/copy/?target=/test/trunk/fa/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>tofolder</td>
+	<td>/test/trunk/</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>newname</td>
+	<td>fa_copy</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//p[3]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/repos/edit/delete/?target=/test/trunk/fa_copy/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//p[3]/a</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
