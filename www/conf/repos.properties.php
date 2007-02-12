@@ -33,6 +33,7 @@ function reportError($n, $message, $file, $line) {
 // default error reporting, for errors that occur before presentation is initialized
 function reportErrorText($n, $message, $trace) {
 	if ($n!=2048) { // E_STRICT not defined in php 4
+		if ($n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error');
 		echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>");
 		exit;
 	}

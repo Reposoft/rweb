@@ -8,6 +8,11 @@ $p = Presentation::getInstance();
 
 $url = getSelfUrl();
 
+if (isRequestService()) {
+	$p->showErrorNoRedirect('Could not find resource '.$url, '404 Page Not Found');
+	exit;
+}
+
 // should be able to view this page without a login
 if (!isRepositoryUrl($url)) {
 	$p->showErrorNoRedirect(
@@ -17,11 +22,6 @@ if (!isRepositoryUrl($url)) {
 }
 
 require('../../../account/login.inc.php');
-
-if (isRequestService()) {
-	$p->showErrorNoRedirect('Could not find resource '.$url, '404 Page Not Found');
-	exit;
-}
 
 // note that we have to do getParent first here, because parent may also be this page
 $near = login_getFirstNon404Parent(getParent($url));
