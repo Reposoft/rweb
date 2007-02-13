@@ -15,7 +15,7 @@
 		<head>
 			<title>
 				<xsl:text>Repos: </xsl:text>
-				<xsl:value-of select="'histroric folder'"/>
+				<xsl:value-of select="'historic folder'"/>
 			</title>
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<!-- if search crawlers has access, contents should not be cached -->
