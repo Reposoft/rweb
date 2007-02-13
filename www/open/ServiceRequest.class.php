@@ -23,6 +23,7 @@ define('SERVICEREQUEST_AGENT', 'Repos service request');
  * Predefined services
  */
 define('SERVICE_LOG', 'open/log/');
+define('SERVICE_ACL', 'account/acl/');
 
 if (!function_exists('getWebapp')) require(dirname(dirname(__FILE__)).'/conf/repos.properties.php');
 

@@ -15,10 +15,24 @@ if (isset($_GET[SUBMIT])) {
 	$password = getRandomPassword($username);
 	
 	accountCreateUserFolder(getTargetUrl(), $username, $password, $email, $fullname);
+	// create acl entry in next revision (same revision would require checkout repository root
 	
-	// folders created, redirect to create ACL entries
+	$acl = new ServiceRequest(SERVICE_ACL,
+		array('create', $username));
+	$acl->exec();
 	$p = Presentation::getInstance();
-	$p->assign('redirect', getWebapp().'account/acl/?create='.urlencode($username));
+	// how do we present a ServiceRequest in an edit page
+	$logEntry = array(
+		'result' => '',
+		'operation' => 'acl',
+		'message' => $acl->getResponse(),
+		'successful' => $acl->isOK(),
+		'revision' => '',
+		'output' => $acl->getResponse(),
+		'description' => 'Created ACL entry for user '.$username
+	);
+	$p->append('log', $logEntry);
+	
 	displayEdit(Presentation::getInstance());
 	
 } else {
@@ -37,12 +51,12 @@ if (isset($_GET[SUBMIT])) {
  * @param String $fullname user's real name for the htpasswd file
  */
 function accountCreateUserFolder($rootUrl, $username, $password, $email='', $fullname='') {
-	
-	// create local user setup
+	// create local user setup that can be imported to repository
 	$folder = System::getTempFolder('account');
-	$trunk = mkdir($folder.'trunk/');
-	$administration = mkdir($trunk.'administration/');
-	
+	$trunk = $folder.'trunk/';
+	System::createFolder($trunk);
+	$administration = $trunk.'administration/';
+	System::createFolder($administration);
 	// create user file contents
 	$pass = accountGetEncryptedPassword($username, $password);
 	// append email and full name like htadmin 1.2.4 does
@@ -57,7 +71,7 @@ function accountCreateUserFolder($rootUrl, $username, $password, $email='', $ful
 	$import->addArgPath($folder);
 	$import->addArgUrl($url);
 	$import->setMessage('Created user account '.$username);
-	$import->exec('Created user home folder '.$url.'. The temporary password is "'.$password.'".');
+	$import->exec('Create user home folder '.$url.'. The temporary password is "'.$password.'".');
 }
 
 ?>

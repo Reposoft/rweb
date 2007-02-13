@@ -25,6 +25,7 @@ if ($file->getStatus()!=200) trigger_error('This account does not have access to
 $wc = System::getTempFolder('acl');
 
 $checkout = new SvnEdit('checkout');
+$checkout->addArgOption('--non-recursive');
 $checkout->addArgUrl(getParent($file->getUrl()));
 $checkout->addArgPath($wc);
 if ($checkout->exec('Checked out current ACL')) {

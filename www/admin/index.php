@@ -87,8 +87,9 @@ that are newer than the latest backup <span class="revision"><?php echo($lastrev
 <p><a id="client" href="client/">Status for internal svn client</a></p>
 <p><a id="testemail" href="testemail/">Test outgoing application e-mails</a></p>
 <p><a id="accountreset" href="accountreset/">Reset a user's password</a></p>
-<p><a id="accountcreate" href="../create/">Create user account</a></p>
-<p><a id="accountdelete" href="../delete/">Delete user account</a></p>
+<p><a id="accountrevert" href="accountrevert/">Revert a user's password to the latest in version control</a></p>
+<p><a id="accountcreate" href="../account/create/">Create user account</a></p>
+<p><a id="accountdelete" href="../account/delete/">Delete user account</a></p>
 <!-- TODO move these to separate page and include with ajax box -->
 <div class="section">
 <h2>Server information</h2>
