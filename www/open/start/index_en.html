@@ -39,7 +39,7 @@ and the tools in each project.</p>
 	{=* special cases not handled by open *}
 	{=if $toolid eq news}{=assign var='toolpath' value=`$toolpath`news.xml}{=/if}
 	{=*{=if $toolid eq calendar}{=assign var='toolpath' value=`$toolpath``$projectname`.ics}{=/if}*}
-	<a class="tool {=$toolid}" href="../?target={=$entry->getPath()}/{=$toolpath}">
+	<a id="{=$toolid}:{=$projectname}" class="tool {=$toolid}" href="../?target={=$entry->getPath()}/{=$toolpath}">
 	<img border="0" src="../../style/tools/{=$toolid}.png" hspace="10" align="absmiddle"/>{=$toolid}</a>
 	</div>
 	<!--{/foreach}-->
