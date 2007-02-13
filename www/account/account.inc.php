@@ -1,6 +1,6 @@
 <?php
 /**
- * Common functions in user administration.
+ * Common functions in user administration, for Repos installation that use apache password files.
  * 
  * Htpasswd syntax is <code>username:MD5(pwd):Full Name:email@address</code>.
  *
@@ -74,7 +74,7 @@ function resetPassword($username, $email='') {
 	
 	$pattern = preg_quote($username, '/').':[^:]+';
 	if ($email) { // require matching email
-		$pattern .= ':[^:]*:'.preg_quote($email).'\n?$'; // note that this also matches empty email if colons are there
+		$pattern .= ':[^:]*:'.preg_quote($email).''; // note that this also matches empty email if colons are there
 	}
 	$pattern = '/^'.$pattern.'/';
 
@@ -112,6 +112,51 @@ function getRandomPassword($username) {
 	return strtolower(substr(base64_encode(microtime()), 2, 8));
 }
 
+/**
+ * Very basic email functionality for new passwords.
+ * @return boolean false if emailing is not enabled in configuration,
+ * 	empty String if mail was successfuly sent,
+ * 	String with message body if mail sending failed.
+ */
+function accountSendPasswordEmail($username, $password, $email, $fullname=null) {
+	$emailEnable = true;
+	$from = getConfig('administrator_email');
+	if (!$from) $emailEnable = false; // don't send email
+	
+	if (!$fullname) $fullname = $username;
+	// protect from injection
+	$fullname = htmlspecialchars($fullname);
+	if (htmlspecialchars($email)!=$email) trigger_error('Invalid e-mail address '.$email, E_USER_ERROR);
+	
+	$webapp = getWebapp();
+	$repository = getRepository();
+	preg_match('/(\w+:\/\/[^\/]+\/).*/', $repository, $matches);
+	$host = $matches[1];
+	$subject = "Your Repos account $username";
+	$body = "$fullname,
+
+A temporary password has been generated 
+for your account $username:
+$password
+
+You can log in at at $host?login.
+After that, please change password from the administration folder.
+Or access the user password file directly at:
+{$webapp}open/?target=/".urlencode($username)."/administration/".REPOSITORY_USER_FILE_NAME."
+
+";
+	$headers = 'From: ' . $host . "\r\n" .
+   'Reply-To: ' . $from . "\r\n" .
+   'X-Mailer: Repos PHP/' . phpversion();
+	
+   // done
+	if (!$emailEnable) return false;
+	if (mail($email,$subject,$body,$headers,null)) {
+		return '';
+	} else {
+		return $body;
+	}
+}
 
 
 ?>

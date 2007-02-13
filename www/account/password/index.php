@@ -55,18 +55,22 @@ if (isset($_REQUEST[SUBMIT])) {
 	if ($newFullname && $newFullname!=$fullname) {
 		$newcontents = str_replace(":$fullname", ":$newFullname", $newcontents);
 		$message[] = 'changed name';
+		$fullname = $newFullname;
 	}
 	
 	$newEmail = $_REQUEST['email'];
 	if ($newEmail && $newEmail!=$email) {
 		$newcontents = str_replace(":$email", ":$newEmail", $newcontents);
 		$message[] = 'changed email';
+		$email = $newEmail;
 	}
 	
 	if ($newcontents == $contents) {
 		trigger_error('The form was submitted but there are no changes', E_USER_ERROR);
 	}
+	
 	savePassword($newcontents, implode(', ', $message));
+		
 } else {
 	$template = Presentation::getInstance();
 	$template->assign('username', $username);

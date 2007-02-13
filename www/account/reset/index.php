@@ -24,12 +24,21 @@ if (isset($_GET[SUBMIT])) {
 }
 
 function userResetPassword($username, $email) {
-	$result = resetPassword($username, $email);
-	if (!$result) {
+	$newpass = resetPassword($username, $email);
+	if (!$newpass) {
 		trigger_error('No user found with username "'.$username.'" and e-mail "'.$email.'".', E_USER_WARNING);
+		exit;
 	}
-	// email the new password
-	echo ("A new password should have been emailed to you, but we have not implemented that yet so here you go: $result");
+	
+	$result = accountSendPasswordEmail($username, $newpass, $email, $fullname);
+	if ($result===false) showResult("Administration E-mail not enabled, new password is $password");
+	elseif ($result) showResult("Could not send the email with the following contents: \n\n$result");
+	else showResult("A new password has been emailed to address $email.");
+}
+
+function showResult($message) {
+	header('Content-Type: text/plain');
+	echo $message;
 }
 
 ?>

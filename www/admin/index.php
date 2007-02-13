@@ -85,6 +85,10 @@ that are newer than the latest backup <span class="revision"><?php echo($lastrev
 <p><a id="hooks" href="hooks/">Repository hook scripts</a></p>
 <p><a id="size" href="size/">Storage space used for this Repos host</a></p>
 <p><a id="client" href="client/">Status for internal svn client</a></p>
+<p><a id="testemail" href="testemail/">Test outgoing application e-mails</a></p>
+<p><a id="accountreset" href="accountreset/">Reset a user's password</a></p>
+<p><a id="accountcreate" href="../create/">Create user account</a></p>
+<p><a id="accountdelete" href="../delete/">Delete user account</a></p>
 <!-- TODO move these to separate page and include with ajax box -->
 <div class="section">
 <h2>Server information</h2>
