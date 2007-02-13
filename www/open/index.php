@@ -28,11 +28,6 @@ if (login_isFolder($url)) {
 	exit;
 }
 
-// temporary plugin strategy for password files, see account.inc.php
-if (!$rev && strEnds($target, 'repos-password.htp')) {
-	header('Location: '.getWebapp().'account/password/?target='.urlencode($target));
-}
-
 // TODO identify folders, even without trailing slash, for example when coming from history
 
 $file = new SvnOpenFile(getTarget(), $rev);

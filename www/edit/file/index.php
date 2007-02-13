@@ -12,6 +12,7 @@ require("../../conf/Presentation.class.php" );
 require("../SvnEdit.class.php" );
 require("../../open/SvnOpenFile.class.php");
 addPlugin('edit');
+addPlugin('password');
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 

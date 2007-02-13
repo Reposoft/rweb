@@ -73,6 +73,7 @@ if (isset($_REQUEST[SUBMIT])) {
 		
 } else {
 	$template = Presentation::getInstance();
+	$template->assign('isEdit', !isset($_GET['view']) && $passwordfile->isLatestRevision());
 	$template->assign('username', $username);
 	$template->assign('fullname', $fullname);
 	$template->assign('email', $email);
