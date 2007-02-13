@@ -11,7 +11,7 @@ function convertGetCommand() {
 		return '"'.$installed.'convert"';
 	}
 	// expect imagemagick in path
-	return 'converta';
+	return 'convert';
 }
 
 ?>

@@ -152,6 +152,7 @@ function getHookScriptPath($type) {
  */
 function checkHookScript($path, $scriptType, $report) {
 	$cmd = getHookCommand($scriptType);
+	if (System::isWindows()) $path = str_replace('.bat', '-run.bat', $path);
 	$fh = fopen($path, 'r');
 	while (!feof($fh)) {
 		$buffer = fgets($fh);

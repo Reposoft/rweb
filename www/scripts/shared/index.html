@@ -23,7 +23,7 @@
 Dynamic loading of scripts and css has been disabled,
 because it was not reliable. Can be found in reposweb-1.1-B1.
 </p>
-</ul>
+
 <h2>unit tests</h2>
 <p>The unit test library overrides Repos.reportError, so it can't be tested, but the surrounding functions can be.</p>
 <p>Hit Ctrl+Shift+L for Firebug light debug console.</p>
@@ -68,6 +68,10 @@ function TestRepos() {
 	
 	this.testLogError = function() {
 		Repos._logError('repos.js unit test message');
+	}
+	
+	this.testLogInfo = function() {
+		Repos.info('this is an info message');
 	}
 	
 	this.testGetWebapp = function() {
