@@ -78,6 +78,7 @@ function aclCreateUser($username, $aclFile) {
 	fwrite($f, "$nl");
 	fwrite($f, "[/$username]$nl");
 	fwrite($f, "$username = rw$nl");
+	fwrite($f, "* = $nl"); // no access from root, even for administrators
 	fclose($f);
 }
 

@@ -89,6 +89,7 @@ function getUserLocale() {
 $_plugins = array();
 function addPlugin($name) {
 	global $plugins;
+	if (in_array($name, $plugins)) return; // already loaded
 	$inc = dirname(dirname(__FILE__))."/plugins/$name/$name.inc.php";
 	if (!file_exists($inc)) trigger_error("The page tried to load a plugin '$name' that does not exist", E_USER_ERROR);
 	require($inc);

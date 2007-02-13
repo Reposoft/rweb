@@ -6,6 +6,7 @@
  */
 require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php'); 
 require(dirname(dirname(dirname(__FILE__))).'/edit/SvnEdit.class.php');
+require(dirname(dirname(dirname(__FILE__))).'/edit/ServiceRequestEdit.class.php');
 require(dirname(dirname(__FILE__)).'/account.inc.php');
 
 if (isset($_GET[SUBMIT])) {
@@ -17,21 +18,11 @@ if (isset($_GET[SUBMIT])) {
 	accountCreateUserFolder(getTargetUrl(), $username, $password, $email, $fullname);
 	// create acl entry in next revision (same revision would require checkout repository root
 	
-	$acl = new ServiceRequest(SERVICE_ACL,
-		array('create', $username));
+	$acl = new ServiceRequestEdit(SERVICE_ACL,
+		array('create' => $username));
 	$acl->exec();
 	$p = Presentation::getInstance();
-	// how do we present a ServiceRequest in an edit page
-	$logEntry = array(
-		'result' => '',
-		'operation' => 'acl',
-		'message' => $acl->getResponse(),
-		'successful' => $acl->isOK(),
-		'revision' => '',
-		'output' => $acl->getResponse(),
-		'description' => 'Created ACL entry for user '.$username
-	);
-	$p->append('log', $logEntry);
+	$aclRev = $acl->getCommittedRevision();
 	
 	displayEdit(Presentation::getInstance());
 	
