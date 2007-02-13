@@ -228,3 +228,8 @@ http://www.dreamprojections.com/SyntaxHighlighter/
 .syntax-wiki .heading1 { font-size: large; }
 .syntax-wiki .italics { font-style: italic; }
 .syntax-wiki .bold { font-weight: bold; }
+
+.syntax-acl {}
+.syntax-acl .keyword { color: #5697D9; font-weight: bold; }
+.syntax-acl .heading { font-weight: bold; }
+.syntax-acl .group { font-style: italic; }
