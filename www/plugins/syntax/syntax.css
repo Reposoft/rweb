@@ -223,6 +223,7 @@ http://www.dreamprojections.com/SyntaxHighlighter/
 .syntax-diff .added { color: #009900; }
 .syntax-diff .removed { color: #CC0000; }
 .syntax-diff .nonewline { color: #CCCCCC; }
+.syntax-diff .keyword { color: #5697D9; }
 
 .syntax-wiki {}
 .syntax-wiki .heading1 { font-size: large; }
@@ -230,6 +231,6 @@ http://www.dreamprojections.com/SyntaxHighlighter/
 .syntax-wiki .bold { font-weight: bold; }
 
 .syntax-acl {}
-.syntax-acl .keyword { color: #5697D9; font-weight: bold; }
-.syntax-acl .heading { font-weight: bold; }
-.syntax-acl .group { font-style: italic; }
+.syntax-acl .path { font-weight: bold; }
+.syntax-acl .group { color: #333366; }
+.syntax-acl .keyword { color: #229911; }
