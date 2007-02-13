@@ -19,8 +19,17 @@ class EditTypeRule extends Rule {
 
 function edit_getHeadTags($webapp) {
 	return array(
-		'<script language="javascript" type="text/javascript" src="'.$webapp.'lib/tinymce/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>',
+		'<script language="javascript" type="text/javascript" src="'.$webapp.'lib/tinymce/tinymce/jscripts/tiny_mce/tiny_mce_gzip.js"></script>',
 		'<script language="javascript" type="text/javascript">
+tinyMCE_GZ.init({
+	plugins : "style,layer,table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras",
+	themes : "simple,advanced",
+	languages : "en",
+	disk_cache : true,
+	debug : false
+});
+</script>
+<script type="text/javascript">
 tinyMCE.init({
 	mode : "textareas",
 	theme : "simple",
