@@ -23,7 +23,7 @@ function edit_getHeadTags($webapp) {
 		'<script language="javascript" type="text/javascript">
 tinyMCE_GZ.init({
 	plugins : "style,layer,table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras",
-	themes : "simple,advanced",
+	themes : "advanced",
 	languages : "en",
 	disk_cache : true,
 	debug : false
@@ -32,9 +32,15 @@ tinyMCE_GZ.init({
 <script type="text/javascript">
 tinyMCE.init({
 	mode : "textareas",
-	theme : "simple",
-	editor_selector : "html",
-	content_css : "/documents.css"
+	theme : "advanced",
+	theme_advanced_buttons1 : "cut,copy,paste,separator,undo,redo,separator,bold,italic,underline,separator,formatselect",
+	theme_advanced_buttons2 : "",
+	theme_advanced_buttons3 : "",
+	theme_advanced_blockformats : "h1, h2, h3, p",
+	theme_advanced_toolbar_location : "top",
+	theme_advanced_toolbar_align : "center",
+	content_css : "/documents.css",
+	editor_selector : "html"
 });
 </script>'.
 		'<script type="text/javascript" src="'.$webapp.'plugins/edit/edit.js"></script>'
