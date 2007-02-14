@@ -3,22 +3,40 @@ $(document).ready( function() {
 	contentsCreateTable();
 } );
 
-var contentsH = new Array();
+function ContentsLevel(parentLevel) {
+	this._count = 0;
+	this._parentLevel = parentLevel;
+	this._members = new Array();
+	this.add = function(headElement) {
+		this._count++;
+		this._members.push({
+			tag: headElement,
+			parent: this.getLastParent()
+		});
+		return this._count;
+	}
+	this.getLastMember = function() {
+		if (this._count == 0) return null;
+		return this._members[count-1];
+	}
+	this.getLastParent = function() {
+		if (this._parentLevel == null) return null;
+		return this._parentLevel.getLastMember();
+	}
+}
+
+var contentsTags = {
+	H1: new ContentsLevel(null),
+	H2: new ContentsLevel(this.H1),
+	H3: new ContentsLevel(this.H2)
+}
 
 function contentsCreateTable() {
-	$('h1').each( function() {
-		var ic = new Array();
-		var i = contentsH.push( { e: this, c: ic } );
-		$(this).text(''+i+'. '+$(this).text());
-		$('h2').each( function() {
-			var jc = new Array();
-			var j = ic.push( { e: this, c: jc } );
-			$(this).text(''+i+'.'+j+'. '+$(this).text());
-			$('h3').each( function() {
-				var kc = new Array();
-				var k = jc.push( { e: this, c: kc } );
-				$(this).text(''+i+'.'+j+'.'+k+'. '+$(this).text());
-			} );
-		} );
+	var contents = new Object();
+	$('h1,h2,h3').each( function() {
+		var level = contentsTags[this.tagName];
+		var n = level.add(this);
+		var position = '' + n + '.';
+		$(this).text(position + ' ' + $(this).text());
 	} );
 };
