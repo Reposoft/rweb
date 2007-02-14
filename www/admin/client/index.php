@@ -34,7 +34,8 @@ if (file_exists($config)) {
 	$report->fail("Could not locate client runtime config file $config");
 }
 
-print_r($config);
+// TODO seems that this does not work in PHP 4.3/windows
+$report->display(); exit;
 $configuration = parse_ini_file($config, true);
 
 foreach ($configuration as $g => $c) {

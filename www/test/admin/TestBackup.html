@@ -8,31 +8,11 @@
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Run backup; delete repository; restore</td></tr>
+<tr><td rowspan="1" colspan="3">Run backup from admin page</td></tr>
 </thead><tbody>
-<tr>
+<tr title="first back up every existing revision">
 	<td>open</td>
 	<td>/repos/admin/backup/</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>0 fails and 0 exceptions</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>/repos/test/reset/</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>empty</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>create</td>
 	<td></td>
 </tr>
 <tr>
@@ -41,9 +21,89 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>load</td>
+	<td>verifyTextPresent</td>
+	<td>At revision</td>
 	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>revision</td>
+	<td>headrev</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Every revision from 0 to ${headrev} is backed up</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>setup/?demoproject</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>createfolder</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>testbackup${headrev}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Committed revision</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/repos/admin/</td>
+	<td></td>
+</tr>
+<tr title="head revision should have increased and backup revision should be the same">
+	<td>verifyNotText</td>
+	<td>revision</td>
+	<td>${headrev}</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>backuprevision</td>
+	<td>${headrev}</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>revision</td>
+	<td>headrev</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>backuprun</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>backuprun</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>0 fails and 0 exceptions</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=admin</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>backuprevision</td>
+	<td>${headrev}</td>
 </tr>
 </tbody></table>
 </body>

@@ -33,7 +33,7 @@ function getBackupInfoAsHtml($backupArray) {
 	echo " backup files";
 	echo ", from revision <span class=\"revision\">";
 	echo $backupArray[0][1];
-	echo "</span> to <span class=\"revision\">";
+	echo "</span> to <span id=\"backuprevision\" class=\"revision\">";
 	echo $backupArray[count($backupArray) - 1][2];
 	echo "</span>";
 	echo "</p>";
@@ -63,7 +63,7 @@ function getBackupInfoAsHtml($backupArray) {
 <table id="repository_list" class="rows">
 <tr>
 <th><?php echo $repourl; ?></th>
-<td>At revision <span class="revision"><?php echo $headrev; ?></span></td>
+<td>At revision <span id="revision" class="revision"><?php echo $headrev; ?></span></td>
 </tr><tr>
 <td colspan="2"><?php $lastrev = getBackupInfoAsHtml($backup); ?>
 </td>
@@ -73,7 +73,7 @@ function getBackupInfoAsHtml($backupArray) {
 <td colspan="2">
 <p>The repository has revisions up to <span class="revision"><?php echo($headrev); ?></span> 
 that are newer than the latest backup <span class="revision"><?php echo($lastrev); ?></span></p>
-<p>Regular automated backups is preferred, but you can also <a href="backup/">run incremental backup manually</a>.</p>
+<p>Regular automated backups is preferred, but you can also <a id="backuprun" href="backup/">run incremental backup manually</a>.</p>
 </td>
 <?php } else if ($headrev < $lastrev) { ?>
 <p>There are more revisions in the backup than in the repository. You can manually <a id="load" href="load/">load new backup files into repository</a>.</p>
