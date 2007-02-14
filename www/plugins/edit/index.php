@@ -16,9 +16,15 @@ $commands = '
 
 $head = edit_getHeadTags('../../');
 
+$saved = '';
+
 $page = 'index_';
 if (isset($_GET['test'])) {
 	$page .= $_GET['test'];
+} else {
+	if (isset($_POST['usertext'])) {
+		$saved = $_POST['usertext'];
+	}	
 }
 $page .= '.html';
 
@@ -33,6 +39,9 @@ fclose($f);
 
 $contents = str_replace('</head>', implode("\n",$head).'</head>', $contents);
 $contents = str_replace('id="commandbar">', 'id="commandbar">'.$commands, $contents);
+if ($saved) {
+	$contents = str_replace('id="saved">', 'id="saved">'.htmlspecialchars($saved), $contents);
+}
 
 header('Cache-Control: no-cache');
 header('Content-Length: '.strlen($contents));

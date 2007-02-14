@@ -25,8 +25,10 @@ See <a href="../../lib/">lib/</a> folder.</p>
 <p>Any textarea which contains HTML with the meta tag<br />
 <code>&lt;meta name="Generator" content="Repos" /&gt;</code>
 can be edited with our TinyMCE theme.</p>
+
 <h2>Edit in TinyMCE</h2>
-<textarea id="text:file.js" rows="10" cols="82" name="myhtml" class="text_html htm">
+<form method="post" action="./">
+<textarea id="text:file.js" rows="10" cols="82" name="usertext" class="text_html htm">
 &lt;html&gt;
 &lt;head&gt;
 &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /&gt;
@@ -35,8 +37,12 @@ can be edited with our TinyMCE theme.</p>
 &lt;/head&gt;
 &lt;body&gt;
 &lt;p&gt;This is a new document in the excellent standardized and open format HTML.&lt;/p&gt;
+&lt;p&gt;Non-ASCII characters: åäöü.&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 </textarea>
+<br />
+<input type="submit" value="Save"/>
+</form>
 </body>
 </html>
