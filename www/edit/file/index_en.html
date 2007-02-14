@@ -10,6 +10,15 @@ function autoFillFilename(filename) {
 		document.getElementsByName('name')[0].value = filename+'.'+type;	
 	}
 }
+
+function checkRequiredFields() {
+	if(document.formUpload.name.value.length > 0) {
+		return true;
+	} else {
+		alert("Filename is required!");
+		return false;
+	}
+}
 </script>
 <!--{$head}-->
 </head>
@@ -27,7 +36,7 @@ function autoFillFilename(filename) {
 <div id="contents">
 
 <a name="textform"></a>
-<form id="formEdit" action="../upload/" method="post" name="formUpload">
+<form id="formEdit" action="../upload/" method="post" name="formUpload" onsubmit="return checkRequiredFields()">
 <fieldset>
 	<!--{if $file}-->
 	<legend>Edit <a class="file" href="{=$file,url}">{=$target}</a> {=$file,revision} with type {=$file,type}</legend>
