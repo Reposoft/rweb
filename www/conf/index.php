@@ -2,6 +2,9 @@
 /**
  * Debug and visualize repos configuration.
  * 
+ * This page does not use the Presentation class, 
+ * because it must be able to run without 3rd party libraries.
+ * 
  * @author Staffan Olsson (solsson)
  * @package conf
  */

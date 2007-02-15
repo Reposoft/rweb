@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Repos administration</title>
+<!--{$head}-->
+</head>
+<body>
+
+<div id="commandbar">
+</div>
+
+<div class="column">
+<div class="section" style="width: 60%">
+<h2>Backup status</h2>
+<table id="repository_list" class="rows">
+<tr>
+<th>{=$repository}</th>
+<td>At revision <span id="revision" class="revision">{=$headrev}</span></td>
+</tr><tr>
+<td colspan="2">
+{=if $backupfiles eq 0}
+<p>No backup files found</p>
+{=/if}
+<p>{=$backupfiles} backup files, from revision 
+<span class="revision">{=$backup[0][1]}</span>
+to <span id="backuprevision" class="revision">{=$lastrev}</span>
+</p>
+{=assign var='last' value=-1}
+{=foreach from=$gaps item=gap}
+<p class="error">Backup gap. Revision {=$gap.from} to {=$gap.to} is missing.</p>
+{=/foreach}
+{=if $hasgaps}
+<p class="warning">To fix the gaps, delete newer backup files and then run backup again.</p> 
+{=else}
+<p class="passed">Every revision from 0 to {=$lastrev} is backed up.</p>
+{=/if}
+</td>
+</tr>
+<!--{if $headrev gt $lastrev }-->
+<tr>
+<td colspan="2">
+<p>The repository has revisions up to <span class="revision">{=$headrev}</span> 
+that are newer than the latest backup <span class="revision">{=$lastrev}</span></p>
+<p>Regular automated backups is preferred, but you can also <a id="backuprun" href="backup/">run incremental backup manually</a>.</p>
+</td>
+<!--{elseif $headrev lt $lastrev }-->
+<p>There are more revisions in the backup than in the repository. You can manually <a id="load" href="load/">load new backup files into repository</a>.</p>
+<!--{/if}-->
+</table>
+<p><a id="backupverify" href="verify/" class="action">Verify current backup files</a></p>
+</div>
+
+<div class="section">
+<h2>Other tools</h2>
+<p><a id="lib" href="../lib/">3rd party libraries</a></p>
+<p><a id="hooks" href="hooks/">Repository hook scripts</a></p>
+<p><a id="size" href="size/">Storage space used for this Repos host</a></p>
+<p><a id="client" href="client/">Status for internal svn client</a></p>
+<p><a id="testemail" href="testemail/">Test outgoing application e-mails</a></p>
+<p><a id="accountreset" href="accountreset/">Reset a user's password</a></p>
+<p><a id="accountrevert" href="accountrevert/">Revert a user's password to the latest in version control</a></p>
+<p><a id="accountcreate" href="../account/create/">Create user account</a></p>
+<p><a id="accountdelete" href="../account/delete/">Delete user account</a></p>
+</div>
+</div>
+
+<div class="column" style="width: 40%">
+<!-- TODO move these to separate page and include with ajax box -->
+<div class="section">
+<h2>Server information</h2>
+<p>Primary server: <?php echo($_SERVER['REPOS_PRIMARY'] ? 'yes' : 'no'); ?></p>
+</div>
+<div class="section">
+<h2>Client information</h2>
+<p>Address: <?php echo($_SERVER['REMOTE_ADDR']); ?></p>
+<p>Repos local: <?php echo($_SERVER['IS_LOCAL_CLIENT'] ? 'yes' : 'no'); ?></p>
+<p>Repos admin: <?php echo($_SERVER['IS_ADMIN_CLIENT'] ? 'yes' : 'no'); ?></p>
+</div>
+<div class="section">
+<h2>Repository administration</h2>
+
+<p><a href="{=$repository}/administration/" target="_blank">Log in to administration area</a></p>
+</div>
+</div>
+
+</body>
+</html>
