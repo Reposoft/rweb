@@ -8,6 +8,13 @@
 <body>
 
 <div id="commandbar">
+<a id="reposconf" href="{=$webapp}conf/">config</a>
+<a id="reposadmin" href="{=$webapp}admin/">admin</a>
+<a id="repostest" href="{=$webapp}test/">test</a>
+</div>
+
+<div id="intro">
+<h1>Repos administration</h1>
 </div>
 
 <div class="column">
@@ -37,35 +44,46 @@ to <span id="backuprevision" class="revision">{=$lastrev}</span>
 {=/if}
 </td>
 </tr>
-<!--{if $headrev gt $lastrev }-->
 <tr>
 <td colspan="2">
+<!--{if $headrev gt $lastrev }-->
 <p>The repository has revisions up to <span class="revision">{=$headrev}</span> 
 that are newer than the latest backup <span class="revision">{=$lastrev}</span></p>
 <p>Regular automated backups is preferred, but you can also <a id="backuprun" href="backup/">run incremental backup manually</a>.</p>
-</td>
 <!--{elseif $headrev lt $lastrev }-->
 <p>There are more revisions in the backup than in the repository. You can manually <a id="load" href="load/">load new backup files into repository</a>.</p>
 <!--{/if}-->
+</td></tr>
 </table>
-<p><a id="backupverify" href="verify/" class="action">Verify current backup files</a></p>
+<p><a id="backupverify" href="verify/">Verify current backup files</a></p>
 </div>
 
 <div class="section">
-<h2>Other tools</h2>
-<p><a id="lib" href="../lib/">3rd party libraries</a></p>
+<h2>Repos components</h2>
+<p><a id="reposplugins" href="plugins/">Installed plugins</a></p>
+<p><a id="reposlib" href="../lib/">Manage 3rd party libraries</a></p>
+</div>
+
+<div class="section">
+<h2>Repository administration</h2>
 <p><a id="hooks" href="hooks/">Repository hook scripts</a></p>
 <p><a id="size" href="size/">Storage space used for this Repos host</a></p>
-<p><a id="client" href="client/">Status for internal svn client</a></p>
+<p><a id="client" href="svnclient/">Status for internal svn client</a></p>
 <p><a id="testemail" href="testemail/">Test outgoing application e-mails</a></p>
-<p><a id="accountreset" href="accountreset/">Reset a user's password</a></p>
-<p><a id="accountrevert" href="accountrevert/">Revert a user's password to the latest in version control</a></p>
-<p><a id="accountcreate" href="../account/create/">Create user account</a></p>
-<p><a id="accountdelete" href="../account/delete/">Delete user account</a></p>
 </div>
+
 </div>
 
 <div class="column" style="width: 40%">
+<div class="section">
+<h2>User administration</h2>
+<p><a id="accountcreate" href="../account/create/">Create user account</a></p>
+<p><a id="accountdelete" href="../account/delete/">Delete user account</a></p>
+<p><a id="accountreset" href="accountreset/">Reset a user's password</a></p>
+<p><a id="accountrevert" href="accountrevert/">Revert password that has been reset</a></p>
+<p><a href="{=$repository}/administration/" target="_blank">Log in to administration area</a></p>
+</div>
+
 <!-- TODO move these to separate page and include with ajax box -->
 <div class="section">
 <h2>Server information</h2>
@@ -77,11 +95,7 @@ that are newer than the latest backup <span class="revision">{=$lastrev}</span><
 <p>Repos local: <?php echo($_SERVER['IS_LOCAL_CLIENT'] ? 'yes' : 'no'); ?></p>
 <p>Repos admin: <?php echo($_SERVER['IS_ADMIN_CLIENT'] ? 'yes' : 'no'); ?></p>
 </div>
-<div class="section">
-<h2>Repository administration</h2>
 
-<p><a href="{=$repository}/administration/" target="_blank">Log in to administration area</a></p>
-</div>
 </div>
 
 </body>

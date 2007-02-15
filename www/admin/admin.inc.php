@@ -7,7 +7,6 @@
  */
 require_once( dirname(dirname(__FILE__)) . "/conf/System.class.php" );
 require_once( dirname(dirname(__FILE__)) . "/conf/repos.properties.php" );
-require_once( dirname(dirname(__FILE__)) . "/conf/Report.class.php" );
 
 define('TEMP_FILE_EXTENSION', '.temporary');
 
@@ -22,10 +21,8 @@ function getTime() { // still used in backup
 	return getReportTime();
 }
 
-// temporary solution, TODO make admin a class that takes a report instance as constructor argument
-// Or allow every page to create its own Report instance.
-$report = new Report();
-function html_start() {} // deprecated
+// Currently all shared backup methods require a global Report instance $report
+function html_start() {}
 function debug($message) {global $report; $report->debug($message); }
 function info($message) {global $report; $report->ok($message); }
 function fail($message) {global $report; $report->fail($message); }

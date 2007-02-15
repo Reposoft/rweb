@@ -299,6 +299,7 @@ class Report {
 	}
 	
 	function _pageStart($title) {
+		$webapp = '/repos/';
 		if (!$this->offline) {
 		$this->_print('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"');
 		$this->_print(' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n");
@@ -318,12 +319,9 @@ class Report {
 		//$this->_print("<div id=\"contents\">\n");
 		
 		$this->_print('<div id="commandbar">'."\n");
-		$this->_print('<a class="command" href="/repos/conf/">config</a>'."\n");
-		$this->_print('<a class="command" href="/repos/admin/">admin</a>'."\n");
-		$this->_print('<a class="command" href="/repos/admin/accounts/">accounts</a>'."\n");
-		$this->_print('<a class="command" href="/repos/test/">test</a>'."\n");
-		$this->_print('<a class="command" href="/?login">login</a>'."\n");
-		$this->_print('<a id="logout" class="command" href="/?logout">logout</a>'."\n");
+		$this->_print('<a id="reposconf" href="'.$webapp.'conf/">config</a>'."\n");
+		$this->_print('<a id="reposadmin" href="'.$webapp.'admin/">admin</a>'."\n");
+		$this->_print('<a id="repostest" href="'.$webapp.'test/">test</a>'."\n");
 		$this->_print('</div>');
 		
 		$this->_print("<h1>$title</h1>\n");
