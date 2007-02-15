@@ -1,4 +1,4 @@
-REPO=http://test.repos.se/testrepo/test
+REPO=http://test.repos.se/testrepo/test/trunk
 
 mkdir a
 

@@ -1,4 +1,4 @@
-REPO=http://test.repos.se/testrepo/test
+REPO=http://test.repos.se/testrepo/test/trunk
 
 cd /tmp
 mkdir svnbm
@@ -14,6 +14,6 @@ do
  rm -Rf svnbm/
 done
 
-svn delete --username test --password test --non-interactive a/ $REPO/svnbm/ -m "benchmark done"
+svn delete --username test --password test --non-interactive $REPO/svnbm/ -m "benchmark done"
 
 
