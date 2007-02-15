@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Repos administration</title>
+<!--{$head}-->
+</head>
+<body>
+
+<div id="commandbar">
+<a id="reposconf" href="{=$webapp}conf/">config</a>
+<a id="reposadmin" href="{=$webapp}admin/">admin</a>
+<a id="repostest" href="{=$webapp}test/">test</a>
+</div>
+
+<h1>Build icons from high resolution images</h1>
+<p>Using {=$imagemagick}</p>
+<p><strong>Wrote new images</strong> to <code>{=$destination}</code></p>
+<p>Original folder contains: 
+{=foreach from=$folderContents item=original}
+<code>{=$original}</code>
+{=/foreach}
+</p>
+<p>
+{=foreach from=$converted item=file}
+Successfully converted <code>{=$file}</code><br />
+{=/foreach}
+</p>
+{=foreach from=$error item=error}
+<p class="error">{=$error|nl2br}</p>
+{=/foreach}
+
+<form method="get" action="./">
+<fieldset>
+  <legend>convert icons</legend>
+  <p>
+    <label for="folder">local folder with originals</label>
+    <input id="folder" type="text" name="folder" size="80" value="{=$folder}" />
+  </p>
+  <p>
+    <label for="size">destination size</label>
+    <input id="size" type="text" name="size" size="4" value="{=$size}" /> pixels
+  </p>
+  <p>
+    <label for="background">background color</label>
+    <input id="background" type="text" name="background" size="7" value="{=$background}" />
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" type="submit" name="submit" value="Convert" />
+  </p>
+</fieldset>
+</form>
+
+</body>
+</html>

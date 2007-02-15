@@ -6,7 +6,7 @@
  */
 
 function convertGetCommand() {
-	$installed = dirname(__FILE__).'/installed/';
+	$installed = dirname(__FILE__).DIRECTORY_SEPARATOR.'installed'.DIRECTORY_SEPARATOR;
 	if (file_exists($installed)) {
 		return '"'.$installed.'convert"';
 	}
