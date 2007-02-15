@@ -9,12 +9,9 @@
 
 <body>
 <div id="commandbar">
-<!-- same as in Report -->
-<a class="command" href="/repos/conf/">config</a>
-<a class="command" href="/repos/admin/">admin</a>
-<a class="command" href="/repos/test/">test</a>
-<a class="command" href="/?login">login</a>
-<a id="logout" class="command" href="/?logout">logout</a>
+<a id="reposconf" href="../conf/">config</a>
+<a id="reposadmin" href="../admin/">admin</a>
+<a id="repostest" href="../test/">test</a>
 </div>
 
 <h1><img src="../style/logo/repos2.png" alt="repos.se" width="144" height="36" align="absmiddle" /> Integration Testing</h1>
@@ -27,6 +24,7 @@
 <h2>Automated test suites</h2>
 <p><a href="reset/">Reset the test repository</a> before running automated tests.</p>
 <p>The "run" links will execute the test suite in the current browser and post the results</p>
+<p>Repository tests require manual <a href="/?login">login</a> as user 'test'.</p>
 <ul>
 <li><a href="browsercheck/" accesskey="b"><u>B</u>rowser test for new users</a></li>
 <li><a href="selenium/TestRunner.html?test=..%2FTestSystem.html" accesskey="c"><u>C</u>onfiguration test</a>

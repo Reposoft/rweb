@@ -17,8 +17,8 @@
 <h1>Repos administration</h1>
 </div>
 
-<div class="column">
-<div class="section" style="width: 60%">
+<div class="column" style="width: 60%">
+<div class="section">
 <h2>Backup status</h2>
 <table id="repository_list" class="rows">
 <tr>
@@ -60,7 +60,7 @@ that are newer than the latest backup <span class="revision">{=$lastrev}</span><
 
 <div class="section">
 <h2>Repos components</h2>
-<p><a id="reposplugins" href="plugins/">Installed plugins</a></p>
+<p><a id="reposplugins" href="plugins/">Plugins</a></p>
 <p><a id="reposlib" href="../lib/">Manage 3rd party libraries</a></p>
 </div>
 
@@ -84,18 +84,27 @@ that are newer than the latest backup <span class="revision">{=$lastrev}</span><
 <p><a href="{=$repository}/administration/" target="_blank">Log in to administration area</a></p>
 </div>
 
-<!-- TODO move these to separate page and include with ajax box -->
-<div class="section">
+<div class="section" id="aboutserver">
 <h2>Server information</h2>
-<p>Primary server: <?php echo($_SERVER['REPOS_PRIMARY'] ? 'yes' : 'no'); ?></p>
+<p>Repos primary? <span id="serverprimary"></span></p>
+<script type="text/javascript">
+$.getJSON('aboutserver/?serv=json', function(json) {
+	$('#serverprimary').append(json.primary ? 'yes' : 'no');
+});
+</script>
 </div>
 <div class="section">
 <h2>Client information</h2>
-<p>Address: <?php echo($_SERVER['REMOTE_ADDR']); ?></p>
-<p>Repos local: <?php echo($_SERVER['IS_LOCAL_CLIENT'] ? 'yes' : 'no'); ?></p>
-<p>Repos admin: <?php echo($_SERVER['IS_ADMIN_CLIENT'] ? 'yes' : 'no'); ?></p>
-</div>
-
+<p>Address: <span id="clientaddress"></span></p>
+<p>Local? <span id="clientlocal"></span></p>
+<p>Admin? <span id="clientadmin"></span></p>
+<script type="text/javascript">
+$.getJSON('aboutclient/?serv=json', function(json) {
+	$('#clientaddress').append(json.address);
+	$('#clientlocal').append(json.local ? 'yes' : 'no');
+	$('#clientadmin').append(json.admin ? 'yes' : 'no');
+});
+</script>
 </div>
 
 </body>
