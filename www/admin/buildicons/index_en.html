@@ -15,6 +15,7 @@
 
 <h1>Build icons from high resolution images</h1>
 <p>Using {=$imagemagick}</p>
+<!--{if $folderContents}-->
 <p><strong>Wrote new images</strong> to <code>{=$destination}</code></p>
 <p>Original folder contains: 
 {=foreach from=$folderContents item=original}
@@ -33,7 +34,7 @@ Converted to indexed color, {=$file.indexed} bytes.
 {=foreach from=$error item=error}
 <p class="error">{=$error|nl2br}</p>
 {=/foreach}
-
+<!--{/if}-->
 <form method="get" action="./">
 <fieldset>
   <legend>convert icons</legend>

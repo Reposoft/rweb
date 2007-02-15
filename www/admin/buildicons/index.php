@@ -10,6 +10,8 @@ require('../../lib/imagemagick/convert.inc.php');
 
 require('../admin.inc.php'); // for getDirContents
 
+define('BUILDICONS_DENSITY', '72x72');
+define('BUILDICONS_DEPTH', '24');
 
 $p = new Presentation();
 
@@ -61,10 +63,10 @@ if (isset($_REQUEST[SUBMIT])) {
 			$p->append('error', implode("\n", $out));
 			continue;
 		}
-		$size = filesize($outFile);
+		$filesize = filesize($outFile);
 		convertToIndexedColor($outFile, 64);
 		$indexed = filesize($outFile);
-		$p->append('converted', array('file'=>$original, 'size'=>$size, 'indexed'=>$indexed));
+		$p->append('converted', array('file'=>$original, 'size'=>$filesize, 'indexed'=>$indexed));
 	}
 	$p->display();
 } else {
@@ -78,7 +80,11 @@ if (isset($_REQUEST[SUBMIT])) {
 function createBackgroundImage($file, $size, $color) {
 	global $convert;
 	if (System::isWindows()) $file = strtr($file, '/','\\');
-	$cmd = "$convert -size {$size}x{$size} xc:{$color} \"$file\"";
+	$cmd = "$convert "
+		." -density ".BUILDICONS_DENSITY
+		." -depth ".BUILDICONS_DEPTH
+		." -size {$size}x{$size}"
+		." xc:{$color} \"$file\"";
 	exec($cmd, $out, $return);
 	if ($return) trigger_error('Could not create background image with command: '.$cmd, E_USER_ERROR);
 	return $out;
@@ -88,7 +94,11 @@ function convertAndFlatten($file, $backgroundFile, $size, $destinationFile) {
 	global $convert;
 	if (System::isWindows()) $backgroundFile = strtr($backgroundFile, '/','\\');
 	if (System::isWindows()) $destinationFile = strtr($destinationFile, '/','\\');
-	$cmd = "$convert \"$backgroundFile\" \"$file\" -resize {$size}x{$size} -gravity center -composite \"$destinationFile\"";
+	$cmd = "$convert \"$backgroundFile\" \"$file\""
+		." -resize {$size}x{$size} -gravity center"
+		." -density ".BUILDICONS_DENSITY
+		." -depth ".BUILDICONS_DEPTH
+		." -composite \"$destinationFile\"";
 	exec($cmd, $out, $return);
 	return $out;
 }
