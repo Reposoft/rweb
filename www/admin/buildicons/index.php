@@ -1,8 +1,8 @@
 <?php
 /**
+ * Convert raw icons to web png.
  *
- *
- * @package
+ * @package admin
  */
 
 require('../../conf/Presentation.class.php');
@@ -55,12 +55,16 @@ if (isset($_REQUEST[SUBMIT])) {
 	
 	// convert all
 	foreach($originals as $original) {
-		$out = convertAndFlatten("$folder/$original", $backgroundFile, $size, "$destination/$original");
+		$outFile = "$destination/$original";
+		$out = convertAndFlatten("$folder/$original", $backgroundFile, $size, $outFile);
 		if ($out) {
 			$p->append('error', implode("\n", $out));
-		} else {
-			$p->append('converted', $original);
+			continue;
 		}
+		$size = filesize($outFile);
+		convertToIndexedColor($outFile, 64);
+		$indexed = filesize($outFile);
+		$p->append('converted', array('file'=>$original, 'size'=>$size, 'indexed'=>$indexed));
 	}
 	$p->display();
 } else {
@@ -87,6 +91,22 @@ function convertAndFlatten($file, $backgroundFile, $size, $destinationFile) {
 	$cmd = "$convert \"$backgroundFile\" \"$file\" -resize {$size}x{$size} -gravity center -composite \"$destinationFile\"";
 	exec($cmd, $out, $return);
 	return $out;
+}
+
+function convertToIndexedColor($destinationFile, $colors) {
+	global $convert;
+	if (System::isWindows()) $destinationFile = strtr($destinationFile, '/','\\');
+	$tmp = "$destinationFile.tmp";
+	$cmd = "$convert \"$destinationFile\" -colors $colors \"$tmp\"";
+	exec($cmd, $out, $return);
+	if ($return) trigger_error('Convert to index color failed: '.implode("\n", $out));
+	if (file_exists($tmp)) {
+		unlink($destinationFile);
+		rename($tmp, $destinationFile);
+		return true;
+	} else {
+		return false;
+	}
 }
 
 ?>

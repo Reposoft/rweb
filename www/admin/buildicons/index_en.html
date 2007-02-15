@@ -23,7 +23,11 @@
 </p>
 <p>
 {=foreach from=$converted item=file}
-Successfully converted <code>{=$file}</code><br />
+Successfully converted <code>{=$file.file}</code>, size {=$file.size} bytes.
+{=if $file.indexed}
+Converted to indexed color, {=$file.indexed} bytes.
+{=/if}
+<br />
 {=/foreach}
 </p>
 {=foreach from=$error item=error}
