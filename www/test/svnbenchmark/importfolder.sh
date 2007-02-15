@@ -10,5 +10,5 @@ do
 done
 rmdir a
 
-svn delete --username test --password test --non-interactive a/ $REPO/importfolder/ -m "benchmark done"
+svn delete --username test --password test --non-interactive $REPO/importfolder -m "benchmark done"
 
