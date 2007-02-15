@@ -79,6 +79,16 @@ function setup_getTempWorkingCopy() {
 	return $wc;
 }
 
+function setup_createHooks() {
+	global $report;
+	// currently hooks are not added automatically, proably needs a service call
+	$report->info('<a href="../../../admin/hooks/">Manually create hook scripts so that repos-access can be edited online</a>');
+}
+
+function setup_exportUsers() {
+	// export users from repository
+}
+
 function setup_createTestUsers() {
 	global $userfile, $report;
 

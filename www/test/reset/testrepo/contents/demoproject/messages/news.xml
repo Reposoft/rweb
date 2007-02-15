@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/repos/view/atom.xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title>Repos demoproject news</title>
+	<modified>2007-02-12T09:28:59+0100</modified>
+	<id>tag:repos.se,demoproject</id>
+	<entry>
+		<title>Testers' repository was reset</title>
+		<id>tag:repos.se,demoproject,0.69693600 1171268939</id>
+		<published>2007-02-12T09:28:59+0100</published>
+		<author>
+			 <name>repos.se testuser</name>
+			 <email>test@users.repos.se</email>
+		</author>
+		<content type="xhtml" xml:lang="en"
+		 xml:base="http://www.repos.se/">
+		  <div xmlns="http://www.w3.org/1999/xhtml">
+		    <p>The test repository has been reset. Check http://localhost/testrepo/demoproject/</p>
+		    <p>Demoproject contains a sample intranet, a public area, documents and images.</p>
+		  </div>
+		</content>
+   </entry>
+</feed>

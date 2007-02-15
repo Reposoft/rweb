@@ -1,0 +1,32 @@
+
+[groups]
+administrators = admin
+demoproject = svensson, test, Sv@n s-on, admin
+
+[/]
+@administrators = rw
+
+[/administration]
+@administrators = rw
+
+[/svensson]
+svensson = rw
+
+[/test]
+test = rw
+
+[/Sv@n s-on]
+Sv@n s-on = rw
+
+[/demoproject]
+@demoproject = rw
+
+[/demoproject/trunk/readonly]
+@demoproject = r
+
+[/demoproject/trunk/noaccess]
+@demoproject = 
+
+[/demoproject/trunk/public]
+@demoproject = rw
+* = r

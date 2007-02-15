@@ -21,8 +21,8 @@ setup_deleteCurrent();
 
 $report->info("Running: svnadmin create \"$repo\"");
 setup_svnadmin("create $repo");
-// currently hooks are not added automatically, proably needs a service call
-$report->info('<a href="../../../admin/hooks/">Manually create hook scripts so that repos-access can be edited online</a>');
+
+setup_createHooks();
 
 // demouser (svensson), test and tricky work together in demoproject
 // administrator does not have a home folder
@@ -79,35 +79,17 @@ Satisfy Any",
 
 // check out working copy and create base structure
 $repourl = $repo;
-
 setup_svn("co file:///$repourl $wc");
 
-// create administration folder
-System::createFolder($wc."administration/");
-// and copy the access file to the administration area for use with hooks
+// add all the testrepo files
+setup_svn("export --force \"".dirname(__FILE__)."/contents/\" $wc");
 $repositoryacl = $wc.'administration/repos-access.acl';
-copy($aclfile, $repositoryacl);
+$publicxml = $wc."demoproject/trunk/public/xmlfile.xml";
+$publicindex = $wc."demoproject/trunk/public/website/index.html";
+$publicstyle = $wc."demoproject/trunk/public/website/styles.css";
 
-// create start page that matches the sample repos-exports
-System::createFolder($wc."administration/startpage/");
-System::createFileWithContents($wc."administration/startpage/start.html",
-'<html><head>
-<title>Test host startpage</title>
-<link href="/documents.css" rel="stylesheet" type="text/css"></link>
-</head><body><center>
-<h3>Welcome to another Repos testing host</h3>
-<p><a href="/?login">login</a> | <a href="repos/admin/">admin</a> | <a href="repos/test/">test</a></p>
-</center></body></html>
-');
-System::createFileWithContents($wc."administration/startpage/documents.css",
-'h1 { font-family: sans-serif; }
-h2 { font-family: sans-serif; }
-h3 { font-family: sans-serif; }
-p { font-family: serif; }
-');
-
+// user accounts, same folder layout as in access/create/
 define('REPOSITORY_USER_FILE_NAME', 'repos-password.htp');
-// user accounts, same as in access/create/
 System::createFolder($wc."svensson/");
 System::createFolder($wc."svensson/trunk/");
 System::createFolder($wc."svensson/administration/");
@@ -122,33 +104,6 @@ System::createFileWithContents($wc."test/administration/".REPOSITORY_USER_FILE_N
 	'test:$apr1$Sy2.....$zF88UPXW6Q0dG3BRHOQ2m0:Testuser Test:test@repos.se'."\n"
 );
 
-// project that all test users can access
-System::createFolder($wc."demoproject/");
-System::createFolder($wc."demoproject/trunk/");
-System::createFolder($wc."demoproject/trunk/noaccess/");
-System::createFolder($wc."demoproject/trunk/readonly/");
-System::createFileWithContents($wc."demoproject/trunk/readonly/index.html",
-	'<html><body>This file should be write protected (folder is "@demoproject = r" in ACL file).</body></html>');
-
-// public contents, allows testing without login
-System::createFolder($wc."demoproject/trunk/public/");
-$publicxml = $wc."demoproject/trunk/public/xmlfile.xml";
-System::createFileWithContents($publicxml, "<test-xml/>\n");
-
-// create a sample intranet
-System::createFolder($wc."demoproject/trunk/public/website/");
-$publicstyle = $wc."demoproject/trunk/public/website/styles.css";
-System::createFileWithContents($publicstyle, "
-body { margin: 15%; color: #223311; }
-a { color: #333399; text-decoration: none; }
-a:hover { text-decoration: underline; }
-");
-$publicindex = $wc."demoproject/trunk/public/website/index.html";
-System::createFileWithContents($publicindex, "<html>\n<head>\n<title>demoproject's web</title>
-<link href=\"styles.css\" rel=\"stylesheet\" type=\"text/css\"></link>\n</head>
-<body>\n<img src=\"../images/a.jpg\"/><h3>Welcome to our website</h3>\n<p>&nbsp;</p>
-<p><small><a href=\"$conflocation/demoproject/trunk/public/\">return to documents</a> &nbsp; | &nbsp; page id: \$Id\$</small></p>\n</html>\n");
-
 setup_svn("add {$wc}*");
 setup_svn("propset svn:eol-style native $repositoryacl");
 setup_svn("propset svn:mime-type text/xml $publicxml");
@@ -158,21 +113,20 @@ setup_svn("propset svn:keywords Id $publicindex");
 
 setup_svn('commit -m "Created users svensson, test and $trickusername, and a shared project" '.$wc);
 
-// Create a locked file
 $lockedfile = $wc."demoproject/trunk/public/locked-file.txt";
-System::createFileWithContents($lockedfile, "This file is locked so only one user can change it now.\n");
-setup_svn("add $lockedfile");
-setup_svn('commit -m "Created a file that will soon be locked by the admin user" '.$wc);
+//setup_svn("add $lockedfile");
+//setup_svn('commit -m "Created a file that will soon be locked by the admin user" '.$wc);
 setup_svn('lock -m "Testing lock features. You should not be allowed to modify this file." '.$lockedfile);
 
 // Create a news feed and a calendar in demo project
 
-System::createFolder($wc."demoproject/messages/");
+//System::createFolder($wc."demoproject/messages/");
 $newsfile = $wc."demoproject/messages/news.xml";
 $contents = new Command('svnlook');
 $contents->addArgOption('tree');
 $contents->addArg($repo);
 $contents->exec();
+if (file_exists($newsfile)) System::deleteFile($newsfile); 
 System::createFileWithContents($newsfile, '<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="/repos/view/atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
@@ -199,10 +153,11 @@ System::createFileWithContents($newsfile, '<?xml version="1.0" encoding="utf-8"?
 ');
 // don't use a <link> to the repository because then the client requests login when reading the feed
 
-System::createFolder($wc."demoproject/calendar/");
+//System::createFolder($wc."demoproject/calendar/");
 $calendarfile = $wc."demoproject/calendar/demoproject.ics";
 $now = date('Ymd\THis\Z');
-$later = date('Ymd\THis\Z', time()+3600); 
+$later = date('Ymd\THis\Z', time()+3600);
+if (file_exists($calendarfile)) System::deleteFile($calendarfile); 
 System::createFileWithContents($calendarfile,
 "BEGIN:VCALENDAR
 VERSION:2.0
