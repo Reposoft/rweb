@@ -46,7 +46,7 @@ function accountCreateUserFolder($rootUrl, $username, $password, $email='', $ful
 	$folder = System::getTempFolder('account');
 	$trunk = $folder.'trunk/';
 	System::createFolder($trunk);
-	$administration = $trunk.'administration/';
+	$administration = $folder.'administration/';
 	System::createFolder($administration);
 	// create user file contents
 	$pass = accountGetEncryptedPassword($username, $password);
