@@ -112,9 +112,7 @@
 	<xsl:template name="commandbar">
 		<xsl:param name="parentlink"/>
 		<div id="commandbar">
-		<a id="reposbutton">
 			<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
-		</a>
 		<xsl:if test="string-length($parentlink)>0">
 			<a id="parent" class="command translate" href="{$parentlink}">up</a>
 		</xsl:if>
