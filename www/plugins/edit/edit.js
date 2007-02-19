@@ -11,7 +11,7 @@ Repos.edit.enableMenu = function() {
 
 // check if this is a new document by checking if textarea and name field are empty.
 // show link HTML document while user is editing document as plain text and vice versa.
-	if ($('#usertext').val() == 0 && $('#name').val() == 0) {
+	if (!$('#usertext').val() && !$('#name').val()) {
 		if (window.location.href.match("&type=html") == null) {
 			$('#commandbar').append(
 				'<span id="texteditor" class="command">Plain text</span>'
@@ -37,7 +37,7 @@ Repos.edit.checkTextarea = function() {
 	if(!$('#usertext').val()){
 		return true;
 	}
-	if(confirm("Textarea is not empty! If you proceed all contents will be lost.")) {
+	if(confirm("Textarea is not empty! If you proceed all contents will be lost. Proceed any way?")) {
 		return true;
 	} else {
 		return false;
@@ -48,7 +48,7 @@ Repos.edit.checkTinyMCEarea = function() {
 	if(!tinyMCE.getContent('mce_editor_0')){
 		return true;
 	}
-	if(confirm("Textarea is not empty! If you proceed all contents will be lost.")) {
+	if(confirm("Textarea is not empty! If you proceed all contents will be lost. Proceed any way?")) {
 		return true;
 	} else {
 		return false;
