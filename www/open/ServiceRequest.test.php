@@ -28,6 +28,7 @@ if (isset($_GET['userno'])) {
 	echo "user checked";
 	exit;
 }
+// used for testExec, watch out so we don't 
 if (isset($_GET[WEBSERVICE_KEY])) {
 	header('HTTP/1.1 200 OK');
 	echo '{"message":"test"';
@@ -72,6 +73,7 @@ class TestServiceRequest extends UnitTestCase {
 	function testExec() {
 		$service = new ServiceRequest('', array());
 		$service->uri = getSelfUrl();
+		$this->sendMessage($service->_buildUrl());
 		$service->exec();
 		$this->assertEqual('{"message":"test","user":"tst","pass":"pwd"}', $service->getResponse());
 		$this->assertTrue($service->isOK());
@@ -82,6 +84,7 @@ class TestServiceRequest extends UnitTestCase {
 	function testExcecHeadersOnly() {
 		$service = new ServiceRequest(getSelfUrl(), array());
 		$service->setSkipBody();
+		$this->sendMessage($service->_buildUrl());
 		$service->exec();
 		$headers = $service->getResponseHeaders();
 		$this->assertEqual('HTTP/1.1 200 OK', $headers[0]);

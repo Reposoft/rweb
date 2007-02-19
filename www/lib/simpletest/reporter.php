@@ -134,17 +134,18 @@ class HtmlReporter extends SimpleReporter {
     
     function paintMessage($message) {
     	parent::paintMessage($message);
+    	$escaped = array();
     	if (is_array($message)) {
-    		for ($i = 0; $i < count($message); $i++) {
-    			$message[$i] = $this->_htmlEntities($message[$i]);
+    		foreach ($message as $m) {
+    			$escaped[] = $this->_htmlEntities($m);
     		}
     	} else {
-    		$message = $this->_htmlEntities($message);
+    		$escaped = $this->_htmlEntities($message);
     	}
     	// debug method accepts html, but in test results we always want it escapes so that all strings are visible
-    	$this->report->debug($message);
+    	$this->report->debug($escaped);
     }
-
+    
     /**
      *    Paints formatted text such as dumped variables.
      *    @param string $message        Text to show.
