@@ -2,7 +2,7 @@
 /**
  * 500 Internal Server Error
  */
-require('../../../conf/Presentation.class.php');
+require('../../conf/Presentation.class.php');
 
 $p = Presentation::getInstance();
 

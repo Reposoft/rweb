@@ -1,18 +1,9 @@
 # Apache directives for the repos host
-# Not all servers read .htaccess files
-# The directives can also be placed in server conf files
+# Not all servers read .htaccess files,
+# the directives can also be placed in server conf files
 
-# Bad Request
-ErrorDocument 400 /repos/open/errors/400/
-
-# Authorization Required
-ErrorDocument 401 /repos/open/errors/401/
-
-# Forbidden
-ErrorDocument 403 /repos/open/errors/403/
-
-# Not Found
-ErrorDocument 404 /repos/open/errors/404/
-
-# Server Error
-ErrorDocument 500 /repos/open/errors/500/
+ErrorDocument 400 /repos/errors/400/
+ErrorDocument 401 /repos/errors/401/
+ErrorDocument 403 /repos/errors/403/
+ErrorDocument 404 /repos/errors/404/
+ErrorDocument 500 /repos/errors/500/

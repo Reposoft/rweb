@@ -2,7 +2,7 @@
 /**
  * 403 Forbidden
  */
-require('../../../conf/Presentation.class.php');
+require('../../conf/Presentation.class.php');
 
 $p = Presentation::getInstance();
 
@@ -22,7 +22,7 @@ if (!isRepositoryUrl($url)) {
 	exit;
 }
 
-require('../../../account/login.inc.php');
+require('../../account/login.inc.php');
 
 // note that we have to do getParent first here, because parent may also be this page
 $status = 0;

@@ -2,7 +2,7 @@
 /**
  * 400 Bad Request
  */
-require('../../../conf/Presentation.class.php');
+require('../../conf/Presentation.class.php');
 
 $p = Presentation::getInstance();
 
