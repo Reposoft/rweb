@@ -1,5 +1,5 @@
 <?php
-require("../../lib/simpletest/setup.php");
+require("../lib/simpletest/setup.php");
 
 require(dirname(__FILE__)."/RepositoryTree.class.php");
 

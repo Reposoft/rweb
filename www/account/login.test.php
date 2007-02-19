@@ -47,14 +47,16 @@ class Login_include_Test extends UnitTestCase {
 	function testTargetUrl() {
 		$_REQUEST[REPO_KEY] = 'http://my.repo';
 		$_REQUEST['target'] = '/my/dir/file.txt';
-		$this->assertEqual('http://my.repo/my/dir/file.txt', getTargetUrl());
+		// REPO_KEY not effective in 1.1 // $this->assertEqual('http://my.repo/my/dir/file.txt', getTargetUrl());
+		$this->assertTrue(strEnds(getTargetUrl(), '/my/dir/file.txt'));
 		unset($_REQUEST[REPO_KEY]);
 		unset($_REQUEST['target']);
 	}
 	
 	function testTargetUrlFromPath() {
 		$_REQUEST[REPO_KEY] = 'http://my.repo';
-		$this->assertEqual('http://my.repo/h.txt', getTargetUrl('/h.txt'));
+		// REPO_KEY not effective in 1.1 // $this->assertEqual('http://my.repo/h.txt', getTargetUrl('/h.txt'));
+		$this->assertTrue(strEnds(getTargetUrl('/h.txt'), '/h.txt'));
 		unset($_REQUEST[REPO_KEY]);
 	}
 	

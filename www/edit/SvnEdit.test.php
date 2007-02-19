@@ -6,9 +6,9 @@ require("../lib/simpletest/setup.php");
 $lastCommand = null;
 $nextOutput = array('output');
 $nextExitcode = 0;
-function _command_run($cmd, $argsString) {
+function _command_run($cmd) {
 	global $lastCommand, $nextOutput, $nextExitcode;
-	$lastCommand = "$cmd $argsString";
+	$lastCommand = "$cmd";
 	return array_merge($nextOutput, array($nextExitcode));
 }
 
@@ -68,10 +68,18 @@ class SvnEditTest extends UnitTestCase
 		// file and path should only be escaped, not converted with toPath or toShellEncoding
 		$edit = new SvnEdit('info');
 		$edit->addArgPath('\temp\file.txt');
-		$edit->addArgFilename("file\xc3\xa5.txt");
+		$utf8filename = "file\xc3\xa5.txt";
+		$edit->addArgFilename($utf8filename);
 		$edit->exec();
 		$this->assertTrue(strpos(_getLastCommand(), "\"\\\\temp\\\\file.txt\""));
-		$this->assertTrue(strpos(_getLastCommand(), "\"file\xc3\xa5.txt\""));
+		$utf8command = _getLastCommand();
+		$this->sendMessage("Filename '$utf8filename' resulted in command '$utf8command'");
+		if (System::isWindows()) {
+			// not utf-8, but how to test?
+			$this->assertFalse(strpos($utf8command, "\"file\xc3\xa5.txt\""));
+		} else {
+			$this->assertFalse(strpos($utf8command, "\"file\xc3\xa5.txt\""));
+		}
 	}
 	
 	function testPercentInFilename(){

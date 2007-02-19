@@ -34,7 +34,8 @@ class TestPresentation extends UnitTestCase {
 	function testSingletonCreateTwice() {
 		$p = Presentation::getInstance();
 		$p2 = Presentation::getInstance();
-		$this->assertReference($p, $p2);
+		// assertion method not reliable: $this->assertReference($p, $p2);
+		$this->assertTrue($p === $p2);
 	}
 
 }
