@@ -7,17 +7,51 @@ $(document).ready( function() {
 } );
 
 Repos.edit.enableMenu = function() {
-	// if we are here the browser supports javascript
-	if (Repos.edit.getCurrentType() == 'txt') {
-		if  $('#create').size() == 0 {
+// if we are here the browser supports javascript
+
+// check if this is a new document by checking if textarea and name field are empty.
+// show link HTML document while user is editing document as plain text and vice versa.
+	if ($('#usertext').val() == 0 && $('#name').val() == 0) {
+		if (window.location.href.match("&type=html") == null) {
 			$('#commandbar').append(
-				'<span id="texteditor" class="command">plain text</span>'
+				'<span id="texteditor" class="command">Plain text</span>'
 			);
 			var htmlHref = window.location.href+'&type=html';
 			$('#commandbar').append(
-				'<a id="htmleditor" class="command" href="'+htmlHref+'">HTML document</a>'
+				'<a id="htmleditor" class="command" href="'+htmlHref+'" onClick="return Repos.edit.checkTextarea();">HTML document</a>'
+			);
+		} else {
+			var htmlHref = window.location.href.replace(/&type=html/,"");
+			$('#commandbar').append(
+				'<a id="texteditor" class="command" href="'+htmlHref+'" onClick="return Repos.edit.checkTinyMCEarea();">Plain text</span>'
+			);
+			var htmlHref = window.location.href+'&type=html';
+			$('#commandbar').append(
+				'<span id="htmleditor" class="command">HTML document</span>'
 			);
 		}
+	}
+}
+
+Repos.edit.checkTextarea = function() {
+	if(!$('#usertext').val()){
+		return true;
+	}
+	if(confirm("Textarea is not empty! If you proceed all contents will be lost.")) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+Repos.edit.checkTinyMCEarea = function() {
+	if(!tinyMCE.getContent('mce_editor_0')){
+		return true;
+	}
+	if(confirm("Textarea is not empty! If you proceed all contents will be lost.")) {
+		return true;
+	} else {
+		return false;
 	}
 }
 
