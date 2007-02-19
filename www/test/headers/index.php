@@ -31,6 +31,7 @@ $links = array(
 	'validationerror' => getWebapp().'plugins/validation/?name=&testuser=123',
 	'validationerror-json' => getWebapp().'plugins/validation/?name=&testuser=123&serv=json',
 	'error' => getWebapp().'test/errorhandling/?case=3',
+	'error404' => getWebapp().'errors/404/',
 	'logxml' => getWebapp().'open/log/?target=/demoproject/trunk/public/'
 	);
 	

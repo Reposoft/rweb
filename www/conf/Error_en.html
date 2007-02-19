@@ -14,15 +14,15 @@ $(document).ready( function() {
 <body>
 <div id="workspace">
 <div id="commandbar">
-<a id="back" class="command" href="{=$referer}">back</a>
-<a id="repository" class="command" href="{=$userhome}">return to repository</a>
-<a id="logout" class="command" href="/?logout">logout</a>
+<a id="back" href="{=$referer}">back</a>
+<a id="parent" href="{=$userhome}">startpage</a>
+{=if $logout}
+<a id="logout" href="{=$logout}">logout</a>
+{=/if}
 </div>
 <div id="contents">
 <h1>{=$headline}</h1>
 <p><em>{=$error}</em></p>
-<p><a class="action" href="{=$referer}">&lt; back</a></p>
-<p>&nbsp;</p>
 </div>
 </div>
 </body>

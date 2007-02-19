@@ -64,7 +64,8 @@ function getAfterLogoutUrl() {
 	if (isset($_GET['go'])) {
 		return getSelfRoot().rawurldecode($_GET['go']);
 	}
-	return getWebapp();
+	// in 1.1 /repos/ is the admin start page // return getWebapp();
+	return '/';
 }
 
 function getVerifyUrl() {

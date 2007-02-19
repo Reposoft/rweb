@@ -256,6 +256,9 @@ class Presentation {
 		$this->assign('referer', $this->getReferer());
 		$this->assign('userhome', $this->getUserhome());
 		$this->assign('webapp', getWebapp());
+		if ($this->isUserLoggedIn()) {
+			$this->assign('logout', '/?logout');
+		}
 		// display
 		if (!$resource_name) {
 			$resource_name = $this->getDefaultTemplate();
@@ -401,6 +404,13 @@ class Presentation {
 	}
 	
 	/**
+	 * @return boolean true if the browser viewing the results has a logged in user
+	 */
+	function isUserLoggedIn() {
+		return function_exists('isLoggedIn') && isLoggedIn();
+	}
+	
+	/**
 	 * @return the current page's 'back' url, using
 	 * 1: $_REQUEST['referer'], 2: getHttpReferer() (only if it's not a result=tmp page)
 	 * if no good referer found, use javascript.
@@ -431,7 +441,11 @@ class Presentation {
 	 * @return repos home page on this server
 	 */
 	function getUserhome() {
-		return getWebapp().'account/login/';
+		if ($this->isUserLoggedIn()) {
+			return getWebapp().'account/login/';
+		} else {
+			return '/'; // server root is startpage for everyone else
+		}
 	}
 }
 

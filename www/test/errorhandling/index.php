@@ -22,7 +22,9 @@ if (!isset($_GET['case'])) {
 	'23: tigger_error after require repos.properties.php, as JSON' => '?case=23&serv=json',
 	'26: showErrorNoRedirect at an instance of Presentation.class.php, as JSON' => '?case=26&serv=json',
 	'27: showError at an instance of Presentation.class.php, as JSON' => '?case=27&serv=json',
-	'60: login_handleSvnError on svn command' => '?case=60',
+	'60: Command exec with unknown command' => '?case=60',
+	'61: SvnOpen exec with invalid svn operation' => '?case=61',
+	'62: SvnEdit exec with invalid svn operation + displayEdit' => '?case=62',
 	'90: output as XML' => '?case=90&serv=xml',
 	'91: output as plain text' => '?case=91&serv=text',
 	);
@@ -98,9 +100,23 @@ if ($case==27) {
 	$p->showError("Message $case.");
 }
 if ($case==60) {
-	// svnRun should be replaced with a command class that can handle output types
-	require('../../account/login.inc.php');
-	login_handleSvnError('svn test --command', 99, array("Message $case."));
+	require('../../conf/Command.class.php');
+	$cmd = new Command('testcommand');
+	$cmd->exec();
+}
+if ($case==61) {
+	require('../../open/SvnOpen.class.php');
+	$open = new SvnOpen('test');
+	$open->addArgOption('--invalidoperation');
+	$open->exec();
+}
+if ($case==62) {
+	require('../../conf/Presentation.class.php');
+	require('../../edit/SvnEdit.class.php');
+	$open = new SvnEdit('test');
+	$open->addArgOption('--invalidoperation');
+	$open->exec();
+	displayEdit(Presentation::getInstance(), './');
 }
 if ($case==90) {
 	require('../../conf/repos.properties.php');

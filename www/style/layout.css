@@ -27,6 +27,10 @@ div.section h2 {
 	color: #666633;
 }
 
+div p {
+	color: #333333;
+}
+
 /* thumbnail plugin, see THUMB_SIZE in open/thumb/ */
 #intro div.thumbnail {
 	width: 120px;

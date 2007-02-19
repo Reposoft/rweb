@@ -93,6 +93,31 @@
 	<td>*result=*</td>
 	<td></td>
 </tr>
+<tr>
+	<td>open</td>
+	<td>/repos/test/headers/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>error404</td>
+	<td></td>
+</tr>
+<tr title="going through the headers page there is no referrer">
+	<td>verifyTextPresent</td>
+	<td>id="back" href="javascript:history.go(-1)"</td>
+	<td></td>
+</tr>
+<tr title="user not logged in, startpage should be server root">
+	<td>verifyTextPresent</td>
+	<td>id="parent" href="/"</td>
+	<td></td>
+</tr>
+<tr title="user is not logged in now">
+	<td>verifyTextNotPresent</td>
+	<td>id="logout"</td>
+	<td></td>
+</tr>
 </tbody></table>
 </body>
 </html>
