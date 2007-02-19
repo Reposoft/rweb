@@ -17,7 +17,7 @@ require( dirname(dirname(__FILE__)) . "/login.inc.php" );
 
 if (isset($_GET['logout']) && $_GET['logout']=='verify') {
 	if (isset($_SERVER['PHP_AUTH_USER'])) {
-		if ($_SERVER['PHP_AUTH_USER'] == 'void') {
+		if ($_SERVER['PHP_AUTH_USER'] == LOGIN_VOID_USER) {
 			doLogoutVoid();
 		} else {
 			showCouldNotLogOutPage();

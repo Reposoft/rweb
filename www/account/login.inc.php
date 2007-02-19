@@ -60,6 +60,9 @@ if (!function_exists('getRepository')) require(dirname(dirname(__FILE__)).'/conf
 if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/ServiceRequest.class.php');
 // not dependent on the System class, this is only web functions
 
+// reserved username value for not-logged-in
+define('LOGIN_VOID_USER', 'void');
+
 // do automatic login if a target is specified the standard way
 if (isTargetSet()) {
 	// special case for the svn index anomaly that root path is "/" but no other paths have trailing slash
@@ -327,7 +330,7 @@ function askForCredentialsAndExit($realm) {
  * @return true if HTTP login credentials are present and username is not "void"
  */
 function isLoggedIn() {
-	return isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER']!='void';
+	return isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER']!=LOGIN_VOID_USER;
 }
 
 /**
