@@ -28,7 +28,10 @@ $r->debug($userpasswd);
 // now read the apache file and replace the user's line with the new one
 $pattern = '/^'.preg_quote($username).':.+/';
 
-if (!file_exists(USERS_PATH)) trigger_error("Could not access authentication file");
+if (!file_exists(USERS_PATH)) {
+	if (!touch(USERS_PATH)) trigger_error("Authentication file does not exist and could not be created.", E_USER_ERROR);
+	$r->info("Authentication file did not exist. Created an empty file.");
+}
 $tmpfile = System::getTempFile('admin');
 $tmp = fopen($tmpfile, 'w');
 $f = fopen(USERS_PATH, 'r');

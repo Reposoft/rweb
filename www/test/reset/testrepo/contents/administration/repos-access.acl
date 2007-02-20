@@ -1,4 +1,4 @@
-
+﻿
 [groups]
 administrators = admin
 demoproject = svensson, test, Sv@n s-on, admin
@@ -11,12 +11,10 @@ demoproject = svensson, test, Sv@n s-on, admin
 
 [/svensson]
 svensson = rw
+* =
 
 [/test]
 test = rw
-
-[/Sv@n s-on]
-Sv@n s-on = rw
 
 [/demoproject]
 @demoproject = rw
@@ -30,3 +28,12 @@ Sv@n s-on = rw
 [/demoproject/trunk/public]
 @demoproject = rw
 * = r
+
+[/Test User]
+Test User = rw
+
+[/t-e_st@user.acc]
+t-e_st@user.acc = rw
+
+[/téstüsär]
+téstüsär = rw
