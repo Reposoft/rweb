@@ -32,7 +32,7 @@ function userResetPassword($username, $email) {
 	
 	$result = accountSendPasswordEmail($username, $newpass, $email, $fullname);
 	if ($result===false) showResult("Administration E-mail not enabled, new password is $password");
-	elseif ($result) showResult("Could not send the email with the following contents: \n\n$result");
+	elseif ($result) showResult("Outgoing emails are disabled on this server. Here's what should have been sent: \n\n$result");
 	else showResult("A new password has been emailed to address $email.");
 }
 

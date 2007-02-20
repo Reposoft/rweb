@@ -14,6 +14,7 @@
  */
 require(dirname(dirname(dirname(__FILE__))).'/conf/Command.class.php');
 require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
+require(dirname(dirname(dirname(__FILE__))).'/open/ServiceRequest.class.php');
 $report = new Report('set up test repository');
 
 // name the temp dir where the repository will be. This dir will be removed recursively.
@@ -81,8 +82,17 @@ function setup_getTempWorkingCopy() {
 
 function setup_createHooks() {
 	global $report;
-	// currently hooks are not added automatically, proably needs a service call
-	$report->info('<a href="../../../admin/hooks/">Manually create hook scripts so that repos-access can be edited online</a>');
+	$url = 'admin/hooks/';
+	$params = array('create' => 'post-commit');
+	$s = new ServiceRequest($url, $params, false);
+	$s->setResponseType(SERVICE_TYPE_TEXT);
+	$s->exec();
+	$report->debug($s->getResponse());
+	if ($s->isOK()) {
+		$report->ok('Created default hook scripts for this repository');
+	} else {
+		$report->fail('Could not create hook scripts. Got status '.$s->getStatus());
+	}
 }
 
 function setup_exportUsers() {
@@ -132,6 +142,18 @@ function setup_createApacheLocation($extraDirectives='', $extraAfterLocation='')
 	} else {
 		$report->fail("Could not create apache config file $conffile");
 	}
+}
+
+function setup_replaceInFile($absolutePath, $replacements) {
+	$f = fopen($absolutePath, 'r');
+	$contents = fread($f, 32768);
+	fclose($f);
+	foreach($replacements as $find => $replace) {
+		$contents = str_replace($find, $replace, $contents);
+	}
+	$f = fopen($absolutePath, 'w');
+	fwrite($f, $contents);
+	fclose($f);
 }
 
 // try to restart apache in one command (that will be slightly delayed so that this page completes

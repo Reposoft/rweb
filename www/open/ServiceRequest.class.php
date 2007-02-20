@@ -20,6 +20,14 @@ if (!function_exists('curl_init')) trigger_error('Service calls require the PHP 
 define('SERVICEREQUEST_AGENT', 'Repos service request');
 
 /**
+ * responseType values
+ */
+define('SERVICE_TYPE_HTML', 'html');
+define('SERVICE_TYPE_XML', 'xml');
+define('SERVICE_TYPE_TEXT', 'text');
+define('SERVICE_TYPE_JSON', 'json');
+
+/**
  * Predefined services
  */
 define('SERVICE_LOG', 'open/log/');
@@ -44,7 +52,7 @@ class ServiceRequest {
 	// mandatory parameters
 	var $uri;
 	var $parameters;
-	var $responseType = 'json';
+	var $responseType = SERVICE_TYPE_JSON;
 	
 	// optional login, if username is null login will not be done
 	var $_username = null;

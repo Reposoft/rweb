@@ -24,7 +24,7 @@
 	<!-- starpage to use as parent directory of 'trunk' -->
 	<xsl:param name="startpage"><xsl:value-of select="$web"/>open/start/</xsl:param>
 	<!-- the recognized top level folders for project tools separated by slash -->
-	<xsl:param name="tools">/trunk/branches/tags/tasks/templates/news/calendar/</xsl:param>
+	<xsl:param name="tools">/trunk/branches/tags/tasks/templates/messages/calendar/</xsl:param>
 	<!-- TODO followConversions: maintain repository conversions, meaning that:
 	- 'trunk',' branches', 'tags' can not be renamed or removed
 	-  (actually nothing in the same dir as 'trunk' can be renamed or removed).

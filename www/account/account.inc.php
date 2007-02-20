@@ -140,9 +140,9 @@ A temporary password has been generated
 for your account $username:
 $password
 
-You can log in at at $host?login.
+You can log in at $host?login.
 After that, please change password from the administration folder.
-Or access the user password file directly at:
+Or proceed to edit the password file directly at:
 {$webapp}edit/?target=/".urlencode($username)."/administration/".REPOSITORY_USER_FILE_NAME."
 
 ";
