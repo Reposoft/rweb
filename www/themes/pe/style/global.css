@@ -69,16 +69,11 @@ code {
 	color: #CC3300;
 }
 /* common page elements, may also be layouted for each tool */
-#workspace {
-}
 #commandbar {
 	background-color: #eeeeee;
 	border-top: 5px solid #FDBC4B;
 	border-bottom: 1px solid #dddddd;
 	padding: 6px;
-}
-#contents {
-	/* rows styled in repository.css and log.css */
 }
 .n0, .n2 {
 	background-color: #F7F7F6;

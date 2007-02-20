@@ -94,18 +94,15 @@ acronym, span.explain {
 	border-top: 1px solid #CCCC99;
 	height: 1.4em;
 }
-#contents {
-	/* overflow: -moz-scrollbars-vertical; */
-}
-#contents .row {
+.row {
 	width: 100%;
 	padding: 1px;
 	border-bottom: 1px solid #FFFFFF;
 }
-#contents .row:hover {
+.row:hover {
 	border-bottom: 1px dashed #CCCC99;
 }
-#contents .row div.actions {
+.row div.actions {
 	display: inline;
 	position: absolute;
 	left: 45%;
