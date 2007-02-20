@@ -1,6 +1,7 @@
 <?php
 require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__))."/SvnEdit.class.php" );
+require("../../open/SvnOpenFile.class.php");
 
 // automatic validation
 new Rule('tofolder');
@@ -15,6 +16,10 @@ if (isset($_GET[SUBMIT])) {
 } else {
 	$target = getTarget();
 	$template = Presentation::getInstance();
+	if (isFile($target)) {
+		$file = new SvnOpenFile($target);
+		$template->assign_by_ref('file', $file);
+	}
 	$template->assign('repository', getRepository());
 	$template->assign('target', $target);
 	$template->assign('oldname', basename($target));

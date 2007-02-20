@@ -9,7 +9,18 @@
 <div id="commandbar">
 <a id="repository" href="{=$repository}{=$folder|urlEncodeNames}">return to repository</a>
 </div>
+<div class="intro">
 <h1>Rename <span class="filename">{=$oldname}</span></h1>
+
+{=if not $file,isWritable} <p>You have read access only. You can not rename this file.</p>
+{=elseif $file,isLockedByThisUser} <p>This file is currently <strong>locked</strong> by you, so other users can not edit it.</p>
+{=elseif $file,isLockedBySomeoneElse} <p>This file is currently <strong>locked</strong> by 
+<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}. 
+You can not rename this file.</p>
+{=/if}
+</div>
+{=if $file,isWritable && not $file,isLockedBySomeoneElse}
+<div class="column" style="width: 60%">
 <form id="rename" name="rename" method="get" action="#">
   <fieldset>
 	<legend>rename {=$target}</legend>
@@ -34,5 +45,7 @@
   </p>
   </fieldset>
 </form>
+</div>
+{=/if}
 </body>
 </html>
