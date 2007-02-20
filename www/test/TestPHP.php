@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>repos.se php unittests</title>
+<title>repos: php unittests</title>
 <link href="../style/global.css" rel="stylesheet" type="text/css" />
 <link href="../style/docs.css" rel="stylesheet" type="text/css" />
 <style>

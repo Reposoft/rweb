@@ -120,7 +120,7 @@ function head() {
 ?>
 <html>
 <head>
-<title>repos.se: test HTTP headers</title>
+<title>repos: test HTTP headers</title>
 <link href="../../style/global.css" rel="stylesheet" type="text/css">
 </head>
 <body>

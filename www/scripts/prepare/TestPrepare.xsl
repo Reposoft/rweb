@@ -10,7 +10,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
-<title>repos.se prepare script</title>
+<title>repos: prepare script</title>
 <link href="../../style/global.css" rel="stylesheet" type="text/css" />
 <link href="../../style/docs.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="ReposPrepare.js"></script>

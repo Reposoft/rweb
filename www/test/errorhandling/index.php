@@ -142,7 +142,7 @@ echo "<br />\n-- Unexpected: Error handling function did not exit. --";
 function printPage($links) {?>
 	<html>
 	<head>
-	<title>repos.se: test PHP error handling</title>
+	<title>repos: test PHP error handling</title>
 	<link href="../../style/global.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
