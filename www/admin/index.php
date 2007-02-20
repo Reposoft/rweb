@@ -13,7 +13,7 @@ require( dirname(__FILE__) . '/admin.inc.php' );
 $repourl = getRepository();
 $repodir = getConfig('local_path');
 if ( !isRepository($repodir) )
-	fatal("Repository '$repourl' is not available locally. If the folder is empty, try <a href=\"create/\">create</a>.");
+	trigger_error("Repository '$repourl' is not available locally. If the folder is empty, try <a href=\"create/\">create</a>.", E_USER_ERROR);
 $headrev = getHeadRevisionNumber($repodir);
 $backupdir = getConfig( 'backup_folder' );
 $backupprefix = getPrefix( $repodir );

@@ -26,7 +26,7 @@ function html_start() {}
 function debug($message) {global $report; $report->debug($message); }
 function info($message) {global $report; $report->ok($message); }
 function fail($message) {global $report; $report->fail($message); }
-function warn($message) {global $report; $report->warn($message); }
+function warn($message) {global $report; if($report) $report->warn($message); }
 function error($message) {global $report; $report->error($message); }
 function fatal($message) {global $report; $report->fatal($message); } // deprecated
 function html_end($code = 0) {global $report; $report->display(); }
@@ -59,7 +59,7 @@ function getHeadRevisionNumber($repository) {
 	$return = 0;
 	$rev = (int) exec($command, $output, $return);
 	if ($return!=0)
-		fatal ("Could not get revision number using $command");
+		trigger_error("Could not get revision number using $command", E_USER_ERROR);
 	return $rev;
 }
 
@@ -69,7 +69,7 @@ function getHeadRevisionNumber($repository) {
 function getCurrentBackup($backupPath, $fileprefix) {
 	// check arguments
 	if ( ! file_exists($backupPath) )
-		fatal("backupPath '$backupPath' does not exist");
+		trigger_error("backupPath '$backupPath' does not exist", E_USER_ERROR);
 	// get backup files in directory
 	$files = getDirContents($backupPath,$fileprefix);
 	if ( count($files)==0 )
