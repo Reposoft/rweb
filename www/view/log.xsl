@@ -63,22 +63,20 @@
 		</xsl:param>
 		<div id="commandbar">
 		<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
-		<a id="repository" class="command" href="{$repourl}">return to repository</a>
+		<a id="repository" href="{$repourl}">return to repository</a>
 		</div>
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="contents">
-		<div id="contents">
-			<h1>History of <span id="path" class="path"><xsl:value-of select="@path"/></span></h1>
-			<xsl:apply-templates select="logentry"/>
-			<xsl:if test="@limit">
-				<xsl:call-template name="limit">
-					<xsl:with-param name="url">?target=<xsl:value-of select="@path"/></xsl:with-param>
-					<xsl:with-param name="size" select="@limit"/>
-					<xsl:with-param name="next" select="@limitrev"/>
-				</xsl:call-template>
-			</xsl:if>
-		</div>
+		<h1>History of <span id="path" class="path"><xsl:value-of select="@path"/></span></h1>
+		<xsl:apply-templates select="logentry"/>
+		<xsl:if test="@limit">
+			<xsl:call-template name="limit">
+				<xsl:with-param name="url">?target=<xsl:value-of select="@path"/></xsl:with-param>
+				<xsl:with-param name="size" select="@limit"/>
+				<xsl:with-param name="next" select="@limitrev"/>
+			</xsl:call-template>
+		</xsl:if>
 	</xsl:template>
 	<!-- extra info and logos -->
 	<xsl:template name="footer">

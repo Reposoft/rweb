@@ -19,7 +19,7 @@ function details_read() {
 	}
 	// add command
 	if ($('#fullpath').size() > 0) {
-		$('#commandbar').append('<a id="showdetails" class="command" href="javascript:detailsToggle()">show details</a>');
+		$('#commandbar').append('<a id="showdetails" href="javascript:detailsToggle()">show details</a>');
 	}
 }
 

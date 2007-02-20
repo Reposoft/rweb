@@ -72,7 +72,7 @@ if (isset($_REQUEST[SUBMIT])) {
 } else {
 	// default values
 	$p->assign('size', 24);
-	$p->assign('background', '#FFFFFF');
+	$p->assign('background', '#ECF1EF');
 	// show form
 	$p->display();
 }
@@ -95,7 +95,10 @@ function convertAndFlatten($file, $backgroundFile, $size, $destinationFile) {
 	if (System::isWindows()) $backgroundFile = strtr($backgroundFile, '/','\\');
 	if (System::isWindows()) $destinationFile = strtr($destinationFile, '/','\\');
 	$cmd = "$convert \"$backgroundFile\" \"$file\""
-		." -resize {$size}x{$size} -gravity center"
+		." -gravity center"
+		." -filter blackman"
+		." -support 0.8"
+		." -resize {$size}x{$size}"
 		." -density ".BUILDICONS_DENSITY
 		." -depth ".BUILDICONS_DEPTH
 		." -composite \"$destinationFile\"";

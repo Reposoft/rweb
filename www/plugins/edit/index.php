@@ -8,10 +8,10 @@ require('../validation/validation.inc.php');
 require('edit.inc.php');
 
 $commands = '
-<a id="plugins" class="command" href="./">plugins:edit</a>
-<a id="editempty" class="command" href="?test=empty">Empty textarea</a>
-<a id="edithtml" class="command" href="?test=html">Repos HTML</a>
-<a id="edittext" class="command" href="?test=text">Plaintext</a>
+<a id="plugins" href="./">plugins:edit</a>
+<a id="editempty" href="?test=empty">Empty textarea</a>
+<a id="edithtml" href="?test=html">Repos HTML</a>
+<a id="edittext" href="?test=text">Plaintext</a>
 ';
 
 $head = edit_getHeadTags('../../');

@@ -135,7 +135,6 @@
 		<xsl:param name="projectname"/>
 		<xsl:param name="homelink"/>
 		<xsl:param name="pathlinks"/>
-		<div id="contents">
 		<span id="fullpath" style="display:none"><xsl:value-of select="$fullpath"/></span>
 		<h2>
 			<a id="home" href="{$homelink}">
@@ -152,7 +151,6 @@
 		<xsl:apply-templates select="file">
 			<xsl:sort select="@name"/>
 		</xsl:apply-templates>
-		</div>
 	</xsl:template>
 	<!-- generate directory -->
 	<xsl:template match="dir">

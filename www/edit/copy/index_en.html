@@ -23,11 +23,9 @@ function setMove(move) {
 </head>
 
 <body>
-<div id="workspace">
 <div id="commandbar">
-<a id="repository" class="command" href="{=$repository}{=$folder|urlEncodeNames}">return to repository</a>
+<a id="repository" href="{=$repository}{=$folder|urlEncodeNames}">return to repository</a>
 </div>
-<div id="contents">
 <h1>Copy or move <span class="filename">{=$oldname}</span></h1>
 <p>Makes a copy of a file or folder at a new location in the repository.</p>
 <p>Select "delete the original" to make this a move operation.</p>
@@ -70,7 +68,5 @@ function setMove(move) {
 </form>
 <p>Copies inside the repository take no extra storage space. A copy is just a reference to the current revision of a resource.
 So a copy can be a good way to share a file as it looks now, but without sharing the future changes to the original.</p>
-</div>
-</div>
 </body>
 </html>

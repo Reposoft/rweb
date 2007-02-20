@@ -41,24 +41,22 @@
 	
 	<xsl:template match="list">
 		<div id="commandbar">
-			<a class="command" id="repository" href="{@path}">current version</a>
-			<a class="command" id="history" href="../log/?target={../@target}&amp;rev={../@rev}">history for version <xsl:value-of select="../@rev"/></a>
-			<a class="command" id="historycurrent" href="../log/?target={../@target}">history of current version</a>
+			<a id="repository" href="{@path}">current version</a>
+			<a id="history" href="../log/?target={../@target}&amp;rev={../@rev}">history for version <xsl:value-of select="../@rev"/></a>
+			<a id="historycurrent" href="../log/?target={../@target}">history of current version</a>
 		</div>
-		<div id="contents">
-			<h2>
-				<span class="path">
-					<xsl:call-template name="getBasename"/>
+		<h2>
+			<span class="path">
+				<xsl:call-template name="getBasename"/>
+			</span>
+			<xsl:if test="../@rev">
+				<xsl:value-of select="$spacer"/>
+				<span class="revision">
+					<xsl:value-of select="../@rev"/>
 				</span>
-				<xsl:if test="../@rev">
-					<xsl:value-of select="$spacer"/>
-					<span class="revision">
-						<xsl:value-of select="../@rev"/>
-					</span>
-				</xsl:if>
-			</h2>
-			<xsl:apply-templates select="*"/>
-		</div>
+			</xsl:if>
+		</h2>
+		<xsl:apply-templates select="*"/>
 	</xsl:template>
 	
 	<xsl:template match="entry[@kind='dir']">

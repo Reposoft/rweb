@@ -14,11 +14,11 @@ Repos.edit.enableMenu = function() {
 	if (window.location.href.match("&type=html") == null) {
 		if ($('#usertext').val() == "" && $('#name').val() == "") {
 			$('#commandbar').append(
-				'<span id="texteditor" class="command">Plain text</span>'
+				'<span id="texteditor">Plain text</span>'
 			);
 			var htmlHref = window.location.href+'&type=html';
 			$('#commandbar').append(
-				'<a id="htmleditor" class="command" href="'+htmlHref+'" onClick="return Repos.edit.checkTextarea();">HTML document</a>'
+				'<a id="htmleditor" href="'+htmlHref+'" onClick="return Repos.edit.checkTextarea();">HTML document</a>'
 			);
 		}
 	} else {
@@ -26,11 +26,11 @@ Repos.edit.enableMenu = function() {
 		if (tinyMCE.getContent('mce_editor_0') == "" && $('#name').val() == "") {
 			var htmlHref = window.location.href.replace(/&type=html/,"");
 			$('#commandbar').append(
-				'<a id="texteditor" class="command" href="'+htmlHref+'" onClick="return Repos.edit.checkTinyMCEarea();">Plain text</span>'
+				'<a id="texteditor" href="'+htmlHref+'" onClick="return Repos.edit.checkTinyMCEarea();">Plain text</span>'
 			);
 			var htmlHref = window.location.href+'&type=html';
 			$('#commandbar').append(
-				'<span id="htmleditor" class="command">HTML document</span>'
+				'<span id="htmleditor">HTML document</span>'
 			);
 		}
 	}

@@ -24,16 +24,14 @@ function checkRequiredFields() {
 </head>
 
 <body>
-<div id="workspace">
 <div id="commandbar">
-<a id="repository" class="command" href="{=$repository|urlEncodeNames}">return to repository</a>
+<a id="repository" href="{=$repository|urlEncodeNames}">return to repository</a>
 <!--{if $file}-->
-<a id="view" class="command" target="_blank" href="../../open/file/?target={=$target}&rev={=$file,revision}">view current version</a>
+<a id="view" target="_blank" href="../../open/file/?target={=$target}&rev={=$file,revision}">view current version</a>
 <!--{else}-->
 
 <!--{/if}-->
 </div>
-<div id="contents">
 
 <a name="textform"></a>
 <form id="formEdit" action="../upload/" method="post" name="formUpload" onsubmit="return checkRequiredFields()">
@@ -79,7 +77,5 @@ function checkRequiredFields() {
   </p>
 </fieldset>
 </form>
-</div>
-</div>
 </body>
 </html>

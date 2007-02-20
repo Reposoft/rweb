@@ -6,11 +6,9 @@
 </head>
 
 <body>
-<div id="workspace">
 <div id="commandbar">
-<a id="repository" class="command" href="{=$repository}{=$folder|urlEncodeNames}">return to repository</a>
+<a id="repository" href="{=$repository}{=$folder|urlEncodeNames}">return to repository</a>
 </div>
-<div id="contents">
 <h1>Rename <span class="filename">{=$oldname}</span></h1>
 <form id="rename" name="rename" method="get" action="#">
   <fieldset>
@@ -36,7 +34,5 @@
   </p>
   </fieldset>
 </form>
-</div>
-</div>
 </body>
 </html>

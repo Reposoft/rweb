@@ -6,12 +6,11 @@
 </head>
 
 <body>
-<div id="workspace">
 <div id="commandbar">
 <!--{if $logurl}-->
-<a id="history" class="command" href="{=$logurl}">return to folder history</a>
+<a id="history" href="{=$logurl}">return to folder history</a>
 <!--{/if}-->
-<a id="repository" class="command" href="{=$repository}">return to repository</a>
+<a id="repository" href="{=$repository}">return to repository</a>
 </div>
 <div class="contents diff">
 <h1>Compare versions</h1>
@@ -21,6 +20,5 @@
 </textarea>
 </div>
 <div id="footer"></div>
-</div>
 </body>
 </html>
