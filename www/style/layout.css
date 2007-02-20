@@ -58,7 +58,7 @@ div#activities p {
 	background-position: left;
 	background-repeat: no-repeat;
 }
-#activities #openfile {
+#activities #open {
 	background-image: url(commands/32x32/open.png);
 }
 #activities #download {
@@ -85,7 +85,7 @@ div#activities p {
 #activities #history {
 	background-image: url(commands/32x32/history.png);
 }
-#activities #view {
+#activities #viewfile {
 	background-image: url(commands/32x32/view.png);
 }
 /* -------- forms ---------

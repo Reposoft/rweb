@@ -125,6 +125,7 @@ a.folder {
 	background: url(rowbackground.png) top repeat-x;
 }
 #footer {
+	margin-top: 1.5em;
 	width: 100%;
 	bottom: 10px;
 	height: 20px;

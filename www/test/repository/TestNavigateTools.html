@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Navigate between tools</title>
+</head>
+<body>
+<table>
+<thead>
+<tr><td colspan="3">projects and tools</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>setup/?start</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=.username</td>
+	<td>test</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>administration:test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=.projectname</td>
+	<td>demoproject</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>files:demoproject</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>news:demoproject</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>files:demoproject</td>
+	<td></td>
+</tr>
+<tr title="trunk is a special folder, so parent should be the startpage">
+	<td>verifyAttribute</td>
+	<td>parent@href</td>
+	<td>*open/start/</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>parent</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>administration:test</td>
+	<td></td>
+</tr>
+<tr title="administration is a special folder, so parent should be the startpage">
+	<td>verifyAttribute</td>
+	<td>parent@href</td>
+	<td>*open/start/</td>
+</tr>
+</tbody></table>
+</body>
+</html>

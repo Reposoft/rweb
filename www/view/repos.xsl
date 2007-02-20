@@ -23,6 +23,8 @@
 	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- starpage to use as parent directory of 'trunk' -->
 	<xsl:param name="startpage"><xsl:value-of select="$web"/>open/start/</xsl:param>
+	<!-- the recognized top level folders for project tools separated by slash -->
+	<xsl:param name="tools">/trunk/branches/tags/tasks/templates/news/calendar/</xsl:param>
 	<!-- TODO followConversions: maintain repository conversions, meaning that:
 	- 'trunk',' branches', 'tags' can not be renamed or removed
 	-  (actually nothing in the same dir as 'trunk' can be renamed or removed).
@@ -254,14 +256,14 @@
 			</xsl:call-template>
 		</xsl:if>
 	</xsl:template>
-	<!-- get the mandatory part of the repository, like /project/trunk. Dos not support branches yet. -->
-	<!-- if 'trunk' is not a part of the path, or is the first part, return the first path element -->
+	<!-- get the home folder, like /project/trunk/ or /branches/, see $tools --> 
 	<xsl:template name="getToolPath">
 		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
 		<xsl:param name="this" select="substring-before(substring($path, 2), '/')"/>
 		<xsl:value-of select="$this"/>
 		<xsl:value-of select="'/'"/>
 		<xsl:choose>
+			<!-- TODO use $tools, maybe combine with getFolderPathLinks -->
 			<xsl:when test="contains($this, 'trunk') or contains($this, 'administration')">
 			</xsl:when>
 			<xsl:when test="not(contains($path, '/'))">

@@ -132,6 +132,7 @@ function accountSendPasswordEmail($username, $password, $email, $fullname=null) 
 	$repository = getRepository();
 	preg_match('/(\w+:\/\/[^\/]+\/).*/', $repository, $matches);
 	$host = $matches[1];
+
 	$subject = "Your Repos account $username";
 	$body = "$fullname,
 
@@ -145,13 +146,19 @@ Or access the user password file directly at:
 {$webapp}edit/?target=/".urlencode($username)."/administration/".REPOSITORY_USER_FILE_NAME."
 
 ";
-	$headers = 'From: ' . $host . "\r\n" .
-   'Reply-To: ' . $from . "\r\n" .
-   'X-Mailer: Repos PHP/' . phpversion();
+	$body = str_replace("\r\n", "\n", $body);
+	
+	$headers = "From: $host\r\n" .
+		 "Reply-To: $from\r\n" .
+       'X-Mailer: PHP/' . phpversion() . "\r\n" .
+       "MIME-Version: 1.0\r\n" .
+       "Content-Type: text/plain; charset=utf-8\r\n" .
+       "Content-Transfer-Encoding: 8bit\r\n".
+       "\r\n"; // end headers
 	
    // done
 	if (!$emailEnable) return false;
-	if (mail($email,$subject,$body,$headers,null)) {
+	if (mail($email,$subject,$body,$headers)) {
 		return '';
 	} else {
 		return $body;

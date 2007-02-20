@@ -17,6 +17,7 @@ function getRepositoryConventionsForTools($projectName) {
 	'files' => 'trunk/',
 	'branches' => 'branches/',
 	'tasks' => 'tasks/',
+	'templates' => 'templates/',
 	'news' => 'messages/',
 	'calendar' => 'calendar/',
 	'nonexisting' => 'dummy/' //just testing

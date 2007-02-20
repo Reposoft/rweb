@@ -131,9 +131,11 @@ if (touch($logfile)) {
 	$email = $_SERVER["SERVER_ADMIN"];
 	if (strpos($email, '@')===false) $email = 'admin@repos.se';
 	mail($email,
-		"Test results $runid",
-		"You get these mails because test results could not be written to $logfile.\n".
-		"Please make sure that the 'testresults' folder exists and is writable.\n\n".
+		"Test results $runid at ".$_SERVER['SERVER_NAME'],
+		"You get these mails because test results could not be written to \n$logfile.\n".
+		"If you want the results to be stored on the server, \n".
+		"make sure that the 'testresults' folder exists and is writable.\n".
+		"To disable testing for a Repos host, delete the /repos/test folder.\n\n".
 		$page);
 }
 
