@@ -16,11 +16,11 @@
 This is the current version of the file.
 {=if not $file,isWritable} You have read access only.
 {=elseif $file,isLockedByThisUser} The file is currently <strong>locked</strong> by you, so other users can not edit it.
-You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
+You may <a id="edit" href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 {=elseif $file,isLockedBySomeoneElse} The file is currently <strong>locked</strong> by 
 <span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}.
 {=else}
-You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
+You may <a id="edit" href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 {=/if}
 </p>
 <!--{else}-->
@@ -51,7 +51,7 @@ Depending on your browser, it may also work for file types like pdf, documents a
 <p>Download this file to your hard drive. The revision number {=$file,revision}
 will be appended to the filename, so you know which version it is.</p>
 {=if $file,size lte 102400}
-<h3><a id="view" href="file/?target={=$target}&rev={=$rev}">View in repos</a></h3>
+<h3><a id="viewfile" href="file/?target={=$target}&rev={=$rev}">View in repos</a></h3>
 <p>Read the file's contents in a web page. This is like View in browser, but with menus.
 This works for text files. If the file is a binary file, like a word document,
 you will see only a long line of characters.</p>

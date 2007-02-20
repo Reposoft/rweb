@@ -142,7 +142,7 @@ $password
 You can log in at at $host?login.
 After that, please change password from the administration folder.
 Or access the user password file directly at:
-{$webapp}open/?target=/".urlencode($username)."/administration/".REPOSITORY_USER_FILE_NAME."
+{$webapp}edit/?target=/".urlencode($username)."/administration/".REPOSITORY_USER_FILE_NAME."
 
 ";
 	$headers = 'From: ' . $host . "\r\n" .

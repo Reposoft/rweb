@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Test operations on locked file</title>
+</head>
+<body>
+<table>
+<thead>
+<tr><td colspan="3">test lock handling</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>setup/?public</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>open:locked-file.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>view:locked-file.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>locked by * with message</td>
+	<td></td>
+</tr>
+<tr title="locked by someone else so there should not be a link to the edit page">
+	<td>verifyElementNotPresent</td>
+	<td>edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>repository</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>edit:locked-file.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>locked by * with message</td>
+	<td></td>
+</tr>
+<tr title="locked by someone else so it can not be edited">
+	<td>verifyElementNotPresent</td>
+	<td>editfile</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>repository</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>rename:locked-file.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>locked by * with message</td>
+	<td></td>
+</tr>
+<tr title="locked by someone else so it can not be edited">
+	<td>verifyElementNotPresent</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>repository</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>delete:locked-file.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>locked by * with message</td>
+	<td></td>
+</tr>
+<tr title="locked by someone else so it can not be deleted">
+	<td>verifyElementNotPresent</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>repository</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>copy:locked-file.txt</td>
+	<td></td>
+</tr>
+<tr title="should be allowed to copy a locked file">
+	<td>verifyElementPresent</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

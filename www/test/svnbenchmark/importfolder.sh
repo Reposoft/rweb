@@ -1,5 +1,5 @@
 
-#REPO=http://test.repos.se/testrepo/test/trunk
+#REPO=http://localhost/testrepo/test/trunk
 
 if [ -z "$1" ]
 then
