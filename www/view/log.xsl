@@ -62,9 +62,7 @@
 			<xsl:value-of select="substring(@path,0,string-length(@path)-string-length(@file)+1)"/>
 		</xsl:param>
 		<div id="commandbar">
-		<a id="reposbutton">
-			<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
-		</a>
+		<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		<a id="repository" class="command" href="{$repourl}">return to repository</a>
 		</div>
 	</xsl:template>
