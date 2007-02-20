@@ -41,16 +41,20 @@ $requiredConfig = array(
 	'repositories' => 'Repoisitory address or addresses',
 	'local_path' => 'Local path of repository',
 	'admin_folder' => 'Administration folder',
-	// not used in 1.0 //'users_file' => 'File for usernames and passwords',
+	// 'users_file' => 'File for usernames and passwords',
 	'backup_folder' => 'Local path for storage of backup'
 	);
+// TODO non required entries
+$_a = getConfig('admin_folder');
 $requiredFiles = array(
 	SVN_CONFIG_DIR => '--svn-config-dir parameter value',
-	getConfig('admin_folder') . getConfig('users_file') => 'File for usernames and passwords',
-	getConfig('admin_folder') . getConfig('access_file') => 'File for subversion access control',
-	getConfig('admin_folder') . getConfig('exports_file') => 'File for repository export paths',
+	$_a => 'Administration folder',
 	getConfig('backup_folder') => 'Local path for storage of backup'
 	);
+if (getConfig('users_file')) $requiredFiles[$_a.getConfig('users_file')] = 'File for usernames and passwords';
+if (getConfig('access_file')) $requiredFiles[$_a.getConfig('access_file')] = 'File for subversion access control';
+if (getConfig('exports_file')) $requiredFiles[$_a.getConfig('exports_file')] = 'File for repository export paths';
+
 $dependencies = array(
 	'svn' => '--version --config-dir '.SVN_CONFIG_DIR,
 	'svnlook' => '--version',
@@ -157,7 +161,7 @@ function requiredConfig() {
 		$val = _getConfig($key);
 		line_start("$descr ($key): ");
 		if ($val === false)
-			sayFailed("Missing");
+			sayFailed("Not set");
 		else
 			sayOK($val);
 		line_end();
@@ -179,9 +183,9 @@ function requiredFiles() {
 			echo " writable: ";
 			$writable = is_writable($key);	
 			if ( ! $writable)
-				sayFailed("No");
+				echo("No");
 			else
-				sayOK("Yes");
+				echo("Yes");
 		}
 		line_end();
 	}

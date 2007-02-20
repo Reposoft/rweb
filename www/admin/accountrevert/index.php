@@ -12,7 +12,7 @@ require('../../conf/Report.class.php');
 
 $r = new Report('Update user login');
  
-if (!isset($_GET['username'])) trigger_error('username required', E_USER_ERROR);
+if (!isset($_GET['username'])) trigger_error("Parameter 'username' required", E_USER_ERROR);
 $username = $_GET['username'];
 
 $look = new Command('svnlook');
@@ -51,8 +51,10 @@ if (!$found) {
 }
 fclose($f);
 fclose($tmp);
-System::deleteFile(USERS_PATH);
-rename($tmpfile, USERS_PATH);
+if (!copy($tmpfile, USERS_PATH)) {
+	trigger_error("Failed to write new password file to ".USERS_PATH);
+}
+System::deleteFile($tmpfile);
 
 $r->display();
 

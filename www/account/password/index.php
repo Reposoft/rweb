@@ -45,31 +45,33 @@ if (isset($_REQUEST[SUBMIT])) {
 	
 	$pass = new PasswordRule();
 	if ($pass->getValue()) {
-		$newcontents = accountGetEncryptedPassword($username, $pass->getValue()).":$fullname:$email\n";
+		$newcontents = explode(':',accountGetEncryptedPassword($username, $pass->getValue()).":$fullname:$email");
 		$message[] = 'changed password';
 	} else {
-		$newcontents = $contents;	
+		$newcontents = explode(':',trim($contents));
 	}
 	
 	$newFullname = $_REQUEST['fullname'];
-	if ($newFullname && $newFullname!=$fullname) {
-		$newcontents = str_replace(":$fullname", ":$newFullname", $newcontents);
+	if ($newFullname!=$fullname) {
+		$newcontents[2] = $newFullname;
 		$message[] = 'changed name';
 		$fullname = $newFullname;
 	}
 	
 	$newEmail = $_REQUEST['email'];
-	if ($newEmail && $newEmail!=$email) {
-		$newcontents = str_replace(":$email", ":$newEmail", $newcontents);
+	if ($newEmail!=$email) {
+		if (!isset($newcontents[2])) $newcontents[2] = '';
+		$newcontents[3] = $newEmail;
 		$message[] = 'changed email';
 		$email = $newEmail;
 	}
 	
-	if ($newcontents == $contents) {
-		trigger_error('The form was submitted but there are no changes', E_USER_ERROR);
+	$newPasswordLine = implode(':', $newcontents)."\n";
+	if (trim($newPasswordLine) == trim($contents)) {
+		trigger_error('The form was submitted but there are no changes.', E_USER_ERROR);
 	}
 	
-	savePassword($newcontents, implode(', ', $message));
+	savePassword($newPasswordLine, implode(', ', $message));
 		
 } else {
 	$template = Presentation::getInstance();
