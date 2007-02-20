@@ -51,11 +51,11 @@ function checkRequiredFields() {
 	 	Textarea must be on one line so it does not insert spaces.
 	 	The 'type' field is the type of contents (which decides how the text should be formatted).
 	 	The class of the text area is the filename extension.
-	 	Recommended filename extension for new files is =type.
+	 	Recommended filename extension for new files is =type. class="{=$file,extension}"
 	 	*}
-    <textarea name="usertext" id="usertext" class="{=$file,extension}" cols="82" rows="20" tabindex="1">{=$file->sendInlineHtml()}</textarea>
+    <textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1">{=$file->sendInlineHtml()}</textarea>
 	<!--{else}-->
-	<textarea name="usertext" id="usertext" class="{=$type}" cols="82" rows="20" tabindex="1"></textarea>
+	<textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1"></textarea>
 	<!--{/if}-->
     <label for="userfile"></label>
   <p>

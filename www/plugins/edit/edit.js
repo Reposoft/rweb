@@ -9,10 +9,10 @@ $(document).ready( function() {
 Repos.edit.enableMenu = function() {
 // if we are here the browser supports javascript
 
-// check if this is a new document by checking if textarea and name field are empty.
+// check if this is a new document by checking if textarea AND name field are empty.
 // show link HTML document while user is editing document as plain text and vice versa.
-	if (!$('#usertext').val() && !$('#name').val()) {
-		if (window.location.href.match("&type=html") == null) {
+	if (window.location.href.match("&type=html") == null) {
+		if ($('#usertext').val() == "" && $('#name').val() == "") {
 			$('#commandbar').append(
 				'<span id="texteditor" class="command">Plain text</span>'
 			);
@@ -20,7 +20,10 @@ Repos.edit.enableMenu = function() {
 			$('#commandbar').append(
 				'<a id="htmleditor" class="command" href="'+htmlHref+'" onClick="return Repos.edit.checkTextarea();">HTML document</a>'
 			);
-		} else {
+		}
+	} else {
+		tinyMCE.execCommand('mceAddControl', true, 'usertext');
+		if (tinyMCE.getContent('mce_editor_0') == "" && $('#name').val() == "") {
 			var htmlHref = window.location.href.replace(/&type=html/,"");
 			$('#commandbar').append(
 				'<a id="texteditor" class="command" href="'+htmlHref+'" onClick="return Repos.edit.checkTinyMCEarea();">Plain text</span>'
@@ -30,6 +33,14 @@ Repos.edit.enableMenu = function() {
 				'<span id="htmleditor" class="command">HTML document</span>'
 			);
 		}
+	}
+
+// check if the file contains <meta name="Generator" content="Repos" />
+// and if it does, open it with TinyMCE.
+	var filetext = $('#usertext').val();
+	var pattern = /<meta name="Generator" content="Repos"/;
+	if (filetext.search(pattern) >= 0) {
+		tinyMCE.execCommand('mceAddControl', true, 'usertext');
 	}
 }
 

@@ -40,7 +40,7 @@ tinyMCE.init({
 	theme_advanced_toolbar_location : "top",
 	theme_advanced_toolbar_align : "center",
 	content_css : "/documents.css",
-	editor_selector : "html"
+	editor_selector : "none"
 });
 </script>'.
 		'<script type="text/javascript" src="'.$webapp.'plugins/edit/edit.js"></script>'
