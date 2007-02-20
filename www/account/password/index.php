@@ -95,10 +95,11 @@ function savePassword($filecontents, $message) {
 	$commit = new SvnEdit('commit');
 	$commit->addArgPath($wc);
 	$commit->setMessage($message);
-	$commit->exec('New passwor file committed');
-	
-	$p = Presentation::getInstance();
-	$p->assign('redirect', '/?logout');
+	$commit->exec('New password file committed');
+	if( strstr($message, 'changed password')){
+		$p = Presentation::getInstance();
+		$p->assign('redirect', '/?logout');
+	}
 	
 	displayEdit(Presentation::getInstance());
 	// Mau cause error "svn: DELETE of '/data/!svn/act/...': authorization failed"
