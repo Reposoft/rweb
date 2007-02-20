@@ -110,8 +110,10 @@ function _aclDeletePath($path, $aclFile) {
    }
 	fclose($f);
 	fclose($tmp);
-	System::deleteFile($aclFile);
-	rename($aclFile.".tmp", $aclFile);
+	if (!copy($aclFile.".tmp", $aclFile)) {
+		trigger_error("Failed to write new ACL file to $aclFile");
+	}
+	System::deleteFile($aclFile.".tmp");
 }
 
 /**
