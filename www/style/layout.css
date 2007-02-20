@@ -58,7 +58,7 @@ div#activities p {
 	background-position: left;
 	background-repeat: no-repeat;
 }
-#activities #open {
+#activities #openfile {
 	background-image: url(commands/32x32/open.png);
 }
 #activities #download {
@@ -70,7 +70,7 @@ div#activities p {
 #activities #download_lock {
 	background-image: url(commands/32x32/download_lock.png);
 }
-#activities #edit {
+#activities #editfile {
 	background-image: url(commands/32x32/edit.png);
 }
 #activities #upload {

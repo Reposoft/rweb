@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Test user preferences</title>
+</head>
+<body>
+<table>
+<thead>
+<tr><td colspan="3">change user's configured e-mail</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>setup/?start</td>
+	<td></td>
+</tr>
+<tr title="find the logged in account's administration tool">
+	<td>assertElementPresent</td>
+	<td>administration:test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>administration:test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>edit:repos-password.htp</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>editfile</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>username</td>
+	<td>test</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>email</td>
+	<td>useremail</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr title="error message shown that there are no changes in form values">
+	<td>verifyTextPresent</td>
+	<td>no changes</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>back</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>email</td>
+	<td>test-${useremail}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Committed revision</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>changed email</td>
+	<td></td>
+</tr>
+<tr title="Should only redirect to logout if password is changed">
+	<td>verifyTextNotPresent</td>
+	<td>redirect</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>repository</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>open:repos-password.htp</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>:test-${useremail}</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
