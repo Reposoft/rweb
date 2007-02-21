@@ -11,9 +11,11 @@
  * which is the file or filder that the user wants to reach.
  * The 'target' is the central concept here, being the identification
  * of a resource, and a URL that the the user has direct access to.
- * - getTarget() returns the absolute path from the repository root.
- * - getTargetUrl() returns the absolute URL as the user knows it.
- * If login passed, use getReposUser() to get the account name.
+ * <code>
+ * getTarget(); // returns the absolute path from the repository root.
+ * getTargetUrl(); // returns the absolute URL as the user knows it.
+ * </code>
+ * If login passed, use <code>getReposUser()</code> to get the account name.
  * 
  * Repos checks the HTTP headers of this direct access URL,
  * and requires the same authentication for the current page.
@@ -24,18 +26,19 @@
  * All scripts working with contents are expected to include this file.
  * Other scripts can include only repos.properties.php instead.
  *
- * Also designed for transparent login in other PHP applications that
- * use online access to resources, such as PHPiCalendar and phpThumb.
- *
  * If 'target' resource can be resolved using getTarget(),
- * login will be done automatically using tagetLogin();
+ * login will be done automatically using <code>tagetLogin();</code>
  *
  * If 'target' is not known the standard way, login explicitly
  * by calling:
- *  - login($targetUrl);
+ * <code>
+ * login($targetUrl);
+ * </code>
  *
  * To do authentication without accessing a specific resource, do:
- *  - askForCredentialsAndExit($realm);
+ * <code>
+ * askForCredentialsAndExit($realm);
+ * </code>
  *
  * Login functions return true if login was successful.
  * Login always requires a target URL. This URL is used to find
@@ -44,17 +47,13 @@
  * The credentials will then be empty.
  * 
  * Note that internally, URLs should never be encoded.
- *
- * Nomenclature throughout the repos PHP solution:
- * 'target' absolute url from repository root to target resource
- * 'targeturl' URI of the resource, permanent location as an HTTP url
- * 'repo' repository root URI, uniquely defines a repository
  * 
  * This script produces HTTP headers, so it must be included before
  * any other output. The script does not print anything to the output stream,
  * it uses trigger_error on unexpected conditions.
  * 
  * @package account
+ * @version $Id$
  */
 if (!function_exists('getRepository')) require(dirname(dirname(__FILE__)).'/conf/repos.properties.php');
 if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/ServiceRequest.class.php');
@@ -124,7 +123,8 @@ function login($targetUrl) {
 }
 
 /**
- * @param targetUrl absolute URL, not encoded, characters like åäö and % are accepted
+ * @param String $targetUrl absolute URL, NOT encoded.
+ * 	Characters like åäö, spaces and % are accepted.
  * @return true if the current user can access the resource, false if not
  * does trigger_error if the resource can not be used for authentication
  */
@@ -141,8 +141,8 @@ function verifyLogin($targetUrl) {
 	$request->setSkipBody();
 	$s = $request->exec();
 	if ($s==301) login_followRedirect($targetUrl, $request->getResponseHeaders());
-	// allow authentication with parent if the current target is no longer in the repository
-	if ($s==404) login_getFirstNon404Parent(_login_getParentUrl($targetUrl), $s);
+	// 404 means we _are_ allowed access to a parent folder (make sure this assumtion is verified on the server)
+	if ($s==404) return true;
 	// accepted codes
 	if ($s==200) return true;
 	if ($s==401 || $s==403) return false;

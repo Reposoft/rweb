@@ -2,6 +2,7 @@
 require('login.inc.php');
 require("../lib/simpletest/setup.php");
 
+// assume that if repository /testrepo exists we have a proper intergration test repository on this host
 define('TESTHOST', getSelfRoot());
 define('TESTREPO', TESTHOST."/testrepo");
 //define('TESTREPO', "http://test.repos.se/testrepo/");
@@ -89,6 +90,23 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertEqual('https://my.repo:88/home', $url);
 	}
 	
+	function testVerifyLoginNotRepositoryUrl() {
+		$this->sendMessage('It would be a serous secority risk if authentication accepts non-repository urls');
+		$this->expectError(new PatternExpectation('* not a repository *'));
+		// reportErrorInTest does not force 'return' so there will be extra errors
+		$this->expectError(new AnythingExpectation());
+		$this->expectError(new AnythingExpectation());
+		$this->expectError(new AnythingExpectation());
+		$result = verifyLogin(TESTHOST);
+		
+		$this->expectError(new PatternExpectation('* not a repository *'));
+		// reportErrorInTest does not force 'return' so there will be extra errors
+		$this->expectError(new AnythingExpectation());
+		$this->expectError(new AnythingExpectation());
+		$result = verifyLogin(TESTHOST.'/repos/'); // code exists if there is no trailing slash
+		
+	}
+	
 	// ----------- below are integration tests ---------------
 	
 	/*
@@ -123,19 +141,28 @@ class Login_include_Test extends UnitTestCase {
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = 'test';
 		$url = TESTREPO.'/test/trunk/';
-		verifyLogin($url);
-		$this->assertEqual(true, verifyLogin($url));
+		$result = verifyLogin($url);
+		$this->assertEqual(true, $result);
 	}
 	
-	function testVerifyLoginTestServerPercent() {
-		$url = TESTREPO.'/demoproject/trunk/public/a%b';
-		$this->assertTrue(verifyLogin($url), "Should find parent of $url and accept login");
+	function testVerifyLoginSpaces() {
+		$_SERVER['PHP_AUTH_USER'] = 'Test User';
+		$_SERVER['PHP_AUTH_PW'] = 'test';
+		$url = TESTREPO.'/Test User/'; // should not be encoded
+		$result = verifyLogin($url);
+		$this->assertEqual(true, $result);
+	}	
+	
+	function testVerifyLoginTestServerSpecialchars() {
+		$url = TESTREPO.'/t-e_st@user.acc/';
+		$this->assertTrue(verifyLogin($url), "Should find $url account and accept login");
 		$this->assertNoErrors();
 	}
 	
 	function testVerifyLoginTestServerUmlaut() {
-		$url = TESTREPO.'/demoproject/trunk/public/aöb';
-		$this->assertTrue(verifyLogin($url), "Should find parent of $url and accept login");
+		$this->sendMessage('This test requires the PHP file to be UTF-8 encoded');
+		$url = TESTREPO.'/téstüsär/';
+		$this->assertTrue(verifyLogin($url), "Should find $url account and accept login");
 		$this->assertNoErrors();
 	}
 	
@@ -151,6 +178,24 @@ class Login_include_Test extends UnitTestCase {
 		$url = login_getFirstNon404Parent(TESTHOST."/repos/adsfawerwreq/does/not/exist.no", $status);
 		$this->assertEqual(TESTHOST."/repos/", $url);
 		$this->assertEqual(200, $status);
+	}
+	
+	function testVerifyLoginNonexistingBelow403() {
+		$this->sendMessage('It is essential that the server sends 403, not 404, for a missing folder inside Forbidden');
+		$_SERVER['PHP_AUTH_USER'] = 'test';
+		$_SERVER['PHP_AUTH_PW'] = 'test';
+		$url = TESTREPO.'/svensson/nonexistingxyz/';
+		$result = verifyLogin($url);
+		$this->assertEqual(false, $result);
+	}	
+
+	function testVerifyLoginNonexisting() {
+		$this->sendMessage('If we get 404 inside the repository we know that login was successful');
+		$_SERVER['PHP_AUTH_USER'] = 'test';
+		$_SERVER['PHP_AUTH_PW'] = 'test';
+		$url = TESTREPO.'/test/nonexistingxyz/';
+		$result = verifyLogin($url);
+		$this->assertEqual(true, $result);
 	}
 	
 }

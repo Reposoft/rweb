@@ -3,7 +3,7 @@
 // -- mock account ---
 function targetLogin() {};
 function isLoggedIn() {return true;};
-function getReposUser() {return 'tst';};
+function getReposUser() {return 'Test User';};
 function _getReposPass() {return 'pwd';};
 // -----------
 
@@ -75,7 +75,7 @@ class TestServiceRequest extends UnitTestCase {
 		$service->uri = getSelfUrl();
 		$this->sendMessage($service->_buildUrl());
 		$service->exec();
-		$this->assertEqual('{"message":"test","user":"tst","pass":"pwd"}', $service->getResponse());
+		$this->assertEqual('{"message":"test","user":"Test User","pass":"pwd"}', $service->getResponse());
 		$this->assertTrue($service->isOK());
 		$this->assertEqual(200, $service->getStatus());
 		$this->sendMessage($service->getResponseHeaders());

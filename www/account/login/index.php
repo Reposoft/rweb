@@ -11,23 +11,26 @@ require( dirname(dirname(dirname(__FILE__))) . "/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__)) . "/login.inc.php" );
 
 /**
- * Get a user's home directory of a repository
- * TODO allow override with 'go' parameter as in logout
- * @param String repository, with tailing slash
+ * Suggests URL that can be used to validate user credentials
+ * @param String $repository absolte url to repository resorce, _with_ tailing slash
+ * @param String $username The username that tries to login
+ * @return array of URLs to test, in order
  */
-function getHomeDir($repository) {
+function getVerifyLoginUrls($repository, $username) {
 	$user = getReposUser();
-	$home = $repository . login_encodeUsernameForURL($user) . '/trunk/';
-	$exist = login_getFirstNon404Parent($home);
-	// allow one-project-repository
-	if ($exist == $repository) $exist = login_getFirstNon404Parent($repository . 'trunk/');
-	// could not even find the repositor root folder
-	if (!$exist) trigger_error("Could not find a home URL for $user. Tried $home and {$repository}trunk/.", E_USER_ERROR);
-	return $exist;
+	return array(
+		$repository . login_encodeUsernameForURL($user) . '/',
+		$repository,
+		$repository . 'trunk/'
+	);
 }
 
+/**
+ * If needed, username is encoded for URLs here.
+ * The rule of thumb is that internally, nothing should be encoded.
+ * URL checking is done by ServiceRequest, which does not want encoded urls.
+ */
 function login_encodeUsernameForURL($username) {
-	//won't work on svn 1.2.3, not needed//$username = str_replace(' ', '%20', $username);
 	return $username;
 }
 
@@ -64,15 +67,16 @@ function loginAndRedirectToHomeDir() {
 		enforceSSL();
 	}
 	if (isLoggedIn()) {
-		$home = getHomeDir($repo);
-		// now when we have the username we can test if the login was ok
-		// (user does not have access to repository root)
-		if (verifyLogin($home)) {
-			login_setUserSettings();
-			header("Location: " . getStartUrl($home));
-		} else {
-			showLoginFailed($home);
+		$user = getReposUser();
+		$try = getVerifyLoginUrls($repo, $user);
+		foreach ($try as $url) {
+			if (verifyLogin($url)) {
+				login_setUserSettings();
+				header("Location: " . getStartUrl($home));
+				return;
+			}
 		}
+		showLoginFailed(implode(", ", $try));
 	} elseif (isset($_GET['login']) && $_GET['login'] == 'user') {
 		$realm = getAuthName($repo);
 		if(!$realm) {
@@ -91,7 +95,7 @@ function loginAndRedirectToHomeDir() {
  * Builds the URL to redirect the browser to after login.
  *
  * @param String $home the repository home folder of the user, used to verify login
- * @return String complete URL for redirect
+ * @return String absolute URL for redirect
  */
 function getStartUrl($home) {
 	return getWebapp() . 'open/start/?home='. rawurlencode($home);

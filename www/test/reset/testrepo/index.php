@@ -19,8 +19,8 @@ $wc = setup_getTempWorkingCopy();
 $report->info("Delete and create repository \"$repo\"...");
 setup_deleteCurrent();
 setup_svnadmin("create $repo");
+setup_createTestUsers();
 setup_createHooks();
-// done by hooks // setup_createTestUsers();
 
 // Custom apache configuration for this repository
 setup_createApacheLocation(

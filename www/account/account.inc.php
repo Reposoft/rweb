@@ -1,8 +1,12 @@
 <?php
 /**
- * Common functions in user administration, for Repos installation that use apache password files.
+ * Common functions in user administration,
+ * for Repos installations that use apache password files.
+ * 
+ * For authentication, regardless of apache backend, use login.inc.php.
  * 
  * Htpasswd syntax is <code>username:MD5(pwd):Full Name:email@address</code>.
+ * Location of the file is specified in repos.properties.
  *
  * @package account
  */
@@ -44,6 +48,17 @@ function accountGetEmail($authFileLine) {
 	return $email;
 }
 
+function accountGetAuthLine($username) {
+	$f = fopen(USERS_PATH, 'r');
+	$found = false;
+	while (!$found && !feof($f)) {
+      $buffer = fgets($f);
+		if (strBegins($buffer, "$username:")) $found = $buffer;
+	}
+	fclose($f);
+	return $found;
+}
+
 /**
  * Runs the server password command to create a new auth file line.
  * @return String the BASIC auth line <code>username:MD5(pwd)</code>, with no trailing newline
@@ -68,12 +83,13 @@ function accountGetEncryptedPassword($username, $password) {
  * @param String $email optional email address that must match the username
  * @return String the new password, false if username or username+password not found
  */
-function resetPassword($username, $email='') {
+function resetPassword($username, $email=null) {
 	$password = getRandomPassword($username);
 	$pass = accountGetEncryptedPassword($username, $password);
 	
 	$pattern = preg_quote($username, '/').':[^:]+';
-	if ($email) { // require matching email
+	if ($email!==null) { // require matching email
+		if (strlen($email)==0) trigger_error("Parameter 'email' is empty.", E_USER_ERROR);
 		$pattern .= ':[^:]*:'.preg_quote($email).''; // note that this also matches empty email if colons are there
 	}
 	$pattern = '/^'.$pattern.'/';

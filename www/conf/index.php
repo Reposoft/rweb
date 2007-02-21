@@ -144,6 +144,10 @@ function sayFailed($msg = 'Failed') {
 	?><span style="color:#990000; padding-left:5px; padding-right:5px;"><strong><?php echo $msg ?></strong></span><?php
 }
 
+function saySomething($msg) {
+	?><span style="color:#333333; padding-left:5px; padding-right:5px;"><strong><?php echo $msg ?></strong></span><?php
+}
+
 // --- sections' presentation ---
 
 function links() {
@@ -180,12 +184,12 @@ function requiredFiles() {
 			sayFailed("Missing");
 		} else {
 			sayOK("Exists");
-			echo " writable: ";
+			saySomething(" writable: ");
 			$writable = is_writable($key);	
 			if ( ! $writable)
-				echo("No");
+				saySomething("No");
 			else
-				echo("Yes");
+				saySomething("Yes");
 		}
 		line_end();
 	}
@@ -296,13 +300,13 @@ function serverVariables() {
 	foreach ( $serverVariables as $command => $expect ) {
 		line_start($command);
 		if (!isset($_SERVER[$command])) {
-			sayFailed('Variable not found');
+			saySomething('Not set');
 		} else {
 			$result = $_SERVER[$command];
 			if ($result == $expect)
 				sayOK( $result );
 			else
-				sayFailed( $result );
+				saySomething( $result );
 		}
 		line_end();
 	}

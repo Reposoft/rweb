@@ -15,9 +15,13 @@ function adminResetPassword($username) {
 		trigger_error('No user found with username "'.$username.'"', E_USER_WARNING);
 	}
 
-	$result = accountSendPasswordEmail($username, $newpass, $email, $fullname);
-	if ($result===false) showResult("Administration E-mail not enabled, new password is $password");
-	elseif ($result) showResult("Could not send the email with the following contents: \n\n$result");
+	$auth = accountGetAuthLine($username);
+	$email = accountGetEmail($auth);
+	$fullname = accountGetFullName($auth);
+	$sent = false;
+	if ($email) $sent = accountSendPasswordEmail($username, $newpass, $email, $fullname);
+	if ($sent===false) showResult("Administration E-mail not enabled, new password is $password");
+	elseif ($sent) showResult("Could not send the email with the following contents: \n\n$sent");
 	else showResult("A new password has been emailed to address $email.");
 }
 

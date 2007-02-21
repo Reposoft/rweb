@@ -198,7 +198,7 @@ class ServiceRequest {
 		// authentication
 		if (!is_null($this->_username)) {
 			curl_setopt($ch, CURLOPT_USERPWD, 
-				rawurlencode($this->_username).':'.rawurlencode($this->_password));
+				$this->_username.':'.$this->_password);
 		}
 		// set preferred response language
 		curl_setopt($ch, CURLOPT_COOKIE, LOCALE_KEY.'=en');

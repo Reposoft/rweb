@@ -61,6 +61,8 @@ function reportErrorInTest($n, $message, $file, $line) {
 		   	$reporter->paintFormattedMessage("$message\n$trace");
 		}
 	}
+	// TODO need to force a "return;" from the function that did the 
+	// trigger_error call to the test case in the call stack
 }
 
 if (!function_exists('_getStackTrace')) {
