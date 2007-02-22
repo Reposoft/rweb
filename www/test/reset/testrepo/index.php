@@ -76,6 +76,14 @@ setup_svn('commit -m "Imported testrepo contents. Created default test users sve
 $lockedfile = $wc."demoproject/trunk/public/locked-file.txt";
 setup_svn('lock -m "Testing lock features. You should not be allowed to modify this file." '.$lockedfile);
 
+// Update a document so we get a diff
+$htmldocument = $wc."demoproject/trunk/Policy document.html";
+setup_svn("propset svn:mime-type text/html \"$htmldocument\"");
+setup_replaceInFile($htmldocument, array(
+	'</body>' => "<p>Feel free to update this document.</p>\n</body>"
+));
+setup_svn('commit -m "Added a policy for the policy document" '.$wc);
+
 // Create a news feed and a calendar in demo project
 $newsfile = $wc."demoproject/messages/news.xml";
 setup_replaceInFile($newsfile, array(

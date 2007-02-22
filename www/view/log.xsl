@@ -68,7 +68,7 @@
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="contents">
-		<h1>History of <span id="path" class="path"><xsl:value-of select="@path"/></span></h1>
+		<h1>History of <span id="fullpath" class="path"><xsl:value-of select="@path"/></span></h1>
 		<xsl:apply-templates select="logentry"/>
 		<xsl:if test="@limit">
 			<xsl:call-template name="limit">
@@ -204,10 +204,10 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- make valid HTML id for file or folder, containing [A-Za-z0-9] and [-_.]  -->
-	<!-- ids should always start with letters, so a prefix like 'f:' is needed -->
+	<!-- make valid (and probably unique) HTML id for log entry, containing [A-Za-z0-9] and [-_.] -->
+	<!-- the log xml has no urlencoded values, so it will be slightly different than repository -->
 	<xsl:template name="getFileID">
 		<xsl:param name="filename" select="@href"/>
-		<xsl:value-of select="translate($filename,'%/()@&amp;','______')"/>
+		<xsl:value-of select="translate($filename,'%/()@&amp; ','_______')"/>
 	</xsl:template>
 </xsl:stylesheet>

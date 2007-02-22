@@ -55,31 +55,44 @@ tinyMCE.init({
  * If there is no previous headers, standard XHTML 1.0 strict headers will be created.
  * 
  * This function always uses line-feed-only newlines.
- * Most HTML edistors on windows will accept that.
+ * Most HTML editors on windows will accept that.
  *
  * @param String $postedText the document contents as valid XHTML 1.0 strict
  * @param String $destinationFile the current file
  */
 function editWriteNewVersion_html(&$postedText, $destinationFile) {
-	// newline before selected start tags
-	$postedText = preg_replace(
-		'/(?!\n)\s*<(p|br|h1|h2|h3|ul|ol|li)/',
-		"\n<$1",
-		$postedText
-	);
-	// newline after text sentences
-	// TODO support tag directly after "." with no space
-	$postedText = preg_replace('/(\w\.\s+)([A-Z0-9<])/', 
-		"$1\n$2",
-		$postedText);
+	$postedText = editIndentHtmlDocument($postedText);
 	// texts coming from smarty have only body contents
 	if (!preg_match('<html.*<body.*</body>.*</html>')) {
-		// TODO use existing html if new version
-		// put the contents in the Repos template
+		// TODO use existing html if new version? Use a templates/ file?
+		// Put the contents in the Repos template
 		$postedText = editGetNewDocument($postedText);
 	}
 	// use plaintext write
 	editWriteNewVersion_txt($postedText, $destinationFile, $type);
+}
+
+/**
+ * Indent according to Repos rules, so line-based version control works.
+ * - Only newlines, no indentations.
+ * - Line break after sentence.
+ *
+ * @param String $html xhtml body contents (should be valid xml).
+ * 	Passed by reference for memory efficiency.
+ * 	Tagnames should always be lowercase.
+ */
+function editIndentHtmlDocument(&$html) {
+	// newline before selected start tags
+	$html = preg_replace(
+		'/(?!\n)\s*<(p|br|h1|h2|h3|ul|ol|li)/',
+		"\n<$1",
+		$html
+	);
+	// newline after text sentences
+	$html = preg_replace('/(\w[\.\?\!\:])(\s)?(\s*)((?(2)[A-Z0-9]|<))/', 
+		"$1$2$3\n$4",
+		$html);
+	return $html;
 }
 
 function editGetNewDocument($bodyContents) {

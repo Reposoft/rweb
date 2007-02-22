@@ -15,7 +15,7 @@
 		<content type="xhtml" xml:lang="en"
 		 xml:base="http://www.repos.se/">
 		  <div xmlns="http://www.w3.org/1999/xhtml">
-		    <p>The test repository has been reset. Check http://{=$repository}/demoproject/</p>
+		    <p>The test repository has been reset. Check {=$repository}/demoproject/</p>
 		    <p>Demoproject contains a sample intranet, a public area, documents and images.</p>
 		  </div>
 		</content>

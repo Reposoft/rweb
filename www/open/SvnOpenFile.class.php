@@ -134,7 +134,8 @@ class SvnOpenFile {
 		$s->exec();
 		$this->headStatus = $s->getStatus();
 		$this->head = $s->getResponseHeaders();
-		if ($this->headStatus == 0) trigger_error("Could not access repository using url ".$this->url.". Might be a temporary error.", E_USER_ERROR);
+		if ($this->headStatus == 0) trigger_error("Could not connect to repository URL ".$this->url.". Might be a temporary error.", E_USER_ERROR);
+		if ($this->headStatus != 200) trigger_error("Unexpected response from target URL '".$this->url."'. Status ".$this->headStatus, E_USER_ERROR);
 	}
 	
 	/**
@@ -222,7 +223,9 @@ class SvnOpenFile {
 	 */
 	function _getHeadRevisionFromETag() {
 		$this->_head();
-		if (!array_key_exists('ETag', $this->head)) return false;
+		if (!array_key_exists('ETag', $this->head)) {
+			trigger_error('Server error. ETag header missing for repository resource.', E_USER_ERROR);
+		}
 		$etag = $this->head['ETag'];
 		$pattern = '/^"(\d+)\/\//';
 		if (preg_match($pattern, $etag, $matches)) return $matches[1];

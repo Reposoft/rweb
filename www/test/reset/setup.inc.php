@@ -206,12 +206,15 @@ function setup_svnadmin($command) {
 
 function setup_svn($command) {
 	global $svnargs, $report;
-	$command = setup_customizeCommand($command);
-	$cmd = new Command('svn');
+	preg_match('/([a-z]+)\s+(.*)/', $command, $matches);
+	if (!$matches) trigger_error('Invalid svn command: '.$command);
+	$cmd = new Command('svn'); // go through the command wrapper to get utf-8 on linux
+	$cmd->addArgOption($matches[1]);
+	setup_customizeCommand($matches[1], $cmd);
 	$cmd->addArgOption($svnargs);
-	$cmd->addArgOption($command);
+	$cmd->addArgOption($matches[2]);
 	if ($cmd->exec()) {
-		$report->fail("Svn command failed: $command");
+		$report->fail("Svn command ($command) failed: ".implode(" \n", $cmd->getOutput()));
 	} elseif (count($cmd->getOutput())==0) {
 		$report->fail("Svn command returned no result: $command");
 	} else {
@@ -220,9 +223,10 @@ function setup_svn($command) {
 	}	
 }
 
-function setup_customizeCommand($command) {
-	// preserve locks set during setup
-	return str_replace('commit ', 'commit --no-unlock ', $command);
+function setup_customizeCommand($operation, &$svn) {
+	if ($operation=='commit') {
+		$svn->addArgOption('--no-unlock');		
+	}
 }
 
 ?>

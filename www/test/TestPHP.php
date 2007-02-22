@@ -39,6 +39,7 @@ $testfiles = array(
 'edit/merge/conflicthandler.test.excel.php',
 'edit/merge/xmlConflictHandler.test.php',
 'plugins/validation/Validation.test.php',
+'plugins/edit/edit.test.php',
 'edit/upload/mimetype.test.php',
 'admin/admin.test.php'
 );

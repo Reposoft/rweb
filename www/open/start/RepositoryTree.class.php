@@ -16,6 +16,7 @@ function getRepositoryConventionsForTools($projectName) {
 	'administration' => 'administration/',
 	'files' => 'trunk/',
 	'branches' => 'branches/',
+	'tags' => 'tags/',
 	'tasks' => 'tasks/',
 	'templates' => 'templates/',
 	'news' => 'messages/',
