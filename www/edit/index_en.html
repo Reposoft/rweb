@@ -90,7 +90,7 @@ You will get a link to the branch, and from there you can access the "merge" fun
 <h3><a id="lock" href="lock/?target={=$target}">Lock file</a></h3>
 <p>You can always lock a file to make it read-only for everyone else.</p>
 {=elseif $file,isLockedByThisUser}
-<h3><a href="unlock/?target={=$target}">Unlock file</a></h3>
+<h3><a id="unlock" href="unlock/?target={=$target}">Unlock file</a></h3>
 <p>This file is locked by you. If you are not working with it,
 you can unlock it so that others are able to edit it.</p>
 {=/if}

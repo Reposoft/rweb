@@ -1,0 +1,96 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+<p>First lock a file for the current user,
+then go to upload page and see that the lock message
+is suggested as commit message.</p>
+<table>
+<thead>
+<tr><td colspan="3">TestUploadLocked</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>setup/?demoproject</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>edit:Policy_20document.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>lock</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>message</td>
+	<td>Spellcheck and review, before sending to management</td>
+</tr>
+<tr>
+	<td>verifyNotChecked</td>
+	<td>download</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>locked</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Spellcheck and review, before sending to management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>locked by you</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>upload</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>message</td>
+	<td>Spellcheck and review, before sending to management</td>
+</tr>
+<tr>
+	<td>verifyChecked</td>
+	<td>unlock</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>unlock</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>unlocked</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
