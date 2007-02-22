@@ -223,7 +223,7 @@ http://www.dreamprojections.com/SyntaxHighlighter/
 .syntax-diff .added { color: #009900; }
 .syntax-diff .removed { color: #CC0000; }
 .syntax-diff .nonewline { color: #CCCCCC; }
-.syntax-diff .keyword { color: #5697D9; }
+.syntax-diff .keyword { color: #999999; }
 
 .syntax-wiki {}
 .syntax-wiki .heading1 { font-size: large; }

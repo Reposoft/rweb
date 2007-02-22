@@ -141,11 +141,11 @@
 				<a id="open:{$pathid}" class="path file" title="Added {.}" href="{$web}open/open/?target={.}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
+				<xsl:value-of select="$spacer"/>
 				<xsl:if test="not(@copyfrom-path)">
 					<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={../../@revision}&amp;action={@action}">view</a>
 				</xsl:if>
 				<xsl:if test="@copyfrom-path">
-					<xsl:value-of select="$spacer"/>
 					<span class="copied" title="Copied from {@copyfrom-path} version {@copyfrom-rev}">
 						<span class="path">
 							<xsl:value-of select="@copyfrom-path"/>&#160;</span>
@@ -153,6 +153,7 @@
 							<xsl:value-of select="@copyfrom-rev"/>
 						</span>
 					</span>
+					<xsl:value-of select="$spacer"/>
 					<a id="view:{$pathid}" class="action" href="{$web}open/?target={@copyfrom-path}&amp;rev={@copyfrom-rev}&amp;action={@action}">view</a>
 				</xsl:if>
 			</xsl:if>
@@ -160,13 +161,16 @@
 				<span class="path" title="Deleted {.}, so it only exists in versions prior to {../../@revision}.">
 					<xsl:value-of select="."/>
 				</span>
+				<xsl:value-of select="$spacer"/>
 				<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={$fromrev}&amp;action={@action}">view</a>
 			</xsl:if>
 			<xsl:if test="@action='M'">
 				<a id="open:{$pathid}" class="path file" title="Modified {.}" href="{$web}open/open/?target={.}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
+				<xsl:value-of select="$spacer"/>
 				<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={../../@revision}&amp;fromrev={$fromrev}&amp;action={@action}">view</a>
+				<a id="diff:{$pathid}" class="action" href="{$web}open/diff/?target={.}&amp;rev={../../@revision}&amp;fromrev={$fromrev}">diff</a>
 			</xsl:if>
 		</div>
 	</xsl:template>

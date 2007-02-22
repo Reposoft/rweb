@@ -1,0 +1,94 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>automated test</title>
+</head>
+<body>
+<p class="description"></p>
+<table class="testcase">
+<thead>
+<tr><td colspan="3">new HTML document</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>setup/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>createfile</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>link=HTML document</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>htmleditor</td>
+	<td></td>
+</tr>
+<tr title="cursor should be in textarea directly">
+	<td>typeKeys</td>
+	<td>abc</td>
+	<td></td>
+</tr>
+<tr title="set a filename without extension">
+	<td>type</td>
+	<td>name</td>
+	<td>Testdoc</td>
+</tr>
+<tr>
+	<td>fireEvent</td>
+	<td>name</td>
+	<td>blur</td>
+</tr>
+<tr title="filename extension should have been added automatically">
+	<td>assertValue</td>
+	<td>name</td>
+	<td>Testdoc.html</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>message</td>
+	<td>created this fine document</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Committed revision</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>repository</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>open:Testdoc.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>open:Testdoc.html</td>
+	<td></td>
+</tr>
+<tr title="should be displayed as HTML, not plaintext">
+	<td>verifyTextNotPresent</td>
+	<td>body</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>abc</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
