@@ -10,15 +10,6 @@ function autoFillFilename(filename) {
 		document.getElementsByName('name')[0].value = filename+'.'+type;	
 	}
 }
-
-function checkRequiredFields() {
-	if(document.formUpload.name.value.length > 0) {
-		return true;
-	} else {
-		alert("Filename is required!");
-		return false;
-	}
-}
 </script>
 <!--{$head}-->
 </head>
@@ -34,7 +25,7 @@ function checkRequiredFields() {
 </div>
 
 <a name="textform"></a>
-<form id="formEdit" action="../upload/" method="post" name="formUpload" onsubmit="return checkRequiredFields()">
+<form id="formEdit" action="../upload/" method="post" name="formUpload">
 <fieldset>
 	<!--{if $file}-->
 	<legend>Edit <a class="file" href="{=$file,url}">{=$target}</a> {=$file,revision} with type {=$file,type}</legend>
@@ -59,7 +50,7 @@ function checkRequiredFields() {
   <p>
     <label for="name">name in repository</label>
 	<!--{if $file}-->
-    <input type="text" id="name" name="name" value="{=$target|basename}" disabled="disabled" size="40" />
+    <input type="text" id="currentname" name="currentname" value="{=$target|basename}" disabled="disabled" size="40" />
 	<!--{else}-->
 	<input type="text" id="name" name="name" size="40" class="required" tabindex="2" onblur="autoFillFilename(value)"/>
 	<input type="hidden" id="create" name="create" value="yes"/>
