@@ -46,6 +46,12 @@ class TestServiceRequestIntegration extends UnitTestCase {
 		$this->assertEqual('200', $s->getStatus());
 	}
 	
+	function testFilePercent() {
+		$url = TESTREPO.'/demoproject/trunk/public/documents/100%open.odt';
+		$s = new ServiceRequest($url);
+		$s->exec();
+		$this->assertEqual('200', $s->getStatus());
+	}	
 	
 	
 }
