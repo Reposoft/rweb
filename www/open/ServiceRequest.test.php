@@ -100,6 +100,7 @@ class TestServiceRequest extends UnitTestCase {
 		$service = new ServiceRequest(getSelfUrl(), array());
 		$service->setResponseTypeDefault();
 		$this->sendMessage("This test hangs in an infinite loop if the internal user agent string is not set.");
+		// or does it? maybe it nowadays sets the serv=json parameter anyway and that is what's detected?
 		$service->exec();
 		$this->assertEqual(412, $service->getStatus());
 	}

@@ -14,6 +14,8 @@
 </head>
 
 <body>
+<p><small>Generally tests need PHP running in webserver.
+<br />Integration tests require the /testrepo repository setup.</small></p>
 <table id="suiteTable" class="rows" width="100%" border="0">
 	<tbody>
 <?php
@@ -23,6 +25,8 @@
  * @package test
  */
 
+if (!defined('TEST_INTEGRATION')) define('TEST_INTEGRATION', true);
+
 $testfiles = array(
 'conf/php/TestServerSettings.php',
 'conf/System.test.php',
@@ -31,6 +35,7 @@ $testfiles = array(
 'conf/Report.test.php',
 'conf/Command.test.php',
 'account/login.test.php',
+'account/login.testi.php',
 'account/RepositoryTree.test.php',
 'open/SvnOpen.test.php',
 'open/SvnOpenFile.test.php',
@@ -43,6 +48,18 @@ $testfiles = array(
 'edit/upload/mimetype.test.php',
 'admin/admin.test.php'
 );
+
+if (!TEST_INTEGRATION) {
+	$testfiles = array_filter($testfiles, 'isNotIntegrationTest');
+}
+
+function isNotIntegrationTest($testName) {
+	return !isIntegrationTest($testName);
+}
+
+function isIntegrationTest($testName) {
+	return strpos($testName, '.testi.');
+}
 
 function printTestSuite($testfiles) {
 	echo("<tr><td><b>repos.se PHP Test Suite</b></td></tr>\n");
