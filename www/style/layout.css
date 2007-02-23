@@ -79,6 +79,9 @@ div#activities p {
 #activities #lock {
 	background-image: url(commands/32x32/lock.png);
 }
+#activities #unlock {
+	background-image: url(commands/32x32/unlock.png);
+}
 #activities #useurl {
 	background-image: url(commands/32x32/url.png);
 }
