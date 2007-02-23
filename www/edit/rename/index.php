@@ -8,17 +8,14 @@ new Rule('folder');
 new FilenameRule('newname');
 // explicit validation
 new NewFilenameRule('newname', $_GET['folder']);
-
 // dispatch
 if (isset($_GET[SUBMIT])) {
 	svnRename(); 
 } else {
 	$target = getTarget();
 	$template = Presentation::getInstance();
-	if (isFile($target)) {
-		$file = new SvnOpenFile($target);
-		$template->assign_by_ref('file', $file);
-	}
+	$file = new SvnOpenFile($target);
+	$template->assign_by_ref('file', $file);
 	$template->assign('target', $target);
 	$template->assign('folder', getParent($target));
 	$template->assign('oldname', basename($target));

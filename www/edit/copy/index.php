@@ -16,10 +16,8 @@ if (isset($_GET[SUBMIT])) {
 } else {
 	$target = getTarget();
 	$template = Presentation::getInstance();
-	if (isFile($target)) {
-		$file = new SvnOpenFile($target);
-		$template->assign_by_ref('file', $file);
-	}
+	$file = new SvnOpenFile($target);
+	$template->assign_by_ref('file', $file);
 	$template->assign('repository', getRepository());
 	$template->assign('target', $target);
 	$template->assign('oldname', basename($target));
