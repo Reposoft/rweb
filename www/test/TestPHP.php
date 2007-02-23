@@ -14,8 +14,6 @@
 </head>
 
 <body>
-<p><small>Generally tests need PHP running in webserver.
-<br />Integration tests require the /testrepo repository setup.</small></p>
 <table id="suiteTable" class="rows" width="100%" border="0">
 	<tbody>
 <?php
@@ -40,6 +38,7 @@ $testfiles = array(
 'open/SvnOpen.test.php',
 'open/SvnOpenFile.test.php',
 'open/ServiceRequest.test.php',
+'open/ServiceRequest.testi.php',
 'edit/SvnEdit.test.php',
 'edit/merge/conflicthandler.test.excel.php',
 'edit/merge/xmlConflictHandler.test.php',
@@ -94,6 +93,8 @@ function printTestCase($file) {
 </tbody>
 </table>
 <p><a class="action" id="open" href="<?php echo($url); ?>" target="_blank" accesskey="w">open in new <u>w</u>indow</a></p>
+<p><small>Generally tests need PHP running in webserver (to get a URL and server variables).
+<br />Integration tests require the /testrepo repository setup.</small></p>
 <?php
 }
 

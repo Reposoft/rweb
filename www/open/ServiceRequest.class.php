@@ -209,7 +209,7 @@ class ServiceRequest {
 	 * appending [WEBSERVICE_KEY]=[responseType]
 	 */
 	function _buildUrl() {
-		$url = urlEncodeNames($this->uri);
+		$url = $this->uri;
 		// $url = str_replace('%', '%25', $url);	// curl in exec() doesn't encode % signs.
 		if (!strpos($url,'://')) $url = getWebapp().$url;
 		$url .= strpos($url, '?') ? '&' : '?';

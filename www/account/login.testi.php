@@ -114,8 +114,6 @@ class Login_integraton_Test extends UnitTestCase {
 		$this->assertEqual(true, $result);
 	}
 	
-	// http://localhost/testrepo/demoproject/trunk/public/documents/legacy formats/
-	
 }
 
 testrun(new Login_integraton_Test());
