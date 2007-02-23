@@ -21,7 +21,7 @@ $report = new Report('set up test repository');
 //$test_repository_folder="test.repos.se";
 
 $allow = getConfig('allow_reset');
-if ($allow != 1) $report->fatal('Not allowed to reset this repository. Set allow_reset = 1 in config file');
+if ($allow != 1) $report->fatal('Not allowed to reset this repository. Set allow_reset=1 in config file');
 
 // --- valriables used by all reset scripts ---
 $repo = getConfig('local_path');
@@ -45,30 +45,41 @@ $svnargs="--config-dir " . rtrim($here, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARAT
 
 $report->info("To use this repository, do \"Include $conffile\" from a conf-file and restart Apache.");
 
-// delete current repository and create empty $repo folder
+// delete contents of the $repo folder
 // delete $userfile and $aclfile from admin folder
 // create backup folder if it does not exist, but don't delete beckup if it exists
 function setup_deleteCurrent() {
 	global $repo, $report, $admin, $userfile, $aclfile, $backup;
 	
-	if (file_exists($repo)) {
-		$report->info("Deleting old test repository folder $repo");
-		// repositories usually have write protected contents
-		if (file_exists($repo.'format')) chmod($repo.'format', 0755);
-		if (file_exists($repo.'db/format')) chmod($repo.'db/format', 0755);
-		System::deleteFolder($repo);
+	// recursively delete these entries in the repo folder, in this order
+	$repoContents = array('db/format', 'db/', 'format', 'conf/', 'dav/', 'hooks/', 'locks/', 'README.txt');
+	
+	// delete only contents, not the repo folder as it may have rights on it
+	foreach ($repoContents as $r) {
+		$delete = $repo.$r;
+		if (!file_exists($delete)) continue;
+		$report->debug("Deleting $delete");
+		if (!is_writable($delete)) chmod($delete, '0755');
+		if (isFolder($delete)) {
+			System::deleteFolder($delete);
+		} else {
+			System::deleteFile($delete, false);		
+		}
 	}
 	
-	$report->info("Create empty repository folder at $repo");
-	System::createFolder($repo);
+	$report->info("Deleted all contents of repository folder $repo");
 	
-	if (!is_dir($backup)) System::createFolder($backup); else $report->info("Keeping backup in $backup");
+	if (!is_dir($backup)) {
+		System::createFolder($backup);
+	} else {
+		$report->debug("Keeping backup in $backup");
+	}
 	
 	if (!file_exists($admin)) {
 		$report->info("Creating empty admin folder $admin");
 		System::createFolder($admin);
 	} else {
-		$report->info("Using the existing admin folder $admin");
+		$report->debug("Using the existing admin folder $admin");
 	}
 }
 

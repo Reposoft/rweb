@@ -93,7 +93,7 @@ function isFile($path) {
 /**
  * Folders are relative or absolute paths that _do_ end with '/'
  *  or (on Windows only) '\'
- * To check if a URL with no tailing slash is a folder, use login_getResourceType.
+ * To check if a URL with no tailing slash is a folder, use HTTP.
  * @param String $path the file system path or URL to check
  * @return boolean true if path is a folder, false if not 
  * @package conf
@@ -340,8 +340,10 @@ class System {
 	/**
 	 * replaces unlink().
 	 * @param String $file absolute path to file
+	 * @param boolean $makeWritableIfNeeded set to false to disable the is_writable check.
+	 * 	Sometimes useful in windows where chomd and is_writable do not always reflect reality.
 	 */
-	function deleteFile($file) {
+	function deleteFile($file, $makeWritableIfNeeded=true) {
 		System::_authorizeFilesystemModify($file);
 		if (!isFile($file)) {
 			trigger_error("Path \" $file\" is not a file.", E_USER_ERROR); return false;
@@ -352,7 +354,7 @@ class System {
 		if (!is_readable($file)) {
 			trigger_error("Path \" $file\" is not readable.", E_USER_ERROR); return false;
 		}
-		if (!is_writable($file) && !System::_chmodWritable($file)) {
+		if ($makeWritableIfNeeded && !is_writable($file) && !System::_chmodWritable($file)) {
 			trigger_error("Path \" $file\" is not writable.", E_USER_ERROR); return false;
 		}
 		return unlink($file);
@@ -381,10 +383,9 @@ class System {
 	/**
 	 * Replaces chmod 0777, and is used internally before deleting files or folders.
 	 * Only allowes chmodding of folders that are expected to be write protected, like .svn. 
-	 * @return false if it is not allowed to chmod the path writable
+	 * @return false if it is not allowed to chmod the path writable, or if 'chmod' function fails
 	 */
 	function _chmodWritable($absolutePath) {
-		// why would we
 		if (strContains($absolutePath, '/.svn')) return chmod($absolutePath, 0777);
 		if (strBegins($absolutePath, System::_getSystemTemp())) return chmod($absolutePath, 0777);
 		return false;
