@@ -59,7 +59,7 @@ function setup_deleteCurrent() {
 		$delete = $repo.$r;
 		if (!file_exists($delete)) continue;
 		$report->debug("Deleting $delete");
-		if (!is_writable($delete)) chmod($delete, '0755');
+		if (!is_writable($delete)) chmod($delete, 0755);
 		if (isFolder($delete)) {
 			System::deleteFolder($delete);
 		} else {

@@ -228,7 +228,7 @@ function repository() {
 		if ($ret == 0)
 			sayOK( $result );
 		else
-			sayFailed( $result );
+			sayFailed( "Failed ".$result );
 		line_end($descr);
 	}
 }
