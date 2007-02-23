@@ -13,7 +13,7 @@ function autoFillFilename(path) {
 <!--{if not $isfile}-->
 	document.getElementsByName('name')[0].value = filename;
 <!--{else}-->
-	if (filename == document.getElementById('currentname').value) return;
+	if (filename == document.getElementById('name').value) return;
 	var m = filename.match(/-(\d+)\.?\w*$/);
 	if (!m || 2 > m.length) return; 
 	var rev = m[1];
@@ -90,9 +90,9 @@ to make sure that your local changes are based on the newest version of the shar
     <span class="note">Maximum file size 10MB</span>
   </p>
   <p>
-    <label for="currentname">name in repository</label>
+    <label for="name">name in repository</label>
 	 <!--{if $isfile}-->
-    <input type="text" id="currentname" name="currentname" value="{=$target|basename}" disabled="disabled" size="40" />
+    <input type="text" id="name" name="name" value="{=$target|basename}" disabled="disabled" size="40" />
     <!--{else}-->
 	 <input type="text" id="name" name="name" size="40" onchange="checkType()" class="required" tabindex="2" />
 	 <input type="hidden" id="create" name="create" value="yes"/>   
