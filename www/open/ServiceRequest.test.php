@@ -107,12 +107,13 @@ class TestServiceRequest extends UnitTestCase {
 	
 	function testFollowRedirect() {
 		// without redirect
-		$service = new ServiceRequest(getSelfUrl().'?redirect=1', array());
+		$service = new ServiceRequest(getSelfUrl(), array('redirect'=>'1'));
 		$service->exec();
+		$this->sendMessage('This test expects a 302 and Location header for encoded URL: '.$service->_buildUrl());
 		$this->assertEqual(0, $service->getRedirectCount());
 		$this->assertEqual(302, $service->getStatus());
 		// enable redirect
-		$service = new ServiceRequest(getSelfUrl().'?redirect=1', array());
+		$service = new ServiceRequest(getSelfUrl(), array('redirect'=>'1'));
 		$service->setFollowRedirects();
 		$service->exec();
 		$this->assertEqual(1, $service->getRedirectCount());
@@ -120,13 +121,13 @@ class TestServiceRequest extends UnitTestCase {
 	}
 	
 	function testAuthentication() {
-		$service = new ServiceRequest(getSelfUrl().'?useryes', array());
+		$service = new ServiceRequest(getSelfUrl(), array('useryes'=>''));
 		$service->exec();
 		$this->assertEqual(200, $service->getStatus());
 	}
 
 	function testAuthenticationFalse() {
-		$service = new ServiceRequest(getSelfUrl().'?userno', array(), false);
+		$service = new ServiceRequest(getSelfUrl(), array('userno'=>''), false);
 		$service->exec();
 		$this->assertEqual(200, $service->getStatus());
 	}
