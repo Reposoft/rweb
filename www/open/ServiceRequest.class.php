@@ -166,7 +166,7 @@ class ServiceRequest {
 		$ch = curl_init(); 
 		curl_setopt($ch, CURLOPT_USERAGENT, SERVICEREQUEST_AGENT); // required to detect loops
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, $this->_buildUrl()); 
+		curl_setopt($ch, CURLOPT_URL, $this->_buildUrl());
 		// set callbacks
 		curl_setopt($ch, CURLOPT_HEADERFUNCTION, array(&$this, '_processHeader'));
 		// custom options
@@ -210,7 +210,7 @@ class ServiceRequest {
 	 */
 	function _buildUrl() {
 		$url = $this->uri;
-		$url = str_replace('%', '%25', $url);	// curl in exec() doesn't encode % signs.
+		// $url = str_replace('%', '%25', $url);	// curl in exec() doesn't encode % signs.
 		if (!strpos($url,'://')) $url = getWebapp().$url;
 		$url .= strpos($url, '?') ? '&' : '?';
 		foreach ($this->parameters as $key => $value) {
