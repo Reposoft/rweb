@@ -132,7 +132,7 @@ function verifyLogin($targetUrl) {
 	if (!isRepositoryUrl($targetUrl)) {
 		trigger_error('Target URL is not a repository resource. Can not validate login using '.$targetUrl, E_USER_ERROR);
 	}
-	$targetUrl = urlEncodeNames($targetUrl);
+	// $targetUrl = urlEncodeNames($targetUrl);
 	$user = getReposUser();
 	if (!$user) {
 		trigger_error('No user credentials given. Can not validate login.', E_USER_ERROR);
