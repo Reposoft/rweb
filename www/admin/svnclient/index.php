@@ -6,8 +6,8 @@
  * @package admin
  */
 
-require('../../conf/Report.class.php');
 require('../../open/SvnOpen.class.php');
+require('../../conf/Report.class.php');
 
 $report = new Report("Repos internal SVN client configuration");
 
