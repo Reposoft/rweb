@@ -14,6 +14,7 @@
 // TODO convert to HTML-entities where needed (without ending up in some kind of wiki syntax). see test reporter.php
 
 // do not force the use of shared functions //require_once(dirname(__FILE__).'/repos.properties.php');
+if (!defined('WEBSERVICE_KEY')) define('WEBSERVICE_KEY', 'serv');
 
 // same function as in Presentation
 if (!function_exists('setupResponse')) {
@@ -46,8 +47,7 @@ function isOffline() {
  * @return true if output should be plain text
  */
 function isTextmode() {
-	return isOffline() || (defined('WEBSERVICE_KEY') && 
-		isset($_REQUEST[WEBSERVICE_KEY]) && $_REQUEST[WEBSERVICE_KEY] != 'html');	
+	return isOffline() || (isset($_REQUEST[WEBSERVICE_KEY]) && $_REQUEST[WEBSERVICE_KEY] != 'html');	
 }
 
 /**

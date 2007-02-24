@@ -6,37 +6,58 @@
 <title>Repos 3rd party libraries</title>
 <link href="../style/global.css" rel="stylesheet" type="text/css"/>
 <link href="../style/docs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../scripts/head.js"></script>
 </head>
 <body>
 <div id="commandbar">
 <!-- same as in Report -->
-<a href="/repos/conf/">config</a>
-<a href="/repos/admin/">admin</a>
-<a href="/repos/test/">test</a>
-<a href="/?login">login</a>
-<a id="logout" href="/?logout">logout</a>
+<a id="reposconf" href="/repos/conf/">config</a>
+<a id="reposadmin" href="/repos/admin/">admin</a>
+<a id="repostest" href="/repos/test/">test</a>
 </div>
 
-<h1>repos lib folder</h1>
+<div id="intro">
+<h1>Repos libraries</h1>
 <p>If you agree to the open soource licenses, download 3rd party libraries here.</p>
+</div>
+
+<div class="column">
+<div class="section">
+<h2>lib/ folder</h2>
 <ul>
-<li>install <a href="smarty/install.php">smarty</a> &nbsp;
+<li>install <a class="install" id="smarty" href="smarty/install.php">smarty</a> &nbsp;
 <small><a target="_blank" href="http://smarty.php.net/">LGPL license</a></small></li>
-<li>install <a href="simpletest/install.php">simpletest</a>
+<li>install <a class="install" id="simpletest" href="simpletest/install.php">simpletest</a>
 <small><a target="_blank" href="http://www.simpletest.org/">LGPL license</a></small></li>
-<li>install <a href="selenium/install.php">selenium</a>
+<li>install <a class="install" id="selenium" href="selenium/install.php">selenium</a>
 <small><a target="_blank" href="http://www.openqa.org/selenium-core/license.action">Apache license 2.0</a></small></li>
-<li>install <a href="dpsyntax/install.php">dp.SyntaxHighlighter</a> &nbsp;
+<li>install <a class="install" id="dpyntax" href="dpsyntax/install.php">dp.SyntaxHighlighter</a> &nbsp;
 <small><a target="_blank" href="http://www.dreamprojections.com/SyntaxHighlighter/">LGPL license</a></small></li>
-<li>install <a href="tinymce/install.php">TinyMCE</a> &nbsp;
+<li>install <a class="install" id="tinymce" href="tinymce/install.php">TinyMCE</a> &nbsp;
 <small><a target="_blank" href="http://wiki.moxiecode.com/index.php/TinyMCE:License">LGPL license</a></small></li>
-<li>install <a href="phpicalendar/install.php">PHPiCalendar</a> &nbsp;
+<li>install <a class="install" id="phpicalendar" href="phpicalendar/install.php">PHPiCalendar</a> &nbsp;
 <small><a target="_blank" href="http://phpicalendar.net/"><strong>GPL</strong> license</a></small></li>
-<li>install <a href="imagemagick/install.php">ImageMagick</a> &nbsp;
+<li>install <a class="install" id="imagemagick" href="imagemagick/install.php">ImageMagick</a> &nbsp;
 <small><a target="_blank" href="http://www.imagemagick.org/script/license.php"><strong>GPL</strong> type license</a></small></li>
+<li><a id="installall" href="install.php?go">Install all</a></li>
 </ul>
 <p>Repos also contains redistributed Services_JSON with <a target="_blank" href="json/LICENSE">custom copyright</a>.</p>
-<p>If the web server does not have write access to the folders,
-you can also use the old <a href="http://ant.apache.org/" target="_blank">ant</a> build scripts.</p>
+<p>Note that the web server needs write access to the library folders during installation.</p></div>
+</div>
+
+<div class="column">
+<div class="section" id="libstatus">
+<script type="text/javascript">
+$.getJSON('install.php', function(json) {
+	$('#libstatus').append('<h2>Current status</h2>');
+	for (var id in json) {
+		$('#libstatus').append('<p>'+json[id].name+': '
+			+ (json[id].installed ? 'installed' : 'not present')
+			+ '</p>');
+	}
+});
+</script>
+</div>
+</div>
 </body>
 </html>

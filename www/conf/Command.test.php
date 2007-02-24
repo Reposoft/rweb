@@ -53,7 +53,7 @@ class TestCommand extends UnitTestCase {
 	function testGetScriptWrapper() {
 		$this->sendMessage("only relevant on *nix");
 		if (!System::isWindows()) {
-			$this->assertTrue(file_exists(_repos_getScriptWrapper()), "the script wrapper file "._repos_getScriptWrapper()." does not exist");
+			$this->assertTrue(file_exists(_command_getScriptWrapper), "the script wrapper file "._repos_getScriptWrapper()." does not exist");
 		}
 	}
 	

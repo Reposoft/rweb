@@ -64,6 +64,6 @@ if (substr(phpversion(),0,1)=='4') {
 	fwrite($fh, "<?php /* removed by repos because it was not PHP4 compatible */ ?>");
 	fclose($fh);
 }
-$report->ok("Done.");
+$report->ok("Installation successful, done.");
 $report->display();
 ?>

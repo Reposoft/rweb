@@ -6,29 +6,33 @@
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Install 3rd party libs</td></tr>
+<tr><td rowspan="1" colspan="3">Check status of 3rd party libs</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/repos/lib/smarty/install.php</td>
+	<td>setup/?admin</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
+	<td>clickAndWait</td>
+	<td>reposlib</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>link=Install all</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>smarty</td>
+	<td></td>
+</tr>
+<tr title="smarty is required for the repos UI">
+	<td>verifyTextPresent</td>
 	<td>done</td>
 	<td></td>
 </tr>
-<tr>
-	<td>open</td>
-	<td>/repos/lib/simpletest/install.php</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>done</td>
-	<td></td>
-</tr>
-
 </tbody></table>
 </body>
 </html>

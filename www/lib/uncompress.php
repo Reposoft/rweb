@@ -12,6 +12,10 @@ require (dirname(dirname(__FILE__)).'/conf/System.class.php');
  * @return int the exit code for the transfer
  */
 function download($url, $localTargetFile) {
+	// simple solution to introduce install check
+	if (!array_key_exists('go', $_GET)) {
+		echo("\nNot found. <a href=\"?go\">Install</a>.\n"); exit;	
+	}
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);

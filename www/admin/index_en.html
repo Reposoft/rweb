@@ -11,6 +11,8 @@
 <a id="reposconf" href="{=$webapp}conf/">config</a>
 <a id="reposadmin" href="{=$webapp}admin/">admin</a>
 <a id="repostest" href="{=$webapp}test/">test</a>
+<a id="reposroot" href="../">repos root</a>
+<a id="serverroot" href="/">server root</a>
 </div>
 
 <div id="intro">
@@ -27,8 +29,8 @@
 </tr><tr>
 <td colspan="2">
 {=if $backupfiles eq 0}
-<p>No backup files found</p>
-{=/if}
+<p class="error">No backup files found</p>
+{=else}
 <p>{=$backupfiles} backup files, from revision 
 <span class="revision">{=$backup[0][1]}</span>
 to <span id="backuprevision" class="revision">{=$lastrev}</span>
@@ -41,6 +43,7 @@ to <span id="backuprevision" class="revision">{=$lastrev}</span>
 <p class="warning">To fix the gaps, delete newer backup files and then run backup again.</p> 
 {=else}
 <p class="passed">Every revision from 0 to {=$lastrev} is backed up.</p>
+{=/if}
 {=/if}
 </td>
 </tr>
