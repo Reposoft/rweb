@@ -16,7 +16,7 @@
 <h1>Repos license</h1>
 {=if $license}
 {=foreach from=$license key=k item=v}
-<p>{$k}: {$v}</li>
+<p>{=$k}: {=$v}</li>
 {=/foreach}
 {=else}
 <p>This installation has no licensing information.</p>
