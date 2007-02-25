@@ -8,7 +8,7 @@ if (!function_exists('getTarget')) require('../../account/login.inc.php');
 
 // for inclusion with addPlugin
 function calendar_getHeadTags() {
-	return '';
+	return array();
 }
 
 // iCalendar files

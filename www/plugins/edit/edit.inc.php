@@ -28,8 +28,8 @@ tinyMCE_GZ.init({
 	disk_cache : true,
 	debug : false
 });
-</script>
-<script type="text/javascript">
+</script>',
+		'<script type="text/javascript">
 tinyMCE.init({
 	mode : "textareas",
 	theme : "advanced",
@@ -42,7 +42,7 @@ tinyMCE.init({
 	content_css : "/documents.css",
 	editor_selector : "none"
 });
-</script>'.
+</script>',
 		'<script type="text/javascript" src="'.$webapp.'plugins/edit/edit.js"></script>'
 	);
 }
