@@ -14,13 +14,11 @@ if (!class_exists('Rule')) require(dirname(dirname(__FILE__)).'/plugins/validati
 
 define('HEAD','HEAD');
 
-// TODO delegate command processing to Command.class.php
-
 // *** Subversion client usage ***
 define('SVN_CONFIG_DIR', _getConfigFolder().'svn-config-dir' . DIRECTORY_SEPARATOR);
 if (!file_exists(SVN_CONFIG_DIR)) {
 	trigger_error('Config folder for svn commands does not exist. '.
-		'Run \'svn --config-dir "'.SVN_CONFIG_DIR.'" info\' to create it.', E_USER_ERROR);
+		'Run \'svn --config-dir "'.SVN_CONFIG_DIR.'" info\' (preferrably as webserver user) to create.', E_USER_ERROR);
 }
 
 /**

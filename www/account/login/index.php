@@ -72,7 +72,7 @@ function loginAndRedirectToHomeDir() {
 		foreach ($try as $url) {
 			if (verifyLogin($url)) {
 				login_setUserSettings();
-				header("Location: " . getStartUrl($home));
+				header("Location: " . getStartUrl($url));
 				return;
 			}
 		}
@@ -98,7 +98,7 @@ function loginAndRedirectToHomeDir() {
  * @return String absolute URL for redirect
  */
 function getStartUrl($home) {
-	return getWebapp() . 'open/start/?home='. rawurlencode($home);
+	return getWebapp() . 'open/start/';//.'?home='. rawurlencode($home);
 }
 
 loginAndRedirectToHomeDir();

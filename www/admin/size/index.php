@@ -26,12 +26,7 @@ $c->addArgOption('--max-depth=1');
 $c->addArg($parent);
 $c->exec();
 
-if ($c->getExitcode()!=0) {
-	$r->info($c->getOutput());
-	$r->fatal('Unable to check folder size');
-}
-
-//$r->info($c->getOutput());
+// exit code=1 if there are write protected folders // if ($c->getExitcode()!=0) $r->info($c->getOutput());
 
 $expected = array(
 	'admin' => 'Administration folder',
@@ -45,7 +40,8 @@ $pattern = '/^([\d\.]+)(\w)\s+(\S.*)/';
 foreach($c->getOutput() as $line) {
 	preg_match($pattern, $line, $matches);
 	if (count($matches) < 4) {
-		$r->warn('Unexpected output: '.$line);
+		// may be /usr/bin/du: `/.../auth': Permission denied
+		if (!strContains($line, 'denied')) $r->warn('Unexpected output: '.$line);
 		continue;
 	}
 	$size = $matches[1] . ' ' . $matches[2] . 'b';
@@ -61,6 +57,8 @@ foreach($c->getOutput() as $line) {
 		$r->info($name.': '.$size);
 	}
 }
+
+if ($r->hasErrors()) $r->error('This listing is incomplete. There were server errors.');
 
 //$r->info($c->getOutput());
 $r->display();
