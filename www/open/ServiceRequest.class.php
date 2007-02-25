@@ -18,6 +18,7 @@ if (!function_exists('curl_init')) trigger_error('Service calls require the PHP 
  * The User-Agent: header contents for internal requests
  */
 define('SERVICEREQUEST_AGENT', 'Repos service request');
+define('SERVICEREQUEST_MAX_REDIRECTS', 10);
 
 /**
  * responseType values
@@ -190,7 +191,9 @@ class ServiceRequest {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->customHeaders);
 		if ($this->followRedirects) {
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-			curl_setopt($ch, CURLOPT_MAXREDIRS, false);
+			curl_setopt($ch, CURLOPT_MAXREDIRS, SERVICEREQUEST_MAX_REDIRECTS);
+		} else {
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
 		}
 		if ($this->skipBody) {
 			curl_setopt($ch, CURLOPT_NOBODY, true);

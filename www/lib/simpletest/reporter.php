@@ -136,8 +136,8 @@ class HtmlReporter extends SimpleReporter {
     	parent::paintMessage($message);
     	$escaped = array();
     	if (is_array($message)) {
-    		foreach ($message as $m) {
-    			$escaped[] = $this->_htmlEntities($m);
+    		foreach ($message as $k => $m) {
+    			$escaped[] = '['.$this->_htmlEntities($k).'] '.$this->_htmlEntities($m);
     		}
     	} else {
     		$escaped = $this->_htmlEntities($message);
