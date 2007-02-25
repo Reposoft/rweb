@@ -27,11 +27,11 @@ setup_createApacheLocation(
 "# standard SVN access control
 AuthzSVNAccessFile $aclfile
 # allow public access to * = r folders
-Satisfy Any",
-"# disable caching for directory listing, because ETag seems not 100% compatible with firefox
-<Location ~ \"^$conflocation/.*/$\">
-	Header add Cache-Control \"no-cache\"
-</Location>"
+Satisfy Any
+# all browsers need to unterstand that etag should be checked
+Header add Cache-Control \"must-revalidate\"
+",
+''
 );
 
 // Check out working copy and create base structure

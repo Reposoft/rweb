@@ -44,8 +44,18 @@
 	<td></td>
 </tr>
 <tr title="*Subversion's default ETags should be enough for files">
+	<td>verifyTextPresent</td>
+	<td>|Cache-Control: must-revalidate|</td>
+	<td></td>
+</tr>
+<tr title="It is useful that browsers cache resources, if they revalidate">
 	<td>verifyTextNotPresent</td>
-	<td>|Cache-Control:</td>
+	<td>no-cache</td>
+	<td></td>
+</tr>
+<tr title="you can never know when a repository resource is updated">
+	<td>verifyTextNotPresent</td>
+	<td>max-age</td>
 	<td></td>
 </tr>
 </tbody></table>
