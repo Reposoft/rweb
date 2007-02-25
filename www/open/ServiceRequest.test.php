@@ -106,7 +106,7 @@ class TestServiceRequest extends UnitTestCase {
 	}
 	
 	function testFollowRedirect() {
-		// without redirect
+		// get redirect page but don't follow redirect
 		$service = new ServiceRequest(getSelfUrl(), array('redirect'=>'1'));
 		$service->exec();
 		$this->sendMessage('This test expects a 302 and Location header for encoded URL: '.$service->_buildUrl());
@@ -117,7 +117,8 @@ class TestServiceRequest extends UnitTestCase {
 		$service->setFollowRedirects();
 		$service->exec();
 		$this->assertEqual(1, $service->getRedirectCount());
-		$this->assertEqual(412, $service->getStatus());		
+		$this->assertEqual(412, $service->getStatus());
+		$this->sendMessage($service->getResponseHeaders());
 	}
 	
 	function testAuthentication() {

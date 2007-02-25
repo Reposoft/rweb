@@ -78,7 +78,7 @@ class SvnEditTest extends UnitTestCase
 			// not utf-8, but how to test?
 			$this->assertFalse(strpos($utf8command, "\"file\xc3\xa5.txt\""));
 		} else {
-			$this->assertFalse(strpos($utf8command, "\"file\xc3\xa5.txt\""));
+			$this->assertTrue(strpos($utf8command, "\"file\xc3\xa5.txt\""));
 		}
 	}
 	
@@ -112,11 +112,17 @@ class SvnEditTest extends UnitTestCase
 	}
 	
 	function testCommandEscape() {
-		if (substr(PHP_OS, 0, 3) != 'WIN') {
+		if (System::isWindows()) {
+			
+		} else {
 			$edit = new SvnEdit('" $(ls)');
-			$edit->setMessage('msg " `ls` \'ls\' \ " | rm');
+			$edit->setMessage('msg " `ls` \'ls\' \ " | rm END');
 			$edit->exec();
-			$this->assertTrue(strpos(_getLastCommand(), '\" \$\(ls\) -m "msg \" \`ls\` \'ls\' \\\\ \" | rm"'));
+			$result = _getLastCommand();
+			$this->sendMessage($result);
+			//should operation be escaped?//$this->assertTrue(strpos($result, '\" \$\(ls\)'));
+			$this->assertTrue(preg_match('/-m\s(.*)END/', $result, $matches));
+			$this->assertEqual($matches[1], '"msg \" \`ls\` '."'\\''ls'\\''".' \\\\ \" | rm ');
 		}
 	}
 	
@@ -141,25 +147,25 @@ class SvnEditTest extends UnitTestCase
 	
 	function testGetResourceTypeNonExisting() {
 		$url = '/demoproject/trunk/public/does-not-exist-adsferqwerw/';
-		$this->assertEqual(0, login_getResourceType($url));
-		$this->assertTrue(login_getResourceType($url)==false);
-		$this->assertFalse(login_getResourceType($url)===false);
+		$this->assertEqual(0, login_getResourceType($url, false));
+		$this->assertTrue(login_getResourceType($url, false)==false);
+		$this->assertFalse(login_getResourceType($url, false)===false);
 	}
 
 	// ---- tests below are for the homeless getResourceType ----
 	
 	function testGetResourceTypeFolder() {
 		$url = '/demoproject/trunk/public/';
-		$this->assertEqual(1, login_getResourceType($url));
-		$this->assertTrue(login_getResourceType($url)==true); // it does exist
-		$this->assertFalse(login_getResourceType($url)===true); // never returns boolean true
+		$this->assertEqual(1, login_getResourceType($url, false));
+		$this->assertTrue(login_getResourceType($url, false)==true); // it does exist
+		$this->assertFalse(login_getResourceType($url, false)===true); // never returns boolean true
 	}
 
 	function testGetResourceTypeFolderNoSlash() {
 		$url = '/demoproject/trunk/public'; // must be able to accept folders without tailing slash (for svn log --xml output)
-		$this->assertEqual(1, login_getResourceType($url));
-		$this->assertTrue(login_getResourceType($url)==true); // it does exist
-		$this->assertFalse(login_getResourceType($url)===true); // never returns boolean true
+		$this->assertEqual(1, login_getResourceType($url, false));
+		$this->assertTrue(login_getResourceType($url, false)==true); // it does exist
+		$this->assertFalse(login_getResourceType($url, false)===true); // never returns boolean true
 	}
 	
 	function testGetResourceTypeFolderWithTestUser() {

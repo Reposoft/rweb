@@ -14,14 +14,15 @@ require_once( dirname(dirname(__FILE__))."/plugins/validation/validation.inc.php
 /**
  * Tries a resource path in current HEAD, for the current user, returning status code.
  * @param $target the path in the current repository; accepts folder names without tailing slash.
+ * @param boolean $login for disabling login in unit tests
  * @return 0 = does not exist, -1 = access denied, 1 = folder, 2 = file, boolean FALSE if undefined
  * @package edit
  * @deprecated REPOS-15, currently it is only used from here
  */
-function login_getResourceType($target) {
+function login_getResourceType($target, $login=true) {
 	$url = getTargetUrl($target);
 	if (substr_count($url, '://')!=1) trigger_error("The URL \"$url\" is invalid", E_USER_WARNING); // remove when not frequent error
-	$request = new ServiceRequest($url);
+	$request = new ServiceRequest($url, array(), $login);
 	$request->setSkipBody();
 	$request->exec();
 	$s = $request->getStatus();
