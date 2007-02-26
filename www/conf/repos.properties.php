@@ -132,6 +132,9 @@ function getRepositoryURL() {
  * @return String absolute url to the repos web application URL, ending with slash
  */
 function getWebapp() {
+	if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) {
+		return str_replace('http:', 'https:', _getConfig('repos_web'));
+	}
 	return _getConfig('repos_web');
 }
 
@@ -142,7 +145,8 @@ function getWebapp() {
  * 
  * @return String webapp root URL to static resources like images, ending with slash
  * @deprecated use getWebapp. If HTTPS is required for _all_ resources, getWebapp will return https,
- *  if not then redirection is done by the apache server
+ *  if not then redirection is done by the apache server.
+ * (Many browsers would complain about not-all-elements-are-safe if images are plain http)
  */
 function getWebappStatic() {
 	if ($w = _getConfig('repos_static')) {

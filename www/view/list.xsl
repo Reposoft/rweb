@@ -9,7 +9,7 @@
 	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>style/</xsl:param>
 	<xsl:param name="cssUrl-pe"><xsl:value-of select="$web"/>themes/pe/style/</xsl:param>
 	
-	<xsl:param name="spacer" select="' &#160; '"/>
+	<xsl:param name="spacer" select="'&#160; '"/>
 	
 	<xsl:template match="/">
 		<head>
@@ -57,6 +57,8 @@
 			</xsl:if>
 		</h2>
 		<xsl:apply-templates select="*"/>
+		<div id="footer">
+		</div>
 	</xsl:template>
 	
 	<xsl:template match="entry[@kind='dir']">
@@ -71,12 +73,15 @@
 			<a id="f:{$id}" class="folder" href="../?target={../../@target}{name}&amp;rev={commit/@revision}">
 				<xsl:value-of select="name"/>
 			</a>
+			<xsl:value-of select="$spacer"/>
 			<span class="revision">
 				<xsl:value-of select="commit/@revision"/>
 			</span>
+			<xsl:value-of select="$spacer"/>
 			<span class="username">
 				<xsl:value-of select="commit/author"/>
 			</span>
+			<xsl:value-of select="$spacer"/>
 			<span class="datetime">
 				<xsl:value-of select="commit/date"/>
 			</span>
@@ -100,17 +105,22 @@
 			<a id="f:{$id}" class="file-{$filetype} file" href="../?target={../../@target}{name}&amp;rev={commit/@revision}">
 				<xsl:value-of select="name"/>
 			</a>
+			<xsl:value-of select="$spacer"/>
 			<span class="revision">
 				<xsl:value-of select="commit/@revision"/>
 			</span>
+			<xsl:value-of select="$spacer"/>
 			<span class="username">
 				<xsl:value-of select="commit/author"/>
 			</span>
+			<xsl:value-of select="$spacer"/>
 			<span class="datetime">
 				<xsl:value-of select="commit/date"/>
 			</span>
+			<xsl:value-of select="$spacer"/>
 			<span class="filesize">
 				<xsl:value-of select="size"/>
+				<xsl:text> bytes</xsl:text>
 			</span>
 		</div>
 	</xsl:template>

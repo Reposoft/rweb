@@ -14,7 +14,7 @@
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
 	<!-- root url for webapp resources -->
 	<xsl:param name="web" select="/log/@web"/>
-	<xsl:param name="static" select="/log/@static"/>
+	<xsl:param name="static" select="$web"/>
 	<!-- static contents urls, set to /themes/any/?u= for automatic theme selection -->
 	<xsl:param name="cssUrl"><xsl:value-of select="$static"/>style/</xsl:param>
 	<xsl:param name="cssUrl-pe"><xsl:value-of select="$static"/>themes/pe/style/</xsl:param>
