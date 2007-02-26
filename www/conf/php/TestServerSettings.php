@@ -64,6 +64,7 @@ class TestServerSettings extends UnitTestCase {
 		$this->assertEqual(0, ini_get('mbstring.func_overload'), "mbstring.func_overload: Mb should be called explicitly, not silently. %s");
 		// expecting UTF-8 input, but no automatic input conversion because input from browser should be valid already (if not, we throw an error)
 		$this->assertEqual("UTF-8", ini_get('mbstring.http_input'), "mbstring.http_input: %s");
+		// the above is not required, it seems, at least not in linux
 		$this->assertFalse(ini_get('mbstring.encoding_translation'), "mbstring.encoding_translation: Automatic encoding translation (mbstring.encoding_translation) should be Off. %s");
 		// no automatic output conversion
 		$this->assertEqual("", ini_get('output_handler'), "output_handler: No output handler should be set, because default is to not buffer output. %s");

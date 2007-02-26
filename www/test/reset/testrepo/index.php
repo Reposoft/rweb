@@ -54,9 +54,13 @@ System::createFileWithContents($wc."test/administration/".REPOSITORY_USER_FILE_N
 	'test:$apr1$Sy2.....$zF88UPXW6Q0dG3BRHOQ2m0:Testuser Test:test@repos.se'."\n"
 );
 
-// Add all the testrepo files
-// TODO do normal recursive copy if the folder is not version controlled
-setup_svn("export --force \"".dirname(__FILE__)."/contents/\" $wc");
+
+$exportContents = dirname(__FILE__).'/contents/';
+if (!file_exists("$exportContents.svn")) { //setup_svn("info \"$exportContents\"")) {
+	setup_copyContents($exportContents, $wc);
+} else {
+	setup_svn("export --force \"$exportContents\" $wc");
+}
 
 setup_svn("add {$wc}*");
 

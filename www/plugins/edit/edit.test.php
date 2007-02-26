@@ -40,6 +40,12 @@ class TestEditPlugin extends UnitTestCase {
 		$this->assertEqual("\n<h1>1</h1>\n<h2>2</h2>\n<h3>3</h3>", $result);
 	}
 
+	function testIndentHtmlTagsList() {
+		$html = "<ol><li>1</li></ol><ul><li>2</li></ul>";
+		$result = editIndentHtmlDocument($html);
+		$this->assertEqual("\n<ol>\n<li>1</li>\n</ol>\n<ul>\n<li>2</li>\n</ul>", $result);
+	}	
+	
 	function testIndentHtmlTagsSentence() {
 		$html = "Vade. Retro. Adaces...";
 		$result = editIndentHtmlDocument($html);

@@ -231,13 +231,43 @@ function setup_svn($command) {
 	} else {
 		$report->ok("Successfully executed svn command: $command");
 		$report->debug($cmd->getOutput());
-	}	
+	}
+	return $cmd->getExitcode();	
 }
 
 function setup_customizeCommand($operation, &$svn) {
 	if ($operation=='commit') {
 		$svn->addArgOption('--no-unlock');		
 	}
+}
+
+function setup_copyContents($srcdir, $dstdir, $verbose = false) {
+  $num = 0;
+  if(!is_dir($dstdir)) mkdir($dstdir);
+  if($curdir = opendir($srcdir)) {
+   while($file = readdir($curdir)) {
+     if($file != '.' && $file != '..') {
+       $srcfile = $srcdir . '\\' . $file;
+       $dstfile = $dstdir . '\\' . $file;
+       if(is_file($srcfile)) {
+         if(is_file($dstfile)) $ow = filemtime($srcfile) - filemtime($dstfile); else $ow = 1;
+         if($ow > 0) {
+           if($verbose) echo "Copying '$srcfile' to '$dstfile'...";
+           if(copy($srcfile, $dstfile)) {
+             touch($dstfile, filemtime($srcfile)); $num++;
+             if($verbose) echo "OK\n";
+           }
+           else echo "Error: File '$srcfile' could not be copied!\n";
+         }                 
+       }
+       else if(is_dir($srcfile)) {
+         $num += setup_copyContents($srcfile, $dstfile, $verbose);
+       }
+     }
+   }
+   closedir($curdir);
+  }
+  return $num;
 }
 
 ?>
