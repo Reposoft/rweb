@@ -32,7 +32,7 @@ You may <a id="edit" href="../edit/?target={=$target}&rev={=$rev}">edit</a> the 
 <h2>View file</h2>
 <p>
 {=if $file,size gt 102400}
-This file is bigger than 100 kb, so we recommend <a href="download/?target={=$target}&rev={=$rev}">dowload</a>.
+This file is bigger than 100 kb, so we recommend <a href="download/?target={=$target}&rev={=$rev}">download</a>.
 {=elseif $file,type eq 'text/html'}
 This is an HTML file, so we recommend <a href="open/?target={=$target}&rev={=$rev}">open</a>.
 {=elseif $file,isPlaintext}
@@ -47,7 +47,7 @@ View the <a href="diff/?target={=$target}&rev={=$rev}&fromrev={=$fromrev}">diffe
 <h3><a id="open" href="open/?target={=$target}&rev={=$rev}">Open</a></h3>
 <p>This shows the file in the current window. It is good for text files, HTML and images.
 Depending on your browser, it may also work for file types like pdf, documents and spreadsheets.</p>
-<h3><a id="download" href="download/?target={=$target}&rev={=$rev}">Dowload</a></h3>
+<h3><a id="download" href="download/?target={=$target}&rev={=$rev}">Download</a></h3>
 <p>Download this file to your hard drive. The revision number {=$file,revision}
 will be appended to the filename, so you know which version it is.</p>
 {=if $file,size lte 102400}
