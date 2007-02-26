@@ -84,7 +84,7 @@ function editWriteNewVersion_html(&$postedText, $destinationFile) {
 function editIndentHtmlDocument(&$html) {
 	// newline before selected start tags
 	$html = preg_replace(
-		'/(?!\n)\s*<(p|br|h1|h2|h3|ul|ol|li)/',
+		'/(?!\n)\s*<(p|br|h1|h2|h3|ul|ol|\/ul|\/ol|li)/',
 		"\n<$1",
 		$html
 	);
