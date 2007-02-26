@@ -195,7 +195,7 @@ function processNewVersion($upload) {
 	$upload->processSubmit($updatefile);
 	if(!file_exists($updatefile)) {
 		$presentation->showError('Could not read uploaded file "'
-			.$filename.'" for operation "'.basename($dir).'"');
+			.$filename.'" for operation "'.getPathName($dir).'"');
 	}
 	// check that there is a diff compared to fromrev, should not be displayed to user: use SvnOpen
 	$diff = new SvnOpen('diff');
@@ -318,7 +318,7 @@ class Upload {
 		if ($this->isCreate()) {
 			return $_POST['name'];
 		}
-		return basename(getTarget());
+		return getPathName(getTarget());
 	}
 	
 	/**

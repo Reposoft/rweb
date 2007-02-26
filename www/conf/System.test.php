@@ -223,6 +223,21 @@ class TestSystem extends UnitTestCase {
 		$this->assertFalse(isFolder('/path'));
 	}
 	
+	function testGetPathName() {
+		$this->assertEqual('a.txt', getPathName('f/a.txt'));
+		$this->assertEqual('a', getPathName('f/a'));
+		$this->assertEqual('a', getPathName('/f/g/a'));
+		$this->assertEqual('a.txt', getPathName('http://localhost/a.txt'));
+		$this->assertEqual('a.txt', getPathName('a.txt'));
+	}	
+
+	function testGetPathNameFolder() {
+		$this->assertEqual('ga', getPathName('fa/ga/'));
+		$this->assertEqual('g', getPathName('/f/g/'));
+		$this->assertEqual('f', getPathName('f/'));
+		$this->assertEqual('fa', getPathName('/fa/'));
+	}	
+	
 	function testCreateAndDeleteFileInReposWeb() {
 		$dir = toPath(dirname(__FILE__));
 		if (is_writable($dir)) {

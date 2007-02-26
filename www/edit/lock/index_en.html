@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Lock {=$target|basename}</title>
+<title>Lock {=$target|getPathName}</title>
 <!--{$head}-->
 </head>
 
@@ -9,7 +9,7 @@
 <div id="commandbar">
 <a id="repository" href="{=$repository|urlEncodeNames}">return to repository</a>
 </div>
-<h1>Lock <span class="filename">{=$target|basename}</span>?</h1>
+<h1>Lock <span class="filename">{=$target|getPathName}</span>?</h1>
 <form id="lock" name="lock" method="get" action="#">
 	<fieldset>
 	<legend>lock</legend>

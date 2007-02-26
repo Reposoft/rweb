@@ -12,6 +12,7 @@
  *  or the recommended value of the svn:mime-type property if we are.
  */
 function getSpecificMimetype($file, $suggestedType) {
+	// note that pathinfo might not be UTF-8 safe
 	$path = pathinfo($file);
 	$ext = strtolower($path['extension']);
 	// first allow pluggable handlers

@@ -154,8 +154,7 @@ class SvnOpenFile {
 	}
 	
 	function getFilename() {
-		// PHP basename is buggy on filenames staring with umlaut
-		return substr($this->path, strrpos($this->path, '/')+1);
+		return getPathName($this->path);
 	}
 	
 	function getPath() {

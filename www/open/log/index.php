@@ -79,7 +79,7 @@ for ($i=0; $i<count($log); $i++) {
 $head = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 $head .= '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
 $head .= '<log repo="'.getRepositoryURL().'" path="'.getTarget().'" web="'.getWebapp().'" static="'.getWebappStatic().'"';
-if ($singlefile) $head .= ' file="'.basename(getTarget()).'"';
+if ($singlefile) $head .= ' file="'.getPathName(getTarget()).'"';
 if ($limited) $head .= ' limit="'.$limit.'" limitrev="'.$lastrev.'"';
 $head .= ">\n";
 

@@ -89,7 +89,7 @@ function savePassword($filecontents, $message) {
 	$checkout->addArgUrl(getParent(getTargetUrl()));
 	$checkout->addArgPath($wc);
 	$checkout->exec();
-	$f = fopen($wc.basename(getTarget()), w);
+	$f = fopen($wc.getPathName(getTarget()), w);
 	fwrite($f, $filecontents);
 	fclose($f);
 	$commit = new SvnEdit('commit');

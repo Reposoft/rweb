@@ -10,7 +10,7 @@
 <a id="repository" href="{=$repository|urlEncodeNames}">return to repository</a>
 </div>
 <div id="intro">
-<h1>Delete <span class="filename">{=$target|basename}</span>?</h1>
+<h1>Delete <span class="filename">{=$target|getPathName}</span>?</h1>
 
 {=if not $file,isWritable} <p>You have read access only. You can not delete this file.</p>
 {=elseif $file,isLockedByThisUser} <p>This file is currently <strong>locked</strong> by you, so other users can not edit it.</p>

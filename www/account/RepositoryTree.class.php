@@ -218,7 +218,7 @@ class RepositoryEntryPoint {
 	 * this is often the project id
 	 */
 	function getDisplayname() {
-		if ($this->path=='/') return basename(getRepository());
+		if ($this->path=='/') return getPathName(getRepository());
 		return substr($this->path, strrpos($this->path, '/')+1);
 	}
 }

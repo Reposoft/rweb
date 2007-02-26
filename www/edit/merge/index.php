@@ -12,7 +12,7 @@ if (isset($_GET[SUBMIT])) {
 	$template = Presentation::getInstance();
 	$template->assign('repository', getRepository());
 	$template->assign('target', $target);
-	$template->assign('oldname', basename($target));
+	$template->assign('oldname', getPathName($target));
 	$template->assign('folder', getParent($target));
 	if (!$target){
 		trigger_error('Branches folder must be set as target parameter', E_USER_ERROR);

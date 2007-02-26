@@ -91,8 +91,7 @@ function isFile($path) {
 }
 
 /**
- * Folders are relative or absolute paths that _do_ end with '/'
- *  or (on Windows only) '\'
+ * Folders are relative or absolute paths that _do_ end with '/'.
  * To check if a URL with no tailing slash is a folder, use HTTP.
  * @param String $path the file system path or URL to check
  * @return boolean true if path is a folder, false if not 
@@ -114,6 +113,20 @@ function getParent($path) {
 	$f = substr($path, 0, strrpos(rtrim($path,'/'), '/'));
 	if (strlen($f)==0 && isRelative($path)) return $f;
 	return $f.'/';
+}
+
+/**
+ * Returns the file or folder name from a path.
+ * Use the PHP 'basename' function only for paths that are always ASCII
+ * and that might contain backslashes.
+ * @param String $path valid path or URL, use toPath if it contains backslashes.
+ * @return String the filename if path is a file, the folder name if it is a folder.
+ */
+function getPathName($path) {
+	if (!isPath($path)) trigger_error("'$path' is not a valid path");
+	$p = rtrim($path, '/');
+	if (!strContains($p,'/')) return $p;
+	return substr($p, strrpos($p, '/')+1);
 }
 
 /**

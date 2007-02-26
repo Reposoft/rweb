@@ -50,7 +50,7 @@ function autoFillFilename(filename) {
   <p>
     <label for="name">name in repository</label>
 	<!--{if $file}-->
-    <input type="text" id="currentname" name="currentname" value="{=$target|basename}" disabled="disabled" size="40" />
+    <input type="text" id="currentname" name="currentname" value="{=$target|getPathName}" disabled="disabled" size="40" />
 	<!--{else}-->
 	<input type="text" id="name" name="name" size="40" class="required" tabindex="2" onblur="autoFillFilename(value)"/>
 	<input type="hidden" id="create" name="create" value="yes"/>

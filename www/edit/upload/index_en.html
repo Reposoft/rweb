@@ -92,7 +92,7 @@ to make sure that your local changes are based on the newest version of the shar
   <p>
     <label for="name">name in repository</label>
 	 <!--{if $isfile}-->
-    <input type="text" id="name" name="name" value="{=$target|basename}" disabled="disabled" size="40" />
+    <input type="text" id="name" name="name" value="{=$target|getPathName}" disabled="disabled" size="40" />
     <!--{else}-->
 	 <input type="text" id="name" name="name" size="40" onchange="checkType()" class="required" tabindex="2" />
 	 <input type="hidden" id="create" name="create" value="yes"/>   
