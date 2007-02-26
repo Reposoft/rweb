@@ -119,7 +119,7 @@ a.folder {
 .row div.actions {
 	display: inline;
 	position: absolute;
-	left: 45%;
+	left: 45em;
 }
 .n0, .n1, .n2, .n3 {
 	background: url(rowbackground.png) top repeat-x;
