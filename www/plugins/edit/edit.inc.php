@@ -33,7 +33,7 @@ tinyMCE_GZ.init({
 tinyMCE.init({
 	mode : "textareas",
 	theme : "advanced",
-	theme_advanced_buttons1 : "cut,copy,paste,separator,undo,redo,separator,bold,italic,underline,separator,formatselect",
+	theme_advanced_buttons1 : "cut,copy,paste,separator,undo,redo,separator,bold,italic,underline,separator,bullist,numlist,separator,formatselect",
 	theme_advanced_buttons2 : "",
 	theme_advanced_buttons3 : "",
 	theme_advanced_blockformats : "h1, h2, h3, p",
