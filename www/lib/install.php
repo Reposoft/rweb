@@ -36,7 +36,7 @@ foreach($libraries as $lib) {
 		continue;
 	}
 	out("installed:");
-	if (preg_match('/done/', $s->getResponse())) {
+	if (preg_match('/[Dd]one/', $s->getResponse())) {
 		out("true");
 	} else {
 		out("false");

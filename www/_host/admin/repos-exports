@@ -2,4 +2,4 @@
 ; Use absolute paths, or paths starting with "admin" "html" "repo" or "backup" for known repos host folders
 
 ; host startpage, start.html, documents.css and contents
-/administration/startpage/ = html/
+/administration/startpage/ = html/start/

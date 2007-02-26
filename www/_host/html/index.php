@@ -29,8 +29,8 @@ if (isset($_GET['login'])) {
 }
 
 // show start page
-if (file_exists(dirname(__FILE__).'/start.html')) {
-	header("Location: /start.html");
+if (file_exists(dirname(__FILE__).'/start/index.html')) {
+	header("Location: /start/");
 } else {
-	header("Location: /start-default.html");
+	header("Location: /start.html");
 }
