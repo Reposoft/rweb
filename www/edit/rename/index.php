@@ -18,7 +18,7 @@ if (isset($_GET[SUBMIT])) {
 	$template->assign_by_ref('file', $file);
 	$template->assign('target', $target);
 	$template->assign('folder', getParent($target));
-	$template->assign('oldname', basename($target));
+	$template->assign('oldname', getPathName($target));
 	$template->assign('repository', getRepository());
 	$template->display();
 }
