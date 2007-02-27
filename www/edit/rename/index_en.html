@@ -2,6 +2,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Rename repos item</title>
+<script type="text/javascript">
+function checkType() {
+	var localFilename = $('#name').val();
+	if ($('#newname').val()) {
+		var reposFilename = $('#newname').val();
+		var i = reposFilename.match(/\.(\w*$)/);
+		if (!i) {
+			var j = localFilename.match(/\.(\w*$)/);
+			if (j) {
+				var reposFilenameWithType = reposFilename + j[0];
+				$('#newname').val(reposFilenameWithType);
+				return true;
+			}
+			return true;
+		}
+		return true;
+	}
+	return true;
+}
+</script>
 <!--{$head}-->
 </head>
 
@@ -33,7 +53,7 @@ You can not rename this file.</p>
   </p>
   <p>
     <label for="newname">new name</label>
-    <input name="newname" type="text" id="name" size="40" class="required" tabindex="1" />
+    <input name="newname" type="text" id="newname" size="40" class="required" tabindex="1" onchange="checkType()" />
 </p>
   <p>
     <label for="message">history text</label>

@@ -19,6 +19,24 @@ function pasteUrl() {
 function setMove(move) {
 	button = document.getElementsByName('submit')[0].value = move ? "Move" : "Copy";
 }
+function checkType() {
+	var localFilename = $('#name').val();
+	if ($('#newname').val()) {
+		var reposFilename = $('#newname').val();
+		var i = reposFilename.match(/\.(\w*$)/);
+		if (!i) {
+			var j = localFilename.match(/\.(\w*$)/);
+			if (j) {
+				var reposFilenameWithType = reposFilename + j[0];
+				$('#newname').val(reposFilenameWithType);
+				return true;
+			}
+			return true;
+		}
+		return true;
+	}
+	return true;
+}
 </script>
 </head>
 
@@ -54,12 +72,12 @@ Select "delete the original" to make this a move operation.</p>
 	</p>
 	<p>
 		<label for="tofolder">to folder</label>
-		<input id="tofolder" name="tofolder" type="text" size="40" value="" class="required" />	
+		<input id="tofolder" name="tofolder" type="text" size="40" value="{=$folder}" class="required" />	
 		<a class="action" href="#" onclick="pasteUrl()">paste the full URL</a>	
 	</p>
 	<p>
 		<label for="newname">name in new folder</label>
-	   <input name="newname" type="text" id="name" size="40" value="{=$oldname}" class="required" />
+	   <input name="newname" type="text" id="newname" size="40" value="{=$oldname}" class="required" onchange="checkType()" />
 	</p>
 	<p>
 		<label for="move">and delete the original</label>
