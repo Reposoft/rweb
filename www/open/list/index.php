@@ -26,6 +26,7 @@ $head = '<?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="/repos/view/list.xsl"?>
 <lists target="'.getTarget().'"'.($rev ? ' rev="'.$rev.'"' : '').'>
 ';
+// Note that SVN returns the non-ssl url, which might break IE transformation. Could have a path here (targetUrl) too.
 $foot = '</lists>';
 $extra = strlen($head) + strlen($foot);
 

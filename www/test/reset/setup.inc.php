@@ -243,12 +243,16 @@ function setup_customizeCommand($operation, &$svn) {
 
 function setup_copyContents($srcdir, $dstdir, $verbose = false) {
   $num = 0;
-  if(!is_dir($dstdir)) mkdir($dstdir);
+  $srcdir = rtrim($srcdir, '\/');
+  $dstdir = rtrim($dstdir, '\/');
+  if(!is_dir($dstdir) && !mkdir($dstdir)) {
+  	trigger_error('Could not create destination folder '.$dstdir, E_USER_ERROR);
+  }
   if($curdir = opendir($srcdir)) {
    while($file = readdir($curdir)) {
      if($file != '.' && $file != '..') {
-       $srcfile = $srcdir . '\\' . $file;
-       $dstfile = $dstdir . '\\' . $file;
+       $srcfile = $srcdir . DIRECTORY_SEPARATOR . $file;
+       $dstfile = $dstdir . DIRECTORY_SEPARATOR . $file;
        if(is_file($srcfile)) {
          if(is_file($dstfile)) $ow = filemtime($srcfile) - filemtime($dstfile); else $ow = 1;
          if($ow > 0) {
@@ -259,13 +263,16 @@ function setup_copyContents($srcdir, $dstdir, $verbose = false) {
            }
            else echo "Error: File '$srcfile' could not be copied!\n";
          }                 
-       }
-       else if(is_dir($srcfile)) {
+       } else if(is_dir($srcfile)) {
          $num += setup_copyContents($srcfile, $dstfile, $verbose);
-       }
+       } else {
+	     	trigger_error('Invalid file entry '.$src, E_USER_ERROR);
+	    }
      }
    }
    closedir($curdir);
+  } else {
+  	trigger_error('Can not open source folder '.$srcdir, E_USER_ERROR);
   }
   return $num;
 }
