@@ -52,18 +52,16 @@ class Login_integraton_Test extends UnitTestCase {
 		$this->assertTrue(TESTREPO, $realm);
 	}
 
+	// test demo account authentication
 	function testVerifyLoginTestServer() {
-		// test demo account authentication
-		$_SERVER['PHP_AUTH_USER'] = 'test';
-		$_SERVER['PHP_AUTH_PW'] = 'test';
+		setTestUser();
 		$url = TESTREPO.'/test/trunk/';
 		$result = verifyLogin($url);
 		$this->assertEqual(true, $result);
 	}
 	
 	function testVerifyLoginSpaces() {
-		$_SERVER['PHP_AUTH_USER'] = 'Test User';
-		$_SERVER['PHP_AUTH_PW'] = 'test';
+		setTestUser('Test User');
 		$url = TESTREPO.'/Test User/'; // should not be encoded
 		$result = verifyLogin($url);
 		$this->assertEqual(true, $result);
@@ -86,10 +84,9 @@ class Login_integraton_Test extends UnitTestCase {
 		$this->assertNoErrors();
 	}
 	
+	// test demo account authentication to repository root (no access there)
 	function testVerifyLoginFail() {
-		// test demo account authentication to repository root (no access there)
-		$_SERVER['PHP_AUTH_USER'] = 'test';
-		$_SERVER['PHP_AUTH_PW'] = 'test';
+		setTestUser();
 		$url = TESTREPO.'/demoproject/trunk/noaccess/';
 		$this->assertEqual(false, verifyLogin($url));
 	}
@@ -102,8 +99,7 @@ class Login_integraton_Test extends UnitTestCase {
 	
 	function testVerifyLoginNonexistingBelow403() {
 		$this->sendMessage('It is essential that the server sends 403, not 404, for a missing folder inside Forbidden');
-		$_SERVER['PHP_AUTH_USER'] = 'test';
-		$_SERVER['PHP_AUTH_PW'] = 'test';
+		setTestUser();
 		$url = TESTREPO.'/svensson/nonexistingxyz/';
 		$result = verifyLogin($url);
 		$this->assertEqual(false, $result);
@@ -111,8 +107,7 @@ class Login_integraton_Test extends UnitTestCase {
 
 	function testVerifyLoginNonexisting() {
 		$this->sendMessage('If we get 404 inside the repository we know that login was successful');
-		$_SERVER['PHP_AUTH_USER'] = 'test';
-		$_SERVER['PHP_AUTH_PW'] = 'test';
+		setTestUser();
 		$url = TESTREPO.'/test/nonexistingxyz/';
 		$result = verifyLogin($url);
 		$this->assertEqual(true, $result);

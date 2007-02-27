@@ -6,17 +6,14 @@ class Login_include_Test extends UnitTestCase {
 	
 	function setUp() {
 		// these tests should not rely on a logged in browser
-		//testGetResourceType needs auth currently
-		//unset($_SERVER['PHP_AUTH_USER']);
-		//unset($_SERVER['PHP_AUTH_PW']);
 	}
 	
 	function testGetReposUserEncode() {
-		$_SERVER['PHP_AUTH_USER'] = "A B";
+		setTestUser("A B");
 		$this->assertEqual("A B", getReposUser(), "Username should not be encoded");
-		$_SERVER['PHP_AUTH_USER'] = "A+B";
+		setTestUser("A+B");
 		$this->assertEqual("A+B", getReposUser());
-		unset($_SERVER['PHP_AUTH_USER']);
+		setTestUserNotLoggedIn();
 	}
 	
 	// this belongs to a system configuration test
@@ -57,17 +54,13 @@ class Login_include_Test extends UnitTestCase {
 	
 	// url manipulation for the logged in user
 	function testGetLoginUrl() {
-		$_SERVER['PHP_AUTH_USER'] = 'mE';
-		$_SERVER['PHP_AUTH_PW'] = 'm&p8ss';
+		setTestUser('mE', 'm&p8ss');
 		$url = _getLoginUrl('https://my.repo:88/home');
 		$this->assertEqual('https://mE:m&p8ss@my.repo:88/home', $url);
-		unset($_SERVER['PHP_AUTH_USER']);
-		unset($_SERVER['PHP_AUTH_PW']);
 	}
 	
 	function testGetLoginUrlNoUser() {
-		unset($_SERVER['PHP_AUTH_USER']);
-		unset($_SERVER['PHP_AUTH_PW']);
+		setTestUserNotLoggedIn();
 		$url = _getLoginUrl('https://my.repo:88/home');
 		$this->assertEqual('https://my.repo:88/home', $url);
 	}

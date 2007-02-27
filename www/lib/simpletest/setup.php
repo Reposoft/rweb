@@ -31,6 +31,26 @@ if (!function_exists('reportErrorText')) {
 	}
 }
 
+/**
+ * Temporarily sets the internal username and password,
+ * for authentication towards svn and services.
+ *
+ * @param String $username the client's username
+ * @param String $password the client's password
+ */
+function setTestUser($username='test', $password='test') {
+	$_SERVER['PHP_AUTH_USER'] = $username;
+	$_SERVER['PHP_AUTH_PW'] = $password;
+}
+
+/**
+ * Clears the internal credentials for outgoing requests.
+ */
+function setTestUserNotLoggedIn() {
+	unset($_SERVER['PHP_AUTH_USER']);
+	unset($_SERVER['PHP_AUTH_PW']);
+}
+
 $reporter = new HtmlReporter();
 function testrun(&$testcase) {
 	global $reporter;

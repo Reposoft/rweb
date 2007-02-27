@@ -29,7 +29,7 @@ AuthzSVNAccessFile $aclfile
 # allow public access to * = r folders
 Satisfy Any
 # all browsers need to unterstand that etag should be checked
-Header add Cache-Control \"must-revalidate\"
+Header add Cache-Control \"private, must-revalidate\"
 ",
 ''
 );
@@ -54,7 +54,6 @@ System::createFileWithContents($wc."test/administration/".REPOSITORY_USER_FILE_N
 	'test:$apr1$Sy2.....$zF88UPXW6Q0dG3BRHOQ2m0:Testuser Test:test@repos.se'."\n"
 );
 
-
 $exportContents = dirname(__FILE__).'/contents/';
 if (!file_exists("$exportContents.svn")) { //setup_svn("info \"$exportContents\"")) {
 	setup_copyContents($exportContents, $wc);
@@ -75,11 +74,11 @@ setup_svn("propset svn:mime-type text/css $publicstyle");
 setup_svn("propset svn:mime-type text/html $publicindex");
 setup_svn("propset svn:keywords Id $publicindex");
 
-setup_svn('commit -m "Imported testrepo contents. Created default test users svensson and test." '.$wc);
+setup_svn('commit --username admin -m "Imported testrepo contents. Created default test users svensson and test." '.$wc);
 
 // Lock a file as the SYSTEM user
 $lockedfile = $wc."demoproject/trunk/public/locked-file.txt";
-setup_svn('lock -m "Testing lock features. You should not be allowed to modify this file." '.$lockedfile);
+setup_svn('lock --username svensson -m "Testing lock features. You should not be allowed to modify this file." '.$lockedfile);
 
 // Update a document so we get a diff
 $htmldocument = $wc."demoproject/trunk/Policy document.html";
@@ -87,7 +86,14 @@ setup_svn("propset svn:mime-type text/html \"$htmldocument\"");
 setup_replaceInFile($htmldocument, array(
 	'</body>' => "<p>Feel free to update this document.</p>\n</body>"
 ));
-setup_svn('commit -m "Added a policy for the policy document" '.$wc);
+
+// Delete a document so we can test that
+setup_svn("rm \"{$wc}demoproject/trunk/public/temp.txt\"");
+
+// Delete a folder that has a document in it
+setup_svn("rm \"{$wc}demoproject/trunk/old/\"");
+
+setup_svn('commit --username test -m "Added a policy for the policy document. Deleted an old file." '.$wc);
 
 // Create a news feed and a calendar in demo project
 $newsfile = $wc."demoproject/messages/news.xml";
@@ -101,7 +107,7 @@ setup_replaceInFile($calendarfile, array(
 	'{=$later}' => date('Ymd\THis\Z', time()+3600)
 ));
 setup_svn("propset svn:mime-type text/xml $newsfile");
-setup_svn('commit -m "Created demo news and demo calendar" '.$wc);
+setup_svn('commit --username admin -m "Created demo news and demo calendar" '.$wc);
 
 // Create a base structure in test/trunk/
 $folders = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z");

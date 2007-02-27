@@ -24,8 +24,7 @@ require("../lib/simpletest/setup.php");
 class TestSvnOpen extends UnitTestCase {
 
 	function testGetSvnSwitches() {
-		$_SERVER['PHP_AUTH_USER'] = 'a b';
-		$_SERVER['PHP_AUTH_PW'] = 'c"d';
+		setTestUser('a b', 'c"d');
 		$this->sendMessage(_svnopen_getSvnSwitches());
 		$this->assertTrue(strContains(_svnopen_getSvnSwitches(), '--username="a b"'), "Username should be escaped for command line.");
 		if (System::isWindows()) {
@@ -33,8 +32,7 @@ class TestSvnOpen extends UnitTestCase {
 		} else {
 			$this->assertTrue(strContains(_svnopen_getSvnSwitches(), '--password="c\\"d"'), "Password should be escaped for command line.");
 		}
-		unset($_SERVER['PHP_AUTH_USER']);
-		unset($_SERVER['PHP_AUTH_PW']);
+		setTestUserNotLoggedIn();
 	}
 	
 	function testRevisionRuleNumeric() {

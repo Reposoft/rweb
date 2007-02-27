@@ -37,6 +37,7 @@ $testfiles = array(
 'account/RepositoryTree.test.php',
 'open/SvnOpen.test.php',
 'open/SvnOpenFile.test.php',
+'open/SvnOpenFile.testi.php',
 'open/ServiceRequest.test.php',
 'open/ServiceRequest.testi.php',
 'edit/SvnEdit.test.php',
