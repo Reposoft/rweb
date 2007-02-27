@@ -135,7 +135,7 @@ class SvnOpenFile {
 		$this->headStatus = $s->getStatus();
 		$this->head = $s->getResponseHeaders();
 		if ($this->headStatus == 0) trigger_error("Could not connect to repository URL ".$this->url.". Might be a temporary error.", E_USER_ERROR);
-		if ($this->headStatus != 200) trigger_error("Unexpected response from target URL '".$this->url."'. Status ".$this->headStatus, E_USER_ERROR);
+		if ($this->headStatus != 200 && $this->headStatus != 404) trigger_error("Unexpected response from target URL '".$this->url."'. Status ".$this->headStatus, E_USER_ERROR);
 	}
 	
 	/**
@@ -180,6 +180,8 @@ class SvnOpenFile {
 	 */
 	function isLatestRevision() {
 		if ($this->_revision==HEAD) return true;
+		// if it does not exist in head it has been deleted
+		if ($this->isReadableInHead() == 404) return false;
 		// need to check the current response code
 		$this->_head();
 		$r = $this->_getHeadRevisionFromETag();
@@ -211,9 +213,9 @@ class SvnOpenFile {
 	 * Note that this is not a "peg revision" check, so it might be a different file at the same URL.
 	 */
 	function isReadableInHead() {
-		if ($this->isLatestRevision()) return true;
+		if ($this->_revision==HEAD) return true;
 		$this->_head();
-		return ($this->headStatus == 200);
+		return $this->headStatus;
 	}
 	
 	/**
@@ -488,8 +490,7 @@ class SvnOpenFile {
 	 */
 	function _readInfoSvn() {
 		$info = new SvnOpen('list', true);
-		$info->addArgRevision($this->_revision);
-		$info->addArgUrl($this->url);
+		$info->addArgUrlPeg($this->url, $this->_revision);
 		if($info->exec()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
 		return $this->_parseListXml($info->getOutput());
 	}
