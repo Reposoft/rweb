@@ -108,6 +108,13 @@ function getRepository() {
 }
 
 /**
+ * @return boolean true if the current client uses SSL
+ */
+function isSSLClient() {
+	return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
+}
+
+/**
  * Same as getRepository, but returns a proper href URL for the current user.
  * 
  * Normally the configugured repository is plain HTTP, but users on
@@ -117,9 +124,9 @@ function getRepository() {
  * 
  * @return the repository root for browser navigation, no trailing slash.
  */
-function getRepositoryURL() {
+function getRepositoryUrl() {
 	$r = getRepository();
-	if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) {
+	if(isSSLClient()) {
 		return str_replace('http:', 'https:', $r);
 	}
 	return $r;
@@ -132,7 +139,7 @@ function getRepositoryURL() {
  * @return String absolute url to the repos web application URL, ending with slash
  */
 function getWebapp() {
-	if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) {
+	if(isSSLClient()) {
 		return str_replace('http:', 'https:', _getConfig('repos_web'));
 	}
 	return _getConfig('repos_web');
@@ -175,7 +182,7 @@ function getHttpReferer() {
  */
 function getSelfRoot() {
 	$url = 'http';
-	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') $url .= 's';
+	if(isSSLClient()) $url .= 's';
 	$url .= '://' . $_SERVER['SERVER_NAME'];
 	if($_SERVER['SERVER_PORT']==80 || $_SERVER['SERVER_PORT']==443) {
 		// standard port number, do not append

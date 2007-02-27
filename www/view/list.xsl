@@ -40,14 +40,17 @@
 	</xsl:template>
 	
 	<xsl:template match="list">
+		<xsl:param name="url" select="concat(../@repo,../@target)"/>
 		<div id="commandbar">
-			<a id="repository" href="{@path}">current version</a>
+			<a id="repository" href="{$url}">current version</a>
 			<a id="history" href="../log/?target={../@target}&amp;rev={../@rev}">history for version <xsl:value-of select="../@rev"/></a>
 			<a id="historycurrent" href="../log/?target={../@target}">history of current version</a>
 		</div>
 		<h2>
 			<span class="path">
-				<xsl:call-template name="getBasename"/>
+				<xsl:call-template name="getBasename">
+					<xsl:with-param name="path" select="$url"/>
+				</xsl:call-template>
 			</span>
 			<xsl:if test="../@rev">
 				<xsl:value-of select="$spacer"/>

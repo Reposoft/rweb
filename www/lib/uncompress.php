@@ -38,7 +38,7 @@ function download($url, $localTargetFile) {
  * @param String $sourceFile absolute path for the compressed file
  * @param String $destination folder to extract to. Will attempt to create it if it does not exist.
  */
-function decompressZip( $sourceFile, $destination) {
+function decompressZip( $sourceFile, $destination, $chmod=0775) {
 	if (!strEnds($destination, '/')) $destination .= '/';
 	$zip = zip_open($sourceFile);
 
@@ -50,9 +50,11 @@ function decompressZip( $sourceFile, $destination) {
        $target_dir = $dir.substr($filename,0,strrpos($filename,'/'));
        $filesize = zip_entry_filesize($zip_entry);
        if (is_dir($target_dir) || mkdir($target_dir)) {
+      	chmod($target_dir, $chmod);
            if ($filesize > 0) {
                $contents = zip_entry_read($zip_entry, $filesize);
                System::createFileWithContents($dir.$filename,$contents);
+               chmod($dir.$filename, $chmod);
            }
        }
    }

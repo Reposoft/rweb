@@ -101,6 +101,7 @@ function testRun($type, $rev, $repoPath) {
 		hookOutput("\n---- failed with exit code $return ----\n");
 	} else {
 		hookOutput("\n---- no errors reported to caller ----\n");
+		hookOutput("\nNote that the call to the actual logic might be asynchrounous, resulting in no output.\n");
 	}
 }
 
@@ -118,9 +119,12 @@ function showInfo() {
 		} else {
 			if (checkHookScript($f, $hook, $r)) {
 				$r->info('<form action="./" method="get"><input type="hidden" name="test" value="'.$hook.'"/>'.
-				'Test this hook with revision <input name="rev" type="text" size="4" value="1"/>'.
-				'<input type="submit" value="execute"/></form>'.
-				'<p>Note that if you test with an old revision, newer configuration will be overwritten.</p>');
+				'Test hook script with revision <input name="rev" type="text" size="4" value="1"/>'.
+				'<input type="submit" value="execute hook script"/></form>');
+				$r->info('<form action="./" method="get"><input type="hidden" name="run" value="'.$hook.'"/>'.
+				'Test hook logic with revision <input name="rev" type="text" size="4" value="1"/>'.
+				'<input type="submit" value="execute hook php"/></form>');
+				$r->info('Note that if you test with an old revision, newer configuration will be overwritten.');
 			} else {
 				$r->info('To let Repos create a hook script, delete the existing file.');
 			}
@@ -151,6 +155,7 @@ function getHookScriptPath($type) {
  * @return boolean true if everything is in order
  */
 function checkHookScript($path, $scriptType, $report) {
+	testHookDependencies($report);
 	$cmd = getHookCommand($scriptType);
 	if (System::isWindows()) $path = str_replace('.bat', '-run.bat', $path);
 	$fh = fopen($path, 'r');
@@ -178,6 +183,17 @@ function getHookCommand($scriptType, $revVariable=null, $repoVariable=null) {
 		trigger_error('Need an absolut webapp url for hook scripts. Can not use: '.$url, E_USER_ERROR);
 	}
 	return "$curl \"$url\"";
+}
+
+function testHookDependencies($report) {
+	$curl = System::getCommand('curl');
+	exec("$curl --version", $out, $return);
+	if ($return > 2) {
+		$report->debug($out);
+		$report->fail("Hooks require cURL ($curl) command which was not found (code $return)");
+	} else {
+		$report->ok("Found cURL ($curl), used in hooks.");
+	}
 }
 
 /**
