@@ -104,6 +104,7 @@ a.folder {
 }
 /* common page elements, may also be layouted for each tool */
 #commandbar {
+	height: 24px;
 	background-color: #ECF1EF;
 	padding: 3px;
 	border-bottom: 1px solid #CCCCCC;
@@ -201,6 +202,10 @@ span.action {
 	background-image: url('commands/24x24/refresh.png');
 }
 #commandbar #logout {
+	position: absolute;
+	right: 150px;
+	padding-top: 0px;
+	padding-bottom: 0px;
 	background-image: url('commands/24x24/logout.png');
 }
 /* visible version numbers, #releaseversion or #resourceversion */
