@@ -66,7 +66,7 @@ function decompressZip( $sourceFile, $destination, $chmod=0775) {
 	arg 2 is the extracted file's name
 	arg 3 is optional. default value is 10 000 000. it has to be larger than the extracted file 
 */
-function uncompressGZ( $srcFileName, $dstFileName, $fileSize ){
+function uncompressGZ( $srcFileName, $dstFileName, $fileSize, $chmod=0775){
 
 	if (!is_writable(dirname($dstFileName))) {
 		return false;
@@ -85,6 +85,7 @@ function uncompressGZ( $srcFileName, $dstFileName, $fileSize ){
 	$fp = fopen( $dstFileName, "w" );
 	fwrite( $fp, $data );
 	fclose( $fp );
+	chmod($fp, $chmod);
 	return true;
 }
 
@@ -94,7 +95,7 @@ function uncompressGZ( $srcFileName, $dstFileName, $fileSize ){
 	arg 2 is the extracted file's name. it is optional. default value is the same path as the tar file
 	arg 3 is optional. it should be used only if a special directory from the tar file is needed.  
 */
-function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null ){
+function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null,  $chmod=0775){
 
 	if (!$dstDirectory){
 		$dstDirectory = dirname(realpath($srcFileName))."/";
@@ -147,8 +148,8 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null ){
 				foreach($newDirArray as $l){
 					$j = $j.$l."/";
 					if (!is_dir($j)){
-						//echo "dir: $j\n";
 						mkdir($j);
+						chmod($j, $chmod);
 					}
 				}
 				if ($_file){
@@ -156,6 +157,7 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null ){
 					$fileFromTar = fopen($dstDirectory.$unpdir.$_file ,"wb");
 					fwrite($fileFromTar,$file_contents);
 					fclose($fileFromTar);
+					chmod($fileFromTar, $chmod);
 				}
 			}
 		} else {
@@ -164,6 +166,7 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null ){
 				if (!is_dir($j)){
 					//echo $j."\n";
 					mkdir($j);
+					chmod($j, $chmod);
 				}
 			} 
 			// Create files
@@ -172,6 +175,7 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null ){
 				$fileFromTar = fopen($dstDirectory.$file_name,"wb");
 				fwrite($fileFromTar,$file_contents);
 				fclose($fileFromTar);
+				chmod($fileFromTar, $chmod);
 			}
 		}
 
