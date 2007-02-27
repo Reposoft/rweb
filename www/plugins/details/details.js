@@ -61,8 +61,8 @@ function details_writeLock(e, entry) {
 	// addtags does not create lock spans
 	var s = $('lock', e);
 	if (s.size() == 0) s = $('<span class="lock"></span>').appendTo(e);
-	s.append('<span class="username">'+ $('owner', lock).text() +'</span>');
-	s.append('<span class="datetime">'+ $('created', lock).text() +'</span>');
+	s.append('<span class="username">'+ $('owner', lock).text() +'</span>&nbsp;');
+	s.append('<span class="datetime">'+ $('created', lock).text() +'</span>&nbsp;');
 	s.append('<span class="message">'+ $('comment', lock).text() +'</span>');
 }
 
