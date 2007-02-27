@@ -20,7 +20,9 @@ div.editlog > pre {
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$nexturl|urlEncodeNames}">return to repository</a>
+{=if $operation eq 'commit'}
 <a id="edit" href="{=$webapp}edit/?target={=$target}">return to edit</a>
+{=/if}
 </div>
 <!--{if $headline}-->
 <h1>{=$headline}</h1>

@@ -125,6 +125,7 @@
 		<xsl:param name="fromrev"/>
 		<xsl:apply-templates select="path">
 			<xsl:with-param name="fromrev" select="$fromrev"/>
+			<xsl:sort select="." order="ascending"/>
 		</xsl:apply-templates>
 	</xsl:template>
 	<xsl:template match="paths/path">
