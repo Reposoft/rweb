@@ -30,7 +30,7 @@ if (login_isFolder($url)) {
 
 // TODO identify folders, even without trailing slash, for example when coming from history
 
-$file = new SvnOpenFile(getTarget(), $rev);
+$file = new SvnOpenFile($target, $rev);
 
 $p = Presentation::getInstance();
 $p->assign_by_ref('file', $file);

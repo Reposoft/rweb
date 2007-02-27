@@ -55,9 +55,9 @@ function exportAdministration($rev, $repo, $changes) {
  */
 function exportOptional($rev, $repo, $changes) {
 	if (!getConfig('exports_file')) trigger_error('No exports defined. Set "exports_file" in repos.properties.');
-	$exports_file = getConfig('admin_folder').getConfig('exports_file');
+	$exportsFile = getConfig('admin_folder').getConfig('exports_file');
 	
-	$exports = parse_ini_file($exports_file);
+	$exports = parse_ini_file($exportsFile);
 	$patterns = array();
 	foreach ($exports as $src => $target) {
 		if (isAbsolute($target)) {

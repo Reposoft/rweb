@@ -56,7 +56,10 @@ function runHook_post_commit($rev, $repo) {
 	if (!isAbsolute($repo)) trigger_error('Repository path must be absolute.', E_USER_ERROR);
 	$changes = hooksGetChanges($rev, $repo);
 	if (getConfig('access_file')) exportAdministration($rev, $repo, $changes);
-	if (getConfig('exports_file')) exportOptional($rev, $repo, $changes);
+	// don't fail if exports file is configured but missing (should be an error message in conf/)
+	if (getConfig('exports_file') && file_exists(getConfig('admin_folder').getConfig('exports_file'))) {
+		exportOptional($rev, $repo, $changes);
+	}
 	// user must be exported last, if password is changed
 	if (getConfig('users_file')) {
 		sleep(5); // password update operation needs to complete before hook is executed

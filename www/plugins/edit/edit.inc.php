@@ -39,7 +39,7 @@ tinyMCE.init({
 	theme_advanced_blockformats : "h1, h2, h3, p",
 	theme_advanced_toolbar_location : "top",
 	theme_advanced_toolbar_align : "center",
-	content_css : "/documents.css",
+	content_css : "/home/documents.css",
 	editor_selector : "none"
 });
 </script>',
@@ -63,13 +63,13 @@ tinyMCE.init({
 function editWriteNewVersion_html(&$postedText, $destinationFile) {
 	$postedText = editIndentHtmlDocument($postedText);
 	// texts coming from smarty have only body contents
-	if (!preg_match('<html.*<body.*</body>.*</html>')) {
+	if (!preg_match('/<html.*<body.*</body>.*</html>/', $postedText)) {
 		// TODO use existing html if new version? Use a templates/ file?
 		// Put the contents in the Repos template
 		$postedText = editGetNewDocument($postedText);
 	}
 	// use plaintext write
-	editWriteNewVersion_txt($postedText, $destinationFile, $type);
+	editWriteNewVersion_txt($postedText, $destinationFile);
 }
 
 /**

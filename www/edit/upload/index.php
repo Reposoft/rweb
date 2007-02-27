@@ -47,8 +47,9 @@ if (!isTargetSet()) {
  * @package edit
  */
 function editWriteNewVersion(&$postedText, $destinationFile, $type) {
-	if ($type && function_exists('editWriteNewVersion_'.$type)) {
-		return call_user_func('editWriteNewVersion_'.$type, $postedText, $destinationFile);
+	$custom = 'editWriteNewVersion_'.$type;
+	if ($type && function_exists($custom)) {
+		return call_user_func($custom, $postedText, $destinationFile);
 	}
 	return _defaultWriteNewVersion($postedText, $destinationFile);
 }
