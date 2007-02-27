@@ -6,6 +6,8 @@
 if (!class_exists('SvnOpen')) require(dirname(__FILE__).'/SvnOpen.class.php');
 if (!class_exists('ServiceRequest')) require(dirname(__FILE__).'/ServiceRequest.class.php');
 
+define('MIMETYPE_UNKNOWN', 'application/x-unknown');
+
 /**
  * Convert filesize from bytes to B, kB or MB.
  *
@@ -176,14 +178,22 @@ class SvnOpenFile {
 	/**
 	 * Try to figure out if the revision is the latest,
 	 * which is only trivial if revision was given as HEAD.
-	 * @return boolean true if this file is the newest revision
+	 * If the file does not exist, we say there is no latest revision (returns false).
+	 * If user has access forbidden (by the ACL) we don't know anything about latest revision,
+	 *  so an error is triggered.
+	 * @return boolean true if this file is the newest revision.
+	 * @see isReadableInHead() to check if the file exists and user has read access.
 	 */
 	function isLatestRevision() {
 		if ($this->_revision==HEAD) return true;
-		// if it does not exist in head it has been deleted
-		if ($this->isReadableInHead() == 404) return false;
 		// need to check the current response code
 		$this->_head();
+		// if it does not exist in head it has been deleted
+		if ($this->headStatus == 404) return false;
+		if ($this->headStatus == 403) { // caller can check isReadableInHead to avoid this
+			trigger_error('Access denied for resource '. $this->getPath(), E_USER_ERROR);
+		}
+		// otherwise we assume that the ETag contains the revision number
 		$r = $this->_getHeadRevisionFromETag();
 		if ($r !== false) {
 			if ($r < $this->_revision) trigger_error("Invalid revision number $this->_revision, higher than last commit but not HEAD");
@@ -191,10 +201,20 @@ class SvnOpenFile {
 		}
 		// it is unlikely that we come this far
 		trigger_error("Could not read revision number of the latest version from repository.", E_USER_ERROR);
-		// TODO call _file then return false if sizes don't match
+		// TODO try other methods? call _file then return false if sizes don't match
 		// TODO final: either parse dates and compare or do an svn list call on HEAD and compare revisions
 	}
 	
+	/**
+	 * Checks if the file still exists, and the user still has read access to it.
+	 * Note that this is not a "peg revision" check, so it might be a different file at the same URL.
+	 * @return boolean true if the file exists in current head revision of repository, false otherwise.
+	 */
+	function isReadableInHead() {
+		// Note that even if the revision is HEAD we are not sure it is readable.
+		$this->_head();
+		return ($this->headStatus == 200);
+	}
 	
 	/**
 	 * Note that read-only is not a versioned property (it is caused by apache configuration).
@@ -206,16 +226,6 @@ class SvnOpenFile {
 	function isWritable() {
 		if (!$this->isLatestRevision()) return false;
 		return _svnResourceIsWritable($this->getUrl());
-	}
-	
-	/**
-	 * Checks if the file still exists, and the user still has read access to it.
-	 * Note that this is not a "peg revision" check, so it might be a different file at the same URL.
-	 */
-	function isReadableInHead() {
-		if ($this->_revision==HEAD) return true;
-		$this->_head();
-		return $this->headStatus;
 	}
 	
 	/**
@@ -245,20 +255,22 @@ class SvnOpenFile {
 	}
 	
 	/**
-	 * @return the mimetype (or best guess) of the file,
-	 *  can be used as value in ContentType header.
+	 * Gets a value for Content-Type headers,
+	 * from 1) apache 2) svn or 3) guess.
+	 * @return the mimetype (or best guess) for the file,
+	 * 	or 'application/x-unknown' if Repos has no guess.
 	 */
 	function getType() {
-		// 1: If HEAD, simply get the headers from apache
+		// 1: If this is the HEAD revision, simply get the headers from apache
 		if ($this->isLatestRevision()) return $this->_getMimeTypeFromHttpHeaders();
 		// 2: If revision != head, get the svn:mime-type property
 		$prop = $this->getMimeTypePropertyValue();
 		if ($prop) return $prop;
-		// 3: If revision != head, guess the mime type for relevant (common) extensions, use default if not
-		// if it exists in HEAD we're lucky
+		// 3: If revision != head, guess the mime type for relevant (common) extensions, use default if not.
+		// If the file exists in HEAD we can safely assume that the content type has not been changed.
 		if ($this->isReadableInHead()) return $this->_getMimeTypeFromHttpHeaders();
-		// never look at file contents, too complicated and we don't want to require fileinfo extension
-		trigger_error("Could not find content type for this file.", E_USER_ERROR);
+		// TODO guess mimetype (based on filename extension)
+		return MIMETYPE_UNKNOWN;
 	}
 	
 	function _getMimeTypeFromHttpHeaders() {
