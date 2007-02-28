@@ -157,6 +157,7 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null,  
 					fwrite($fileFromTar,$file_contents);
 					fclose($fileFromTar);
 					chmod($dstDirectory.$unpdir.$_file, $chmod);
+				}
 			}
 		} else {
 			foreach($directory_array as $i){
@@ -174,6 +175,7 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null,  
 				fwrite($fileFromTar,$file_contents);
 				fclose($fileFromTar);
 				chmod($dstDirectory.$file_name, $chmod);
+			}
 		}
 	}
 	fclose($fp);
