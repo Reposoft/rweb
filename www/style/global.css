@@ -15,6 +15,7 @@ body {
 /* resume with em font sizes relative to the above */
 a {
 	color: #003399;
+	outline: none;
 	text-decoration: none;
 }
 table p {
