@@ -12,6 +12,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$file = new SvnOpenFile("/demoproject/trunk/public/xmlfile.xml");
 		$this->assertTrue($file->isLatestRevision());
 		$this->assertTrue($file->isWritable());
+		$this->assertEqual('', $file->getLockComment());
 		$this->assertTrue(is_numeric($file->getRevision()) && $file->getRevision() > 0);
 		$this->assertEqual('text/xml', $file->getType());
 		
