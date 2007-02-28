@@ -5,7 +5,7 @@ require(dirname(__FILE__).'/RepositoryTree.class.php');
 require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
 
 // need to add at least one plugin to get the ResourceId script loaded
-addPlugin('tooltip');
+addPlugin('dateformat');
 
 /**
  * Hide "projects" that have no tools,

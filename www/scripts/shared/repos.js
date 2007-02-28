@@ -25,6 +25,7 @@ var Repos = {
 	 * @return the script element that was appended
 	 */
 	addScript: function(src, loadEventHandler) {
+		// maybe it would be better to load and eval using AJAX
 		var srcUrl = Repos.getWebapp() + src;
 		if (/:\/\/localhost[:\/]/.test(window.location.href)) srcUrl += '?'+(new Date().getTime());
 		var s = document.createElement('script');

@@ -6,6 +6,9 @@
 require(dirname(dirname(__FILE__)).'/conf/Presentation.class.php');
 require(dirname(dirname(__FILE__)).'/open/SvnOpenFile.class.php');
 
+addPlugin('dateformat');
+addPlugin('thumbnails');
+
 // old behaviour, forward to an action
 if(isset($_GET['action'])) {
 	header('Location: '.getWebapp().'edit/'.$_GET['action'].'/?'.$_SERVER['QUERY_STRING']);

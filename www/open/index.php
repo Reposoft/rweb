@@ -8,6 +8,9 @@
 require(dirname(dirname(__FILE__)).'/conf/Presentation.class.php');
 require(dirname(__FILE__)."/SvnOpenFile.class.php" );
 
+addPlugin('dateformat');
+addPlugin('thumbnails');
+
 // get file to open
 $target = getTarget();
 
