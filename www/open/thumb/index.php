@@ -22,7 +22,7 @@ function getThumbnailCommand($format='', $target='-') {
 	if ($format) $format.=':';
 	$convert = convertGetCommand();
 	// todo select -filter?
-	return "$convert $format- -thumbnail {$z}x{$z}\">\" -quality 60 jpg:\"$target\"";
+	return "$convert $format- -thumbnail {$z}x{$z}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
 }
 
 // first get the data about the repository image
