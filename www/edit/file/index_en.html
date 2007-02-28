@@ -42,11 +42,10 @@ function autoFillFilename(filename) {
 	 	The class of the text area is the filename extension.
 	 	Recommended filename extension for new files is =type. class="{=$file,extension}"
 	 	*}
-    <textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1">{=$file->sendInlineHtml()}</textarea>
-	<!--{else}-->
-	<textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1"></textarea>
-	<!--{/if}-->
-    <label for="userfile"></label>
+<textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1">{=$file->sendInlineHtml()}</textarea>
+<!--{else}-->
+<textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1"></textarea>
+<!--{/if}-->
   <p>
     <label for="name">name in repository</label>
 	<!--{if $file}-->

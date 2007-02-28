@@ -431,14 +431,13 @@ class SvnOpenFile {
 	function getContents() {
 		$open = new SvnOpen('cat');
 		$open->addArgUrlPeg($this->getUrl(), $this->getRevision());
-		// exec can not be used for reading contents
+		// exec can not be used for reading contents, see REPOS-58
 		ob_start();
+		ob_flush();
 		$result = $open->passthru();
 		if ($result) trigger_error('Could not read file from svn', E_USER_ERROR);
-		$contents = ob_get_contents();
-		ob_clean();
-		// TODO how do we stop ob?
-		// TODO how do we handle \r\n?
+		$contents = ob_get_clean();
+		// TODO how do we handle \r\n? In Edit in Repos we always convert them to plain newline.
 		return str_replace("\r\n", "\n", $contents);
 	}
 	
@@ -470,18 +469,13 @@ class SvnOpenFile {
 		// TODO there is currently no efficient passthru with filter,
 		// so the show page must limit size so that we don't use up all memory
 		if ($this->getSize()>102400) trigger_error("Can not convert file bigger than 100 kb to HTML.", E_USER_ERROR);
-		$text = $this->getContentsText();
-		$lines = count($text);
-		for ($i=0; $i<$lines; $i++) {
-			//$text[$i] = mb_convert_encoding($text[$i], "UTF-8", "ASCII");
-			if (!isUTF8($text[$i])){
-				$text[$i] = mb_convert_encoding($text[$i], "UTF-8", "ASCII");
-			}
-			$text[$i] = makeAmpersandEntities($text[$i]);
-			$text[$i] = makeTagEntities($text[$i]);
-			echo($text[$i]);
-			echo("\n");
+		$text = $this->getContents();
+		if (!isUTF8($text)){
+			$text = mb_convert_encoding($text, "UTF-8", "ASCII");
 		}
+		$text = makeAmpersandEntities($text);
+		$text = makeTagEntities($text);
+		echo $text;
 	}	
 	
 	/**

@@ -15,11 +15,17 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertTrue(is_numeric($file->getRevision()) && $file->getRevision() > 0);
 		$this->assertEqual('text/xml', $file->getType());
 		
-		$this->sendMessage('Note that getContents() switches on output buffering');
 		$contents = $file->getContents();
 		$this->assertEqual(">\n", substr($contents, strlen($contents)-2), "File ends with newline. %s");
 		$contentsArray = $file->getContentsText();
 		$this->assertEqual(2, count($contentsArray), "The last line is empty, should be in the array. %s");
+		
+		// test passthru (sendInlineHtml), sendInline is just a plain passthru, so it is not tested
+		ob_start();
+		ob_flush();
+		$file->sendInlineHtml();
+		$inline = ob_get_clean();
+		$this->assertEqual("&gt;\n", substr($inline, strlen($inline)-5), "%s");
 	}
 
 	function testHeadVersionReadonly() {
