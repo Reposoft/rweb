@@ -75,17 +75,22 @@ function uncompressGZ( $srcFileName, $dstFileName, $fileSize, $chmod=0775){
 	if (!$fileSize){
 		$fileSize = 10000000;
 	}
-		
-	// read in the GZ file
+	
 	$gp = gzopen( $srcFileName, "r" );
-	$data = fread ( $gp, $fileSize );
-	gzclose( $gp );
-
-	// write uncompressed file
 	$fp = fopen( $dstFileName, "w" );
-	fwrite( $fp, $data );
+	while (!feof($gp)) {
+		$buffer = fread($gp, 16384);
+		fwrite($fp, $buffer);
+	}
+	gzclose( $gp );
 	fclose( $fp );
+<<<<<<< .mine
+	if (file_exists($dstFileName)){
+		chmod($dstFileName, $chmod);
+	}
+=======
 	chmod($fp, $chmod);
+>>>>>>> .r2737
 	return true;
 }
 
@@ -103,16 +108,11 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null,  
 	}
 	// read in the TAR file
 	$fp = fopen($srcFileName, "rb");
-	$tar_file = fread($fp, filesize($srcFileName));
-	fclose($fp);
 
-	$tar_length = strlen($tar_file);
-	$offset = 0;
-
-	while($offset < $tar_length) {
-	
+	while(!feof($fp)) {
+		$tar_file = fread($fp, 512);
 		//  end of the archive consists of 512 nulls
-		if(substr($tar_file,$offset,512) == str_repeat(chr(0),512)){
+		if($tar_file == str_repeat(chr(0),512)){
 			return true;
 		}
 		
@@ -122,12 +122,15 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null,  
 		file's last block, and sometimes one or more totally empty blocks.*/
 		
 		// first 100 characters of the file are reserved for the filename followed by nulls
-		$file_name		= rtrim(substr($tar_file,$offset,100),chr(0));
+		$file_name		= rtrim(substr($tar_file,0,100),chr(0));
 		// filesize information is 12 characters long and it starts at 124th character
-		$file_size		= octdec(substr($tar_file,$offset + 124,12));
+		$file_size		= octdec(substr($tar_file,124,12));
 		// the actual file starts at 512th character
-		$file_contents	= substr($tar_file,$offset + 512,$file_size);
-
+		if ($file_size > 0) {
+			$file_contents	= fread($fp, $file_size);
+			// if a file's last block is 500 bytes the rest 12 bytes are filled with padding
+			$eventualPadding = fread($fp, ceil($file_size / 512)*512-$file_size);
+		}
 		// Create directories
 		
 		if ($file_name{strlen($file_name)-1} == "/"){
@@ -157,7 +160,11 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null,  
 					$fileFromTar = fopen($dstDirectory.$unpdir.$_file ,"wb");
 					fwrite($fileFromTar,$file_contents);
 					fclose($fileFromTar);
+<<<<<<< .mine
+					chmod($dstDirectory.$unpdir.$_file, $chmod);
+=======
 					chmod($fileFromTar, $chmod);
+>>>>>>> .r2737
 				}
 			}
 		} else {
@@ -175,12 +182,14 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null,  
 				$fileFromTar = fopen($dstDirectory.$file_name,"wb");
 				fwrite($fileFromTar,$file_contents);
 				fclose($fileFromTar);
+<<<<<<< .mine
+				chmod($dstDirectory.$file_name, $chmod);
+=======
 				chmod($fileFromTar, $chmod);
+>>>>>>> .r2737
 			}
 		}
-
-		// move offset to the beginning of the next file
-		$offset += 512 + (ceil($file_size / 512) * 512);
 	}
+	fclose($fp);
 }
 ?>
