@@ -15,14 +15,14 @@ And it can be further improved by replacing the -strip and -resize with
 */
 require('../SvnOpenFile.class.php');
 require('../../lib/imagemagick/convert.inc.php');
-define('THUMB_SIZE', 120);
+define('THUMB_SIZE', 150);
 
 function getThumbnailCommand($format='', $target='-') {
 	$z = THUMB_SIZE;
 	if ($format) $format.=':';
 	$convert = convertGetCommand();
 	// todo select -filter?
-	return "$convert $format- -thumbnail {$z}x{$z} -quality 60 jpg:\"$target\"";
+	return "$convert $format- -thumbnail {$z}x{$z}\">\" -quality 60 jpg:\"$target\"";
 }
 
 // first get the data about the repository image
