@@ -18,8 +18,10 @@ function details_read() {
 				details_write(e, $('/lists/list/entry', xml)); });
 	}
 	// add command
-	if ($('#fullpath').size() > 0) {
-		$('#commandbar').append('<a id="showdetails" href="javascript:detailsToggle()">show details</a>');
+	if ($('.repository #fullpath').size() > 0) {
+		var command = $('<a id="showdetails" name="showdetails">show details</a>');
+		command.appendTo($('#commandbar'));
+		command.click(function() { detailsToggle(this); });
 	}
 }
 
@@ -30,7 +32,7 @@ function details_read() {
  */
 function details_write(e, entry) {
 	entry.each(function(){
-		$('.path', e).append($('name', this).text());
+		$('.filename', e).append($('name', this).text());
 		var noaccess = details_isNoaccess(this);
 		if (noaccess) {
 			e.addClass('noaccess');
@@ -63,7 +65,7 @@ function details_writeLock(e, entry) {
 	if (s.size() == 0) s = $('<span class="lock"></span>').appendTo(e);
 	s.append('<span class="username">'+ $('owner', lock).text() +'</span>&nbsp;');
 	s.append('<span class="datetime">'+ $('created', lock).text() +'</span>&nbsp;');
-	s.append('<span class="message">'+ $('comment', lock).text() +'</span>');
+	s.append(' <span class="message">'+ $('comment', lock).text() +'</span>');
 }
 
 function details_repository() {
@@ -83,6 +85,8 @@ function details_repository() {
 				//$('.details',row).hide();
 				details_write(row, $(this));
 			});
+			$('.details').show();
+			$('#showdetails').removeClass('loading').text('refresh details');
 		});
 }
 
@@ -103,7 +107,7 @@ function details_isNoaccess(entry) {
  * @param e jQuery element to add to
  */
 function details_addtags(e) {
- 	$(e).find('div.details').remove(); // allow refresh
+ 	$(e).find('div.details, span.lock').remove(); // allow refresh
 	e.append('<div class="details"><span class="revision"></span><span class="datetime"></span><span class="username"></span><span class="filesize"></span></div>');
 }
 
@@ -123,8 +127,8 @@ function details_formatSize(strBytes) {
 function detailsToggle() {
 	$('#commandbar').find('#showdetails').each( function() {
 		this.href = '#'; // TODO show load animation and disable command
+		$(this).addClass('loading');
 	} );
 	details_repository();
-	$('.details').show(); //.toggle();
 }
 

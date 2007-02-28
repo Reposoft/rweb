@@ -87,6 +87,7 @@ a.folder {
 	color: #666666;
 }
 .lock {
+	margin-left: 16px;
 	padding-left: 16px;
 	background: url(lock.png) left no-repeat;
 }

@@ -17,14 +17,19 @@
 /* details plugin */
 #commandbar #showdetails {
 	background-image: url('../commands/24x24/details.png');
+	cursor: pointer;
 }
-div.details {
+.row div.details {
 	position: relative;
 	left: 3.0em;
 	height: 1.8em;
 }
-div.details span {
+.row div.details span {
 	margin: 0.4em;
+}
+/* general class for loading animation */
+#commandbar #showdetails.loading {
+	background-image: url('../loading.gif');
 }
 /* directory listing */
 .file {

@@ -12,6 +12,8 @@
 <script type="text/javascript" src="../../scripts/fileid/fileid.js"></script>
 <!-- for unit testing -->
 <script type="text/javascript" src="../../scripts/unittest.js"></script>
+<!-- needs the repository css -->
+<link rel="stylesheet" type="text/css" href="../../style/repository/repository.css"/>
 </head>
 
 <body>
@@ -19,7 +21,7 @@
 <p>Dynamically add file or folder details to page</p>
 <h2>Single file example</h2>
 <div class="details" title="/demoproject/trunk/public/xmlfile.xml">
-<p>Name: <span class="file"></span></p>
+<p>Name: <span class="filename"></span></p>
 <p>Size: <span class="filesize"></span></p>
 <p>Current revision: <span class="revision"></span></p>
 <p>Last edited by: <span class="username"></span></p>
@@ -27,12 +29,15 @@
 </div>
 
 <h2>Directory listing example</h2>
+<div class="repository">
 <div id="commandbar"><span>a command</span></div>
 <p id="fullpath" title="#fullpath element required" style="font-family: monospace;">/demoproject/trunk/public/</p>
 <div id="row:website_"><span>website</span></div>
 <div id="row:images_"><span>images</span></div>
 <div id="row:xmlfile.xml"><span>xmlfile.xml</span></div>
 <div id="row:locked-file.txt"><span>locked-file.txt</span></div>
+</div>
+
 <h2>unit tests</h2>
 <p>Note that this page uses AJAX, so it must run from a web server.</p>
 <script type="text/javascript">
