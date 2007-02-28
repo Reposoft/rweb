@@ -115,6 +115,18 @@ function isSSLClient() {
 }
 
 /**
+ * Internally URLs have the default protocol, usually 'http'
+ *  - this function is for transforming to the browser's protocol.
+ * Note that this is done auomatically for getWebapp().
+ * @param String $url the URL that should be presented to the user
+ * @return String the URL with the current protocol for navigation.
+ */
+function asLink($url) {
+	if(isSSLClient()) return str_replace('http:', 'https:', $url);
+	return $url;
+}
+
+/**
  * Same as getRepository, but returns a proper href URL for the current user.
  * 
  * Normally the configugured repository is plain HTTP, but users on
@@ -123,33 +135,27 @@ function isSSLClient() {
  * Where this causes trouble, use this URL instead.
  * 
  * @return the repository root for browser navigation, no trailing slash.
+ * @see asUrl()
  */
 function getRepositoryUrl() {
-	$r = getRepository();
-	if(isSSLClient()) {
-		return str_replace('http:', 'https:', $r);
-	}
-	return $r;
+	return asLink(getRepository());
 }
 
 /**
  * Returns the URL to the root folder of the web application.
  * Can be a complete URL with host and path, as well as an absolute URL from server root.
- * 
+ * It is assumed that 'repos_web' is a non-SSL url.
  * @return String absolute url to the repos web application URL, ending with slash
  */
 function getWebapp() {
-	if(isSSLClient()) {
-		return str_replace('http:', 'https:', _getConfig('repos_web'));
-	}
-	return _getConfig('repos_web');
+	return asLink(_getConfig('repos_web'));
 }
 
 /**
  * @return String webapp root URL for local clients and resurces that do not require SSL.
  */
 function getWebappNonsecure() {
-	return str_replace('https:', 'http:', getWebapp());
+	return _getConfig('repos_web');
 }
 
 /**

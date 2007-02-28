@@ -83,6 +83,9 @@ class ServiceRequest {
 	 * @return ServiceRequest which might be further configured with set* methods
 	 */
 	function ServiceRequest($service, $parameters=array(), $authenticate=true) {
+		// temporary check while converting getWebapp to use asLink.
+		// ServiceRequest can actually handle SSL too.
+		if (substr($service, 0, 6)=='https:') trigger_error('Service calls should be non-SSL');
 		$this->uri = $service;
 		$this->parameters = $parameters;
 		if ($authenticate) $this->_enableAuthentication();

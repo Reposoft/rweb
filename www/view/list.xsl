@@ -48,9 +48,7 @@
 		</div>
 		<h2>
 			<span class="path">
-				<xsl:call-template name="getBasename">
-					<xsl:with-param name="path" select="$url"/>
-				</xsl:call-template>
+				<xsl:call-template name="getBasename"/>
 			</span>
 			<xsl:if test="../@rev">
 				<xsl:value-of select="$spacer"/>
@@ -59,7 +57,10 @@
 				</span>
 			</xsl:if>
 		</h2>
-		<xsl:apply-templates select="*"/>
+		<xsl:apply-templates select="*">
+			<xsl:sort select="@kind"/>
+			<xsl:sort select="name"/>
+		</xsl:apply-templates>
 		<div id="footer">
 		</div>
 	</xsl:template>

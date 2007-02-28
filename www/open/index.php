@@ -18,8 +18,10 @@ $rev = $revisionRule->getValue();
 $fromrevRule = new RevisionRule('fromrev');
 $fromrev = $fromrevRule->getValue();
 
+// TODO use a HTTP method to check for folder (this is only syntactically)
+// should probably be integrated with SvnOpenFile
 $url = getRepositoryUrl().$target;
-if (login_isFolder($url)) {
+if (isFolder($url) || !strContains(getPathName($url), '.')) {
 	if ($rev) {
 		header('Location: '.getWebapp().'open/list/?target='.urlencode($target).'&rev='.$rev);
 	} else {

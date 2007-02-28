@@ -273,32 +273,16 @@ function getTarget() {
 }
 
 /**
- * Target url is resolved from query parameters
+ * Target url is resolved from query parameters.
+ * Not that this returns the non-SSL url. Use 
+ * getRepositoryUrl().getTarget() for URL with same protocol as current page.
  * @param target Optional target path, if not set then getTarget() is used.
- * @return Full url of the file or directory this request targets
- *  Not urlencoded.
+ * @return Full url of the file or directory this request targets, Not urlencoded.
  */
 function getTargetUrl($target=null) {
 	if ($target==null) $target = getTarget();
 	if (strlen($target)<1) return false;
     return getRepository() . $target;
-}
-
-/**
- * Checks if a respository resource is a folder
- *
- * @param String $url absolute URL to a svn repository resources
- * @see System::isFile for checkin paths based on contents
- */
-function login_isFolder($url) {
-	if (strEnds($url, '/')) return true;
-	$s = new ServiceRequest($url);
-	$s->setSkipBody();
-	$s->exec();
-	if ($s->getStatus() == 301) {
-		$h = $s->getResponseHeaders();
-		return ($h['Location'] == $url.'/');
-	}
 }
 
 // ----- authentication functionality -----
