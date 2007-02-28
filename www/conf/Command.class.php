@@ -21,13 +21,14 @@ if (!function_exists('_getConfigFolder')) require(dirname(__FILE__).'/repos.prop
 // the actual command execution, can be mocked
 if (!function_exists('_command_run')) {
 	/**
+	 * @param String $cmd the complete command line
+	 * @param array $output The varable to store output in
 	 * @returns stdout and stderr output from the command, one array element per row. 
 	 *   Last element is the return code (use array_pop to remove).
 	 */
-	function _command_run($cmd) {
+	function _command_run($cmd, &$output) {
 		exec($cmd, $output, $returnvalue);
-		$output[] = $returnvalue;
-		return $output;
+		return $returnvalue;
 	}
 }
 if (!function_exists('_command_passthru')) {
@@ -143,8 +144,7 @@ class Command {
 	 */
 	function exec() {
 		$cmd = Command::_getFullCommand($this->operation, $this->_getArgumentsString());
-		$this->output = _command_run($cmd);
-		$this->exitcode = array_pop($this->output);
+		$this->exitcode = _command_run($cmd, $this->output);
 		return $this->exitcode;
 	}
 	
@@ -175,6 +175,13 @@ class Command {
 		return $this->exitcode;
 	}
 	
+	/**
+	 * Gets the output from PHP's exec function.
+	 * Note that trailing spaces and newlines are removed from each line by PHP,
+	 * and lines that end up empty are not included in the array.
+	 * Needless to say, this is not very good when reading textfiles.
+	 * @return array text contents from the command output.
+	 */
 	function getOutput() {
 		if (is_null($this->exitcode)) trigger_error('Command not executed yet', E_USER_ERROR);
 		return $this->output;

@@ -429,18 +429,24 @@ class SvnOpenFile {
 	 * Reads the contents of the file to a string of characters, even if it is binary
 	 */
 	function getContents() {
-		// TODO this might need a lot of memory
-		return implode("\n", $this->getContentsText());
+		$open = new SvnOpen('cat');
+		$open->addArgUrlPeg($this->getUrl(), $this->getRevision());
+		// exec can not be used for reading contents
+		ob_start();
+		$result = $open->passthru();
+		if ($result) trigger_error('Could not read file from svn', E_USER_ERROR);
+		$contents = ob_get_contents();
+		ob_clean();
+		// TODO how do we stop ob?
+		// TODO how do we handle \r\n?
+		return str_replace("\r\n", "\n", $contents);
 	}
 	
 	/**
 	 * Reads the contents of the file to a string array, one item per line, without newlines.
 	 */
 	function getContentsText() {
-		$open = new SvnOpen('cat');
-		$open->addArgUrlPeg($this->getUrl(), $this->getRevision());
-		$open->exec();
-		return $open->getOutput();
+		return explode("\n", $this->getContents());
 	}
 	
 	/**

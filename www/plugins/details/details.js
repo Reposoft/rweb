@@ -125,10 +125,7 @@ function details_formatSize(strBytes) {
 }
 
 function detailsToggle() {
-	$('#commandbar').find('#showdetails').each( function() {
-		this.href = '#'; // TODO show load animation and disable command
-		$(this).addClass('loading');
-	} );
+	$('#commandbar #showdetails').addClass('loading');
 	details_repository();
 }
 

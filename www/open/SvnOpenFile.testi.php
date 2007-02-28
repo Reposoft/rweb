@@ -13,10 +13,35 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertTrue($file->isLatestRevision());
 		$this->assertTrue($file->isWritable());
 		$this->assertTrue(is_numeric($file->getRevision()) && $file->getRevision() > 0);
-		$this->assertTrue(strlen($file->getContents()) > 1, substr($file->getContents(), 0, 20).'...');
 		$this->assertEqual('text/xml', $file->getType());
+		
+		$this->sendMessage('Note that getContents() switches on output buffering');
+		$contents = $file->getContents();
+		$this->assertEqual(">\n", substr($contents, strlen($contents)-2), "File ends with newline. %s");
+		$contentsArray = $file->getContentsText();
+		$this->assertEqual(2, count($contentsArray), "The last line is empty, should be in the array. %s");
 	}
 
+	function testHeadVersionReadonly() {
+		setTestUser();
+		$file = new SvnOpenFile("/demoproject/trunk/readonly/index.html");
+		$this->assertTrue($file->isLatestRevision());
+		$this->assertFalse($file->isWritable(), "The file is in a readonly folder. %2");
+		$this->assertEqual(1, $file->getRevision(), "Shouldn't have been changed since first commit. %s");
+		$this->assertEqual('text/plain', $file->getType(), "Content type not explicitly set. %s"); 
+		$contents = $file->getContents();
+		$this->assertEqual("</html>\n", substr($contents, strlen($contents)-8), "File ends with newline. %s");
+		$contentsArray = $file->getContentsText();
+		$this->assertEqual(2, count($contentsArray), "The last line is empty, should be in the array. %s");
+	}
+	
+	function testGetContentsBinary() {
+		$file = new SvnOpenFile("/demoproject/trunk/public/images/a.gif");
+		$this->assertTrue($file->isLatestRevision());
+		$this->assertTrue($file->isWritable());
+		$this->assertFalse(strEnds($file->getContents(), "\n"));
+	}
+	
 	function testOldVersionFileExists() {
 		setTestUser();
 		$file = new SvnOpenFile("/demoproject/trunk/Policy document.html", 1);
@@ -28,6 +53,18 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		setTestUserNotLoggedIn();
 	}
 	
+	function testNonexistingFileHead() {
+		$file = new SvnOpenFile("/demoproject/trunk/public/thispathdoesnotexist.tmp");
+		$this->assertEqual(404, $file->getStatus());
+		$this->assertFalse($file->isWritable());
+	}
+	
+	function testNonexistingFile() {
+		$file = new SvnOpenFile("/demoproject/trunk/public/temp.txt", 2);
+		$this->assertEqual(404, $file->getStatus());
+		$this->assertFalse($file->isWritable());
+	}
+	
 	function testOldVersionFileDeleted() {
 		setTestUser(); // needed until REPOS-21 is solved
 		$file = new SvnOpenFile("/demoproject/trunk/public/temp.txt", 1);
@@ -35,8 +72,13 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertFalse($file->isWritable());
 		$this->assertEqual(1, $file->getRevision());
 		$this->assertTrue(200, $file->getStatus(), "getStatus is not the HTTP status, but the equivalent. %s");
-		$this->assertTrue(strlen($file->getContents()) > 1, substr($file->getContents(), 0, 20).'...');
-		$this->assertEqual('text/plain', $file->getType()); // probably a guess
+		$this->assertEqual(MIMETYPE_UNKNOWN, $file->getType());
+		// this file does not end with newline
+		$contents = $file->getContents();
+		$this->assertTrue(strlen($contents) > 0);
+		$this->assertNotEqual("\n", substr($contents, strlen($contents)));
+		$contentsArray = $file->getContentsText();
+		$this->assertEqual(1, count($contentsArray), "Should be only one line in array. %s");
 	}
 	
 	function testFileInDeletedFolder() {
