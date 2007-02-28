@@ -1,7 +1,6 @@
 @CHARSET "UTF-8";
 /* CSS for Repos pages with forms or columns or both */
 div#intro {
-	width: 100%;
 	margin: 5px;
 	padding: 5px;
 }
@@ -32,11 +31,9 @@ div p {
 }
 
 /* thumbnail plugin, see THUMB_SIZE in open/thumb/ */
-#intro div.thumbnail {
-	width: 120px;
+#intro img.thumbnail {
 	display: inline;
 	float: left;
-	text-align: center;
 	margin-right: 1em;
 }
 
