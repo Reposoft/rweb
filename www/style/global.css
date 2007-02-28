@@ -207,6 +207,7 @@ span.action {
 	padding-top: 0px;
 	padding-bottom: 0px;
 	background-image: url('commands/24x24/logout.png');
+	border-right: none;
 }
 /* visible version numbers, #releaseversion or #resourceversion */
 .versiondisplay {
