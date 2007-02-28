@@ -84,13 +84,9 @@ function uncompressGZ( $srcFileName, $dstFileName, $fileSize, $chmod=0775){
 	}
 	gzclose( $gp );
 	fclose( $fp );
-<<<<<<< .mine
 	if (file_exists($dstFileName)){
 		chmod($dstFileName, $chmod);
 	}
-=======
-	chmod($fp, $chmod);
->>>>>>> .r2737
 	return true;
 }
 
@@ -160,12 +156,7 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null,  
 					$fileFromTar = fopen($dstDirectory.$unpdir.$_file ,"wb");
 					fwrite($fileFromTar,$file_contents);
 					fclose($fileFromTar);
-<<<<<<< .mine
 					chmod($dstDirectory.$unpdir.$_file, $chmod);
-=======
-					chmod($fileFromTar, $chmod);
->>>>>>> .r2737
-				}
 			}
 		} else {
 			foreach($directory_array as $i){
@@ -182,12 +173,7 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null,  
 				$fileFromTar = fopen($dstDirectory.$file_name,"wb");
 				fwrite($fileFromTar,$file_contents);
 				fclose($fileFromTar);
-<<<<<<< .mine
 				chmod($dstDirectory.$file_name, $chmod);
-=======
-				chmod($fileFromTar, $chmod);
->>>>>>> .r2737
-			}
 		}
 	}
 	fclose($fp);
