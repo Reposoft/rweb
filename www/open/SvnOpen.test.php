@@ -5,7 +5,7 @@ $nextOutput = array('output');
 $nextExitcode = 0;
 function _command_run($cmd, &$result) {
 	global $lastCommand, $nextOutput, $nextExitcode;
-	$lastCommand = "$cmd $argsString";
+	$lastCommand = "$cmd";
 	$result = $nextOutput;
 	return $nextExitcode;
 }

@@ -6,12 +6,12 @@ require("../lib/simpletest/setup.php");
 $lastCommand = null;
 $nextOutput = array('output');
 $nextExitcode = 0;
-function _command_run($cmd) {
+function _command_run($cmd, &$result) {
 	global $lastCommand, $nextOutput, $nextExitcode;
 	$lastCommand = "$cmd";
-	return array_merge($nextOutput, array($nextExitcode));
+	$result = $nextOutput;
+	return $nextExitcode;
 }
-
 function _getLastCommand() {
 	global $lastCommand;
 	return $lastCommand;

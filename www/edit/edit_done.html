@@ -20,7 +20,7 @@ div.editlog > pre {
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$nexturl|urlEncodeNames}">return to repository</a>
-{=if $operation eq 'commit'}
+{=if $operation eq 'commit' or $operation eq 'lock' or $operation eq 'unlock'}
 <a id="edit" href="{=$webapp}edit/?target={=$target}">return to edit</a>
 {=/if}
 </div>
