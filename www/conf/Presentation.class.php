@@ -363,9 +363,20 @@ class Presentation {
 		$this->extraStylesheets[] = $urlRelativeToTheme;
 	}
 	
+	/**
+	 * Get the base URL for images and css (not javascript)
+	 */
+	function _getStaticWebappUrl() {
+		// even if SSL, use https for static resources too, to avoid browser warnings
+		return getWebapp();
+	}
+	
+	/**
+	 * Get the contents of the $head parameter in templates.
+	 */
 	function _getThemeHeadTags() {
 		$theme = getUserTheme();
-		$style = getWebappStatic().$theme.'style/';
+		$style = $this->_getStaticWebappUrl().$theme.'style/';
 		return $this->_getAllHeadTags($style);
 	}
 	
@@ -377,7 +388,7 @@ class Presentation {
 		foreach ($this->extraStylesheets as $css) {
 			$head = $head . $this->_getLinkCssTag($stylePath.$css);
 		}
-		$head = $head . $this->_getPluginHeadTags(getWebappStatic());
+		$head = $head . $this->_getPluginHeadTags(getWebapp());
 		return $head;
 	}
 	
@@ -386,7 +397,7 @@ class Presentation {
 	 */
 	function _getMandatoryHeadTags($stylePath) {
 		return $this->_getLinkCssTag($stylePath.'global.css') .
-			'<script type="text/javascript" src="'.getWebappStatic().'scripts/head.js"></script>';
+			'<script type="text/javascript" src="'.getWebapp().'scripts/head.js"></script>';
 	}
 	
 	function _getLinkCssTag($href) {

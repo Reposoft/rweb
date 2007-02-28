@@ -146,21 +146,10 @@ function getWebapp() {
 }
 
 /**
- * Static resources may be delivered from a different URL than dynamic webapp, for performance.
- * For example dynamic pages that require login might need SSL, but images don't.
- * If uncertain, use getWebapp instead of this function
- * 
- * @return String webapp root URL to static resources like images, ending with slash
- * @deprecated use getWebapp. If HTTPS is required for _all_ resources, getWebapp will return https,
- *  if not then redirection is done by the apache server.
- * (Many browsers would complain about not-all-elements-are-safe if images are plain http)
+ * @return String webapp root URL for local clients and resurces that do not require SSL.
  */
-function getWebappStatic() {
-	if ($w = _getConfig('repos_static')) {
-		return $w;
-	} else {
-		return getWebapp();
-	}
+function getWebappNonsecure() {
+	return str_replace('https:', 'http:', getWebapp());
 }
 
 /**

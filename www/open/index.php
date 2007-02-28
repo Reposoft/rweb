@@ -10,7 +10,6 @@ require(dirname(__FILE__)."/SvnOpenFile.class.php" );
 
 // get file to open
 $target = getTarget();
-$url = getTargetUrl();
 
 $revisionRule = new RevisionRule();
 $rev = $revisionRule->getValue();
@@ -19,6 +18,7 @@ $rev = $revisionRule->getValue();
 $fromrevRule = new RevisionRule('fromrev');
 $fromrev = $fromrevRule->getValue();
 
+$url = getRepositoryUrl().$target;
 if (login_isFolder($url)) {
 	if ($rev) {
 		header('Location: '.getWebapp().'open/list/?target='.urlencode($target).'&rev='.$rev);
