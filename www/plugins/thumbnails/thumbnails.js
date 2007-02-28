@@ -15,7 +15,8 @@ Repos.thumbnails.initIntro = function() {
 	var rev = Repos.thumbnails.getRev(href);
 	var src = Repos.thumbnails.getSrc(target, rev);
 	if (!src) return;
-	$('#intro').prepend('<div class="thumbnail"><img src="'+src+'" border="0"/></div>');
+	$('#intro').prepend('<img class="thumbnail" src="'+src+'" border="0"/>');
+	$('#intro').append('<div style="clear: both;"></div>'); 
 };
 
 Repos.thumbnails.initRepository = function() {
