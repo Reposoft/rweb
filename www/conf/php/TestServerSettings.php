@@ -49,6 +49,7 @@ class TestServerSettings extends UnitTestCase {
 	
 	function testOutputBuffering() {
 		$this->assertEqual(0, ini_get('output_buffering'), "output_buffering: For passthrough of resources and reports we don't want output buffering. %s");
+		$this->assertEqual(0, ini_get('implicit_flush'), "For performance reasons we don't want implicit flush. We do flush() when needed. ");
 	}
 
 	function testDefaultEncoding() {
@@ -69,6 +70,7 @@ class TestServerSettings extends UnitTestCase {
 		// no automatic output conversion
 		$this->assertEqual("", ini_get('output_handler'), "output_handler: No output handler should be set, because default is to not buffer output. %s");
 		$this->assertEqual(0, ini_get('mbstring.http_output'), "mbstring.http_output: mbstring is not the output handler, so there is no need for a http_output setting. %s");
+		// what is mbstring.strict_detection available from php 5.1.2?
 	}
 }
 

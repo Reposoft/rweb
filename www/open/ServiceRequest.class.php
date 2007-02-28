@@ -205,6 +205,8 @@ class ServiceRequest {
 		}
 		// set preferred response language
 		curl_setopt($ch, CURLOPT_COOKIE, LOCALE_KEY.'=en');
+		// allow SSL connection without checking CA
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	}
 	
 	/**
