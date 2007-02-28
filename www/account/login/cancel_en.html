@@ -5,6 +5,18 @@
 <!--{$head}-->
 </head>
 <body>
-Login cancelled. Return to the <a href="{=$start}">startpage</a>.
+<div id="commandbar">
+<a href="{=$start}">startpage</a>
+<a href="/?login">login</a>
+<a href="repos/account/reset/">lost password?</a>
+</div>
+<h2>Login cancelled</h2>
+<p>No username or password was sent to the server.</p>
+<p>If you have an e-mail address stored in your Repos preferences,
+you can use the <a href="repos/account/reset/">lost password</a> functionality.
+If not, please contact a Repos administrator.</p>
+<p><a href="/?login">Login again</a> or return to the <a href="{=$start}">startpage</a>.</p>
+<div id="footer">
+</div>
 </body>
 </html>

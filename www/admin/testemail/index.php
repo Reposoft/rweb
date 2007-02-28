@@ -4,8 +4,8 @@
  *
  * @package admin
  */
-require('../../conf/Report.class.php');
 require('../../account/account.inc.php');
+require('../../conf/Report.class.php');
 
 if (isset($_GET[SUBMIT])) {
 	if (!isset($_GET['email'])) trigger_error('"email" not set');
@@ -28,8 +28,15 @@ function emailShowInfo() {
 }
 
 function emailTestPassword($toEmail) {
+	$r = new Report('Test Repos application e-mails');
 	$result = accountSendPasswordEmail('[test admin email]', 'Abc123@#%&/()=?', $toEmail, 'Administrator');
-	echo ("Sample password email was sent to $toEmail with password 'Abc123@#%&/()=?'");
+	if ($result===false) $r->info('There is no administration_email set in applicatino properties.');
+	if ($result) {
+		$r->debug($result);
+		$r->fail('Server says mail could not be sent');
+	} else {
+		$r->ok("Sample password email was sent to $toEmail with password 'Abc123@#%&/()=?'");
+	}
 }
 
 ?>

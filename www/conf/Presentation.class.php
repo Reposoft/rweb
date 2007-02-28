@@ -384,20 +384,16 @@ class Presentation {
 	 * @param stylePath the path to the current theme's 'style/' directory
 	 */
 	function _getAllHeadTags($stylePath) {
-		$head = $this->_getMandatoryHeadTags($stylePath);
+		$head = $this->_getLinkCssTag($stylePath.'global.css');
 		foreach ($this->extraStylesheets as $css) {
 			$head = $head . $this->_getLinkCssTag($stylePath.$css);
 		}
 		$head = $head . $this->_getPluginHeadTags(getWebapp());
+		// allow the pages to avoid javascripts if no plugins are loaded
+		if (strContains($head, '<script ')) {
+			$head = '<script type="text/javascript" src="'.getWebapp().'scripts/head.js"></script>'.$head;
+		}
 		return $head;
-	}
-	
-	/**
-	 * @return tags to include in <head> at all pages
-	 */
-	function _getMandatoryHeadTags($stylePath) {
-		return $this->_getLinkCssTag($stylePath.'global.css') .
-			'<script type="text/javascript" src="'.getWebapp().'scripts/head.js"></script>';
 	}
 	
 	function _getLinkCssTag($href) {
