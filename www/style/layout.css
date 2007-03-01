@@ -19,7 +19,7 @@ div.section {
 	display: block;	
 }
 
-div.section h2 {
+div.section h2, legend {
 	margin: 0px;
 	padding-left: 1em;
 	background-color: #E9F4C9;
@@ -104,18 +104,15 @@ div#activities p {
 </form>
 */
 fieldset {
-	border:2px solid #CCCC99;
+	border: 2px solid #F4F4F4;
 	border-collapse:collapse;
 	padding: 1em;
 	margin: 1em;
 }
 legend {
-	background-color:#CCCC99;
-	letter-spacing:0.2em;
 	font-size:0.7em;
 	padding-left: 1em;
 	padding-right: 1em;
-	color:#FFFFFF;
 }
 label {
 	float:left;

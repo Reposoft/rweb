@@ -9,7 +9,7 @@
  * @see FolderWriteAccessRule
  */
 require_once( dirname(dirname(__FILE__))."/open/SvnOpen.class.php" );
-require_once( dirname(dirname(__FILE__))."/plugins/validation/validation.inc.php" );
+addPlugin('validation');
 
 /**
  * Tries a resource path in current HEAD, for the current user, returning status code.

@@ -33,6 +33,14 @@ define('VALIDATION_KEY', 'validation');
 // Validation class uses this array to store all instantiated Rules
 $_validation_rules=array();
 
+function validation_getHeadTags($webapp) {
+	if (strpos($_SERVER['REQUEST_URI'], '/edit/') && !isset($_GET[SUBMIT])) {
+		return array('<script type="text/javascript" src="'.$webapp.'plugins/validation/validation.js"></script>');
+	} else {
+		return array();
+	}
+}
+
 /**
  * @return true if this request is _only_ for validation of a field
  */

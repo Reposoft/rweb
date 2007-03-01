@@ -73,8 +73,8 @@ No locking is needed, and when you save it creates a new version of the file.
 </p>
 
 <!--{if not $file,isBranch}-->
-<h3>
 {=* personal branches not in 1.1
+<h3>
 <!-- temporary solution, requires /branches folder in root, which is not fair to the other repository layouts -->
 <a id="branch" href="copy/?target={=$target}&oldname={=$oldname}&tofolder=%2Fbranches%2F&newname={=$file,revision}-{=$file,authenticatedUser}-{=$file,filename}&move=0&message={=$message}&submit=Copy">
 Create personal branch</a></h3>

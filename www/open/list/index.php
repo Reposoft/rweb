@@ -25,7 +25,7 @@ $list->exec();
 // some custom parameters needed in the XML. Url needed for navigation http/https.
 $head = '<?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="/repos/view/list.xsl"?>
-<lists repo="'.getRepositoryUrl().'" target="'.getTarget().'"'.($rev ? ' rev="'.$rev.'"' : '').'>
+<lists repo="'.asLink(getRepository()).'" target="'.getTarget().'"'.($rev ? ' rev="'.$rev.'"' : '').'>
 ';
 // Note that SVN returns the non-ssl url, which might break IE transformation. Could have a path here (targetUrl) too.
 $foot = '</lists>';

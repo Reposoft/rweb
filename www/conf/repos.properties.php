@@ -127,34 +127,12 @@ function asLink($url) {
 }
 
 /**
- * Same as getRepository, but returns a proper href URL for the current user.
- * 
- * Normally the configugured repository is plain HTTP, but users on
- * external network use SSL. This means that if links are generated
- * using getRepository(), users get a 301/302 redirect for each request.
- * Where this causes trouble, use this URL instead.
- * 
- * @return the repository root for browser navigation, no trailing slash.
- * @see asUrl()
- */
-function getRepositoryUrl() {
-	return asLink(getRepository());
-}
-
-/**
  * Returns the URL to the root folder of the web application.
  * Can be a complete URL with host and path, as well as an absolute URL from server root.
  * It is assumed that 'repos_web' is a non-SSL url.
  * @return String absolute url to the repos web application URL, ending with slash
  */
 function getWebapp() {
-	return asLink(_getConfig('repos_web'));
-}
-
-/**
- * @return String webapp root URL for local clients and resurces that do not require SSL.
- */
-function getWebappNonsecure() {
 	return _getConfig('repos_web');
 }
 

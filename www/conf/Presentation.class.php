@@ -25,7 +25,8 @@ if (!class_exists('System')) require(dirname(__FILE__).'/System.class.php');
  */
 define('PRESENTATION_DEBUG_MODE', getConfig('disable_caching') ? true : false); // enable/disable smarty caching
 define('TEMPLATE_CACHING', !PRESENTATION_DEBUG_MODE);
-define('PRESENTATION_XTHML', PRESENTATION_DEBUG_MODE); // true->application/xhtml+xml, false->text/html
+// allow automatic validation during development, true->application/xhtml+xml, false->text/html
+define('PRESENTATION_XTHML', PRESENTATION_DEBUG_MODE && strpos($_SERVER['HTTP_USER_AGENT'],'Gecko'));
 
 // function called before any other output or headers
 if (!function_exists('setupResponse')) {
@@ -262,7 +263,7 @@ class Presentation {
 		$this->assign('head', $this->_getThemeHeadTags());
 		$this->assign('referer', $this->getReferer());
 		$this->assign('userhome', $this->getUserhome());
-		$this->assign('webapp', getWebapp());
+		$this->assign('webapp', $this->_getStaticWebappUrl());
 		if ($this->isUserLoggedIn()) {
 			$this->assign('logout', '/?logout');
 		}
@@ -277,8 +278,7 @@ class Presentation {
 			$handle = fopen($file, "w");
 			fwrite($handle, $pagecontents);
 			fclose($handle);
-			// should be handled by the root page, but on the same hostso getWebapp() can not be used
-			$nexturl = getWebapp() . 'view/?result=' . basename($file);
+			$nexturl = $this->_getStaticWebappUrl() . 'view/?result=' . basename($file);
 			header("Location: $nexturl");
 		} else {
 			$this->smarty->display($resource_name, $cache_id, $compile_id);
@@ -374,8 +374,10 @@ class Presentation {
 	 * Get the base URL for images and css (not javascript)
 	 */
 	function _getStaticWebappUrl() {
+		static $w = null;
+		if (is_null($w)) $w = asLink(getWebapp());
 		// even if SSL, use https for static resources too, to avoid browser warnings
-		return getWebapp();
+		return $w;
 	}
 	
 	/**

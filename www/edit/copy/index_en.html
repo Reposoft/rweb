@@ -59,10 +59,11 @@ Select "delete the original" to make this a move operation.</p>
 <p>Select "delete the original" to make this a move operation.</p>
 {=/if}
 </div>
+
 <div class="column" style="width: 60%">
 <form id="copy" name="copy" method="get" action="#">
   <fieldset>
-	<legend>make a copy of {=$target} inside repository {=$repository}</legend>
+	<legend>make a copy of {=$target|getPathName} inside repository {=$repository}</legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
   <p>
     <label for="name">copy the current</label>
@@ -100,8 +101,17 @@ Select "delete the original" to make this a move operation.</p>
   </p>
   </fieldset>
 </form>
-<p>Copies inside the repository take no extra storage space. A copy is just a reference to the current revision of a resource.
-So a copy can be a good way to share a file as it looks now, but without sharing the future changes to the original.</p>
+</div>
+<div class="column" style="width: 40%">
+<div class="section">
+<h2>Cheap copies</h2>
+<p>Copies inside the repository take no extra storage space.
+A copy is simply a reference to a specific version of a different URL.
+</p>
+<p>Thus, a copy can be a good way to share a file as it looks now,
+without sharing any future changes to the original.
+</p>
+</div>
 </div>
 </body>
 </html>

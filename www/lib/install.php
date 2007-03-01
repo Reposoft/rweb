@@ -21,7 +21,7 @@ $libraries = array(
 'imagemagick'
 );
 
-$url = getWebappNonsecure().'lib/';
+$url = getWebapp().'lib/';
 
 $params = array();
 if (array_key_exists('go', $_GET)) $params['go'] = '1';
