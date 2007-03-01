@@ -86,6 +86,9 @@ Select "delete the original" to make this a move operation.</p>
 		<label for="move">and delete the original</label>
 		<input id="moveyes" name="move" type="radio" value="1" {=if not $file,isWritable || $file,isLockedBySomeoneElse}disabled="disabled"{=/if} onchange="setMove(this.checked)"/> Yes 
 		<input id="moveno" name="move" type="radio" value="0" {=if not $file,isWritable || $file,isLockedBySomeoneElse}disabled="disabled"{=/if} checked="checked" onchange="setMove(!this.checked)" /> No
+		{=if not $file,isWritable || $file,isLockedBySomeoneElse}
+			<input id="movehidden" name="move" type="hidden" value="0" />
+		{=/if}
 	</p>
   <p>
     <label for="message">history text</label>
