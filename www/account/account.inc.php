@@ -170,7 +170,7 @@ Or proceed to edit the password file directly at:
        "MIME-Version: 1.0\r\n" .
        "Content-Type: text/plain; charset=utf-8\r\n" .
        "Content-Transfer-Encoding: 8bit\r\n".
-       "\r\n"; // end headers
+       ""; // no extra newline, mailer would say "double newlines, possible security risk"
 	
    // done
 	if (!$emailEnable) return false;
