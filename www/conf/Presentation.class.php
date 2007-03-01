@@ -20,10 +20,15 @@ if (!function_exists('getRepository')) require(dirname(__FILE__).'/repos.propert
 // The current redirect-after-post solution needs System for temp folder
 if (!class_exists('System')) require(dirname(__FILE__).'/System.class.php');
 
-define('PRESENTATION_XTHML', false); // true->application/xhtml+xml, false->text/html
-define('TEMPLATE_CACHING', getConfig('disable_caching') ? true : false); // enable/disable smarty caching
+/**
+ * Use the configuration entry disable_caching to mark a general development mode
+ */
+define('PRESENTATION_DEBUG_MODE', getConfig('disable_caching') ? true : false); // enable/disable smarty caching
+define('TEMPLATE_CACHING', !PRESENTATION_DEBUG_MODE);
+define('PRESENTATION_XTHML', PRESENTATION_DEBUG_MODE); // true->application/xhtml+xml, false->text/html
 
 // function called before any other output or headers
+if (!function_exists('setupResponse')) {
 function setupResponse() {
 	// set cookie headers
 	getUserLocale();
@@ -40,7 +45,7 @@ function setupResponse() {
 		}
 	}
 }
-
+}
 
 // -------- user settings from cookies ---------
 
@@ -162,18 +167,20 @@ class Presentation {
 		
 		$this->smarty = smarty_getInstance();
 		
-		// register the prefilter
 		$this->smarty->register_prefilter('Presentation_useCommentedDelimiters');
 		$this->smarty->load_filter('pre', 'Presentation_useCommentedDelimiters');
 		$this->smarty->register_prefilter('Presentation_useDotNotationForObjects');
 		$this->smarty->load_filter('pre', 'Presentation_useDotNotationForObjects');
+		$this->smarty->register_prefilter('Presentation_urlRewriteForHttps');
+		$this->smarty->load_filter('pre', 'Presentation_urlRewriteForHttps');
 		if (PRESENTATION_XTHML) {
 			$this->smarty->register_prefilter('Presentation_useXmlEntities');
 			$this->smarty->load_filter('pre', 'Presentation_useXmlEntities');
 		}
-		// during development:
-		$this->smarty->register_prefilter('Presentation_noExtraContentType');
-		$this->smarty->load_filter('pre', 'Presentation_noExtraContentType');
+		if (PRESENTATION_DEBUG_MODE) {
+			$this->smarty->register_prefilter('Presentation_noExtraContentType');
+			$this->smarty->load_filter('pre', 'Presentation_noExtraContentType');
+		}
 	}
 	
 	/**
@@ -487,6 +494,12 @@ function Presentation_useDotNotationForObjects($tpl_source, &$smarty)
 	$replacements[0] = '$$1->is$2()';
 	$replacements[1] = '$$1->get$2()'; // would be good to uppercase first letter of $2
 	return preg_replace($patterns,$replacements,$tpl_source);
+}
+
+function Presentation_urlRewriteForHttps($tpl_source, &$smarty) {
+	$pattern = '/(href|src)=\"{=\$(\w+)}/';
+	$replacement = '$1="{=$$2|asLink}';
+	return preg_replace($pattern, $replacement, $tpl_source);
 }
 
 // plug in to repos.properties.php's error handling solution

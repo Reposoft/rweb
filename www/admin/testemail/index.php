@@ -22,15 +22,15 @@ function emailShowInfo() {
 	// reset password
 	if (!$adminemail) $r->warn('administrator_email not set');
 	$r->info('<form action="./" method="get">'.
-	'Test password email to <input name="email" type="text" size="40" value="'.$adminemail.'"/>'.
-	'<input type="submit" name="submit" value="password"/></form>');
+	'Test password email to address <input name="email" type="text" size="40" value="'.$adminemail.'"/>'.
+	'<input type="submit" name="submit" value="password"/> (only a test, does not affect accounts)</form>');
 	$r->display();
 }
 
 function emailTestPassword($toEmail) {
 	$r = new Report('Test Repos application e-mails');
 	$result = accountSendPasswordEmail('[test admin email]', 'Abc123@#%&/()=?', $toEmail, 'Administrator');
-	if ($result===false) $r->info('There is no administration_email set in applicatino properties.');
+	if ($result===false) $r->info('There is no administration_email set in application properties.');
 	if ($result) {
 		$r->debug($result);
 		$r->fail('Server says mail could not be sent');

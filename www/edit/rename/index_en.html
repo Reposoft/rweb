@@ -39,7 +39,7 @@ function checkType() {
 You can not rename this file.</p>
 {=/if}
 </div>
-{=if $file,isWritable && not $file,isLockedBySomeoneElse}
+{=if $file,isWritable and not $file,isLockedBySomeoneElse}
 <div class="column" style="width: 60%">
 <form id="rename" name="rename" method="get" action="#">
   <fieldset>

@@ -34,13 +34,10 @@ function smarty_getInstance() {
 
 	if (defined('TEMPLATE_CACHING') && TEMPLATE_CACHING===false) {
 		$s->caching = false;
-	} else {
-		$s->caching = true;
-	}
-	if ($s->caching) {
 		$s->force_compile = true;
-		// allow SMARTY_DEBUG query string parameter TODO remove in production
 		$s->debugging_ctrl = 'URL';
+	} else {
+		$s->caching = true;	
 	}
 	
 	$s->template_dir = CACHE_DIR.'templates/';

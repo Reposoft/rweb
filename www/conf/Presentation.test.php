@@ -1,4 +1,7 @@
 <?php
+// mock before include
+function setupResponse() {
+}
 require(dirname(__FILE__)."/Presentation.class.php");
 require("../lib/simpletest/setup.php");
 
@@ -15,6 +18,18 @@ class TestPresentation extends UnitTestCase {
 		// bypas the singleton check
 		global $_presentationInstance;
 		$_presentationInstance = null;
+	}
+	
+	function testSmartyParameters() {
+		$debugMode = getConfig('disable_caching');
+		$p = new Presentation();
+		$smarty = $p->smarty;
+		if ($debugMode) {
+			
+		} else {
+			$this->assertTrue($smarty->caching);
+			$this->assertFalse($smarty->force_compile);
+		}
 	}
 	
 	function testAddStylesheet() {
@@ -36,6 +51,30 @@ class TestPresentation extends UnitTestCase {
 		$p2 = Presentation::getInstance();
 		// assertion method not reliable: $this->assertReference($p, $p2);
 		$this->assertTrue($p === $p2);
+	}
+	
+	function testPrefilter_urlRewriteForHttps() {
+		$smarty = null;
+		// no link
+		$result = Presentation_urlRewriteForHttps(
+			'http://'.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'/', $smarty);
+		$this->assertEqual('http://'.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'/', $result);
+		// href
+		$result = Presentation_urlRewriteForHttps(
+			'<a href="'.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a href="'.LEFT_DELIMITER.'$var|asLink'.RIGHT_DELIMITER.'">', $result);
+		// part of href
+		$result = Presentation_urlRewriteForHttps(
+			'<a href="http://'.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a href="http://'.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'">', $result);
+		// src
+		$result = Presentation_urlRewriteForHttps(
+			'<img src="'.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<img src="'.LEFT_DELIMITER.'$var|asLink'.RIGHT_DELIMITER.'">', $result);
+		// already a function, assume that the result is not a complete URL
+		$result = Presentation_urlRewriteForHttps(
+			'<a href="'.LEFT_DELIMITER.'$var|getPathName'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a href="'.LEFT_DELIMITER.'$var|getPathName'.RIGHT_DELIMITER.'">', $result);		
 	}
 
 }
