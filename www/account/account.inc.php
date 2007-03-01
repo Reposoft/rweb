@@ -146,13 +146,14 @@ function accountSendPasswordEmail($username, $password, $email, $fullname=null) 
 	
 	$webapp = getWebapp();
 	$repository = getRepository();
-	preg_match('/(\w+:\/\/[^\/]+\/).*/', $repository, $matches);
-	$host = $matches[1];
+	preg_match('/(\w+:\/\/)([^\/]+)\/.*/', $repository, $matches);
+	$hostname = $matches[2];
+	$host = $matches[1].$hostname.'/';
 
 	$subject = "Your Repos account $username";
 	$body = "$fullname,
 
-A temporary password has been generated 
+A temporary password has been generated at $hostname
 for your account $username:
 $password
 
@@ -164,14 +165,16 @@ Or proceed to edit the password file directly at:
 ";
 	$body = str_replace("\r\n", "\n", $body);
 	
-	$headers = "From: $host\r\n" .
-		 "Reply-To: $from\r\n" .
-       'X-Mailer: PHP/' . phpversion() . "\r\n" .
-       "MIME-Version: 1.0\r\n" .
-       "Content-Type: text/plain; charset=utf-8\r\n" .
-       "Content-Transfer-Encoding: 8bit\r\n".
-       ""; // no extra newline, mailer would say "double newlines, possible security risk"
+        $headers = 'MIME-Version: 1.0'."\r\n";
+        //$headers .= 'Content-Type: text/plain'."\r\n";
+	$headers .= 'Content-Type: text/plain; charset=utf-8'."\r\n"; 
+        $headers .= 'Content-Transfer-Encoding: 8bit'."\r\n";
+        $headers .= "From: Repos Administrator <$from>\r\n";
+        $headers .= "Reply-To: $from\r\n";
+        $headers .= 'X-Mailer: PHP/' . phpversion() . "\r\n";
 	
+	if (!System::isWindows()) $headers = str_replace("\r\n", "\n", $headers);
+
    // done
 	if (!$emailEnable) return false;
 	if (mail($email,$subject,$body,$headers)) {
