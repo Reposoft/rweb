@@ -24,7 +24,7 @@ function exportUsers($rev, $repo, $changes) {
 }
 
 function _exportUserPassword($username) {
-	$url = getWebapp().'admin/accountrevert/';
+	$url = getWebappNonsecure().'admin/accountrevert/';
 	$r = new ServiceRequest($url, array('username'=>$username), false);
 	$r->exec();
 	if ($r->isOK()) {

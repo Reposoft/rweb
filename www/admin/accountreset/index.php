@@ -20,8 +20,8 @@ function adminResetPassword($username) {
 	$fullname = accountGetFullName($auth);
 	$sent = false;
 	if ($email) $sent = accountSendPasswordEmail($username, $newpass, $email, $fullname);
-	if ($sent===false) showResult("Administration E-mail not enabled, new password is $password");
-	elseif ($sent) showResult("Could not send the email with the following contents: \n\n$sent");
+	if ($sent===false) showResult("Administration E-mail not enabled, new password is $newpass");
+	elseif ($sent) showResult("Could not send e-mail. Please forward this to the user: \n\n$sent");
 	else showResult("A new password has been emailed to address $email.");
 }
 

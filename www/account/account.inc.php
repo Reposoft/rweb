@@ -36,16 +36,18 @@ function accountGetEmailRequiredRule($fieldname='email') {
  * @return String the Full Name part of the password entry, empty string if not set
  */
 function accountGetFullName($authFileLine) {
-	list($user, $pass, $full, $email) = explode(":", $authFileLine, 4);
-	return $full;
+	$line = explode(":", $authFileLine, 4);
+	if (!isset($line[2])) return '';
+	return rtrim($line[2], "\n");
 }
 
 /**
  * @return String the email part of the password entry, empty string if not set
  */
 function accountGetEmail($authFileLine) {
-	list($user, $pass, $full, $email) = explode(":", $authFileLine, 4);
-	return $email;
+	$line = explode(":", $authFileLine, 4);
+	if (!isset($line[3])) return '';
+	return rtrim($line[3], "\n");
 }
 
 function accountGetAuthLine($username) {
