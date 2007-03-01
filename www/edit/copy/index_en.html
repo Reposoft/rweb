@@ -5,13 +5,16 @@
 <!--{$head}-->
 <script type="text/javascript">
 function pasteUrl() {
-	r='{=$repository}';
+	reposUrl='{=$repository}';
 	url=prompt('Paste the full URL of the destination folder','');
 	if (url==null) {
 		return;
 	}
+	if (url.indexOf('https')==0 && reposUrl.indexOf('http:')==0) {
+		r = reposUrl.replace(/http/,"https");
+	}
 	if (url.indexOf(r)!=0) {
-		alert('The folder URL must begin with the repository URL '+r);
+		alert('The folder URL must begin with the repository URL '+reposUrl+' or '+r);
 		return;
 	}
 	document.getElementsByName('tofolder')[0].value = url.substring(r.length);
