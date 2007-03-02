@@ -191,9 +191,9 @@
 					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{@href}">rename</a>
 					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={../@path}/{@href}">copy</a>
 					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{@href}">delete</a>
-					<a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={../@path}/{@href}">upload changes</a>
+					<a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={../@path}/{@href}">upload&#xA0;changes</a>
 				</xsl:if>
-				<a id="history:{$id}" class="action" href="{$web}open/log/?target={../@path}/{@href}">view history</a>
+				<a id="history:{$id}" class="action" href="{$web}open/log/?target={../@path}/{@href}">view&#xA0;history</a>
 			</div>
 			<a id="open:{$id}" class="file-{$filetype} file" href="{@href}">
 				<xsl:value-of select="@name"/>
