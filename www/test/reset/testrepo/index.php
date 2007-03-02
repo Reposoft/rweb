@@ -63,6 +63,16 @@ if (!file_exists("$exportContents.svn")) { //setup_svn("info \"$exportContents\"
 
 setup_svn("add {$wc}*");
 
+// demo repository should not contain unsupported tools
+if (strContains(getRepository(), 'demo')) {
+	setup_svn("revert {$wc}demoproject/branches/");
+	setup_svn("revert {$wc}demoproject/tags/");
+	setup_svn("revert {$wc}demoproject/tasks/");
+	setup_svn("revert {$wc}demoproject/messages/");
+	setup_svn("revert {$wc}demoproject/calendar/");
+	setup_svn("revert {$wc}demoproject/templates/");
+}
+
 $repositoryacl = $wc.'administration/repos-access.acl';
 $publicxml = $wc."demoproject/trunk/public/xmlfile.xml";
 $publicindex = $wc."demoproject/trunk/public/website/index.html";
