@@ -33,7 +33,10 @@ function getRepositoryFolderContents($path) {
 	$url = getRepository() . $path;
 	$list = new ServiceRequest($url,array());
 	$list->exec();
-	if ($list->getResponseType()!='text/xml') trigger_error("Repository URL $url did not deliver xml.", E_USER_ERROR);
+	if ($list->getResponseType()!='text/xml') {
+		// trigger_error("Repository URL $url did not deliver xml.", E_USER_ERROR);
+		return array(); // no tools shown if the folder was not found
+	}
 	preg_match_all('/\shref="([^"]+)"/', $list->getResponse(), $matches);
 	return $matches[1];
 }

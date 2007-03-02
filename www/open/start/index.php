@@ -1,7 +1,7 @@
 <?php
 
 require(dirname(dirname(dirname(__FILE__))).'/account/login.inc.php');
-require(dirname(__FILE__).'/RepositoryTree.class.php');
+require(dirname(dirname(dirname(__FILE__))).'/account/RepositoryTree.class.php');
 require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
 
 // need to add at least one plugin to get the ResourceId script loaded
@@ -40,7 +40,7 @@ $entrypoints = array_filter($tree->getEntryPoints(), 'shouldShow');
 if (count($entrypoints)==0) {
 	trigger_error('This username has not been given access to any folders that match the Repos conventions. '.
 		'Try <a href="'.$repo.'/">repository root</a>.', E_USER_ERROR);
-	// or
+	// TODO make a template instead of an error message, like this...
 	$p = Presentation::getInstance();
 	$p->assign('entrypoints',$entrypoints); // and use the paths directly
 	$p->display($p->getLocaleFile(dirname(__FILE__) . '/index-notools'));
