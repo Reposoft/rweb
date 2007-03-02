@@ -33,7 +33,7 @@ while ($status!=200 && ($parent=getParent($near))!==false) {
 
 $p->showErrorNoRedirect('
 Your user account does not have access rights to URL '.$url.'.
-</p><p>'
+'
 .($near==$url ? '' :
 'The nearest parent folder that you have access to is <a href="'.$near.'">'.$near.'</a>.'
 )
