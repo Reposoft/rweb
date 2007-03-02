@@ -173,6 +173,10 @@ a.folder {
 	background-image: url('loading.gif') ! important;
 	background-repeat: no-repeat ! important;
 }
+#submit.loading {
+	background-color: #D5D5D5;
+	color: #666666;
+}
 /* action is for buttons inside listings, <a> is  active, <span> is greyed out */
 a.action {
 	color: #333333;

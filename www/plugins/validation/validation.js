@@ -1,13 +1,12 @@
 
-var submitted = false;
 $(document).ready(function() {
-	$('#submit').removeClass('.loading').click(function() {
-		if (submitted) {
-			console.log('not again');
-			return false;
-		}
-		submitted = true;
-		$(this).addClass('.loading');
+	$('#submit').click(function() {
+		if ($('#submit.loading').length==1) return false;
+		$('#submit').addClass('loading');
 		return true;
 	} );
+} );
+
+$(window).unload(function() {
+	$('#submit').removeClass('loading');
 } );
