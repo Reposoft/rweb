@@ -37,7 +37,8 @@ function smarty_getInstance() {
 		$s->force_compile = true;
 		$s->debugging_ctrl = 'URL';
 	} else {
-		$s->caching = true;	
+		// never cache the result of templates
+		$s->caching = false;	
 	}
 	
 	$s->template_dir = CACHE_DIR.'templates/';
