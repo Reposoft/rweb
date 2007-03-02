@@ -103,6 +103,12 @@ class TestEditPlugin extends UnitTestCase {
 		$result = editIndentHtmlDocument($html);
 		$this->assertEqual("Non. \n&Auml;scii. &auml;", $html);
 	}	
+	
+	function testIndentHtmlTagsSentenceEndWithUmlaut() {
+		$html = "P&aring;. &Aring;r och dag.";
+		$result = editIndentHtmlDocument($html);
+		$this->assertEqual("P&aring;. \n&Aring;r och dag.", $html);
+	}
 
 	function testIndentHtmlTagsSentenceQuestion() {
 		$html = "What? No newline? yes";
