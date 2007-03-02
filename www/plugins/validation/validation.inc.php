@@ -34,11 +34,11 @@ define('VALIDATION_KEY', 'validation');
 $_validation_rules=array();
 
 function validation_getHeadTags($webapp) {
-	if (strpos($_SERVER['REQUEST_URI'], '/edit/') && !isset($_GET[SUBMIT])) {
+	//if (strpos($_SERVER['REQUEST_URI'], '/edit/') && !isset($_GET[SUBMIT])) {
 		return array('<script type="text/javascript" src="'.$webapp.'plugins/validation/validation.js"></script>');
-	} else {
-		return array();
-	}
+	//} else {
+	//	return array();
+	//}
 }
 
 /**
