@@ -31,7 +31,11 @@ Satisfy Any
 # all browsers need to unterstand that etag should be checked
 Header add Cache-Control \"private, must-revalidate\"
 ",
-''
+// "private, must-revalitate" sometimes doesn't work until after first manual refresh 
+"# disable caching for directory listing, because ETag seems not 100% compatible with firefox
+<Location ~ \"^$conflocation/.*/$\">
+	Header add Cache-Control \"no-cache\"
+</Location>"
 );
 
 // Check out working copy and create base structure
