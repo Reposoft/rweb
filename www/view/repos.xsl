@@ -119,11 +119,11 @@
 			<a id="parent" class="command translate" href="{$parentlink}">up</a>
 		</xsl:if>
 		<xsl:if test="$editUrl">
-			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={@path}/">new folder</a>
-			<a id="createfile" class="command translate" href="{$editUrl}file/?target={@path}/">new document</a>
-			<a id="addfile" class="command translate" href="{$editUrl}upload/?target={@path}/">add file</a>
+			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={@path}/">new&#xA0;folder</a>
+			<a id="createfile" class="command translate" href="{$editUrl}file/?target={@path}/">new&#xA0;document</a>
+			<a id="addfile" class="command translate" href="{$editUrl}upload/?target={@path}/">add&#xA0;file</a>
 		</xsl:if>
-		<a id="history" class="command translate" href="{$web}open/log/?target={@path}/">folder history</a>
+		<a id="history" class="command translate" href="{$web}open/log/?target={@path}/">folder&#xA0;history</a>
 		<a id="refresh" class="command translate" href="#" onclick="window.location.reload( true )">refresh</a>
 		<a id="logout" class="command translate" href="/?logout">logout</a>
 		<!-- print, possibly plugin -->
