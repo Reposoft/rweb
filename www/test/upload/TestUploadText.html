@@ -62,6 +62,31 @@
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
+	<td>open:testfile.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>open:testfile.txt</td>
+	<td></td>
+</tr>
+<tr title="Open first version in browser, it is now cached with this version number as cache tag.">
+	<td>verifyTextPresent</td>
+	<td>new novel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>goBack</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
 	<td>edit:testfile.txt</td>
 	<td></td>
 </tr>
@@ -113,9 +138,9 @@
 	<td>open:testfile.txt</td>
 	<td></td>
 </tr>
-<tr>
+<tr title="If the old contents are cached (and cache not revalidated) the update is not shown">
 	<td>verifyTextPresent</td>
-	<td>My new novel*Chapter 1</td>
+	<td>Chapter 1</td>
 	<td></td>
 </tr>
 <tr>
