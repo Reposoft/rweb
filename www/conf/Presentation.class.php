@@ -385,22 +385,21 @@ class Presentation {
 	 */
 	function _getThemeHeadTags() {
 		$theme = getUserTheme();
-		$style = $this->_getStaticWebappUrl().$theme.'style/';
-		return $this->_getAllHeadTags($style);
+		return $this->_getAllHeadTags($this->_getStaticWebappUrl(), $theme.'style/');
 	}
 	
 	/**
 	 * @param stylePath the path to the current theme's 'style/' directory
 	 */
-	function _getAllHeadTags($stylePath) {
-		$head = $this->_getLinkCssTag($stylePath.'global.css');
+	function _getAllHeadTags($webapp, $stylePath) {
+		$head = $this->_getLinkCssTag($webapp.$stylePath.'global.css');
 		foreach ($this->extraStylesheets as $css) {
-			$head = $head . $this->_getLinkCssTag($stylePath.$css);
+			$head = $head . $this->_getLinkCssTag($webapp.$stylePath.$css);
 		}
-		$head = $head . $this->_getPluginHeadTags(getWebapp());
+		$head = $head . $this->_getPluginHeadTags($webapp);
 		// allow the pages to avoid javascripts if no plugins are loaded
 		if (strContains($head, '<script ')) {
-			$head = '<script type="text/javascript" src="'.getWebapp().'scripts/head.js"></script>'.$head;
+			$head = '<script type="text/javascript" src="'.$webapp.'scripts/head.js"></script>'.$head;
 		}
 		return $head;
 	}
