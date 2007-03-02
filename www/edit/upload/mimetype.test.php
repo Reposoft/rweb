@@ -80,6 +80,8 @@ class MimetypeTest extends UnitTestCase {
 	}
 	
 	function testGetSpecificMimetype_xml_excel() {
+		$this->sendMessage('Mimetypes based on contents is not supported in 1.1.');
+		return;
 		$file = System::getTempFile('mimetest').'tmp';
 		$fh = fopen($file,'w');
 		fwrite($fh,
