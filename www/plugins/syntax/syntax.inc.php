@@ -41,7 +41,12 @@ function syntax_getBrushes() {
  * 
  */
 
+function syntax_isDpsyntaxInstalled() {
+	return file_exists(dirname(dirname(dirname(__FILE__))).'/lib/dpsyntax/dp.SyntaxHighlighter/');
+}
+
 function syntax_getHeadTags($webapp) {
+	if (!syntax_isDpsyntaxInstalled()) return array();
 	$REPOS_SYNTAX_BRUSH = syntax_getBrushes();
 	$load = array(
 		'<link type="text/css" rel="stylesheet" href="'.$webapp.'plugins/syntax/syntax.css"></link>'

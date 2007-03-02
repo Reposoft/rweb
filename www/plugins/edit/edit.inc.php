@@ -17,7 +17,12 @@ class EditTypeRule extends Rule {
 	}
 }
 
+function edit_isTinyMCEInstalled() {
+	return file_exists(dirname(dirname(dirname(__FILE__))).'/lib/tinymce/tinymce/');	
+}
+
 function edit_getHeadTags($webapp) {
+	if (!edit_isTinyMCEInstalled()) return array();
 	return array(
 		'<script language="javascript" type="text/javascript" src="'.$webapp.'lib/tinymce/tinymce/jscripts/tiny_mce/tiny_mce_gzip.js"></script>',
 		'<script language="javascript" type="text/javascript">
