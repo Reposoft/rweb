@@ -131,7 +131,7 @@ class SvnOpenFile {
 	 */
 	function _head() {
 		if ($this->headStatus > 0) return;
-		$s = new ServiceRequest($this->url);
+		$s = new ServiceRequest($this->url, array(), isLoggedIn()); // allow public access
 		$s->setSkipBody();
 		$s->exec();
 		$this->headStatus = $s->getStatus();
@@ -237,6 +237,7 @@ class SvnOpenFile {
 	 * To detect read-only for files or folders, it is also possible to 
 	 *  inspect "svn info --xml [parent folder]" and check if commit autor and date are missing.
 	 * @see _svnResourceIsWritable
+	 * @return boolean true if resource is writable in DAV. Locked files may still be writable.
 	 */	
 	function isWritable() {
 		if (!$this->isLatestRevision()) return false;
@@ -507,19 +508,23 @@ class SvnOpenFile {
 			return $this->headStatus;
 		}
 		$this->_read();
+		if (count($this->file)<2) return 404;
 		// no error, assume ok
 		return 200;
 	}
 	
 	/**
 	 * Reads all file information with a 
-	 * @return array[String] metadata name=>value
+	 * @return array[String] metadata name=>value, empty array or array with only path if file does not exist
 	 */
 	function _readInfoSvn() {
 		$info = new SvnOpen('list', true);
 		$info->addArgUrlPeg($this->url, $this->_revision);
-		if($info->exec()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
-		return $this->_parseListXml($info->getOutput());
+		$info->exec();
+		$result = $info->getOutput();
+		if (preg_match('/non-existent/', $result[0])) return array(); // does not exist in svn
+		if ($info->getExitcode()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
+		return $this->_parseListXml($result);
 	}
 	
 	/**

@@ -61,6 +61,7 @@ function getRevision($rev = false) {
  * @package open
  */
 function _svnResourceIsWritable($url) {
+	if (!isLoggedIn()) return false; // can not attempt to lock without a username
 	$r = new ServiceRequest($url);
 	$r->setCustomHttpMethod('LOCK');
 	// Use If-Match to make dummy request that does not cause an entry in the error log

@@ -9,6 +9,7 @@ require("../lib/simpletest/setup.php");
 class TestIntegrationSvnOpenFile extends UnitTestCase {
 	
 	function testHeadVersion() {
+		setTestUser();
 		$file = new SvnOpenFile("/demoproject/trunk/public/xmlfile.xml");
 		$this->assertTrue($file->isLatestRevision());
 		$this->assertTrue($file->isWritable());
@@ -29,6 +30,13 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$file->sendInlineHtml();
 		$inline = ob_get_clean();
 		$this->assertEqual("&gt;\n", substr($inline, strlen($inline)-5), "%s");
+	}
+	
+	function testHeadVersionAnonymousUser() {
+		setTestUserNotLoggedIn();
+		$file = new SvnOpenFile("/demoproject/trunk/public/xmlfile.xml");
+		$this->assertFalse($file->isWritable(),
+			"File may be writable in SVN, but if the user is logged in we don't know, and we'd rather say no. %s");
 	}
 
 	function testHeadVersionReadonly() {
@@ -70,6 +78,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 	
 	function testNonexistingFile() {
 		$file = new SvnOpenFile("/demoproject/trunk/public/temp.txt", 2);
+		//$this->expectError(new PatternExpectation("/Could not read file .* from svn/"));
 		$this->assertEqual(404, $file->getStatus());
 		$this->assertFalse($file->isWritable());
 	}
@@ -98,7 +107,9 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertEqual(1, $file->getRevision());
 		$this->assertEqual(0, $file->getSize());
 		$this->assertEqual(0 ,$file->getContents());
-		$this->assertEqual('text/plain', $file->getType()); // based on filename extension
+		//$this->assertEqual('text/plain', $file->getType()); // based on filename extension
+		$this->assertEqual(MIMETYPE_UNKNOWN, $file->getType(),
+			"until MIME guessing is implemented, we don't know type if the file does not exist in apache. %s");
 	}
 	
 	function testLockedFile() {
@@ -107,7 +118,9 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertTrue($file->isLocked());
 		$this->assertTrue($file->isLockedBySomeoneElse());
 		$this->assertFalse($file->isLockedByThisUser());
-		$this->assertFalse($file->isWritable(),"File is not writable when locked by someone else. %s");
+		//$this->assertFalse($file->isWritable(),"File is not writable when locked by someone else. %s");
+		// for performance reasons we don't want to require an svn call to check writable
+		$this->assertTrue($file->isWritable(),"Even if it is locked it is still writable. %s");
 	}
 	
 	function testFolder() {

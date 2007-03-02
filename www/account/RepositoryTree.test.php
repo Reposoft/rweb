@@ -1,11 +1,13 @@
 <?php
-require("../lib/simpletest/setup.php");
-
 require(dirname(__FILE__)."/RepositoryTree.class.php");
+require("../lib/simpletest/setup.php");
 
 // mock
 function getRepository() {
 	return 'http://where-we-work.com/my-repo/';
+}
+function getPathName($p) {
+	return 'my-repo';
 }
 
 class TestRepositoryTree extends UnitTestCase {
