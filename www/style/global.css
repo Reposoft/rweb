@@ -168,6 +168,11 @@ a.folder {
 #commandbar span {
 	color: #BBBBBB;
 }
+/* general class for loading animation */
+.loading {
+	background-image: url('loading.gif') ! important;
+	background-repeat: no-repeat ! important;
+}
 /* action is for buttons inside listings, <a> is  active, <span> is greyed out */
 a.action {
 	color: #333333;

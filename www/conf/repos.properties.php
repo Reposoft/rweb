@@ -122,7 +122,9 @@ function isSSLClient() {
  * @return String the URL with the current protocol for navigation.
  */
 function asLink($url) {
-	if(isSSLClient()) return str_replace('http:', 'https:', $url);
+	if (isSSLClient() && substr($url, 0, 5)=='http:') {
+		return 'https:'.substr($url, 5);
+	}
 	return $url;
 }
 

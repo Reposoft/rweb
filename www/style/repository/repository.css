@@ -27,10 +27,6 @@
 .row div.details span {
 	margin: 0.4em;
 }
-/* general class for loading animation */
-#commandbar #showdetails.loading {
-	background-image: url('../loading.gif');
-}
 /* directory listing */
 .file {
 	background-image: url('16x16/file.png');
