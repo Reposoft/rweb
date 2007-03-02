@@ -7,6 +7,26 @@ require('edit.inc.php');
 // import testing framework, see http://www.lastcraft.com/simple_test.php
 require("../../lib/simpletest/setup.php");
 
+// mock
+$written = null;
+function editWriteNewVersion_txt($postedText, $destinationFile) {
+	global $written;
+	$written = $postedText;
+}
+function getLastWrite() {
+	global $written;
+	return $written;
+}
+class SmartyMock {
+	function assign($a, $b) {}
+	function fetch($t) {
+		return '<html><body>a</body></html>';
+	}
+}
+function smarty_getInstance() {
+	return new SmartyMock();
+}
+
 class TestEditPlugin extends UnitTestCase {
 
 	function setUp() {
@@ -106,6 +126,50 @@ class TestEditPlugin extends UnitTestCase {
 		preg_match('/(a)(b)?(c)((?(2)d))/',
 			'abcdefghij', $m);
 		print_r($m);
+	}
+	
+	function testCreateHtmlDocumentFromEditor() {
+		$html = '<p>hello</p>';
+		editWriteNewVersion_html($html, null);
+		$result = getLastWrite();
+		$this->assertTrue(strContains($result,'<html'));
+		$this->assertTrue(strContains($result,'<body'));
+		$this->assertTrue(strContains($result,'</body>'));
+		$this->assertTrue(strContains($result,'</html>'));
+	}
+
+	function testCreateHtmlDocument() {
+		$html = "<html htmlns=..>\n<body class=..>\n<p>hello</p>\n</body></html>";
+		editWriteNewVersion_html($html, null);
+		$result = getLastWrite();
+		$this->assertEqual(1, substr_count($result,'<html'));
+		$this->assertEqual(1, substr_count($result,'<body'));
+		$this->assertEqual(1, substr_count($result,'</body>'));
+		$this->assertEqual(1, substr_count($result,'</html>'));
+	}
+	
+	function testFullDocument() {
+		$html =
+'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+<meta name="Generator" content="Repos"></meta>
+<title></title>
+<link href="/home/documents.css" rel="stylesheet" type="text/css"></link>
+</head>
+<body>
+<p>tjoff</p>
+
+</body>
+</html>';
+		editWriteNewVersion_html($html, null);
+		$result = getLastWrite();
+		$this->assertEqual(1, substr_count($result,'<html'));
+		$this->assertEqual(1, substr_count($result,'<body'));
+		$this->assertEqual(1, substr_count($result,'</body>'));
+		$this->assertEqual(1, substr_count($result,'</html>'));		
 	}
 }
 

@@ -63,11 +63,12 @@ tinyMCE.init({
 function editWriteNewVersion_html(&$postedText, $destinationFile) {
 	$postedText = editIndentHtmlDocument($postedText);
 	// texts coming from smarty have only body contents
-	if (!preg_match('/<html.*<body.*</body>.*</html>/', $postedText)) {
+	if (!preg_match('/<html.*<body.*<\/body>.*<\/html>/ms', $postedText)) {
 		// TODO use existing html if new version? Use a templates/ file?
 		// Put the contents in the Repos template
 		$postedText = editGetNewDocument($postedText);
 	}
+	
 	// use plaintext write
 	editWriteNewVersion_txt($postedText, $destinationFile);
 }
