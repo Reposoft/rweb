@@ -137,7 +137,22 @@ class SvnOpenFile {
 		$this->headStatus = $s->getStatus();
 		$this->head = $s->getResponseHeaders();
 		if ($this->headStatus == 0) trigger_error("Could not connect to repository URL ".$this->url.". Might be a temporary error.", E_USER_ERROR);
-		if ($this->headStatus != 200 && $this->headStatus != 404) trigger_error("Unexpected response from target URL '".$this->url."'. Status ".$this->headStatus, E_USER_ERROR);
+		//could be a folder//if ($this->headStatus != 200 && $this->headStatus != 404) trigger_error("Unexpected response from target URL '".$this->url."'. Status ".$this->headStatus, E_USER_ERROR);
+	}
+	
+	/**
+	 * This might seem like an odd method to have in SvnOpenFile,
+	 * but it is good for reuse of code. The class does a best-effort
+	 * attempt to return meaningful results for folders,
+	 * specifically isWritable();
+	 */
+	function isFolder() {
+		if (strEnds($this->path,'/')) return true;
+		$this->_head();
+		if ($this->headStatus == 301) {
+			return ($this->head['Location'] == $this->url.'/');
+		}
+		return false;
 	}
 	
 	/**

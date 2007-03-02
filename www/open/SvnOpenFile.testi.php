@@ -15,6 +15,8 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertEqual('', $file->getLockComment());
 		$this->assertTrue(is_numeric($file->getRevision()) && $file->getRevision() > 0);
 		$this->assertEqual('text/xml', $file->getType());
+		$this->assertEqual('xmlfile.xml', $file->getFilename());
+		$this->assertEqual('/demoproject/trunk/public/', $file->getFolderPath());	
 		
 		$contents = $file->getContents();
 		$this->assertEqual(">\n", substr($contents, strlen($contents)-2), "File ends with newline. %s");
@@ -106,6 +108,46 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertTrue($file->isLockedBySomeoneElse());
 		$this->assertFalse($file->isLockedByThisUser());
 		$this->assertFalse($file->isWritable(),"File is not writable when locked by someone else. %s");
+	}
+	
+	function testFolder() {
+		$file = new SvnOpenFile("/demoproject/trunk/public/");
+		$this->assertEqual(200, $file->getStatus());
+		$this->assertTrue($file->isFolder());
+		$this->sendMessage("Note that isWritable should not generate an error in apache error log");
+		$this->assertTrue($file->isWritable());
+		$this->assertEqual('public', $file->getFilename());
+		$this->assertEqual('/demoproject/trunk/', $file->getFolderPath());
+	}
+	
+	function testFolderNoSlash() {
+		$file = new SvnOpenFile("/demoproject/trunk/public");
+		$this->assertEqual(301, $file->getStatus(), 
+			"HTTP status should be 301, not 302, for redirect to folder with slash. %s");
+		$this->assertTrue($file->isFolder(), "Should say isFolder==true when the slash is missing.");
+		$this->assertTrue($file->isWritable());
+	}
+		
+	function testFolderReadonly() {
+		$file = new SvnOpenFile("/demoproject/trunk/readonly/");
+		$this->assertEqual(200, $file->getStatus());
+		$this->assertTrue($file->isFolder());
+		$this->sendMessage("Note that isWritable should not generate an error in apache error log");
+		$this->assertFalse($file->isWritable());		
+	}
+	
+	function testFolderNoaccess() {
+		$file = new SvnOpenFile("/demoproject/trunk/noaccess/");
+		$this->assertEqual(403, $file->getStatus());
+		$this->assertTrue($file->isFolder());
+		$this->sendMessage("Note that isWritable should not generate an error in apache error log");
+		$this->assertFalse($file->isWritable());		
+	}
+	
+	function testFolderNonExisting() {
+		$file = new SvnOpenFile("/demoproject/trunk/nonexisting/");
+		$this->assertEqual(404, $file->getStatus());
+		$this->assertTrue($file->isFolder(), "Ends with slash so it is a folder. %s");	
 	}
 	
 }
