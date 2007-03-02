@@ -1,7 +1,8 @@
 <?php
 
-require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
-require( dirname(dirname(__FILE__))."/SvnEdit.class.php" );	
+require("../../conf/Presentation.class.php" );
+require("../SvnEdit.class.php" );	
+addPlugin('validation');
 
 // automatic validation
 new FilenameRule('name');

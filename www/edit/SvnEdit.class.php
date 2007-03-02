@@ -8,36 +8,10 @@
  * @see NewFilenameRule
  * @see FolderWriteAccessRule
  */
-require_once( dirname(dirname(__FILE__))."/open/SvnOpen.class.php" );
-addPlugin('validation');
 
-/**
- * Tries a resource path in current HEAD, for the current user, returning status code.
- * @param $target the path in the current repository; accepts folder names without tailing slash.
- * @param boolean $login for disabling login in unit tests
- * @return 0 = does not exist, -1 = access denied, 1 = folder, 2 = file, boolean FALSE if undefined
- * @package edit
- * @deprecated REPOS-15, currently it is only used from here
- */
-function login_getResourceType($target, $login=true) {
-	$url = getTargetUrl($target);
-	if (substr_count($url, '://')!=1) trigger_error("The URL \"$url\" is invalid", E_USER_WARNING); // remove when not frequent error
-	$request = new ServiceRequest($url, array(), $login);
-	$request->setSkipBody();
-	$request->exec();
-	$s = $request->getStatus();
-	$headers = $request->getResponseHeaders();
-	if ($s==301 && rawurldecode($headers['Location'])==$url.'/') return 1; // need to decode to handle UTF-8 chars
-	if ($s==404) return 0;
-	if ($s==403) return -1;
-	if ($s==200) return _isHttpHeadersForFolder($headers) ? 1 : 2;
-	trigger_error("Unexpected return code $s for URL $url", E_USER_ERROR);
-}
-function _isHttpHeadersForFolder($headers) {
-	if (!$headers['Content-Type']='text/xml') return false;
-	return !isset($headers['Content-Length']);
-}
- 
+require_once( dirname(dirname(__FILE__))."/open/SvnOpenFile.class.php" );
+require_once(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php');
+
 // ---- standard rules that the pages can instantiate ----
 
 /**
@@ -66,7 +40,6 @@ class FilenameRule extends RuleEreg {
 		return parent::validate($value);
 	}
 }
-
 /**
  * Shared validation rule to check if the name for a new file or folder is valid
  * 
@@ -80,16 +53,14 @@ class NewFilenameRule extends Rule {
 	}
 	function validate($fieldvalue) {
 		$target = $this->_getPath($fieldvalue);
-		$s = $this->_getResourceType($target);
-		if ($s < 0) return "The URL has access denied, so $target can not be used.";
-		if ($s == 1) return 'There is already a folder named "'.basename($target).'". Chose a different name.';
-		if ($s == 2) return 'There is already a file named "'.basename($target).'". Chose a different name.';
+		$s = new SvnOpenFile($target);
+		if ($s->getStatus()==404) return;
+		if ($s->getStatus()==403) return "The URL has access denied, so $target can not be used.";
+		if ($s->isFolder()) return 'There is already a folder named "'.basename($target).'". Chose a different name.';
+		return 'There is already a file named "'.basename($target).'". Chose a different name.';
 	}
 	function _getPath($fieldvalue) {
 		return $this->_pathPrefix.$fieldvalue;
-	}
-	function _getResourceType($path) {
-		return login_getResourceType($path);
 	}
 }
 

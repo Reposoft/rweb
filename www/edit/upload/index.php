@@ -5,9 +5,9 @@
  */
 require("../../conf/Presentation.class.php");
 require("../SvnEdit.class.php");
-require("../../open/SvnOpenFile.class.php");
 require("mimetype.inc.php");
 addPlugin('edit');
+addPlugin('validation');
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 

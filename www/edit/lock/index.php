@@ -9,6 +9,7 @@
 // locked when
 require('../../conf/Presentation.class.php');
 require('../SvnEdit.class.php');
+addPlugin('validation');
 
 if (isset($_GET[SUBMIT])) {
 	Validation::expect('message');

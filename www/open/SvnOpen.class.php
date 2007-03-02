@@ -10,7 +10,7 @@
 if (!function_exists('targetLogin')) require(dirname(dirname(__FILE__)).'/account/login.inc.php');
 
 if (!class_exists('Command')) require(dirname(dirname(__FILE__)).'/conf/Command.class.php');
-if (!class_exists('Rule')) require(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php');
+require_once(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php');
 
 define('HEAD','HEAD');
 

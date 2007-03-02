@@ -1,7 +1,6 @@
 <?php
 require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__))."/SvnEdit.class.php" );
-require("../../open/SvnOpenFile.class.php");
 
 if (isset($_GET[SUBMIT])) {
 	Validation::expect('message');

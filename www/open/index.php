@@ -21,10 +21,9 @@ $rev = $revisionRule->getValue();
 $fromrevRule = new RevisionRule('fromrev');
 $fromrev = $fromrevRule->getValue();
 
-// TODO use a HTTP method to check for folder (this is only syntactically)
-// should probably be integrated with SvnOpenFile
-$url = asLink(getRepository()).$target;
-if (isFolder($url) || !strContains(getPathName($url), '.')) {
+$file = new SvnOpenFile($target, $rev);
+// identify folders, even without trailing slash, for example when coming from history
+if ($file->isFolder()) {
 	if ($rev) {
 		header('Location: '.getWebapp().'open/list/?target='.urlencode($target).'&rev='.$rev);
 	} else {
@@ -32,10 +31,6 @@ if (isFolder($url) || !strContains(getPathName($url), '.')) {
 	}
 	exit;
 }
-
-// TODO identify folders, even without trailing slash, for example when coming from history
-
-$file = new SvnOpenFile($target, $rev);
 
 $p = Presentation::getInstance();
 $p->assign_by_ref('file', $file);
@@ -45,7 +40,5 @@ $p->assign('target', getTarget());
 if ($fromrev) $p->assign('fromrev', $fromrev);
 // all set
 $p->display();
-
-// go directly to the resource in repository // header("Location: ".getConfig('repo_root')."$url");
 
 ?>

@@ -5,12 +5,8 @@
  * It is always text files, so it is assumed that no locks exist or are needed.
  * @package edit
  */
-define('DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
-define('PARENT_DIR', dirname(rtrim(DIR, DIRECTORY_SEPARATOR)));
-
 require("../../conf/Presentation.class.php" );
 require("../SvnEdit.class.php" );
-require("../../open/SvnOpenFile.class.php");
 addPlugin('edit');
 addPlugin('password');
 //addPlugin('acl');
