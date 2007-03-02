@@ -61,14 +61,14 @@ Select "delete the original" to make this a move operation.</p>
 
 <div class="column" style="width: 60%">
 <form id="copy" name="copy" method="get" action="#">
-  <fieldset>
+	<fieldset>
 	<legend>make a copy of <a class="filename" href="{=$file,url}">{=$file,filename}</a> inside repository {=$repository}</legend>
-    <input name="target" type="hidden" id="target" value="{=$target}" />
-  <p>
-    <label for="name">copy the current</label>
-    <input id="name" name="name" type="text" size="40" disabled="disabled" value="{=$oldname}" />
-    <input id="oldname" name="oldname" type="hidden" value="{=$oldname}" />
-  </p>
+		<input name="target" type="hidden" id="target" value="{=$target}" />
+	<p>
+		<label for="name">copy the current</label>
+		<input id="name" name="name" type="text" size="40" disabled="disabled" value="{=$oldname}" />
+		<input id="oldname" name="oldname" type="hidden" value="{=$oldname}" />
+	</p>
 	<p>
 		<label for="folder">from folder</label>
 		<input id="folder" name="folder" type="text" size="40" disabled="disabled" value="{=$folder}" />	
@@ -76,11 +76,11 @@ Select "delete the original" to make this a move operation.</p>
 	<p>
 		<label for="tofolder">to folder</label>
 		<input id="tofolder" name="tofolder" type="text" size="40" value="{=$folder}" class="required" />	
-		<a class="action" href="#" onclick="pasteUrl()">paste the full URL</a>	
+		<a class="action" href="#" onclick="pasteUrl()">paste&nbsp;the&nbsp;full&nbsp;URL</a>	
 	</p>
 	<p>
 		<label for="newname">new name</label>
-	   <input name="newname" type="text" id="newname" size="40" value="{=$oldname}" class="required" onchange="checkType()" />
+		<input name="newname" type="text" id="newname" size="40" value="{=$oldname}" class="required" onchange="checkType()" />
 	</p>
 	<p>
 		<label for="move">and delete the original</label>
@@ -90,15 +90,15 @@ Select "delete the original" to make this a move operation.</p>
 			<input id="movehidden" name="move" type="hidden" value="0" />
 		{=/if}
 	</p>
-  <p>
-    <label for="message">history text</label>
-    <textarea name="message" id="message" cols="30" rows="2" tabindex="2" ></textarea>
-  </p>
-  <p>
-    <label for="submit"></label>
-    <input id="submit" type="submit" name="submit" value="Copy" tabindex="3" />
-  </p>
-  </fieldset>
+	<p>
+		<label for="message">history text</label>
+		<textarea name="message" id="message" cols="30" rows="2" tabindex="2" ></textarea>
+	</p>
+	<p>
+		<label for="submit"></label>
+		<input id="submit" type="submit" name="submit" value="Copy" tabindex="3" />
+	</p>
+	</fieldset>
 </form>
 </div>
 <div class="column" style="width: 40%">
