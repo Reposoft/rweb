@@ -59,7 +59,7 @@ Select "delete the original" to make this a move operation.</p>
 {=/if}
 </div>
 
-<div class="column" style="width: 60%">
+<div class="column" style="width: 70%">
 <form id="copy" name="copy" method="get" action="#">
 	<fieldset>
 	<legend>make a copy of <a class="filename" href="{=$file,url}">{=$file,filename}</a> inside repository {=$repository}</legend>
@@ -89,7 +89,7 @@ Select "delete the original" to make this a move operation.</p>
 			<input id="moveno" name="move" type="radio" value="0" checked="checked" onchange="setMove(!this.checked)" /> No
 		<!--{else}-->
 			<input id="moveyes" name="move" type="radio" value="1" disabled="disabled"/> Yes 
-			<input id="moveno" name="move" type="radio" value="0" checked="checked"/> No
+			<input id="moveno" name="move" type="radio" value="0" checked="checked"/> No (original&nbsp;is&nbsp;locked)
 			<input id="movehidden" name="move" type="hidden" value="0" />
 		<!--{/if}-->
 	</p>
@@ -104,7 +104,7 @@ Select "delete the original" to make this a move operation.</p>
 	</fieldset>
 </form>
 </div>
-<div class="column" style="width: 40%">
+<div class="column" style="width: 30%">
 <div class="section">
 <h2>Cheap copies</h2>
 <p>Copies inside the repository take no extra storage space.

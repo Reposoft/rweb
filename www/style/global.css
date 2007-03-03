@@ -9,7 +9,6 @@ html {
 body {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
 	font-size: 82.5%;
-	min-width: 980px;
 	margin-top: 0px;
 }
 /* resume with em font sizes relative to the above */
@@ -106,13 +105,14 @@ a.folder {
 }
 /* common page elements, may also be layouted for each tool */
 #commandbar {
+	min-width: 980px;
 	height: 24px;
 	background-color: #ECF1EF;
 	padding: 3px;
 	border-bottom: 1px solid #CCCCCC;
 }
 .row {
-	width: 100%;
+	min-width: 980px;
 	padding: 1px;
 	border-bottom: 1px solid #FFFFFF;
 }
