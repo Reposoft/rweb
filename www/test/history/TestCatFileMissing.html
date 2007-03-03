@@ -10,7 +10,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/repos/open/file/?target=/test/trunk/does/not/exist.txt&rev=HEAD</td>
+	<td>/repos/open/file/?target=/test/trunk/does/not/exist.txt&rev=2</td>
 	<td></td>
 </tr>
 <tr>
@@ -23,15 +23,35 @@
 	<td>/test/trunk/does/not/exist.txt</td>
 	<td></td>
 </tr>
-<tr>
-	<td>assertElementPresent</td>
-	<td>css=a#parent</td>
+<tr title="should this be the 404 page or the view page?">
+	<td>storeElementPresent</td>
+	<td>css=a#back</td>
+	<td>isErrorPage</td>
+</tr>
+<tr title="should this be the 404 page or the view page?">
+	<td>storeElementPresent</td>
+	<td>css=a#repository</td>
+	<td>isViewPage</td>
+</tr>
+<tr title="should not be the subversion error message">
+	<td>verifyTextNotPresent</td>
+	<td>svn:</td>
 	<td></td>
 </tr>
 <tr title="should not be the subversion error message">
-	<td>assertTextNotPresent</td>
-	<td>svn:</td>
+	<td>verifyTextPresent</td>
+	<td>does not exist</td>
 	<td></td>
+</tr>
+<tr title="should not be the subversion error message">
+	<td>verifyTextPresent</td>
+	<td>version 2</td>
+	<td></td>
+</tr>
+<tr title="TODO test for a file that exists in HEAD">
+	<td>storeTextPresent</td>
+	<td>exists in current version</td>
+	<td>checksHead</td>
 </tr>
 </tbody></table>
 </body>

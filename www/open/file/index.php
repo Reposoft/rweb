@@ -12,6 +12,8 @@ addPlugin('password');
 $revisionRule = new RevisionRule();
 $rev = $revisionRule->getValue();
 $file = new SvnOpenFile(getTarget(), $rev);
+// Error handling for non existing file is in the template
+// If that's a good idea, then probably error handling for big file should be there too
 
 // show
 $p = Presentation::getInstance();
