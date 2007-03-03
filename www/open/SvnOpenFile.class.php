@@ -341,10 +341,13 @@ class SvnOpenFile {
 	
 	/**
 	 * This is _not_ a getter for the '_revision' field, which may have value HEAD.
+	 * However, if the file's revision could not be read from svn,
+	 * the value of the '_revision' field is returned (which might be "HEAD").
 	 * @return int Integer revision number, even for HEAD.
 	 */
 	function getRevision() {
 		$this->_read();
+		if (!isset($this->file['revision'])) return $this->_revision;
 		return $this->file['revision'];
 	}
 	

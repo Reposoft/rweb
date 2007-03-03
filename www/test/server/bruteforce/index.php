@@ -54,20 +54,9 @@ function testMultiple($threads, $url, $count) {
 }
 
 function testBruteForce($url, $count) {
-	$param = array();
-	if ($q = strpos($url, '?')) {
-		$p = explode('&', substr($url, $q+1));
-		foreach($p as $pa) {
-			list($key, $value) = explode('=', $pa);
-			$param[$key] = $value;
-		}
-		$url = substr($url, 0, $q);
-	}
-	
 	$r = new Report('Repeated login attempts');	
 	$r->info("Running $count login attemts at url '$url'");
-	if (count($param)) $r->debug($param);
-	$s = new ServiceRequest($url, $param, false);
+	$s = ServiceRequest::forUrl($url, false);
 	$s->exec();
 	if ($s->getStatus() != 401) {
 		$r->error('The URL must return 401 Authorization Required but got http code '.$s->getStatus()); 
@@ -77,14 +66,14 @@ function testBruteForce($url, $count) {
 	}
 	$time = microtime_float();
 	for ($i = 1; $i<$count; $i++) {
-		$s = new ServiceRequest($url, $param, false);
+		$s = ServiceRequest::forUrl($url, false);
 		$s->_username = 'test';
 		$s->_password = 'test'.$i;
 		$s->exec();
 		$time2 = microtime_float();
 		$status = $s->getStatus();
 		// normal BASIC login return 401 on invalid credentials, Repos returns an info page
-		if ($status == 401 || ($status == 200 && isset($param['login']))) {
+		if ($status == 401 || ($status == 200 && strpos($url,'?login'))) {
 			$r->info("$i: Got status $status, response time ".sprintf("%01.3f",$time2-$time)." seconds");
 		} else { // unexpected return code
 			$r->error("$i: Got status $status, response time ".sprintf("%01.3f",$time2-$time)." seconds");
@@ -98,7 +87,7 @@ function testBruteForce($url, $count) {
 		$time = $time2;
 	}
 	$r->info('Last login done with password "test"');
-	$s = new ServiceRequest($url, $param, false);
+	$s = ServiceRequest::forUrl($url, false);
 	$s->_username = 'test';
 	$s->_password = 'test';
 	$s->exec();

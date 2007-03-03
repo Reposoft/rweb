@@ -53,7 +53,7 @@ function printHeaders($target) {
 	echo("<p><strong>URL: <a check=\"blank\" href=\"$target\">$target</a></strong></p>");
 	if (strContains($target, '?'));
 	
-	$request = new ServiceRequest($target, array(), false);
+	$request = ServiceRequest::forUrl($target, false);
 	$request->setResponseTypeDefault();
 	$request->exec();
 	$headers = $request->getResponseHeaders();

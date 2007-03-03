@@ -89,6 +89,26 @@ class ServiceRequest {
 	}
 	
 	/**
+	 * Instantiates a ServiceRequest from an URL with query string
+	 * Example: <code>$s = ServiceRequest::forUrl('http://host/?a=b&c=d');</code>
+	 * @param String $url complete url with query string, not encoded
+	 * @return ServiceRequest after calling constructor
+	 * @static 
+	 */
+	function forUrl($url, $authenticate=true) {
+		$param = array();
+		if ($q = strpos($url, '?')) {
+			$p = explode('&', substr($url, $q+1));
+			foreach($p as $pa) {
+				list($key, $value) = explode('=', $pa);
+				$param[$key] = $value;
+			}
+			$url = substr($url, 0, $q);
+		}
+		return new ServiceRequest($url, $param, $authenticate);
+	}
+	
+	/**
 	 * Enables authentication in the request, with the same user that is authenticated now.
 	 * If no user is authenticated, read the realm from the service URL, and return login box.
 	 */

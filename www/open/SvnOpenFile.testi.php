@@ -74,6 +74,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 	function testNonexistingFileHead() {
 		$file = new SvnOpenFile("/demoproject/trunk/public/thispathdoesnotexist.tmp");
 		$this->assertEqual(404, $file->getStatus());
+		$this->assertEqual('HEAD', $file->getRevision(), "No revision can be found. %s");
 		$this->assertFalse($file->isWritable());
 	}
 	
@@ -81,6 +82,8 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$file = new SvnOpenFile("/demoproject/trunk/public/temp.txt", 2);
 		//$this->expectError(new PatternExpectation("/Could not read file .* from svn/"));
 		$this->assertEqual(404, $file->getStatus());
+		$this->assertEqual(2, $file->getRevision(),
+			"Revision not found in svn, so return the value given to the constructor. %s");
 		$this->assertFalse($file->isWritable());
 	}
 	

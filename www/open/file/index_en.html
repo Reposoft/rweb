@@ -15,7 +15,7 @@
 <!-- on javascript browsers the box will be resized by the syntax plugin -->
 <textarea id="file" cols="82" rows="20" name="file" class="{=$file,extension}" readonly="readonly" >{=$file->sendInlineHtml()}</textarea>
 {=else}
-<p class="error">Error. Could not read file (status {=$file,status}). Maybe the file does not exist with this version.</p>
+<p class="error">Error. Could not read file (status {=$file,status}). The file might exist with a version other than {=$file,revision}.</p>
 {=/if}
 <div id="footer"></div>
 </body>

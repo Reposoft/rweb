@@ -10,8 +10,10 @@ $revisionRule = new RevisionRule();
 
 $file = new SvnOpenFile(getTarget(), $revisionRule->getValue());
 if ($file->getStatus() != 200) {
-	trigger_error('Failed to read the file from repository (status '.$file->getStatus().
-	'). Maybe it does not exist in version '.$revisionRule->getValue().'.', E_USER_ERROR);
+	// TODO have some kind of forwarding to the error pages for matching status code
+	require("../../conf/Presentation.class.php");
+	trigger_error('Failed to read '.$file->getPath().' from repository (status '.$file->getStatus().
+	'). Maybe it exists in a version other than '.$file->getRevision().'.', E_USER_ERROR);
 }
 
 $name = $file->getFilename();

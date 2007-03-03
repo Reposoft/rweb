@@ -136,6 +136,13 @@ class TestServiceRequest extends UnitTestCase {
 		$this->assertEqual(200, $service->getStatus());
 	}
 	
+	function testForUrl() {
+		$s = ServiceRequest::forUrl('http://host.se/a/b.php?c=d&e=f');
+		$this->assertEqual('http://host.se/a/b.php', $s->uri);
+		$this->assertEqual(2, count($s->parameters));
+		$this->assertEqual('f', $s->parameters['e']);
+	}
+	
 }
 
 testrun(new TestServiceRequest());
