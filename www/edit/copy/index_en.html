@@ -83,12 +83,15 @@ Select "delete the original" to make this a move operation.</p>
 		<input name="newname" type="text" id="newname" size="40" value="{=$oldname}" class="required" onchange="checkType()" />
 	</p>
 	<p>
-		<label for="move">and delete the original</label>
-		<input id="moveyes" name="move" type="radio" value="1" {=if not $file,isWritable || $file,isLockedBySomeoneElse}disabled="disabled"{=/if} onchange="setMove(this.checked)"/> Yes 
-		<input id="moveno" name="move" type="radio" value="0" {=if not $file,isWritable || $file,isLockedBySomeoneElse}disabled="disabled"{=/if} checked="checked" onchange="setMove(!this.checked)" /> No
-		{=if not $file,isWritable || $file,isLockedBySomeoneElse}
+		<label for="move">delete the original</label>
+		<!--{if $file,isWriteAllow}-->
+			<input id="moveyes" name="move" type="radio" value="1" onchange="setMove(this.checked)"/> Yes 
+			<input id="moveno" name="move" type="radio" value="0" checked="checked" onchange="setMove(!this.checked)" /> No
+		<!--{else}-->
+			<input id="moveyes" name="move" type="radio" value="1" disabled="disabled"/> Yes 
+			<input id="moveno" name="move" type="radio" value="0" checked="checked"/> No
 			<input id="movehidden" name="move" type="hidden" value="0" />
-		{=/if}
+		<!--{/if}-->
 	</p>
 	<p>
 		<label for="message">history text</label>

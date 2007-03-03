@@ -13,6 +13,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$file = new SvnOpenFile("/demoproject/trunk/public/xmlfile.xml");
 		$this->assertTrue($file->isLatestRevision());
 		$this->assertTrue($file->isWritable());
+		$this->assertTrue($file->isWriteAllow());
 		$this->assertEqual('', $file->getLockComment());
 		$this->assertTrue(is_numeric($file->getRevision()) && $file->getRevision() > 0);
 		$this->assertEqual('text/xml', $file->getType());
@@ -113,6 +114,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 	}
 	
 	function testLockedFile() {
+		setTestUser();
 		$file = new SvnOpenFile("/demoproject/trunk/public/locked-file.txt");
 		$this->assertTrue($file->isLatestRevision());
 		$this->assertTrue($file->isLocked());
@@ -121,6 +123,10 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		//$this->assertFalse($file->isWritable(),"File is not writable when locked by someone else. %s");
 		// for performance reasons we don't want to require an svn call to check writable
 		$this->assertTrue($file->isWritable(),"Even if it is locked it is still writable. %s");
+		// requires a user
+		$this->assertFalse($file->isWriteAllow(), "Current user not allowed to write to this file");
+		// TODO test as user svensson
+		// TODO test as user not logged in
 	}
 	
 	function testFolder() {

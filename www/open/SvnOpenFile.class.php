@@ -245,6 +245,16 @@ class SvnOpenFile {
 	}
 	
 	/**
+	 * @return true if the user is allowed to commit a new version,
+	 *  i.e. the file isWritable and not isLockedBySomeoneElse
+	 */
+	function isWriteAllow() {
+		if (!$this->isWritable()) return false;
+		if ($this->isLockedBySomeoneElse()) return false;
+		return true;
+	}
+	
+	/**
 	 * Subversion usually puts the revision number in the ETag header.
 	 * @return the revision number if found, boolean false if not
 	 *  (if revision number can be 0, use ===)
