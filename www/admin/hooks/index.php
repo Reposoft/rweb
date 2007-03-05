@@ -227,7 +227,7 @@ function createHook($type) {
 		$hook .= 'REV="$2"'."\n";
 		//$hook .= 'REPO="$1"'."\n";
 		// using non-blocking call to save on concurrent apache threads
-		$hook .= getHookCommand($type, '$REV')." >> /dev/null 2>&1 &\n";
+		$hook .= getHookCommand($type, '$REV')." > /dev/null 2>&1 &\n";
 	}
 	
 	if (!is_writable(dirname($f))) {
