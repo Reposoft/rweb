@@ -15,7 +15,7 @@ function ReposFileId(name) {
 	
 	this.get = function() {
 		return this._idescape(this._urlescape(name));
-	}
+	};
 	
 	/**
 	 * Returns the element matching the id.
@@ -24,7 +24,7 @@ function ReposFileId(name) {
 	 */
 	this.find = function(prefix) {
 		return document.getElementById(prefix + ':' + this.get());
-	}
+	};
 	
 	/**
 	 * Escapes utf-8 escaped url so that it is a valid XHTML id
@@ -32,7 +32,7 @@ function ReposFileId(name) {
 	this._idescape = function(text) {
 		// same characters as in the xsl:translate in repos.xsl getFileId template
 		return text.replace(/[%\/\(\)@&]/g,'_');
-	}
+	};
 	
 	/**
 	 * Subversion 'href' tags are already encoded with escaped utf-8 in the XML,
@@ -43,5 +43,5 @@ function ReposFileId(name) {
 		return text.replace(/[^\w]+/g, function(sub) {
 			return encodeURI(sub).toLowerCase();
 		}).replace(/;/g,'%3b').replace(/#/g,'%23');
-	}
+	};
 }
