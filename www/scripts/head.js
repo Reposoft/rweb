@@ -2,22 +2,11 @@
  * Repos common script logic (c) 2006 Staffan Olsson www.repos.se
  * @version $Id: head.js 2309 2007-01-15 08:51:01Z solsson $
  */
-if (document.documentElement && document.documentElement.namespaceURI && document.createElementNS) {
-	document.createElement = function(t) {
-		return document.createElementNS(document.documentElement.namespaceURI, t);
-	};
-}
+if(document.documentElement&&document.documentElement.namespaceURI&&document.createElementNS){document.createElement=function(t){return document.createElementNS(document.documentElement.namespaceURI,t);};}
 
 // ======= allow console.log in all browsers =========
-if (!("console" in window) || !("firebug" in console))
-{
-    var names = ["log", "debug", "info", "warn", "error", "assert", "dir", "dirxml",
-    "group", "groupEnd", "time", "timeEnd", "count", "trace", "profile", "profileEnd"];
-
-    window.console = {};
-    for (var i = 0; i < names.length; ++i)
-        window.console[names[i]] = function() {}
-}
+if(!("console"in window)||!("firebug"in console))
+{var names=["log","debug","info","warn","error","assert","dir","dirxml","group","groupEnd","time","timeEnd","count","trace","profile","profileEnd"];window.console={};for(var i=0;i<names.length;++i){window.console[names[i]]=function(){};}}
 
 // ===================================================
 /*
@@ -37,7 +26,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a
  * Repos fileid (c) 2006 Staffan Olsson www.repos.se
  * $Id: head.js 2309 2007-01-15 08:51:01Z solsson $
  */
-eval(function(p,a,c,k,e,d){e=function(c){return c.toString(36)};if(!''.replace(/^/,String)){while(c--){d[c.toString(a)]=k[c]||c.toString(a)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('1 d(3){0.3=3;0.9=1(){2 0.a(0.7(3))};0.j=1(8){2 f.i(8+\':\'+0.9())};0.a=1(4){2 4.5(/[%\\/\\(\\)@&]/g,\'b\')};0.7=1(4){2 4.5(/[^\\e]+/g,1(6){2 k(6).c()}).5(/;/g,\'%h\').5(/#/g,\'%l\')}};',22,22,'this|function|return|name|text|replace|sub|_urlescape|prefix|get|_idescape|_|toLowerCase|ReposFileId|w|document||3b|getElementById|find|encodeURI|23'.split('|'),0,{}))
+function ReposFileId(name){this.name=name;this.get=function(){return this._idescape(this._urlescape(name));};this.find=function(prefix){return document.getElementById(prefix+':'+this.get());};this._idescape=function(text){return text.replace(/[%\/\(\)@&]/g,'_');};this._urlescape=function(text){return text.replace(/[^\w]+/g,function(sub){return encodeURI(sub).toLowerCase();}).replace(/;/g,'%3b').replace(/#/g,'%23');};}
 
 // ===================================================
 /**
@@ -45,7 +34,24 @@ eval(function(p,a,c,k,e,d){e=function(c){return c.toString(36)};if(!''.replace(/
 * Under an Attribution, Share Alike License
 * By Kelvin Luck ( http://www.kelvinluck.com/ )
 **/
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('6(Y(8.b)==\'P\'){$.y("/K/A/b/",{4:"5"},2(u){e(\'5\',u);k()})}n{$(8).B(2(){k()})}2 k(){$(\'.E\').F(2(){l(9.r("t"));m s});3 c=x(\'5\');6(c)l(c)};2 l(h){$(\'H[@t*=5][@p]\').I(2(i){9.q=J;6(9.r(\'p\')==h)9.q=s});e(\'5\',h,N)};2 e(4,w,f){6(f){3 d=Q R();d.S(d.T()+(f*U*v*v*W));3 a="; a="+d.z()}n 3 a="";8.b=4+"="+w+a+"; G=/"};2 x(4){3 g=4+"=";3 j=8.b.L(\';\');M(3 i=0;i<j.7;i++){3 c=j[i];V(c.X(0)==\' \')c=c.o(1,c.7);6(c.C(g)==0)m c.o(g.7,c.7)}m D};2 O(4){e(4,"",-1)};',61,61,'||function|var|name|style|if|length|document|this|expires|cookie||date|createCookie|days|nameEQ|styleName||ca|initSwitch|switchStylestyle|return|else|substring|title|disabled|getAttribute|false|rel|data|60|value|readCookie|get|toGMTString|open|ready|indexOf|null|styleswitch|click|path|link|each|true|repos|split|for|365|eraseCookie|undefined|new|Date|setTime|getTime|24|while|1000|charAt|typeof'.split('|'),0,{}))
+if(typeof(document.cookie)=='undefined'){$.get("/repos/open/cookie/",{name:"style"},function(data){createCookie('style',data);initSwitch();});}else{$(document).ready(function(){initSwitch();});}
+function initSwitch(){$('.styleswitch').click(function()
+{switchStylestyle(this.getAttribute("rel"));return false;});var c=readCookie('style');if(c){switchStylestyle(c);}}
+function switchStylestyle(styleName)
+{$('link[@rel*=style][@title]').each(function(i)
+{this.disabled=true;if(this.getAttribute('title')==styleName){this.disabled=false;}});createCookie('style',styleName,365);}
+function createCookie(name,value,days)
+{if(days)
+{var date=new Date();date.setTime(date.getTime()+(days*24*60*60*1000));var expires="; expires="+date.toGMTString();}
+else{var expires="";}
+document.cookie=name+"="+value+expires+"; path=/";}
+function readCookie(name)
+{var nameEQ=name+"=";var ca=document.cookie.split(';');for(var i=0;i<ca.length;i++)
+{var c=ca[i];while(c.charAt(0)==' '){c=c.substring(1,c.length);}
+if(c.indexOf(nameEQ)===0){return c.substring(nameEQ.length,c.length);}}
+return null;}
+function eraseCookie(name)
+{createCookie(name,"",-1);}
 
 // ===================================================
 /**
@@ -64,15 +70,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a
 // ===================================================
 // load plugins for pages that can not add <script> statically
 
-$(document).ready( function() {
-	if ($('body.repository').length == 1) {
-		Repos.addScript('plugins/dateformat/dateformat.js');
-		Repos.addScript('plugins/details/details.js');
-	}
-	if ($('body.log').length == 1) {
-		Repos.addScript('plugins/dateformat/dateformat.js');
-	}
-	if ($('body.resource').length == 1) {
-		Repos.addScript('plugins/thumbnails/thumbnails.js');
-	}
-} );
+$(document).ready(function(){if($('body.repository').length==1){Repos.addScript('plugins/dateformat/dateformat.js');Repos.addScript('plugins/details/details.js');}
+if($('body.log').length==1){Repos.addScript('plugins/dateformat/dateformat.js');}
+if($('body.resource').length==1){Repos.addScript('plugins/thumbnails/thumbnails.js');}});
