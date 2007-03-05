@@ -16,9 +16,11 @@ function getRepositoryConventionsForTools($projectName) {
 	'administration' => 'administration/',
 	'files' => 'trunk/',
 	'branches' => 'branches/',
+	'tags' => 'tags/',
 	'tasks' => 'tasks/',
 	'news' => 'messages/',
 	'calendar' => 'calendar/',
+	'templates' => 'templates/',
 	'nonexisting' => 'dummy/' //just testing
 	);
 }

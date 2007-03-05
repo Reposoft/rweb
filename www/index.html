@@ -92,7 +92,7 @@ $.getJSON('lib/install.php', function(json) {
 	var any = false;
 	for (var id in json) {
 		if (json[id].installed) {
-			any = true;
+			if (id=='smarty') any = true;
 			$('#libstatus').append('<p>'+json[id].name+'</p>');
 		}
 	}
