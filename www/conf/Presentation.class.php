@@ -121,8 +121,9 @@ require(dirname(dirname(__FILE__)).'/lib/smarty/smarty.inc.php' );
  * {= ... }
  * 
  * Also adds a prefilter that allows "dot" notation, but with comma, for objects
- * <code>..$foo,bar} {$foo,isBar..</code> becomes <code>..$foo->getBar()} {$foo->isBar()..<code>
- * Comma is used instead of dot so it can be used with the standard Smarty
+ * <code>..$foo,bar} {$foo,isBar..</code> becomes 
+ * <code>..$foo->getBar()} {$foo->isBar()..</code>
+ * Comma is used instead of dot so it can be combined with the standard Smarty
  * syntax for associative arrays.
  * 
  * All templates have the following variables, assigned in display():
@@ -174,6 +175,8 @@ class Presentation {
 		$this->smarty->load_filter('pre', 'Presentation_useDotNotationForObjects');
 		$this->smarty->register_prefilter('Presentation_urlRewriteForHttps');
 		$this->smarty->load_filter('pre', 'Presentation_urlRewriteForHttps');
+		$this->smarty->register_prefilter('Presentation_removeIndentation');
+		$this->smarty->load_filter('pre', 'Presentation_removeIndentation');
 		if (PRESENTATION_XTHML) {
 			$this->smarty->register_prefilter('Presentation_useXmlEntities');
 			$this->smarty->load_filter('pre', 'Presentation_useXmlEntities');
@@ -501,6 +504,12 @@ function Presentation_urlRewriteForHttps($tpl_source, &$smarty) {
 	$pattern = '/(href|src)=\"{=\$(\w+)}/';
 	$replacement = '$1="{=$$2|asLink}';
 	return preg_replace($pattern, $replacement, $tpl_source);
+}
+
+function Presentation_removeIndentation($tpl_source, &$smarty) {
+	$pattern = '/>\r?\n\s*([<{])/';
+	$replacement = '>$1';
+	return preg_replace($pattern, $replacement, $tpl_source); 
 }
 
 // plug in to repos.properties.php's error handling solution

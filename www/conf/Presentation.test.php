@@ -25,9 +25,9 @@ class TestPresentation extends UnitTestCase {
 		$p = new Presentation();
 		$smarty = $p->smarty;
 		if ($debugMode) {
-			
+			$this->assertFalse($smarty->caching);
 		} else {
-			$this->assertTrue($smarty->caching);
+			$this->assertFalse($smarty->caching, "We should never cache output. %s");
 			$this->assertFalse($smarty->force_compile);
 		}
 	}
@@ -75,6 +75,30 @@ class TestPresentation extends UnitTestCase {
 		$result = Presentation_urlRewriteForHttps(
 			'<a href="'.LEFT_DELIMITER.'$var|getPathName'.RIGHT_DELIMITER.'">', $smarty);
 		$this->assertEqual('<a href="'.LEFT_DELIMITER.'$var|getPathName'.RIGHT_DELIMITER.'">', $result);		
+	}
+	
+	function testPrefilter_removeIndentation() {
+		$smarty = null;
+		// only newline
+		$result = Presentation_removeIndentation(
+			"abc</p>\n<p>def", $smarty);
+		$this->assertEqual("abc</p><p>def", $result);
+		// CRLF
+		$result = Presentation_removeIndentation(
+			"abc</p>\r\n<p>def", $smarty);
+		$this->assertEqual("abc</p><p>def", $result);
+		// newline and indent spaces
+		$result = Presentation_removeIndentation(
+			"abc</p>\n   <p>def", $smarty);
+		$this->assertEqual("abc</p><p>def", $result);
+		// newline and indent tab
+		$result = Presentation_removeIndentation(
+			"abc</p>\n\t\t<p>def", $smarty);
+		$this->assertEqual("abc</p><p>def", $result);
+		// template varable
+		$result = Presentation_removeIndentation(
+			"abc</p>\n   {=if \$a}", $smarty);
+		$this->assertEqual("abc</p>{=if \$a}", $result);
 	}
 
 }
