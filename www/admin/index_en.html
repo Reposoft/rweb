@@ -42,7 +42,7 @@ to <span id="backuprevision" class="revision">{=$lastrev}</span>
 {=if $hasgaps}
 <p class="warning">To fix the gaps, delete newer backup files and then run backup again.</p> 
 {=else}
-<p class="passed">Every revision from 0 to {=$lastrev} is backed up.</p>
+<p class="passed">Revisions from 0 to {=$lastrev} are backed up.</p>
 {=/if}
 {=/if}
 </td>
@@ -52,13 +52,24 @@ to <span id="backuprevision" class="revision">{=$lastrev}</span>
 <!--{if $headrev gt $lastrev }-->
 <p>The repository has revisions up to <span class="revision">{=$headrev}</span> 
 that are newer than the latest backup <span class="revision">{=$lastrev}</span></p>
-<p>Regular automated backups is preferred, but you can also <a id="backuprun" href="backup/">run incremental backup manually</a>.</p>
+<form action="backup/">
+<p>Regular automated backups is preferred, but you can also 
+<input type="submit" id="backuprun" name="backuprun" value="run incremental backup manually"/>
+</p></form>
 <!--{elseif $headrev lt $lastrev }-->
-<p>There are more revisions in the backup than in the repository. You can manually <a id="load" href="load/">load new backup files into repository</a>.</p>
+<form action="load/">
+<p>There are more revisions in the backup than in the repository. You can manually
+<input type="submit" id="backupload" name="backupload" value="load new backup files into repository"/>
+</p></form>
+<!--{else}-->
+<p>Every revision is backed up. <a id="backuprun" href="backup/">Backup</a>
+will report that no further backup is needed now.</p>
 <!--{/if}-->
 </td></tr>
 </table>
-<p><a id="backupverify" href="verify/">Verify current backup files</a></p>
+<form action="verify/"><p>
+<input type="submit" id="backupverify" name="backupverify" value="Verify current backup files"/>
+</p></form>
 </div>
 
 <div class="section">

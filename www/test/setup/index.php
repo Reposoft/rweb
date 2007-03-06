@@ -37,6 +37,16 @@ if (array_key_exists('public', $_GET)) {
 	exit;
 }
 
+if (array_key_exists('reset', $_GET)) {
+	header("Location: /repos/test/reset/testrepo/");
+	exit;
+}
+
+if (array_key_exists('resetminimal', $_GET)) {
+	header("Location: /repos/test/reset/minimal/");
+	exit;
+}
+
 // go to start page for repository browser tests
 header("Location: /testrepo/test/trunk/");
 

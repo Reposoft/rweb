@@ -29,8 +29,8 @@ class FilenameRule extends RuleEreg {
 	function FilenameRule($fieldname, $required='true') {
 		$this->required = $required;
 		$this->RuleEreg($fieldname, 
-			'may not contain any of the characters \/:*?<>|! or quotes', 
-			'^[^\\/:*?<>|\'"!]+$');
+			'may not contain any of the characters \/:*?<>| or quotes', 
+			'^[^\\/:*?<>|\'"]+$');
 	}
 	function validate($value) {
 		if (empty($value)) return $this->required ? 'This is a required field' : null;

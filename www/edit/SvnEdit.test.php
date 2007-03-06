@@ -149,11 +149,19 @@ class SvnEditTest extends UnitTestCase
 		$r = new FilenameRule('file');
 		$this->assertNull($r->validate('abc.txt'));
 		$this->assertEqual('This is a required field', $r->validate(''));
-		$this->assertNull($r->validate(str_repeat('a', 50)));
-		$this->assertNotNull($r->validate(str_repeat('a', 51)), "max length 50");
 		$this->sendMessage("Message on validate 'a\"': ".$r->validate('a"'));
 		$this->assertNotNull($r->validate('a"'), 'double quote not allowed in filename');
 		$this->assertNotNull($r->validate('a*'), '* not allowed in filename');
+		$this->assertNull($r->validate('a!'), '! is allowed in filename');
+		$this->assertNotNull($r->validate("a'"), 'single quoute is not allowed in filename. '
+			.'It would be possible but it causes extra work for linux users.');
+	}
+	
+	function testFilenameMaxLength() {
+		// this is actually a recommendation but we handle it like a rule
+		$r = new FilenameRule('file');
+		$this->assertNull($r->validate(str_repeat('a', 50+4)));
+		$this->assertNotNull($r->validate(str_repeat('a', 51+4)), "max length 50 + extension .123");
 	}
 	
 	function testFilenameRuleSpecialCases() {

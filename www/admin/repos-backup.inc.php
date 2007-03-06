@@ -12,6 +12,9 @@ define('BACKUP_SCRIPT_VERSION','$LastChangedRevision$');
 define('BACKUP_SIZE', 100*1024*1024); // recommended unpacked size of dump files
 define('BACKUP_MAX_TIME', 30*60); // maximum time in seconds for dumping and packing one backup increment (with the above size)
 
+// don't stop in the middle of backup operations
+ignore_user_abort();
+
 function getNewBackupTempFile() {
 	return System::getTempFile('backup'); // TODO prefix?
 }

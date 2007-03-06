@@ -11,7 +11,9 @@
 <h1>Create and reset test repositories</h1>
 <table class="rows">
 <tr>
-<th><a id="testrepo" href="testrepo/">testrepo</a></th>
+<th>
+<form action="testrepo/"><input type="submit" id="testrepo" value="testrepo"/></form>
+</th>
 <td>
 The repository used for automated tests: <code>/testrepo</code>. A standard repos setup with accounts 'svensson' and 'test', 
 ACL file, a shared project, writeprotected folder, no-access folder, public folder with anonymous access,
@@ -22,7 +24,9 @@ be preceded and followed by a full automated system test.
 </td>
 </tr>
 <tr>
-<th><a href="minimal/">minimal</a></th>
+<th>
+<form action="minimal/"><input type="submit" id="minimal" value="minimal"/></form>
+</th>
 <td>
 A basic single.project repository <a target="_blank" href="/testrepo/">/testrepo</a>. Sample setup for a company running starting with repos in-house,
 with one shared repository and access for all users to all folders. Project folders can be created
@@ -30,7 +34,9 @@ in a custom structure within the <code>trunk</code> folder.
 </td>
 </tr>
 <tr>
-<th><a id="empty" href="empty/">empty</a></th>
+<th>
+<form action="empty/"><input type="submit" id="empty" value="empty"/></form>
+</th>
 <td>
 Deletes the contents of the existing repository and creates an empty folder instead.
 This can be used to test backup recovery.
