@@ -96,12 +96,18 @@ a.folder {
 }
 /* elements to get user's attention  */
 .error, .warning, .note {
-	padding-left: 24px;	
+	padding-left: 26px;
+	padding-top: 6px;
+	padding-bottom: 6px;
 	background-position: left;
 	background-repeat: no-repeat;
+	width: 80%;
+	margin-left: 8%;
 }
 .error {
+	border: 1px dotted #cc9999;
 	color: #CC3300;
+	font-weight: bold;
 	background-image: url(error.png);
 }
 .warning {
