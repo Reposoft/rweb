@@ -41,6 +41,7 @@ $testfiles = array(
 'open/ServiceRequest.test.php',
 'open/ServiceRequest.testi.php',
 'edit/SvnEdit.test.php',
+'edit/PresentEdit.test.php',
 'edit/merge/conflicthandler.test.excel.php',
 'edit/merge/xmlConflictHandler.test.php',
 'plugins/validation/Validation.test.php',
