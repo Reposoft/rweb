@@ -94,14 +94,22 @@ a.folder {
 .projectname {
 	color: #663300;
 }
+/* elements to get user's attention  */
+.error, .warning, .note {
+	padding-left: 24px;	
+	background-position: left;
+	background-repeat: no-repeat;
+}
 .error {
 	color: #CC3300;
+	background-image: url(error.png);
 }
 .warning {
-	width: 80%;
 	border: 1px dotted #cc9999;
-	padding-left: 40px;
-	background: url(warning.png) left no-repeat;
+	background-image: url(warning.png);
+}
+.note {
+	background-image: url(note.png);	
 }
 /* common page elements, may also be layouted for each tool */
 #commandbar {
