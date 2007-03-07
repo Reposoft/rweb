@@ -21,6 +21,7 @@ svn import --username test --password test --non-interactive $TEST $REPO/importf
 for F in a b c d e f g h i j
 do
 	svn import --username test --password test --non-interactive $TEST $REPO/importfolder/$F -m "import-$F"
+	echo "time: $(date)"
 done
 rmdir $TEST
 

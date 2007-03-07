@@ -59,7 +59,7 @@ function checkType() {
 Save the file on your hard drive, edit, then upload the new version in the form below.</p>
 <!--{/if}-->
 <!--{if $isfile}-->
-<p>As a new version of file <a class="file" href="../open/?target={=$target}">{=$target}</a>.</p>
+<p>As a new version of file <a class="file" href="{=$file,url}">{=$file,filename}</a>.</p>
 <div class="details" title="{=$target}" style="display: none">
 Current revision: <span class="revision"></span><br />
 Last modified <span class="datetime"></span> by <span class="username"></span><br />
@@ -101,6 +101,7 @@ to make sure that your local changes are based on the newest version of the shar
   <!--{if $isfile}-->
   <p title="the version of the file when it was downloaded">
     {=foreach from=$log key=r item=e name=log}
+    <div style="border:1px solid white">
       {=if $smarty.foreach.log.first}
       <label for="fromrev{=$r}">based on version <span class="revision">{=$r}</span></label>
       <input id="fromrev{=$r}" type="radio" name="fromrev" value="{=$r}" checked="checked" />
@@ -111,10 +112,13 @@ to make sure that your local changes are based on the newest version of the shar
       <input id="fromrev{=$r}" type="radio" name="fromrev" value="{=$r}" />
       <span class="username">{=$e.user}</span> <span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span><br />
       {=/if}
+    </div>
     {=/foreach}
+    <div style="border:1px solid white">
       <label for="fromrevHEAD">&nbsp;</label>
       <input id="fromrevHEAD" type="radio" name="fromrev" value="HEAD" />
       <span>Don't know. Just overwrite the current version.</span>
+	</div>
   </p>
   {=if $file,isLockedByThisUser}
   <p>
