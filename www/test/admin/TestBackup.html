@@ -30,7 +30,7 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>Every revision from 0 to ${headrev} is backed up</td>
+	<td>sions from 0 to ${headrev} are backed up</td>
 	<td></td>
 </tr>
 <tr>
@@ -102,6 +102,16 @@
 	<td>verifyText</td>
 	<td>backuprevision</td>
 	<td>${headrev}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>backupverify</td>
+	<td></td>
+</tr>
+<tr title="This may report that MD5 sum contains sums from old test backups">
+	<td>assertTextPresent</td>
+	<td>0 fails and 0 exceptions</td>
+	<td></td>
 </tr>
 </tbody></table>
 </body>

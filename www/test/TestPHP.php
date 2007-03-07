@@ -47,7 +47,8 @@ $testfiles = array(
 'plugins/validation/Validation.test.php',
 'plugins/edit/edit.test.php',
 'edit/upload/mimetype.test.php',
-'admin/admin.test.php'
+'admin/admin.test.php',
+'admin/repos-backup.test.php'
 );
 
 if (!TEST_INTEGRATION) {

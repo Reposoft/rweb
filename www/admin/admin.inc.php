@@ -24,11 +24,11 @@ function getTime() { // still used in backup
 // Currently all shared backup methods require a global Report instance $report
 function html_start() {}
 function debug($message) {global $report; $report->debug($message); }
-function info($message) {global $report; $report->ok($message); }
-function fail($message) {global $report; $report->fail($message); }
-function warn($message) {global $report; if($report) $report->warn($message); }
-function error($message) {global $report; $report->error($message); }
-function fatal($message) {global $report; $report->fatal($message); } // deprecated
+function info($message) {global $report; $report->ok(getTime().' '.$message); }
+function fail($message) {global $report; $report->fail(getTime().' '.$message); }
+function warn($message) {global $report; if($report) $report->warn(getTime().' '.$message); }
+function error($message) {global $report; $report->error(getTime().' '.$message); }
+function fatal($message) {global $report; $report->fatal(getTime().' '.$message); } // deprecated
 function html_end($code = 0) {global $report; $report->display(); }
 
 // --- basic repository examination ---

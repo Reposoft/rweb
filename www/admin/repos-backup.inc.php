@@ -29,13 +29,13 @@ function create($repository) {
 		debug ("Creating repository directory $repository");
 		mkdir($repository, 0700);
 	}
-	$command = System::getCommand("svnadmin") . " create $repository";
-	$output = array();
-	$return = 0;
-	$result = (int) exec($command, $output, $return);
-	debug("$command said $result and outputted: " . $output);
-	// TODO ok message
-	return ( $return==0 );
+	$command = new Command('svnadmin');
+	$command->addArgOption('create', $repository);
+	if ($command->exec()) {
+		error($command->getOutput());
+		return false;
+	}
+	return true;
 }
 
 /**
@@ -53,15 +53,15 @@ function dump($repository, $backupPath, $fileprefix) {
 	if ( $files>0 )
 		$fromrev = $current[$files-1][2] + 1;
 	if ( $fromrev - 1 > $headrev )
-		fatal(getTime()." Serious error in $repository backup. Backup has more revisions ($fromrev) than repository ($headrev)." );
+		fatal("Error in $repository backup. Backup has more revisions ($fromrev) than repository ($headrev)." );
 	if ( $fromrev - 1 == $headrev ) {
-		info(getTime()." No further backup needed for $repository. Both dumpfiles and repository are at revision $headrev." );
+		info("No further backup needed for $repository. Both dumpfiles and repository are at revision $headrev." );
 		return;
 	}
 	$success = dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $headrev);
 	if ( ! $success )
-		fatal(getTime()." Could not dump $repository revision $fromrev to $headrev to folder $backupPath");
-	info(getTime()." Dumped $repository revision $fromrev to $headrev to folder $backupPath");
+		fatal("Could not dump $repository revision $fromrev to $headrev to folder $backupPath");
+	info("Dumped $repository revision $fromrev to $headrev to folder $backupPath");
 }
 
 /**
@@ -146,8 +146,6 @@ function packageDumpfile($tempfile, $path) {
  * @param fileprefix Filenames up to first revision number, for example "myrepo-" for myrepo-00?-to-0??.svndump.gz
  */
 function load($repository, $backupPath, $fileprefix) {
-	define("LOADCOMMAND",System::getCommand('svnadmin') . " load $repository");
-
 	// validate input
 	if ( strlen($backupPath)<3 )
 		fatal("backupPath not set");
@@ -172,7 +170,7 @@ function load($repository, $backupPath, $fileprefix) {
 		// read the files into repo
 		set_time_limit(BACKUP_MAX_TIME);
 		$head = $file[2];
-		$return = loadDumpfile($backupPath . $file[0],LOADCOMMAND);
+		$return = loadDumpfile($backupPath . $file[0], $repository);
 		if ($return != 0) {
 			fatal("Error loading backup file $file[0], returned $return. Repository loading stopped.");
 		}
@@ -186,14 +184,14 @@ function load($repository, $backupPath, $fileprefix) {
  * @return true if repository is valid
  */
 function verify($repository) {
-	define("VERIFYCOMMAND", System::getCommand('svnadmin') . " verify $repository" );
 	set_time_limit(BACKUP_MAX_TIME);
-	$return = 0;
-	exec( VERIFYCOMMAND, $output, $return );
-	if ( $return == 0 )
+	$command = new Command('svnadmin');
+	$command->addArgOption('verify', $repository);
+	if ($command->exec()) {
 		info( "Repository $repository verified and seems OK." );
-	else
-		error( VERIFFYCOMMAND . " returned code $return. Repository is not valid." );
+	} else {
+		error( "Verify '$repository' returned code $return. Repository is not valid." );
+	}
 	return $return==0;
 }
 
@@ -296,26 +294,61 @@ function _calculateMD5($file) {
 /**
  * @return 1 if backup file is invalid, otherwise return value of the resulting command
  * @param file the compressed dumpfile to load
- * @param loadcommand the svnadmin load command, excluding input pipe
+ * @param repository the path to the repository to load to
  */
-function loadDumpfile($file,$loadcommand) {
+function loadDumpfile($file, $repository) {
 	if ( ! verifyFileMD5($file) ) {
 		error( "File $file has incorrect MD5 sum. Might cause corrupted repository. Aborting load." );
 		return 1;
 	}
-	$command = '';
+	
+	// extract to temporary file (pipe would save time but increases the risk of stop halfway through)
+	//$command = System::getCommand('gunzip') . " -c $file | $loadcommand";
 	$tmpfile = getNewBackupTempFile();
-	if ( System::isWindows() ) {
-		if ( ! gunzipInternal($file,$tmpfile) ) fatal("Could not extract file $file");
-		$command = "$loadcommand < $tmpfile";
-	} else {
-		$command = System::getCommand('gunzip') . " -c $file | $loadcommand";
+	if ( ! gunzipInternal($file,$tmpfile) ) fatal("Could not extract file $file");
+	// if we had the original md5 sum we could verify here, but gzip probably does that?
+	
+	// create the load command
+	$command = new Command('svnadmin');
+	$command->addArgOption('load', $repository);
+	// add backup input from temp file
+	$command->addArgOption('<', $tmpfile);
+
+	// run
+	if ($command->exec()) {
+		$message = analyzeBackupLoadError($command->getOutput());
+		warn($message);
 	}
-	$return = 0;
-	debug("Executing: $command");
-	exec( $command, $output, $return);
 	System::deleteFile( $tmpfile );
-	return $return;
+	return $command->getExitcode();
+}
+
+/**
+ * When svnadmin load finds and error it stops the loading and prints
+ * a message to stderr. This function tries to extract that message
+ * from the command output.
+ *
+ * @param array $output
+ * @return String an error message, or the full array (as debug info) if error could not be identified
+ */
+function analyzeBackupLoadError($output) {
+		// svnadmin: File not found: transaction '68-1', path 'test/trunk/testfile.txt'
+		$ok = '';
+		$error = '';
+		foreach ($output as $line) {
+			if (preg_match('/Committed revision (\d+)/i', $line, $matches)) {
+				$ok .= ', '.$matches[1];
+			}
+			if (preg_match('/not found.*transaction\D+(\d+)-(\d+)\D+path (.*)/', $line, $matches)) {
+				$error .= 'Backup integrity error. Reference to a file '.$matches[3]
+					.' in revision '.$matches[1].' that does not exist.';
+			}
+		}
+		// return something?
+		if (strlen($ok)>2) {
+			return $error.' Loaded revisions '.substr($ok, 2).'.';
+		}
+		return $error.' No revisions loaded.';
 }
 
 /**

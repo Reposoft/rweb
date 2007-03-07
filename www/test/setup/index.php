@@ -38,7 +38,7 @@ if (array_key_exists('public', $_GET)) {
 }
 
 if (array_key_exists('reset', $_GET)) {
-	header("Location: /repos/test/reset/testrepo/");
+	header("Location: /repos/test/reset/");
 	exit;
 }
 
