@@ -246,7 +246,9 @@ function isRepositoryUrl($url) {
  */
 function urlEncodeNames($url) {
 	$q = strpos($url, '?');
-	if ($q !== false) return urlEncodeNames(substr($url, 0, $q)).'?'.rawurlencode(substr($url, $q+1));
+	if ($q !== false) {
+		return urlEncodeNames(substr($url, 0, $q)).'?'._urlEncodeQueryString(substr($url, $q+1));
+	}
 	$parts = explode('/', $url);
 	$i = 0;
 	if (strpos($url, '://')!==false) $i = 3; // don't escape protocol and host
@@ -255,6 +257,20 @@ function urlEncodeNames($url) {
 	}
 	$encoded = implode('/', $parts);
 	return $encoded;
+}
+
+function _urlEncodeQueryString($params) {
+	$parts = explode('&', $params);
+	$q = '';
+	foreach ($parts as $part) {
+		// encode only the values
+		if ($p = strpos($part, '=')) {
+			$q .= '&'.substr($part, 0, $p+1).rawurlencode(substr($part, $p+1));
+		} else {
+			$q .= '&'.$part;
+		}
+	}
+	return substr($q, 1);
 }
 
 // ----- internal functions -----

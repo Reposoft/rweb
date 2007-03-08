@@ -45,8 +45,13 @@ class TestReposProperties extends UnitTestCase {
 	
 	function testUrlEncodeNames() {
 		$this->assertEqual('https://host/r%25p', urlEncodeNames('https://host/r%p'));
-		$this->assertEqual('http://host:80/r%22/?s%25t', urlEncodeNames('http://host:80/r"/?s%t'));
-		$this->assertEqual("/r%3As/t%20/?u%3F", urlEncodeNames("/r:s/t /?u?"));
+		$this->assertEqual('http://host:80/r%22/?a=s%25t', urlEncodeNames('http://host:80/r"/?a=s%t'));
+		$this->assertEqual("/r%3As/t%20/?b=u%3F", urlEncodeNames("/r:s/t /?b=u?"));
+	}
+	
+	function testUrlEncodeNamesQuery() {
+		$this->assertEqual('http://host/?a=b%2Bb&c=d%25e', urlEncodeNames('http://host/?a=b+b&c=d%e'));
+		
 	}
 	
 	function testGetSelfUrl() {
