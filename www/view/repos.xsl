@@ -314,9 +314,31 @@
 		<xsl:param name="filename" select="@href"/>
 		<xsl:value-of select="translate($filename,'%/()@&amp;','______')"/>
 	</xsl:template>
-	<!-- subversion has some shortcomings in urlescaping, which we complensate for here -->
+	<!-- subversion has some shortcomings in urlescaping, which we compensate for here -->
 	<xsl:template name="getHref">
 		<xsl:param name="href" select="@href"/>
-		<xsl:value-of select="@href"/>
+		<xsl:choose>
+			<xsl:when test="contains($href, '+')">
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href">
+						<xsl:value-of select="substring-before($href,'+')"/>
+						<xsl:value-of select="'%2B'"/>
+						<xsl:value-of select="substring-after($href,'+')"/>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="contains($href, '&amp;')">
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href">
+						<xsl:value-of select="substring-before($href,'&amp;')"/>
+						<xsl:value-of select="'%26'"/>
+						<xsl:value-of select="substring-after($href,'&amp;')"/>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$href"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>
