@@ -159,17 +159,20 @@
 		<xsl:param name="id">
 			<xsl:call-template name="getFileID"/>
 		</xsl:param>
+		<xsl:param name="href">
+			<xsl:call-template name="getHref"/>
+		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
-				<a id="view:{$id}" class="action" href="{@href}">view</a>
+				<a id="view:{$id}" class="action" href="{$href}">view</a>
 				<xsl:if test="$editUrl">
-					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{@href}">rename</a>
-					<a id="copy:{$id}" class="action"  href="{$editUrl}copy/?target={../@path}/{@href}">copy</a>
-					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{@href}">delete</a>
+					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{$href}">rename</a>
+					<a id="copy:{$id}" class="action"  href="{$editUrl}copy/?target={../@path}/{$href}">copy</a>
+					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{$href}">delete</a>
 				</xsl:if>
 			</div>
-			<a id="open:{$id}" class="folder" href="{@href}">
+			<a id="open:{$id}" class="folder" href="{$href}">
 				<xsl:value-of select="@name"/>
 			</a>
 		</div>
@@ -182,20 +185,23 @@
 		<xsl:param name="id">
 			<xsl:call-template name="getFileID"/>
 		</xsl:param>
+		<xsl:param name="href">
+			<xsl:call-template name="getHref"/>
+		</xsl:param>
 		<xsl:param name="n" select="count(/svn/index/dir) + position() - 1"/>
 		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
-				<a id="view:{$id}" class="action" href="{$web}open/?target={../@path}/{@href}">view</a>
+				<a id="view:{$id}" class="action" href="{$web}open/?target={../@path}/{$href}">view</a>
 				<xsl:if test="$editUrl">
-					<a id="edit:{$id}" class="action" href="{$editUrl}?target={../@path}/{@href}">edit</a>
-					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{@href}">rename</a>
-					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={../@path}/{@href}">copy</a>
-					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{@href}">delete</a>
-					<a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={../@path}/{@href}">upload&#xA0;changes</a>
+					<a id="edit:{$id}" class="action" href="{$editUrl}?target={../@path}/{$href}">edit</a>
+					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={../@path}/{$href}">rename</a>
+					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={../@path}/{$href}">copy</a>
+					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={../@path}/{$href}">delete</a>
+					<a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={../@path}/{$href}">upload&#xA0;changes</a>
 				</xsl:if>
-				<a id="history:{$id}" class="action" href="{$web}open/log/?target={../@path}/{@href}">view&#xA0;history</a>
+				<a id="history:{$id}" class="action" href="{$web}open/log/?target={../@path}/{$href}">view&#xA0;history</a>
 			</div>
-			<a id="open:{$id}" class="file-{$filetype} file" href="{@href}">
+			<a id="open:{$id}" class="file-{$filetype} file" href="{$href}">
 				<xsl:value-of select="@name"/>
 			</a>
 		</div>
@@ -307,5 +313,10 @@
 	<xsl:template name="getFileID">
 		<xsl:param name="filename" select="@href"/>
 		<xsl:value-of select="translate($filename,'%/()@&amp;','______')"/>
+	</xsl:template>
+	<!-- subversion has some shortcomings in urlescaping, which we complensate for here -->
+	<xsl:template name="getHref">
+		<xsl:param name="href" select="@href"/>
+		<xsl:value-of select="@href"/>
 	</xsl:template>
 </xsl:stylesheet>
