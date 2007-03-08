@@ -30,7 +30,7 @@ function checkType() {
 <a id="repository" href="{=$repository}{=$folder|urlEncodeNames}">return to repository</a>
 </div>
 <div class="intro">
-<h1>Rename <span class="filename">{=$oldname}</span></h1>
+<h1>Rename</h1>
 
 {=if not $file,isWritable} <p>You have read access only. You can not rename this file.</p>
 {=elseif $file,isLockedByThisUser} <p>This file is currently <strong>locked</strong> by you, so other users can not edit it.</p>
@@ -43,7 +43,10 @@ You can not rename this file.</p>
 <div class="column" style="width: 60%">
 <form id="rename" name="rename" method="get" action="#">
   <fieldset>
-	<legend>rename {=$target}</legend>
+	<legend>
+	 {=if $file,isFolder}Folder: <a class="folder" href="{=$file,url}">{=$file,filename}</a>
+	 {=else}File: <a class="file" href="{=$file,url}">{=$file,filename}</a>{=/if}
+	</legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
     <input name="folder" type="hidden" id="target" value="{=$folder}" />
   <p>
