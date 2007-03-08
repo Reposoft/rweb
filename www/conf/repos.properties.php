@@ -168,11 +168,18 @@ function getSelfRoot() {
 }
 
 /**
+ * @return the current request uri (from server root), _not_ urlencoded
+ */
+function getRequestUri() {
+	return rawurldecode($_SERVER['REQUEST_URI']);	// REQUEST_URI is urlencoded
+}
+
+/**
  * The current URL without query string
  * Complete url = getSelfUrl().'?'.getSelfQuery();
  */
 function getSelfUrl() {
-	$uri = $_SERVER['REQUEST_URI'];
+	$uri = getRequestUri();
 	$q = strpos($uri, '?');
 	if ($q > 0) {
 		$uri = substr($uri, 0, $q);
@@ -183,11 +190,13 @@ function getSelfUrl() {
 
 /**
  * Current query string, or empty string if there is no query string
- * @return string
+ * @return string the part of the URI after the "?", or empty string if no query
  */
 function getSelfQuery() {
-	if (!isset($_SERVER['QUERY_STRING'])) return '';
-	return $_SERVER['QUERY_STRING'];
+	$uri = getRequestUri();
+	$q = strpos($uri, '?');
+	if ($q == 0) return '';
+	return substr($uri, $q+1);
 }
 
 /**
