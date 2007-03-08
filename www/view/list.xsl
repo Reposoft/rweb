@@ -4,7 +4,8 @@
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
 
-	<xsl:param name="web">/repos/</xsl:param>
+	<!-- unlike in log.xsl we use relative url for list pages -->
+	<xsl:param name="web">../../</xsl:param>
 
 	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>style/</xsl:param>
 	<xsl:param name="cssUrl-pe"><xsl:value-of select="$web"/>themes/pe/style/</xsl:param>
@@ -47,9 +48,7 @@
 			<a id="historycurrent" href="../log/?target={../@target}">history of current version</a>
 		</div>
 		<h2>
-			<span class="path">
-				<xsl:call-template name="getBasename"/>
-			</span>
+			<a class="folder" href="{@path}"><xsl:value-of select="../@name"/></a>
 			<xsl:if test="../@rev">
 				<xsl:value-of select="$spacer"/>
 				<span class="revision">
@@ -149,20 +148,6 @@
 	<xsl:template name="getFileID">
 		<xsl:param name="filename" select="@href"/>
 		<xsl:value-of select="translate($filename,'%/()@&amp;','______')"/>
-	</xsl:template>
-	
-	<xsl:template name="getBasename">
-		<xsl:param name="path" select="@path"/>
-		<xsl:if test="not(contains($path,'/'))">
-			<xsl:value-of select="$path"/>
-		</xsl:if>
-		<xsl:if test="contains($path,'/')">
-			<xsl:call-template name="getBasename">
-				<xsl:with-param name="path">
-					<xsl:value-of select="substring-after($path,'/')"/>
-				</xsl:with-param>
-			</xsl:call-template>
-		</xsl:if>
 	</xsl:template>
 	
 </xsl:stylesheet>

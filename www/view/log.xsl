@@ -12,7 +12,7 @@
 	<!-- start transform -->
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
-	<!-- root url for webapp resources -->
+	<!-- root url for webapp resources, not using relative urls -->
 	<xsl:param name="web" select="/log/@web"/>
 	<xsl:param name="static" select="$web"/>
 	<!-- static contents urls, set to /themes/any/?u= for automatic theme selection -->
@@ -26,7 +26,7 @@
 			<head>
 				<title>
 					<xsl:text>repos.se: history of </xsl:text>
-					<xsl:value-of select="log/@path"/>
+					<xsl:value-of select="log/@target"/>
 				</title>
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 				<!-- if search crawlers has access, contents should not be cached -->
@@ -59,7 +59,7 @@
 	<xsl:template name="commandbar">
 		<xsl:param name="repourl">
 			<xsl:value-of select="@repo"/>
-			<xsl:value-of select="substring(@path,0,string-length(@path)-string-length(@file)+1)"/>
+			<xsl:value-of select="substring(@target,0,string-length(@target)-string-length(@file)+1)"/>
 		</xsl:param>
 		<div id="commandbar">
 		<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
@@ -68,11 +68,12 @@
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="contents">
-		<h1>History of <span id="fullpath" class="path"><xsl:value-of select="@path"/></span></h1>
+		<span id="fullpath" style="display:none"><xsl:value-of select="@path"/></span>
+		<h1>History of <a class="folder" href="{@repo}{@target}"><xsl:value-of select="@name"/></a></h1>
 		<xsl:apply-templates select="logentry"/>
 		<xsl:if test="@limit">
 			<xsl:call-template name="limit">
-				<xsl:with-param name="url">?target=<xsl:value-of select="@path"/></xsl:with-param>
+				<xsl:with-param name="url">?target=<xsl:value-of select="@target"/></xsl:with-param>
 				<xsl:with-param name="size" select="@limit"/>
 				<xsl:with-param name="next" select="@limitrev"/>
 			</xsl:call-template>
@@ -139,7 +140,7 @@
 		</xsl:param>
 		<div class="row log-{@action}">
 			<xsl:if test="@action='A'">
-				<a id="open:{$pathid}" class="path file" title="Added {.}" href="{$web}open/open/?target={.}&amp;rev={../../@revision}">
+				<a id="open:{$pathid}" class="folder" title="Added {.}" href="{$web}open/open/?target={.}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
 				<xsl:value-of select="$spacer"/>
@@ -166,7 +167,7 @@
 				<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={$fromrev}&amp;action={@action}">view</a>
 			</xsl:if>
 			<xsl:if test="@action='M'">
-				<a id="open:{$pathid}" class="path file" title="Modified {.}" href="{$web}open/open/?target={.}&amp;rev={../../@revision}">
+				<a id="open:{$pathid}" class="file" title="Modified {.}" href="{$web}open/open/?target={.}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
 				<xsl:value-of select="$spacer"/>
