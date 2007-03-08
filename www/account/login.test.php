@@ -82,6 +82,19 @@ class Login_include_Test extends UnitTestCase {
 		
 	}
 	
+	function testGetTarget() {
+		$_REQUEST['target'] = '/demoproject/trunk/+/';
+		$this->assertEqual('/demoproject/trunk/+/', getTarget());
+		$_REQUEST['target'] = '/demoproject/trunk/&/';
+		$this->assertEqual('/demoproject/trunk/&/', getTarget());
+		// PHP does one transparent urldecode before puttin the param value in the global array
+		// (proven using echo $_REQUEST['target'] in login_getQueryParam)
+		// so this target is actually %2525 in browser address
+		$_REQUEST['target'] = '/demoproject/trunk/%25/';
+		// so we should not do another decode
+		$this->assertEqual('/demoproject/trunk/%25/', getTarget());
+	}
+	
 }
 
 testrun(new Login_include_Test());
