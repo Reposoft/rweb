@@ -55,6 +55,7 @@
  * @package account
  * @version $Id$
  */
+
 if (!function_exists('getRepository')) require(dirname(dirname(__FILE__)).'/conf/repos.properties.php');
 if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/ServiceRequest.class.php');
 // not dependent on the System class, this is only web functions
@@ -71,6 +72,7 @@ if (isTargetSet()) {
 	}
 	targetLogin();
 }
+
 
 /**
  * Redirect to secure URL if current URL is not secure.
@@ -162,12 +164,12 @@ function _login_getParentUrl($url) {
  * Useful when target is a folder but does not end with slash.
  */
 function login_followRedirect($fromUrl, $headers) {
-	$location = $headers['Location'];
+	$location = rawurldecode($headers['Location']);  // location header is urlencoded
 	$from = substr($fromUrl, strlen(getRepository()));
 	$to = substr($location, strlen(getRepository()));
 	$url = getSelfUrl().'?'.getSelfQuery();
 	$url = str_replace($from, $to, $url);
-	header('Location: '.$url);
+	header('Location: '.urlEncodeNames($url));
 	exit;
 }
 
