@@ -49,9 +49,9 @@ if ($rev) {
 $command->addArgUrl($url);
 
 // read the log to memory, size is limited and the browser needs the complete xml before rendering anyway
-$result = $command->exec();
-
-if ($result!=0) { login_handleSvnError($cmd, $ret); exit; } // need a real command class that does exist
+if ($command->exec()) { 
+	trigger_error('Could not read log for URL '.$url, E_USER_ERROR);
+}
 $log = $command->getOutput();
 
 // count entries
@@ -78,8 +78,8 @@ for ($i=0; $i<count($log); $i++) {
 // build xml
 $head = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 $head .= '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
-$head .= '<log repo="'.asLink(getRepository()).'" target="'.getTarget()
-	.'" name="'.getPathName(getTarget()).'" web="'.asLink(getWebapp()).'"';
+$head .= '<log repo="'.asLink(getRepository()).'" target="'.xmlEncodePath(getTarget())
+	.'" name="'.xmlEncodePath(getPathName(getTarget())).'" web="'.asLink(getWebapp()).'"';
 if ($singlefile) $head .= ' file="'.getPathName(getTarget()).'"';
 if ($limited) $head .= ' limit="'.$limit.'" limitrev="'.$lastrev.'"';
 $head .= ">\n";

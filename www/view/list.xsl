@@ -66,14 +66,24 @@
 	
 	<xsl:template match="entry[@kind='dir']">
 		<xsl:param name="id">
-			<xsl:call-template name="getFileID"/>
+			<xsl:call-template name="getFileID">
+				<xsl:with-param name="filename" select="name"/>
+			</xsl:call-template>
+		</xsl:param>
+		<xsl:param name="target">
+			<xsl:call-template name="getHref">
+				<xsl:with-param name="href">
+					<xsl:value-of select="../../@target"/>
+					<xsl:value-of select="name"/>
+				</xsl:with-param>
+			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
 
 			</div>
-			<a id="f:{$id}" class="folder" href="../?target={../../@target}{name}&amp;rev={commit/@revision}">
+			<a id="open:{$id}" class="folder" href="../?target={$target}&amp;rev={commit/@revision}">
 				<xsl:value-of select="name"/>
 			</a>
 			<xsl:value-of select="$spacer"/>
@@ -98,14 +108,24 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="id">
-			<xsl:call-template name="getFileID"/>
+			<xsl:call-template name="getFileID">
+				<xsl:with-param name="filename" select="name"/>
+			</xsl:call-template>
+		</xsl:param>
+		<xsl:param name="target">
+			<xsl:call-template name="getHref">
+				<xsl:with-param name="href">
+					<xsl:value-of select="../../@target"/>
+					<xsl:value-of select="name"/>
+				</xsl:with-param>
+			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
 
 			</div>
-			<a id="f:{$id}" class="file-{$filetype} file" href="../?target={../../@target}{name}&amp;rev={commit/@revision}">
+			<a id="open:{$id}" class="file-{$filetype} file" href="../?target={$target}&amp;rev={commit/@revision}">
 				<xsl:value-of select="name"/>
 			</a>
 			<xsl:value-of select="$spacer"/>
@@ -147,7 +167,33 @@
 
 	<xsl:template name="getFileID">
 		<xsl:param name="filename" select="@href"/>
-		<xsl:value-of select="translate($filename,'%/()@&amp;','______')"/>
+		<xsl:value-of select="translate($filename,'%/()@&amp;+= ','_________')"/>
 	</xsl:template>
-	
+
+	<xsl:template name="getHref">
+		<xsl:param name="href" select="@href"/>
+		<xsl:choose>
+			<xsl:when test="contains($href, '+')">
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href">
+						<xsl:value-of select="substring-before($href,'+')"/>
+						<xsl:value-of select="'%2B'"/>
+						<xsl:value-of select="substring-after($href,'+')"/>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="contains($href, '&amp;')">
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href">
+						<xsl:value-of select="substring-before($href,'&amp;')"/>
+						<xsl:value-of select="'%26'"/>
+						<xsl:value-of select="substring-after($href,'&amp;')"/>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$href"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>	
 </xsl:stylesheet>

@@ -282,6 +282,16 @@ function _urlEncodeQueryString($params) {
 	return substr($q, 1);
 }
 
+/**
+ * The only character that is valid in filenames and not xml is "&"
+ * (and maybe single quote too, but currently we do not handle that).
+ * @param String $path path to a file or folder in repository
+ * @return String the path for use in XML output
+ */
+function xmlEncodePath($path) {
+	return str_replace('&', '&amp;', $path);
+}
+
 // ----- internal functions -----
 
 /**

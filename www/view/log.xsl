@@ -135,17 +135,23 @@
 			<xsl:call-template name="getFileID">
 				<xsl:with-param name="filename" select="."/>
 			</xsl:call-template>
+			<xsl:value-of select="'-'"/>
 			<xsl:value-of select="../../@revision"/>
 			<xsl:value-of select="@action"/>
 		</xsl:param>
+		<xsl:param name="target">
+			<xsl:call-template name="getHref">
+				<xsl:with-param name="href" select="."/>
+			</xsl:call-template>
+		</xsl:param>
 		<div class="row log-{@action}">
 			<xsl:if test="@action='A'">
-				<a id="open:{$pathid}" class="folder" title="Added {.}" href="{$web}open/open/?target={.}&amp;rev={../../@revision}">
+				<a id="open:{$pathid}" class="folder" title="Added {.}" href="{$web}open/open/?target={$target}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
 				<xsl:value-of select="$spacer"/>
 				<xsl:if test="not(@copyfrom-path)">
-					<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={../../@revision}&amp;action={@action}">view</a>
+					<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}&amp;rev={../../@revision}&amp;action={@action}">view</a>
 				</xsl:if>
 				<xsl:if test="@copyfrom-path">
 					<span class="copied" title="Copied from {@copyfrom-path} version {@copyfrom-rev}">
@@ -164,15 +170,15 @@
 					<xsl:value-of select="."/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={$fromrev}&amp;action={@action}">view</a>
+				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}&amp;rev={$fromrev}&amp;action={@action}">view</a>
 			</xsl:if>
 			<xsl:if test="@action='M'">
 				<a id="open:{$pathid}" class="file" title="Modified {.}" href="{$web}open/open/?target={.}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
 				<xsl:value-of select="$spacer"/>
-				<a id="view:{$pathid}" class="action" href="{$web}open/?target={.}&amp;rev={../../@revision}&amp;fromrev={$fromrev}&amp;action={@action}">view</a>
-				<a id="diff:{$pathid}" class="action" href="{$web}open/diff/?target={.}&amp;rev={../../@revision}&amp;fromrev={$fromrev}">diff</a>
+				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}&amp;rev={../../@revision}&amp;fromrev={$fromrev}&amp;action={@action}">view</a>
+				<a id="diff:{$pathid}" class="action" href="{$web}open/diff/?target={$target}&amp;rev={../../@revision}&amp;fromrev={$fromrev}">diff</a>
 			</xsl:if>
 		</div>
 	</xsl:template>
@@ -210,6 +216,33 @@
 	<!-- the log xml has no urlencoded values, so it will be slightly different than repository -->
 	<xsl:template name="getFileID">
 		<xsl:param name="filename" select="@href"/>
-		<xsl:value-of select="translate($filename,'%/()@&amp; ','_______')"/>
+		<xsl:value-of select="translate($filename,'%/()@&amp;+= ','_________')"/>
+	</xsl:template>
+	<!-- Escape query string metacharacters. Impossible for the browser to know if they should be escaped. -->
+	<xsl:template name="getHref">
+		<xsl:param name="href" select="@href"/>
+		<xsl:choose>
+			<xsl:when test="contains($href, '+')">
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href">
+						<xsl:value-of select="substring-before($href,'+')"/>
+						<xsl:value-of select="'%2B'"/>
+						<xsl:value-of select="substring-after($href,'+')"/>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="contains($href, '&amp;')">
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href">
+						<xsl:value-of select="substring-before($href,'&amp;')"/>
+						<xsl:value-of select="'%26'"/>
+						<xsl:value-of select="substring-after($href,'&amp;')"/>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$href"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>

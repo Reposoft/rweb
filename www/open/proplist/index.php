@@ -6,12 +6,11 @@ require( dirname(dirname(dirname(__FILE__)))."/lib/json/json.php" );
 $url = getTargetUrl();
 if (!$url) trigger_error("'target' must be set");
 
-// XML format
 header('Content-type: text/plain');
-$cmd = 'proplist '.escapeArgument($url);
-$proplist = login_svnRun($cmd);
-if (array_pop($proplist) != 0) {
-	login_handleSvnError($cmd, $return);
+$cmd = new SvnOpen('proplist');
+$cmd->addArgUrl($url);
+if ($cmd->exec()) {
+	trigger_error(implode("\n",$cmd->getOutput()), E_USER_ERROR);	
 }
 
 // to get all the properties of a specific type for a tree,

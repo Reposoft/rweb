@@ -313,11 +313,11 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- make valid HTML id for file or folder, containing [A-Za-z0-9] and [-_.]  -->
+	<!-- make valid HTML id for file or folder, matching [A-Za-z][A-Za-z0-9:_.-]*  -->
 	<!-- ids should always start with letters, so a prefix like 'file:' must be prepended -->
 	<xsl:template name="getFileID">
 		<xsl:param name="filename" select="@href"/>
-		<xsl:value-of select="translate($filename,'%/()@&amp;','______')"/>
+		<xsl:value-of select="translate($filename,'%/()@&amp;+=','________')"/>
 	</xsl:template>
 	<!-- subversion has some shortcomings in urlescaping, which we compensate for here -->
 	<xsl:template name="getHref">
