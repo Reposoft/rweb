@@ -1,0 +1,49 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>automated test</title>
+</head>
+<body>
+<p class="description"></p>
+<table>
+<thead>
+<tr><td colspan="3"></td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>setup/?demoproject</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>history</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>open:_demoproject_trunk_old_a_b_c_d-1A</td>
+	<td></td>
+</tr>
+<tr title="currently open: does not contain the logic to append trailing slash">
+	<td>clickAndWait</td>
+	<td>view:_demoproject_trunk_old_a_b_c_d-1A</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=h2 a</td>
+	<td>a+b&c=d</td>
+</tr>
+<tr title="ids are not based on urlencoded names in log and list, so %25 is _25 (in repository _2525)">
+	<td>verifyElementPresent</td>
+	<td>row:_25</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>open:_25</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
