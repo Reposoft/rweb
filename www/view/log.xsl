@@ -224,20 +224,29 @@
 		<xsl:choose>
 			<xsl:when test="contains($href, '+')">
 				<xsl:call-template name="getHref">
-					<xsl:with-param name="href">
-						<xsl:value-of select="substring-before($href,'+')"/>
-						<xsl:value-of select="'%2B'"/>
-						<xsl:value-of select="substring-after($href,'+')"/>
-					</xsl:with-param>
+					<xsl:with-param name="href" select="substring-before($href,'+')"/>
+				</xsl:call-template>
+				<xsl:value-of select="'%2B'"/>
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href" select="substring-after($href,'+')"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:when test="contains($href, '&amp;')">
 				<xsl:call-template name="getHref">
-					<xsl:with-param name="href">
-						<xsl:value-of select="substring-before($href,'&amp;')"/>
-						<xsl:value-of select="'%26'"/>
-						<xsl:value-of select="substring-after($href,'&amp;')"/>
-					</xsl:with-param>
+					<xsl:with-param name="href" select="substring-before($href,'&amp;')"/>
+				</xsl:call-template>
+				<xsl:value-of select="'%26'"/>
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href" select="substring-after($href,'&amp;')"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="contains($href, '%')">
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href" select="substring-before($href,'%')"/>
+				</xsl:call-template>
+				<xsl:value-of select="'%25'"/>
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href" select="substring-after($href,'%')"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>

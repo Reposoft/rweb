@@ -11,8 +11,10 @@ $revisionRule = new RevisionRule();
 $target = getTarget();
 $file = new SvnOpenFile($target, $revisionRule->getValue());
 if ($file->isFolder()) {
+	// The logic for folders is in main open/.
+	// Causes double redirect for targets that don't end with slash, but that's ok.
 	$rev = $_GET['rev'];
-	$list = getWebapp().'open/list/?target='.rawurlencode($target).'&rev='.$rev;
+	$list = getWebapp().'open/?target='.rawurlencode($target).'&rev='.$rev;
 	header('Location: '.$list);
 	exit;
 }

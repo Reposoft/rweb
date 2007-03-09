@@ -26,7 +26,6 @@ $file = new SvnOpenFile($target, $rev);
 if ($file->isFolder()) {
 	if ($rev) {
 		// for old revisions SvnOpenFile detects folder even if trailing slash is missing
-		$target = $file->getPath();
 		if (!strEnds($target, '/')) $target .= '/';
 		header('Location: '.getWebapp().'open/list/?target='.urlencode($target).'&rev='.$rev);
 	} else {
