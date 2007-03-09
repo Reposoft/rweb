@@ -341,6 +341,15 @@
 					<xsl:with-param name="href" select="substring-after($href,'&amp;')"/>
 				</xsl:call-template>
 			</xsl:when>
+			<xsl:when test="contains($href, '#')">
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href" select="substring-before($href,'#')"/>
+				</xsl:call-template>
+				<xsl:value-of select="'%23'"/>
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href" select="substring-after($href,'#')"/>
+				</xsl:call-template>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$href"/>
 			</xsl:otherwise>
