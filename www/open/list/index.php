@@ -17,8 +17,12 @@ $rev = $revisionRule->getValue();
 $list = new SvnOpen('list');
 $list->addArgOption('--xml');
 $list->addArgOption('--incremental');
-if ($rev) $list->addArgOption('-r', $rev, false);
-$list->addArgUrl($url);
+if ($rev) {
+	$list->addArgUrlPeg($url, $rev);
+} else {
+	$list->addArgUrl($url);
+}
+
 
 $list->exec();
 

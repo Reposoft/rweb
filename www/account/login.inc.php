@@ -162,6 +162,7 @@ function _login_getParentUrl($url) {
 /**
  * Mimics redirects from repository for target parameters.
  * Useful when target is a folder but does not end with slash.
+ * Note that this can not handle old revisions of folders that have been deleted.
  */
 function login_followRedirect($fromUrl, $headers) {
 	$location = rawurldecode($headers['Location']);  // location header is urlencoded

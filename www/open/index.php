@@ -25,7 +25,10 @@ $file = new SvnOpenFile($target, $rev);
 // identify folders, even without trailing slash, for example when coming from history
 if ($file->isFolder()) {
 	if ($rev) {
-		header('Location: '.getWebapp().'open/list/?target='.urlencode($file->getPath()).'&rev='.$rev);
+		// for old revisions SvnOpenFile detects folder even if trailing slash is missing
+		$target = $file->getPath();
+		if (!strEnds($target, '/')) $target .= '/';
+		header('Location: '.getWebapp().'open/list/?target='.urlencode($target).'&rev='.$rev);
 	} else {
 		header('Location: '.$file->getUrl());
 	}

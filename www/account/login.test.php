@@ -40,11 +40,6 @@ class Login_include_Test extends UnitTestCase {
 		unset($_REQUEST[REPO_KEY]);
 	}
 	
-	function testTargetUrldecode() {
-		
-		//"https%3A%2F%2Fwww.repos.se%2Fsweden%2Fsvensson%2Ftrunk%2F"
-	}
-	
 	// getTargetUrl should throw error if there is no target
 	function testGetTargetUrlFalse() {
 		$this->expectError();
@@ -87,12 +82,24 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertEqual('/demoproject/trunk/+/', getTarget());
 		$_REQUEST['target'] = '/demoproject/trunk/&/';
 		$this->assertEqual('/demoproject/trunk/&/', getTarget());
-		// PHP does one transparent urldecode before puttin the param value in the global array
-		// (proven using echo $_REQUEST['target'] in login_getQueryParam)
+		// PHP does one transparent urldecode before the value goes superglobal.
+		// (test echo($_REQUEST['target']) in login_getQueryParam)
 		// so this target is actually %2525 in browser address
 		$_REQUEST['target'] = '/demoproject/trunk/%25/';
 		// so we should not do another decode
 		$this->assertEqual('/demoproject/trunk/%25/', getTarget());
+	}
+	
+	function testGetTargetUrlMetacharacters() {
+		// log xml does not contain escaped hrefs, so it relies on browser's encoding
+		// browser does not encode + and &
+		$_REQUEST['target'] = '/demoproject/a+b/';
+		$this->assertEqual('/demoproject/a+b/', getTarget());
+		$_REQUEST['target'] = '/demoproject/a&b/';
+		$this->assertEqual('/demoproject/a&b/', getTarget());
+		// "=" is no problem in parameter values, because it can't be a metacharacter until after next "&"
+		$_REQUEST['target'] = '/demoproject/a=b/';
+		$this->assertEqual('/demoproject/a=b/', getTarget());
 	}
 	
 }

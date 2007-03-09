@@ -152,6 +152,16 @@ class SvnOpenFile {
 		if ($this->headStatus == 301) {
 			return ($this->head['Location'] == $this->url.'/');
 		}
+		// when viewing a folder from history, if if does not exist we need to check svn
+		// but it could be expensive doing that for every page,
+		// so we only do it for names that do not look like files
+		if (!preg_match('/\.\w+$/', $this->path)) {
+			if (!$this->isReadableInHead()) {
+				$this->_read();
+				// because we use svn list, not info, we can not check for kind==dir
+				return $this->file['name'] != $this->getFilename();
+			}
+		}
 		return false;
 	}
 	
@@ -368,6 +378,7 @@ class SvnOpenFile {
 	}
 
 	function isLocked() {
+		if ($this->isFolder()) return false;
 		$this->_read();
 		return array_key_exists('lockowner', $this->file);
 	}
@@ -537,11 +548,13 @@ class SvnOpenFile {
 		$result = $info->getOutput();
 		if (preg_match('/non-existent/', $result[0])) return array(); // does not exist in svn
 		if ($info->getExitcode()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
+		// and isFolder handles the case where the list returns folder contents instead of file
 		return $this->_parseListXml($result);
 	}
 	
 	/**
-	 * Parses the result of svn list --xml to an associative array
+	 * Parses the result of svn list --xml to an associative array,
+	 * without the use of an xml library
 	 *
 	 * @param array[String] $xmlArray
 	 * @return array[String] metadata entry name => value
@@ -559,7 +572,7 @@ class SvnOpenFile {
 			'locktoken' => '/<token>([^<]+)</',
 			'lockowner' => '/<owner>([^<]+)</',
 			'lockcomment' => '/<comment>([^<]+)</',
-			'lockcreated' => '/<created>([^<]+)</',
+			'lockcreated' => '/<created>([^<]+)</'
 		);
 		list($n, $p) = each($patternsInOrder);
 		for ($i=0; $i<count($xmlArray); $i++) {

@@ -148,6 +148,9 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 			"HTTP status should be 301, not 302, for redirect to folder with slash. %s");
 		$this->assertTrue($file->isFolder(), "Should say isFolder==true when the slash is missing.");
 		$this->assertTrue($file->isWritable());
+		$this->assertFalse($file->isLocked(), "Folders are never locked, even if they contain a locked file. %s");
+		$this->assertFalse($file->isLockedBySomeoneElse(), "Folders are never locked, even if they contain a locked file. %s");
+		$this->assertFalse($file->isLockedByThisUser(), "Folders are never locked, even if they contain a locked file. %s");
 	}
 		
 	function testFolderReadonly() {
@@ -155,7 +158,8 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertEqual(200, $file->getStatus());
 		$this->assertTrue($file->isFolder());
 		$this->sendMessage("Note that isWritable should not generate an error in apache error log");
-		$this->assertFalse($file->isWritable());		
+		$this->assertFalse($file->isWritable());	
+		$this->assertFalse($file->isLocked(), "Folders are never locked. %s");	
 	}
 	
 	function testFolderNoaccess() {
@@ -163,13 +167,32 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertEqual(403, $file->getStatus());
 		$this->assertTrue($file->isFolder());
 		$this->sendMessage("Note that isWritable should not generate an error in apache error log");
-		$this->assertFalse($file->isWritable());		
+		$this->assertFalse($file->isWritable());
+		$this->assertFalse($file->isLocked(), "Folders are never locked. %s");
 	}
 	
 	function testFolderNonExisting() {
 		$file = new SvnOpenFile("/demoproject/trunk/nonexisting/");
 		$this->assertEqual(404, $file->getStatus());
 		$this->assertTrue($file->isFolder(), "Ends with slash so it is a folder. %s");	
+	}
+	
+	function testFolderDeleted() {
+		setTestUser();
+		$file = new SvnOpenFile("/demoproject/trunk/old/", 1);
+		$this->assertTrue($file->isFolder());
+		$this->assertFalse($file->isLatestRevision());
+		$this->assertFalse($file->isReadableInHead());
+	}
+
+	function testFolderDeletedNoSlash() {
+		setTestUser();
+		// it is impossible for target login to do redirect to folder,
+		// because it can not know that it is a folder
+		$file = new SvnOpenFile("/demoproject/trunk/old", 1);
+		$this->assertTrue($file->isFolder());
+		$this->assertFalse($file->isLatestRevision());
+		$this->assertFalse($file->isReadableInHead());
 	}
 	
 }
