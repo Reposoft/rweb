@@ -113,17 +113,22 @@
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
 		<xsl:param name="parentlink"/>
+		<xsl:param name="target">
+			<xsl:call-template name="getHref">
+				<xsl:with-param name="href" select="@path"/>
+			</xsl:call-template>
+		</xsl:param>
 		<div id="commandbar">
 			<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
 		<xsl:if test="string-length($parentlink)>0">
 			<a id="parent" class="command translate" href="{$parentlink}">up</a>
 		</xsl:if>
 		<xsl:if test="$editUrl">
-			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={@path}/">new&#xA0;folder</a>
-			<a id="createfile" class="command translate" href="{$editUrl}file/?target={@path}/">new&#xA0;document</a>
-			<a id="addfile" class="command translate" href="{$editUrl}upload/?target={@path}/">add&#xA0;file</a>
+			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={$target}/">new&#xA0;folder</a>
+			<a id="createfile" class="command translate" href="{$editUrl}file/?target={$target}/">new&#xA0;document</a>
+			<a id="addfile" class="command translate" href="{$editUrl}upload/?target={$target}/">add&#xA0;file</a>
 		</xsl:if>
-		<a id="history" class="command translate" href="{$web}open/log/?target={@path}/">folder&#xA0;history</a>
+		<a id="history" class="command translate" href="{$web}open/log/?target={$target}/">folder&#xA0;history</a>
 		<a id="refresh" class="command translate" href="#" onclick="window.location.reload( true )">refresh</a>
 		<a id="logout" class="command translate" href="/?logout">logout</a>
 		<!-- print, possibly plugin -->
