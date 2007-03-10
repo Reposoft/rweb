@@ -317,7 +317,7 @@
 	<!-- ids should always start with letters, so a prefix like 'file:' must be prepended -->
 	<xsl:template name="getFileID">
 		<xsl:param name="filename" select="@href"/>
-		<xsl:value-of select="translate($filename,'%/()@&amp;+=','________')"/>
+		<xsl:value-of select="translate($filename,'%/()@&amp;+=,~$!','____________')"/>
 	</xsl:template>
 	<!-- subversion has some shortcomings in urlescaping, which we compensate for here -->
 	<xsl:template name="getHref">

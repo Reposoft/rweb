@@ -216,7 +216,7 @@
 	<!-- the log xml has no urlencoded values, so it will be slightly different than repository -->
 	<xsl:template name="getFileID">
 		<xsl:param name="filename" select="@href"/>
-		<xsl:value-of select="translate($filename,'%/()@&amp;+= ','_________')"/>
+		<xsl:value-of select="translate($filename,'%/()@&amp;+=,~$! ','_____________')"/>
 	</xsl:template>
 	<!-- Escape query string metacharacters. Impossible for the browser to know if they should be escaped. -->
 	<xsl:template name="getHref">
@@ -238,6 +238,15 @@
 				<xsl:value-of select="'%26'"/>
 				<xsl:call-template name="getHref">
 					<xsl:with-param name="href" select="substring-after($href,'&amp;')"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="contains($href, '#')">
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href" select="substring-before($href,'#')"/>
+				</xsl:call-template>
+				<xsl:value-of select="'%23'"/>
+				<xsl:call-template name="getHref">
+					<xsl:with-param name="href" select="substring-after($href,'#')"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:when test="contains($href, '%')">
