@@ -109,6 +109,12 @@ fieldset {
 	padding: 1em;
 	margin: 1em;
 }
+fieldset p {
+	clear: left;
+}
+input {
+	margin-top: 0.5em;
+}
 legend {
 	color: #666633;
 	font-size: 1.1em;
