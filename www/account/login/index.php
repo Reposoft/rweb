@@ -53,7 +53,7 @@ function showLoginCancelled() {
 
 function showLoginFailed($targetUrl) {
 	//header('HTTP/1.1 401 Unauthorized');
-	$nexturl = getSelfRoot().'/?logout&go='.rawurlencode('?login');
+	$nexturl = asLogoutUrl('/?login');
 	$presentation = Presentation::getInstance();
 	$presentation->assign('nexturl', $nexturl);
 	$presentation->assign('start', getParent(getWebapp())); // not the same host if the repository is ssl
@@ -85,7 +85,7 @@ function loginAndRedirectToHomeDir() {
 		$realm = getAuthName($repo);
 		if(!$realm) {
 			$check = '<a href="'.getWebapp().'test/headers/?check='.rawurlencode($repo).'">Check HTTP headers</a> for 401 Authorization Required.';
-			trigger_error("Error: No login realm was found for repository $repo. \n$check", E_USER_ERROR);
+			trigger_error("Server configuration error: No login realm was found for repository $repo. \n$check", E_USER_ERROR);
 		}
 		askForCredentials($realm);
 		// browser will refresh upon user input, if there is still no credentials we end up here
@@ -102,7 +102,7 @@ function loginAndRedirectToHomeDir() {
  * @return String absolute URL for redirect
  */
 function getStartUrl($home) {
-	return getWebapp() . 'open/start/';//.'?home='. rawurlencode($home);
+	return getWebapp() . 'open/start/';//.'?home='. rawurlencode($home); not needed, makes the URL ugly
 }
 
 loginAndRedirectToHomeDir();

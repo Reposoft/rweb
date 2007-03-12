@@ -61,11 +61,12 @@ function doLogoutVoid() {
  * where to redirect browser when logout is done or not needed, allow override with 'go' parameter as in login
  */
 function getAfterLogoutUrl() {
+	$url = '/';
 	if (isset($_GET['go'])) {
-		return getSelfRoot().rawurldecode($_GET['go']);
+		$url = $_GET['go']; // already urldecoded by PHP
+		if (!preg_match('/^(\/|\w+:\/\/).*/', $url)) $url = getSelfRoot() . $url;
 	}
-	// in 1.1 /repos/ is the admin start page // return getWebapp();
-	return '/';
+	return $url;
 }
 
 function getVerifyUrl() {
@@ -97,7 +98,7 @@ function showCouldNotLogOutPage() {
 		$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/logout-ie'));
 	} else {
 		// redirecting to the exact same url with user 'void', expecting the next 401 header to make browser enough confused to clear auth cache
-		$logout_url = str_replace('://', '://void:LoggedOut@', getVerifyUrl());
+		$logout_url = str_replace('://', '://'.LOGIN_VOID_USER.':(logged-out)@', getVerifyUrl());
 		header("Location: $logout_url");
 	}
 }

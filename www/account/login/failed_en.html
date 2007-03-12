@@ -7,9 +7,9 @@
 </head>
 <body>
 <div id="commandbar">
-<a href="{=$start}">startpage</a>
+<a href="{=$start|asLogoutUrl}">startpage</a>
 <a href="{=$nexturl}">try again</a>
-<a href="repos/account/reset/">forgot password</a>
+<a href="{=$webapp|cat:'account/reset/'|asLogoutUrl}">forgot password</a>
 </div>
 
 <h2>Login failed</h2>

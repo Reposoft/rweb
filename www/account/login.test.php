@@ -102,6 +102,15 @@ class Login_include_Test extends UnitTestCase {
 		$this->assertEqual('/demoproject/a=b/', getTarget());
 	}
 	
+	function testAsLogoutUrl() {
+		$url = '/repos/admin/';
+		$this->assertEqual('/?logout&go='.rawurlencode($url), asLogoutUrl($url));
+		$url = '/?login';
+		$this->assertEqual('/?logout&go='.rawurlencode($url), asLogoutUrl($url));
+		$url = 'http://localhost/repos/';
+		$this->assertEqual('/?logout&go='.rawurlencode($url), asLogoutUrl($url));
+	}
+	
 }
 
 testrun(new Login_include_Test());

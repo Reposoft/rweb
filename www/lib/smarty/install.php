@@ -13,8 +13,8 @@ if (file_exists('libs/')) {
 }
 
 $home = "http://smarty.php.net";
-$version = "2.6.16";
-$archive = "$home/distributions/Smarty-$version.tar.gz";
+$version = "2.6.18";
+$archive = "$home/do_download.php?download_file=Smarty-$version.tar.gz";
 $repos_package = "Smarty";
 
 $basedir = dirname(__FILE__);

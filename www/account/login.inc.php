@@ -61,7 +61,7 @@ if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/S
 // not dependent on the System class, this is only web functions
 
 // reserved username value for not-logged-in
-define('LOGIN_VOID_USER', 'void');
+define('LOGIN_VOID_USER', '0');
 
 // do automatic login if a target is specified the standard way
 if (isTargetSet()) {
@@ -73,6 +73,15 @@ if (isTargetSet()) {
 	targetLogin();
 }
 
+/**
+ * Converts a URL to a logout with redirect to the original destination.
+ */
+function asLogoutUrl($href) {
+	if (!preg_match('/^(\/|\w+:\/\/).*/', $href)) {
+		trigger_error('Logout requires absolute URL, got '.$href, E_USER_ERROR);
+	}
+	return '/?logout&go='.rawurlencode($href);
+}
 
 /**
  * Redirect to secure URL if current URL is not secure.
