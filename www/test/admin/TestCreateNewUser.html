@@ -4,10 +4,10 @@
 <title>automated test</title>
 </head>
 <body>
-<p class="description"></p>
+<p class="description">This test required that the authenticated user has admin rights to the repository.</p>
 <table>
 <thead>
-<tr><td colspan="3"></td></tr>
+<tr><td colspan="3">Create user account in repository and ACL</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -16,7 +16,82 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>createuser</td>
+	<td>accounts</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>accountcreate</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>test2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>email</td>
+	<td>test2@repos.se</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>fullname</td>
+	<td>Test Create</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr title="Should have created an account folder in the repository">
+	<td>verifyTextPresent</td>
+	<td>Created</td>
+	<td></td>
+</tr>
+<tr title="Should have created an entry in the ACL">
+	<td>verifyTextPresent</td>
+	<td>Committed revision</td>
+	<td></td>
+</tr>
+<tr title="The generated password should be given to the administrator">
+	<td>verifyTextPresent</td>
+	<td>password is</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>setup/?start</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>administration:testrepo</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>open:repos-access.acl</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>[/test2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>test2 = rw</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>setup/?root</td>
+	<td></td>
+</tr>
+<tr title="there should be a home folder for the new user, and admin does not need access to it">
+	<td>verifyElementPresent</td>
+	<td>open:test2_</td>
 	<td></td>
 </tr>
 </tbody></table>

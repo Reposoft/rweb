@@ -47,6 +47,11 @@ if (array_key_exists('resetminimal', $_GET)) {
 	exit;
 }
 
+if (array_key_exists('root', $_GET)) {
+	header("Location: /testrepo/");
+	exit;
+}
+
 // go to start page for repository browser tests
 header("Location: /testrepo/test/trunk/");
 
