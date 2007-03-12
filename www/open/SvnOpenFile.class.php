@@ -184,6 +184,15 @@ class SvnOpenFile {
 		return getPathName($this->path);
 	}
 	
+	/**
+	 * Return the type of entry, "file" or "folder", for use in texts.
+	 * @return lowercase text that can be used instead of if-else in messages.
+	 */
+	function getKind() {
+		if ($this->isFolder()) return "folder";
+		return "file";
+	}
+	
 	function getPath() {
 		return $this->path;
 	}

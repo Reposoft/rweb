@@ -43,10 +43,7 @@ You can not rename this file.</p>
 <div class="column" style="width: 60%">
 <form id="rename" name="rename" method="get" action="#">
   <fieldset>
-	<legend>
-	 {=if $file,isFolder}Folder: <a class="folder" href="{=$file,url}">{=$file,filename}</a>
-	 {=else}File: <a class="file" href="{=$file,url}">{=$file,filename}</a>{=/if}
-	</legend>
+	<legend>{=$file,kind|ucfirst}: <a class="{=$file,kind}" href="{=$file,url}">{=$file,filename}</a></legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
     <input name="folder" type="hidden" id="target" value="{=$folder}" />
   <p>

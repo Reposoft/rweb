@@ -7,15 +7,15 @@
 
 <body>
 <div id="commandbar">
-<a id="repository" href="{=$repository|urlEncodeNames}">return to repository</a>
+<a id="repository" href="{=$repository}">return to repository</a>
 </div>
 <h1>Create subfolder</h1>
 <form id="createFolder" name="createFolder" method="get" action="#">
   <fieldset>
-	<legend>Create folder in {=$target}</legend>
+	<legend>New folder in <a class="folder" href="{=$repository}{=$target}">{=$target|getPathName}</a></legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
   <p>
-    <label for="name">name of new folder</label>
+    <label for="name">name</label>
     <input name="name" type="text" id="name" size="40" class="required" tabindex="1" />
 </p>
   <p>

@@ -10,24 +10,26 @@
 <a id="repository" href="{=$repository}">return to repository</a>
 </div>
 <div id="intro">
-<h1>Delete <span class="filename">{=$target|getPathName}</span>?</h1>
+<h1>Delete</h1>
 
 {=if not $file,isWritable} <p>You have read access only. You can not delete this file.</p>
 {=elseif $file,isLockedByThisUser} <p>This file is currently <strong>locked</strong> by you, so other users can not edit it.</p>
-<p>After deletion it will not be present in the latest revision, but can always be recovered from the the history for the 
-parent folder <span class="folder">{=$target|dirname}/</span>.</p>
+<p>After deletion it will not be present in the latest revision, but can always be recovered
+from the the history for the <a class="folder" href="{=$file,folderUrl}">parent folder</a>.
+The last version of the file will be <span class="revision">{=$file,revision}</span>.</p>
 {=elseif $file,isLockedBySomeoneElse} <p>This file is currently <strong>locked</strong> by 
 <span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}. You can not delete this file.</p>
 {=else}
 <p>After deletion it will not be present in the latest revision, but can always be recovered 
-from the the history for the parent folder <span class="folder">{=$target|dirname}/</span>.</p>
+from the the history for the <a class="folder" href="{=$file,folderUrl}">parent folder</a>.
+The last version of the file will be <span class="revision">{=$file,revision}</span>.</p>
 {=/if}
 </div>
 {=if $file,isWritable and not $file,isLockedBySomeoneElse}
 <div class="column" style="width: 60%">
 <form id="delete" name="delete" method="get" action="#">
 	<fieldset>
-	<legend>delete</legend>
+	<legend>Delete {=$file,kind} <a class="{=$file,kind}" href="{=$file,url}">{=$file,filename}</a>?</legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
   <p>
     <label for="name">delete</label>

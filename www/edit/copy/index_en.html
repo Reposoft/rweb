@@ -49,7 +49,7 @@ function checkType() {
 </div>
 <div id="intro">
 <h1>Copy or Move</h1>
-<p>Makes a copy of a file or folder at a new location in the repository. Select "delete the original" to make this a move operation.</p>
+<p>Makes a copy of the {=$file,kind} at a new location in the repository. Select "delete the original" to make this a move operation.</p>
 {=if not $file,isWritable} <p>You have read access only. You can only copy the file.</p>
 {=elseif $file,isLockedByThisUser} <p>The file is currently <strong>locked</strong> by you, so other users can not edit it.
 Select "delete the original" to make this a move operation.</p>
@@ -62,7 +62,7 @@ Select "delete the original" to make this a move operation.</p>
 <div class="column" style="width: 70%">
 <form id="copy" name="copy" method="get" action="#">
 	<fieldset>
-	<legend>Cheap copy of <a class="file" href="{=$file,url}">{=$file,filename}</a>&nbsp;<span class="revision">{=$file,revision}</span></legend>
+	<legend>{=$file,kind|ucfirst}: <a class="{=$file,kind}" href="{=$file,url}">{=$file,filename}</a>&nbsp;<span class="revision">{=$file,revision}</span></legend>
 		<input name="target" type="hidden" id="target" value="{=$target}" />
 	<p>
 		<label for="name">copy the current</label>
@@ -108,9 +108,10 @@ Select "delete the original" to make this a move operation.</p>
 <div class="section">
 <h2>Cheap copies</h2>
 <p>Copies inside the repository take no extra storage space.
-A copy is simply a reference to a specific version of a different URL.
+The copy is just a reference to version <span class="revision">{=$file,revision}</span> at the old location.
 </p>
-<p>Thus, a copy can be a good way to share a file as it looks now,
+<p>That is why copy and move are the same operations.</p>
+<p>Thus, a copy can be a good way to share the {=$file,kind} as it looks now,
 without sharing any future changes to the original.
 </p>
 </div>

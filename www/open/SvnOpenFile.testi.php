@@ -18,7 +18,8 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertTrue(is_numeric($file->getRevision()) && $file->getRevision() > 0);
 		$this->assertEqual('text/xml', $file->getType());
 		$this->assertEqual('xmlfile.xml', $file->getFilename());
-		$this->assertEqual('/demoproject/trunk/public/', $file->getFolderPath());	
+		$this->assertEqual('/demoproject/trunk/public/', $file->getFolderPath());
+		$this->assertEqual('file', $file->getKind());	
 		
 		$contents = $file->getContents();
 		$this->assertEqual(">\n", substr($contents, strlen($contents)-2), "File ends with newline. %s");
@@ -140,6 +141,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertTrue($file->isWritable());
 		$this->assertEqual('public', $file->getFilename());
 		$this->assertEqual('/demoproject/trunk/', $file->getFolderPath());
+		$this->assertEqual('folder', $file->getKind(), "Repos says 'folder', not 'dir'. %s");
 	}
 	
 	function testFolderNoSlash() {
