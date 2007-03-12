@@ -65,21 +65,30 @@ class TestAdmin extends UnitTestCase {
 	}
 	
 	function testGetDirContents() {
-		$dir = getConfig("backup_folder");
-		$prefix = getPrefix( getConfig("local_path") );
-		$this->sendMessage("This test depends on file in backup_folder $dir, and local_path wich gives prefix $prefix");
-		$files1 = getDirContents($dir);
-		$total = count($files1);
-		if ( $total<1 )
-			$this->fail("No files found in $dir");
-		$files2 = getDirContents($dir, $prefix);
-		$filtered = count($files2);
-		if ( $filtered<1 )
-			$this->sendMessage("No files found in $dir with prefix $prefix");
-		if ( $total < $filtered )
-			$this->fail( "Filtering with prefix makes $total files become $filtered, which is very strange");
-		if ( $total == $filtered )
-			$this->sendMessage( "Total number of files is same as filtered, this may indicate that $prefix filtering makes no difference");
+		$dir = System::getTempFolder('admintest');
+		$prefix = 'repos-data-repository-';
+		touch("$dir{$prefix}00-02.svndump.gz");
+		touch("$dir{$prefix}03-03.svndump.gz");
+		touch("$dir{$prefix}04-05.svndump");
+		touch("$dir{$prefix}06-10.svndump.gz.c");
+		
+		$files = getDirContents($dir);
+		$this->assertEqual(4, count($files), "Files with prefix $prefix in $dir. %s");
+		$this->assertEqual('repos-data-repository-00-02.svndump.gz', $files[0]);
+		
+		// clean
+		System::deleteFolder($dir);
+	}
+	
+	function testIsRepositoryAndGetHead() {
+		$dir = System::getTempFolder('admintest'); 
+		$this->assertFalse(isRepository($dir), "No repository in $dir. %s");
+		exec(System::getCommand('svnadmin').' create "'.$dir.'"');
+		$this->assertTrue(isRepository($dir), "Created repository in $dir. %s");
+		// test getHeadRevisionNumber
+		$this->assertEqual(0, getHeadRevisionNumber($dir));
+		// clean
+		System::deleteFolder($dir);
 	}
 	
 }

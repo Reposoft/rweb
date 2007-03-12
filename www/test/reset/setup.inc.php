@@ -142,6 +142,8 @@ function setup_createApacheLocation($extraDirectives='', $extraAfterLocation='')
 	AuthUserFile $userfile
 	Require valid-user
 	$extraDirectives
+	# All browsers should do If-None-Match with ETag
+	Header add Cache-Control \"max-age=0, must-revalidate\"
 	</Location>
 	$extraAfterLocation
 	";

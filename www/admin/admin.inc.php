@@ -7,6 +7,7 @@
  */
 require_once( dirname(dirname(__FILE__)) . "/conf/System.class.php" );
 require_once( dirname(dirname(__FILE__)) . "/conf/repos.properties.php" );
+require_once( dirname(dirname(__FILE__)) . '/conf/Command.class.php' );
 
 define('TEMP_FILE_EXTENSION', '.temporary');
 
@@ -40,13 +41,10 @@ function html_end($code = 0) {global $report; $report->display(); }
 function isRepository($localPath) {
 	if (!file_exists($localPath))
 		return false;
-	$command = System::getCommand("svnlook") . " uuid $localPath";
-	$output = array();
-	$return = 0;
-	$uuid = exec($command, $output, $return);
-	if ($return!=0)
-		return false;
-	return strlen($uuid) > 0;	
+	$command = new Command('svnlook');
+	$command->addArgOption('uuid', $localPath);
+	if ($command->exec()) return false;
+	return strlen(array_pop($command->getOutput())) > 0;	
 }
 
 /**

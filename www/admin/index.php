@@ -28,7 +28,11 @@ $p->assign('lastrev', $backup[count($backup) - 1][2]);
 
 $lastrev = -1;
 foreach ($backup as $file) {
-	if ( $file[1] != $lastrev + 1 ) {
+	if ( $file[1] < $lastrev + 1 ) {
+		$p->assign('hasoverlap', true);
+		$p->append('overlaps', array('from'=>$file[1], 'to'=>$lastrev));
+	}
+	if ( $file[1] > $lastrev + 1 ) {
 		$p->assign('hasgaps', true);
 		$p->append('gaps', array('from'=>$lastrev + 1, 'to'=>$file[1] - 1));
 	}

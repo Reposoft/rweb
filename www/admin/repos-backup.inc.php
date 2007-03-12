@@ -6,7 +6,6 @@
  */
 
 require( dirname(__FILE__) . '/admin.inc.php' );
-require( dirname(dirname(__FILE__)) . '/conf/Command.class.php' );
 
 define('BACKUP_SCRIPT_VERSION','$LastChangedRevision$');
 define('BACKUP_SIZE', 100*1024*1024); // recommended unpacked size of dump files

@@ -28,8 +28,6 @@ setup_createApacheLocation(
 AuthzSVNAccessFile $aclfile
 # allow public access to * = r folders
 Satisfy Any
-# all browsers need to unterstand that etag should be checked
-Header add Cache-Control \"must-revalidate\"
 ",
 ''
 );

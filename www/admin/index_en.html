@@ -36,13 +36,16 @@
 to <span id="backuprevision" class="revision">{=$lastrev}</span>
 </p>
 {=assign var='last' value=-1}
+{=foreach from=$overlaps item=over}
+<p class="warning">Backup overlap. Backup files overlap from version {=$over.from} to {=$over.to}.</p>
+{=/foreach}
 {=foreach from=$gaps item=gap}
-<p class="error">Backup gap. Revision {=$gap.from} to {=$gap.to} is missing.</p>
+<p class="error">Backup gap. Versision {=$gap.from} to {=$gap.to} is missing.</p>
 {=/foreach}
 {=if $hasgaps}
 <p class="warning">To fix the gaps, delete newer backup files and then run backup again.</p> 
 {=else}
-<p class="passed">Revisions from 0 to {=$lastrev} are backed up.</p>
+<p class="passed">Versions from 0 to {=$lastrev} are backed up.</p>
 {=/if}
 {=/if}
 </td>
