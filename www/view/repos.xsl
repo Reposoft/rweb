@@ -167,17 +167,23 @@
 		<xsl:param name="href">
 			<xsl:call-template name="getHref"/>
 		</xsl:param>
-		<xsl:param name="newpath">
-			<xsl:call-template name="getNewPath"/>
+		<xsl:param name="target">
+			<xsl:call-template name="getHref">
+				<xsl:with-param name="href">
+					<xsl:value-of select="../@path"/>
+					<xsl:value-of select="'/'"/>
+					<xsl:value-of select="@href"/>
+				</xsl:with-param>
+			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
 				<a id="view:{$id}" class="action" href="{$href}">view</a>
 				<xsl:if test="$editUrl">
-					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={$newpath}/{$href}">rename</a>
-					<a id="copy:{$id}" class="action"  href="{$editUrl}copy/?target={$newpath}/{$href}">copy</a>
-					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={$newpath}/{$href}">delete</a>
+					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={$target}">rename</a>
+					<a id="copy:{$id}" class="action"  href="{$editUrl}copy/?target={$target}">copy</a>
+					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={$target}">delete</a>
 				</xsl:if>
 			</div>
 			<a id="open:{$id}" class="folder" href="{$href}">
@@ -196,21 +202,27 @@
 		<xsl:param name="href">
 			<xsl:call-template name="getHref"/>
 		</xsl:param>
-		<xsl:param name="newpath">
-			<xsl:call-template name="getNewPath"/>
+		<xsl:param name="target">
+			<xsl:call-template name="getHref">
+				<xsl:with-param name="href">
+					<xsl:value-of select="../@path"/>
+					<xsl:value-of select="'/'"/>
+					<xsl:value-of select="@href"/>
+				</xsl:with-param>
+			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="n" select="count(/svn/index/dir) + position() - 1"/>
 		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
-				<a id="view:{$id}" class="action" href="{$web}open/?target={$newpath}/{$href}">view</a>
+				<a id="view:{$id}" class="action" href="{$web}open/?target={$target}">view</a>
 				<xsl:if test="$editUrl">
-					<a id="edit:{$id}" class="action" href="{$editUrl}?target={$newpath}/{$href}">edit</a>
-					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={$newpath}/{$href}">rename</a>
-					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={$newpath}/{$href}">copy</a>
-					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={$newpath}/{$href}">delete</a>
-					<a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={$newpath}/{$href}">upload&#xA0;changes</a>
+					<a id="edit:{$id}" class="action" href="{$editUrl}?target={$target}">edit</a>
+					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={$target}">rename</a>
+					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={$target}">copy</a>
+					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={$target}">delete</a>
+					<a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={$target}">upload&#xA0;changes</a>
 				</xsl:if>
-				<a id="history:{$id}" class="action" href="{$web}open/log/?target={$newpath}/{$href}">view&#xA0;history</a>
+				<a id="history:{$id}" class="action" href="{$web}open/log/?target={$target}">view&#xA0;history</a>
 			</div>
 			<a id="open:{$id}" class="file-{$filetype} file" href="{$href}">
 				<xsl:value-of select="@name"/>
@@ -358,41 +370,6 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$href"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<xsl:template name="getNewPath">
-		<xsl:param name="newpath" select="../@path"/>
-		<xsl:choose>
-			<xsl:when test="contains($newpath, '+')">
-				<xsl:call-template name="getNewPath">
-					<xsl:with-param name="newpath" select="substring-before($newpath,'+')"/>
-				</xsl:call-template>
-				<xsl:value-of select="'%2B'"/>
-				<xsl:call-template name="getNewPath">
-					<xsl:with-param name="newpath" select="substring-after($newpath,'+')"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:when test="contains($newpath, '&amp;')">
-				<xsl:call-template name="getNewPath">
-					<xsl:with-param name="newpath" select="substring-before($newpath,'&amp;')"/>
-				</xsl:call-template>
-				<xsl:value-of select="'%26'"/>
-				<xsl:call-template name="getNewPath">
-					<xsl:with-param name="newpath" select="substring-after($newpath,'&amp;')"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:when test="contains($newpath, '#')">
-				<xsl:call-template name="getNewPath">
-					<xsl:with-param name="newpath" select="substring-before($newpath,'#')"/>
-				</xsl:call-template>
-				<xsl:value-of select="'%23'"/>
-				<xsl:call-template name="getNewPath">
-					<xsl:with-param name="newpath" select="substring-after($newpath,'#')"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="$newpath"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
