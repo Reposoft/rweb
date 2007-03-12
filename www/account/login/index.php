@@ -68,6 +68,10 @@ function loginAndRedirectToHomeDir() {
 	}
 	if (isLoggedIn()) {
 		$user = getReposUser();
+		if (!$user) {
+			showLoginFailed('[Error: Username is required but was empty]');
+			exit;
+		}
 		$try = getVerifyLoginUrls($repo, $user);
 		foreach ($try as $url) {
 			if (verifyLogin($url)) {
