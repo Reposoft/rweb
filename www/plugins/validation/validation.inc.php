@@ -83,7 +83,7 @@ class Rule {
 	 * Validates a field value according to the rule, and returns the error message if invalid.
 	 * Also sets the $value field.
 	 * Default implementation calls Rule->valid($value).
-	 * It is best to only override valid($value). If overriding this method, make sure it sets _value field if valud.
+	 * It is best to only override valid($value). If overriding this method, make sure it sets _value field if valid.
 	 * @param String $value the value to check
 	 * @return String error message if invalid, null if valid (use empty() to check)
 	 */
@@ -122,6 +122,31 @@ class RuleEreg extends Rule {
 	}
 	function valid($value) {
 		return ereg($this->regex, $value);
+	}
+}
+
+/**
+ * Creates a validation rule from an 'preg' family regular expressions.
+ *
+ * Example: <code>new RuleRegexp('name', 'required field, must not contain @', '/^[^@]+$/g');</code>
+ */
+class RuleRegexp extends Rule {
+	var $regexp;
+	function RuleRegexp($fieldname, $message, $pRegexp) {
+		$this->regexp = $pRegexp;
+		$this->Rule($fieldname, $message);
+	}
+	function valid($value) {
+		return preg_match($this->regexp, $value);
+	}
+}
+
+class RuleRegexpInvert extends RuleRegexp {
+	function RuleRegexpInvert($fieldname, $message, $pRegexpNoMatch) {
+		$this->RuleRegexp($fieldname, $message, $pRegexpNoMatch);
+	}
+	function valid($value) {
+		return !parent::valid($value);
 	}
 }
 

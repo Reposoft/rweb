@@ -22,14 +22,28 @@ define('LOCAL_PATH', getConfig('local_path'));
 // Repos convention for the per-user htpasswd file
 define('REPOSITORY_USER_FILE_NAME', 'repos-password.htp');
 
-// TODO validation Rules
-
 function accountGetUsernameRequiredRule($fieldname='username') {
-	return new RuleEreg('username', "Need a valid username.", '.+'); // our current username limitation
+	return new RuleRegexp($fieldname, 
+		"Username must contain at least 2 and at most 50 characters.",
+		'/.{2,50}/');
 }
 
 function accountGetEmailRequiredRule($fieldname='email') {
-	return new RuleEreg('email', "Need a valid e-mail address.", '.+@.+\.[a-z]+');
+	return new RuleRegexp($fieldname,
+		"Need a valid e-mail address.",
+		'/.+@.+\.[a-z]+/');
+}
+
+function accountGetUsernameNotExistingRule($fieldname='username') {
+	return new NewFilenameRule($fieldname, '/');	
+}
+
+function accountGetUsernameNotReservedRule($fieldname='username') {
+	return new RuleRegexpInvert($fieldname,
+		'This is a reserved word and can not be used as account name.',
+		'/^(repo|repos.*|data|svn.*|subversion|admin.*|root|su|test.*|login.*|account.*|user.*'
+		.'|trunk|branches|tags|tasks|templates|calendar|messages|news|support|help|manual|docs'
+		.')$/i');
 }
 
 /**

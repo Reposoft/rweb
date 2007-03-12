@@ -14,6 +14,9 @@ if (isset($_GET[SUBMIT])) {
 	$email = $_GET['email'];
 	$fullname = $_GET['fullname'];
 	$password = getRandomPassword($username);
+	accountGetUsernameRequiredRule();
+	accountGetUsernameNotReservedRule();
+	accountGetUsernameNotExistingRule();
 	
 	accountCreateUserFolder(getTargetUrl(), $username, $password, $email, $fullname);
 	// create acl entry in next revision (same revision would require checkout repository root

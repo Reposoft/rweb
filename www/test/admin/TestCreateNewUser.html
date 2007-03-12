@@ -27,12 +27,12 @@
 <tr>
 	<td>type</td>
 	<td>username</td>
-	<td>test2</td>
+	<td>2user</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>email</td>
-	<td>test2@repos.se</td>
+	<td>test2user@repos.se</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -76,12 +76,12 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>[/test2]</td>
+	<td>[/2user]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>test2 = rw</td>
+	<td>2user = rw</td>
 	<td></td>
 </tr>
 <tr>
@@ -91,7 +91,77 @@
 </tr>
 <tr title="there should be a home folder for the new user, and admin does not need access to it">
 	<td>verifyElementPresent</td>
-	<td>open:test2_</td>
+	<td>open:2user_</td>
+	<td></td>
+</tr>
+<tr title="Make sure there is an error message if we try to create an existing user">
+	<td>open</td>
+	<td>setup/?admin</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>accounts</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>accountcreate</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>2user</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>error</td>
+	<td></td>
+</tr>
+<tr>
+	<td>goBack</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr title="test too short username">
+	<td>type</td>
+	<td>username</td>
+	<td>a</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>at least</td>
+	<td></td>
+</tr>
+<tr title="test reserved username">
+	<td>type</td>
+	<td>username</td>
+	<td>branches</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>reserved</td>
+	<td></td>
+</tr>
+<tr>
+	<td>goBack</td>
+	<td></td>
 	<td></td>
 </tr>
 </tbody></table>
