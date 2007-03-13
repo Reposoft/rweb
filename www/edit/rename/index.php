@@ -4,10 +4,12 @@ require("../SvnEdit.class.php" );
 addPlugin('validation');
 
 // automatic validation
-new Rule('folder');
 new FilenameRule('newname');
+// svn import: parent folder must exists, to avoid implicit create
+$parent = new ResourceExistsRule('folder');
 // explicit validation
-new NewFilenameRule('newname', $_GET['folder']);
+new NewFilenameRule('newname', $parent->getValue());
+
 // dispatch
 if (isset($_GET[SUBMIT])) {
 	svnRename(); 

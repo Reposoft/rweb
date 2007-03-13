@@ -4,15 +4,18 @@
 <title>automated test</title>
 </head>
 <body>
-<p class="description">See what happens when form pages are accessed with invalid parameters.
-The validators used for displaying the form are usually also active when posting it.</p>
+<p class="description">
+All operations that do <code>svn import</code> <em>must check</em> that the parent folder exists.
+Svn client will create the entire import path if it has access rights to do so.
+This is a typical example of validation in edit operations:
+validate only to avoid surprises, allow the svn operation to fail on normal error conditions.</p>
 <table>
 <thead>
-<tr><td colspan="3">test error handling for forms</td></tr>
+<tr><td colspan="3">test error handling for import</td></tr>
 </thead><tbody>
-<tr title="folder could have been deleted by someone else">
+<tr title="mkdir uses import">
 	<td>open</td>
-	<td>http://localhost/repos/edit/mkdir/?target=/demoproject/trunk/nonexisting/</td>
+	<td>http://localhost/repos/edit/mkdir/?target=/demoproject/trunk/noexist/&name=new&submit=Test</td>
 	<td></td>
 </tr>
 <tr>
@@ -22,17 +25,27 @@ The validators used for displaying the form are usually also active when posting
 </tr>
 <tr>
 	<td>open</td>
-	<td>http://localhost/repos/edit/mkdir/?target=/demoproject/trunk/readonly/</td>
+	<td>http://localhost/repos/edit/rename/?target=/demoproject/trunk/&folder=/demoproject/noexist/&name=new&submit=Test</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>glob:read*only</td>
+	<td>does not exist</td>
 	<td></td>
 </tr>
 <tr>
 	<td>open</td>
-	<td>http://localhost/repos/edit/upload/?target=/demoproject/trunk/nonexisting/</td>
+	<td>http://localhost/repos/edit/copy/?target=/demoproject/trunk/&tofolder=/demoproject/noexist/&newname=new&submit=Test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>does not exist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>http://localhost/repos/edit/upload/?target=/demoproject/trunk/noexist/&name=new&submit=Test</td>
 	<td></td>
 </tr>
 <tr>

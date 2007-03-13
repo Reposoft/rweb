@@ -4,10 +4,11 @@ require( dirname(dirname(__FILE__))."/SvnEdit.class.php" );
 addPlugin('validation');
 
 // automatic validation
-new Rule('tofolder');
 new FilenameRule('newname');
+// svn import: parent folder must exists, to avoid implicit create
+$parent = new ResourceExistsRule('tofolder');
 // explicit validation of the destination
-$tofolder = rtrim($_GET['tofolder'], '/').'/';// don't require tailing slash from user;
+$tofolder = rtrim($parent->getValue(), '/').'/';// don't require tailing slash from user;
 new NewFilenameRule('newname', $tofolder);
 
 // dispatch

@@ -6,8 +6,10 @@ addPlugin('validation');
 
 // automatic validation
 new FilenameRule('name');
+// svn import: parent folder must exists, to avoid implicit create
+$parent = new ResourceExistsRule('target');
 // explicit validation
-new NewFilenameRule('name', getTarget());
+new NewFilenameRule('name', $parent->getValue());
 
 if (isset($_GET[SUBMIT])) {
 	Validation::expect('target', 'name', 'message');

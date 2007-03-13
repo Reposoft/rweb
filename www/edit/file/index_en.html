@@ -16,7 +16,7 @@ function autoFillFilename(filename) {
 
 <body>
 <div id="commandbar">
-<a id="repository" href="{=$repository|urlEncodeNames}">return to repository</a>
+<a id="repository" href="{=$repository}">return to repository</a>
 <!--{if $file}-->
 <a id="view" target="_blank" href="../../open/file/?target={=$target}&rev={=$file,revision}">view current version</a>
 <!--{else}-->
@@ -28,9 +28,9 @@ function autoFillFilename(filename) {
 <form id="formEdit" action="../upload/" method="post" name="formUpload">
 <fieldset>
 	<!--{if $file}-->
-	<legend>Edit <a class="file" href="{=$file,url}">{=$target}</a> {=$file,revision} with type {=$file,type}</legend>
+	<legend>Edit <a class="file" href="{=$file,url}">{=$file,filename}</a> with type {=$file,type}</legend>
 	<!--{else}-->
-	<legend>Create new file in {=$target}</legend>
+	<legend>New text in <a class="folder" href="{=$repository}{=$target}">{=$target|getPathName}</a></legend>
 	<!--{/if}-->
   <input type="hidden" name="target" value="{=$target}"/>
   <input type="text" name="type" value="{=$type}" style="display:none"/>

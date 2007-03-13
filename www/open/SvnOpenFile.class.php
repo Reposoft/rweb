@@ -273,20 +273,25 @@ class SvnOpenFile {
 	 * For all revisions that are _not_ HEAD, this method has to return 'false'.
 	 * To detect read-only for files or folders, it is also possible to 
 	 *  inspect "svn info --xml [parent folder]" and check if commit autor and date are missing.
-	 * @see _svnResourceIsWritable
-	 * @return boolean true if resource is writable in DAV. Locked files may still be writable.
+	 * @see _svnFileIsWritable
+	 * @return boolean true if resource is writable in DAV.
+	 *  Locked files may still be writable, see integration tests and isWriteAllow().
 	 */	
 	function isWritable() {
 		if (!$this->isLatestRevision()) return false;
-		return _svnResourceIsWritable($this->getUrl());
+		if ($this->isFolder()) return _svnFolderIsWritable($this->getUrl());
+		return _svnFileIsWritable($this->getUrl());
 	}
 	
 	/**
+	 * Method created as a shorthand for isWritable() && !isLockedBySomeoneElse().
 	 * @return true if the user is allowed to commit a new version,
 	 *  i.e. the file isWritable and not isLockedBySomeoneElse
 	 */
 	function isWriteAllow() {
 		if (!$this->isWritable()) return false;
+		// TODO isn't it quite costly to check for lock every time?
+		// maybe isWritable should return false for locked files?
 		if ($this->isLockedBySomeoneElse()) return false;
 		return true;
 	}

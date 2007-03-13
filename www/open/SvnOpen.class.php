@@ -32,35 +32,13 @@ function _svnopen_getSvnSwitches() {
 }
 
 /**
- * @return revision number from parameters (safe as command argument), false if not set
- * @deprecated use RevisionRule instead
- */
-function getRevision($rev = false) {
-	if (!$rev) {
-		if(!isset($_GET['rev'])) {
-			return false;
-		}
-		$rev = $_GET['rev'];
-	}
-	if (is_numeric($rev)) {
-		return $rev;
-	}
-	$accepted = array('HEAD');
-	if (in_array($rev, $accepted)) {
-		return $rev;
-	}
-	trigger_error("Error. Revision number '$rev' is not valid.", E_USER_ERROR);
-}
-
-/**
  * A tricky operation, not supported by svn, is to figure out if a file or folder is writable by
  * the user, without trying a write operation.
- * This is our secret.
  * @param String $url The absolute URL to check.
- * @return boolean true if the current user has write access to the file or folder (false if read-only)
+ * @return boolean true if the current user has write access to the file (false if read-only)
  * @package open
  */
-function _svnResourceIsWritable($url) {
+function _svnFileIsWritable($url) {
 	if (!isLoggedIn()) return false; // can not attempt to lock without a username
 	$r = new ServiceRequest($url);
 	$r->setCustomHttpMethod('LOCK');
@@ -74,6 +52,17 @@ function _svnResourceIsWritable($url) {
 		// unlock before error message?
 	}
 	trigger_error('Server configuration error. Could not check if resource is read-only. Status '.$r->getStatus());
+}
+
+/**
+ * Folders might need different logic than files.
+ * @param String $url The absolute URL to check.
+ * @return boolean true if the current user has write access to the folder (false if read-only)
+ * @package open
+ */
+function _svnFolderIsWritable($url) {
+	// TODO create a method tha does not cause an entry in the error log
+	return _svnFileIsWritable($url);
 }
 
 /**

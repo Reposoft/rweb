@@ -178,6 +178,12 @@ class SvnEditTest extends UnitTestCase
 		$this->assertNotNull($r->validate('a\\/'));
 	}
 	
+	function testParentFolderExists() {
+		$_REQUEST['folder'] = getSelfUrl().'nonexistingresource/';
+		$this->expectError(new PatternExpectation('/does not exist/'));
+		$r = new ResourceExistsRule('folder');
+	}
+	
 }
 
 testrun(new SvnEditTest());

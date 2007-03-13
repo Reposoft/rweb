@@ -19,7 +19,8 @@ if (!isTargetSet()) {
 	trigger_error("Could not upload file. It is probably larger than ".formatSize(MAX_FILE_SIZE), E_USER_ERROR);
 	exit;
 } else {
-	new NewFilenameRule("name", getTarget());
+	$folderRule = new ResourceExistsRule('target');
+	new NewFilenameRule("name", $folderRule->getValue());
 	
 	if ($_SERVER['REQUEST_METHOD']=='GET') {
 		showUploadForm();

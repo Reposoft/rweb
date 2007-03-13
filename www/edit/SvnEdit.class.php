@@ -15,18 +15,19 @@ require_once(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php'
 // ---- standard rules that the pages can instantiate ----
 
 /**
- * Shared validation rule representing file- or foldername.
+ * Shared validation rule representing file- or foldername restrictions.
  * 
  * Not required field. Use Validation::expect(...) to require.
  * 
  * Basically same rules as in windows, but max 50 characters, 
  * no \/:*?"<> or |.
+ * Unlike windows, we don't accept single quote.
  * 
  * @package edit
  */
 class FilenameRule extends RuleEreg {
 	var $required;
-	function FilenameRule($fieldname, $required='true') {
+	function FilenameRule($fieldname, $required=true) {
 		$this->required = $required;
 		$this->RuleEreg($fieldname, 
 			'may not contain any of the characters \/:*?<>| or quotes', 
@@ -40,8 +41,11 @@ class FilenameRule extends RuleEreg {
 		return parent::validate($value);
 	}
 }
+
 /**
- * Shared validation rule to check if the name for a new file or folder is valid
+ * Shared validation rule, used before attempting a create,
+ * to check that the name is not already in use.
+ * This is a common error case, so we don't want to wait for the commit error.
  * 
  * @package edit
  */
@@ -65,37 +69,21 @@ class NewFilenameRule extends Rule {
 }
 
 /**
- * Shared validation rule for operations that create new contents (file or folder) in a folder.
- * The repository browser, without javascript addons, does not check such things (because it is rare)
- * but before an upload or create page is presented it has to be checked.
- * 
- * No check is needed for read access, because for read-only folders 
- * you can get to the command only by modifying URLs
- * and in that case there will be an error message when the operation is attempted. 
- * 
- * TODO do we really need this as a validation rule. it is never a form field, or is it? service parameter?
- * 
- * TODO work in progress
- * 
+ * Operations are validated upon commit, but since 'svn import'
+ * will create any missing parent folders in the new path we must
+ * validate parent folder explicitly.
+ *
  * @package edit
  */
-class FolderWriteAccessRule extends Rule {
-	function FolderWriteAccessRule($fieldname='target') {
-		$this->Rule($fieldname, 'Your username does not have write access to this folder');
+class ResourceExistsRule extends Rule {
+	function ResourceExistsRule($fieldname='target') {
+		$this->Rule($fieldname, 'The path does not exist in the repository.');
 	}
-	function validate($fieldvalue) {
-		if (!isFolder($fieldvalue)) trigger_error('Target was expected to be a folder', E_USER_ERROR);
-		
-	}
-	/**
-	 * Checks if the current logged in user has write privileges on a folder in the repository.
-	 *
-	 * @param String $targetFolder the folder path in the repository, begins with slash
-	 */
-	function hasWriteAccess($targetFolder) {
-		$url = getRepository() . $targetFolder;
-		return _svnResourceIsWritable($url);
-	}
+	function valid($fieldvalue) {
+		$s = new ServiceRequest(getRepository().$fieldvalue);
+		$s->exec();
+		return $s->getStatus() == 200;
+	}	
 }
 
 // ---- presentation support ----
