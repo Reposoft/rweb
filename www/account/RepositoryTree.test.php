@@ -64,12 +64,12 @@ class TestRepositoryTree extends UnitTestCase {
 	function testEntryPoints() {
 		$e = $this->tree->getEntryPoints();
 		$this->assertEqual(2, count($e));
-		$this->assertEqual('/svensson', $e[0]->getPath());
-		$this->assertEqual(true, $e[0]->isReadOnly());
-		$this->assertEqual(false, $e[0]->isByGroup());
-		$this->assertEqual('/aproject', $e[1]->getPath());
-		$this->assertEqual(false, $e[1]->isReadOnly());
-		$this->assertEqual(true, $e[1]->isByGroup());	
+		$this->assertTrue(isset($e['/svensson']));
+		$this->assertEqual(true, $e['/svensson']->isReadOnly());
+		$this->assertEqual(false, $e['/svensson']->isByGroup());
+		$this->assertTrue(isset($e['/aproject']));
+		$this->assertEqual(false, $e['/aproject']->isReadOnly());
+		$this->assertEqual(true, $e['/aproject']->isByGroup());	
 	}
 	
 	function testEntryPointsDifferentUser() {
@@ -79,16 +79,16 @@ class TestRepositoryTree extends UnitTestCase {
 	
 	function testDisplayname() {
 		$e = $this->tree->getEntryPoints();
-		$this->assertEqual('svensson', $e[0]->getDisplayname());
+		$this->assertEqual('svensson', $e['/svensson']->getDisplayname());
 	}
 	
 	function test_getEntryPointsForUserOrGroup() {
 		$acl = array();
 		$acl['/'] = array('admin' => 'rw');
 		$acl['/sven'] = array('sven' => 'rw');
-		$e = $this->tree->_getEntryPointsForUserOrGroup($acl, 'sven', array());
+		$e = RepositoryTree::_getEntryPointsForUserOrGroup($acl, 'sven', array());
 		$this->assertEqual(1, count($e));
-		$this->assertEqual('/sven', $e[0]->getPath());
+		$this->assertEqual('/sven', $e['/sven']->getPath());
 	}
 
 	function test_getEntryPointsForUserOrGroup2() {
@@ -96,36 +96,36 @@ class TestRepositoryTree extends UnitTestCase {
 		$acl['/proj'] = array('@grupp' => 'r', '@boss' => 'rw');
 		$acl['/proj/secret'] = array('@boss' => 'rw', '@grupp' => '' ); // access stopped for @grupp, no test for this yet
 		$acl['/proj/a/subdir'] = array('sven' => 'rw');
-		$e = $this->tree->_getEntryPointsForUserOrGroup($acl, 'sven', array('grupp'));
+		$e = RepositoryTree::_getEntryPointsForUserOrGroup($acl, 'sven', array('grupp'));
 		$this->assertEqual(2, count($e));
-		$this->assertEqual('/proj', $e[0]->getPath());
-		$this->assertEqual(true, $e[0]->isReadOnly());
-		$this->assertEqual(true, $e[0]->isByGroup());
-		$this->assertEqual('/proj/a/subdir', $e[1]->getPath());
-		$this->assertEqual(false, $e[1]->isReadOnly());
-		$this->assertEqual(false, $e[1]->isByGroup());
+		$this->assertEqual('/proj', $e['/proj']->getPath());
+		$this->assertEqual(true, $e['/proj']->isReadOnly());
+		$this->assertEqual(true, $e['/proj']->isByGroup());
+		$this->assertEqual('/proj/a/subdir', $e['/proj/a/subdir']->getPath());
+		$this->assertEqual(false, $e['/proj/a/subdir']->isReadOnly());
+		$this->assertEqual(false, $e['/proj/a/subdir']->isByGroup());
 	}
 	
 	function test_getEntryPointsWithAsterisk() {
 		$acl = array();
 		$acl['/'] = array('*' => 'r'); // the most basic acl
-		$e = $this->tree->_getEntryPointsForUserOrGroup($acl, 'sven', array());
+		$e = RepositoryTree::_getEntryPointsForUserOrGroup($acl, 'sven', array());
 		$this->assertEqual(1, count($e));
-		$this->assertEqual('', $e[0]->getPath()); // no other paths in ACL have tailing slash
-		$this->assertEqual(true, $e[0]->isReadOnly());
+		$this->assertEqual('', $e['/']->getPath()); // no other paths in ACL have tailing slash
+		$this->assertEqual(true, $e['/']->isReadOnly());
 		// for "/", displayname should be the repository name
-		$this->assertEqual('my-repo', $e[0]->getDisplayname());
+		$this->assertEqual('my-repo', $e['/']->getDisplayname());
 	}
 
 	function test_getEntryPointsWithAsteriskReadOnlyTrunk() {
 		$acl = array();
 		$acl['/trunk'] = array('*' => 'rw');
-		$e = $this->tree->_getEntryPointsForUserOrGroup($acl, 'sven', array());
+		$e = RepositoryTree::_getEntryPointsForUserOrGroup($acl, 'sven', array());
 		$this->assertEqual(1, count($e));
-		$this->assertEqual('/trunk', $e[0]->getPath());
-		$this->assertEqual(false, $e[0]->isReadOnly());
+		$this->assertEqual('/trunk', $e['/trunk']->getPath());
+		$this->assertEqual(false, $e['/trunk']->isReadOnly());
 		// for "/", displayname should be the repository name
-		$this->assertEqual('trunk', $e[0]->getDisplayname());
+		$this->assertEqual('trunk', $e['/trunk']->getDisplayname());
 	}	
 
 	function test_getEntryPointsIgnoreReadOnlyPublicFiles() {
@@ -134,10 +134,28 @@ class TestRepositoryTree extends UnitTestCase {
 		$acl['/sven/public/xmlfile.xml'] = array('sven' => 'r'); // is obviously a folder
 		// read only files is considered temporary shares, not a target for navigation
 		$acl['/trunk/public/xmlfile.xml'] = array('*' => 'r');
-		$e = $this->tree->_getEntryPointsForUserOrGroup($acl, 'sven', array());
+		$e = RepositoryTree::_getEntryPointsForUserOrGroup($acl, 'sven', array());
 		$this->assertEqual(1, count($e), "Don't list readonly resources that are accessible to everyone");
-		$this->assertEqual('/sven/public/xmlfile.xml', $e[0]->getPath());
+		$this->assertEqual('/sven/public/xmlfile.xml', $e['/sven/public/xmlfile.xml']->getPath());
 	}
+	
+	function test_getEntryPointsSame() {
+		$acl = array();
+		$acl['/proj'] = array('@proj' => 'rw', 'test' => 'rw', 'test' => 'r');
+		$e = RepositoryTree::_getEntryPointsForUserOrGroup($acl, 'test', array('proj'));
+		$this->assertEqual(1, count($e), "2+ acl matches for the same path should be shown as one. %s");
+		$this->assertEqual('/proj', $e['/proj']->getPath());
+		$this->assertFalse($e['/proj']->isReadOnly(), "Should show the highet available access level. %s");
+	}
+
+	function test_getEntryPointsOverlap() {
+		$acl = array();
+		$acl['/proj'] = array('@aproject' => 'r', 'svensson' => 'rw');
+		$e = RepositoryTree::_getEntryPointsForUserOrGroup($acl, 'svensson', array('aproject'));
+		$this->assertEqual(1, count($e), "Two acl matches for the same path should be shown as one. %s");
+		$this->assertEqual('/proj', $e['/proj']->getPath());
+		$this->assertFalse($e['/proj']->isReadOnly(), "Should show the highet access level of the two. %s");
+	}	
 	
 	// test the small entry point class too
 	function testRepositoryEntryPoint() {

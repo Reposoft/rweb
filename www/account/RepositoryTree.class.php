@@ -123,32 +123,51 @@ class RepositoryTree {
 	}
 	
 	/**
-	 * @return an array of RepositoryEntryPoint for the user
-	 * TODO rw policies should have precedence over r
+	 * Logic for decoding the ACL contents into a list of entry points, good for unit testing.
+	 * @param array $acl the parsed acl
+	 * @param String $username the username
+	 * @param array $groups names of the groups that the user is member of
+	 * @return an array of RepositoryEntryPoint for the user and the groups (whichever matches)
+	 * @static
 	 */
 	function _getEntryPointsForUserOrGroup($acl, $username, $groups) {
 		$e = array();
 		foreach ($acl as $section => $accessrow) {
 			if ($section == 'groups') continue;
 			foreach ($accessrow as $id => $policy) {
-				if (!$this->_isPolicy($policy)) continue;
+				if (!RepositoryTree::_isPolicy($policy)) continue;
 				if ($id=='*') {
 					if ($section != '/' && $policy=='r') continue; // don't list public shared readonly resources
-					$e[] = new RepositoryEntryPoint($section, $policy, true);
+					RepositoryTree::_addEntry($e, $section, $policy, true);
 				} else if (substr($id, 0, 1) == '@') {
 					if (in_array(substr($id, 1), $groups)) {
-						$e[] = new RepositoryEntryPoint($section, $policy, true);
+						RepositoryTree::_addEntry($e, $section, $policy, true);
 					}
 				} else if ($id == $username) {
-					$e[] = new RepositoryEntryPoint($section, $policy, false);
+					RepositoryTree::_addEntry($e, $section, $policy, false);
 				}
 			}
 		}
 		return $e;
 	}
+	
+	/**
+	 * Don't use the RepositoryEntryPoint constructor directly, allow some preprocessing.
+	 * @see RepositoryEntryPoint
+	 * @static
+	 */
+	function _addEntry(&$list, $path, $policy, $byGroupMembership) {
+		$e = new RepositoryEntryPoint($path, $policy, $byGroupMembership);
+		if (isset($list[$path])) { // use the new instance only if access level is higher
+			if ($e->isReadOnly()) return;
+			if (!$list[$path]->isReadOnly()) return;
+		}
+		$list[$path] = $e;
+	}
 
 	/**
 	 * @return true if the argument is a valid access policy specification, such as 'r' or 'rw'
+	 * @static
 	 */
 	function _isPolicy($accessString) {
 		return ($accessString == 'r' || $accessString=='rw');
