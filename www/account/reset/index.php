@@ -37,8 +37,9 @@ function userResetPassword($username, $email) {
 }
 
 function showResult($message) {
-	header('Content-Type: text/plain');
-	echo $message;
+	$p = new Presentation();
+	$p->assign('message', $message);
+	$p->display($p->getLocaleFile(dirname(__FILE__).'/done'));
 }
 
 ?>
