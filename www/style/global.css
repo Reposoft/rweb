@@ -175,24 +175,15 @@ a.folder {
 	line-height: 2.4em;
 }
 #commandbar a {
-	color: #333333;
+	color: #555555;
 	border-right: 2px dotted #D5E0E0;
 }
 #commandbar span {
 	color: #BBBBBB;
 }
-/* general class for loading animation */
-.loading {
-	background-image: url('loading.gif') ! important;
-	background-repeat: no-repeat ! important;
-}
-#submit.loading {
-	background-color: #D5D5D5;
-	color: #666666;
-}
 /* action is for buttons inside listings, <a> is  active, <span> is greyed out */
 a.action {
-	color: #333333;
+	color: #555555;
 	background-color: #F0F0EE;
 	font-size: 82.5%;
 	margin: 0.2em;
@@ -232,6 +223,16 @@ span.action {
 	padding-bottom: 0px;
 	background-image: url('commands/24x24/logout.png');
 	border-right: none;
+}
+/* general class for loading animation */
+.loading {
+	background-image: url('loading.gif') ! important;
+	background-repeat: no-repeat ! important;
+}
+#submit.loading {
+	background-color: #D5D5D5;
+	color: #666666;
+	background-position: center ! important;
 }
 /* visible version numbers, #releaseversion or #resourceversion */
 .versiondisplay {

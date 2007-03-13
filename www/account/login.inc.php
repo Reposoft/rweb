@@ -323,7 +323,7 @@ function askForCredentialsAndExit($realm) {
 }
 
 /**
- * @return true if HTTP login credentials are present and username is not "void"
+ * @return true if HTTP login credentials are present and username is not void
  */
 function isLoggedIn() {
 	return isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER']!=LOGIN_VOID_USER;

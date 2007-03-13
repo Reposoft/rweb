@@ -34,7 +34,7 @@ class TestEditPlugin extends UnitTestCase {
 	}
 	
 	// note that we should be resrictive with changing these rules
-	// to avoide extra diffs in existing documents for new releases
+	// to avoid extra diffs in existing documents for new releases
 	
 	function testIndentHtmlTags() {
 		$html = "<p>hello<br />world</p><p>!</p>";
