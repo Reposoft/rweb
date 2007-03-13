@@ -69,7 +69,7 @@ if (isset($_REQUEST[SUBMIT])) {
 	
 	$newPasswordLine = implode(':', $newcontents)."\n";
 	if (trim($newPasswordLine) == trim($contents)) {
-		Validation::error('The form contains the same settings as the last committed settings.');
+		Validation::error('The form contents are the same as the current version of the settings file.');
 	}
 	
 	savePassword($newPasswordLine, implode(', ', $message));

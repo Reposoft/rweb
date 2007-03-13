@@ -505,7 +505,8 @@ class SvnOpenFile {
 		$open->addArgUrlPeg($this->getUrl(), $this->getRevision());
 		// exec can not be used for reading contents, see REPOS-58
 		ob_start();
-		ob_flush();
+		// can not do flush because then no headers can be sent, ob_flush();
+		if (ob_get_contents()) trigger_error('The output buffer is already in use. Can not read contents.', E_USER_ERROR);
 		$result = $open->passthru();
 		if ($result) trigger_error('Could not read file from svn', E_USER_ERROR);
 		$contents = ob_get_clean();
