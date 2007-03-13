@@ -118,7 +118,8 @@ function showInfo() {
 		$f = getHookScriptPath($hook);
 		if (!file_exists($f)) {
 			$r->info($hook . ' hook script does not exist.');
-			$r->info('<a href="?create='.$hook.'">Create '.$hook.' hook</a>');
+			$r->info('<form action="./"><input type="hidden" name="create" value="'.$hook.'">'.
+				'<input type="submit" value="Create '.$hook.' hook"/></form>');
 		} else {
 			if (checkHookScript($f, $hook, $r)) {
 				$r->info('<form action="./" method="get"><input type="hidden" name="test" value="'.$hook.'"/>'.
