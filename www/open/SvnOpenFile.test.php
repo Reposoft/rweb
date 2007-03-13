@@ -10,6 +10,10 @@ require("../lib/simpletest/setup.php");
 
 class TestSvnOpenFile extends UnitTestCase {
 
+	function setUp() {
+		_svnOpenFile_setInstance(null);
+	}
+	
 	function testParseListXml() {
 		$list = explode("\n",
 			'<?xml version="1.0"?>
@@ -138,7 +142,9 @@ class TestSvnOpenFile extends UnitTestCase {
 			'ETag' => '"54321//demoproject/trunk/public/xmlfile.xml"');
 		$file->headStatus = 200;
 		$this->assertTrue($file->isLatestRevision());
-		
+	}
+	
+	function testIsLatestRevision_newetag() {
 		$file = new SvnOpenFile('/test/a.txt', 54321);
 		$file->head = array(0 => 'HTTP/1.1 200 OK',
 			'ETag' => '"54322//demoproject/trunk/public/xmlfile.xml"');
@@ -162,6 +168,12 @@ class TestSvnOpenFile extends UnitTestCase {
 		$file->headStatus = 200;
 		$this->assertEqual('text/html', $file->getType());
 		$this->assertEqual('text', $file->getTypeDiscrete());
+	}
+	
+	function testInstantiateTwice() {
+		$file = new SvnOpenFile('/test/a.txt');
+		$this->expectError(new PatternExpectation('/already .* open/'));
+		$file2 = new SvnOpenFile('/test/b.txt');
 	}
 
 }

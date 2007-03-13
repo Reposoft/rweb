@@ -8,6 +8,10 @@ require("../lib/simpletest/setup.php");
 
 class TestIntegrationSvnOpenFile extends UnitTestCase {
 	
+	function setUp() {
+		_svnOpenFile_setInstance(null);
+	}	
+	
 	function testHeadVersion() {
 		setTestUser();
 		$file = new SvnOpenFile("/demoproject/trunk/public/xmlfile.xml");

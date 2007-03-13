@@ -58,6 +58,23 @@ function makeAmpersandEntities($str, $useNamedEntities = 1) {
   // return preg_replace("/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,5};)/m", $useNamedEntities ? "&amp;" : "&#38;", $str);
 }
 
+/**
+ * SvnOpenFile is very convenient, but could be a performance issue
+ * if used in many simple tasks where simpler methods would be sufficient.
+ * 
+ * SvnOpenFile is meant to present details for a file, with the same interface for HEAD and older revisions.
+ * If many resources are involved in a request, it is probably not a task for SvnOpenFile.
+ * 
+ * For example in edit operations, the system validates operations automatically
+ * when a commit is attempted, so all we need is proper error handling.
+ *
+ * @param SvnOpenFile $fromConstructor
+ */
+function _svnOpenFile_setInstance($fromConstructor) {
+	static $instance = null;
+	if ($fromConstructor && $instance) trigger_error('Svn file has already been opened in this request', E_USER_ERROR);
+	$instance = $fromConstructor;
+}
 	
 /**
  * Reads a file directly from the repository, without the need for local temp storage.
@@ -115,6 +132,7 @@ class SvnOpenFile {
 		$this->path = $path;
 		$this->url = SvnOpenFile::getRepository().$path;
 		$this->_revision = $revision;
+		_svnOpenFile_setInstance($this);
 	}
 	
 	/**
