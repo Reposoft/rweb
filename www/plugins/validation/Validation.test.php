@@ -1,4 +1,5 @@
 <?php
+require("../../open/ServiceRequest.class.php");
 require("validation.inc.php");
 require("../../lib/simpletest/setup.php");
 
@@ -10,9 +11,9 @@ class MyRuleWithDynamicMessage extends Rule {
 	function validate($value) { if ($value!='ohmy') return "Value is \"$value\", but should be \"ohmy\""; }
 }
 
-class MyRuleEreg extends RuleEreg {
-	function MyRuleEreg ($fieldname) {
-		$this->RuleEreg($fieldname,	'empty or 1-5 lowercase letters please', '^[a-z]{0,5}$');
+class MyRuleRegexp extends RuleRegexp {
+	function MyRuleRegexp($fieldname) {
+		$this->RuleRegexp($fieldname,	'empty or 1-5 lowercase letters please', '/^[a-z]{0,5}$/');
 	}
 }
 
@@ -55,23 +56,23 @@ class TestValidation extends UnitTestCase {
 		$this->assertEqual('Value is "oh", but should be "ohmy"', $r->valid('oh'));
 	}
 	
-	function testRuleEreg() {
-		$regexp = '[^@]+@[^@]+';
+	function testRuleRegexp() {
+		$regexp = '/[^@]+@[^@]+/';
 		$this->sendMessage("The reqular expression in this test is '$regexp'");
-		$r = new RuleEreg('name', 'must be a string with @ somewhere in the middle', $regexp);
+		$r = new RuleRegexp('name', 'must be a string with @ somewhere in the middle', $regexp);
 		$this->assertTrue($r->valid('a@b'));
 		$this->assertFalse($r->valid('ab'));
 		$this->assertNull($r->validate('a@b'));
 		$this->assertNotNull($r->validate('ab'));
 	}
 	
-	function testExtendRuleEreg() {
-		$r = new MyRuleEreg('a');
+	function testExtendRuleRegexp() {
+		$r = new MyRuleRegexp('a');
 		$this->assertEqual('a', $r->fieldname);
 		$this->assertFalse(empty($r->_message));
-		$this->assertFalse(empty($r->regex));
+		$this->assertFalse(empty($r->regexp));
 		$this->assertTrue($r->valid('abc'));
-		$this->assertTrue($r->valid(''), "Empty string should be allowed by the regex $r->regex");
+		$this->assertTrue($r->valid(''), "Empty string should be allowed by the regex $r->regexp");
 		$this->assertNull($r->validate(''));
 		$this->assertNotNull($r->validate('123456789'));	
 	}
@@ -95,15 +96,14 @@ class TestValidation extends UnitTestCase {
 	}
 	
 	function testValidateFieldUsingAJAX() {
-		$url = dirname($_SERVER['SCRIPT_URI']).'/?validation&name=somename';
-		$this->sendMessage("Request url: $url");
-		//$handle = fsockopen($url, 80, $errno, $errstr, 5); // seems to require special php config
-		$handle = fopen($url, 'r');
-		//if (!$handle) $this->fail("Could not open connection to validator. Error $errno: $errstr");
-		$result = fgets($handle);
-		$this->assertTrue(feof($handle), "response should be only one line");
-		fclose($handle);
-		$this->assertTrue(strlen($result)>0, "Should have got a response.");
+		$url = dirname($_SERVER['SCRIPT_URI']).'/';
+		$params = array(VALIDATION_KEY=>'','name'=>'somename');
+		
+		$s = new ServiceRequest($url, $params);
+		$this->sendMessage("Request url: ".$s->_buildUrl());
+		$s->exec();
+		$this->assertEqual(200, $s->getStatus(), "Should have got a response. %s");
+		$result = $s->getResponse();
 		$this->assertFalse(strContains($result, '<html'), "Should not return HTML, only a response string.");
 		$this->sendMessage(array('Result:',$result));
 		
@@ -118,11 +118,12 @@ class TestValidation extends UnitTestCase {
 		$expect = "{id: 'testuser', value: 'tes', success: false, msg: '$errormsg'}";
 		$json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
 		$expected = $json->decode($expect);
-		$url = dirname($_SERVER['SCRIPT_URI']).'?validation&testuser=tes';
-		$handle = fopen($url, 'r');
-		$result = fgets($handle);
-		fclose($handle);
 		
+		$url = dirname($_SERVER['SCRIPT_URI']).'/';
+		$params = array(VALIDATION_KEY=>'', 'testuser'=>'tes');
+		$s = new ServiceRequest($url, $params);
+		$s->exec();
+		$result = $s->getResponse();
 		$this->assertEqual($expected, $json->decode($result));
 	}
 	

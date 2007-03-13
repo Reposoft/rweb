@@ -110,22 +110,6 @@ class Rule {
 }
 
 /**
- * Creates a validation rule from an 'ereg' family regular expression.
- *
- * Example: <code>new RuleEreg('name', 'required field, must not contain @', '[^@]+');</code>
- */
-class RuleEreg extends Rule {
-	var $regex;
-	function RuleEreg($fieldname, $message, $eRegEx) {
-		$this->regex = $eRegEx;
-		$this->Rule($fieldname, $message);
-	}
-	function valid($value) {
-		return ereg($this->regex, $value);
-	}
-}
-
-/**
  * Creates a validation rule from an 'preg' family regular expressions.
  *
  * Example: <code>new RuleRegexp('name', 'required field, must not contain @', '/^[^@]+$/g');</code>
