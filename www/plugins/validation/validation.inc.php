@@ -165,6 +165,17 @@ class Validation {
 		}
 	}
 	/**
+	 * Shows a validation error as server side validation result.
+	 * Can be called statically from custom validation logic,
+	 * for example semantic errors that can not be captured by a Rule.
+	 * @param String $message the error description for the user
+	 * @static
+	 * @see _respond method for service call validation error (connected to a filedname)
+	 */
+	function error($message) {
+		_validation_trigger_error($message);
+	}
+	/**
 	 * Adds a new rule to the rules hash.
 	 */
 	function _add(&$rule) {
@@ -189,7 +200,7 @@ class Validation {
 	function _run(&$rule, $value) {
 		$r = $rule->validate($value);
 		if (!empty($r)) {
-			_validation_trigger_error('Error in field "'.$rule->fieldname.'", value "'.$value.'": '.$r
+			Validation::error('Error in field "'.$rule->fieldname.'", value "'.$value.'": '.$r
 			//." \n(with script support enabled this should have been reported when the form was submitted)"
 			." \n\nClick 'back' and try again.");
 		}

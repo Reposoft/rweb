@@ -22,22 +22,38 @@ define('LOCAL_PATH', getConfig('local_path'));
 // Repos convention for the per-user htpasswd file
 define('REPOSITORY_USER_FILE_NAME', 'repos-password.htp');
 
+/**
+ * @return Rule that has processed the field validatoin
+ */
 function accountGetUsernameRequiredRule($fieldname='username') {
 	return new RuleRegexp($fieldname, 
 		"Username must contain at least 2 and at most 50 characters.",
 		'/.{2,50}/');
 }
-
-function accountGetEmailRequiredRule($fieldname='email') {
+/**
+ * @return Rule that has validated email, if the field if set
+ */
+function accountGetEmailRule($fieldname='email') {
 	return new RuleRegexp($fieldname,
-		"Need a valid e-mail address.",
-		'/.+@.+\.[a-z]+/');
+		"Must be an e-mail address.",
+		'/^$|^.+@.+\.[a-z]+$/');
 }
-
+/**
+ * @return Rule that has processed the field validatoin
+ */
+function accountGetEmailRequiredRule($fieldname='email') {
+	new Rule('email');
+	return accountGetEmailRule($fieldname);
+}
+/**
+ * @return Rule that has processed the field validatoin
+ */
 function accountGetUsernameNotExistingRule($fieldname='username') {
 	return new NewFilenameRule($fieldname, '/');	
 }
-
+/**
+ * @return Rule that has processed the field validatoin
+ */
 function accountGetUsernameNotReservedRule($fieldname='username') {
 	return new RuleRegexpInvert($fieldname,
 		'This is a reserved word and can not be used as account name.',

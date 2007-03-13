@@ -10,13 +10,14 @@ require(dirname(dirname(dirname(__FILE__))).'/edit/ServiceRequestEdit.class.php'
 require(dirname(dirname(__FILE__)).'/account.inc.php');
 
 if (isset($_GET[SUBMIT])) {
-	$username = $_GET['username'];
-	$email = $_GET['email'];
-	$fullname = $_GET['fullname'];
-	$password = getRandomPassword($username);
 	accountGetUsernameRequiredRule();
 	accountGetUsernameNotReservedRule();
 	accountGetUsernameNotExistingRule();
+	$username = $_GET['username'];
+	$emailRule = accountGetEmailRule();
+	$email = $emailRule->getValue();
+	$fullname = $_GET['fullname'];
+	$password = getRandomPassword($username);
 	
 	accountCreateUserFolder(getTargetUrl(), $username, $password, $email, $fullname);
 	// create acl entry in next revision (same revision would require checkout repository root

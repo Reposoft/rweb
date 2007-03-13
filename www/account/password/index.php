@@ -8,10 +8,10 @@
  *
  * @package account
  */
-require('../../conf/Presentation.class.php');
 require('../../open/SvnOpenFile.class.php');
 require('../../edit/SvnEdit.class.php');
 require('../account.inc.php');
+require('../../conf/Presentation.class.php');
 
 class PasswordRule extends Rule {
 	var $repeatfield; 
@@ -58,7 +58,8 @@ if (isset($_REQUEST[SUBMIT])) {
 		$fullname = $newFullname;
 	}
 	
-	$newEmail = $_REQUEST['email'];
+	$email = accountGetEmailRule('email');
+	$newEmail = $email->getValue();
 	if ($newEmail!=$email) {
 		if (!isset($newcontents[2])) $newcontents[2] = '';
 		$newcontents[3] = $newEmail;
@@ -68,7 +69,7 @@ if (isset($_REQUEST[SUBMIT])) {
 	
 	$newPasswordLine = implode(':', $newcontents)."\n";
 	if (trim($newPasswordLine) == trim($contents)) {
-		trigger_error('The form was submitted but there are no changes.', E_USER_ERROR);
+		Validation::error('The form contains the same settings as the last committed settings.');
 	}
 	
 	savePassword($newPasswordLine, implode(', ', $message));
