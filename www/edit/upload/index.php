@@ -6,6 +6,7 @@
 require("../../conf/Presentation.class.php");
 require("../SvnEdit.class.php");
 require("mimetype.inc.php");
+require('filewrite.inc.php');
 addPlugin('edit');
 addPlugin('validation');
 
@@ -32,58 +33,6 @@ if (!isTargetSet()) {
 			processNewVersion($upload);
 		}
 	}
-}
-
-/**
- * Writes textarea contents to version controlled text file.
- * Based on the 'type' parameter value, a custom write function "editWriteNewVersion_$type"
- * is called if it exists. If no custom function is found, the posted string is written with
- * a single fwrite to the file.
- *
- * @param String $postedText the contents from the text area
- * @param String $destinationFile the local working copy file,
- * 	containing the "based-on" revision, or for new files empty
- * @param String $type a type as validated by the 'edit' plugin.
- * @return int the number of bytes in the new version of the file
- * @package edit
- */
-function editWriteNewVersion(&$postedText, $destinationFile, $type) {
-	$custom = 'editWriteNewVersion_'.$type;
-	if ($type && function_exists($custom)) {
-		return call_user_func($custom, $postedText, $destinationFile);
-	}
-	return _defaultWriteNewVersion($postedText, $destinationFile);
-}
-
-/**
- * Writes $postedText as it is to $destinationFile, returns length of $postedText.
- * @see editWriteNewVersion
- */
-function _defaultWriteNewVersion(&$postedText, $destinationFile) {
-	$fp = fopen($destinationFile, 'w+');
-	if ($fp) {
-		fwrite($fp, $postedText);
-		fclose($fp);
-	} else {
-		trigger_error("Couldn't write file contents from the submitted text.", E_USER_ERROR);
-	}
-	return strlen($postedText);
-}
-
-/**
- * Plaintext documents are _always_ written in UTF-8 with newline at end of file.
- * We assume that all users have text editors capable of open and resave in UTF-8.
- *
- * @param String $postedText the contents from the text area
- * @param String $destinationFile the local working copy file, currently containing the "based-on" revision
- * @param String $type a type as validated by the 'edit' plugin.
- * @return int the number of bytes in the new version of the file
- * @package edit
- */
-function editWriteNewVersion_txt(&$postedText, $destinationFile) {
-	// already made UTF-8 by browser encoding
-	if (!strEnds($postedText, "\n")) $postedText.="\n";
-	return _defaultWriteNewVersion($postedText, $destinationFile);
 }
 
 /**
