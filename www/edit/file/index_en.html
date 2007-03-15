@@ -2,15 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Upload to repos</title>
-<script type="text/javascript">
-function autoFillFilename(filename) {
-	if (!filename) filename = 'newtext';
-	if (!/\.[\w\d]{1,4}$/.test(filename)) {
-		var type = document.getElementsByName('type')[0].value;
-		document.getElementsByName('name')[0].value = filename+'.'+type;	
-	}
-}
-</script>
 <!--{$head}-->
 </head>
 
@@ -33,6 +24,7 @@ function autoFillFilename(filename) {
 	<legend>New text in <a class="folder" href="{=$repository}{=$target}">{=$target|getPathName}</a></legend>
 	<!--{/if}-->
   <input type="hidden" name="target" value="{=$target}"/>
+  <input type="hidden" name="extension" class="current-name" value=".{=$type}"/>
   <input type="text" name="type" value="{=$type}" style="display:none"/>
 	<!--{if $file}-->
 	<input type="hidden" name="fromrev" value="{=$file,revision}"/>
@@ -51,7 +43,7 @@ function autoFillFilename(filename) {
 	<!--{if $file}-->
     <input type="text" id="currentname" name="currentname" value="{=$target|getPathName}" disabled="disabled" size="40" />
 	<!--{else}-->
-	<input type="text" id="name" name="name" size="40" class="required" tabindex="2" onblur="autoFillFilename(value)"/>
+	<input type="text" id="name" name="name" size="40" class="remember-extension" class="required" tabindex="2"/>
 	<input type="hidden" id="create" name="create" value="yes"/>
 	<!--{/if}-->
   </p>

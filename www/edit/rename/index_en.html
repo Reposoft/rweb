@@ -2,26 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Rename repos item</title>
-<script type="text/javascript">
-function checkType() {
-	var localFilename = $('#name').val();
-	if ($('#newname').val()) {
-		var reposFilename = $('#newname').val();
-		var i = reposFilename.match(/\.(\w*$)/);
-		if (!i) {
-			var j = localFilename.match(/\.(\w*$)/);
-			if (j) {
-				var reposFilenameWithType = reposFilename + j[0];
-				$('#newname').val(reposFilenameWithType);
-				return true;
-			}
-			return true;
-		}
-		return true;
-	}
-	return true;
-}
-</script>
 <!--{$head}-->
 </head>
 
@@ -48,12 +28,12 @@ You can not rename this file.</p>
     <input name="folder" type="hidden" id="target" value="{=$folder}" />
   <p>
     <label for="name">current name</label>
-    <input id="name" name="name" type="text" size="40" disabled="disabled" value="{=$oldname}" />
+    <input id="name" name="name" type="text" class="current-name" size="40" disabled="disabled" value="{=$oldname}" />
     <input id="oldname" name="oldname" type="hidden" value="{=$oldname}" />
   </p>
   <p>
     <label for="newname">new name</label>
-    <input name="newname" type="text" id="newname" size="40" class="required" tabindex="1" onchange="checkType()" />
+    <input name="newname" type="text" id="newname" size="40" class="remember-extension" tabindex="1" class="required" />
 </p>
   <p>
     <label for="message">history text</label>

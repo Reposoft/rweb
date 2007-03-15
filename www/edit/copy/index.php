@@ -2,6 +2,7 @@
 require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__))."/SvnEdit.class.php" );
 addPlugin('validation');
+addPlugin('filename');
 
 // automatic validation
 new FilenameRule('newname');

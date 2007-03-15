@@ -22,24 +22,7 @@ function pasteUrl() {
 function setMove(move) {
 	button = document.getElementsByName('submit')[0].value = move ? "Move" : "Copy";
 }
-function checkType() {
-	var localFilename = $('#name').val();
-	if ($('#newname').val()) {
-		var reposFilename = $('#newname').val();
-		var i = reposFilename.match(/\.(\w*$)/);
-		if (!i) {
-			var j = localFilename.match(/\.(\w*$)/);
-			if (j) {
-				var reposFilenameWithType = reposFilename + j[0];
-				$('#newname').val(reposFilenameWithType);
-				return true;
-			}
-			return true;
-		}
-		return true;
-	}
-	return true;
-}
+
 </script>
 </head>
 
@@ -66,7 +49,7 @@ Select "delete the original" to make this a move operation.</p>
 		<input name="target" type="hidden" id="target" value="{=$target}" />
 	<p>
 		<label for="name">copy the current</label>
-		<input id="name" name="name" type="text" size="40" disabled="disabled" value="{=$oldname}" />
+		<input id="name" name="name" type="text" class="current-name" size="40" disabled="disabled" value="{=$oldname}" />
 		<input id="oldname" name="oldname" type="hidden" value="{=$oldname}" />
 	</p>
 	<p>
@@ -80,7 +63,7 @@ Select "delete the original" to make this a move operation.</p>
 	</p>
 	<p>
 		<label for="newname">new name</label>
-		<input name="newname" type="text" id="newname" size="40" value="{=$oldname}" class="required" onchange="checkType()" />
+		<input name="newname" type="text" id="newname" class="remember-extension" size="40" value="{=$oldname}" class="required" />
 	</p>
 	<p>
 		<label for="move">delete the original</label>

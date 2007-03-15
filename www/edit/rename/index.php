@@ -2,6 +2,7 @@
 require("../../conf/Presentation.class.php" );
 require("../SvnEdit.class.php" );
 addPlugin('validation');
+addPlugin('filename');
 
 // automatic validation
 new FilenameRule('newname');

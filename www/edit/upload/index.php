@@ -9,6 +9,7 @@ require("mimetype.inc.php");
 require('filewrite.inc.php');
 addPlugin('edit');
 addPlugin('validation');
+addPlugin('filename');
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 
