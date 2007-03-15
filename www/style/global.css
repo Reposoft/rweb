@@ -216,6 +216,12 @@ span.action {
 #commandbar #refresh {
 	background-image: url('commands/24x24/refresh.png');
 }
+#commandbar #view {
+	background-image: url('commands/24x24/view.png');
+}
+#commandbar #edit {
+	background-image: url('commands/24x24/edit.png');
+}
 #commandbar #logout {
 	position: absolute;
 	left: 800px;
