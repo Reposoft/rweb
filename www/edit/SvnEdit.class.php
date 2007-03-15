@@ -37,7 +37,7 @@ class FilenameRule extends RuleRegexp {
 		if (empty($value)) return $this->required ? 'This is a required field' : null;
 		if ($value=='.') return 'The name "." is not a valid filename';
 		if ($value=='..') return 'The name ".." is not a valid filename';
-		if (strlen($value) > 54) return "max length 50"; // excluding file extension
+		if (mb_strlen($value) > 54) return "max length 50"; // excluding file extension
 		return parent::validate($value);
 	}
 }

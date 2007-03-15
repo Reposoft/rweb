@@ -164,6 +164,13 @@ class SvnEditTest extends UnitTestCase
 		$this->assertNotNull($r->validate(str_repeat('a', 51+4)), "max length 50 + extension .123");
 	}
 	
+	function testFilenameMaxLengthUTF8() {
+		// this is actually a recommendation but we handle it like a rule
+		$r = new FilenameRule('file');
+		$this->assertNull($r->validate(str_repeat("\x81", 50+4)));
+		$this->assertNotNull($r->validate(str_repeat("\x81", 51+4)), "max length 50 + extension .123");
+	}
+	
 	function testFilenameRuleSpecialCases() {
 		$r = new FilenameRule('file');
 		$this->assertNotNull($r->validate('.'));
