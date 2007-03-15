@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * Create repository account (c) 2007 Staffan Olsson www.repos.se
  *
  * @package
  */

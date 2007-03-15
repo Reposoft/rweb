@@ -1,5 +1,6 @@
 <?php
-/************** repos.se PHP authentication *****************
+/**
+ * Login integration (c) 2004-2007 Staffan Olsson www.repos.se
  * 
  * repos.se versions 1.x has no internal user database.
  * Instead, all security relies on the repository security,

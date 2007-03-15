@@ -1,6 +1,6 @@
 <?php
 /**
- * Provides HTTP authentication logout.
+ * HTTP authentication logout (c) 2004-2007 Staffan Olsson www.repos.se 
  * 
  * This is not really a supported feature in HTTP authentications,
  * so we need to trick browsers to dropping the credentials.

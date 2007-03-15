@@ -1,5 +1,6 @@
 <?php
 /**
+ * Repository model (c) 2006-2007 Staffan Olsson www.repos.se
  * Analyzing the repository structure to list points of entry for a user.
  * @package open
  */

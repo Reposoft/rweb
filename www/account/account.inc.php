@@ -1,5 +1,6 @@
 <?php
 /**
+ * Htaccess integration (c) 2007 Staffan Olsson www.repos.se
  * Common functions in user administration,
  * for Repos installations that use apache password files.
  * 

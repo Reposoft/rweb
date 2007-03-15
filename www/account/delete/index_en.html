@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Delete a repository account</title>
+<!--{$head}-->
+</head>
+
+<body>
+<div id="commandbar">
+<a id="admin" href="../../admin/">return to admin</a>
+</div>
+<h1>Delete account</h1>
+<p>This has to be done manually.
+Repos can not know how the user has been integrated with the repository.
+It usually involved these steps:</p>
+<ol>
+<li>Remove the <code>[/username]</code> section from the ACL.</li>
+<li>Remove the username from any groups that he/she is member of.</li>
+<li>If the user has a home folder, that folder can be deleted.
+This does not free up any storage space, but makes the folder name available for others.
+Please note that if others are given access to that path in the ACL, they can also access the history.</li>
+<li>The user may still have an account stored in the Repos server for some time,
+but if there are no entries in the ACL he/she can not access repository contents.
+If this is a problem, ask a server administrator to remove the account from the users file.</li>
+</ol>
+</p>
+<p>This process can of course be automated to suit you.
+Please contact the Repos team for more information.</p> 
+<div id="footer">
+</div>
+</body>
+</html>

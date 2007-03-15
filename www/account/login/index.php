@@ -1,7 +1,7 @@
 <?php
 /**
- * Provides HTTP basic login, with authentication, 
- * verified by forwarding the credentials to a repository resource.
+ * HTTP basic authentication (c) 2004-2007 Staffan Olsson www.repos.se
+ * Verified by forwarding the credentials to a repository resource.
  * 
  * @package account
  */
