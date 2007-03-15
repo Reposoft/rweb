@@ -49,11 +49,11 @@ _showVersion = function() {
 	try {
 		$('#releaseversion').each( function() {
 			this.innerHTML = _getReleaseVersion(this.innerHTML);
-			this.style.display = '';
+			this.style.display = 'inherit';
 		} );
 		$('#resourceversion').each( function() {
 			this.innerHTML = _getResourceVersion(this.innerHTML);
-			this.style.display = '';
+			this.style.display = 'inherit';
 		} );
 	} catch (err) {
 		Repos.reportError(err);

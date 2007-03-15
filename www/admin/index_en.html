@@ -22,6 +22,7 @@
 <div class="column" style="width: 60%">
 <div class="section">
 <h2>Backup status</h2>
+
 <table id="repository_list" class="rows">
 <tr>
 <th>{=$repository}</th>
@@ -70,13 +71,13 @@ will report that no further backup is needed now.</p>
 <!--{/if}-->
 </td></tr>
 </table>
-<p>
+
 <form action="verify/">
 <input type="submit" id="backupverify" name="backupverify" value="Verify current backup files"/>
 </form> <form action="svnverify/">
 <input type="submit" id="svnverify" name="svnverify" value="Verify repository"/>
 </form>
-</p>
+
 </div>
 
 <div class="section">

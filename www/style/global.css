@@ -7,9 +7,9 @@ html {
 	filter: expression(document.execCommand("BackgroundImageCache", false, true));
 }
 body {
+	margin-top: 0px;
 	font-family: Verdana, Helvetica, Arial, sans-serif;
 	font-size: 82.5%;
-	margin-top: 0px;
 }
 /* resume with em font sizes relative to the above */
 a {
@@ -66,10 +66,10 @@ a.folder {
 	color: #001133;
 }
 .revision {
-	color: #006600;
+	color: #336622;
 	padding: 1px;
 	border: 1px dotted #cccc99;
-	font-size-adjust: 0.4;
+	font-size: 82.5%;
 	font-family: Arial, Helvetica, sans-serif;
 }
 .username {
@@ -149,7 +149,7 @@ a.folder {
 	border-top: 1px solid #CCCCCC;
 	background-color: #F4F4F4;
 	color: #999999;
-	font-size: smaller;
+	font-size: 85.5%;
 }
 #footer .legal {
 	position: absolute;
@@ -157,7 +157,7 @@ a.folder {
 	text-align: right;
 }
 #footer .legal a {
-	color: #556699;
+	color: #667799;
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 #commandbar a, #commandbar span {
@@ -244,6 +244,7 @@ span.action {
 .versiondisplay {
 	font-size:9px;
 	color:#cccccc;
+	display: none;
 }
 div.versiondisplay {
 	position:absolute;
