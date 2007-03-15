@@ -158,7 +158,13 @@ function resetPassword($username, $email=null) {
  */
 function getRandomPassword($username) {
 	// TODO real randomizer
-	return strtolower(substr(base64_encode(microtime()), 2, 8));
+	$allowedChars = '23456789abcdefghijkmnpqrstuwxyzABCDEFGHJKLMNPQRSTUVWXYZ';
+	$randomPassword = array();
+	for ($i = 0; $i <= 7; $i++) {
+		$rnd = mt_rand(0, strlen($allowedChars)-1);
+   		$randomPassword[$i] = $allowedChars{$rnd};
+	}
+	return implode("", $randomPassword);
 }
 
 /**
