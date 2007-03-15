@@ -32,6 +32,7 @@ $testfiles = array(
 'conf/Presentation.test.php',
 'conf/Report.test.php',
 'conf/Command.test.php',
+'account/account.test.php',
 'account/login.test.php',
 'account/login.testi.php',
 'account/RepositoryTree.test.php',
