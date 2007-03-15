@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Repos filename plugin</title>
+
+<!-- plugins -->
+<script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../scripts/shared/repos.js"></script>
+<!-- for unit testing -->
+<script type="text/javascript" src="../../scripts/unittest.js"></script>
+<!-- filename plugin -->
+<script type="text/javascript" src="filename.js"></script>
+</head>
+<body>
+
+<h1>Repos filename plugin</h1>
+<p>Form fields with class "remember-extension" get file extensions added automatically.</p>
+<p>On page load and on every onchange, the plugin reads the extension and stores the latest found extension. If the extension is missing it adds the latest found extension. 
+When it adds an extensions it shows a p class="note" below that says it autmatically added the filename extension. </p>
+
+
+<h1>Add file extension automatically</h1>
+
+
+<form id="copy" name="copy" method="get" action="#">
+	<fieldset>
+	<p>
+		<label for="name">Old filename</label>
+		<input id="name" name="name" type="text" disabled="disabled" size="40" />
+	</p>
+	<p>
+		<label for="newname">New filename</label>
+		<input name="newname" type="text" id="newname" class="remember-extension" size="40" class="required" />
+	</p>
+	<p>
+		<label for="submit"></label>
+		<input id="submit" type="submit" name="submit" value="Copy" tabindex="3" />
+	</p>
+	</fieldset>
+</form>
+
+<script type="text/javascript">
+
+function TestExtension() {
+	this.name = 'TestExtension';
+	
+	this.setUp = function() {
+	};
+	
+	this.testFileExtensionRead = function() {
+		$('.remember-extension').val('filename.txt');
+		this.assertEquals('.txt', fileExtensionRead());
+		$('.remember-extension').val('quicktime.qt');
+		this.assertEquals('.qt', fileExtensionRead());
+		$('.remember-extension').val('photo.jpeg');
+		this.assertEquals('.jpeg', fileExtensionRead());
+	};
+	
+	this.testGetFileExtension = function() {
+		this.assertEquals('.txt', getFileExtension('abcd.txt'));
+		this.assertEquals('.qt', getFileExtension('a.qt'));
+		this.assertEquals('.txt', getFileExtension('.txt'));
+		this.assertEquals('.', getFileExtension('punkt.'));
+		this.assertEquals('', getFileExtension('aahgsfahj'));
+	}
+	
+	this.testAddFileExtension = function() {
+		filenamePluginExtension = '.txt';
+		this.assertEquals('abcd.txt', addFileExtension('abcd'));
+		filenamePluginExtension = '.qt';
+		this.assertEquals('a.qt', addFileExtension('a'));
+		filenamePluginExtension = '.jpeg';
+		this.assertEquals('pic.jpeg', addFileExtension('pic'));
+		filenamePluginExtension = '.';
+		this.assertEquals('dot.', addFileExtension('dot'));
+		filenamePluginExtension = '';
+		this.assertEquals('name', addFileExtension('name'));
+	}
+	
+}
+
+testrun(TestExtension);
+
+</script>
+</body>
+</html>
