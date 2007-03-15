@@ -11,13 +11,14 @@ var Repos = {};
 Repos.getWebapp = function() {
 	var tags = document.getElementsByTagName("head")[0].childNodes;
 	var me = /scripts\/head\.js(\??.*)$|scripts\/shared\/repos\.js$/;
-	
-	for (i = 0; i < tags.length; i++) {
-		var t = tags[i];
+	var t, n;
+	for (var i = 0; i < tags.length; i++) {
+		t = tags[i];
 		if (!t.tagName) continue;
-		var n = t.tagName.toLowerCase();
-		if (n == 'script' && t.src && t.src.match(me)) // located head.js, save path for future use
+		n = t.tagName.toLowerCase();
+		if (n == 'script' && t.src && t.src.match(me)) {// located head.js, save path for future use
 			this.repos_webappRoot = t.src.replace(me, '');
+		}
 	}
 	if (!this.repos_webappRoot) return '/repos/'; // best guess
 	return this.repos_webappRoot;
@@ -79,12 +80,12 @@ Repos.url = Repos.getWebapp();
 	 * @param error String error message or Exception 
 	 */
 	Repos.reportError = function(error) {
-		var error = Repos._errorToString(error);
+		var strError = Repos._errorToString(error);
 		var id = Repos.generateId();
 		// send to errorlog
-		Repos._storeError(error, id);
+		Repos._storeError(strError, id);
 		// show to user
-		var msg = "Repos has run into a script error:\n" + error + 
+		var msg = "Repos has run into a script error:\n" + strError + 
 			  "\n\nThe details of this error have been logged so we can fix the issue. " +
 			  "\nFeel free to contact support@repos.se about this error, ID \""+id+"\"." +
 			  "\n\nBecause of the error, this page may not function properly.";
@@ -165,8 +166,9 @@ Repos.url = Repos.getWebapp();
 		var chars = "ABCDEFGHIJKLMNOPQRSTUVWXTZ";
 		var string_length = 8;
 		var randomstring = '';
+		var rnum;
 		for (var i=0; i<string_length; i++) {
-			var rnum = Math.floor(Math.random() * chars.length);
+			rnum = Math.floor(Math.random() * chars.length);
 			randomstring += chars.charAt(rnum);
 		}
 		return randomstring;
@@ -204,6 +206,6 @@ Repos._log = function(level, msg) {
 	} else if (typeof(Components)!='undefined' && typeof(Component.utils)!='undefined') { // Firefox console
 		Components.utils.reportError(msg);
 	} else {
-		window.status = "Due to a script error the page is not fully functional. Contact support@repos.se for info, error id: " + id;
+		window.status = "Due to a script error the page is not fully functional."; // Contact support@repos.se for info, error id: " + id;
 	}
 };
