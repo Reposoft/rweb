@@ -1,5 +1,7 @@
 <?php
 /**
+ * Target operation menu (c) 2005-2007 Staffan Olsson www.repos.se
+ * 
  * Displays a page that describes the different viewing options.
  * It would be possible to have different template HTML
  * for different MIME types, but currently it is the same template for all.
@@ -10,6 +12,7 @@ require(dirname(__FILE__)."/SvnOpenFile.class.php" );
 
 addPlugin('dateformat');
 addPlugin('thumbnails');
+addPlugin('proplist');
 
 // get file to open
 $target = getTarget();

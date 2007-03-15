@@ -13,6 +13,7 @@ Repos.proplist.init = function() {
 };
 
 Repos.proplist.getTarget = function(elem) {
+	if ($(elem).attr('title')) return $(elem).attr('title');
 	return $(elem).parent().attr('title');
 };
 

@@ -25,16 +25,16 @@
 </div>
 
 <h2>File without properties</h2>
-<div class="details" title="/demoproject/trunk/public/locked-file.txt">
+<div class="details">
 <p>/demoproject/trunk/public/locked-file.txt</p>
-<div id="testproplist" class="proplist">
+<div id="testnoprops" class="proplist" title="/demoproject/trunk/public/locked-file.txt">
 </div>
 </div>
 
 <h2>File that does not exist</h2>
 <div class="details" title="/demoproject/trunk/public/nonexisting.txt">
 <p>/demoproject/trunk/public/nonexisting.txt</p>
-<div id="testproplist" class="proplist">
+<div id="testerror" class="proplist">
 </div>
 </div>
 
@@ -46,6 +46,10 @@ function TestProplist() {
 	};
 
 	this.testGetTarget = function() {
+		// from the actual element
+		var t = Repos.proplist.getTarget( document.getElementById('testnoprops') );
+		this.assertEquals('/demoproject/trunk/public/locked-file.txt', t);		
+		// from parent element
 		var t = Repos.proplist.getTarget( document.getElementById('testproplist') );
 		this.assertEquals('/demoproject/trunk/public/xmlfile.xml', t);
 	}
