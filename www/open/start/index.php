@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Personalized repository entry (c) 2006-2007 Staffan Olsson www.repos.se 
+ */
 require(dirname(dirname(dirname(__FILE__))).'/account/login.inc.php');
 require(dirname(dirname(dirname(__FILE__))).'/account/RepositoryTree.class.php');
 require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');

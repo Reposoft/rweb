@@ -1,6 +1,6 @@
 <?php
 /**
- * Calls services that commit to the repository.
+ * Web service commit calls (c) 2007 Staffan Olsson www.repos.se
  */
 if (!class_exists('ServiceRequest')) require (dirname(dirname(__FILE__)).'/open/ServiceRequest.class.php');
 if (!class_exists('ServiceRequest')) require (dirname(dirname(__FILE__)).'/lib/json/json.php');

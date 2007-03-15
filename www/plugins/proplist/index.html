@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Repos proplist plugin testpage</title>
+<!-- plugins -->
+<script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../scripts/shared/repos.js"></script>
+<script type="text/javascript" src="proplist.js"></script>
+<!-- for unit testing -->
+<script type="text/javascript" src="../../scripts/unittest.js"></script>
+</head>
+
+<body>
+<h1>Repos proplist</h1>
+
+<p>Enable ajax call for user to see resource properties</p>
+
+<h2>File with explicit mime type</h2>
+<div class="details" title="/demoproject/trunk/public/xmlfile.xml">
+<p>/demoproject/trunk/public/xmlfile.xml</p>
+<div id="testproplist" class="proplist">
+</div>
+</div>
+
+<h2>File without properties</h2>
+<div class="details" title="/demoproject/trunk/public/locked-file.txt">
+<p>/demoproject/trunk/public/locked-file.txt</p>
+<div id="testproplist" class="proplist">
+</div>
+</div>
+
+<h2>File that does not exist</h2>
+<div class="details" title="/demoproject/trunk/public/nonexisting.txt">
+<p>/demoproject/trunk/public/nonexisting.txt</p>
+<div id="testproplist" class="proplist">
+</div>
+</div>
+
+<script type="text/javascript">
+
+function TestProplist() {
+	
+	this.setUp = function() {
+	};
+
+	this.testGetTarget = function() {
+		var t = Repos.proplist.getTarget( document.getElementById('testproplist') );
+		this.assertEquals('/demoproject/trunk/public/xmlfile.xml', t);
+	}
+
+}
+
+testrun(TestProplist);
+
+</script>
+</body>
+</html>

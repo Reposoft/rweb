@@ -1,5 +1,6 @@
 <?php
 /**
+ * Repository commits (c) 2006-1007 Staffan Olsson www.repos.se 
  * Operations that result in a new revision in the repository.
  * 
  * @package edit

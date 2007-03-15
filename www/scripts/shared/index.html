@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>repos: dateformat plugin test page</title>
+<title>repos: shared javascript</title>
 <!-- the script, with a realistic url that can be used to find webappRoot -->
 <script type="text/javascript" src="../../scripts/shared/repos.js"></script>
 <!-- unit testing must be imported after Repos, so it can override functions -->
@@ -15,6 +15,7 @@
 <body>
 <h1>Repos shared script API</h1>
 <ul>
+<li><code>Repos.url</code> (the web application root, with trailing slash)</li>
 <li><code>Repos.reportError(error)</code></li>
 <li><code>Repos.addScript(srcFromWebappRoot)</code></li>
 <li><code>Repos.addCss(srcFromWebappRoot)</code></li>
@@ -67,7 +68,8 @@ function TestRepos() {
 	}
 	
 	this.testLogError = function() {
-		Repos._logError('repos.js unit test message');
+		// this message sholuld end up in a server error log
+		Repos._storeError('repos.js unit test message');
 	}
 	
 	this.testLogInfo = function() {
@@ -77,6 +79,10 @@ function TestRepos() {
 	this.testGetWebapp = function() {
 		// Firefox creates an absolute URL: this.assertEquals('../../', Repos.getWebapp());
 		this.assertTrue(/\.\.\/\.\.\/|https?:\/\/.*\/.*\/$/.test(Repos.getWebapp()));
+	}
+	
+	this.testUrl = function() {
+		this.assertEquals(Repos.getWebapp(), Repos.url);
 	}
 
 	this.testAddCss = function() {

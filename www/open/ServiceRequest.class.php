@@ -1,5 +1,7 @@
 <?php
 /**
+ * Web service interface (c) 2006-2007 Staffan Olsson www.repos.se
+ * 
  * Calls an internal service synchronously and returns the reponse as XML, JSON, HTML or text.
  * 
  * It is assumed that services require login, so login.inc.php is always included,

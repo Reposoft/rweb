@@ -5,7 +5,7 @@
  */
 require("../../conf/Presentation.class.php");
 require("../SvnEdit.class.php");
-require("mimetype.inc.php");
+//not 1.1//require("mimetype.inc.php");
 require('filewrite.inc.php');
 addPlugin('edit');
 addPlugin('validation');
@@ -100,13 +100,9 @@ function processNewFile($upload) {
 	$edit->addArgUrl($upload->getTargeturl());
 	$edit->setMessage($upload->getMessage());
 	$edit->exec();
-	// detect mime type, if we want to set the property we need to checkout
+	// In 1.1 we don't customize mime types, but here's how to get the type from the browser
+	// If the customer wants mime types to be set, it can be configured with svn autoprops
 	$clientMime = $upload->getType();
-	// need the original filename, $recommend = getSpecificMimetype($newfile, $clientMime);
-	$recommend = getSpecificMimetype($upload->getName(), $clientMime);
-	if ($recommend) {
-		// TODO echo('Recommending mime type '.$clientMime); exit;
-	}
 	// clean up
 	System::deleteFile($newfile);
 	$upload->cleanUp();
@@ -298,7 +294,8 @@ class Upload {
 	}
 	
 	/**
-	 * @return mime type
+	 * Reads the MIME value set by the browser in multipart form.
+	 * @return String mime type 
 	 */
 	function getType() {
 		return $_FILES[$this->file_id]['type'];

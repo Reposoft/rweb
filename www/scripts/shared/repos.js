@@ -2,9 +2,31 @@
  * Repos shared script logic (c) 2006 Staffan Olsson www.repos.se
  * @version $Id$
  */
-var Repos = {
+var Repos = {};
 
-	// Static functions, loaded after prepare and jquery.
+/**
+ * Calculates webapp root based on the include path of this script (repos.js or head.js)
+ * @return String webapp root url with trailing slash
+ */
+Repos.getWebapp = function() {
+	var tags = document.getElementsByTagName("head")[0].childNodes;
+	var me = /scripts\/head\.js(\??.*)$|scripts\/shared\/repos\.js$/;
+	
+	for (i = 0; i < tags.length; i++) {
+		var t = tags[i];
+		if (!t.tagName) continue;
+		var n = t.tagName.toLowerCase();
+		if (n == 'script' && t.src && t.src.match(me)) // located head.js, save path for future use
+			this.repos_webappRoot = t.src.replace(me, '');
+	}
+	if (!this.repos_webappRoot) return '/repos/'; // best guess
+	return this.repos_webappRoot;
+};
+
+/**
+ * Static accessor for getWebapp, the application root with trailing slash
+ */
+Repos.url = Repos.getWebapp();
 
 	/*
 	 Dynamic loading of scripts and css has been disabled,
@@ -24,16 +46,16 @@ var Repos = {
 	 * @param src script url from repos root, not starting with slash
 	 * @return the script element that was appended
 	 */
-	addScript: function(src, loadEventHandler) {
+	Repos.addScript = function(src, loadEventHandler) {
 		// maybe it would be better to load and eval using AJAX
-		var srcUrl = Repos.getWebapp() + src;
+		var srcUrl = Repos.url + src;
 		if (/:\/\/localhost[:\/]/.test(window.location.href)) srcUrl += '?'+(new Date().getTime());
 		var s = document.createElement('script');
 		s.type = "text/javascript";
 		s.src = srcUrl;
 		document.getElementsByTagName('head')[0].appendChild(s);
 		return s;
-	},
+	};
 
 	/**
 	 * Adds a stylesheet to the current page.
@@ -41,67 +63,48 @@ var Repos = {
 	 * @return the link element that was appended
 	 * @todo is the appended css accepted by IE6?
 	 */
-	addCss: function(src) {
+	Repos.addCss = function(src) {
 		var s = document.createElement('link');
 		s.type = "text/css";
 		s.rel = "stylesheet";
-		s.href = Repos.getWebapp() + src;
+		s.href = Repos.url + src;
 		document.getElementsByTagName('head')[0].appendChild(s);
 		return s;
-	},
-	
-	/**
-	 * Calculates webapp root based on the include path of this script (repos.js or head.js)
-	 * @return String webapp root url with trailing slash
-	 */
-	getWebapp: function() {
-		var tags = document.getElementsByTagName("head")[0].childNodes;
-		var me = /scripts\/head\.js(\??.*)$|scripts\/shared\/repos\.js$/;
-		
-		for (i = 0; i < tags.length; i++) {
-			var t = tags[i];
-			if (!t.tagName) continue;
-			var n = t.tagName.toLowerCase();
-			if (n == 'script' && t.src && t.src.match(me)) // located head.js, save path for future use
-				this.repos_webappRoot = t.src.replace(me, '');
-		}
-		if (!this.repos_webappRoot) return '/repos/'; // best guess
-		return this.repos_webappRoot;
-	},
+	};
 
 	// ------------ exception handling ------------
 	
 	/**
-	 * Allows common error reporting routines, and logging errors to server.
+	 * Called in try...catch to do Error and Exception handling
 	 * @param error String error message or Exception 
 	 */
-	reportError: function(error) {
+	Repos.reportError = function(error) {
 		var error = Repos._errorToString(error);
 		var id = Repos.generateId();
 		// send to errorlog
-		Repos._logError(error, id);
+		Repos._storeError(error, id);
 		// show to user
 		var msg = "Repos has run into a script error:\n" + error + 
 			  "\n\nThe details of this error have been logged so we can fix the issue. " +
 			  "\nFeel free to contact support@repos.se about this error, ID \""+id+"\"." +
 			  "\n\nBecause of the error, this page may not function properly.";
 		Repos._alertError(msg);
-	},
+	};
 	
 	/**
 	 * Takes an error of any type and converts to a message String.
 	 */
-	_errorToString: function(error) {
+	Repos._errorToString = function(error) {
 		if (typeof(error)=='Error') {
 			return Repos._exceptionToString(error);
 		}
 		return ''+error;
-	},
+	};
 	
 	/**
 	 * Converts a caught exception to an error message.
 	 */
-	_exceptionToString: function(exceptionInstance) {
+	Repos._exceptionToString = function(exceptionInstance) {
 		// if stacktraces are supported, add the info from it
 		var msg = '(Exception';
 		if (exceptionInstance.fileName) {
@@ -116,48 +119,49 @@ var Repos = {
 			msg += ') ' + exceptionInstance;
 		}
 		return msg;
-	},
+	};
 	
 	/**
 	 * Sends an error report to the server, if possible.
 	 */
-	_logError: function(error, id) {
+	Repos._storeError = function(error, id) {
 		var logurl = "/repos/errorlog/";
 		var info = Repos._getBrowserInfo();
 		info += '&id=' + id + '&message=' + error;
+		// NOT MAINTANED, test Repos.url+errorlog/ and convert to jQuery ajax 
 		if (typeof(Ajax) != 'undefined') {
 			var report = new Ajax.Request(logurl, {method: 'post', parameters: info});
 		} else {
 			window.status = error; // Find out a way to send an error report anyway	
 			return;
 		}
-	},
+	};
 	
 	/**
 	 * Shows the error to the user, without requiring attention.
 	 * @deprecated use Repos.error
 	 */
-	_alertError: function(msg) {
+	Repos._alertError = function(msg) {
 		Repos._log(Repos.loglevel.error, msg);
-	},
+	};
 	
 	/**
 	 * collect debug info about the user's environment
 	 * @return as query string
 	 */
-	_getBrowserInfo: function() {
+	Repos._getBrowserInfo = function() {
 		var query,ref,page,date;
 		page=window.location.href; // assuming that script errors occur in tools
 		ref=window.referrer;
 		query = 'url='+escape(page)+'&ref='+escape(ref)+'&os='+escape(navigator.userAgent)+'&browsername='+escape(navigator.appName)
 			+'&browserversion='+escape(navigator.appVersion)+'&lang='+escape(navigator.language)+'&syslang='+escape(navigator.systemLanguage);
 		return query;
-	},
+	};
 	
 	/**
 	 * Generate a random character sequence of length 8
 	 */
-	_generateId: function() {
+	Repos._generateId = function() {
 		var chars = "ABCDEFGHIJKLMNOPQRSTUVWXTZ";
 		var string_length = 8;
 		var randomstring = '';
@@ -166,11 +170,10 @@ var Repos = {
 			randomstring += chars.charAt(rnum);
 		}
 		return randomstring;
-	}
-	
-};
+	};
 
 // ------------ logging ------------
+// firebug dummy is added to head.js, so we could use console directly from everywhere
 
 Repos.loglevel = {
 	info: 3,
@@ -186,16 +189,18 @@ Repos.warn = function(message) {
 	Repos._log(Repos.loglevel.warn, message);
 };
 
+// show error message. Use Repos.reportError for exceptions.
 Repos.error = function(message) {
-	Repos._log(Repos.loglevel.error, message);
+	Repos.reportError(message);
 };
 
 Repos._log = function(level, msg) {
-	// firebug dummy is added to head.js, so we can use console directly
 	if (typeof(console) != 'undefined') { // FireBug console
 		console.log(msg);
 	} else if (typeof(window.console) != 'undefined') { // Safari 'defaults write com.apple.Safari IncludeDebugMenu 1'
 		window.console.log(msg);
+	} else if (level < Repos.logleve.error) {
+		return;
 	} else if (typeof(Components)!='undefined' && typeof(Component.utils)!='undefined') { // Firefox console
 		Components.utils.reportError(msg);
 	} else {

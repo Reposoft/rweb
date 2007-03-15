@@ -81,7 +81,7 @@ class MimetypeTest extends UnitTestCase {
 	
 	function testGetSpecificMimetype_xml_excel() {
 		$this->sendMessage('Mimetypes based on contents is not supported in 1.1.');
-		return;
+		return; // this functionality is not in 1.1
 		$file = System::getTempFile('mimetest').'tmp';
 		$fh = fopen($file,'w');
 		fwrite($fh,
@@ -100,7 +100,15 @@ class MimetypeTest extends UnitTestCase {
 		System::deleteFile($file);
 	}
 	
-	
+	function testBrowserMimetype() {
+		// IE6 jpeg => image/pjpeg
+		// FF jpeg => image/jpeg
+		// IE6/FF htm => text/html
+		// pdf => application/pdf
+		// IE6 xml => application/octet-stream
+		// FF xml => text/xml
+		//upload->getType method returns this
+	}
 	
 }
 

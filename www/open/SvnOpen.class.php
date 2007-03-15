@@ -1,8 +1,7 @@
 <?php
 /**
- * Represents a subversion read operation which does not need a working copy.
+ * Subversion read operation (c) 2006-2007 Staffan Olsson www.repos.se
  * 
- * TODO this is a work in progress. functions are being converted from login.inc.php
  * @package open
  */
 

@@ -1,5 +1,6 @@
 <?php
 /**
+ * Subversion file operation (c) 2006-2007 Staffan Olsson www.repos.se
  * @package open
  * @version $Id$
  */

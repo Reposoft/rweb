@@ -1,4 +1,7 @@
 <?php
+/**
+ * Ideas, not used in 1.1, on how to set svn:mime-type property only when needed.
+ */
 
 /**
  * Decides if svn:mime-type property should be set for an uploaded file,
@@ -6,6 +9,7 @@
  * 
  * @param String $file the local file, if it exists we can inspect the contents.
  *  The file should have the name (or at least the extension) that it will have in the repository.
+ *  OR the extension that it had on the client, depending on how we want to implement this...
  * @param String $suggestedType the mime type that the client reports for the file.
  *  It is assumed that all mimetypes are lowercase.
  * @return false if we're not interested in the suggested type,
