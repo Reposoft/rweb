@@ -48,7 +48,7 @@ div.editlog > pre {
 <em>{=$result}</em></p>
 <!--{/if}-->
 <!-- urlEncodeNames does not work here if there is query params -->
-<p><a href="{=$nexturl}">return to repository</a></p>
+<p><a href="{=$nexturl|urlEncodeNames}">return to repository</a></p>
 <!--{if $redirect}-->
 <p><small>You should be automatically redirected to <a href="{=$redirect}">{=$redirect}</a></small></p>
 <!--{/if}-->
