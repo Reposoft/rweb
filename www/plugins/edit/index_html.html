@@ -8,6 +8,7 @@
 <script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="../../scripts/shared/repos.js"></script>
 <script type="text/javascript" src="../../scripts/unittest.js"></script>
+<script type="text/javascript" src="edit.js"></script>
 </head>
 <body>
 <div id="commandbar">
@@ -21,8 +22,8 @@ See <a href="../../lib/">lib/</a> folder.</p>
 can be edited with our TinyMCE theme.</p>
 
 <h2>Edit in TinyMCE</h2>
-<form method="post" action="./">
-<textarea id="text:file.js" rows="10" cols="82" name="usertext" class="text_html htm">
+<form id="formEdit" method="post" action="./">
+<textarea id="usertext" rows="10" cols="82" name="usertext" class="text_html htm">
 &lt;html&gt;
 &lt;head&gt;
 &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /&gt;
@@ -31,7 +32,7 @@ can be edited with our TinyMCE theme.</p>
 &lt;/head&gt;
 &lt;body&gt;
 &lt;p&gt;This is a new document in the excellent standardized and open format HTML.&lt;/p&gt;
-&lt;p&gt;Non-ASCII characters: åäöü.&lt;/p&gt;
+&lt;p&gt;Non-ASCII characters: Ã¥Ã¤Ã¶Ã¼.&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 </textarea>
