@@ -67,8 +67,8 @@ define('LOGIN_VOID_USER', '0');
 // do automatic login if a target is specified the standard way
 if (isTargetSet()) {
 	// special case for the svn index anomaly that root path is "/" but no other paths have trailing slash
-	if (getTarget() == '//') {
-		header('Location: '.getSelfUrl().'?'.str_replace('=//', '=/', getSelfQuery()));
+	if (strpos(getTarget(), '//') === 0) {
+		header('Location: '.getSelfUrl().'?'.str_replace('target=//', 'target=/', getSelfQuery()));
 		exit;
 	}
 	targetLogin();
