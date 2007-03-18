@@ -13,7 +13,7 @@ if ($file->getStatus() != 200) {
 	// TODO have some kind of forwarding to the error pages for matching status code
 	require("../../conf/Presentation.class.php");
 	trigger_error('Failed to read '.$file->getPath().' from repository (status '.$file->getStatus().
-	'). Maybe it exists in a version other than '.$file->getRevision().'.', E_USER_ERROR);
+	'). Maybe it exists in a version other than '.$revisionRule->getValue().'.', E_USER_ERROR);
 }
 
 $name = $file->getFilename();

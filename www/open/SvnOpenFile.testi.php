@@ -79,7 +79,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 	function testNonexistingFileHead() {
 		$file = new SvnOpenFile("/demoproject/trunk/public/thispathdoesnotexist.tmp");
 		$this->assertEqual(404, $file->getStatus());
-		$this->assertEqual('HEAD', $file->getRevision(), "No revision can be found. %s");
+		// Why support this? // $this->assertEqual('HEAD', $file->getRevision(), "No revision can be found. %s");
 		$this->assertFalse($file->isWritable());
 	}
 	
@@ -87,8 +87,8 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$file = new SvnOpenFile("/demoproject/trunk/public/temp.txt", 2);
 		//$this->expectError(new PatternExpectation("/Could not read file .* from svn/"));
 		$this->assertEqual(404, $file->getStatus());
-		$this->assertEqual(2, $file->getRevision(),
-			"Revision not found in svn, so return the value given to the constructor. %s");
+		// Why support this? // $this->assertEqual(2, $file->getRevision(),
+		//	 "Revision not found in svn, so return the value given to the constructor. %s");
 		$this->assertFalse($file->isWritable());
 	}
 	
@@ -146,6 +146,15 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertEqual('public', $file->getFilename());
 		$this->assertEqual('/demoproject/trunk/', $file->getFolderPath());
 		$this->assertEqual('folder', $file->getKind(), "Repos says 'folder', not 'dir'. %s");
+		// not allowed //$this->assertNotEqual(HEAD, $file->getRevision(), "Should get the real revision number. %s");
+	}
+	
+	function testFolderEmpty() {
+		$file = new SvnOpenFile("/test/trunk/trunk/trunk/");
+		$this->assertEqual(200, $file->getStatus());
+		$this->assertTrue($file->isFolder());
+		$this->assertEqual('trunk', $file->getFilename());
+		// not allowed //$this->assertNotEqual(HEAD, $file->getRevision(), "Should get the real revision number. %s");
 	}
 	
 	function testFolderNoSlash() {
@@ -189,12 +198,25 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertTrue($file->isFolder());
 		$this->assertFalse($file->isLatestRevision());
 		$this->assertFalse($file->isReadableInHead());
+		// not allowed //$this->assertEqual(1, $file->getRevision());
 	}
 
+	function testFolderOldVersion() {
+		setTestUser();
+		$file = new SvnOpenFile("/demoproject/trunk/", 1);
+		$this->assertTrue($file->isFolder());
+		$this->assertTrue($file->isReadableInHead());
+		$this->expectError(new PatternExpectation('/could not read.* revision/i',
+			"isLatedRevision is not supported for folders, unless answer is obvious. %s"));
+		$this->assertFalse($file->isLatestRevision());
+		// not allowed //$this->assertEqual(1, $file->getRevision());
+	}	
+	
 	function testFolderDeletedNoSlash() {
 		setTestUser();
-		// it is impossible for target login to do redirect to folder,
-		// because it can not know that it is a folder
+		// No trailing slash, but it is impossible for target login to do redirect to folder,
+		// because it can not know that it is a folder using an HTTP call.
+		// This means we have to handle it like it is.
 		$file = new SvnOpenFile("/demoproject/trunk/old", 1);
 		$this->assertTrue($file->isFolder());
 		$this->assertFalse($file->isLatestRevision());

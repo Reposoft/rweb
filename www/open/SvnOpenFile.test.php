@@ -175,6 +175,12 @@ class TestSvnOpenFile extends UnitTestCase {
 		$this->expectError(new PatternExpectation('/already .* open/'));
 		$file2 = new SvnOpenFile('/test/b.txt');
 	}
+	
+	function testIsFolderNameLooksLikeFile() {
+		$file = new SvnOpenFile('/test/a.folder/');
+		// The below will give isFolder = false, but how to test?
+		$file = new SvnOpenFile('/test/a.folder');
+	}
 
 }
 

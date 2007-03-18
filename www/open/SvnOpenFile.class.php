@@ -140,6 +140,7 @@ class SvnOpenFile {
 	 * Called first in every method that requires metadata
 	 */
 	function _read() {
+		if ($this->isFolder()) trigger_error("File operation attempted on a folder.", E_USER_ERROR);
 		if (!is_null($this->file)) return;
 		$this->file = $this->_readInfoSvn();
 		if (is_null($this->file)) trigger_error("Could not read file information for '$path' revision $revision in repository ".getRepository(), E_USER_ERROR);
@@ -162,10 +163,11 @@ class SvnOpenFile {
 	/**
 	 * This might seem like an odd method to have in SvnOpenFile,
 	 * but it is good for reuse of code. The class does a best-effort
-	 * attempt to return meaningful results for folders,
-	 * specifically isWritable();
+	 * attempt to return meaningful results for folders, specifically isWritable().
+	 * It only does HTTP operations, not svn (the _read() method is not allowed for folders).
 	 */
 	function isFolder() {
+		// TODO cache results
 		if (strEnds($this->path,'/')) return true;
 		$this->_head();
 		if ($this->headStatus == 301) {
@@ -175,11 +177,10 @@ class SvnOpenFile {
 		// but it could be expensive doing that for every page,
 		// so we only do it for names that do not look like files
 		if (!preg_match('/\.\w+$/', $this->path)) {
-			if (!$this->isReadableInHead()) {
-				$this->_read();
-				// because we use svn list, not info, we can not check for kind==dir
-				return $this->file['name'] != $this->getFilename();
-			}
+			// note that $this->_read is not allowed fo folders.
+			// We'd like to do svn info here, but that would be a duplication of the _read call
+			// Guess
+			return true;
 		}
 		return false;
 	}
@@ -384,13 +385,12 @@ class SvnOpenFile {
 	
 	/**
 	 * This is _not_ a getter for the '_revision' field, which may have value HEAD.
-	 * However, if the file's revision could not be read from svn,
-	 * the value of the '_revision' field is returned (which might be "HEAD").
 	 * @return int Integer revision number, even for HEAD.
 	 */
 	function getRevision() {
 		$this->_read();
-		if (!isset($this->file['revision'])) return $this->_revision;
+		// if (!isset($this->file['revision'])) return $this->_revision;
+		if (!isset($this->file['revision'])) trigger_error('Revision not found. Does the file exist?');
 		return $this->file['revision'];
 	}
 	
@@ -576,6 +576,7 @@ class SvnOpenFile {
 	 * @return array[String] metadata name=>value, empty array or array with only path if file does not exist
 	 */
 	function _readInfoSvn() {
+		// the reason we do 'list' and not 'info' is that 'info' does not contain file size
 		$info = new SvnOpen('list', true);
 		$info->addArgUrlPeg($this->url, $this->_revision);
 		$info->exec();

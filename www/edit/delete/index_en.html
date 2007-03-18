@@ -12,17 +12,17 @@
 <div id="intro">
 <h1>Delete</h1>
 
-{=if not $file,isWritable} <p>You have read access only. You can not delete this file.</p>
+{=if not $file,isWritable} <p>You have read access only. You can not delete this {=$file,kind}.</p>
 {=elseif $file,isLockedByThisUser} <p>This file is currently <strong>locked</strong> by you, so other users can not edit it.</p>
 <p>After deletion it will not be present in the latest revision, but can always be recovered
 from the the history for the <a class="folder" href="{=$file,folderUrl}">parent folder</a>.
-The last version of the file will be <span class="revision">{=$file,revision}</span>.</p>
+{=if not $file,isFolder}The last version of the file will be <span class="revision">{=$file,revision}</span>.{=/if}</p>
 {=elseif $file,isLockedBySomeoneElse} <p>This file is currently <strong>locked</strong> by 
 <span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}. You can not delete this file.</p>
 {=else}
 <p>After deletion it will not be present in the latest revision, but can always be recovered 
 from the the history for the <a class="folder" href="{=$file,folderUrl}">parent folder</a>.
-The last version of the file will be <span class="revision">{=$file,revision}</span>.</p>
+{=if not $file,isFolder}The last version of the file will be <span class="revision">{=$file,revision}</span>.{=/if}</p>
 {=/if}
 </div>
 {=if $file,isWritable and not $file,isLockedBySomeoneElse}
