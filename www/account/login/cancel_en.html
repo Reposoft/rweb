@@ -15,8 +15,11 @@
 <p>If you have an e-mail address stored in your Repos preferences,
 you can use the <a href="repos/account/reset/">lost password</a> functionality.
 If not, please contact a Repos administrator.</p>
-<p><a href="/?login">Login again</a> or return to the <a href="{=$start}">startpage</a>.</p>
+<p><a href="/?login">Login again</a> or return to the <a id="startpage" href="{=$start}">startpage</a>.</p>
 <div id="footer">
 </div>
+<script type="text/javascript">
+document.getElementById('startpage').focus();
+</script>
 </body>
 </html>

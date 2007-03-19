@@ -14,7 +14,7 @@
 
 <h2>Login failed</h2>
 <p>Invalid username or password. Tested the following repository locations: <code>{=$targeturl}</code>.</p>
-<p>Please <a href="{=$nexturl}">try again</a> with a different username or password.</p>
+<p>Please <a id="login" href="{=$nexturl}">try again</a> with a different username or password.</p>
 
 <p>If you reach this page without seeing a login box,
 it is because a previous login could not be cleared.
@@ -23,5 +23,8 @@ to force it to remove the failing authentication credentials.</p>
 
 <div id="footer">
 </div>
+<script type="text/javascript">
+document.getElementById('login').focus();
+</script>
 </body>
 </html>

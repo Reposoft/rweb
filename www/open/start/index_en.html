@@ -26,7 +26,7 @@ and the tools in each project.</p>
 <h2>
 <!--{* todo: make a smarter link, trunk/ if existing, project root if no trunk *}-->
 <span class="{=if $projectname eq $userfullname}username{=else}projectname{=/if}">{=$projectname}</span>
-{=if !$entry->getPath()}root{=/if}
+{=if !$entry->getPath()}&nbsp;root{=/if}
 <!--{* 
 <a class="folder {=if $entry->isReadOnly()}readonly{=/if}" href="../project/?target={=$entry->getPath()}/">{=$projectname}</a>
  *}-->

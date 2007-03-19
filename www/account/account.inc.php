@@ -157,7 +157,6 @@ function resetPassword($username, $email=null) {
  * @return String password
  */
 function getRandomPassword($username) {
-	// TODO real randomizer
 	$allowedChars = '23456789abcdefghijkmnpqrstuwxyzABCDEFGHJKLMNPQRSTUVWXYZ';
 	$randomPassword = array();
 	for ($i = 0; $i <= 7; $i++) {
