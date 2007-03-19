@@ -11,7 +11,9 @@ function pasteUrl() {
 		return;
 	}
 	if (url.indexOf('https')==0 && reposUrl.indexOf('http:')==0) {
-		r = reposUrl.replace(/http/,"https");
+		r = reposUrl.replace(/http:/,"https:");
+	} else {
+		r = reposUrl;
 	}
 	if (url.indexOf(r)!=0) {
 		alert('The folder URL must begin with the repository URL '+reposUrl+' or '+r);
