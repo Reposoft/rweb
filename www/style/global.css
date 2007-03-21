@@ -222,6 +222,21 @@ span.action {
 #commandbar #edit {
 	background-image: url('commands/24x24/edit.png');
 }
+#commandbar #reposconf {
+	background-image: url('commands/24x24/reposconf.png');
+}
+#commandbar #reposadmin {
+	background-image: url('commands/24x24/reposadmin.png');
+}
+#commandbar #repostest {
+	background-image: url('commands/24x24/repostest.png');
+}
+#commandbar #reposroot {
+	background-image: url('commands/24x24/repository.png');
+}
+#commandbar #serverroot {
+	background-image: url('commands/24x24/serverroot.png');
+}
 #commandbar #logout {
 	position: absolute;
 	left: 800px;
