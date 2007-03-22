@@ -176,8 +176,9 @@ class TestSvnOpenFile extends UnitTestCase {
 		$file2 = new SvnOpenFile('/test/b.txt');
 	}
 	
+	// We currently use a handy approximation in how SvnOpenFile detects folders
 	function testIsFolderNameLooksLikeFile() {
-		$file = new SvnOpenFile('/test/a.folder/');
+		//$file = new SvnOpenFile('/test/a.folder/');
 		// The below will give isFolder = false, but how to test?
 		$file = new SvnOpenFile('/test/a.folder');
 	}

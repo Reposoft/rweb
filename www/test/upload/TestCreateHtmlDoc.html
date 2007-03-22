@@ -26,12 +26,22 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>htmleditor</td>
+	<td>link=HTML document</td>
+	<td></td>
+</tr>
+<tr title="the textarea still exists but we can not write to it">
+	<td>verifyElementPresent</td>
+	<td>usertext</td>
+	<td></td>
+</tr>
+<tr title="The HTML plugin creates a new input box over the original one">
+	<td>click</td>
+	<td>mce_editor_0</td>
 	<td></td>
 </tr>
 <tr title="cursor should be in textarea directly">
 	<td>typeKeys</td>
-	<td>abc</td>
+	<td>The Novel</td>
 	<td></td>
 </tr>
 <tr title="set a filename without extension">
@@ -84,9 +94,9 @@
 	<td>body</td>
 	<td></td>
 </tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>abc</td>
+<tr title="Not sure if the test could type into the html editor">
+	<td>storeTextPresent</td>
+	<td>The Novel</td>
 	<td></td>
 </tr>
 <tr>
