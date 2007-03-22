@@ -4,7 +4,7 @@
 <title>automated test</title>
 </head>
 <body>
-<p class="description">This test required that the authenticated user has admin rights to the repository.</p>
+<p class="description">This test required that the authenticated user has <strong>admin rights</strong> to the repository.</p>
 <table>
 <thead>
 <tr><td colspan="3">Create user account in repository and ACL</td></tr>
@@ -129,6 +129,11 @@
 	<td></td>
 	<td></td>
 </tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
 <tr title="test too short username">
 	<td>type</td>
 	<td>username</td>
@@ -142,6 +147,16 @@
 <tr>
 	<td>verifyTextPresent</td>
 	<td>at least</td>
+	<td></td>
+</tr>
+<tr>
+	<td>goBack</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
 	<td></td>
 </tr>
 <tr title="test reserved username">

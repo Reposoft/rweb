@@ -33,9 +33,9 @@
 	<td>|ETag:</td>
 	<td></td>
 </tr>
-<tr title="however, ETag is not sufficient for Firefox, or our server, to figure out that a refresh is needed, so we have to add Cache-Control">
+<tr title="Activate caching based on e-tag, with revalidate after 0 seconds">
 	<td>verifyTextPresent</td>
-	<td>|Cache-Control: private, must-revalidate|</td>
+	<td>|Cache-Control: max-age=0, must-revalidate|</td>
 	<td></td>
 </tr>
 </tbody></table>

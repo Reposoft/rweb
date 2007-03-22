@@ -4,6 +4,11 @@
 <title>backup test</title>
 </head>
 <body>
+<p>This test assumes the backup to be valid from the start,
+so it won't work if there is gaps or if backup files are from before the repository was reset.
+Manually delete all the backup files to get a safe start.</p>
+<p>If a verifyText fails, it might be because Selenium has stored old variable values.
+Refresh the test suite to fix that.</p>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
 <tr><td rowspan="1" colspan="3">Run backup from admin page</td></tr>
