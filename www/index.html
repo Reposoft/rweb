@@ -50,7 +50,7 @@ body {
     <td width="33%" style="border-left: 0px;">
 <p id="serverprimary"></p>
 <script type="text/javascript">
-$.getJSON('admin/aboutserver/?serv=json', function(json) {
+$.getJSON('view/service/?s=SERVER', function(json) {
 	$('#serverprimary').append(
 		json.primary ? 'This is a primary server. It should host the main repository and the backup files.'
 		: 'This is a repos mirror. It should host a readonly copy of the repository.');
@@ -60,17 +60,28 @@ $.getJSON('admin/aboutserver/?serv=json', function(json) {
 <p>Local client? <span id="clientlocal"></span></p>
 <p>Admin client? <span id="clientadmin"></span></p>
 <script type="text/javascript">
-$.getJSON('admin/aboutclient/?serv=json', function(json) {
+$.getJSON('view/service/?s=CLIENT', function(json) {
 	$('#clientaddress').append(json.address);
 	$('#clientlocal').append(json.local ? 'yes' : 'no');
 	$('#clientadmin').append(json.admin ? 'yes' : 'no');
+});
+</script>
+<p>Licensed to: <span id="license"></span></p>
+<script type="text/javascript">
+$.getJSON('view/service/?s=LICENSE', function(json) {
+	if (json.length == 0) {
+		$('#license').append('No license information available.');
+	} else {
+		// TODO relevant fields
+		$('#license').append(json);
+	}
 });
 </script>
     </td>
     <td width="33%" id="repositorystatus">
 <!-- if this page is visited a lot, this section should probably be removed -->
 <script type="text/javascript">
-$.getJSON('admin/?serv=json', function(json) {
+$.getJSON('view/service/?s=STATUS', function(json) {
 	var div = $('#repositorystatus');
 	div.append('<p>'+json.repository+'</p>')
 		.append('<p>at version: <span class="revision">'+json.headrev+'</span></p>');
@@ -119,7 +130,7 @@ $.getJSON('lib/install.php', function(json) {
 </div>
 <!--
 <div id="news">
-<iframe src="/repos/view/external/?url=https://www.repos.se/sweden/staffan/messages.xml" id="feed" name="feed" style="display:none" frameborder="0" scrolling="auto"></iframe>
+<iframe src="/repos/view/service/?url=https://www.repos.se/sweden/staffan/messages.xml" id="feed" name="feed" style="display:none" frameborder="0" scrolling="auto"></iframe>
 </div>
 -->
 <div id="releaseversion" class="versiondisplay" style="display:none">repos.se version $URL$ $Rev$</div>

@@ -35,6 +35,13 @@ define('SERVICE_TYPE_JSON', 'json');
  */
 define('SERVICE_LOG', 'open/log/');
 define('SERVICE_ACL', 'account/acl/');
+/**
+ * Protected services that can be called internally for any client.
+ */
+define('SERVICE_PUBLIC_LICENSE', 'admin/license/');
+define('SERVICE_PUBLIC_SERVER', 'admin/aboutserver/');
+define('SERVICE_PUBLIC_CLIENT', 'admin/aboutclient/');
+define('SERVICE_PUBLIC_STATUS', 'admin/');
 
 if (!function_exists('getWebapp')) require(dirname(dirname(__FILE__)).'/conf/repos.properties.php');
 
