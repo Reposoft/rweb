@@ -7,6 +7,8 @@ require("../../conf/Presentation.class.php");
 require("../SvnEdit.class.php");
 //not 1.1//require("mimetype.inc.php");
 require('filewrite.inc.php');
+// required for the temporary mime type solution for HTML below
+require_once("../ServiceRequestEdit.class.php");
 addPlugin('edit');
 addPlugin('validation');
 addPlugin('filename');
@@ -103,11 +105,32 @@ function processNewFile($upload) {
 	// In 1.1 we don't customize mime types, but here's how to get the type from the browser
 	// If the customer wants mime types to be set, it can be configured with svn autoprops
 	$clientMime = $upload->getType();
+	// this should be done from the edit/html plugin, but the design does not allow that
+	uglyHackToSetMimetypeForNewReposHtml($newfile, getTarget().$upload->getName());
 	// clean up
 	System::deleteFile($newfile);
 	$upload->cleanUp();
 	// show results
 	displayEdit($presentation, dirname($upload->getTargetUrl()));
+}
+
+/**
+ * Because the HTML plugin is not properly separated (it should post the result as a service call)
+ *	we need an ugly hack to use do propset (which should have been done with another service call)
+ */
+function uglyHackToSetMimetypeForNewReposHtml($file, $target) {
+	if (!file_exists($file)) return; // error condition but it must be detected somewhere else
+	$f = fopen($file, 'r');
+	$head = fread($f, 4096);
+	fclose($f);
+	// regexp copied from edit plugin's js
+	$pattern = '/<meta name="Generator" content="Repos"/';
+	if (!preg_match($pattern, $head)) return;
+	$propset = new ServiceRequestEdit(SERVICE_EDIT_PROPSET, array(
+		'target' => $target,
+		'name'=>'svn:mime-type',
+		'value'=>'text/html'));
+	$propset->exec();
 }
 
 /**

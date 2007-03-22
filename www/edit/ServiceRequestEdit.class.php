@@ -7,6 +7,7 @@ if (!class_exists('ServiceRequest')) require (dirname(dirname(__FILE__)).'/lib/j
 
 // define additional services
 define('SERVICE_EDIT_COPY', 'edit/copy/');
+define('SERVICE_EDIT_PROPSET', 'edit/propset/');
 
 /**
  * ServiceRequest that expects JSON response and returns revision number from it.
