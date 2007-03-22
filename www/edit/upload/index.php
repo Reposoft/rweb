@@ -118,7 +118,7 @@ function processNewVersion($upload) {
 	Validation::expect('fromrev', 'type');
 	$presentation = Presentation::getInstance();
 	$dir = System::getTempFolder('upload');
-	$repoFolder = dirname($upload->getTargetUrl());
+	$repoFolder = getParent($upload->getTargetUrl());
 	// check out existing files of the given revision
 	$fromrev = $upload->getFromrev();
 	$checkout = new SvnEdit('checkout');

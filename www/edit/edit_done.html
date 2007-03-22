@@ -48,7 +48,8 @@ div.editlog > pre {
 <em>{=$result}</em></p>
 <!--{/if}-->
 <!-- urlEncodeNames does not work here if there is query params -->
-<p><a href="{=$nexturl|urlEncodeNames}">return to repository</a></p>
+<p><a id="return" href="{=$nexturl|urlEncodeNames}">return to repository</a></p>
+<script type="text/javascript">document.getElementById('return').focus();</script>
 <!--{if $redirect}-->
 <p><small>You should be automatically redirected to <a href="{=$redirect}">{=$redirect}</a></small></p>
 <!--{/if}-->
