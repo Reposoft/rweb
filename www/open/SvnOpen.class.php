@@ -60,8 +60,23 @@ function _svnFileIsWritable($url) {
  * @package open
  */
 function _svnFolderIsWritable($url) {
-	// TODO create a method tha does not cause an entry in the error log
-	return _svnFileIsWritable($url);
+	// don't use lock (logs "Could not LOCK /testrepo/ due to a failed precondition")
+	//return _svnFileIsWritable($url);
+	$dummyName = '.repos_writable_check';
+	if (!strEnds($url, '/')) $url.='/';
+	$url .= $dummyName;
+	$r = new ServiceRequest($url);
+	$r->setCustomHttpMethod('MKCOL');
+	// Use If-Match to make dummy request that does not cause an entry in the error log
+	// If the server does not understand this, we'll soon have locked files all over the repository
+	$r->setRequestHeader('If-Match', '"shouldnevermatch"');
+	$r->exec();
+	if ($r->getStatus() == 412) return true;
+	if ($r->getStatus() == 403) return false;
+	if ($r->getStatus() == 200) {
+		// delete before error message?
+	}
+	trigger_error('Server configuration error. Could not check if resource is read-only. Status '.$r->getStatus());
 }
 
 /**
