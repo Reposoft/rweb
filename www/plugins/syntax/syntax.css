@@ -233,4 +233,7 @@ http://www.dreamprojections.com/SyntaxHighlighter/
 .syntax-acl {}
 .syntax-acl .path { font-weight: bold; }
 .syntax-acl .group { color: #333366; }
-.syntax-acl .keyword { color: #229911; }
+.syntax-acl .keyword { text-decoration: underline; }
+.syntax-acl .noaccess { color: #992211; }
+.syntax-acl .readonly { color: #666600; }
+.syntax-acl .readwrite { color: #116622; }

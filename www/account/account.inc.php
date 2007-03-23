@@ -58,7 +58,7 @@ function accountGetUsernameNotExistingRule($fieldname='username') {
 function accountGetUsernameNotReservedRule($fieldname='username') {
 	return new RuleRegexpInvert($fieldname,
 		'This is a reserved word and can not be used as account name.',
-		'/^(repo|repos.*|data|svn.*|subversion|admin.*|root|su|test.*|login.*|account.*|user.*'
+		'/^(repo|repos.*|data|svn.*|subversion|admin.*|root|su|rw|test.*|login.*|account.*|user.*'
 		.'|trunk|branches|tags|tasks|templates|calendar|messages|news|support|help|manual|docs'
 		.')$/i');
 }

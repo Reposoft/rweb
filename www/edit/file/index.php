@@ -10,7 +10,7 @@ require("../SvnEdit.class.php" );
 addPlugin('edit');
 addPlugin('password');
 addPlugin('filename');
-//addPlugin('acl');
+addPlugin('acl');
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 

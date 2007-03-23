@@ -1,10 +1,13 @@
 dp.sh.Brushes.Acl = function()
 {
-	var keywords =	'r rw groups';
+	var keywords =	'r rw';
 
 	this.regexList = [
 		{ regex: new RegExp('^\\[\\/.*\\]', 'gm'), css: 'path' },
-		{ regex: new RegExp('^@[\\S]+', 'gm'), css: 'group' },
+		{ regex: new RegExp('^.*=(?=\\s*$)', 'gm'), css: 'noaccess' },
+		{ regex: new RegExp('^.*=(?=\\s*r\\s*$)', 'gm'), css: 'readonly' },
+		{ regex: new RegExp('^.*=(?=\\s*rw\\s*$)', 'gm'), css: 'readwrite' },
+		// { regex: new RegExp('^@[\\S]+', 'gm'), css: 'group' },
 		{ regex: new RegExp(this.GetKeywords(keywords), 'gm'), css: 'keyword' }
 		];
 

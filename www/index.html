@@ -72,7 +72,7 @@ $.getJSON('view/service/?s=LICENSE', function(json) {
 	if (json.length == 0) {
 		$('#license').append('No license information available.');
 	} else {
-		$('#license').append(json.Product-Name+' registered to '+json.Registered-To);
+		$('#license').append(json['Product-Name'] + ' registered to ' + json['Registered-To']);
 	}
 });
 </script>
