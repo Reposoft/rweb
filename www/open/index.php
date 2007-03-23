@@ -32,7 +32,7 @@ if ($file->isFolder()) {
 		if (!strEnds($target, '/')) $target .= '/';
 		header('Location: '.getWebapp().'open/list/?target='.urlencode($target).'&rev='.$rev);
 	} else {
-		header('Location: '.$file->getUrl());
+		header('Location: '.asLink($file->getUrl()));
 	}
 	exit;
 }

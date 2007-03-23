@@ -67,7 +67,7 @@ to make sure that your local changes are based on the newest version of the shar
   <p>
     <label for="userfile">local file</label>
 	<input type="hidden" name="MAX_FILE_SIZE" value="{=$maxfilesize}" />
-    <input type="file" id="userfile" name="userfile" class="current-name" size="40" onchange="autoFillFilename(value)" class="required" tabindex="1" />
+    <input type="file" id="userfile" name="userfile" class="required current-name" size="40" onchange="autoFillFilename(value)" tabindex="1" />
     <span class="note">Maximum file size 10MB</span>
   </p>
   <p>
@@ -75,7 +75,7 @@ to make sure that your local changes are based on the newest version of the shar
 	 <!--{if $isfile}-->
     <input type="text" id="name" name="name" value="{=$target|getPathName}" disabled="disabled" size="40" />
     <!--{else}-->
-	 <input type="text" id="name" name="name" size="40" class="remember-extension" class="required" tabindex="2" />
+	 <input type="text" id="name" name="name" size="40" class="required remember-extension" tabindex="2" />
 	 <input type="hidden" id="create" name="create" value="yes"/>   
     <!--{/if}-->
   </p>

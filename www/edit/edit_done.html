@@ -19,7 +19,7 @@ div.editlog > pre {
 
 <body>
 <div id="commandbar">
-<a id="repository" href="{=$nexturl|urlEncodeNames}">return to repository</a>
+<a id="repository" href="{=$nexturl}">return to repository</a>
 {=if $operation eq 'commit' or $operation eq 'lock' or $operation eq 'unlock'}
 <a id="edit" href="{=$webapp}edit/?target={=$target}">return to edit</a>
 {=/if}
@@ -48,7 +48,7 @@ div.editlog > pre {
 <em>{=$result}</em></p>
 <!--{/if}-->
 <!-- urlEncodeNames does not work here if there is query params -->
-<p><a id="return" href="{=$nexturl|urlEncodeNames}">return to repository</a></p>
+<p><a id="return" href="{=$nexturl}">return to repository</a></p>
 <script type="text/javascript">document.getElementById('return').focus();</script>
 <!--{if $redirect}-->
 <p><small>You should be automatically redirected to <a href="{=$redirect}">{=$redirect}</a></small></p>
