@@ -60,10 +60,18 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		assertEquals(message, expected.getCanonicalPath(), actual.getCanonicalPath());
 	}
 	
-	public void testWorkingCopyRootFolderStatus() {
+	public void testWorkingCopyRootFolderStatus() throws IOException {
 		assertTrue("Working copy root folder should of course be versioned", client.isVersioned(path));
 		assertFalse("After checkout working copy has no changes", client.hasLocalChanges());
 		assertFalse("After checkout working copy root folder has no changes", client.hasLocalChanges(path));
+		// isIgnore is a special case here
+		assertFalse("Working copy root can never be ignore==true", client.isIgnore(path));
+		
+		// try to mess up the root folder File instance
+		String p = path.getCanonicalPath();
+		File p2 = new File(p);
+		assertTrue("New File object, same path, same result?", client.isVersioned(path));
+		assertFalse("New File object, same path, still root -> versioned", client.isIgnore(path));
 	}
 	
 	public void testFileOutsideWorkingCopy() throws IOException {
@@ -355,6 +363,33 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		// now do addNew for the working copy, which should include the file too
 		client.addNew(path);
 		assertTrue("Everything in the working copy should have been added now", client.isVersioned(f1));
+	}
+	
+	public void testAddTreeManually() throws IOException {
+		// create a file tree which we will recurse manually
+		File d1 = new File(path, "testAddTreeManually" + System.currentTimeMillis());
+		d1.mkdir();
+		File f1 = new File(d1, "new.txt");
+		f1.createNewFile();
+		
+		// manually check ignores
+		assertFalse("This folder does not match any ignore pattern", client.isIgnore(d1));
+		try {
+			client.isIgnore(f1);
+			fail("Should have thrown exception on isIgnore inside folder that is not added yet");
+		} catch (Exception e) {
+			// expected
+		}
+		
+		// add the folder
+		client.add(d1);
+		assertTrue("Added folder should be versioned", client.isVersioned(d1));
+		// add file after ignore check
+		assertFalse("File is in versioned folder, should not be ignored", client.isIgnore(f1));
+		client.add(f1);
+		assertTrue("Added file in added folder should be versioned", client.isVersioned(f1));
+		
+		assertFalse("API says: For folders that ... are in version control, [ignore] returns false", client.isIgnore(d1));
 	}
 	
 }

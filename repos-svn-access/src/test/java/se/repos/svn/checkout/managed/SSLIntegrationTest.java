@@ -13,6 +13,7 @@ import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.tigris.subversion.svnclientadapter.SVNUrl;
 
 import se.repos.svn.RepositoryUrl;
+import se.repos.svn.UserCredentials;
 import se.repos.svn.checkout.CheckoutSettings;
 import se.repos.svn.checkout.InvalidCredentialsException;
 import se.repos.svn.checkout.RepositoryAccessException;
@@ -28,7 +29,7 @@ public class SSLIntegrationTest extends TestCase {
 	 * All we need is an SSL host with a self-signed certificate that matches the host name.
 	 * We don't need an account for this host to test certificate handling.
 	 */
-	public static final String HTTPS_URL = "https://test.repos.se/testrepo/test/trunk/";
+	public static final String HTTPS_URL = "https://test.repos.se/testrepo/";
 	
 	public void testCheckout() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SVNClientException {
 		System.out.println("---------- " + super.getName() + " ----------");
@@ -43,6 +44,13 @@ public class SSLIntegrationTest extends TestCase {
 							return null;
 						}
 					}
+				};
+			}
+			// the local account may have credentials cached, so we must explicitly give non-existing user
+			public UserCredentials getLogin() {
+				return new UserCredentials() {
+					public String getUsername() { return "non-existing-user"; }
+					public String getPassword() { return "test"; }
 				};
 			}
 		};

@@ -23,8 +23,8 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>${slf4j-version}</version>
-      <!-- deployment package must chose an implementation  -->
-      <scope>test</scope>
+      <!-- allow custom implementation: <scope>test</scope> -->
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>ch.ethz.ganymed</groupId>

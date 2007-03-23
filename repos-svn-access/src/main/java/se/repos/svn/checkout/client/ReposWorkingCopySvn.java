@@ -88,7 +88,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	
 	private ConflictNotifyListener conflictNotifyListener;
 	
-	// corrently it is not verified that the application sets this
+	// currently it is not verified that the application sets this
 	protected ConflictHandler conflictHandler = null;
 	
 	/**
@@ -266,7 +266,11 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 
 	public boolean isVersioned(File path) throws WorkingCopyAccessException {
+		// single status is undefined for working copy root
+		if (this.settings != null && this.settings.getWorkingCopyFolder().equals(path)) return true;
+		// check status for one item (for folders this is _not_ the same as 'svn status -N')
 		SVNStatusKind textStatus = this.getSingleStatus(path).getTextStatus();
+		logger.debug("Status of '"+path+"' is: "+textStatus);
 		return (textStatus != SVNStatusKind.UNVERSIONED 
 				&& textStatus != SVNStatusKind.IGNORED
 				&& textStatus != SVNStatusKind.NONE); //does not exist and is not versioned
