@@ -4,7 +4,7 @@
   <parent>
     <groupId>se.repos</groupId>
     <artifactId>repos-root</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1</version>
   </parent>
   <artifactId>repos-svn-access</artifactId>
   <version>1.2-dev</version>
@@ -20,6 +20,13 @@
   </description>
   <dependencies>
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${slf4j-version}</version>
+      <!-- deployment package must chose an implementation  -->
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>ch.ethz.ganymed</groupId>
       <artifactId>ganymed-ssh2</artifactId>
       <version>build210</version>
@@ -27,7 +34,7 @@
     <dependency>
       <groupId>org.tigris.subversion</groupId>
       <artifactId>svnClientAdapter</artifactId>
-      <version>2955</version>
+      <version>2999</version>
     </dependency>
     <dependency>
       <groupId>org.tigris.subversion</groupId>
