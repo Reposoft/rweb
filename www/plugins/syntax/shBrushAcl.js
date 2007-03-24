@@ -4,11 +4,12 @@ dp.sh.Brushes.Acl = function()
 
 	this.regexList = [
 		{ regex: new RegExp('^\\[\\/.*\\]', 'gm'), css: 'path' },
-		{ regex: new RegExp('^.*=(?=\\s*$)', 'gm'), css: 'noaccess' },
-		{ regex: new RegExp('^.*=(?=\\s*r\\s*$)', 'gm'), css: 'readonly' },
-		{ regex: new RegExp('^.*=(?=\\s*rw\\s*$)', 'gm'), css: 'readwrite' },
-		// { regex: new RegExp('^@[\\S]+', 'gm'), css: 'group' },
-		{ regex: new RegExp(this.GetKeywords(keywords), 'gm'), css: 'keyword' }
+		{ regex: new RegExp('= *$', 'gm'), css: 'noaccess' },
+		{ regex: new RegExp('= *r *$', 'gm'), css: 'readonly' },
+		{ regex: new RegExp('= *rw *$', 'gm'), css: 'readwrite' },
+		{ regex: new RegExp('\\[groups\\]', 'gm'), css: 'groups' },
+		{ regex: new RegExp('^@[\\S]+', 'gm'), css: 'group' },
+		//{ regex: new RegExp(this.GetKeywords(keywords), 'gm'), css: 'keyword' }
 		];
 
 	this.CssClass = 'syntax-acl';
