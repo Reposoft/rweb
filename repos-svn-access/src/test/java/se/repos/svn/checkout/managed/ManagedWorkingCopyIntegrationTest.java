@@ -42,7 +42,6 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 	}
 	
 	public void testIsVersionedParentNotVersioned() throws IOException {
-		// TODO REWRITE
 		File tmp = File.createTempFile("testFileOutsideWorkingCopy", "file");
 		tmp.deleteOnExit();
 		//assertFalse("folder that is outside working copy should still report not versioned", client.isVersioned(tmp));
@@ -103,7 +102,35 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		client.commit("Deleted test folder (testDeleteAlreadyDeletedFolder)");
 		assertFalse("After commit the folder should definitely be gone", created.exists());
 		assertFalse("Now the folder name is not in use anymore", client.isVersioned(created));
-	}	
+	}
+	
+	public void testMoveFileFromOutsideWorkingCopy() throws IOException {
+		File f = new File(".").getCanonicalFile(); // base path
+		File d = new File(path, "nothing");
+		try {
+			client.move(f, d);
+			fail("Should have thrown exception because target file is not in working copy");
+		} catch (IllegalArgumentException e) {
+			// expected
+		} catch (WorkingCopyAccessException we) {
+			// expected
+		}
+	}
+	
+	public void testMove() throws ConflictException, RepositoryAccessException {
+		// this is actually a simple move like in default client, but Manages has some extra logic
+		File f = new File(path, "tobemoved" + System.currentTimeMillis());
+		File d = new File(path, "destination" + System.currentTimeMillis());
+		f.mkdir();
+		client.add(f);
+		client.commit(getName() + " setup");
+		client.move(f, d);
+		assertTrue("move() destination should be versioned", client.isVersioned(d));
+		client.commit(getName() + " move");
+		assertFalse("source should be gone now", f.exists());
+		client.delete(d);
+		client.commit(getName() + " clean");
+	}
 	
 	public void testMoveAlreadyMovedFolder() throws IOException, ConflictException, RepositoryAccessException {
 		File f = new File(path, "tobemoved" + System.currentTimeMillis());

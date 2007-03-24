@@ -190,7 +190,6 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		this.delete(from);
 	}
 	
-	
 	public void copy(File from, File to) {
 		workingCopy.copy(from, to);
 	}
@@ -251,9 +250,10 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 		return workingCopy.getUnversionedContents(path);
 	}
 
-	private boolean pathDeleteRecursive(File remove) {
-		if (remove.getAbsolutePath().indexOf(workingCopyFolder.getAbsolutePath()) == -1) {
-			throw new RuntimeException("Can not delete folder outside the working copy: " + remove);
+	protected boolean pathDeleteRecursive(File remove) {
+		if (!remove.getAbsolutePath().startsWith(workingCopyFolder.getAbsolutePath())) {
+			throw new IllegalArgumentException("Can not delete folder '" + remove + 
+					"' outside the working copy '" + workingCopyFolder + "'");
 		}
 		if (remove.exists()) {
 			File[] files = remove.listFiles();
