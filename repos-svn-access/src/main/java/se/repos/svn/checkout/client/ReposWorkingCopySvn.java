@@ -266,13 +266,15 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 
 	public boolean isVersioned(File path) throws WorkingCopyAccessException {
-		// single status is undefined for working copy root
-		if (this.settings != null && this.settings.getWorkingCopyFolder().equals(path)) return true;
 		// check status for one item (for folders this is _not_ the same as 'svn status -N')
 		SVNStatusKind textStatus = this.getSingleStatus(path).getTextStatus();
 		logger.debug("Status of '"+path+"' is: "+textStatus);
-		return (textStatus != SVNStatusKind.UNVERSIONED 
-				&& textStatus != SVNStatusKind.IGNORED
+		// single status is undefined (unversioned) for working copy root
+		if (textStatus == SVNStatusKind.UNVERSIONED) {
+			return this.settings!=null && fileEquals(this.settings.getWorkingCopyFolder(), path);
+		}
+		// other cases that means not versioned
+		return (textStatus != SVNStatusKind.IGNORED
 				&& textStatus != SVNStatusKind.NONE); //does not exist and is not versioned
 	}
 
@@ -320,21 +322,27 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	/**
 	 * Gets non-recursive status, verbose, of one file or folder.
 	 * Replaces {@link ISVNClientAdapter#getSingleStatus(File)},
-	 * which looks on-standard and behaves differently depending on client lib.
+	 * which looks non-standard and behaves differently depending on client lib.
 	 * We'd better use only {@link ISVNClientAdapter#getStatus(File, boolean, boolean)}.
 	 */
 	private ISVNStatus getStatusOneLine(File path) throws SVNClientException {
 		ISVNStatus[] status = client.getStatus(path, false, true);
+		// this is verbose status so even entries with no changes should be in the list
 		if (status.length == 0) {
 			if (!path.exists()) return new StatusUnversionedMissing(path);
 			throw new WorkingCopyAccessException("Could not check status for path " + path);
 		}
 		if (status.length == 1) return status[0];
-		// try to figure out which one it is for path
-		if (status[status.length-1].getPath().length() < status[0].getPath().length()) {
-			return status[status.length-1];
+		// try to figure out which one it is for the folder, should be the shortest path 
+		int min = status[0].getPath().length();
+		ISVNStatus found = status[0];
+		for (int i=1; i < status.length; i++) {
+			if (status[i].getPath().length() < min) {
+				min = status[i].getPath().length();
+				found = status[i];
+			}
 		}
-		return status[0];
+		return found;
 	}
 	
 	public boolean hasLocalChanges() {
@@ -705,7 +713,7 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	}
 
 	public boolean isIgnore(File path) {
-		if (this.settings.getWorkingCopyFolder().equals(path)) return false;
+		if (fileEquals(this.settings.getWorkingCopyFolder(), path)) return false;
 		if (!path.exists()) throw new IllegalArgumentException("Can not check status for non-existing path: " + path);
 		if (!isVersioned(path.getParentFile())) throw new IllegalArgumentException("Can not check status. The parent folder is not versioned: " + path.getParentFile());
 		if (isVersioned(path)) return false; // svn status is of no help to see if a versioned file matches ignore patterns
@@ -752,6 +760,35 @@ public class ReposWorkingCopySvn implements ReposWorkingCopy {
 	
 	private void verifyCanAccessProperties(File path) {
 		if (!isVersioned(path)) throw new IllegalArgumentException("Can not access properties for the non-versioned path " + path);
+	}
+	
+	/**
+	 * Compares paths in the canonical form, unlike File.equals.
+	 * See {@link http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4787260}
+	 * This method might be slow, but when used in combination
+	 * with versioning operations it is negligible.
+	 * @param f1 File or folder, absolute path, not null
+	 * @param f1 File or folder, absolute path, not null
+	 * @return true if the two arguments represent the same file system entry
+	 */
+	public static boolean fileEquals(File f1, File f2) {
+		if (f1.equals(f2)) return true;
+		// assuming we don't deal with relative paths this should be a valid timesaver
+		if (!f1.getName().equals(f2.getName())) return false;
+		// compare the canonical paths
+	    File canonical1;
+	    try {
+	        canonical1 = f1.getCanonicalFile();
+	    } catch (java.io.IOException iox) {
+	        canonical1 = f1.getAbsoluteFile();
+	    }
+	    File canonical2;
+	    try {
+	        canonical2 = f2.getCanonicalFile();
+	    } catch (java.io.IOException iox) {
+	        canonical2 = f2.getAbsoluteFile();
+	    }
+	    return canonical1.equals(canonical2);
 	}
 	
 }

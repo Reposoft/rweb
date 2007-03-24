@@ -64,14 +64,6 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		assertTrue("Working copy root folder should of course be versioned", client.isVersioned(path));
 		assertFalse("After checkout working copy has no changes", client.hasLocalChanges());
 		assertFalse("After checkout working copy root folder has no changes", client.hasLocalChanges(path));
-		// isIgnore is a special case here
-		assertFalse("Working copy root can never be ignore==true", client.isIgnore(path));
-		
-		// try to mess up the root folder File instance
-		String p = path.getCanonicalPath();
-		File p2 = new File(p);
-		assertTrue("New File object, same path, same result?", client.isVersioned(path));
-		assertFalse("New File object, same path, still root -> versioned", client.isIgnore(path));
 	}
 	
 	public void testFileOutsideWorkingCopy() throws IOException {
@@ -231,6 +223,8 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		d.mkdir();
 		File f = new File(d, "child.txt");
 		f.createNewFile();
+		File f2 = new File(d, "child2.txt");
+		f2.createNewFile();
 		
 		// first try to add the file before the folder is added
 		try {
@@ -258,6 +252,7 @@ public class StatusAddDeleteIntegrationTest extends TestCase {
 		assertFalse("The new folder should be versioned and committed", client.hasLocalChanges(d));
 		
 		// clean up
+		f2.delete();
 		client.delete(d);
 		client.commit(path, getName() + " clean");
 	}	

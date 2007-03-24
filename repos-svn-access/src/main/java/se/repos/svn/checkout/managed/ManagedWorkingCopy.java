@@ -252,7 +252,7 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 	}
 
 	private boolean pathDeleteRecursive(File remove) {
-		if (!remove.getAbsolutePath().contains(workingCopyFolder.getAbsolutePath())) {
+		if (remove.getAbsolutePath().indexOf(workingCopyFolder.getAbsolutePath()) == -1) {
 			throw new RuntimeException("Can not delete folder outside the working copy: " + remove);
 		}
 		if (remove.exists()) {

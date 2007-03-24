@@ -119,6 +119,20 @@ public class SvnPropertiesIntegrationTest extends TestCase {
 				client.isIgnore(child));
 	}	
 	
+	public void testIsIgnoreWorkingCopyRoot() throws IOException {
+		// This test is effective only if the working copy root is in a folder that is not versioned
+		// isIgnore is a special case here
+		assertFalse("Working copy root can never be ignore==true", client.isIgnore(path));
+
+		// try to mess up the root folder File instance
+		String p = path.getCanonicalPath();
+		File p2 = new File(p);
+		assertTrue("New File object, same path, same result?", client.isVersioned(p2));
+		File d2 = new File(p2, "child");
+		d2.mkdir();
+		assertFalse("New File object, same path, still root -> versioned", client.isIgnore(d2));
+	}
+	
 	public void testIsIgnoreAdministrativeAreaFolder() throws Exception {
 		File svn = new File(path, ".svn");
 		assertFalse("The administrative area should definitely not be versioned", client.isVersioned(svn));
@@ -187,6 +201,41 @@ public class SvnPropertiesIntegrationTest extends TestCase {
 			client.getPropertiesForFolder(f).setIgnore(new SvnIgnorePattern(child));
 		} catch (RuntimeException e) {
 			fail("Should allow new ignore value that is the name of a file even if the file does not exist");
+		}
+	}
+	
+	public void testIsIgnoreSpacesAndUtf8() throws IOException, ConflictException, RepositoryAccessException {
+		File d1 = new File(path, "TestSpaces" + System.currentTimeMillis());
+		d1.mkdir();
+		File d2 = new File(d1, "Konsultbolag1 test- och kravdokument");
+		d2.mkdir();
+		File d3 = new File(d2, "åäö");
+		d3.mkdir();
+		File f4 = new File(d3, "Användningsfall - mall.doc");
+		f4.createNewFile();
+		
+		assertFalse(d1.toString(), client.isIgnore(d1));
+		client.add(d1);
+		assertFalse(d2.toString(), client.isIgnore(d2));
+		client.add(d2);
+		assertFalse(d3.toString(), client.isIgnore(d2));
+		client.add(d3);
+		assertFalse(f4.toString(), client.isIgnore(f4));
+		client.add(f4);
+		
+		client.commit(d1, "Test utf-8 structure");
+		
+		assertFalse(f4.toString(), client.isIgnore(f4));
+		
+		client.delete(d1);
+		assertFalse("path is still versioned so it can not be ignore", client.isIgnore(d3));
+		client.commit(d1, "Test utf-8 delte");
+		
+		try {
+			client.isIgnore(d3);
+			fail("Now the parent folder is deleted, so isIgnore is undefiled");
+		} catch (IllegalArgumentException e) {
+			// expected
 		}
 	}
 	
