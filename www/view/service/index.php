@@ -23,10 +23,9 @@ if (isset($_GET['url'])) $url = $_GET['url'];
 if (isset($_GET['s'])) {
 	$s = $_GET['s'];
 	if (!defined('SERVICE_PUBLIC_'.$s)) trigger_error('Unknown service '.$s, E_USER_ERROR);
-	// special case for client information, can't be proxied
-	if ($s == SERVICE_PUBLIC_CLIENT) serviceClientNoProxy(); 
-	// proxy to service page that might be protected on IP
 	$url = constant('SERVICE_PUBLIC_'.$s);	
+	// special case for client information, as it can't be proxied
+	if ($url == SERVICE_PUBLIC_CLIENT) serviceClientNoProxy(); 
 }
 
 if (!$url) trigger_error('No service specified', E_USER_ERROR);
@@ -53,6 +52,7 @@ echo $service->getResponse();
  * Run the client information logic without an internal request
  */
 function serviceClientNoProxy() {
+	$_REQUEST[WEBSERVICE_KEY] = 'json';
 	require('../../'.SERVICE_PUBLIC_CLIENT.'index.php');
 	exit;
 }
