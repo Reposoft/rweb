@@ -61,8 +61,8 @@ class TestPresentation extends UnitTestCase {
 		$this->assertEqual('http://'.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'/', $result);
 		// href
 		$result = Presentation_urlRewriteForHttps(
-			'<a href="'.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'">', $smarty);
-		$this->assertEqual('<a href="'.LEFT_DELIMITER.'$var|asLink'.RIGHT_DELIMITER.'">', $result);
+			'<a id="test" href="'.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a id="test" href="'.LEFT_DELIMITER.'$var|asLink'.RIGHT_DELIMITER.'">', $result);
 		// part of href
 		$result = Presentation_urlRewriteForHttps(
 			'<a href="http://'.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'">', $smarty);
@@ -74,7 +74,28 @@ class TestPresentation extends UnitTestCase {
 		// already a function, assume that the result is not a complete URL
 		$result = Presentation_urlRewriteForHttps(
 			'<a href="'.LEFT_DELIMITER.'$var|getPathName'.RIGHT_DELIMITER.'">', $smarty);
-		$this->assertEqual('<a href="'.LEFT_DELIMITER.'$var|getPathName'.RIGHT_DELIMITER.'">', $result);		
+		$this->assertEqual('<a href="'.LEFT_DELIMITER.'$var|getPathName'.RIGHT_DELIMITER.'">', $result);
+		// associative array syntax
+		$result = Presentation_urlRewriteForHttps(
+			'<a href="'.LEFT_DELIMITER.'$var.field'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a href="'.LEFT_DELIMITER.'$var.field|asLink'.RIGHT_DELIMITER.'">', $result);
+		// object syntax, _not_ supported
+		$result = Presentation_urlRewriteForHttps(
+			'<a href="'.LEFT_DELIMITER.'$var->isOk()'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a href="'.LEFT_DELIMITER.'$var->isOk()'.RIGHT_DELIMITER.'">', $result);		
+		// our own object syntax -- this filter must be applied _before_ object syntax filter
+		$result = Presentation_urlRewriteForHttps(
+			'<a href="'.LEFT_DELIMITER.'$file,folderUrl'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a href="'.LEFT_DELIMITER.'$file,folderUrl|asLink'.RIGHT_DELIMITER.'">', $result);
+	}
+	
+	function testPrefilter_urlRewriteForHttps_object() {
+		$result = Presentation_urlRewriteForHttps(
+			'<a id="repository" href="{=$file,folderUrl}">return to repository</a>
+			{=$file->getkind()|ucfirst}: <a class="{=$file->getkind()}" href="{=$file,url}">', $smarty);
+		$this->assertEqual(
+			'<a id="repository" href="{=$file,folderUrl|asLink}">return to repository</a>
+			{=$file->getkind()|ucfirst}: <a class="{=$file->getkind()}" href="{=$file,url|asLink}">', $result);
 	}
 	
 	function testPrefilter_removeIndentation() {

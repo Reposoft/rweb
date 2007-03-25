@@ -7,12 +7,12 @@
 
 <body>
 <div id="commandbar">
-<a id="repository" href="{=$repository}{=$folder|urlEncodeNames}">return to repository</a>
+<a id="repository" href="{=$file,folderUrl}">return to repository</a>
 </div>
 <div class="intro">
 <h1>Rename</h1>
 
-{=if not $file,isWritable} <p>You have read access only. You can not rename this file.</p>
+{=if not $file,isWritable} <p>You have read access only. You can not rename this {=$file,kind}.</p>
 {=elseif $file,isLockedByThisUser} <p>This file is currently <strong>locked</strong> by you, so other users can not edit it.</p>
 {=elseif $file,isLockedBySomeoneElse} <p>This file is currently <strong>locked</strong> by 
 <span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}. 

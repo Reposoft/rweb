@@ -171,10 +171,10 @@ class Presentation {
 		
 		$this->smarty->register_prefilter('Presentation_useCommentedDelimiters');
 		$this->smarty->load_filter('pre', 'Presentation_useCommentedDelimiters');
-		$this->smarty->register_prefilter('Presentation_useDotNotationForObjects');
-		$this->smarty->load_filter('pre', 'Presentation_useDotNotationForObjects');
 		$this->smarty->register_prefilter('Presentation_urlRewriteForHttps');
 		$this->smarty->load_filter('pre', 'Presentation_urlRewriteForHttps');
+		$this->smarty->register_prefilter('Presentation_useDotNotationForObjects');
+		$this->smarty->load_filter('pre', 'Presentation_useDotNotationForObjects');
 		$this->smarty->register_prefilter('Presentation_removeIndentation');
 		$this->smarty->load_filter('pre', 'Presentation_removeIndentation');
 		if (PRESENTATION_XTHML) {
@@ -502,7 +502,7 @@ function Presentation_useDotNotationForObjects($tpl_source, &$smarty)
 }
 
 function Presentation_urlRewriteForHttps($tpl_source, &$smarty) {
-	$pattern = '/(href|src)=\"{=\$(\w+)}/';
+	$pattern = '/(href|src)=\"\{=\$([\w,.]+)\}/';
 	$replacement = '$1="{=$$2|asLink}';
 	return preg_replace($pattern, $replacement, $tpl_source);
 }

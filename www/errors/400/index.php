@@ -14,8 +14,8 @@ print_r($_REQUEST);
 echo('-->');
  */
 
-$p->showError('
-Invalid request from browser. We would be interested to see how this could occur,
-so feel free to contact <a href="mailto:support@repos.se">support@repos.se</a>.
+$p->showErrorNoRedirect('
+The server can not process the request. We would be interested to see how this could occur,
+so please contact <a href="mailto:support@repos.se">support@repos.se</a>.
 ', 'Bad Request');
 ?>
