@@ -126,6 +126,32 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('http://my.host/test/', getSelfUrl());
 	}
 	
+	function testUrlSpecialChars() {
+		// percent must be encoded before any other encoding
+		$this->assertEqual('http://my.host/%25',
+			urlSpecialChars('http://my.host/%'));
+		// avoid ampersands, they have different encoding in different contexts
+		$this->assertEqual('http://my.host/%26',
+			urlSpecialChars('http://my.host/&'));
+		// browser can't know if bracket is for a section name, causes 404 page not found
+		$this->assertEqual('http://my.host/%23',
+			urlSpecialChars('http://my.host/#'));		
+	}
+	
+	function testUrlSpecialCharsQueryString() {
+		// luckliy question mark is not allowed in filenames
+		$this->assertEqual('http://my.host/%26%25%23/?a&%#',
+			urlSpecialChars('http://my.host/&%#/?a&%#'));
+		
+	}
+	
+	function testAsLink() {
+		// test that asLink calls urlSpecialChars
+		$host = getSelfRoot();
+		$this->assertEqual("$host/%26%25%23/",
+			urlSpecialChars("$host/&%#/"));
+	}
+	
 }
 
 testrun(new TestReposProperties());

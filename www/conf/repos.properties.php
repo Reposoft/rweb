@@ -123,9 +123,9 @@ function isSSLClient() {
  */
 function asLink($url) {
 	if (isSSLClient() && substr($url, 0, 5)=='http:') {
-		return 'https:'.substr($url, 5);
+		$url = 'https:'.substr($url, 5);
 	}
-	return $url;
+	return urlSpecialChars($url);
 }
 
 /**
@@ -266,6 +266,24 @@ function urlEncodeNames($url) {
 	}
 	$encoded = implode('/', $parts);
 	return $encoded;
+}
+
+/**
+ * A minimal escape for characters that the browsers can't urlescape themseleves.
+ * This is analogous to the getHref escape in repos xslt.
+ */
+function urlSpecialChars($url) {
+	if ($q = strpos($url, '?')) return urlSpecialChars(substr($url, 0, $q)).'?'.substr($url, $q+1);
+	return str_replace(
+		array(
+		'%',
+		'&',
+		'#'),
+		array(
+		'%25',
+		'%26',
+		'%23'),
+		$url);
 }
 
 function _urlEncodeQueryString($params) {
