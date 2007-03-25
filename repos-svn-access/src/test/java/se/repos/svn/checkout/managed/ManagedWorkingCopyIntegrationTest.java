@@ -117,17 +117,20 @@ public class ManagedWorkingCopyIntegrationTest extends TestCase {
 		}
 	}
 	
-	public void testMove() throws ConflictException, RepositoryAccessException {
+	public void testMove() throws ConflictException, RepositoryAccessException, IOException {
 		// this is actually a simple move like in default client, but Manages has some extra logic
+		File d1 = new File(path, "movetest" + System.currentTimeMillis());
+		d1.mkdir();
 		File f = new File(path, "tobemoved" + System.currentTimeMillis());
+		f.createNewFile();
 		File d = new File(path, "destination" + System.currentTimeMillis());
-		f.mkdir();
-		client.add(f);
+		client.addNew();
 		client.commit(getName() + " setup");
 		client.move(f, d);
 		assertTrue("move() destination should be versioned", client.isVersioned(d));
 		client.commit(getName() + " move");
 		assertFalse("source should be gone now", f.exists());
+		client.delete(d1);
 		client.delete(d);
 		client.commit(getName() + " clean");
 	}

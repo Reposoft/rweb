@@ -255,7 +255,7 @@ public class ManagedWorkingCopy implements ReposWorkingCopy {
 			throw new IllegalArgumentException("Can not delete folder '" + remove + 
 					"' outside the working copy '" + workingCopyFolder + "'");
 		}
-		if (remove.exists()) {
+		if (remove.exists() && remove.isDirectory()) {
 			File[] files = remove.listFiles();
 			for (int i = 0; i < files.length; i++) {
 				if (files[i].isDirectory()) {
