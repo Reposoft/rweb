@@ -69,10 +69,11 @@ $.getJSON('view/service/?s=CLIENT', function(json) {
 <p>Licensed to: <span id="license"></span></p>
 <script type="text/javascript">
 $.getJSON('view/service/?s=LICENSE', function(json) {
-	if (json.length == 0) {
+	if (json.length == 0 || !json.license) {
 		$('#license').append('No license information available.');
 	} else {
-		$('#license').append(json['Product-Name'] + ' registered to ' + json['Registered-To']);
+		$('#license').append('<em>' + json.license['Product-Name'] + '</em>'
+			+ ' registered to <em>' + json.license['Registered-To'] + '</em>');
 	}
 });
 </script>
