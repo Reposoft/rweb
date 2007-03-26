@@ -12,6 +12,7 @@ require_once("../ServiceRequestEdit.class.php");
 addPlugin('edit');
 addPlugin('validation');
 addPlugin('filename');
+addPlugin('dateformat');
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 
