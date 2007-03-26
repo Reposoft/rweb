@@ -59,7 +59,10 @@ class NewFilenameRule extends Rule {
 	function validate($fieldvalue) {
 		$target = $this->_getPath($fieldvalue);
 		$s = new SvnOpenFile($target);
-		if ($s->getStatus()==404) return;
+		if ($s->getStatus()==404) {
+			$this->_value = $fieldvalue;
+			return;
+		}
 		if ($s->getStatus()==403) return "The URL has access denied, so $target can not be used.";
 		if ($s->isFolder()) return 'There is already a folder named "'.basename($target).'". Chose a different name.';
 		return 'There is already a file named "'.basename($target).'". Chose a different name.';

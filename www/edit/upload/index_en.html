@@ -87,7 +87,7 @@ to make sure that your local changes are based on the newest version of the shar
       <label for="fromrev{=$r}">based on version <span class="revision">{=$r}</span></label>
       <input id="fromrev{=$r}" type="radio" name="fromrev" value="{=$r}" checked="checked" />
       <span class="username">{=$e.user}</span> <span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span>
-      <span>(this is the current version)</span><br />
+      <span> (this is the current version)</span><br />
       {=else}
       <label for="fromrev{=$r}">&nbsp;<span class="revision">{=$r}</span></label>
       <input id="fromrev{=$r}" type="radio" name="fromrev" value="{=$r}" />

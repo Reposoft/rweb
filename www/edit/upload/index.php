@@ -171,9 +171,8 @@ function processNewVersion($upload) {
 	// check that there is a diff compared to fromrev, should not be displayed to user: use SvnOpen
 	$diff = new SvnOpen('diff');
 	$diff->addArgPath($dir . $filename);	// addArgPath needs utf8 encoded argument. $updatefile has to be converted to ISO-8859-1 in toShellEncoding function in order file_exists function to work
-	$diff->exec();
-	if ($diff->getExitcode()) trigger_error('Could not read difference between current and uploaded file.', E_USER_WARNING);
-	// TODO shouldn't this be a validation rule instead? Who does cleanup?
+	if ($diff->exec()) trigger_error('Could not read difference between current and uploaded file.', E_USER_ERROR);
+	// can not do a validation rule on multipart POST
 	if (count($diff->getOutput())==0) trigger_error('Uploaded file is identical to the existing.', E_USER_WARNING);
 	// always do update before commit
 	updateAndHandleConflicts($dir, $presentation);
