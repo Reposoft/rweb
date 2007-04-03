@@ -224,6 +224,7 @@ function _canEditAsTextarea($mimetype) {
  */
 function updateAndHandleConflicts($workingCopyPath, $presentation) {
 	$update = new SvnEdit('update');
+	$update->addArgOption('--non-recursive');
 	$update->addArgPath($workingCopyPath);
 	$update->exec('Updating to see if there is conflicts with other new changes');
 	// TODO use conflicthandler to detect conflicts (exit code is still 0 on conflict)
