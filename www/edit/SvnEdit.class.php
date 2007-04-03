@@ -349,7 +349,7 @@ class SvnEdit {
 	function _show($description=null) {
 		$result = $this->getResult();
 		$logEntry = array(
-			'result' => $this->getResult(),
+			'result' => str_replace('Committed revision','Committed version',$this->getResult()),
 			'operation' => $this->getOperation(),
 			'message' => $this->getMessage(),
 			'successful' => $this->isSuccessful(),
