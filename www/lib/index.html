@@ -18,12 +18,10 @@
 
 <div id="intro">
 <h1>Repos libraries</h1>
-<p>If you agree to the open source licenses, download 3rd party libraries here.
-</p>
+<p>If you agree to the open source licenses, download 3rd party libraries here.</p>
 </div>
 
-<div class="column" style="width: 
-60%">
+<div class="column" style="width: 60%">
 <div class="section">
 <h2>lib/ folder</h2>
 <ul>
@@ -44,20 +42,16 @@
 <li><a id="installall" href="install.php?go">Install all</a></li>
 </ul>
 <p>Repos also contains redistributed Services_JSON with <a target="_blank" href="json/LICENSE">custom copyright</a>.</p>
-<p>Note that the web server needs write access to the library folders during installation.
-</p></div>
+<p>Note that the web server needs write access to the library folders during installation.</p></div>
 </div>
 
-<div class="column" style="width: 
-40%">
+<div class="column" style="width: 40%">
 <div class="section" id="libstatus">
 <script type="text/javascript">
 $.getJSON('install.php', function(json) {
-	$('#libstatus').append('
-<h2>Current status</h2>');
+	$('#libstatus').append('<h2>Current status</h2>');
 	for (var id in json) {
-		$('#libstatus').append('
-<p>'+json[id].name+': '
+		$('#libstatus').append('<p>'+json[id].name+': '
 			+ (json[id].installed ? 'installed' : 'not present')
 			+ '</p>');
 	}

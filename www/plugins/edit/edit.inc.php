@@ -66,9 +66,11 @@ tinyMCE.init({
  * @param String $destinationFile the current file
  */
 function editWriteNewVersion_html(&$postedText, $destinationFile) {
-	$postedText = editIndentHtmlDocument($postedText);
 	// texts coming from smarty have only body contents
 	if (!preg_match('/<html.*<body.*<\/body>.*<\/html>/ms', $postedText)) {
+		// indent only documents edited with the online html editor
+		// (not only new documents, but currently updates end up here too)
+		$postedText = editIndentHtmlDocument($postedText);
 		// TODO use existing html if new version? Use a templates/ file?
 		// Put the contents in the Repos template
 		$postedText = editGetNewDocument($postedText);

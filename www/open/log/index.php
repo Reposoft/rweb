@@ -17,7 +17,7 @@ function getParameter($name, $default=null) {
 
 // always use a limit for the number of records, to prevent big transforms
 // if the limit is active (meaning that there are more records than returned) the xml sets the limit attribute
-$limit = getParameter('limit', '100');
+$limit = getParameter('limit', '20');
 
 // log a revision interval, using integer numbers to flip between log pages
 // revisions must exist for the given target
