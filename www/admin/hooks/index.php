@@ -192,7 +192,7 @@ function getHookCommand($scriptType, $revVariable=null, $repoVariable=null) {
 function testHookDependencies($report) {
 	$curl = System::getCommand('curl');
 	exec("$curl --version", $out, $return);
-	if ($return > 2) {
+	if (count($out) == 0) {
 		$report->debug($out);
 		$report->fail("Hooks require cURL ($curl) command which was not found (code $return)");
 	} else {
