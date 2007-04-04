@@ -510,11 +510,10 @@ function Presentation_urlRewriteForHttps($tpl_source, &$smarty) {
 }
 
 /**
- * A temporary filter to solve the issue with "+" in $target when used in query strings.
- * Adds rawurlencode to the first query parameter template variable
+ * Rawurlencode every 'target' query parameter value (if there is no passthru function for it already)
  */
 function Presentation_urlEncodeQueryString($tpl_source, &$smarty) {
-	$pattern = '/(href)=\"([^"]*\?[^"{]*)\{=\$([\w,.]+)\}/';
+	$pattern = '/(href)=\"([^"]*\?[^"]*target=)\{=\$([\w,.]+)\}/';
 	$replacement = '$1="$2{=$$3|rawurlencode}';
 	return preg_replace($pattern, $replacement, $tpl_source);
 }
