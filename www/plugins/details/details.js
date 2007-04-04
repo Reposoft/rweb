@@ -72,8 +72,12 @@ function details_repository() {
 	//var path = $('body.repository').find('#fullpath');
 	var path = $('#fullpath');
 	if (path.size()==0) return;
-	var url = '/repos/open/list/?target='+encodeURIComponent(path.text());
-	$.get(url, function(xml){
+	$.ajax({
+		type: 'GET',
+		url: '/repos/open/list/?target='+encodeURIComponent(path.text()),
+		dataType: 'xml',
+		error: function() { $('#showdetails').removeClass('loading').text('error'); },
+		success: function(xml){
 			//console.log(url + ': '+$(xml).text());
 			$('/lists/list/entry', xml).each(function() {
 				var name = $('name', this).text();
@@ -87,7 +91,8 @@ function details_repository() {
 			});
 			$('.details').show();
 			$('#showdetails').removeClass('loading').text('refresh details');
-		});
+		}
+	});
 }
 
 function details_isFolder(entry) {
