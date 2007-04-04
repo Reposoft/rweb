@@ -121,6 +121,30 @@ class TestPresentation extends UnitTestCase {
 			"abc</p>\n   {=if \$a}", $smarty);
 		$this->assertEqual("abc</p>{=if \$a}", $result);
 	}
+	
+	function testPrefilter_urlEncodeQueryString() {
+		$result = Presentation_urlEncodeQueryString(
+			'<a id="test" href="edit/?b='.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a id="test" href="edit/?b='.LEFT_DELIMITER
+			.'$var|rawurlencode'.RIGHT_DELIMITER.'">', $result);
+					
+		$result = Presentation_urlEncodeQueryString(
+			'<a id="test" href="?'.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a id="test" href="?'.LEFT_DELIMITER
+			.'$var|rawurlencode'.RIGHT_DELIMITER.'">', $result);
+		
+		$result = Presentation_urlEncodeQueryString(
+			'<a id="test" href="?x='.LEFT_DELIMITER.'$var|already'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a id="test" href="?x='.LEFT_DELIMITER
+			.'$var|already'.RIGHT_DELIMITER.'">', $result);		
+
+		$result = Presentation_urlEncodeQueryString(
+			'<a id="test" href="../?target='.LEFT_DELIMITER.'$target'.RIGHT_DELIMITER
+				.'&rev='.LEFT_DELIMITER.'$rev'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a id="test" href="../?target='.LEFT_DELIMITER.'$target|rawurlencode'.RIGHT_DELIMITER
+				.'&rev='.LEFT_DELIMITER.'$rev'.RIGHT_DELIMITER.'">', $result);
+		
+	}
 
 }
 

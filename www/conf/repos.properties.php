@@ -1,6 +1,6 @@
 <?php
 /**
- * Repos logic shared by all PHP pages.
+ * Repos configuration logic (c) 2004-1007 Staffan Olsson www.repos.se
  *
  * Behaviour is configurable in the file
  * ../../repos-conf/repos.properties

@@ -1,6 +1,6 @@
 <?php
 /**
- * Repos administrative reports.
+ * Incremental admin reports (c) 2006-1007 Staffan Olsson www.repos.se
  *
  * A common interface for scripts that do tests, configuration or sysadmin tasks.
  * Does not do output buffering, because for slow operations we want to report progress.

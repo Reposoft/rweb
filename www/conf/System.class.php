@@ -1,5 +1,6 @@
 <?php
 /**
+ * System utitlity functions (c) 2006-1007 Staffan Olsson www.repos.se
  * Controls access to the filesystem and server environment.
  * Unlike repos.properties.php, these functions do not depend on configuration.
  * 

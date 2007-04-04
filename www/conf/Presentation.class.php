@@ -1,6 +1,6 @@
 <?php
 /**
- * Represents the generation of a web page.
+ * Content streaming and templating (c) 2006-1007 Staffan Olsson www.repos.se
  * 
  * Presentation can not use the functions from /account, so user settings must be read from cookies.
  * Presentation is for all webapp pages, except administration reports.
@@ -177,6 +177,8 @@ class Presentation {
 		$this->smarty->load_filter('pre', 'Presentation_useDotNotationForObjects');
 		$this->smarty->register_prefilter('Presentation_removeIndentation');
 		$this->smarty->load_filter('pre', 'Presentation_removeIndentation');
+		$this->smarty->register_prefilter('Presentation_urlEncodeQueryString');
+		$this->smarty->load_filter('pre', 'Presentation_urlEncodeQueryString');
 		if (PRESENTATION_XTHML) {
 			$this->smarty->register_prefilter('Presentation_useXmlEntities');
 			$this->smarty->load_filter('pre', 'Presentation_useXmlEntities');
@@ -504,6 +506,16 @@ function Presentation_useDotNotationForObjects($tpl_source, &$smarty)
 function Presentation_urlRewriteForHttps($tpl_source, &$smarty) {
 	$pattern = '/(href|src)=\"\{=\$([\w,.]+)\}/';
 	$replacement = '$1="{=$$2|asLink}';
+	return preg_replace($pattern, $replacement, $tpl_source);
+}
+
+/**
+ * A temporary filter to solve the issue with "+" in $target when used in query strings.
+ * Adds rawurlencode to the first query parameter template variable
+ */
+function Presentation_urlEncodeQueryString($tpl_source, &$smarty) {
+	$pattern = '/(href)=\"([^"]*\?[^"{]*)\{=\$([\w,.]+)\}/';
+	$replacement = '$1="$2{=$$3|rawurlencode}';
 	return preg_replace($pattern, $replacement, $tpl_source);
 }
 

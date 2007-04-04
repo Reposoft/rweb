@@ -1,5 +1,6 @@
 <?php
 /**
+ * Command line wrapper (c) 2006-1007 Staffan Olsson www.repos.se
  * Controls access to the command line, as wrapper for executable operations with arguments.
  * 
  * Repos PHP relies heavily on command line execution.
