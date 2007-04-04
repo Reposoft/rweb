@@ -12,7 +12,7 @@ function password_getHeadTags() {
 }
 
 // identify password files
-if (strEnds(getTarget(), 'repos-password.htp')) {
+if (strEnds(getTarget(), 'repos.user')) {
 	header('Cache-Control: no-cache');
 	$url = asLink(getWebapp().'account/password/?target='.urlencode(getTarget()));
 	if (strpos(getSelfUrl(),'/edit/') === false) $url .= '&view=1';

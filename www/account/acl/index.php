@@ -12,7 +12,7 @@
  */
 
 define('ADMIN_FOLDER', '/administration/');
-define('ACCESS_FILE', 'repos-access.acl');
+define('ACCESS_FILE', 'repos.accs');
 
 require('../../open/SvnOpenFile.class.php');
 require('../../edit/SvnEdit.class.php');

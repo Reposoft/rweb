@@ -21,7 +21,7 @@ if (!getConfig('users_file')) {
 define('USERS_PATH', getConfig('admin_folder').getConfig('users_file'));
 define('LOCAL_PATH', getConfig('local_path'));
 // Repos convention for the per-user htpasswd file
-define('REPOSITORY_USER_FILE_NAME', 'repos-password.htp');
+define('REPOSITORY_USER_FILE_NAME', 'repos.user');
 
 /**
  * @return Rule that has processed the field validatoin

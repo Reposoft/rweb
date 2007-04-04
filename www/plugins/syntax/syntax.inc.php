@@ -19,7 +19,7 @@ function syntax_getBrushes() {
 	'/\.(css)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushCss.js',
 	'/\.(xml|htm|html|xsl|jsp)\b/' => REPOS_SYNTAX_DP_PATH . 'Scripts/shBrushXml.js',
 	'/\.(txt)\b/' => 'plugins/syntax/shBrushWiki.js',
-	'/\.(acl)\b/' => 'plugins/syntax/shBrushAcl.js',
+	'/\.(accs)\b/' => 'plugins/syntax/shBrushAcl.js',
 	'/\.(htp)\b/' => 'plugins/syntax/shBrushHtp.js',
 	'/open\/(diff)\/\?/' => 'plugins/syntax/shBrushDiff.js'
 	);

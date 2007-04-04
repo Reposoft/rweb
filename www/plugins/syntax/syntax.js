@@ -18,7 +18,7 @@ Repos.syntax.map["htm"] = "xml";
 Repos.syntax.map["css"] = "css";
 Repos.syntax.map["diff"] = "diff";
 Repos.syntax.map["txt"] = "wiki";
-Repos.syntax.map["acl"] = "acl";
+Repos.syntax.map["accs"] = "acl";
 Repos.syntax.map["htp"] = "htp";
 
 $(document).ready(function() { 

@@ -37,7 +37,7 @@ $repourl = $repo;
 setup_svn("co file:///$repourl $wc");
 
 // User accounts, same folder layout as in access/create/
-define('REPOSITORY_USER_FILE_NAME', 'repos-password.htp');
+define('REPOSITORY_USER_FILE_NAME', 'repos.user');
 System::createFolder($wc."svensson/");
 System::createFolder($wc."svensson/trunk/");
 System::createFolder($wc."svensson/administration/");
@@ -71,7 +71,7 @@ if (strContains(getRepository(), 'demo')) {
 	setup_svn("revert {$wc}demoproject/templates/");
 }
 
-$repositoryacl = $wc.'administration/repos-access.acl';
+$repositoryacl = $wc.'administration/repos.accs';
 $publicxml = $wc."demoproject/trunk/public/xmlfile.xml";
 $publicindex = $wc."demoproject/trunk/public/website/index.html";
 $publicstyle = $wc."demoproject/trunk/public/website/styles.css";

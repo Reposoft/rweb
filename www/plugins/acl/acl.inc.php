@@ -9,7 +9,7 @@ addPlugin('syntax');
 
 function acl_getHeadTags($webapp) {
 	if (strEnds(getSelfUrl(), '/upload/')) return array(); // upload is used for saving the file
-	if (!strEnds(getTarget(), '.acl')) return array();
+	if (!strEnds(getTarget(), '.accs')) return array();
 	return array('<script language="javascript" type="text/javascript" src="'.$webapp.'plugins/acl/acl.js"></script>');
 }
 

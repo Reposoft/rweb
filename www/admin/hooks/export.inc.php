@@ -6,9 +6,9 @@
  */
 
 // user account password file
-define('PASSWORD_FILE', 'administration/repos-password.htp');
+define('PASSWORD_FILE', 'administration/repos.user');
 // repository ACL
-define('ACL_FILE', 'administration/repos-access.acl');
+define('ACL_FILE', 'administration/repos.accs');
 
 require('../../open/ServiceRequest.class.php');
 

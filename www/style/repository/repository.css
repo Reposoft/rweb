@@ -43,6 +43,8 @@
 	margin-left: 10px;
 }
 /* filetype icons */
+.file-user { background-image: url('filetypes/16x16/user.png');}
+.file-accs { background-image: url('filetypes/16x16/accs.png');}
 .file-zip { background-image: url('filetypes/16x16/zip.png');}
 .file-gz { background-image: url('filetypes/16x16/gz.png');}
 .file-sit { background-image: url('filetypes/16x16/sit.png');}
