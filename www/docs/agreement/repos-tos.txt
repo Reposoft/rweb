@@ -1,0 +1,35 @@
+Terms of Service
+$LastChangedRevision$
+
+This is the default agreement between Repository Systems AB ("Repos") and the customer. By subscribing to the Repos service, you agree to all of the following terms of usage without modification or exception. Basically it means the service comes without warranties. A custom service level agreement may be signed between Repos and a customer.
+
+1. Privacy
+Repos uses cookies to store session data in the user's browser. To monitor the service, Repos also logs requests with usernames. Being a version control service, Repos inherently logs every modification made to repository data. The collected data is not sold to or shared with other parties.
+
+2. No unlawful conduct
+You, as a customer agree that you will not use the Repos website and service for any purpose that is unlawful or prohibited by these terms and conditions. Any unauthorised use of the Repos website and service is expressly prohibited.
+
+3. Repos's liability 
+Repos makes no representations about the availability, accuracy, reliability, suitability, completeness, or timeliness of any of its services or any of the material provided on this website or about the results to be obtained from using its services or the website. You use this website and Repos's services at your own risk. Changes are periodically made to the website and may be made at any time.
+
+THIS WEBSITE AND ALL OF REPOS'S SERVICES ARE PROVIDED ON AN "AS IS" BASIS WITHOUT ANY WARRANTIES OF ANY KIND. TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT SHALL REPOS BE LIABLE FOR ANY DAMAGES RESULTING FROM THE USE OR INABILITY TO USE REPOS'S SERVICES OR THIS WEBSITE OR SITES LINKED TO THIS WEBSITE, WHETHER BASED ON WARRANTY, CONTRACT, TORT, OR ANY OTHER LEGAL BASIS, AND WHETHER OR NOT REPOS IS ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+4. Termination
+Repos reserves the right to terminate accounts without warning.
+
+5. Backup
+Repos maintains backup mirrors of all repositories, but makes no claim about the accuracy and reliability of these backups. The repositories are accessible for mirroring by the customer using a version control client like Subversion.
+
+6. 3rd party tools
+Repos was designed to allow access using an open protocol to shared, version controlled, documents. As such, the service is used through 3rd party tools, hosted on the server or on client machines. These tools are governed by their own license agreement. Even if visually integrated with Repos, these licenses must be individually accepted by the user, or, where applicable, by the administrator.
+
+7. Copyright and Intellectual Property
+You are not authorised to modify or distribute in any way content available through Repos's website or service, including code.
+
+Repos acknowledges that repository contents may also be protected by copyright and other intellectual property laws, and will not modify or distribute user data in any way.
+
+8. Applicable law
+These Terms Of Service are governed by Swedish law. 
+
+9. Changes to Terms Of Service
+Repos may modify these Terms Of Service at any time.

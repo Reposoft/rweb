@@ -17,8 +17,8 @@ $libraries = array(
 'selenium',
 'dpsyntax',
 'tinymce',
-'phpicalendar',
-'imagemagick'
+//'phpicalendar',
+//'imagemagick'
 );
 
 $url = getWebapp().'lib/';
