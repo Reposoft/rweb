@@ -1,9 +1,0 @@
-; post-commit export paths using Repos script
-; ini-file format
-; 
-; [arbitrary section name]
-; /my/repo/path=/local/system/path
-; ; Sections not needed unless a repository path must be exported to several local paths
-
-/repos/trunk/www=/srv/www/htdocs/repos
-/repos/trunk=/home/repos/nightly-build

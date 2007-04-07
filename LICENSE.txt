@@ -1,5 +1,0 @@
-Optime Repos / repos.se
-
-Repos is currently closed source. The project's nature will be decided when it has matured.
-
-The concept and the code is owned by Optime data
