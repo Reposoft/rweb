@@ -153,6 +153,17 @@ class TestEditPlugin extends UnitTestCase {
 		$this->assertEqual(1, substr_count($result,'</body>'));
 		$this->assertEqual(1, substr_count($result,'</html>'));
 	}
+
+	function testCreateHtmlDocumentNoEndTags() {
+		// should not create new document if html and body start tags exist
+		$html = "<html>\n<body>\n<p>hello</p>\n";
+		editWriteNewVersion_html($html, null);
+		$result = getLastWrite();
+		$this->assertEqual(1, substr_count($result,'<html'));
+		$this->assertEqual(1, substr_count($result,'<body'));
+		$this->assertEqual(0, substr_count($result,'</body>'));
+		$this->assertEqual(0, substr_count($result,'</html>'));
+	}
 	
 	function testFullDocument() {
 		$html =

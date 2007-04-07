@@ -67,7 +67,7 @@ tinyMCE.init({
  */
 function editWriteNewVersion_html(&$postedText, $destinationFile) {
 	// texts coming from smarty have only body contents
-	if (!preg_match('/<html.*<body.*<\/body>.*<\/html>/ms', $postedText)) {
+	if (!preg_match('/<html.*<body.*/ms', $postedText)) {
 		// indent only documents edited with the online html editor
 		// (not only new documents, but currently updates end up here too)
 		$postedText = editIndentHtmlDocument($postedText);
