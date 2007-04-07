@@ -4,6 +4,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Repos Terms of Service HTML</title>
 <link href="../../style/docs.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+body, p {
+	font-family: monospace;
+}
+</style>
 </head>
 <body>
 <p>
