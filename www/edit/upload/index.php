@@ -31,6 +31,9 @@ if (!isTargetSet()) {
 		showUploadForm();
 	} else {
 		$upload = new Upload('userfile');
+		clearstatcache();
+		header('Content-Type: text/plain');
+		echo "size is specified to ".$upload->getSize()."\n";
 		if ($upload->isCreate()) {
 			processNewFile($upload);
 		} else {
@@ -102,6 +105,10 @@ function processNewFile($upload) {
 	$edit->addArgPath($newfile);
 	$edit->addArgUrl($upload->getTargeturl());
 	$edit->setMessage($upload->getMessage());
+	
+	clearstatcache();
+	echo "size is ".filesize($newfile)."\n";
+	
 	$edit->exec();
 	// In 1.1 we don't customize mime types, but here's how to get the type from the browser
 	// If the customer wants mime types to be set, it can be configured with svn autoprops
@@ -254,14 +261,21 @@ class Upload {
 		}
 		$current = $_FILES[$this->file_id]['tmp_name'];;
 		if (is_uploaded_file($current)) {
-			$from = fopen($current, 'rb');
-			$to = fopen($destinationFile, 'wb');
+			clearstatcache();
+			echo "uploaded file is ".filesize($current)."\n";
+			copy($current, $destinationFile);
+			/*
+			$from = fopen($current, 'r');
+			$to = fopen($destinationFile, 'w');
 			while (!feof($from)) {
 				$contents .= fread($from, 8192);
 				fwrite($to, $contents);
 			}
 			fclose($to);
 			fclose($from);
+			*/
+			clearstatcache();
+			echo "written file is ".filesize($destinationFile)."\n";
 			unlink($current); // because we don't use move_uploaded_file anymore
 		} else {
 			trigger_error("Could not access the uploaded file ".$this->getOriginalFilename(), E_USER_ERROR);
