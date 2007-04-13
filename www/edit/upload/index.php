@@ -254,9 +254,14 @@ class Upload {
 		}
 		$current = $_FILES[$this->file_id]['tmp_name'];;
 		if (is_uploaded_file($current)) {
-			clearstatcache();
-			// need to do a copy so subversion gets an overwritten, not a new, file
-			copy($current, $destinationFile);
+			$from = fopen($current, 'rb');
+			$to = fopen($destinationFile, 'wb');
+			while (!feof($from)) {
+				$contents = fread($from, 8192);
+				fwrite($to, $contents);
+			}
+			fclose($to);
+			fclose($from);
 			unlink($current); // because we don't use move_uploaded_file anymore
 		} else {
 			trigger_error("Could not access the uploaded file ".$this->getOriginalFilename(), E_USER_ERROR);
