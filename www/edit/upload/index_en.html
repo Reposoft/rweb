@@ -32,7 +32,9 @@ function autoFillFilename(path) {
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$repository}">return to repository</a>
+<!--{if $isfile}-->
 <a id="edit" href="../?target={=$target}">edit</a>
+<!--{/if}-->
 </div>
 <h1>Upload file</h1>
 <!--{if $download}-->

@@ -503,7 +503,13 @@ class SvnOpenFile {
 	 */
 	function getContents() {
 		$open = new SvnOpen('cat');
-		$open->addArgUrlPeg($this->getUrl(), $this->getRevision());
+		if ($this->_revision==HEAD) {
+			// file's revision may be older than the folder, so peg can not be used here
+			$open->addArgUrl($this->getUrl());
+		} else {
+			// use peg revision only for explicit revision numbers
+			$open->addArgUrlPeg($this->getUrl(), $this->getRevision());
+		}
 		// exec can not be used for reading contents, see REPOS-58
 		ob_start();
 		// can not do flush because then no headers can be sent, ob_flush();

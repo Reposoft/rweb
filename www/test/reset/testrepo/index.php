@@ -95,13 +95,18 @@ setup_replaceInFile($htmldocument, array(
 	'</body>' => "<p>Feel free to update this document.</p>\n</body>"
 ));
 
-// Delete a document so we can test that
+// Delete a document so we can test that it can still be read
 setup_svn("rm \"{$wc}demoproject/trunk/public/temp.txt\"");
 
 // Delete a folder that has a document in it
 setup_svn("rm \"{$wc}demoproject/trunk/old/\"");
 
 setup_svn('commit --username test -m "Added a policy for the policy document. Deleted an old file." '.$wc);
+
+// Create some history in the public website
+setup_svn("mv \"{$wc}demoproject/trunk/public/website/draw/\" \"{$wc}demoproject/trunk/public/website/images/\"");
+// don't edit the file yet //setup_svn("propset svn:mime-type text/svg \"{$wc}demoproject/trunk/public/website/images/house.svg\"");
+setup_svn('commit --username test -m "using vector drawings directly in homepage" '.$wc);
 
 // Create a news feed and a calendar in demo project
 $newsfile = $wc."demoproject/messages/news.xml";

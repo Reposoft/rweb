@@ -223,6 +223,15 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertFalse($file->isReadableInHead());
 	}
 	
+	function testFileInRenamedFolderNotEdited() {
+		setTestUser();
+		// we have seen problems with peg revisions inside a renamed folder, when the file has not been modified
+		// (which makes the revision number of the file lower than the revision number of the folder)
+		$file = new SvnOpenFile("/demoproject/trunk/public/website/images/house.svg");
+		$contents = $file->getContents();
+		$this->assertTrue(strBegins($contents, '<?xml'), "%s Got: ".htmlspecialchars(substr($contents,0,40)));
+	}
+	
 }
 
 testrun(new TestIntegrationSvnOpenFile());

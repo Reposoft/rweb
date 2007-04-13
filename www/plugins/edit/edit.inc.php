@@ -99,7 +99,7 @@ function editIndentHtmlDocument(&$html) {
 	);
 	// newline after text sentences
 	$html = preg_replace('/([\w;][\.\?\!\:])(\s)?(\s*)((?(2)&?[A-Z0-9]|<))/', 
-		"$1$2$3\n$4",
+		"$1 \n$4", //preserve spaces: "$1$2$3\n$4",
 		$html);
 	return $html;
 }

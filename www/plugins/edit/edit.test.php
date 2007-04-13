@@ -71,6 +71,14 @@ class TestEditPlugin extends UnitTestCase {
 		$result = editIndentHtmlDocument($html);
 		$this->assertEqual("Vade. \nRetro. \nAdaces...", $html);
 	}
+
+	// when opening an indented document, the added newlines may be interpreted as spaces
+	// we should have one space after each sentence (just like html treats spaces)
+	function testIndentHtmlTagsSentenceExtraSpaces() {
+		$html = "Vade.  Retro.  \nAdaces...";
+		$result = editIndentHtmlDocument($html);
+		$this->assertEqual("Vade. \nRetro. \nAdaces...", $html);
+	}	
 	
 	function testIndentHtmlTagsSentenceLowercase() {
 		$html = "Vade. retro. adaces...";
@@ -94,7 +102,7 @@ class TestEditPlugin extends UnitTestCase {
 	function testIndentHtmlTagsSentenceTag() {
 		$html = "Vade.<a href=\"link\">link</a>";
 		$result = editIndentHtmlDocument($html);
-		$this->assertEqual("Vade.\n<a href=\"link\">link</a>", $html);
+		$this->assertEqual("Vade. \n<a href=\"link\">link</a>", $html);
 	}
 
 	function testIndentHtmlTagsSentenceAuml() {

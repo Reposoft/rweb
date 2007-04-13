@@ -51,7 +51,7 @@ class ServiceRequestEdit extends ServiceRequest {
 			$smartyTemplate->assign($logEntry);
 		}
 		// see also SvnEdit::getCommittedRevision
-		$expect = '/Committed revision (\d+)/';
+		$expect = '/Committed \w+sion (\d+)/';
 		if (preg_match($expect, $lastResult, $matches)) {
 			if ($matches[1] == $lastRevision) return $matches[1];
 			trigger_error('Unexpected result "'.$lastResult.'", should be revision '.$lastRevision, E_USER_ERROR);
