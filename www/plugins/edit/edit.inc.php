@@ -44,6 +44,7 @@ tinyMCE.init({
 	theme_advanced_blockformats : "h1, h2, h3, p",
 	theme_advanced_toolbar_location : "top",
 	theme_advanced_toolbar_align : "center",
+	entity_encoding : "raw",
 	content_css : "/home/documents.css",
 	editor_selector : "none"
 });
