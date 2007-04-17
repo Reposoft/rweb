@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "Remove eaccelerator lines from all php.ini files"
+

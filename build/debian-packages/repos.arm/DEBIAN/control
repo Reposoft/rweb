@@ -1,0 +1,10 @@
+Package: repos
+Version: 1.1.2-1
+Section: web 
+Priority: optional
+Architecture: arm
+Essential: no
+Depends: locales, php4 (>= 4.3.10), curl, subversion (>= 1.4.2), libapache2-svn (>= 1.4.2), libapache2-mod-auth-pam
+Maintainer: Staffan Olsson <solsson@gmail.com>
+Description: Repos web application
+
