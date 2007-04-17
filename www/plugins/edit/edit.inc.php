@@ -37,6 +37,7 @@ tinyMCE_GZ.init({
 		'<script type="text/javascript">
 tinyMCE.init({
 	mode : "textareas",
+	plugins: "autosave,inlinepopups,fullscreen,save",
 	theme : "advanced",
 	theme_advanced_buttons1 : "formatselect,separator,cut,copy,paste,separator,undo,redo,separator,bold,italic,underline,separator,bullist,numlist,separator,link,image,separator,fullscreen,code",
 	theme_advanced_buttons2 : "",
