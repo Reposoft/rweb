@@ -57,6 +57,26 @@ if(uncompressTAR( $tarfile, null, "libs" )) {
 System::deleteFile($tmp);
 System::deleteFile($tarfile);
 
+// apply fix to allow resources cached relative to webapp
+$smartyClass = $dir.'/libs/Smarty.class.php';
+if (!file_exists($smartyClass)) $report->fatal("Install error. '$smartyClass' not found.");
+$fixFrom = '/function\s+_get_compile_path\(\$resource_name\)[^{]*\{/ms';
+$fixTo = 'function _get_compile_path($resource_name)
+    {
+		// --- preserve cached templates when moving web application ---
+		if (defined("TEMPLATE_BASE")) $resource_name = substr($resource_name, strlen(TEMPLATE_BASE));
+		// ---
+	';
+
+$fh = fopen($smartyClass, 'r');
+$contents = fread($fh, 131072);
+fclose($fh);
+$contentsFixed = preg_replace($fixFrom, $fixTo, $contents);
+if ($contents == $contentsFixed) $report->error('Coult not apply fix to Smarty class');
+$fh = fopen($smartyClass, 'w');
+fwrite($fh, $contentsFixed);
+$report->ok('Fix for template caching applied');
+
 $report->ok("Done.");
 $report->display();
 ?> 

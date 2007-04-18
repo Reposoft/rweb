@@ -85,13 +85,6 @@
 				<include name="edit/**/*.html"/>
 			</fileset>
 		</apply>
-		<!-- delete the source html
-		<delete>
-			<fileset dir="${source.folder}">
-				<include name="open/**/*.html"/>
-				<include name="edit/**/*.html"/>
-			</fileset>	
-		</delete> -->
 		<!-- done, mark template cache in CACHE_DIR as complete --> 
 		<touch file="${source.folder}/lib/smarty/cache/COMPLETE"/>
 		<delete dir="${basedir}/admin"/>
