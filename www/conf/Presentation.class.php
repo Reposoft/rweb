@@ -161,7 +161,8 @@ class Presentation {
 	}
 	
 	/**
-	 * Constructor initializes a Smarty instance and adds custom filders.
+	 * Constructor initializes a Smarty instance and adds custom filters.
+	 * This function does everything that is required befor compiling templates.
 	 * @private This class is Singleton. Use Presentation::getInstance().
 	 */
 	function Presentation() {

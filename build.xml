@@ -1,15 +1,100 @@
 <?xml version="1.0"?>
 
-<project name="repos" basedir="." default="status">
+<project name="repos" basedir="." default="compile">
 
+	<property file="local.properties"/>
 	<property file="build.properties"/>
-
-	<target name="status">
-		<echo>We're using Maven</echo>
+	
+	<target name="clean" description="Clean all output folders">
+		<delete dir="${target.folder}"/>
 	</target>
 	
-	<!-- testing ant code snippets -->
-	<target name="scratch">
+	<target name="preprocess" description="Copy to temp folder with filter">
+		<copy todir="${source.folder}" includeemptydirs="true">
+			<fileset dir="${development.folder}">
+				<exclude name="**/.svn"/>
+				<exclude name="test/**"/>
+				<exclude name="lib/**"/>
+			</fileset>
+			<fileset dir="${development.folder}">
+				<include name="lib/*.html"/>
+				<include name="lib/*.php"/>
+				<include name="lib/*/*.html"/>
+				<include name="lib/*/*.php"/>
+				<include name="lib/*/*.bat"/>
+				<include name="lib/*/*.sh"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="compile" depends="clean, preprocess" description="Compile project to dist folder">
+		<!-- attempt compile tools in order of preference -->
+		<antcall target="compile.zendguard"></antcall>
+		<antcall target="compile.phpcoder"></antcall>
+		<antcall target="compile.copy"></antcall>
+		
+	</target>
+	
+	<target name="compile.check">
+	    <condition property="compile.done">
+	        <available file="${app.folder}"/>
+	    </condition>
+	</target>
+	
+	<target name="compile.copy" depends="compile.check" description="Fallback if no encoding method is found"
+		unless="compile.done">
+		<copy todir="${app.folder}">
+			<fileset dir="${source.folder}"/>
+		</copy>
+	</target>
+	
+	<target name="compile.phpcoder" depends="compile.check" description="Open source encoder"
+		unless="compile.done">
+		<!-- todo -->
+	</target>
+	
+	<target name="compile.zendguard" depends="compile.check" description="Expensive encoder"
+		unless="compile.done">
+		<!-- todo -->
+	</target>
+	
+	<target name="install.smarty" depends="preprocess" description="Smarty is LGPL and can be redistributed">
+		<exec executable="php" dir="${source.folder}/lib/smarty/">
+			<arg value="install.php"/>
+		</exec>
+	</target>
+	
+	<!-- not needed when using apply in encode.templates
+	<target name="encode.template" description="Compile a single template HTML file">
+		<exec executable="php" dir="${source.folder}/lib/smarty/">
+			<arg value="precompile.php"/>
+			<arg value="${encode.template.file}"/>
+		</exec>
+	</target>
+	-->
+	
+	<target name="encode.templates" depends="install.smarty">
+		<!-- create a temporary config file -->
+		<copy todir="${basedir}/admin" file="${source.folder}/_host/admin/repos.properties"/>
+		<!-- treat every html file in the project as a template -->
+		<apply executable="php" dir="${source.folder}/lib/smarty/" parallel="false" relative="true">
+			<arg value="precompile.php"/>
+			<srcfile/>
+			<fileset dir="${source.folder}">
+				<include name="open/**/*.html"/>
+				<include name="edit/**/*.html"/>
+			</fileset>
+		</apply>
+		<!-- delete the source html
+		<delete>
+			<fileset dir="${source.folder}">
+				<include name="open/**/*.html"/>
+				<include name="edit/**/*.html"/>
+			</fileset>	
+		</delete> -->
+		<!-- done, mark template cache in CACHE_DIR as complete --> 
+		<touch file="${source.folder}/lib/smarty/cache/COMPLETE"/>
+		<delete dir="${basedir}/admin"/>
 	</target>
 	
 </project>

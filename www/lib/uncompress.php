@@ -14,8 +14,8 @@ require (dirname(dirname(__FILE__)).'/conf/System.class.php');
 function download($url, $localTargetFile) {
 	// check that the folder that this script is included from is writable
 	if (!is_writable('./')) trigger_error("Can not write to this lib's folder.", E_USER_ERROR);
-	// simple solution to introduce install check
-	if (!array_key_exists('go', $_GET)) {
+	// simple solution to introduce install check (disable in CLI)
+	if (!array_key_exists('go', $_GET) && !isOffline()) {
 		echo("\nNot found. <a href=\"?go\">Install</a>.\n"); exit;	
 	}
 	$ch = curl_init();

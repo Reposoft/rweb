@@ -12,6 +12,16 @@ if (file_exists('libs/')) {
 	exit;
 }
 
+define('CACHE_DIR', dirname(__FILE__).'/cache/');
+if (!file_exists(CACHE_DIR)) {
+	mkdir( CACHE_DIR );
+	mkdir( CACHE_DIR.'templates/' );
+	mkdir( CACHE_DIR.'templates_c/' );
+	mkdir( CACHE_DIR.'configs/' );
+	mkdir( CACHE_DIR.'cache/' );
+	$report->ok("Created empty cache folder ".CACHE_DIR.". Should be writable by webserver.");
+}
+
 $home = "http://smarty.php.net";
 $version = "2.6.18";
 $archive = "$home/do_download.php?download_file=Smarty-$version.tar.gz";

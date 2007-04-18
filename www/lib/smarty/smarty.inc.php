@@ -1,25 +1,23 @@
 <?php
 if (!class_exists('System')) require(dirname(dirname(dirname(__FILE__))).'/conf/System.class.php');
 
-// this file is not needed anymore. simply instantiate Presentation.
 if (!file_exists(dirname(__FILE__).'/libs/')) {
 	trigger_error("Smarty 'libs' folder has not been installed. Go to repos/lib/ to install it.");
 }
 require(dirname(__FILE__).'/libs/Smarty.class.php');
 
-define('LEFT_DELIMITER', '{='); // to be able to mix with css and javascript
+// globale template settings, compatible with inline with css and javascript
+define('LEFT_DELIMITER', '{=');
 define('RIGHT_DELIMITER', '}');
 
-// set the constant TEMPLATE_CACHING to false before include during development: define('TEMPLATE_CACHING', false);
-
 // the four cache subdirectories must be writable by webserver
-define('CACHE_DIR', System::getApplicationTemp('smarty-cache'));
-if ( ! file_exists(CACHE_DIR.'templates/') ) {
-	mkdir( CACHE_DIR.'templates/' );
-	mkdir( CACHE_DIR.'templates_c/' );
-	mkdir( CACHE_DIR.'configs/' );
-	mkdir( CACHE_DIR.'cache/' );
-}
+define('CACHE_DIR', dirname(__FILE__).'/cache/');
+
+// in production cache may be precompiled, which is then flagged using a file
+if (file_exists(CACHE_DIR.'/COMPLETE')) define('TEMPLATE_PRODUCTION', true);
+
+// during development you may want to disable all kinds of caching (overrides PRODUCTION)
+//define('TEMPLATE_CACHING', false);
 
 // smarty 2.6.14 sends error message if SMARTY_DEBUG is not set
 if (!isset($_COOKIE['SMARTY_DEBUG'])) $_COOKIE['SMARTY_DEBUG'] = 0;
@@ -36,8 +34,10 @@ function smarty_getInstance() {
 		$s->caching = false;
 		$s->force_compile = true;
 		$s->debugging_ctrl = 'URL';
+	} else if (defined('TEMPLATE_PRODUCTION') && TEMPLATE_PRODUCTION===false) {
+		$s->compile_check = false;
+		$s->caching = false; // never cache the result of templates	
 	} else {
-		// never cache the result of templates
 		$s->caching = false;	
 	}
 	
