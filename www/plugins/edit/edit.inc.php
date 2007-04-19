@@ -39,7 +39,7 @@ tinyMCE.init({
 	mode : "textareas",
 	plugins: "autosave,inlinepopups,fullscreen,save",
 	theme : "advanced",
-	theme_advanced_buttons1 : "formatselect,separator,cut,copy,paste,separator,undo,redo,separator,bold,italic,underline,separator,bullist,numlist,separator,link,image,hr,styleselect,separator,fullscreen",
+	theme_advanced_buttons1 : "formatselect,separator,cut,copy,paste,separator,undo,redo,separator,bold,italic,underline,separator,bullist,numlist,separator,link,image,hr,separator,fullscreen",
 	theme_advanced_buttons2 : "",
 	theme_advanced_buttons3 : "",
 	remove_linebreaks : false,
