@@ -5,6 +5,8 @@
 	<property file="local.properties"/>
 	<property file="build.properties"/>
 	
+	<property name="app.folder" value="${target.folder}/${app.name}" description="what we'll ship"/>
+	
 	<target name="clean" description="Clean all output folders">
 		<delete dir="${target.folder}"/>
 	</target>
@@ -27,8 +29,10 @@
 		</copy>
 	</target>
 	
-	<target name="compile" depends="preprocess" description="Compile project to dist folder">
+	<target name="compile" depends="preprocess"
+			description="Template method for compiling everything to an application folder ready for distributiion">
 		<antcall target="encode.templates"></antcall>
+		<antcall target="encode.javascript"></antcall>
 		<!-- attempt compile tools in order of preference, they all produce the app folder if they consider themselves available -->
 		<antcall target="compile.zendguard"></antcall>
 		<antcall target="compile.phpcoder"></antcall>
@@ -36,7 +40,7 @@
 		
 	</target>
 	
-	<target name="compile.check">
+	<target name="compile.check" description="Checks if source compilation has been done">
 	    <condition property="compile.done">
 	        <available file="${app.folder}"/>
 	    </condition>
@@ -92,6 +96,56 @@
 		<delete dir="${basedir}/admin"/>
 	</target>
 	
+	<target name="get.rhino">
+		<get dest="${encode.js.jar}" usetimestamp="true"
+			src="http://repo1.maven.org/maven2/rhino/js/1.6R5/js-1.6R5.jar"/>
+		
+	</target>
+	
+	<target name="encode.javascript" depends="get.rhino"
+			description="Selects javascript encoding and processes all scripts">
+		<!-- scripts may have be suitable for different encoders, select individually -->
+		<antcall target="encode.javascript.select.jsmin"></antcall>
+		<antcall target="encode.javascript.run">
+			<param name="encode.js.source" value="${source.folder}/plugins/details/details.js"/>
+			<param name="encode.js.target" value="${source.folder}/plugins/details/details.js"/>
+		</antcall>
+		<antcall target="encode.javascript.run">
+			<param name="encode.js.source" value="${source.folder}/plugins/dateformat/dateformat.js"/>
+			<param name="encode.js.target" value="${source.folder}/plugins/dateformat/dateformat.js"/>
+		</antcall>
+		<antcall target="encode.javascript.run">
+			<param name="encode.js.source" value="${source.folder}/plugins/filename/filename.js"/>
+			<param name="encode.js.target" value="${source.folder}/plugins/filename/filename.js"/>
+		</antcall>
+		<delete file="${encode.js.script}"/>
+	</target>
+	
+	<target name="encode.javascript.run"
+			description="Encodes a single js file using the current encoding script">
+		<echo message="Encoding ${encode.js.target}"/>
+		<java jar="${encode.js.jar}" fork="true">
+          <arg value="${encode.js.script}" />
+          <arg value="${encode.js.source}" />
+          <arg value="${encode.js.target}" />
+      </java>
+	</target>
+	
+	<target name="encode.javascript.select.jsmin" description="http://www.crockford.com/javascript/jsmin.html">
+		<echo file="${encode.js.script}">
+		load("build/js/jsmin.js", "build/js/writeFile.js");
+		var f = jsmin('', readFile(arguments[0]), 3);
+		writeFile( arguments[1], f );
+		</echo>
+	</target>
+	
+	<target name="package.gzip" depends="compile" description="Create distributable archive">
+		<!-- the archive should contain one folder, the application folder with app.name -->
+		<tar tarfile="${package.gzip}.tmp" basedir="${target.folder}" includes="${app.name}/**"/>
+		<gzip zipfile="${package.gzip}" src="${package.gzip}.tmp"/>
+		<delete file="${package.gzip}.tmp"/>
+	</target>
+	
 	<!-- below are targets that might be used during development -->
 	
 	<target name="dev.include.test" depends="compile" description="to test the distribution on a build machine, include test sources">
@@ -104,13 +158,11 @@
 	</target>
 	
 	<target name="dev.www.debian" depends="dev.include.test" description="copy compiled package to www on bubba">
-		<!-- causes IllegalArgumentException: day out of range 
-		 could have a generic task and a property for www location instead 
+		<!-- could have a generic task and a property for www location instead -->
 		<copy todir="/var/www/html/repos/">
-			<fileset dir="${app.folder}">
+			<fileset dir="${app.folder}"/>
 		</copy>
-		<copy todir="/var/www/html/" file="${app.folder}/_host/html/index.php">
-		-->
+		<copy todir="/var/www/html/" file="${app.folder}/_host/html/index.php"/>
 	</target>
 	
 </project>
