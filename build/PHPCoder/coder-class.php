@@ -234,7 +234,7 @@ class coder {
       @Desc: Encodes source files
    */
 
-   function Encode()
+   function Encode($flush = true)
    {
       if (!is_dir($this->src_dir) || !is_readable($this->src_dir)) {
          print '<b>Unable to begin, source directory is not readable or does not exist.</b>';
@@ -288,7 +288,7 @@ class coder {
          }
 
          // flush output so if the script executes a long time we aren't waiting for output
-         if (function_exists("ob_get_level")) {
+         if ($flush && function_exists("ob_get_level")) {
              // GJH-Check that buffer exists before flushing to avoid failure errors.
              if(ob_get_contents())
                  ob_flush();

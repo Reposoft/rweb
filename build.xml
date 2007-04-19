@@ -9,7 +9,7 @@
 		<delete dir="${target.folder}"/>
 	</target>
 	
-	<target name="preprocess" description="Copy to temp folder with filter">
+	<target name="preprocess" depends="clean" description="Copy to temp folder with filter">
 		<copy todir="${source.folder}" includeemptydirs="true">
 			<fileset dir="${development.folder}">
 				<exclude name="**/.svn"/>
@@ -27,7 +27,7 @@
 		</copy>
 	</target>
 	
-	<target name="compile" depends="clean, preprocess" description="Compile project to dist folder">
+	<target name="compile" depends="preprocess" description="Compile project to dist folder">
 		<antcall target="encode.templates"></antcall>
 		<!-- attempt compile tools in order of preference, they all produce the app folder if they consider themselves available -->
 		<antcall target="compile.zendguard"></antcall>
@@ -66,7 +66,7 @@
 		<!-- todo -->
 	</target>
 	
-	<target name="install.smarty" depends="preprocess" description="Smarty is LGPL and can be redistributed">
+	<target name="install.smarty" depends="" description="Smarty is LGPL and can be redistributed">
 		<exec executable="php" dir="${source.folder}/lib/smarty/">
 			<arg value="install.php"/>
 		</exec>

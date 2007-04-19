@@ -62,13 +62,14 @@ $dest = $argv[2];
    
 // enable output buffering if we need to
 ob_start();
-
 // run
-$coder->Encode();
-
+$coder->Encode(false);
 // capture output because it is not readable in command prompt
-$result = og_get_clean();
+$result = ob_get_clean();
 // TODO analyde
+$f = fopen('output.txt','w');
+fwrite($f, $result);
+fclose($f);
 
 echo("Encoding completed.\n");
 
