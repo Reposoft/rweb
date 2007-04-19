@@ -60,15 +60,17 @@ $dest = $argv[2];
              "expire_unit"    => "",
              "expire_english" => "");
    
-   // enable output buffering if we need to
-   if (function_exists("ob_get_level")) {
-     if (0 == ob_get_level()) {
-        ob_start();
-     }
-    }
+// enable output buffering if we need to
+ob_start();
 
-   // run, output as html
-   $coder->Encode();
+// run
+$coder->Encode();
+
+// capture output because it is not readable in command prompt
+$result = og_get_clean();
+// TODO analyde
+
+echo("Encoding completed.\n");
 
 exit(EXIT_OK);
 

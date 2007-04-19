@@ -28,7 +28,8 @@
 	</target>
 	
 	<target name="compile" depends="clean, preprocess" description="Compile project to dist folder">
-		<!-- attempt compile tools in order of preference -->
+		<antcall target="encode.templates"></antcall>
+		<!-- attempt compile tools in order of preference, they all produce the app folder if they consider themselves available -->
 		<antcall target="compile.zendguard"></antcall>
 		<antcall target="compile.phpcoder"></antcall>
 		<antcall target="compile.copy"></antcall>
@@ -43,6 +44,7 @@
 	
 	<target name="compile.copy" depends="compile.check" description="Fallback if no encoding method is found"
 		unless="compile.done">
+		<echo message="WARNING: Sources are plain copies. No PHP encoder found."/>
 		<copy todir="${app.folder}">
 			<fileset dir="${source.folder}"/>
 		</copy>
@@ -50,7 +52,13 @@
 	
 	<target name="compile.phpcoder" depends="compile.check" description="Open source encoder"
 		unless="compile.done">
-		<!-- todo -->
+		<!-- after encoding with eaccelerator, clean the sources before test to see that there are no hardcoded references -->
+		<echo message="Compiling PHP sources using PHPCoder/eAccelerator"/>
+		<exec executable="php" dir="${tools.folder}/PHPCoder/">
+			<arg value="repos-cli.php"/>
+			<arg value="${source.folder}"/>
+			<arg value="${app.folder}"/>
+		</exec>
 	</target>
 	
 	<target name="compile.zendguard" depends="compile.check" description="Expensive encoder"
@@ -64,14 +72,7 @@
 		</exec>
 	</target>
 	
-	<!-- not needed when using apply in encode.templates
-	<target name="encode.template" description="Compile a single template HTML file">
-		<exec executable="php" dir="${source.folder}/lib/smarty/">
-			<arg value="precompile.php"/>
-			<arg value="${encode.template.file}"/>
-		</exec>
-	</target>
-	-->
+	<!-- precompile html templates (this destroys the original templates so it really requires clean, preprocess, but if added them they will be executed twice in compile) -->
 	
 	<target name="encode.templates" depends="install.smarty">
 		<!-- create a temporary config file -->
@@ -87,7 +88,29 @@
 		</apply>
 		<!-- done, mark template cache in CACHE_DIR as complete --> 
 		<touch file="${source.folder}/lib/smarty/cache/COMPLETE"/>
+		<!-- clean up, delete temp config -->
 		<delete dir="${basedir}/admin"/>
+	</target>
+	
+	<!-- below are targets that might be used during development -->
+	
+	<target name="dev.include.test" depends="compile" description="to test the distribution on a build machine, include test sources">
+		<copy todir="${app.folder}">
+			<fileset dir="${development.folder}">
+				<include name="test/**"/>
+				<exclude name="**/.svn"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="dev.www.debian" depends="dev.include.test" description="copy compiled package to www on bubba">
+		<!-- causes IllegalArgumentException: day out of range 
+		 could have a generic task and a property for www location instead 
+		<copy todir="/var/www/html/repos/">
+			<fileset dir="${app.folder}">
+		</copy>
+		<copy todir="/var/www/html/" file="${app.folder}/_host/html/index.php">
+		-->
 	</target>
 	
 </project>

@@ -66,6 +66,24 @@ fi
 # rewrite needed for mass virtual hosts
 #if [ ! -e /etc/apache2/mods-enabled/rewrite.load ]
 
+
+# set up subversion folder structure
+sudo -u www-data svn --config-dir "/var/www/admin/svn-config-dir/" info
+chmod -R a-w /var/www/admin/svn-config-dir/
+
+svnadmin create /var/www/repo/
+chown -R www-data /var/www/repo/
+
+chown www-data /var/www/backup
+
+# enable the repository in apache
+ln -s /var/www/admin/data-repository.conf /etc/apache2/sites-enabled/
+
+# after repos is installed the login file must be copied to server root
+mv /var/www/html/index.html /var/www/html/start.html
+cp /var/www/html/repos/_host/html/* /var/www/html/
+
+
 echo "Restart apacke2"
 
 # for libapache2-mod-auth-pam make sure www-data is in the shadow group
