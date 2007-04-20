@@ -6,7 +6,8 @@ function writeFile( file, stream ) {
 	buffer.close();
 }
 
-function read( file ) {
+// rhino has a built in readFile(path [, characterCoding) but it fails with SableVM
+function readFileCustomized( file ) {
 	var jq = new File(file);
 	var reader = new BufferedReader(new FileReader(jq));
 	var line = null;

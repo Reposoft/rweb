@@ -7,6 +7,8 @@
 	
 	<property name="app.folder" value="${target.folder}/${app.name}" description="what we'll ship"/>
 	
+	<available file="${zend.guard.command}" property="zend.guard.available"/>
+	
 	<target name="clean" description="Clean all output folders">
 		<delete dir="${target.folder}"/>
 	</target>
@@ -37,7 +39,14 @@
 		<antcall target="compile.zendguard"></antcall>
 		<antcall target="compile.phpcoder"></antcall>
 		<antcall target="compile.copy"></antcall>
-		
+		<!-- done -->
+		<antcall target="postprocess"></antcall>
+	</target>
+	
+	<target name="postprocess">
+		<chmod file="${app.folder}/_host/admin/reposrun.sh" perm="ug+x"/>
+		<chmod file="${app.folder}/lib/tinymce/" perm="ug+w"/>
+		<chmod file="${app.folder}/lib/dpsyntax/" perm="ug+w"/>
 	</target>
 	
 	<target name="compile.check" description="Checks if source compilation has been done">
@@ -65,9 +74,19 @@
 		</exec>
 	</target>
 	
-	<target name="compile.zendguard" depends="compile.check" description="Expensive encoder"
+	<target name="compile.zendguard" depends="compile.check" if="zend.guard.available" description="Expensive encoder"
 		unless="compile.done">
-		<!-- todo -->
+		<exec executable="${zend.guard.command}" dir="${target.folder}">
+			<arg value="--recursive"/>
+			<arg value="--obfuscation-level"/>
+			<arg value="${zend.guard.level}"/>
+			<arg value="--ignore"/>
+			<arg value="${zend.guard.ignore}"/>
+			<arg value="--license-product"/>
+			<arg value="${zend.guard.product}"/>
+			<arg value="${source.folder}"/>
+			<arg value="${app.folder}"/>
+		</exec>		
 	</target>
 	
 	<target name="install.smarty" depends="" description="Smarty is LGPL and can be redistributed">
@@ -131,9 +150,19 @@
       </java>
 	</target>
 	
+	<target name="encode.javascript.select.lite" description="from jquery">
+		<echo file="${encode.js.script}">
+		load("build/js/writeFile.js");
+		var blockMatch = /\s*\/\*\*\s*((.|\n|\r\n)*?)\s*\*\/\n*/g;
+		var f = readFileCustomized(arguments[0]).replaceAll( blockMatch, "\n" ).replaceAll( /\n\n+/g, "\n\n" );
+		writeFile( arguments[1], f );
+		</echo>
+	</target>
+	
 	<target name="encode.javascript.select.jsmin" description="http://www.crockford.com/javascript/jsmin.html">
 		<echo file="${encode.js.script}">
 		load("build/js/jsmin.js", "build/js/writeFile.js");
+		/* have to use Rhino's built in reader (which fails in SableVM) for jsmin to work */
 		var f = jsmin('', readFile(arguments[0]), 3);
 		writeFile( arguments[1], f );
 		</echo>
