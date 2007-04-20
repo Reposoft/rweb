@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="repos" basedir="." default="compile">
+<project name="repos" basedir="." default="dist">
 
 	<property file="local.properties"/>
 	<property file="build.properties"/>
@@ -45,8 +45,8 @@
 	
 	<target name="postprocess">
 		<chmod file="${app.folder}/_host/admin/reposrun.sh" perm="ug+x"/>
-		<chmod file="${app.folder}/lib/tinymce/" perm="ug+w"/>
-		<chmod file="${app.folder}/lib/dpsyntax/" perm="ug+w"/>
+		<chmod file="${app.folder}/lib/tinymce" perm="ug+w"/>
+		<chmod file="${app.folder}/lib/dpsyntax" perm="ug+w"/>
 	</target>
 	
 	<target name="compile.check" description="Checks if source compilation has been done">
@@ -168,11 +168,19 @@
 		</echo>
 	</target>
 	
+	<target name="dist.clean" description="Delete intermediate files">
+		<delete dir="${source.folder}"/>
+	</target>
+	
 	<target name="package.gzip" depends="compile" description="Create distributable archive">
 		<!-- the archive should contain one folder, the application folder with app.name -->
 		<tar tarfile="${package.gzip}.tmp" basedir="${target.folder}" includes="${app.name}/**"/>
 		<gzip zipfile="${package.gzip}" src="${package.gzip}.tmp"/>
 		<delete file="${package.gzip}.tmp"/>
+	</target>
+	
+	<target name="dist" depends="dist.clean, package.gzip">
+	
 	</target>
 	
 	<!-- below are targets that might be used during development -->
