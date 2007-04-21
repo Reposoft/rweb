@@ -9,11 +9,15 @@
 	
 	<available file="${zend.guard.command}" property="zend.guard.available"/>
 	
+	<!-- rhino, used for javascript conpression, has issues with jamvm and sablevm, and Sun has no JRE for ARM -->
+	<available file="/usr/lib/sablevm" property="java.arm" description="Java running on a non-standard VM"/>
+		
 	<target name="clean" description="Clean all output folders">
 		<delete dir="${target.folder}"/>
 	</target>
 	
 	<target name="preprocess" depends="clean" description="Copy to temp folder with filter">
+		<mkdir dir="${target.folder}"/>
 		<copy todir="${source.folder}" includeemptydirs="true">
 			<fileset dir="${development.folder}">
 				<exclude name="**/.svn"/>
@@ -35,11 +39,14 @@
 			description="Template method for compiling everything to an application folder ready for distributiion">
 		<antcall target="encode.templates"></antcall>
 		<antcall target="encode.javascript"></antcall>
+		<!-- bundled dependency should keep original source code -->
+		<move file="${source.folder}/lib/smarty/libs" tofile="${target.folder}/exclude-smarty-libs"/>
 		<!-- attempt compile tools in order of preference, they all produce the app folder if they consider themselves available -->
 		<antcall target="compile.zendguard"></antcall>
 		<antcall target="compile.phpcoder"></antcall>
 		<antcall target="compile.copy"></antcall>
 		<!-- done -->
+		<move file="${target.folder}/exclude-smarty-libs" tofile="${app.folder}/lib/smarty/libs"/>
 		<antcall target="postprocess"></antcall>
 	</target>
 	
@@ -113,12 +120,12 @@
 		<touch file="${source.folder}/lib/smarty/cache/COMPLETE"/>
 		<!-- clean up, delete temp config -->
 		<delete dir="${basedir}/admin"/>
+		<!-- TODO exclude smarty from compile? -->
 	</target>
 	
 	<target name="get.rhino">
 		<get dest="${encode.js.jar}" usetimestamp="true"
 			src="http://repo1.maven.org/maven2/rhino/js/1.6R5/js-1.6R5.jar"/>
-		
 	</target>
 	
 	<target name="encode.javascript" depends="get.rhino"
@@ -140,7 +147,7 @@
 		<delete file="${encode.js.script}"/>
 	</target>
 	
-	<target name="encode.javascript.run"
+	<target name="encode.javascript.run" depends="encode.javascript.run.arm" unless="java.arm"
 			description="Encodes a single js file using the current encoding script">
 		<echo message="Encoding ${encode.js.target}"/>
 		<java jar="${encode.js.jar}" fork="true">
@@ -148,6 +155,13 @@
           <arg value="${encode.js.source}" />
           <arg value="${encode.js.target}" />
       </java>
+	</target>
+
+	<target name="encode.javascript.run.arm" if="java.arm">
+		<exec executable="${tools.folder}/js/jsmin.arm"
+			input="${encode.js.source}" output="${target.folder}/encoded.tmp">
+		</exec>
+		<move file="${target.folder}/encoded.tmp" tofile="${encode.js.target}" overwrite="true" />
 	</target>
 	
 	<target name="encode.javascript.select.lite" description="from jquery">
@@ -186,6 +200,7 @@
 	<!-- below are targets that might be used during development -->
 	
 	<target name="dev.include.test" depends="compile" description="to test the distribution on a build machine, include test sources">
+		<echo message="WARNING: Including all test sources in distribution."/>
 		<copy todir="${app.folder}">
 			<fileset dir="${development.folder}">
 				<include name="test/**"/>

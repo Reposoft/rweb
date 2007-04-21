@@ -4,6 +4,7 @@ Section: web
 Priority: optional
 Architecture: arm
 Essential: no
-Depends: locales, java2-runtime | java1-runtime | java-gcj-compat, ant, php4-dev, gcc, kernel-headers, libc6-dev, build-essential, dpkg-dev
+Depends: locales, sun-java5-bin | sablevm, ant, php4-dev, gcc, kernel-headers, libc6-dev, build-essential, dpkg-dev
+Conflicts: gij, jamvm
 Maintainer: Staffan Olsson <solsson@gmail.com>
 Description: Repos development tools, required to create packages repos and eaccelerator 

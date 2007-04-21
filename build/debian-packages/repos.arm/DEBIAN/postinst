@@ -84,8 +84,8 @@ mv /var/www/html/index.html /var/www/html/start.html
 cp /var/www/html/repos/_host/html/* /var/www/html/
 
 
+echo "Make www-data memeber of shadow group, to enable mod-auth-pam"
+echo "This means it can be readable by anyone who can run CGI scripts, see libapache2-mod-auth-pam README"
+usermod -G shadow www-data
+
 echo "Restart apacke2"
-
-# for libapache2-mod-auth-pam make sure www-data is in the shadow group
-# (grep for something like shadow:x:42:www-data in /etc/group)
-

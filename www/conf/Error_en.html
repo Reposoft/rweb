@@ -3,13 +3,6 @@
 <head>
 <title>repos error message</title>
 <!--{$head}-->
-<script type="text/javascript">
-if(typeof($)!='undefined') {
-$(document).ready( function() {
-	if (2>history.length) $("a[@href^=javascript:history.go(-1)]").hide();
-});
-}
-</script>
 </head>
 <body>
 <div id="commandbar">
@@ -21,5 +14,8 @@ $(document).ready( function() {
 </div>
 <h1>{=$headline}</h1>
 <p><em>{=$error}</em></p>
+<script type="text/javascript">
+if (2>history.length) document.getElementById('back').style.display='none';
+</script>
 </body>
 </html>
