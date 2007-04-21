@@ -66,6 +66,8 @@ fi
 # rewrite needed for mass virtual hosts
 #if [ ! -e /etc/apache2/mods-enabled/rewrite.load ]
 
+# repos 1.1 is hardcoded to use /usr/bin/gzip 
+ln -s /bin/gzip /usr/bin/gzip
 
 # set up subversion folder structure
 sudo -u www-data svn --config-dir "/var/www/admin/svn-config-dir/" info

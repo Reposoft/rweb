@@ -39,20 +39,36 @@
 			description="Template method for compiling everything to an application folder ready for distributiion">
 		<antcall target="encode.templates"></antcall>
 		<antcall target="encode.javascript"></antcall>
-		<!-- bundled dependency should keep original source code -->
-		<move file="${source.folder}/lib/smarty/libs" tofile="${target.folder}/exclude-smarty-libs"/>
+		<antcall target="compile.excludes"></antcall>
 		<!-- attempt compile tools in order of preference, they all produce the app folder if they consider themselves available -->
 		<antcall target="compile.zendguard"></antcall>
 		<antcall target="compile.phpcoder"></antcall>
 		<antcall target="compile.copy"></antcall>
 		<!-- done -->
-		<move file="${target.folder}/exclude-smarty-libs" tofile="${app.folder}/lib/smarty/libs"/>
+		<echo message="Moving excluded files, plain source, to distribution"/>
+		<move todir="${app.folder}">
+			<fileset dir="${target.folder}/compile.excludes" includes="**/*"/>
+		</move>
 		<antcall target="postprocess"></antcall>
+	</target>
+	
+	<target name="compile.excludes">
+		<mkdir dir="${target.folder}/compile.excludes"/>
+		<move todir="${target.folder}/compile.excludes">
+			<fileset dir="${source.folder}">
+				<include name="lib/smarty/libs/**"/>
+			</fileset>
+		</move>
 	</target>
 	
 	<target name="postprocess">
 		<chmod file="${app.folder}/_host/admin/reposrun.sh" perm="ug+x"/>
-		<chmod file="${app.folder}/lib/tinymce" perm="ug+w"/>
+		<chmod perm="ug+w">
+			<fileset dir="${app.folder}/lib">
+				<include name="tinymce"/>
+				<include name="dpsyntax"/>
+			</fileset>
+		</chmod>
 		<chmod file="${app.folder}/lib/dpsyntax" perm="ug+w"/>
 	</target>
 	
@@ -211,7 +227,8 @@
 	
 	<target name="dev.www.debian" depends="dev.include.test" description="copy compiled package to www on bubba">
 		<!-- could have a generic task and a property for www location instead -->
-		<copy todir="/var/www/html/repos/">
+		<delete dir="/var/www/html/repos"/>
+		<copy todir="/var/www/html/repos">
 			<fileset dir="${app.folder}"/>
 		</copy>
 		<copy todir="/var/www/html/" file="${app.folder}/_host/html/index.php"/>
