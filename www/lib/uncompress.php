@@ -21,8 +21,9 @@ function download($url, $localTargetFile) {
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-	curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+	// using rather unusual timeouts to see the difference from php timeouts
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 45);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 480);
 	curl_setopt($ch, CURLOPT_VERBOSE, 0);
 	$fh = fopen($localTargetFile, 'w');
 	curl_setopt($ch, CURLOPT_FILE, $fh);
@@ -30,9 +31,12 @@ function download($url, $localTargetFile) {
 	$info = curl_getinfo($ch);
 	curl_close($ch);
 	fclose($fh);
-	// verify result
 	echo ("Got $info[url] with status $info[http_code] after $info[redirect_count] redirects.\n");
-	echo ("Downloaded $info[size_download] bytes of type '$info[content_type]' in $info[total_time] seconds.\n");
+	if (!$result) {
+		System::deleteFile($localTargetFile);
+	} else {
+		echo ("Downloaded $info[size_download] bytes of type '$info[content_type]' in $info[total_time] seconds.\n");
+	}
 	return $result;
 }
 

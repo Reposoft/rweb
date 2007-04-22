@@ -26,7 +26,11 @@ if (file_exists($extracted_folder)) {
 	exit;
 }
 
-if(download($archive, $tmp)) $report->info("Download complete.");
+if(download($archive, $tmp)) {
+	$report->info("Download complete.");
+} else {
+	$report->fatal("Download failed.");
+}
 
 
 /*

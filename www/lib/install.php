@@ -4,6 +4,8 @@
  *
  * @package
  */
+set_time_limit(60*5); // normally set by Report.class.php, but we don't use that include here 
+ 
 require('../open/ServiceRequest.class.php');
 
 header('Content-Type: text/plain');

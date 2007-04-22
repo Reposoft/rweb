@@ -23,7 +23,11 @@ if (file_exists($core_folder)) {
 	exit;
 }
 
-if(download($archive, $tmp)) $report->info("Download complete.");
+if(download($archive, $tmp)) {
+	$report->info("Download complete.");
+} else {
+	$report->fatal("Download failed.");
+}
 
 decompressZip($tmp, $dir);
 

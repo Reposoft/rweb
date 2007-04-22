@@ -23,10 +23,19 @@ Repos.proplist.addClick = function(container, target) {
 		.click( function() {
 			var e = $(this);
 			e.text(' ...').addClass('loading');
-			$.getJSON(e.attr('href'), function(json) {
-				Repos.proplist.present(e.parent(), json);
-				e.remove();
-			} );
+			$.ajax({
+				type: 'GET',
+				url: e.attr('href'),
+				dataType: 'json',
+				success: function(json) {
+					Repos.proplist.present(e.parent(), json);
+					e.remove();
+				},
+				error: function() {
+					$(container).append('Failed to read properties');
+					e.remove();
+				} 
+				});
 			return false;
 		} );
 	$(container).append(link);
@@ -34,7 +43,7 @@ Repos.proplist.addClick = function(container, target) {
 
 Repos.proplist.present = function(jqElem, json) {
 	if (!json.proplist) {
-		jqElem.append('<p>Could not read properties</p>');
+		jqElem.append('<p>No property list found</p>');
 	} else if (json.proplist.length == 0) {
 		jqElem.append('<p>No properties set</p>');
 	} else {

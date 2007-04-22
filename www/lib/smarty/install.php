@@ -32,8 +32,12 @@ $dir = strtr($basedir, "\\", '/');
 $tmp = $dir.'/downloaded.tmp';
 $tarfile = "$dir/$repos_package.tar";
 
+if(download($archive, $tmp)) {
+	$report->info("Download complete.");
+} else {
+	$report->fatal("Download failed.");
+}
 
-if(download($archive, $tmp)) $report->info("Download complete.");
 /*
 	extract GZ archive
 	arg 1 is an absolute path to a gz archive

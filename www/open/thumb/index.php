@@ -5,28 +5,33 @@
  * @package
  */
 
-/*
-convert -size 150x150 test.jpg \
--strip -coalesce -resize 150x150 \
--quality 100 test.thumb.jpg
-
-And it can be further improved by replacing the -strip and -resize with
--thumbnail which does both.
-*/
 require('../SvnOpenFile.class.php');
 require('../../lib/imagemagick/convert.inc.php');
 define('THUMB_SIZE', 150);
 
+// create the option string to use with convert command
 function getThumbnailCommand($format='', $target='-') {
 	$z = THUMB_SIZE;
 	if ($format) $format.=':';
-	$convert = convertGetCommand();
 	// todo select -filter?
-	return "$convert $format- -thumbnail {$z}x{$z}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
+	return "$format- -thumbnail {$z}x{$z}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
+}
+
+// verify that the graphics tool exists
+$convert = convertGetCommand();
+
+exec("$convert -version", $output, $result);
+if ($result) {
+	handleError('[convert not installed]','','empty.jpg');
 }
 
 // first get the data about the repository image
 $r = new RevisionRule();
+// Validation::expect('rev'); // explicit revision number required for caching
+if (!$r->getValue()) {
+	handleError(412, "Revision number required ".$r->getValue());
+}
+
 $file = new SvnOpenFile(getTarget(), $r->getValue());
 $extension = $file->getExtension();
 
@@ -39,7 +44,7 @@ if ($file->getStatus() != 200) {
 $tempfile = System::getTempFile('thumb');
 
 // create the ImageMagick command
-$convert = getThumbnailCommand($extension, $tempfile);
+$convert = $convert . ' ' . getThumbnailCommand($extension, $tempfile);
 
 // integer revision number, can be cached
 $rev = $file->getRevision();
@@ -48,10 +53,13 @@ $o = new SvnOpen('cat');
 $o->addArgOption('-r', $rev);
 $o->addArgUrl(getTargetUrl());
 $o->addArgOption('|', $convert, false);
-if($o->passthru()) {
+if($o->exec()) {
 	handleError($o->getExitcode(), implode('"\n"', $o->getOutput()));
 }
 
+// thumbnails can be cached indefinitely, because the target and the revsion number is in the url
+header('Cache-Control: max-age=8640000');
+// send from the tempfile
 showJpeg($tempfile);
 
 System::deleteFile($tempfile);
@@ -65,7 +73,7 @@ function showJpeg($file) {
 	fclose($f);	
 }
 
-function handleError($code, $message) {
+function handleError($code, $message, $image='error.jpg') {
 	// for viewing the error in new tab
 	if (!getHttpReferer()) {
 		header('Content-Type: text/plain');
@@ -74,7 +82,7 @@ function handleError($code, $message) {
 		exit;
 	}
 	// error image to user
-	$tempfile = dirname(__FILE__).'/error.jpg';
+	$tempfile = dirname(__FILE__).'/'.$image;
 	showJpeg($tempfile);
 	exit;
 }

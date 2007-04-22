@@ -7,7 +7,7 @@
 <!-- test page needs taget -->
 <script type="text/javascript">
 	if (window.location.search.length == 0) {
-		window.location.href = window.location.href + '?target=/demoproject/trunk/public/images/b.jpg&rev=8';
+		window.location.href = window.location.href + '?target=/demoproject/trunk/public/images/b.jpg&rev=1';
 	}
 </script>
 <!-- plugins -->
@@ -29,7 +29,7 @@ even when there are no "thmbnail" classes.</p>
 <p>If there are many thumbnails on a page, this plugin should do proper queuing, so that the first thumbnail is shown before the next is requested.</p>
 
 <h2>Directly embed in page (no javascript)</h2>
-<img src="../../open/thumb/?target=/demoproject/trunk/public/images/b.gif&rev="/>
+<img src="../../open/thumb/?target=/demoproject/trunk/public/images/b.gif&rev=1"/>
 
 <h2>div#intro with a class="file"</h2>
 <div id="intro">
@@ -43,11 +43,18 @@ even when there are no "thmbnail" classes.</p>
 <!--<div id="row:b.ai"><a id="open:b.ai" class="file" href="/demoproject/trunk/public/images/b.ai">b.ai</a></div>-->
 <div id="row:b.png"><a id="open:b.png" class="file" href="/demoproject/trunk/public/images/b.png">b.png</a></div>
 
+<!-- 
 <h2>File history (not folder history)</h2>
-
+<p>Thumbnail for each revision</p>
+ -->
+ 
 <h2>Error message as image</h2>
-<p><img src="../../open/thumb/?target=/demoproject/trunk/nonexisting.gif"/>
-Paste the image url in new window to get text error.
+<p><img src="../../open/thumb/?target=/demoproject/trunk/nonexisting.gif&rev=1" align="middle"/>
+Paste the image url in new window to get text error. Or use 'Display image' in firefox.
+</p>
+
+<p><a href="./?target=/demoproject/trunk/public/images/b.jpg&rev=99999999">Test with too high revision number</a>.
+Currently there is no error message as image for this. Should be a rare type of error.
 </p>
 
 <h2>unit tests</h2>

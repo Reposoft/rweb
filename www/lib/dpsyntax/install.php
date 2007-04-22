@@ -26,7 +26,11 @@ $tmp = $dir.'/downloaded.tmp';
 $extracted_folder = "$dir/$repos_package/";
 
 
-if(download($archive, $tmp)) $report->info("Download complete.");
+if(download($archive, $tmp)) {
+	$report->info("Download complete.");
+} else {
+	$report->fatal("Download failed.");
+}
 
 decompressZip($tmp, $dir);
 

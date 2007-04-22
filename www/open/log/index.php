@@ -45,6 +45,8 @@ if ($rev) {
 	// reverse order, always return revisions in descending order
 	$command->addArgRevisionRange($torev.':'.$fromrev);
 	$command->addArgUrl($url);
+} else {
+	$command->addArgUrl($url);
 }
 
 // read the log to memory, size is limited and the browser needs the complete xml before rendering anyway
