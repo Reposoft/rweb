@@ -8,7 +8,7 @@ var filenamePluginExtension = '';
 
 $(document).ready(function() {
 	fileExtensionRead();
-	$('.remember-extension').change(function() {checkNewFileExtension()});
+	$('.remember-extension').change(function() { checkNewFileExtension(); });
 });
 
 function fileExtensionRead() {

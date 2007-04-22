@@ -40,17 +40,16 @@ $command->addArgOption('--incremental');
 // set limit +1 to be able to see if there are more entries
 $command->addArgOption('--limit', $limit+1, false); // limit is a number, if not this will be an empty string (so it's safe)
 if ($rev) {
-	$command->addArgRevision($rev);
+	$command->addArgUrlPeg($url, $rev);
 } else if ($torev) {
 	// reverse order, always return revisions in descending order
 	$command->addArgRevisionRange($torev.':'.$fromrev);
+	$command->addArgUrl($url);
 }
-
-$command->addArgUrl($url);
 
 // read the log to memory, size is limited and the browser needs the complete xml before rendering anyway
 if ($command->exec()) { 
-	trigger_error('Could not read log for URL '.$url, E_USER_ERROR);
+	trigger_error('Could not read log for URL '.$url.': '.implode(" \n",$command->getOutput()), E_USER_ERROR);
 }
 $log = $command->getOutput();
 

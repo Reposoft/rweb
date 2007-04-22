@@ -244,7 +244,8 @@ class Presentation {
 	}
 	
 	/**
-	 * executes & returns or displays the template results
+	 * executes & returns or displays the template results, 
+	 * unlike display this does not assign any common variables.
 	 *
 	 * @param string $resource_name
 	 * @param string $cache_id
@@ -252,6 +253,9 @@ class Presentation {
 	 * @param boolean $display
 	 */
 	function fetch($resource_name, $cache_id = null, $compile_id = null, $display = false) {
+		// to get predictable cache path, always use forward slashes
+		$resource_name = strtr($resource_name, '\\', '/');
+		// no extra processing with fetch, just process the template with explicit assigns
 		return $this->smarty->fetch($resource_name, $cache_id, $compile_id, $display);	
 	}
 	
@@ -277,6 +281,9 @@ class Presentation {
 		if (!$resource_name) {
 			$resource_name = $this->getDefaultTemplate();
 		}
+		// to get predictable cache path, always use forward slashes
+		$resource_name = strtr($resource_name, '\\', '/');
+		// custom processing for redirect before display
 		if (!headers_sent() && //debug:// false && 
 			$this->isRedirectBeforeDisplay()) {
 			$file = System::getTempFile('pages');

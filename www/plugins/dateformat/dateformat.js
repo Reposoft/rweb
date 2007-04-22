@@ -34,7 +34,7 @@ Date.prototype.setISO8601 = function (string) {
     offset -= date.getTimezoneOffset();
     time = (Number(date) + (offset * 60 * 1000));
     this.setTime(Number(time));
-}
+};
 
 // from http://delete.me.uk/2005/03/iso8601.html
 Date.prototype.toISO8601String = function (format, offset) {
@@ -64,7 +64,7 @@ Date.prototype.toISO8601String = function (format, offset) {
         var date = new Date(Number(Number(this) + (offsetnum * 60000)));
     }
 
-    var zeropad = function (num) { return ((num < 10) ? '0' : '') + num; }
+    var zeropad = function (num) { return ((num < 10) ? '0' : '') + num; };
 
     var str = "";
     str += date.getUTCFullYear();
@@ -83,7 +83,7 @@ Date.prototype.toISO8601String = function (format, offset) {
 
     if (format > 3) { str += offset; }
     return str;
-}
+};
  
 // ----- Dateformat class -----
 $(document).ready(function(){
@@ -104,7 +104,7 @@ function Dateformat() {
 		if (text.length > 32) return false;
 		// and some regexp
 		return true;
-	}
+	};
 	
 	/**
 	 * @param texttag element containing date time
@@ -119,7 +119,7 @@ function Dateformat() {
 		var f = this.format(d);
 		texttag.innerHTML = f;
 		$(texttag).addClass('formatted');
-	}
+	};
 	
 	/**
 	 * @param xsd:dateTime/ISO 8601 date
@@ -132,5 +132,5 @@ function Dateformat() {
 		var d = new Date();
 		d.setISO8601(dateTime);
 		return d.toLocaleString();
-	}
+	};
 }

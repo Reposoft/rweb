@@ -130,13 +130,15 @@
 			<fileset dir="${source.folder}">
 				<include name="open/**/*.html"/>
 				<include name="edit/**/*.html"/>
+				<include name="conf/**/*.html"/>
+				<include name="account/**/*.html"/>
+				<include name="admin/**/*.html"/>
 			</fileset>
 		</apply>
 		<!-- done, mark template cache in CACHE_DIR as complete --> 
 		<touch file="${source.folder}/lib/smarty/cache/COMPLETE"/>
 		<!-- clean up, delete temp config -->
 		<delete dir="${basedir}/admin"/>
-		<!-- TODO exclude smarty from compile? -->
 	</target>
 	
 	<target name="get.rhino">
@@ -198,18 +200,20 @@
 		</echo>
 	</target>
 	
-	<target name="dist.clean" description="Delete intermediate files">
+	<target name="dist.clean" depends="compile" description="Delete intermediate files">
+		<echo message="Removing intermediate source folder"/>
 		<delete dir="${source.folder}"/>
+		<delete dir="${target.folder}/compile.exlucdes" includeemptydirs="true"/>
 	</target>
 	
-	<target name="package.gzip" depends="compile" description="Create distributable archive">
+	<target name="package.gzip" depends="dist.clean" description="Create distributable archive">
 		<!-- the archive should contain one folder, the application folder with app.name -->
 		<tar tarfile="${package.gzip}.tmp" basedir="${target.folder}" includes="${app.name}/**"/>
 		<gzip zipfile="${package.gzip}" src="${package.gzip}.tmp"/>
 		<delete file="${package.gzip}.tmp"/>
 	</target>
 	
-	<target name="dist" depends="dist.clean, package.gzip">
+	<target name="dist" depends="package.gzip" description="Run all packaging activities">
 	
 	</target>
 	

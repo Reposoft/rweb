@@ -51,7 +51,9 @@ function details_write(e, entry) {
 		if (details_isLocked(this)) details_writeLock(e, this);
 		// if the dateformat plugin is present, do format
 		$('.datetime', e).each(function() {
-			if (typeof('Dateformat')!='undefined') new Dateformat().formatElement(this);
+			if (typeof('Dateformat')!='undefined') {
+				(new Dateformat()).formatElement(this);
+			}
 		});
 	});
 	e.show();
@@ -123,7 +125,7 @@ function details_formatSize(strBytes) {
 	var f = 1.0 * b / 1024;
 	if (f < 0.995) return f.toPrecision(2) + ' kB';
 	if (f < 999.5) return f.toPrecision(3) + ' kB';
-	var f = f / 1024;
+	f = f / 1024;
 	if (f < 0.995) return f.toPrecision(2) + ' MB';
 	if (f < 99.95) return f.toPrecision(3) + ' MB';
 	return f.toFixed(0) + ' MB';

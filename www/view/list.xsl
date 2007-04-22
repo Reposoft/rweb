@@ -41,11 +41,16 @@
 	</xsl:template>
 	
 	<xsl:template match="list">
-		<xsl:param name="url" select="concat(../@repo,../@target)"/>
+		<xsl:param name="target">
+			<xsl:call-template name="getHref">
+				<xsl:with-param name="href" select="../@target"/>
+			</xsl:call-template>
+		</xsl:param>
+		<xsl:param name="url" select="concat(../@repo,$target)"/>
 		<div id="commandbar">
 			<a id="repository" href="{$url}">current version</a>
-			<a id="history" href="../log/?target={../@target}&amp;rev={../@rev}">history for version <xsl:value-of select="../@rev"/></a>
-			<a id="historycurrent" href="../log/?target={../@target}">history of current version</a>
+			<a id="history" href="../log/?target={$target}&amp;rev={../@rev}">history for version <xsl:value-of select="../@rev"/></a>
+			<a id="historycurrent" href="../log/?target={$target}">history of current version</a>
 		</div>
 		<h2>
 			<a class="folder" href="{@path}"><xsl:value-of select="../@name"/></a>
@@ -57,6 +62,7 @@
 			</xsl:if>
 		</h2>
 		<xsl:apply-templates select="*">
+			<xsl:with-param name="parent" select="$target"/>
 			<xsl:sort select="@kind"/>
 			<xsl:sort select="name"/>
 		</xsl:apply-templates>
@@ -65,19 +71,18 @@
 	</xsl:template>
 	
 	<xsl:template match="entry[@kind='dir']">
+		<xsl:param name="parent" select="../../@target"/>
 		<xsl:param name="id">
 			<xsl:call-template name="getFileID">
 				<xsl:with-param name="filename" select="name"/>
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="target">
+			<xsl:value-of select="$parent"/>
 			<xsl:call-template name="getHref">
-				<xsl:with-param name="href">
-					<xsl:value-of select="../../@target"/>
-					<xsl:value-of select="name"/>
-					<xsl:value-of select="'/'"/>
-				</xsl:with-param>
+				<xsl:with-param name="href" select="name"/>
 			</xsl:call-template>
+			<xsl:value-of select="'/'"/>
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<div id="row:{$id}" class="row n{$n mod 4}">
@@ -103,6 +108,7 @@
 	</xsl:template>	
 	
 	<xsl:template match="entry[@kind='file']">
+		<xsl:param name="parent" select="../../@target"/>
 		<xsl:param name="filetype">
 			<xsl:call-template name="getFiletype">
 				<xsl:with-param name="filename" select="name"/>
@@ -114,11 +120,9 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="target">
+			<xsl:value-of select="$parent"/>
 			<xsl:call-template name="getHref">
-				<xsl:with-param name="href">
-					<xsl:value-of select="../../@target"/>
-					<xsl:value-of select="name"/>
-				</xsl:with-param>
+				<xsl:with-param name="href" select="name"/>
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>

@@ -21,7 +21,9 @@ function download($url, $localTargetFile) {
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-	curl_setopt($ch, CURLOPT_VERBOSE, 1);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+	curl_setopt($ch, CURLOPT_VERBOSE, 0);
 	$fh = fopen($localTargetFile, 'w');
 	curl_setopt($ch, CURLOPT_FILE, $fh);
 	$result = curl_exec($ch);

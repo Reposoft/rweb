@@ -22,8 +22,8 @@ if (file_exists(CACHE_DIR.'/COMPLETE')) define('TEMPLATE_PRODUCTION', true);
 // smarty 2.6.14 sends error message if SMARTY_DEBUG is not set
 if (!isset($_COOKIE['SMARTY_DEBUG'])) $_COOKIE['SMARTY_DEBUG'] = 0;
 
-// use paths relative to webapp root for smarty template caching
-define('TEMPLATE_BASE', dirname(dirname(dirname(__FILE__))));
+// use paths relative to webapp root for smarty template caching, always use forward slashes
+define('TEMPLATE_BASE', strtr(dirname(dirname(dirname(__FILE__))), '\\', '/'));
 
 /**
  * Create and configure a template engine instance

@@ -28,6 +28,10 @@ if (!file_exists($template)) die("Template '$template' not found.");
 // use the presentation class to get custom processing
 require($basedir.'conf/Presentation.class.php');
 
+// define custom smarty modifiers (if they are available in runtime but not in current includes)
+if (!function_exists('formatSize')) { function formatSize($b) {} }
+
+// start
 $result = ''.$template;
 
 // use Presentation constructor to initialize template filters
