@@ -9,11 +9,15 @@
 	
 	<available file="${zend.guard.command}" property="zend.guard.available"/>
 	
+	<property name="cache.smarty.file" value="${tools.folder}/cached-smarty.tar"/>
+	<available file="${cache.smarty.file}" property="cache.smarty.available"/>
+	
 	<!-- rhino, used for javascript conpression, has issues with jamvm and sablevm, and Sun has no JRE for ARM -->
 	<available file="/usr/lib/sablevm" property="java.arm" description="Java running on a non-standard VM"/>
 		
 	<target name="clean" description="Clean all output folders">
-		<delete dir="${target.folder}"/>
+		<delete dir="${source.folder}" failonerror="true"/>
+		<delete dir="${target.folder}" failonerror="true"/>
 	</target>
 	
 	<target name="preprocess" depends="clean" description="Copy to temp folder with filter">
@@ -31,6 +35,7 @@
 				<include name="lib/*/*.php"/>
 				<include name="lib/*/*.bat"/>
 				<include name="lib/*/*.sh"/>
+				<include name="lib/*/*LICENSE"/>
 			</fileset>
 		</copy>
 	</target>
@@ -90,7 +95,7 @@
 		unless="compile.done">
 		<!-- after encoding with eaccelerator, clean the sources before test to see that there are no hardcoded references -->
 		<echo message="Compiling PHP sources using PHPCoder/eAccelerator"/>
-		<exec executable="php" dir="${tools.folder}/PHPCoder/">
+		<exec executable="php" dir="${tools.folder}/PHPCoder/" failonerror="false">
 			<arg value="repos-cli.php"/>
 			<arg value="${source.folder}"/>
 			<arg value="${app.folder}"/>
@@ -112,10 +117,22 @@
 		</exec>		
 	</target>
 	
-	<target name="install.smarty" depends="" description="Smarty is LGPL and can be redistributed">
-		<exec executable="php" dir="${source.folder}/lib/smarty/">
+	<target name="install.smarty" depends="install.smarty.cached"
+			description="Smarty is LGPL and can be redistributed">
+		<exec executable="php" dir="${source.folder}/lib/smarty/" failonerror="true">
 			<arg value="install.php"/>
 		</exec>
+		<tar destfile="${cache.smarty.file}">
+			<fileset dir="${source.folder}/lib/smarty/">
+			    <include name="libs/**"/>
+				<include name="cache/**"/>
+			</fileset>
+		</tar>
+	</target>
+	
+	<target name="install.smarty.cached" if="cache.smarty.available"
+			description="Avoid repeated downloads for subsequent builds">
+		<untar src="${cache.smarty.file}" dest="${source.folder}/lib/smarty/"/>
 	</target>
 	
 	<!-- precompile html templates (this destroys the original templates so it really requires clean, preprocess, but if added them they will be executed twice in compile) -->

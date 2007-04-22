@@ -71,6 +71,8 @@ $fixTo = 'function _get_compile_path($resource_name)
 		if (defined("TEMPLATE_BASE")) $resource_name = substr($resource_name, strlen(TEMPLATE_BASE));
 		// ---
 	';
+// smarty is encoded with single newline
+$fixTo = str_replace("\r\n", "\n", $fixTo);
 
 $fh = fopen($smartyClass, 'r');
 $contents = fread($fh, 131072);
