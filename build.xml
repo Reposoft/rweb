@@ -44,6 +44,7 @@
 			description="Template method for compiling everything to an application folder ready for distributiion">
 		<antcall target="encode.templates"></antcall>
 		<antcall target="encode.javascript"></antcall>
+		<antcall target="encode.xslt"></antcall>
 		<antcall target="compile.excludes"></antcall>
 		<!-- attempt compile tools in order of preference, they all produce the app folder if they consider themselves available -->
 		<antcall target="compile.zendguard"></antcall>
@@ -122,12 +123,13 @@
 		<exec executable="php" dir="${source.folder}/lib/smarty/" failonerror="true">
 			<arg value="install.php"/>
 		</exec>
-		<tar destfile="${cache.smarty.file}">
-			<fileset dir="${source.folder}/lib/smarty/">
-			    <include name="libs/**"/>
-				<include name="cache/**"/>
-			</fileset>
-		</tar>
+		<antcall target="install.smarty.save"/>
+	</target>
+	
+	<target name="install.smarty.save" unless="cache.smarty.available"
+			description="cache the installed smarty (right after installation - not with cached templates)">
+		<tar destfile="${cache.smarty.file}" basedir="${source.folder}/lib/smarty/"
+					includes="libs/**,cache/**"/>
 	</target>
 	
 	<target name="install.smarty.cached" if="cache.smarty.available"
@@ -199,15 +201,6 @@
 		<move file="${target.folder}/encoded.tmp" tofile="${encode.js.target}" overwrite="true" />
 	</target>
 	
-	<target name="encode.javascript.select.lite" description="from jquery">
-		<echo file="${encode.js.script}">
-		load("build/js/writeFile.js");
-		var blockMatch = /\s*\/\*\*\s*((.|\n|\r\n)*?)\s*\*\/\n*/g;
-		var f = readFileCustomized(arguments[0]).replaceAll( blockMatch, "\n" ).replaceAll( /\n\n+/g, "\n\n" );
-		writeFile( arguments[1], f );
-		</echo>
-	</target>
-	
 	<target name="encode.javascript.select.jsmin" description="http://www.crockford.com/javascript/jsmin.html">
 		<echo file="${encode.js.script}">
 		load("build/js/jsmin.js", "build/js/writeFile.js");
@@ -215,6 +208,16 @@
 		var f = jsmin('', readFile(arguments[0]), 3);
 		writeFile( arguments[1], f );
 		</echo>
+	</target>
+	
+	<target name="encode.xslt" description="minimize our xslt">
+		<apply executable="php" parallel="false" relative="false">
+			<arg value="${tools.folder}/xslt/xslmin.php"/>
+			<srcfile/>
+			<fileset dir="${source.folder}">
+				<include name="**/*.xsl"/>
+			</fileset>
+		</apply>
 	</target>
 	
 	<target name="dist.clean" depends="compile" description="Delete intermediate files">
@@ -225,7 +228,7 @@
 	
 	<target name="package.gzip" depends="dist.clean" description="Create distributable archive">
 		<!-- the archive should contain one folder, the application folder with app.name -->
-		<tar tarfile="${package.gzip}.tmp" basedir="${target.folder}" includes="${app.name}/**"/>
+		<tar destfile="${package.gzip}.tmp" basedir="${target.folder}" includes="${app.name}/**"/>
 		<gzip zipfile="${package.gzip}" src="${package.gzip}.tmp"/>
 		<delete file="${package.gzip}.tmp"/>
 	</target>
@@ -234,13 +237,12 @@
 	
 	</target>
 	
-	<!-- below are targets that might be used during development -->
+	<!-- below are targets that might be used during development, they do not produce packaged distribution -->
 	
 	<target name="dev.include.test" depends="compile" description="to test the distribution on a build machine, include test sources">
 		<echo message="WARNING: Including all test sources in distribution."/>
-		<copy todir="${app.folder}">
-			<fileset dir="${development.folder}">
-				<include name="test/**"/>
+		<copy todir="${app.folder}/test">
+			<fileset dir="${development.folder}/test">
 				<exclude name="**/.svn"/>
 			</fileset>
 		</copy>

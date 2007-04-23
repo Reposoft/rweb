@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>A View or Edit page</title>
+
+<!-- plugins -->
+<script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../scripts/shared/repos.js"></script>
+<!-- for unit testing -->
+<script type="text/javascript" src="../../scripts/unittest.js"></script>
+<!-- css is loaded dynamically by unittest.js, so thumbnails will be loaded last -->
+<script type="text/javascript" src="thumbnails.js"></script>
+
+</head>
+<body>
+
+<div id="commandbar">
+<a id="back" href="./">thumbnails plugin</a>
+</div>
+
+<div id="intro">
+<h1><a class="file" href="/testrepo/demoproject/trunk/public/images/b.jpg">b.jpg</a> 
+	<span class="revision">1</span></h1>
+<p>
+The revision number to use for the thumbnail generator should be taken from query string if available,
+otherwise from filedetails box.
+The revision number is important for caching.
+</p>
+</div>
+
+<div class="column" style="width: 40%">
+<div id="filedetails" class="section">
+<h2>File details</h2>
+<p>Version number: <span class="revision">1</span></p>
+<p>Last edited by: <span class="username">tester 1</span></p>
+<p>Last edited at: <span class="datetime">2007-04-22T09:14:19.159540Z</span></p>
+<p>File size: <span class="filesize">47 kb</span></p>
+<p>Content type: <span>application/octet-stream</span></p>
+</div>
+</div>
+
+<div id="footer">
+</div>
+
+</body>
+</html>

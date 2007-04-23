@@ -49,9 +49,14 @@ Repos.thumbnails.getTarget = function(href) {
 };
 
 Repos.thumbnails.getRev = function(href) {
+	// get from query string
 	var m = /[\?&]rev=([^&]+)/.exec(href);
 	if (m && m.length > 1) return m[1];
-	return ''; // still a valid query parameter
+	// get from details box
+	$('#filedetails .revision').text();
+	
+	// use HEAD, still a valid query parameter, DISABLES CACHING
+	return ''; 
 };
 
 // or should it be onload so that other resources load first?

@@ -4,12 +4,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Repos thumbnails plugin</title>
-<!-- test page needs taget -->
-<script type="text/javascript">
-	if (window.location.search.length == 0) {
-		window.location.href = window.location.href + '?target=/demoproject/trunk/public/images/b.jpg&rev=1';
-	}
-</script>
 <!-- plugins -->
 <script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="../../scripts/shared/repos.js"></script>
@@ -22,24 +16,22 @@
 
 <h1>Repos thumbnailer plugin</h1>
 <p>Thumbnailing is built in as open/thumb/, but not integrated with the urser interface.
-This plugin identifies "open" links and adds thumbnail button.</p>
-<p>Should be possible, in repository view, to click a command that adds thumbnails to all image files in the list,
-even when there are no "thmbnail" classes.</p>
-<p>Might be combined with thickbox to show the image in a popup instead of a new page when clicked.</p>
+This plugin identifies "open" links and adds thumbnail button. 
+Should be possible, in repository view, to click a command that adds thumbnails to all image files in the list,
+even when there are no "thmbnail" classes. 
+Might be combined with thickbox to show the image in a popup instead of a new page when clicked.</p>
 <p>If there are many thumbnails on a page, this plugin should do proper queuing, so that the first thumbnail is shown before the next is requested.</p>
 
-<h2>Directly embed in page (no javascript)</h2>
-<img src="../../open/thumb/?target=/demoproject/trunk/public/images/b.gif&rev=1"/>
-
-<h2>div#intro with a class="file"</h2>
-<div id="intro">
-<a href="/testrepo/demoproject/trunk/public/images/b.jpg">b.jpg</a>
-<p>This kind of div is used in View and Edit pages. It shows old revisions, because view is reached directly from history.</p>
-</div>
+<h2>Embed in page without javascript</h2>
+<p>
+<img src="../../open/thumb/?target=/demoproject/trunk/public/images/b.gif&rev=" align="middle" border="1"/> 
+&lt;- you should see an image with 1px border here (or a white pixel if thumbnailer is not installed).
+</p>
 
 <h2>Directory listing</h2>
-<div id="commandbar"><span>some command</span></div>
-<p id="fullpath" title="fullpath (ususally hidden)">/demoproject/trunk/public/images/</p>
+<div id="commandbar"><span>some command</span>
+<span id="fullpath" title="fullpath (ususally hidden)">/demoproject/trunk/public/images/</span>
+</div>
 <!--<div id="row:b.ai"><a id="open:b.ai" class="file" href="/demoproject/trunk/public/images/b.ai">b.ai</a></div>-->
 <div id="row:b.png"><a id="open:b.png" class="file" href="/demoproject/trunk/public/images/b.png">b.png</a></div>
 
@@ -48,13 +40,16 @@ even when there are no "thmbnail" classes.</p>
 <p>Thumbnail for each revision</p>
  -->
  
-<h2>Error message as image</h2>
-<p><img src="../../open/thumb/?target=/demoproject/trunk/nonexisting.gif&rev=1" align="middle"/>
-Paste the image url in new window to get text error. Or use 'Display image' in firefox.
-</p>
-
-<p><a href="./?target=/demoproject/trunk/public/images/b.jpg&rev=99999999">Test with too high revision number</a>.
+<h2>#intro div</h2>
+<p><a href="view.html?target=/demoproject/trunk/public/images/b.jpg">without revision number</a></p>
+<p><a href="view.html?target=/demoproject/trunk/public/images/b.jpg&rev=1">with revision number</a></p>
+<p><a href="view.html?target=/demoproject/trunk/public/images/b.jpg&rev=99999999">Too high revision number</a>.
 Currently there is no error message as image for this. Should be a rare type of error.
+</p>
+ 
+<h2>Error message as image</h2>
+<p><img src="../../open/thumb/?target=/demoproject/trunk/nonexisting.gif&rev=1" align="middle" border="1"/>
+Paste the image url in new window to get text error. Or use 'Display image' in firefox.
 </p>
 
 <h2>unit tests</h2>
