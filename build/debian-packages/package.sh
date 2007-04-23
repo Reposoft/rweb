@@ -3,12 +3,16 @@ mkdir ./dist
 
 # remember to update version numbers to match current control files
 
-dpkg -b repos.arm/ ./dist/repos_1.1.2-1.arm.deb
-dpkg -b repos-build.arm/ ./dist/repos-build_1.1-1.arm.deb
-dpkg -b eaccelerator.arm/ ./dist/eaccelerator_0.9.5-2.arm.deb
+dpkg -b repos.arm/ ./dist/repos_@REPOSVERSION@-@REPOSBUILD@.arm.deb
+dpkg -b repos-test.arm/ ./dist/repos-test_@REPOSVERSION@-@REPOSBUILD@.arm.deb
+# currently build setup follows the repos version numbers
+dpkg -b repos-build.arm/ ./dist/repos-build_@REPOSVERSION@-@REPOSBUILD@.arm.deb
+# eaccelerator version is the compiled release
+EACCELERATORVERSION=0.95-2
+dpkg -b eaccelerator.arm/ ./dist/eaccelerator_$EACCELERATORVERSION.arm.deb
 
 cd ./dist/
-pkg-scanpackages ./ /dev/null | gzip -9c > Packages.gz
+dpkg-scanpackages ./ /dev/null | gzip -9c > Packages.gz
 cd ..
 
 # and to use the package site in /etc/apt/sources.list add: 'http://host/package-path/ ./'

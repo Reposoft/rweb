@@ -69,11 +69,11 @@
 	
 	<target name="postprocess">
 		<chmod file="${app.folder}/_host/admin/reposrun.sh" perm="ug+x"/>
-		<chmod perm="ug+w">
-			<fileset dir="${app.folder}/lib">
-				<include name="tinymce"/>
-				<include name="dpsyntax"/>
-			</fileset>
+		<chmod perm="ug+w" verbose="true">
+			<dirset dir="${app.folder}">
+				<include name="lib/tinymce"/>
+				<include name="lib/dpsyntax"/>
+			</dirset>
 		</chmod>
 		<chmod file="${app.folder}/lib/dpsyntax" perm="ug+w"/>
 	</target>
@@ -233,8 +233,15 @@
 		<delete file="${package.gzip}.tmp"/>
 	</target>
 	
-	<target name="dist" depends="package.gzip" description="Run all packaging activities">
+	<target name="package.test" if="package.gzip.test"
+			description="Create a package with the test sources">
+		<tar destfile="${package.gzip.test}.tmp" basedir="${target.folder}" includes="${app.name}/test/**"/>
+		<gzip zipfile="${package.gzip.test}" src="${package.gzip.test}.tmp"/>
+		<delete file="${package.gzip.test}.tmp"/>
+	</target>
 	
+	<target name="dist" depends="package.gzip,package.test"
+			description="Run all packaging activities">
 	</target>
 	
 	<!-- below are targets that might be used during development, they do not produce packaged distribution -->
@@ -255,6 +262,34 @@
 			<fileset dir="${app.folder}"/>
 		</copy>
 		<copy todir="/var/www/html/" file="${app.folder}/_host/html/index.php"/>
+	</target>
+	
+	<!-- debian packaging -->
+	
+	<target name="dist.debian" depends="dist">
+		<copy todir="${target.folder}/debian-packages">
+			<fileset dir="${tools.folder}/debian-packages">
+				<exclude name="**/.svn"/>
+			</fileset>
+			<filterset>
+		      <filter token="REPOSVERSION" value="${app.version}"/>
+			  <filter token="REPOSBUILD" value="${app.version.build}"/>
+		    </filterset>
+		</copy>
+		<copy todir="${target.folder}/debian-packages/repos.arm/var/www/html/repos">
+			<fileset dir="${app.folder}"/>
+		</copy>
+		<chmod perm="755" verbose="true">
+			<fileset dir="${target.folder}/debian-packages">
+				<include name="*.sh"/>
+				<include name="**/DEBIAN"/>
+				<include name="**/postinst"/>
+				<include name="**/prerm"/>
+			</fileset>
+		</chmod>
+		<!-- todo use filter to set version in DEBIAN/control, use three digit version number and extra build number -->
+		<exec dir="${target.folder}/debian-packages" executable="${target.folder}/debian-packages/package.sh">
+		</exec>
 	</target>
 	
 </project>

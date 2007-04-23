@@ -1,5 +1,5 @@
 Package: repos-build
-Version: 1.1-1
+Version: @REPOSVERSION@-@REPOSBUILD@
 Section: web 
 Priority: optional
 Architecture: arm

@@ -1,5 +1,5 @@
 Package: repos
-Version: @REPOSVERSION@-@REPOSBUILD@
+Version: 1.1.2-1
 Section: web 
 Priority: optional
 Architecture: arm
