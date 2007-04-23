@@ -28,6 +28,8 @@ The revision number to use for the thumbnail generator should be taken from quer
 otherwise from filedetails box.
 The revision number is important for caching.
 </p>
+<p>Test: Copy the image address and check HTTP headers; caching should be enabled, with a big max-age.
+If you revisit the page, image should be read from browser cache.</p>
 </div>
 
 <div class="column" style="width: 40%">

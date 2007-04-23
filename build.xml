@@ -279,6 +279,9 @@
 		<copy todir="${target.folder}/debian-packages/repos.arm/var/www/html/repos">
 			<fileset dir="${app.folder}"/>
 		</copy>
+		<copy todir="${target.folder}/debian-packages/repos-test.arm/var/www/html/repos/test">
+			<fileset dir="${app.folder}/test"/>
+		</copy>
 		<chmod perm="755" verbose="true">
 			<fileset dir="${target.folder}/debian-packages">
 				<include name="*.sh"/>

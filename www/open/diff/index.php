@@ -23,13 +23,13 @@ $p = Presentation::getInstance();
 $p->assign('target', $url);
 $p->assign('revfrom', $revfrom);
 $p->assign('revto', $revto);
+$existingFolder = login_getFirstNon404Parent(getParent($url), $s);
+$p->assign('repository', $existingFolder);
 $referer = getHttpReferer();
 if (!empty($referer) && strContains($referer, '/open/log/')) {
 	$p->assign('logurl', $referer);
-	$p->assign('repository', getRepository().strAfter($referer, 'target='));
 } else {
-	$existingFolder = login_getFirstNon404Parent(getParent($url), $s);
-	$p->assign('repository', $existingFolder);
+	// best effort if user came through a bookmark
 	$p->assign('logurl', '../log/?target='.strAfter($existingFolder, getRepository()));
 }
 

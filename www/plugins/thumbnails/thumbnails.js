@@ -53,8 +53,8 @@ Repos.thumbnails.getRev = function(href) {
 	var m = /[\?&]rev=([^&]+)/.exec(href);
 	if (m && m.length > 1) return m[1];
 	// get from details box
-	$('#filedetails .revision').text();
-	
+	var r = parseInt($('#filedetails .revision').text());
+	if(!isNaN(r)) return r;
 	// use HEAD, still a valid query parameter, DISABLES CACHING
 	return ''; 
 };

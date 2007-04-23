@@ -29,7 +29,9 @@ if ($result) {
 $r = new RevisionRule();
 // Validation::expect('rev'); // explicit revision number required for caching
 if (!$r->getValue()) {
-	handleError(412, "Revision number required ".$r->getValue());
+	//handleError(412, "Revision number required ".$r->getValue());
+} else {
+	// enable caching, see below
 }
 
 $file = new SvnOpenFile(getTarget(), $r->getValue());
@@ -57,8 +59,11 @@ if($o->exec()) {
 	handleError($o->getExitcode(), implode('"\n"', $o->getOutput()));
 }
 
-// thumbnails can be cached indefinitely, because the target and the revsion number is in the url
-header('Cache-Control: max-age=8640000');
+// thumbnails can be cached permanently if target and revsion number is in the url
+if ($r->getValue()) {
+	header('Cache-Control: max-age=8640000');
+}
+
 // send from the tempfile
 showJpeg($tempfile);
 

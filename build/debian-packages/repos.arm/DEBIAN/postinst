@@ -19,8 +19,12 @@ set -e
 
 PHPINI="/etc/php4/apache2/php.ini"
 
-# check that magic quotes is off
-
+echo "Magic quotes should be disabled in php.ini"
+cat $PHPINI | grep "magic_quotes_gpc"
+#if grep -q "" $PHPINI
+#then
+#
+#fi
 
 # enable dav+svn apache modules
 
@@ -66,28 +70,33 @@ fi
 # rewrite needed for mass virtual hosts
 #if [ ! -e /etc/apache2/mods-enabled/rewrite.load ]
 
-# repos 1.1 is hardcoded to use /usr/bin/gzip 
-ln -s /bin/gzip /usr/bin/gzip
+if [ ! -f /bin/gzip ]
+then
+ echo "Repos 1.1 is hardcoded to use /usr/bin/gzip"
+ ln -sv /bin/gzip /usr/bin/gzip
+fi
 
-# set up subversion folder structure
-sudo -u www-data svn --config-dir "/var/www/admin/svn-config-dir/" info
+echo "Create Subversion client configuration for Repos"
+svn --config-dir /var/www/admin/svn-config-dir/ info > /dev/null
+chown -R www-data /var/www/admin/svn-config-dir/
 chmod -R a-w /var/www/admin/svn-config-dir/
 
+echo "Create empty repository in /var/www/repo"
 svnadmin create /var/www/repo/
 chown -R www-data /var/www/repo/
 
 chown www-data /var/www/backup
 
-# enable the repository in apache
-ln -s /var/www/admin/data-repository.conf /etc/apache2/sites-enabled/
+echo "Enable the repository in apache"
+ln -sv /var/www/admin/data-repository.conf /etc/apache2/sites-enabled/
 
-# after repos is installed the login file must be copied to server root
-mv /var/www/html/index.html /var/www/html/start.html
-cp /var/www/html/repos/_host/html/* /var/www/html/
-
+echo "The repos login file must be copied to server root"
+mv -v /var/www/html/index.html /var/www/html/start.html
+cp -v /var/www/html/repos/_host/html/* /var/www/html/
 
 echo "Make www-data memeber of shadow group, to enable mod-auth-pam"
 echo "This means it can be readable by anyone who can run CGI scripts, see libapache2-mod-auth-pam README"
 usermod -G shadow www-data
 
 echo "Restart apacke2"
+/etc/init.d/apache2 restart

@@ -1,6 +1,12 @@
 
 mkdir ./dist
 
+# seems like Ant can't chmod folders, so we have to do that manually
+chmod 755 repos.arm/DEBIAN
+chmod 755 repos-test.arm/DEBIAN
+chmod 755 repos-build.arm/DEBIAN
+chmod 755 eaccelerator.arm/DEBIAN
+
 # remember to update version numbers to match current control files
 
 dpkg -b repos.arm/ ./dist/repos_@REPOSVERSION@-@REPOSBUILD@.arm.deb
