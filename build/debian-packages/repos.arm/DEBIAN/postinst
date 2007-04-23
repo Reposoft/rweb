@@ -76,16 +76,16 @@ then
  ln -sv /bin/gzip /usr/bin/gzip
 fi
 
-echo "Create Subversion client configuration for Repos"
-svn --config-dir /var/www/admin/svn-config-dir/ info > /dev/null
-chown -R www-data /var/www/admin/svn-config-dir/
-chmod -R a-w /var/www/admin/svn-config-dir/
-
 echo "Create empty repository in /var/www/repo"
 svnadmin create /var/www/repo/
 chown -R www-data /var/www/repo/
 
 chown www-data /var/www/backup
+
+echo "Create Subversion client configuration for Repos"
+svn --config-dir /var/www/admin/svn-config-dir/ ls file:///var/www/repo/ > /dev/null
+chown -R www-data /var/www/admin/svn-config-dir/
+chmod -R a-w /var/www/admin/svn-config-dir/
 
 echo "Enable the repository in apache"
 ln -sv /var/www/admin/data-repository.conf /etc/apache2/sites-enabled/
