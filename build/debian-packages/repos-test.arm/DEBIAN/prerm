@@ -1,2 +1,8 @@
 #!/bin/sh
 
+echo "Switch back to real repository"
+/var/www/admin/switch-to-data.sh
+
+rm -v /var/www/admin/repos.properties.test
+
+rm -Rf /tmp/repos-test/

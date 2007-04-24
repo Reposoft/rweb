@@ -1,3 +1,11 @@
 #!/bin/sh
 
 echo "Setup testrepo.conf"
+
+
+echo "Install selenium test framework"
+curl "http://localhost/repos/lib/selenium/install.php?go&serv=text"
+
+echo "Switch Repos repository to that with test contents"
+/var/www/admin/switch-to-testrepo.sh
+
