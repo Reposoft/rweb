@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <project name="repos" basedir="." default="dist">
 
@@ -51,19 +51,24 @@
 		<antcall target="compile.phpcoder"></antcall>
 		<antcall target="compile.copy"></antcall>
 		<!-- done -->
-		<echo message="Moving excluded files, plain source, to distribution"/>
-		<move todir="${app.folder}" failonerror="false">
-			<fileset dir="${target.folder}/compile.excludes" includes="**/*"/>
-		</move>
+		<antcall target="compile.excludes.restore"></antcall>
 		<antcall target="postprocess"></antcall>
 	</target>
 	
+	<!-- getting 'function does not exist' if encoding with Zend Guard without smarty sources -->
 	<target name="compile.excludes" unless="zend.guard.available">
 		<mkdir dir="${target.folder}/compile.excludes"/>
 		<move todir="${target.folder}/compile.excludes">
 			<fileset dir="${source.folder}">
 				<include name="lib/smarty/libs/**"/>
 			</fileset>
+		</move>
+	</target>
+	
+	<target name="compile.excludes.restore" unless="zend.guard.available">
+		<echo message="Moving excluded files, plain source, to distribution"/>
+		<move todir="${app.folder}">
+			<fileset dir="${target.folder}/compile.excludes" includes="**/*"/>
 		</move>
 	</target>
 	
@@ -105,6 +110,8 @@
 	
 	<target name="compile.zendguard" depends="compile.check" if="zend.guard.available" description="Expensive encoder"
 		unless="compile.done">
+		<!-- currently we have a problem with the cached open/start/index_en.html. When it is encoded we get a white page and error log says
+		ALERT - canary mismatch on efree() - heap overflow detected (attacker '213.112.139.70', file 'repos/lib/smarty/cache/templates_c/%%0F^0F2^0F2FD2A3%%index_en.html.php', line 19 -->
 		<exec executable="${zend.guard.command}" dir="${basedir}" failonerror="true">
 			<arg value="--recursive"/>
 			<arg value="--obfuscation-level"/>
@@ -222,8 +229,8 @@
 	
 	<target name="dist.clean" depends="compile" description="Delete intermediate files">
 		<echo message="Removing intermediate source folder"/>
-		<!--<delete dir="${source.folder}"/>-->
-		<delete dir="${target.folder}/compile.exlucdes" includeemptydirs="true"/>
+		<delete dir="${source.folder}"/>
+		<delete dir="${target.folder}/compile.excludes"/>
 	</target>
 	
 	<target name="package.gzip" depends="dist.clean" description="Create distributable archive">
@@ -249,6 +256,8 @@
 		<copy todir="${app.folder}/test">
 			<fileset dir="${development.folder}/test">
 				<exclude name="**/.svn"/>
+				<!-- seems utf-8 characters will be invalid after tar/gzip -->
+				<exclude name="reset/testrepo/té*"/>
 			</fileset>
 		</copy>
 	</target>

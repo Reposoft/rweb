@@ -76,6 +76,11 @@ then
  ln -sv /bin/gzip /usr/bin/gzip
 fi
 
+if [ ! -f /bin/gzip ]
+then
+ ln -sv /bin/gunzip /usr/bin/gunzip
+fi
+
 echo "Create empty repository in /var/www/repo"
 svnadmin create /var/www/repo/
 chown -R www-data /var/www/repo/
@@ -86,6 +91,9 @@ echo "Create Subversion client configuration for Repos"
 svn --config-dir /var/www/admin/svn-config-dir/ ls file:///var/www/repo/ > /dev/null
 chown -R www-data /var/www/admin/svn-config-dir/
 chmod -R a-w /var/www/admin/svn-config-dir/
+
+echo "www-data user should have execute rights on command wrapper"
+chmod -v a+x /var/www/admin/reposrun.sh
 
 echo "Enable the repository in apache"
 ln -sv /var/www/admin/data-repository.conf /etc/apache2/sites-enabled/
@@ -98,5 +106,21 @@ echo "Make www-data memeber of shadow group, to enable mod-auth-pam"
 echo "This means it can be readable by anyone who can run CGI scripts, see libapache2-mod-auth-pam README"
 usermod -G shadow www-data
 
-echo "Restart apacke2"
+echo "Restart apache2"
 /etc/init.d/apache2 restart
+
+echo "Only 'admin' can login ro Repos administration" 
+chown -v admin /var/www/admin/data-repository.conf
+chown -v admin /var/www/admin/repos-access
+chown -v admin /var/www/admin/repos.properties
+chown -Rv admin /var/www/html/home
+if [ ! -d /home/admin/repos ]
+then
+ sudo -u admin mkdir -v /home/admin/repos
+ sudo -u admin ln -sv /var/www/html/home /home/admin/repos/home
+ sudo -u admin ln -sv /var/www/admin/repos-access /home/admin/repos/repos-access
+fi
+
+echo "TODO if hostname is not 'bubba', edit /var/www/admin/repos.properties"
+
+echo "TODO create demoproject/trunk/ with sample data"
