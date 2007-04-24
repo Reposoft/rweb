@@ -52,13 +52,13 @@
 		<antcall target="compile.copy"></antcall>
 		<!-- done -->
 		<echo message="Moving excluded files, plain source, to distribution"/>
-		<move todir="${app.folder}">
+		<move todir="${app.folder}" failonerror="false">
 			<fileset dir="${target.folder}/compile.excludes" includes="**/*"/>
 		</move>
 		<antcall target="postprocess"></antcall>
 	</target>
 	
-	<target name="compile.excludes">
+	<target name="compile.excludes" unless="zend.guard.available">
 		<mkdir dir="${target.folder}/compile.excludes"/>
 		<move todir="${target.folder}/compile.excludes">
 			<fileset dir="${source.folder}">
@@ -222,7 +222,7 @@
 	
 	<target name="dist.clean" depends="compile" description="Delete intermediate files">
 		<echo message="Removing intermediate source folder"/>
-		<delete dir="${source.folder}"/>
+		<!--<delete dir="${source.folder}"/>-->
 		<delete dir="${target.folder}/compile.exlucdes" includeemptydirs="true"/>
 	</target>
 	
