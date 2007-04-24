@@ -81,6 +81,9 @@ then
  ln -sv /bin/gunzip /usr/bin/gunzip
 fi
 
+echo "Update settings to use this server's hostname"
+/var/www/admin/switch-hostname.sh repos
+
 echo "Create empty repository in /var/www/repo"
 svnadmin create /var/www/repo/
 chown -R www-data /var/www/repo/
@@ -120,6 +123,10 @@ then
  sudo -u admin ln -sv /var/www/html/home /home/admin/repos/home
  sudo -u admin ln -sv /var/www/admin/repos-access /home/admin/repos/repos-access
 fi
+
+echo "'admin' user might do local svn operation, needs LANG=en_US.UTF-8"
+echo "" >> /home/admin/.bash_profile
+echo "export LANG=en_US.UTF-8" >> /home/admin/.bash_profile
 
 echo "TODO if hostname is not 'bubba', edit /var/www/admin/repos.properties"
 
