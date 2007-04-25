@@ -144,6 +144,12 @@ function setup_createApacheLocation($extraDirectives='', $extraAfterLocation='')
 	$extraDirectives
 	# All browsers should do If-None-Match with ETag
 	Header add Cache-Control \"max-age=0, must-revalidate\"
+	# Repos error pages, in case they are not defined in host
+	ErrorDocument 400 /repos/errors/400/
+	ErrorDocument 401 /repos/errors/401/
+	ErrorDocument 403 /repos/errors/403/
+	ErrorDocument 404 /repos/errors/404/
+	ErrorDocument 500 /repos/errors/500/
 	</Location>
 	$extraAfterLocation
 	";

@@ -3,7 +3,7 @@
 WEBAPP="http://localhost/repos"
 
 echo "Setup testrepo.conf"
-
+chown -v www-data /var/www/html/testresults/
 
 echo "Install selenium test framework"
 curl "$WEBAPP/lib/selenium/install.php?go&serv=text"

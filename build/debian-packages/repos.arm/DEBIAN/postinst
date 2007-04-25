@@ -18,13 +18,13 @@
 set -e
 
 PHPINI="/etc/php4/apache2/php.ini"
+echo "Checking, not changing, current PHP settings in $PHPINI"
 
-echo "Magic quotes should be disabled in php.ini"
-cat $PHPINI | grep "magic_quotes_gpc"
-#if grep -q "" $PHPINI
-#then
-#
-#fi
+echo "Magic quotes must be disabled in php.ini."
+cat $PHPINI | grep -n "magic_quotes_gpc"
+
+echo "Consider allowing big fileuploads. 10M shoudn't be a problem."
+cat $PHPINI | grep -n "upload_max_filesize"
 
 # enable dav+svn apache modules
 
