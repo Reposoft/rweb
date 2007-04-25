@@ -291,7 +291,7 @@
 		</copy>
 		<chmod perm="755" verbose="true">
 			<fileset dir="${target.folder}/debian-packages">
-				<include name="*.sh"/>
+				<include name="**/*.sh"/>
 				<include name="**/DEBIAN"/>
 				<include name="**/postinst"/>
 				<include name="**/prerm"/>

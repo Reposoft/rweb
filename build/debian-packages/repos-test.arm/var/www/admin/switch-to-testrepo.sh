@@ -11,10 +11,14 @@ then
  ln -sv /var/www/admin/testrepo.conf /etc/apache2/sites-enabled
 fi
 
-echo "Switch repos settings"
-mv -v /var/www/admin/repos.properties /var/www/admin/repos.properties.data
-mv -v /var/www/admin/repos.properties.test /var/www/admin/repos.properties
-cp -v /var/www/admin/repos-access /var/www/admin/repos-access.data
+if [ -f /var/www/admin/repos.properties.test ]
+then
+ echo "Switch repos settings"
+ mv -v /var/www/admin/repos.properties /var/www/admin/repos.properties.data
+ mv -v /var/www/admin/repos.properties.test /var/www/admin/repos.properties
+ cp -v /var/www/admin/repos-access /var/www/admin/repos-access.data
+fi
+
 if [ -f /var/www/admin/repos-users ]
 then
  mv -v /var/www/admin/repos-users /var/www/admin/repos-users.data

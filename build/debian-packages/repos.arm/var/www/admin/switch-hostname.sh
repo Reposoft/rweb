@@ -26,7 +26,7 @@ then
  do
   if [ -f "$F" ]
   then
-   ./switch-hostname.sh "$F" "$OLDHOSTNAME" "$NEWHOSTNAME"
+   /var/www/admin/switch-hostname.sh "$F" "$OLDHOSTNAME" "$NEWHOSTNAME"
   fi
  done
  exit 0

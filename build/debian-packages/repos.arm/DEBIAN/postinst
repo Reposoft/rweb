@@ -84,9 +84,14 @@ fi
 echo "Update settings to use this server's hostname"
 /var/www/admin/switch-hostname.sh repos
 
-echo "Create empty repository in /var/www/repo"
-svnadmin create /var/www/repo/
-chown -R www-data /var/www/repo/
+if [ -d /var/www/repo ]
+then
+ echo "Using existing repository /var/www/repo"
+else
+ echo "Create empty repository in /var/www/repo"
+ svnadmin create /var/www/repo/
+ chown -R www-data /var/www/repo/
+fi
 
 chown www-data /var/www/backup
 
@@ -99,10 +104,13 @@ echo "www-data user should have execute rights on command wrapper"
 chmod -v a+x /var/www/admin/reposrun.sh
 
 echo "Enable the repository in apache"
-ln -sv /var/www/admin/data-repository.conf /etc/apache2/sites-enabled/
+ln -sv /var/www/admin/data-repository.conf /etc/apache2/sites-enabled
 
 echo "The repos login file must be copied to server root"
-mv -v /var/www/html/index.html /var/www/html/start.html
+if [ -f /var/www/html/index.html ]
+then
+ mv -v /var/www/html/index.html /var/www/html/start.html
+fi
 cp -v /var/www/html/repos/_host/html/* /var/www/html/
 
 echo "Make www-data memeber of shadow group, to enable mod-auth-pam"
@@ -127,7 +135,5 @@ fi
 echo "'admin' user might do local svn operation, needs LANG=en_US.UTF-8"
 echo "" >> /home/admin/.bash_profile
 echo "export LANG=en_US.UTF-8" >> /home/admin/.bash_profile
-
-echo "TODO if hostname is not 'bubba', edit /var/www/admin/repos.properties"
 
 echo "TODO create demoproject/trunk/ with sample data"

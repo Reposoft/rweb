@@ -11,9 +11,16 @@ then
  rm -v /etc/apache2/sites-enabled/testrepo.conf
 fi
 
-echo "Switch repos settings"
-mv -v /var/www/admin/repos.properties /var/www/admin/repos.properties.test
-mv -v /var/www/admin/repos.properties.data /var/www/admin/repos.properties
-mv -v /var/www/admin/repos-access.data /var/www/admin/repos-access
+if [ -f /var/www/admin/repos.properties.data ]
+then
+ echo "Switch repos settings"
+ mv -v /var/www/admin/repos.properties /var/www/admin/repos.properties.test
+ mv -v /var/www/admin/repos.properties.data /var/www/admin/repos.properties
+fi
+
+if [ -f /var/www/admin/repos-access.data ]
+then
+ mv -v /var/www/admin/repos-access.data /var/www/admin/repos-access
+fi 
 
 /etc/init.d/apache2 reload

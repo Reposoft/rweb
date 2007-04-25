@@ -4,3 +4,17 @@ if [ -f /etc/apache2/sites-enabled/data-repository.conf ]
 then 
  rm -v /etc/apache2/sites-enabled/data-repository.conf
 fi
+
+if [ -f /var/www/html/start.html ]
+then
+ if [ ! -f /var/www/html/index.html ]
+ then
+  mv -v /var/www/html/start.html /var/www/html/index.html
+ fi
+fi
+
+echo "Remove installed libraries"
+rm -Rf /var/www/html/repos/lib
+
+echo "Repository and backup folder will not be deleted"
+
