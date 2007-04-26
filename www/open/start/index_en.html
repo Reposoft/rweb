@@ -35,7 +35,9 @@ and the tools in each project.</p>
 </h2>
 <!--{* todo: class groupaccess *}-->
 	<!--{* bug with generated 'foreach a as b => c' in zendguard4+php5.2, derive key *}-->
-	<!--{foreach from=$projecttools item=toolpath key=toolid}-->
+	<!--{assign var='projecttoolids' value=$projecttools|@array_keys}-->	
+	<!--{foreach from=$projecttoolids item=toolid}-->
+	<!--{assign var='toolpath' value=$projecttools.$toolid}-->
 	<div class="row n{=cycle values=0,1,2,3}">
 	{=* special cases not handled by open *}
 	{=if $toolid eq news}{=assign var='toolpath' value=`$toolpath`news.xml}{=/if}

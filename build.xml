@@ -163,7 +163,7 @@
 			</fileset>
 		</apply>
 		<!-- keep the source of some templates -->
-		<copy tofile="${source.folder/plugins/edit/template_en.html" file="${development.folder/plugins/edit/template_en.html"/>
+		<copy tofile="${source.folder}/plugins/edit/template_en.html" file="${development.folder}/plugins/edit/template_en.html"/>
 		<!-- done, mark template cache in CACHE_DIR as complete --> 
 		<touch file="${source.folder}/lib/smarty/cache/COMPLETE"/>
 		<!-- clean up, delete temp config -->
