@@ -24,25 +24,25 @@ then
  mv -v /var/www/admin/repos-users /var/www/admin/repos-users.data
 fi
 
+echo "Webserver user must be able to write to repos-users and repos-access"
+chmod a+w /var/www/admin/repos-users
+chmod a+w /var/www/admin/repos-access
+
 echo "Create folder for testrepository"
-if [ ! -d /tmp/repos-test/ ]
+if [ ! -d /var/www/testrepo/ ]
 then
- mkdir -v /tmp/repos-test/
+ mkdir -v /var/www/testrepo/
+ svnadmin create /var/www/testrepo/
 fi
 
-if [ ! -d /tmp/repos-test/repo/ ]
-then
- mkdir -v /tmp/repos-test/repo/
- svnadmin create /tmp/repos-test/repo/
-fi
-
-chown -R www-data /tmp/repos-test/
+chown -R www-data /var/www/testrepo/
 
 echo "Create empty test backup folder"
-if [ -d /tmp/repos-test/backup/ ]
+if [ -d /var/www/testbackup/ ]
 then
- rm -Rf /tmp/repos-test/backup/
+ rm -Rf /var/www/testbackup/
 fi
-mkdir -v /tmp/repos-test/backup/
+mkdir -v /var/www/testbackup/
+chmod a+w /var/www/testbackup/ 
 
 sudo /etc/init.d/apache2 reload

@@ -30,6 +30,7 @@ require($basedir.'conf/Presentation.class.php');
 
 // define custom smarty modifiers (if they are available in runtime but not in current includes)
 if (!function_exists('formatSize')) { function formatSize($b) {} }
+if (!function_exists('asLogoutUrl')) { function asLogoutUrl($b) {} }
 
 // start
 $result = ''.$template;

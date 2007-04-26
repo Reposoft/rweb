@@ -205,6 +205,7 @@ class RepositoryEntryPoint {
 	
 	/**
 	 * Checks the entry point url for specific Repos contents
+	 * Note that the folder contents are read during this call, and results are not cached.
 	 * @return array[String => String] associative array with 'tool id' => 'path relative to entry point'
 	 *  empty array if there are no tools
 	 */

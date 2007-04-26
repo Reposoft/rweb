@@ -9,7 +9,7 @@ repositories="http://bubba/testrepo"
 
 ;---- Repository configuration for administratoin ----
 ; Path for local access to repository using 'svn', 'svnlook' and 'svnadmin'
-local_path="/tmp/repos-test/repo/"
+local_path="/var/www/testrepo/"
 ; Path for administration files, usually not accessible through web
 admin_folder="/var/www/admin/"
 
@@ -24,6 +24,6 @@ access_file="repos-access"
 ; Enable outgoing emails and set Reply-To header
 administrator_email="test@repos.se"
 ; Local repository backup folder, with tailing slash
-backup_folder="/tmp/repos-test/backup/"
+backup_folder="/var/www/testbackup/"
 
 allow_reset=1

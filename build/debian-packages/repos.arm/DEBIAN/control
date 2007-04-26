@@ -4,8 +4,7 @@ Section: web
 Priority: optional
 Architecture: arm
 Essential: no
-Depends: locales, php4 (>= 4.3.10), wget, curl, php4-curl, subversion (>= 1.4.2), libapache2-svn (>= 1.4.2), libapache2-mod-auth-pam
+Depends: locales, php4 (= 4:4.3.10-19), curl, php4-curl, subversion (>= 1.4.2, << 1.5), libapache2-svn (>= 1.4.2), libapache2-mod-auth-pam
 Suggests: imagemagick
 Maintainer: Staffan Olsson <solsson@gmail.com>
 Description: Repos web application
-

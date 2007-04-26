@@ -5,7 +5,8 @@ echo "Switch back to real repository"
 
 rm -v /var/www/admin/repos.properties.test
 
-rm -Rf /tmp/repos-test/
+rm -Rf /var/www/testrepo/
+rm -Rf /var/www/testbackup/
 
 if [ -e /var/www/html/repos/test/reset/test-svn-config-dir ]
 then
