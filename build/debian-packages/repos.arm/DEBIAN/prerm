@@ -13,8 +13,11 @@ then
  fi
 fi
 
+echo "Remove svn client configuration"
+rm -Rf /var/www/admin/svn-config-dir
+
 echo "Remove installed libraries"
-rm -Rf /var/www/html/repos/lib
+rm -Rf /var/www/html/repos/lib/*
 
 echo "Repository and backup folder will not be deleted"
 
