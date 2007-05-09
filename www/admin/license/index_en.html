@@ -15,7 +15,10 @@
 
 <h1>Repos license</h1>
 {=if $license}
-{=foreach from=$license key=k item=v}
+<!--{* bug with generated 'foreach a as b => c' in zendguard4+php5.2, derive key *}-->
+<!--{assign var='licensekeys' value=$license|@array_keys}-->	
+{=foreach from=$licensekeys item=k}
+<!--{assign var='v' value=$license.$k}-->
 <p>{=$k}: {=$v}</p>
 {=/foreach}
 {=else}

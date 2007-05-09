@@ -148,7 +148,7 @@
 	
 	<target name="encode.templates" depends="install.smarty">
 		<!-- create a temporary config file -->
-		<copy todir="${target.folder}/../admin" file="${source.folder}/_host/admin/repos.properties"/>
+		<copy todir="${source.folder}/../../admin" file="${source.folder}/_host/admin/repos.properties"/>
 		<!-- treat every html file in the project as a template -->
 		<apply executable="php" dir="${source.folder}/lib/smarty/" parallel="false" relative="true">
 			<arg value="precompile.php"/>
@@ -167,7 +167,7 @@
 		<!-- done, mark template cache in CACHE_DIR as complete --> 
 		<touch file="${source.folder}/lib/smarty/cache/COMPLETE"/>
 		<!-- clean up, delete temp config -->
-		<delete dir="${target.folder}/../admin"/>
+		<delete dir="${source.folder}/../../admin"/>
 	</target>
 	
 	<target name="get.rhino">
