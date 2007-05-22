@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Subversion Service Layer - integrate with your repository</title>
+<meta name="Generator" content="Repos"></meta>
+<link href="/home/documents.css" rel="stylesheet" type="text/css" media="screen, projection"/>
+<link href="/home/documents-print.css" rel="stylesheet" type="text/css" media="print"/>
+<script src="/home/documents.js" type="text/javascript"></script>
+</head>
+<body>
+<h1>Specification of Subversion Service</h1>
+<h2 class="service" id="log"><span class="query">svn=</span>log</h2>
+<ul class="service-specification">
+<li class="datatype">text/xml</li>
+<li class="description">The log for the URL as XML</li>
+<li class="example">&nbsp;</li>
+</ul>
+
+<h2 class="service" id="rev">rev=<a href="http://svnbook.red-bean.com/nightly/en/svn.tour.revs.specifiers.html">X</a></h2>
+<ul class="service-specification">
+<li class="datatype">unknown/unknown</li>
+<li class="description">Get the contents of a specific revision</li>
+<li class="example">&nbsp;</li>
+</ul>
+
+<h2 class="service" id="listjs"><span class="query">svn=</span>listjs</h2>
+<ul class="service-specification">
+<li class="datatype">text/javascript</li>
+<li class="description">A javascript that writes a folder contents to an HTML element</li>
+<li class="parameter"><em>select</em> Mandatory CSS selector for the element</li>
+<li class="example">&nbsp;</li>
+<li class="depends">The page must import <a href="http://jquery.com">jQuery</a> before this script</li>
+</ul>
+
+</body>
+</html>
