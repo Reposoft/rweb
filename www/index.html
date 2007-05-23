@@ -66,7 +66,7 @@ $.getJSON('view/service/?s=CLIENT', function(json) {
 	$('#clientadmin').append(json.admin ? 'yes' : 'no');
 });
 </script>
-<p>Licensed to: <span id="license"></span></p>
+<p>License: <span id="license"></span></p>
 <script type="text/javascript">
 $.getJSON('view/service/?s=LICENSE', function(json) {
 	if (json.length == 0 || !json.license) {

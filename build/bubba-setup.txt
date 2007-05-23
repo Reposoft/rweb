@@ -1,0 +1,32 @@
+Create new user and "allow SSH login" - Yes
+Log in using ssh
+Switch to superuser using su (password excito)
+
+Add new package sources to /etc/apt/sources.list using:
+nano /etc/apt/sources.list
+Uncomment the line: deb http://ftp(.xx).debian.org/debian/ sarge main
+Uncomment the line: deb http://security.debian.org/ sarge/updates main
+(updates needed to get latest PHP bugfixes)
+Add a line containing: deb http://www.backports.org/debian sarge-backports main
+Add a line containing: deb http://update.repos.se/ repos main
+Save file (Ctrl+o)
+
+(the file below is needed to force APT to install the new subversion from backports.org)
+Create file /etc/apt/preferences and write:
+Package: subversion
+Pin: release a=sarge-backports
+Pin-Priority: 999
+
+Package: libsvn0
+Pin: release a=sarge-backports
+Pin-Priority: 999
+
+Package: libapache2-svn
+Pin: release a=sarge-backports
+Pin-Priority: 999
+
+apt-get install repos
+When 'locales' package is installing you get a screen to select locale.
+In the next screen chose that as default
+Chose an UTF-8 locale, like en_US.UTF-8
+

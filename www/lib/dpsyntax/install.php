@@ -2,7 +2,7 @@
 require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
 require '../uncompress.php';
 
-$report = new Report('Install dp.SyntaxHighlighter');
+$report = new Report('Install SyntaxHighlighter');
 
 if (file_exists('dp.SyntaxHighlighter/')) {
 	$report->ok("dp.SyntaxHighlighter is already installed, done.");
@@ -13,11 +13,11 @@ if (file_exists('dp.SyntaxHighlighter/')) {
 
 // PHP unit testing framework
 
-$repos_package = "dp.SyntaxHighlighter";
-$home = "http://www.dreamprojections.com/SyntaxHighlighter/";
+$repos_package = "SyntaxHighlighter";
+$home = "http://code.google.com/p/syntaxhighlighter/";
 
-$version = "1.4.1";
-$archive = "http://www.dreamprojections.com/SyntaxHighlighter/Download.aspx?SyntaxHighlighter_$version.zip";
+$version = "1.5.0";
+$archive = "http://syntaxhighlighter.googlecode.com/files/SyntaxHighlighter_$version.zip";
 $license = "http://www.opensource.org/licenses/lgpl-license.php";
 
 $basedir = dirname(__FILE__);

@@ -25,10 +25,13 @@
 		<copy todir="${source.folder}" includeemptydirs="true">
 			<fileset dir="${development.folder}">
 				<exclude name="**/.svn"/>
+				<exclude name="scripts/**"/>
 				<exclude name="test/**"/>
 				<exclude name="lib/**"/>
 			</fileset>
 			<fileset dir="${development.folder}">
+				<include name="scripts/head.js"/>
+				<include name="scripts/styleswitch/**"/>
 				<include name="lib/*.html"/>
 				<include name="lib/*.php"/>
 				<include name="lib/*/*.html"/>
@@ -78,6 +81,8 @@
 			<dirset dir="${app.folder}">
 				<include name="lib/tinymce"/>
 				<include name="lib/dpsyntax"/>
+				<include name="lib/simpletest"/>
+				<include name="lib/selenium"/>
 			</dirset>
 		</chmod>
 		<chmod file="${app.folder}/lib/dpsyntax" perm="ug+w"/>
@@ -147,8 +152,6 @@
 	<!-- precompile html templates (this destroys the original templates so it really requires clean, preprocess, but if added them they will be executed twice in compile) -->
 	
 	<target name="encode.templates" depends="install.smarty">
-		<!-- create a temporary config file -->
-		<copy todir="${source.folder}/../../admin" file="${source.folder}/_host/admin/repos.properties"/>
 		<!-- treat every html file in the project as a template -->
 		<apply executable="php" dir="${source.folder}/lib/smarty/" parallel="false" relative="true">
 			<arg value="precompile.php"/>
@@ -160,14 +163,13 @@
 				<include name="account/**/*.html"/>
 				<include name="admin/**/*.html"/>
 				<include name="plugins/edit/template_en.html"/>
+				<include name="plugins/calendar/index_en.html"/>
 			</fileset>
 		</apply>
 		<!-- keep the source of some templates -->
 		<copy tofile="${source.folder}/plugins/edit/template_en.html" file="${development.folder}/plugins/edit/template_en.html"/>
 		<!-- done, mark template cache in CACHE_DIR as complete --> 
 		<touch file="${source.folder}/lib/smarty/cache/COMPLETE"/>
-		<!-- clean up, delete temp config -->
-		<delete dir="${source.folder}/../../admin"/>
 	</target>
 	
 	<target name="get.rhino">
@@ -179,19 +181,27 @@
 			description="Selects javascript encoding and processes all scripts">
 		<!-- scripts may have be suitable for different encoders, select individually -->
 		<antcall target="encode.javascript.select.jsmin"></antcall>
+		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="acl"/></antcall>
+		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="details"/></antcall>
+		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="dateformat"/></antcall>
+		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="edit"/></antcall>
+		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="filename"/></antcall>
+		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="thumbnails"/></antcall>
+		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="tooltip"/></antcall>
+		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="validation"/></antcall>
+		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="syntax"/></antcall>
 		<antcall target="encode.javascript.run">
-			<param name="encode.js.source" value="${source.folder}/plugins/details/details.js"/>
-			<param name="encode.js.target" value="${source.folder}/plugins/details/details.js"/>
-		</antcall>
-		<antcall target="encode.javascript.run">
-			<param name="encode.js.source" value="${source.folder}/plugins/dateformat/dateformat.js"/>
-			<param name="encode.js.target" value="${source.folder}/plugins/dateformat/dateformat.js"/>
-		</antcall>
-		<antcall target="encode.javascript.run">
-			<param name="encode.js.source" value="${source.folder}/plugins/filename/filename.js"/>
-			<param name="encode.js.target" value="${source.folder}/plugins/filename/filename.js"/>
+			<param name="encode.js.source" value="${source.folder}/plugins/syntax/shBrushAcl.js"/>
+			<param name="encode.js.target" value="${source.folder}/plugins/syntax/shBrushAcl.js"/>
 		</antcall>
 		<delete file="${encode.js.script}"/>
+	</target>
+	
+	<target name="encode.javascript.plugin" description="simply a shortcut for plugin encode antcall">
+		<antcall target="encode.javascript.run">
+			<param name="encode.js.source" value="${source.folder}/plugins/${js.plugin}/${js.plugin}.js"/>
+			<param name="encode.js.target" value="${source.folder}/plugins/${js.plugin}/${js.plugin}.js"/>
+		</antcall>
 	</target>
 	
 	<target name="encode.javascript.run" depends="encode.javascript.run.arm" unless="java.arm"
@@ -237,18 +247,23 @@
 	</target>
 	
 	<target name="package.gzip" depends="dist.clean" description="Create distributable archive">
-		<!-- the archive should contain one folder, the application folder with app.name -->
-		<tar destfile="${package.gzip}" compression="gzip"
+		<tar destfile="${package.filename}.tgz" compression="gzip"
+			basedir="${target.folder}" includes="${app.name}/**"/>
+	</target>
+
+	<target name="package.zip" depends="dist.clean" description="Create distributable archive">
+		<zip destfile="${package.filename}.zip" encoding="UTF8"
 			basedir="${target.folder}" includes="${app.name}/**"/>
 	</target>
 	
-	<target name="package.tests" if="package.tests.gzip"
+	<target name="package.tests" if="package.tests.filename"
 			description="Create a package with the test sources">
-		<tar destfile="${package.tests.gzip}" compression="gzip"
+		<!-- problems with utf-8 characters: <tar destfile="${package.tests.gzip}" compression="gzip" -->
+		<zip destfile="${package.tests.filename}.zip" encoding="UTF8"
 			basedir="${development.folder}" includes="test/**"/>
 	</target>
 	
-	<target name="dist" depends="package.gzip,package.tests"
+	<target name="dist" depends="package.gzip,package.zip,package.tests"
 			description="Run all packaging activities">
 	</target>
 	

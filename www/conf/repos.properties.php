@@ -15,8 +15,10 @@
  * @package conf
  */
 
-$_repos_config = parse_ini_file( _getPropertiesFile(), false );
-// not dependent on the System class, this is only functions related to the config
+// Configuration array can be set before inport. If not it will be read from file.
+if (!isset($_repos_config)) {
+       $_repos_config = parse_ini_file( _getPropertiesFile(), false );
+}
 
 // ----- global settings -----
 // PHP4 does not have exceptions, so we use 'trigger_error' as throw Exception.

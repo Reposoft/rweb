@@ -1,5 +1,5 @@
 
-Repos.edit = new Object();
+Repos.edit = {};
 
 $(document).ready( function() {
 	if (!Repos.edit.isEditPage()) return;
@@ -42,7 +42,7 @@ Repos.edit.enableMenu = function() {
 	if (filetext.search(pattern) >= 0) {
 		tinyMCE.execCommand('mceAddControl', true, 'usertext');
 	}
-}
+};
 
 Repos.edit.checkTextarea = function() {
 	if(!$('#usertext').val()){
@@ -53,7 +53,7 @@ Repos.edit.checkTextarea = function() {
 	} else {
 		return false;
 	}
-}
+};
 
 Repos.edit.checkTinyMCEarea = function() {
 	if(!tinyMCE.getContent('mce_editor_0')){
@@ -64,15 +64,15 @@ Repos.edit.checkTinyMCEarea = function() {
 	} else {
 		return false;
 	}
-}
+};
 
 Repos.edit.isEditPage = function() {
 	return (document.getElementById('formEdit') != null);
-}
+};
 
 Repos.edit.getCurrentType = function() {
 	return document.getElementsByName('type')[0].value;
-}
+};
 
 /* moved to header include to do like in tinymce manual
 tinyMCE.init({

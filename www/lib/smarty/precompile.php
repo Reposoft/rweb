@@ -25,6 +25,9 @@ $template = $basedir . $template;
 $template = strtr($template, '\\', '/');
 if (!file_exists($template)) die("Template '$template' not found.");
 
+// create appropriate configuration array for compiling production templates
+$_repos_config = parse_ini_file('../../_host/admin/repos.properties');
+
 // use the presentation class to get custom processing
 require($basedir.'conf/Presentation.class.php');
 

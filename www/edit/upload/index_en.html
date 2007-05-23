@@ -83,7 +83,9 @@ to make sure that your local changes are based on the newest version of the shar
   </p>
   <!--{if $isfile}-->
   <p title="the version of the file when it was downloaded">
-    {=foreach from=$log key=r item=e name=log}
+  	 {=assign var='logrev' value=$log|@array_keys}	
+    {=foreach from=$logrev item=r name=log}
+    {=assign var='e' value=$log.$r}
     <div style="border:1px solid white">
       {=if $smarty.foreach.log.first}
       <label for="fromrev{=$r}">based on version <span class="revision">{=$r}</span></label>

@@ -84,7 +84,7 @@ fi
 echo "Update settings to use this server's hostname"
 /var/www/admin/switch-hostname.sh repos
 
-if [ -d /var/www/repo ]
+if [ -d /var/www/repo/conf ]
 then
  echo "Using existing repository /var/www/repo"
 else

@@ -27,7 +27,7 @@ $(document).ready(function() {
 
 Repos.syntax.load = function() {
 	Repos.syntax.activate();
-}
+};
 
 Repos.syntax.activate = function() {
 	Repos.info('activating syntax highlighting');
@@ -44,8 +44,8 @@ Repos.syntax.activate = function() {
 			}
 		}
 	} );
-}
+};
 
 Repos.syntax.render = function(textarea) {
 	dp.SyntaxHighlighter.HighlightAll(textarea.name);
-}
+};

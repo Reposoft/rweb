@@ -15,7 +15,7 @@ function calendar_getHeadTags() {
 if (strEnds(getTarget(), '.ics')) {
 	setcookie("repos-calendar", getTargetUrl(), time()+3600, '/');
 	header("Cache-Control: no-cache");
-	header("Location: ".getWebapp()."plugins/calendar/");
+	header("Location: ".asLink(getWebapp()."plugins/calendar/"));
 	exit;
 }
  

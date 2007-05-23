@@ -1,9 +1,9 @@
 Package: eaccelerator
-Version: 0.9.5-2
+Version: 0.9.5.1-1
 Section: web
 Priority: optional
 Architecture: arm
 Essential: no
-Depends: php4 (= 4:4.3.10-19)
+Depends: php4 (= 4:4.3.10-20)
 Maintainer: Staffan Olsson <solsson@gmail.com>
 Description: Compiled eAccelerator for bubba. Requires a very specific php build.

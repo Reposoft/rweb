@@ -14,7 +14,7 @@ dpkg -b repos-test.arm/ ./dist/repos-test_@REPOSVERSION@-@REPOSBUILD@.arm.deb
 # currently build setup follows the repos version numbers
 dpkg -b repos-build.arm/ ./dist/repos-build_@REPOSVERSION@-@REPOSBUILD@.arm.deb
 # eaccelerator version is the compiled release
-EACCELERATORVERSION=0.95-2
+EACCELERATORVERSION=0.9.5.1-1
 dpkg -b eaccelerator.arm/ ./dist/eaccelerator_$EACCELERATORVERSION.arm.deb
 
 cd ./dist/
