@@ -119,7 +119,7 @@ a.folder {
 /* common page elements, may also be layouted for each tool */
 #commandbar {
 	min-width: 980px;
-	height: 24px;
+	height: 1.9em;
 	background-color: #ECF1EF;
 	padding: 3px;
 	border-bottom: 1px solid #CCCCCC;

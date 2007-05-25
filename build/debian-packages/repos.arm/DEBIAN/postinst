@@ -18,12 +18,19 @@
 set -e
 
 PHPINI="/etc/php4/apache2/php.ini"
-echo "Checking, not changing, current PHP settings in $PHPINI"
+echo "Checking and updating current PHP settings in $PHPINI"
+cp $PHPINI $PHPINI.pre-repos
+cp $PHPINI /tmp/php.ini.tmp
 
 echo "Magic quotes must be disabled in php.ini."
-cat $PHPINI | grep -n "magic_quotes_gpc"
+sed s/\^magic_quotes_gpc\ =\ On/magic_quotes_gpc\ =\ Off/ /tmp/php.ini.tmp > /tmp/php.ini.repos
+cp /tmp/php.ini.repos /tmp/php.ini.tmp 
+echo "Allowing big fileuploads. 10M shoudn't be a problem."
+sed s/\^upload_max_filesize\ =\ 2M/upload_max_filesize\ =\ 10M/ /tmp/php.ini.tmp > /tmp/php.ini.repos
+cp /tmp/php.ini.repos /tmp/php.ini.tmp 
 
-echo "Consider allowing big fileuploads. 10M shoudn't be a problem."
+cp /tmp/php.ini.repos $PHPINI
+cat $PHPINI | grep -n "magic_quotes_gpc"
 cat $PHPINI | grep -n "upload_max_filesize"
 
 # enable dav+svn apache modules
@@ -70,13 +77,13 @@ fi
 # rewrite needed for mass virtual hosts
 #if [ ! -e /etc/apache2/mods-enabled/rewrite.load ]
 
-if [ ! -f /bin/gzip ]
+f [ ! -f /bin/bin/gzip ]
 then
  echo "Repos 1.1 is hardcoded to use /usr/bin/gzip"
  ln -sv /bin/gzip /usr/bin/gzip
 fi
 
-if [ ! -f /bin/gzip ]
+if [ ! -f /bin/bin/gzip ]
 then
  ln -sv /bin/gunzip /usr/bin/gunzip
 fi
@@ -91,6 +98,8 @@ else
  echo "Create empty repository in /var/www/repo"
  svnadmin create /var/www/repo/
  chown -R www-data /var/www/repo/
+ mkdir /tmp/repos-empty-folder
+ svn import --username admin -m "New project for testing" /tmp/repos-empty-folder file:///var/www/repo/demoproject/trunk
 fi
 
 chown www-data /var/www/backup

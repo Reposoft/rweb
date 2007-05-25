@@ -43,12 +43,14 @@ tinyMCE.init({
 	theme_advanced_buttons2 : "",
 	theme_advanced_buttons3 : "",
 	remove_linebreaks : false,
+	forced_root_block : "p",
 	theme_advanced_blockformats : "h1, h2, h3, p",
 	theme_advanced_toolbar_location : "top",
 	theme_advanced_toolbar_align : "center",
 	convert_urls : "false",
 	entity_encoding : "raw",
 	content_css : "/home/documents.css",
+	width : "900",
 	editor_selector : "none"
 });
 </script>',

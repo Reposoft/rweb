@@ -9,7 +9,7 @@ $report = new Report('Install TinyMCE');
 $repos_package = "tinymce";
 $home = "http://tinymce.moxiecode.com/";
 
-$version = "2_1_0";
+$version = "2_1_1_1";
 $archive = "http://downloads.sourceforge.net/tinymce/tinymce_$version.zip?download";
 $license = "http://wiki.moxiecode.com/index.php/TinyMCE:License";
 
@@ -35,7 +35,7 @@ decompressZip($tmp, $dir);
 System::deleteFile($tmp);
 
 $version = "1_1_0";
-$archive = "http://prdownloads.sourceforge.net/tinymce/tinymce_compressor_php_$version.zip?download";
+$archive = "http://downloads.sourceforge.net/tinymce/tinymce_compressor_php_$version.zip?download";
 $license = "http://wiki.moxiecode.com/index.php/TinyMCE:License";
 
 $basedir = dirname(__FILE__).'/tinymce/jscripts/tiny_mce';

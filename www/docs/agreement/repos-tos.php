@@ -6,7 +6,8 @@
 <link href="../../style/docs.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 body, p {
-	font-family: monospace;
+	font-family: serif;
+	font-size: 1.1em;
 }
 </style>
 </head>

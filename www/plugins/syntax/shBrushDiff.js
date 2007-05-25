@@ -1,6 +1,6 @@
 dp.sh.Brushes.Diff = function()
 {
-	var keywords =	'Index';
+	var keywords =	'Index:';
 
 	this.regexList = [
 		{ regex: new RegExp('^-.*$', 'gm'),	css: 'removed' },

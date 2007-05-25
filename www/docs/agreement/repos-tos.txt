@@ -1,5 +1,4 @@
 Terms of Service
-$LastChangedRevision$
 
 This is the default agreement between Repository Systems AB ("Repos") and the customer. By subscribing to the Repos service, you agree to all of the following terms of usage without modification or exception. Basically it means the service comes without warranties. A custom service level agreement may be signed between Repos and a customer.
 
@@ -33,3 +32,5 @@ These Terms Of Service are governed by Swedish law.
 
 9. Changes to Terms Of Service
 Repos may modify these Terms Of Service at any time.
+
+$LastChangedRevision$
