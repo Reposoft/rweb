@@ -5,11 +5,11 @@ then
  rm -v /etc/apache2/sites-enabled/data-repository.conf
 fi
 
-if [ -f /var/www/html/start.html ]
+if [ -f /var/www/html/start-default.html ]
 then
  if [ ! -f /var/www/html/index.html ]
  then
-  mv -v /var/www/html/start.html /var/www/html/index.html
+  mv -v /var/www/html/start-default.html /var/www/html/index.html
  fi
 fi
 

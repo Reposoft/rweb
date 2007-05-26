@@ -111,6 +111,7 @@ function editIndentHtmlDocument(&$html) {
 
 function editGetNewDocument($bodyContents) {
 	$template = dirname(__FILE__).'/template_en.html';
+	// plain smarty, not Presentation (avoid filters)
 	$p = smarty_getInstance();
 	$p->assign('title', 'text');
 	$p->assign('generator', 'Repos');

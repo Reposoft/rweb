@@ -9,6 +9,10 @@ function reportErrorToUser($n, $message, $trace) {
 
 // for source protection, templates will be removed if they contain the following string (which should be true for all important pages)
 define('TEMPLATE_IDENTIFY', '<!--{$head}-->');
+// templates that should _not_ have filters enabled, like the document skeleton
+$templatesThatShouldNotBeAltered = array(
+	'plugins/edit/template_en.html'
+);
 
 $basedir = dirname(dirname(dirname(__FILE__))).'/';
 
@@ -18,6 +22,8 @@ if ( isset($argv) && count( $argv ) == 2 ) $template = $argv[1];
 if ( isset($_REQUEST['template'])) $template = $_REQUEST['template'];
 
 if (!isset($template)) die("Parameter 'template' (first command line argument) not set.");
+
+$noFilterTemplates = in_array($template, $templatesThatShouldNotBeAltered);
 
 // must be the exact same cache name used in runtime
 $given = $template;
@@ -39,8 +45,12 @@ if (!function_exists('asLogoutUrl')) { function asLogoutUrl($b) {} }
 $result = ''.$template;
 
 // use Presentation constructor to initialize template filters
-$p = new Presentation();
-$s = $p->smarty;
+if ($noFilterTemplates) {
+	$s = smarty_getInstance();
+} else {
+	$p = new Presentation();
+	$s = $p->smarty;	
+}
 
 // mimic some internals of smarty fetch function to produce the cached template
 $s_path = $s->_get_compile_path($template);

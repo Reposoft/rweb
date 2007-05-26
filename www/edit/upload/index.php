@@ -16,12 +16,19 @@ addPlugin('dateformat');
 
 define('MAX_FILE_SIZE', 1024*1024*10);
 
+define('UPLOAD_MAX_TIME', 10*60);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+	set_time_limit(BACKUP_MAX_TIME);
+}
+
 // name only exists for new files, not for new version requests
 new FilenameRule("name");
 new EditTypeRule('type');
 
 if (!isTargetSet()) {
-	trigger_error("Could not upload file. It is probably larger than ".formatSize(MAX_FILE_SIZE), E_USER_ERROR);
+	trigger_error("Could not upload file. The time limit of 10 minutes may have been exceeded," 
+		." or the file is larger than ".formatSize(MAX_FILE_SIZE).".", E_USER_ERROR);
+	// TODO: is this extra protection needed? Code should not contain exits, as they are not testable.
 	exit;
 } else {
 	$folderRule = new ResourceExistsRule('target');

@@ -38,6 +38,10 @@ class TestServerSettings extends UnitTestCase {
 		$M = 1048576;
 		eval(''.str_replace('M', ' * '.$M, '$max = '.$maxsize.';'));
 		$this->assertTrue($max >= 10*$M, "upload_max_filesize: 10 MB file uploads must be allowed, but upload_max_filesize is $maxsize ($max bytes).");
+		
+		$maxpost = ini_get('post_max_size');
+		eval(''.str_replace('M', ' * '.$M, '$max = '.$maxpost.';'));
+		$this->assertTrue($max >= 11*$M, "post_max_size: Post max size must be a couple of kb higher than upload max size, is $maxpost ($max bytes).");
 	}
 
 	function testUrlFopen() {

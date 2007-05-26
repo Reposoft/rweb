@@ -28,10 +28,13 @@ cp /tmp/php.ini.repos /tmp/php.ini.tmp
 echo "Allowing big fileuploads. 10M shoudn't be a problem."
 sed s/\^upload_max_filesize\ =\ 2M/upload_max_filesize\ =\ 10M/ /tmp/php.ini.tmp > /tmp/php.ini.repos
 cp /tmp/php.ini.repos /tmp/php.ini.tmp 
+sed s/\^post_max_size\ =\ 8M/post_max_size\ =\ 11M/ /tmp/php.ini.tmp > /tmp/php.ini.repos
+cp /tmp/php.ini.repos /tmp/php.ini.tmp 
 
 cp /tmp/php.ini.repos $PHPINI
 cat $PHPINI | grep -n "magic_quotes_gpc"
 cat $PHPINI | grep -n "upload_max_filesize"
+cat $PHPINI | grep -n "post_max_size"
 
 # enable dav+svn apache modules
 
@@ -77,13 +80,13 @@ fi
 # rewrite needed for mass virtual hosts
 #if [ ! -e /etc/apache2/mods-enabled/rewrite.load ]
 
-f [ ! -f /bin/bin/gzip ]
+if [ ! -e /bin/bin/gzip ]
 then
  echo "Repos 1.1 is hardcoded to use /usr/bin/gzip"
  ln -sv /bin/gzip /usr/bin/gzip
 fi
 
-if [ ! -f /bin/bin/gzip ]
+if [ ! -e /bin/bin/gzip ]
 then
  ln -sv /bin/gunzip /usr/bin/gunzip
 fi
@@ -118,7 +121,7 @@ ln -sv /var/www/admin/data-repository.conf /etc/apache2/sites-enabled
 echo "The repos login file must be copied to server root"
 if [ -f /var/www/html/index.html ]
 then
- mv -v /var/www/html/index.html /var/www/html/start.html
+ mv -v /var/www/html/index.html /var/www/html/start-default.html
 fi
 cp -v /var/www/html/repos/_host/html/* /var/www/html/
 
@@ -144,5 +147,3 @@ fi
 echo "'admin' user might do local svn operation, needs LANG=en_US.UTF-8"
 echo "" >> /home/admin/.bash_profile
 echo "export LANG=en_US.UTF-8" >> /home/admin/.bash_profile
-
-echo "TODO create demoproject/trunk/ with sample data"
