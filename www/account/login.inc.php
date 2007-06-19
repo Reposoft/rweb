@@ -264,7 +264,7 @@ function login_decodeQueryParam($array, $name) {
 	$v = $array[$name];
 	// target link for files placed in root begins with '//'
 	// it should begin with '/'
-	if(strpos($v, '//') == 0) {
+	if(strpos($v, '//') === 0) {
 		$v = substr($v, 1);
 	}
 	if (mb_detect_encoding($v, 'UTF-8, ISO-8859-1')=='ISO-8859-1') {
