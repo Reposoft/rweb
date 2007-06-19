@@ -7,10 +7,12 @@ function ReposResourceId(text) {
 	this.text = text;
 	// the release is the first version number "digits.digits..." up to next /
 	this.getRelease = function() {
+		if (/@Dev@/.test(this.text)) return 'dev';
 		if (/\/trunk\//.test(this.text)) return 'dev';
 		var b = /\/branches\/\D+(\d[^\/]+)/.exec(this.text);
 		if (b) return b[1] + ' dev';
-		var t = /\/tags\/\D+(\d[^\/]+)/.exec(this.text);
+		// tags URL or explicit version number counts as a distributable build
+		var t = /\/tags\/\D+(\d[^\/]+)/.exec(this.text) || /\b(\d+\.\d+\.?-?\w?\d*)\b/.exec(this.text);
 		if (t) {
 			this.isTag = true;
 			return t[1];
@@ -25,12 +27,12 @@ function ReposResourceId(text) {
 		return '';
 	};
 	this.getTextBefore = function() {
-		return /(^[^\$]*)/.exec(this.text)[1];
+		return /(^[^\$\d@]*)/.exec(this.text)[1];
 	};
 	this.getTextAfter = function() {
-		return /([^\$]*$)/.exec(this.text)[1];
+		return /([^\$\d@]*$)/.exec(this.text)[1];
 	};
-};
+}
 
 // ----- marking screens -----
 _getReleaseVersion = function(versionText) {
@@ -49,11 +51,11 @@ _showVersion = function() {
 	try {
 		$('#releaseversion').each( function() {
 			this.innerHTML = _getReleaseVersion(this.innerHTML);
-			this.style.display = 'inherit';
+			this.style.display = 'inline';
 		} );
 		$('#resourceversion').each( function() {
 			this.innerHTML = _getResourceVersion(this.innerHTML);
-			this.style.display = 'inherit';
+			this.style.display = 'inline'; // can't set to empty because it might be display:none in css
 		} );
 	} catch (err) {
 		Repos.reportError(err);

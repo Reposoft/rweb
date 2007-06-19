@@ -9,10 +9,10 @@
 <div id="commandbar">
 <a id="repository" href="{=$repository}">return to repository</a>
 </div>
-<h1>Lock <span class="filename">{=$target|getPathName}</span>?</h1>
+<h1>Lock</h1>
 <form id="lock" name="lock" method="get" action="#">
 	<fieldset>
-	<legend>lock</legend>
+	<legend>File: <a class="filename" href="{=$repository}/{=$target|getPathName}">{=$target|getPathName}</a></legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
   <p>
     <label for="name">lock</label>

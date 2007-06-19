@@ -43,7 +43,7 @@ tinyMCE.init({
 	theme_advanced_buttons2 : "",
 	theme_advanced_buttons3 : "",
 	remove_linebreaks : false,
-	forced_root_block : "p",
+	// buggy in 2.1.1.1 //forced_root_block : "p",
 	theme_advanced_blockformats : "h1, h2, h3, p",
 	theme_advanced_toolbar_location : "top",
 	theme_advanced_toolbar_align : "center",
@@ -106,6 +106,8 @@ function editIndentHtmlDocument(&$html) {
 	$html = preg_replace('/([\w;][\.\?\!\:])(\s)?(\s*)((?(2)&?[A-Z0-9]|<))/', 
 		"$1 \n$4", //preserve spaces: "$1$2$3\n$4",
 		$html);
+	// remove double newlines at end of body
+	$html = preg_replace('/\n(\r?\n)$/', "\n", $html);
 	return $html;
 }
 

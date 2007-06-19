@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>repos: ResourceId plugin test page</title>
+<!-- unit testing -->
+<script type="text/javascript" src="../unittest.js"></script>
+<!-- dependencies -->
+<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
+<!-- the script -->
+<script type="text/javascript" src="ReposResourceId.js"></script>
+<!-- should make invisible strings visible -->
+<style type="text/css">
+.versiondisplay {
+	display:none;
+}
+</style>
+</head>
+
+<body>
+<h1>Repos resource id</h1>
+<p>In the distributables we don't want to use the $URL$ keyword so we insert version number using Ant tokens</p>
+<p><a href="inde.html">Testpage for keywords</a></p>
+
+<p>Here we assume that <code>@Dev@</code> has been replaced with 1.1.5</p>
+
+<p>resourceversion 1.1.5 $Rev: 2121 $
+<br /><strong><span id="resourceversion" class="versiondisplay">
+resourceversion 1.1.5 $Rev: 2121 $
+</span></strong></p>
+
+<p>releaseversion 1.1.5 $Rev: 2121 $
+<br /><strong><span id="releaseversion" class="versiondisplay">
+releaseversion: 1.1.5 $Rev: 2121 $
+</span></strong></p>
+
+<script type="text/javascript">
+var X='$';
+
+function TestResourceId() {
+    
+    this.setUp = function() {
+    };
+    
+	this.testResourceId = function() { with(this) {
+		var testid = 'version @Dev@ '+X+'Rev: 1602 '+X+'';
+		var rid = new ReposResourceId(testid);
+		assertEquals('dev', rid.getRelease(), "It is trunk so release should be 'dev'");
+		assertEquals('1602', rid.getRevision(), "Should return the revision from Rev");
+		var result = _getResourceVersion(testid);
+		assertEquals('version dev 1602', result, "As long as no version has been set the revision number should be shown");
+	}}; 
+	
+	this.testResourceIdTag = function() { with(this) {
+		var testid = 'version 1.1.5 '+X+'Rev: 1602 '+X+'';
+		var rid = new ReposResourceId(testid);
+		assertEquals('1.1.5', rid.getRelease(), "URL is a tag so version number should be final");
+		var result = _getResourceVersion(testid);
+		assertEquals('version 1.1.5', result, "When the build has set version number revision should be hidden");
+	}};
+	
+	this.testResourceIdOnlyURL = function() { with(this) {
+		var testid = '@Dev@';
+		var rid = new ReposResourceId(testid);
+		assertEquals('dev', rid.getRelease(), "URL is a branch so should be version + dev");
+		assertEquals('', rid.getRevision(), "There is no Rev");
+	}};
+
+	this.testResourceIdOnlyURL = function() { with(this) {
+		// note the extra subfolder inside branches
+		var testid = '1.1.5';
+		var rid = new ReposResourceId(testid);
+		assertEquals('1.1.5', rid.getRelease(), "URL is a branch so should be version + dev");
+		assertEquals('', rid.getRevision(), "There is no Rev");
+	}};
+	
+	this.testResourceIdOnlyRev = function() { with(this) {
+		var testid = ''+X+'Rev: 1602 '+X+' only';
+		var rid = new ReposResourceId(testid);
+		assertEquals('', rid.getRelease(), "No URL so release should be empty");
+		assertEquals('1602', rid.getRevision(), "Should return the revision from Rev");
+	}};
+	
+	this.testResourceIdId = function() { with(this) {
+		var testid = 'repos.se stylesheet version '+X+'Id: repos.xsl 1601 2006-09-14 09:09:50Z solsson '+X+'';
+		var rid = new ReposResourceId(testid);
+		assertEquals('1601', rid.getRevision(),'"Should be able to get revision number from '+X+'Id'+X+' keyword too');
+		assertEquals('', rid.getRelease(), 'There is no branch info in '+X+'Id'+X+'');
+	}};
+		
+}
+
+testrun(TestResourceId);
+</script>
+
+</body>
+</html>

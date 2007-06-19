@@ -5,6 +5,8 @@
 	<property file="local.properties"/>
 	<property file="build.properties"/>
 	
+	<filter token="Dev" value="${app.version}"/>
+	
 	<property name="app.folder" value="${target.folder}/${app.name}" description="what we'll ship"/>
 	
 	<available file="${zend.guard.command}" property="zend.guard.available"/>
@@ -41,6 +43,13 @@
 				<include name="lib/*/*LICENSE"/>
 			</fileset>
 		</copy>
+		<copy todir="${source.folder}" filtering="true" overwrite="true">
+			<fileset dir="${development.folder}">
+				<include name="index.html"/>
+				<include name="open/start/*.html"/>
+				<include name="view/*.xsl"/>
+			</fileset>
+		</copy>
 	</target>
 	
 	<target name="compile" depends="preprocess"
@@ -58,9 +67,16 @@
 		<antcall target="postprocess"></antcall>
 	</target>
 	
-	<!-- getting 'function does not exist' if encoding with Zend Guard without smarty sources -->
-	<target name="compile.excludes" unless="zend.guard.available">
+	<target name="compile.excludes">
 		<mkdir dir="${target.folder}/compile.excludes"/>
+		<antcall target="compile.excludes.smarty"></antcall>
+		<move todir="${target.folder}/compile.excludes">
+			<fileset dir="${source.folder}" includes="admin/hostid/**"/>
+		</move>
+	</target>
+	
+	<target name="compile.excludes.smarty" unless="zend.guard.available"
+			description="getting 'function does not exist' if encoding with Zend Guard without smarty sources">
 		<move todir="${target.folder}/compile.excludes">
 			<fileset dir="${source.folder}">
 				<include name="lib/smarty/libs/**"/>
@@ -68,7 +84,7 @@
 		</move>
 	</target>
 	
-	<target name="compile.excludes.restore" unless="zend.guard.available">
+	<target name="compile.excludes.restore">
 		<echo message="Moving excluded files, plain source, to distribution"/>
 		<move todir="${app.folder}">
 			<fileset dir="${target.folder}/compile.excludes" includes="**/*"/>

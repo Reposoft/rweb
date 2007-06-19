@@ -26,6 +26,9 @@
 {=/if}
 
 <div id="footer">
+{=if $hostid}
+<input title="Server Host ID" type="text" id="url" size="25" value="{=$hostid}"  readonly="readonly" onclick="this.select();"/>
+{=/if}
 </div>
 </body>
 </html>

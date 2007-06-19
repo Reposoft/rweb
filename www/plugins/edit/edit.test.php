@@ -196,6 +196,27 @@ class TestEditPlugin extends UnitTestCase {
 		$this->assertEqual(1, substr_count($result,'</body>'));
 		$this->assertEqual(1, substr_count($result,'</html>'));		
 	}
+	
+	function testRemoveExtraNewlineAtEndOfBody() {
+		// when a document is created in tinymce there is only wone newline before body,
+		// but on next edit another newline is appended 
+		$html = "the end</p>\r\n\r\n";
+		$result = editIndentHtmlDocument($html);
+		$this->assertEqual("the end</p>\r\n", $result);
+		
+		$html = "\r\n\r\n\r\n";
+		$result = editIndentHtmlDocument($html);
+		$this->assertEqual("\r\n\r\n", $result);
+		
+		$html = "\n\n\n";
+		$result = editIndentHtmlDocument($html);
+		$this->assertEqual("\n\n", $result);
+		
+		$html = "\n\nX\n\n";
+		$result = editIndentHtmlDocument($html);
+		$this->assertEqual("\n\nX\n", $result);
+		
+	}
 }
 
 testrun(new TestEditPlugin());
