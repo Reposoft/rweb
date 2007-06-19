@@ -86,6 +86,10 @@ class ResourceExistsRule extends Rule {
 	function valid($fieldvalue) {
 		$s = new ServiceRequest(getRepository().$fieldvalue);
 		$s->exec();
+		if($s->getStatus() == 301){
+			$headers = $s->getResponseHeaders();
+			return $headers['Location'] == getRepository().$fieldvalue.'/';
+		}
 		return $s->getStatus() == 200;
 	}	
 }
