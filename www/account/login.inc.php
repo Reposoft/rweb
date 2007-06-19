@@ -262,6 +262,11 @@ function _login_getHttpStatus($targetUrl) {
  */
 function login_decodeQueryParam($array, $name) {
 	$v = $array[$name];
+	// target link for files placed in root begins with '//'
+	// it should begin with '/'
+	if(strpos($v, '//') == 0) {
+		$v = substr($v, 1);
+	}
 	if (mb_detect_encoding($v, 'UTF-8, ISO-8859-1')=='ISO-8859-1') {
 		trigger_error("The value of parameter '$name' ($v) is not valid UTF-8", E_USER_ERROR);
 	}
