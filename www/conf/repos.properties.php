@@ -56,7 +56,7 @@ define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST
 if (!isset($_repos_config['repositories'])) trigger_error("No repositories configured");
 if (!isset($_repos_config['repos_web'])) trigger_error("Repos web applicaiton root not specified in configuration");
 function _denyParam($name) { if (isset($_GET[$name]) || isset($_POST[$name])) trigger_error("The parameter '$name' is reserved.", E_USER_ERROR); }
-_denyParam(REPO_KEY);
+// used for svn service layer // _denyParam(REPO_KEY);
 _denyParam(USERNAME_KEY);
 _denyParam(LOCALE_KEY);
 _denyParam(THEME_KEY);
