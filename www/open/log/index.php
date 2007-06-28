@@ -2,8 +2,8 @@
 
 require_once(dirname(dirname(__FILE__)) . "/SvnOpen.class.php" );
 
-// TODO configurable webapp location (!=/repos)
-define('STYLESHEET','/repos/view/log.xsl');
+$webapp = asLink(getWebapp()); // asLink to get the same host
+define('STYLESHEET',$webapp.'view/log.xsl');
 
 // the resource to log
 $url = getTargetUrl();

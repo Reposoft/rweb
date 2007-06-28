@@ -8,12 +8,12 @@
 <body>
 
 <div id="commandbar">
-<img src="../../style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="repos.se content management"/>
+<img src="{=$webapp}style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="repos.se content management"/>
 <a href="/?logout" id="logout">logout</a>
 </div>
 
 <div id="intro">
-<h1><img src="../../style/logo/repos2.png" border="0" align="absmiddle" width="144" height="36" alt="Repos "/> startpage</h1>
+<h1><img src="{=$webapp}style/logo/repos2.png" border="0" align="absmiddle" width="144" height="36" alt="Repos "/> startpage</h1>
 <p>You are logged in with username <em>{=$userfullname}</em>.
 This startpage lists the projects that you have access to,
 and the tools in each project.</p>
@@ -30,7 +30,7 @@ and the tools in each project.</p>
 <span class="{=if $projectname eq $userfullname}username{=else}projectname{=/if}">{=$projectname}</span>
 {=if !$entry->getPath()}&nbsp;root{=/if}
 <!--{* 
-<a class="folder {=if $entry->isReadOnly()}readonly{=/if}" href="../project/?target={=$entry->getPath()}/">{=$projectname}</a>
+<a class="folder {=if $entry->isReadOnly()}readonly{=/if}" href="{=$webapp}open/project/?target={=$entry->getPath()}/">{=$projectname}</a>
  *}-->
 </h2>
 <!--{* todo: class groupaccess *}-->
@@ -42,8 +42,8 @@ and the tools in each project.</p>
 	{=* special cases not handled by open *}
 	{=if $toolid eq news}{=assign var='toolpath' value=`$toolpath`news.xml}{=/if}
 	{=*{=if $toolid eq calendar}{=assign var='toolpath' value=`$toolpath``$projectname`.ics}{=/if}*}
-	<a id="{=$toolid}:{=$projectname}" class="tool {=$toolid}" href="../?target={=$entry->getPath()}/{=$toolpath}">
-	<img border="0" src="../../style/tools/{=$toolid}.png" hspace="10" align="absmiddle"/>{=$toolid}</a>
+	<a id="{=$toolid}:{=$projectname}" class="tool {=$toolid}" href="{=$webapp}open/?target={=$entry->getPath()}/{=$toolpath}">
+	<img border="0" src="{=$webapp}style/tools/{=$toolid}.png" hspace="10" align="absmiddle"/>{=$toolid}</a>
 	</div>
 	<!--{/foreach}-->
 </div>
@@ -57,7 +57,7 @@ or $smarty.foreach.project.iteration + $smarty.foreach.project.iteration - 1 eq 
 
 <div id="footer">
 <span id="releaseversion" class="versiondisplay">Repos @Dev@</span>
-<span class="legal">Repos is a web platform for version control with <a target="_blank" href="http://subversion.tigris.org/">Subversion</a>, see <a id="agreement" href="../../docs/agreement/" target="_blank">terms and conditions</a></span>
+<span class="legal">Repos is a web platform for version control with <a target="_blank" href="http://subversion.tigris.org/">Subversion</a>, see <a id="agreement" href="{=$webapp}docs/agreement/" target="_blank">terms and conditions</a></span>
 </div>
 
 </body>
