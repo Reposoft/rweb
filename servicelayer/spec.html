@@ -9,7 +9,7 @@
 <script src="/home/documents.js" type="text/javascript"></script>
 </head>
 <body>
-<h1>Specification of Subversion Service</h1>
+<h1>Specification: Subversion Service Layer</h1>
 <h2 class="service" id="log"><span class="query">svn=</span>log</h2>
 <ul class="service-specification">
 <li class="datatype">text/xml</li>
@@ -24,11 +24,18 @@
 <li class="example">&nbsp;</li>
 </ul>
 
+<h2 class="service" id="list"><span class="query">svn=</span>list</h2>
+<ul class="service-specification">
+<li class="datatype">text/xml</li>
+<li class="description">The XML output from svn list command on the folder or file</li>
+<li class="example">&nbsp;</li>
+</ul>
+
 <h2 class="service" id="listjs"><span class="query">svn=</span>listjs</h2>
 <ul class="service-specification">
 <li class="datatype">text/javascript</li>
 <li class="description">A javascript that writes a folder contents to an HTML element</li>
-<li class="parameter"><em>select</em> Mandatory CSS selector for the element</li>
+<li class="parameter"><em>selector</em> CSS selector for the UL element to add contents to</li>
 <li class="example">&nbsp;</li>
 <li class="depends">The page must import <a href="http://jquery.com">jQuery</a> before this script</li>
 </ul>

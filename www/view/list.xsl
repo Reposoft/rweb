@@ -4,19 +4,17 @@
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
 
-	<!-- unlike in log.xsl we use relative url for list pages -->
-	<xsl:param name="web">../../</xsl:param>
+	<xsl:param name="web">/repos/</xsl:param>
 
 	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>style/</xsl:param>
-	<xsl:param name="cssUrl-pe"><xsl:value-of select="$web"/>themes/pe/style/</xsl:param>
-	
+
 	<xsl:param name="spacer" select="'&#160; '"/>
 	
 	<xsl:template match="/">
 		<head>
 			<title>
 				<xsl:text>Repos: </xsl:text>
-				<xsl:value-of select="'historic folder'"/>
+				<xsl:value-of select="'detailed folder listing'"/>
 			</title>
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<!-- if search crawlers has access, contents should not be cached -->
@@ -25,9 +23,6 @@
 			<!-- default stylesheets -->
 			<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
 			<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>
-			<!-- alternative stylesheets -->
-			<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}global.css"/>
-			<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}repository/repository.css"/>
 			<!-- install the repos script bundle -->
 			<script type="text/javascript" src="{$web}scripts/head.js"></script>
 		</head>
