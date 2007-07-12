@@ -12,6 +12,7 @@
 	<!-- start transform -->
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
+	<xsl:param name="title">repos history: </xsl:param>
 	<!-- root url for webapp resources, not using relative urls -->
 	<xsl:param name="web" select="/log/@web"/>
 	<xsl:param name="static" select="$web"/>
@@ -25,7 +26,7 @@
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<head>
 				<title>
-					<xsl:text>repos.se: history of </xsl:text>
+					<xsl:value-of select="$title"/>
 					<xsl:value-of select="log/@target"/>
 				</title>
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>

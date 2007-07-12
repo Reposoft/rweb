@@ -65,6 +65,31 @@ function unittest() {
 	
 	$t4 = '<p><xsl:text>A</xsl:text>  <xsl:text>text</xsl:text></p>';
 	assertEquals($t4, minimizeXslt($t4));
+	
+	// Should there be any special treatment of the initial params section?
+	// Marke with <!-- === configuration === -->?
+	$t5 = '<?xml version="1.0"?>
+<!--
+
+-->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+	<!-- start transform -->
+	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
+		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
+	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
+	<xsl:param name="web">/repos/</xsl:param>
+	<xsl:param name="static">/repos/</xsl:param>
+	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
+	<xsl:param name="editUrl"><xsl:value-of select="$web"/>edit/</xsl:param>
+	<!-- we dont want to force the CSS to set margins everywhere -->
+	<xsl:param name="spacer" select="\' &#160; \'"/>
+	<!-- TODO
+	- improve
+	-->
+	<!-- first template -->
+	<xsl:template match="/">
+	</xsl:template match="/">';
+	assertEquals(true, strlen(minimizeXslt($t5)) < strlen($t5));
 }
 
 function assertEquals($string1, $string2) {

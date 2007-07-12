@@ -11,6 +11,7 @@
 	<!-- start transform -->
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
+	<xsl:param name="title">repos: </xsl:param>
 	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
 	<xsl:param name="web">/repos/</xsl:param>
 	<xsl:param name="static">/repos/</xsl:param>
@@ -41,7 +42,7 @@
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<head>
 				<title>
-					<xsl:text>repos: </xsl:text>
+					<xsl:value-of select="$title"/>
 					<xsl:value-of select="/svn/index/@path"/>
 				</title>
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>

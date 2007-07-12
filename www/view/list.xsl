@@ -3,6 +3,7 @@
 	
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
+	<xsl:param name="title">repos list: </xsl:param>
 
 	<xsl:param name="web">/repos/</xsl:param>
 
@@ -13,8 +14,8 @@
 	<xsl:template match="/">
 		<head>
 			<title>
-				<xsl:text>Repos: </xsl:text>
-				<xsl:value-of select="'detailed folder listing'"/>
+				<xsl:value-of select="$title"/>
+				<xsl:value-of select="'detailed'"/>
 			</title>
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<!-- if search crawlers has access, contents should not be cached -->
