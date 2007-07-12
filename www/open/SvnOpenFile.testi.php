@@ -73,10 +73,10 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertEqual(1, $file->getRevision());
 		$this->assertTrue(strlen($file->getContents()) > 1, substr($file->getContents(), 0, 20).'...');
 		$this->assertEqual('text/html', $file->getType());
-		setTestUserNotLoggedIn();
 	}
 	
 	function testNonexistingFileHead() {
+		setTestUser();
 		$file = new SvnOpenFile("/demoproject/trunk/public/thispathdoesnotexist.tmp");
 		$this->assertEqual(404, $file->getStatus());
 		// Why support this? // $this->assertEqual('HEAD', $file->getRevision(), "No revision can be found. %s");

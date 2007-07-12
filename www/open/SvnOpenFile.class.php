@@ -281,6 +281,7 @@ class SvnOpenFile {
 	 */	
 	function isWritable() {
 		if (!$this->isLatestRevision()) return false;
+		if ($this->getStatus() == 404) return false;
 		if ($this->isFolder()) return _svnFolderIsWritable($this->getUrl());
 		return _svnFileIsWritable($this->getUrl());
 	}
