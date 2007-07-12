@@ -68,6 +68,7 @@ if (typeof(parseXml)=='undefined') { function parseXml(xml) {
 	// get the URL for this script, which is the same folder as the contents it lists
 	var scripts = document.getElementsByTagName('script');
 	for (i=scripts.length-1; i>=0; i--) {
+		if (!scripts[i].src) continue;
 		var m = /^(.*\/)\?svn=listjs&?(.*)$/.exec(scripts[i].src);
 		if (m && m.length > 1) {
 			if (m[2]) params = eval('({'+m[2].replace(/=/g,':"').replace(/&/g,'",')+'"})');
@@ -83,7 +84,7 @@ if (typeof(parseXml)=='undefined') { function parseXml(xml) {
       titles: true,
       path: null
 	}, params);
-	
+
 	//todo: write directly to body (no selector) if parent is not head
 	$().ready( function() {
 		var xml = parseXml(svn_list_xml); // domify xml string
