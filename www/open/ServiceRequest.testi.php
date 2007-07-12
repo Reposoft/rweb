@@ -8,7 +8,8 @@ require('ServiceRequest.class.php');
 // import testing framework, see http://www.lastcraft.com/simple_test.php
 require("../lib/simpletest/setup.php");
 
-define('TESTREPO', getSelfRoot().'/testrepo/');
+define('TESTREPO', getRepository());
+//define('TESTREPO', getSelfRoot().'/testrepo/');
 
 class TestServiceRequestIntegration extends UnitTestCase {
 

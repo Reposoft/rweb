@@ -137,6 +137,20 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		// TODO test as user not logged in
 	}
 	
+	function testFileNoExtension() {
+		$file = new SvnOpenFile("/test/trunk/TESTACCOUNT");
+		$this->assertEqual(200, $file->getStatus());
+		$this->assertEqual('file', $file->getKind());
+	}
+	
+	function testFileNoExtensionRev() {
+		// TODO should really delete the file in head to get a good test
+		$revWhenAdded = 6; 
+		$file = new SvnOpenFile("/test/trunk/TESTACCOUNT", $revWhenAdded);
+		$this->assertEqual(200, $file->getStatus());
+		$this->assertEqual('file', $file->getKind());
+	}
+	
 	function testFolder() {
 		$file = new SvnOpenFile("/demoproject/trunk/public/");
 		$this->assertEqual(200, $file->getStatus());

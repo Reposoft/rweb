@@ -4,7 +4,8 @@ require("../lib/simpletest/setup.php");
 
 // assume that if repository /testrepo exists we have a proper intergration test repository on this host
 define('TESTHOST', getSelfRoot());
-define('TESTREPO', TESTHOST."/testrepo");
+define('TESTREPO', getRepository());
+//define('TESTREPO', TESTHOST."/testrepo");
 //define('TESTREPO', "http://test.repos.se/testrepo/");
 //define('TESTREPO', "http://alto.optime.se/testrepo/");
  

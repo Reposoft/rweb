@@ -140,6 +140,9 @@ setup_svn('commit -m "Created a abnormal folder structure for user test" '.$wc);
 System::createFolder($wc."test/trunk/repos-svn-access/");
 System::createFileWithContents($wc."test/trunk/repos-svn-access/automated-test-increment.txt", "0");
 setup_svn("add {$wc}test/trunk/repos-svn-access/");
+System::createFileWithContents($wc."test/trunk/TESTACCOUNT", "This folder contains data for automated tests\n");
+setup_svn("add {$wc}test/trunk/TESTACCOUNT");
+
 setup_svn('commit -m "Added integration testing folders for other repos projects" '.$wc);
 
 // Clean up

@@ -173,13 +173,16 @@ class SvnOpenFile {
 		if ($this->headStatus == 301) {
 			return ($this->head['Location'] == $this->url.'/');
 		}
+		// now for HEAD we know it is not a folder
+		if ($this->headStatus == 200 && $this->isLatestRevision()) return false;
 		// when viewing a folder from history, if if does not exist we need to check svn
 		// but it could be expensive doing that for every page,
 		// so we only do it for names that do not look like files
 		if (!preg_match('/\.\w+$/', $this->path)) {
 			// note that $this->_read is not allowed fo folders.
 			// We'd like to do svn info here, but that would be a duplication of the _read call
-			// Guess
+			// TODO use 'svn' to see, for a path without extension that no longer exists, if it was a file or a folder
+			// Guess folder, assuming that files without extension are rare
 			return true;
 		}
 		return false;
