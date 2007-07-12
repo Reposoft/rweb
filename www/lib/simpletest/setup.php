@@ -39,16 +39,20 @@ if (!function_exists('reportErrorText')) {
  * @param String $password the client's password
  */
 function setTestUser($username='test', $password='test') {
-	$_SERVER['PHP_AUTH_USER'] = $username;
-	$_SERVER['PHP_AUTH_PW'] = $password;
+	//$_SERVER['PHP_AUTH_USER'] = $username;
+	//$_SERVER['PHP_AUTH_PW'] = $password;
+	getReposUser($username);
+	_getReposPass($password);
 }
 
 /**
  * Clears the internal credentials for outgoing requests.
  */
 function setTestUserNotLoggedIn() {
-	unset($_SERVER['PHP_AUTH_USER']);
-	unset($_SERVER['PHP_AUTH_PW']);
+	//unset($_SERVER['PHP_AUTH_USER']);
+	//unset($_SERVER['PHP_AUTH_PW']);
+	getReposUser(false);
+	_getReposPass(false);
 }
 
 $reporter = new HtmlReporter();

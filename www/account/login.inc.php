@@ -332,20 +332,40 @@ function askForCredentialsAndExit($realm) {
  * @return true if HTTP login credentials are present and username is not void
  */
 function isLoggedIn() {
-	return isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER']!=LOGIN_VOID_USER;
+	return (getReposUser() !== false);
 }
 
 /**
  * @return logged in username, or false if no user (but use isLoggedIn to check)
  */
-function getReposUser() {
-	if (!isLoggedIn()) return false;
-	validateUsername($_SERVER['PHP_AUTH_USER']);
-	return $_SERVER['PHP_AUTH_USER'];
+function getReposUser($force = null) {
+	static $_user = null;
+	if ($force !== null) $_user = $force; // testing
+	if ($_user !== null) return $_user;
+	// read the auth only once per request
+	if (isset($_SERVER['PHP_AUTH_USER'])) {
+		 $u = $_SERVER['PHP_AUTH_USER'];
+		 if ($u == LOGIN_VOID_USER) {
+		 	$_user = false;
+		 } else {
+		 	validateUsername($u);
+		 	$_user = $u;
+		 }
+	} else {
+		$_user = false;
+	}
+	return $_user;
 }
-function _getReposPass() {
-	if (!isLoggedIn()) return false;
-	return $_SERVER['PHP_AUTH_PW'];
+function _getReposPass($force = null) {
+	static $_pass = null;
+	if ($force !== null) $_pass = $force; // testing
+	if ($_pass !== null) return $_pass;
+	if (!isLoggedIn()) {
+		$_pass = false;
+	} else {
+		$_pass = $_SERVER['PHP_AUTH_PW'];
+	}
+	return $_pass;
 }
 function getReposAuth() {
 	return "This function is deprecated. Will be removed in 1.0"; // $_SERVER['HTTP_AUTHORIZATION'];
