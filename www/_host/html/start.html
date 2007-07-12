@@ -17,7 +17,11 @@
 <body>
 
 <h2>Welcome to our <a href="/repos/">Repos</a> host</h2>
-<p><big> &nbsp;&raquo;&nbsp;<a href="/?login">login</a></big></p>
+
+<p><big> &nbsp;&raquo;&nbsp;<a id="login" href="/?login" style="padding:0.1em;">login</a></big></p>
+<script type="text/javascript">
+document.getElementById('login').focus();
+</script>
 
 <!-- here is a good place to add links to projects within the repository -->
 
@@ -27,7 +31,7 @@
 <!-- set default theme for this host, in place of a link to /repos/scripts/styleswitch/
 <script type="text/javascript" src="/repos/scripts/head.js"></script>
 <script type="text/javascript" src="/repos/scripts/styleswitch/styleswitch.js"></script>
-<script type="text/javascript">if (typeof(switchStylesheet) != 'undefined') switchStylestyle('pe');</script>
+<script type="text/javascript">if (typeof(switchStylestyle) != 'undefined') switchStylestyle('pe');</script>
  -->
 
 </body>
