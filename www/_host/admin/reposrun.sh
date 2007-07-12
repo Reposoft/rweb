@@ -1,8 +1,5 @@
 #!/bin/bash
-# Repos command line runner
-# First set up the environment, then run all the arguments as a command
-
-# The argument should be the complete command escaped with single quotes
+# Repos command line runner: set up the environment, then run the single argument as a command
 
 if [ $# -ne 1 ]
 then
@@ -12,8 +9,6 @@ fi
 
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
-
-# for test servers # echo "$1" >> "/tmp/repos-php/run-log.txt"
 
 eval "$1"
 exit $?
