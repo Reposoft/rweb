@@ -1,9 +1,11 @@
 /* repos.se common styles for Project Engine integration */
+@import "../../../style/layout.css";
 html {
 	/* Fix IE background image flicker */
 	filter: expression(document.execCommand("BackgroundImageCache", false, true));
 }
 body {
+	margin-top: 20px;
 	font-family: Verdana, Helvetica, Arial, sans-serif;
 	font-size: 82.5%;
 }
@@ -42,6 +44,11 @@ pre {
 code {
 	font-size: 1.1em;
 }
+/* override layout.css, including headlines on startpage */
+div.section h2, div.section h2 span {
+	background-color: #eeeeee;
+	color: #D37C0B;
+}
 /* layout of version control concepts, these are usually span tags */
 .path {
 	color: #112200;
@@ -76,17 +83,21 @@ code {
 	padding: 6px;
 }
 .n0, .n2 {
-	background-color: #F7F7F6;
+	background-color: #FDFDFE;
 }
 .n1, .n3 {
-	background-color: #F0F0EE;	
+	background-color: #F7F7F6;	
 }
 #footer {
-	border-top: 1px solid #FDBC4B;
+	margin-top: 1.5em;
+	width: 100%;
 	bottom: 10px;
 	height: 20px;
+	float: left;
+	border-top: 1px solid #FDBC4B;
+	background-color: #F4F4F4;
 	color: #cccccc;
-	font-size: smaller;
+	font-size: 85.5%;
 }
 #footer a {
 	color: #cccccc;
@@ -96,7 +107,7 @@ code {
 	right: 10px;
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
-.command {
+#commandbar a, #commandbar span {
 	background-position: center left;
 	background-repeat: no-repeat;
 	margin: 0.2em;
@@ -105,10 +116,10 @@ code {
 	padding-top: 5px;
 	padding-bottom: 5px;
 }
-a.command {
+#commandbar a {
 	color: #333333;
 }
-span.command {
+#commandbar span {
 	color: #BBBBBB;
 }
 /* action is for buttons inside listings, <a> is  active, <span> is greyed out */

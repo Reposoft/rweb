@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-/* maybe we should have a plugin solution for the layout sylesheet */
+/* shared layout between themse instead of plugin solution */
 @import "layout.css";
 /* repos.se common styles */
 html {

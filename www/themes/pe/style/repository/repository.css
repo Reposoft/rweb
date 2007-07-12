@@ -8,11 +8,27 @@
 #commandbar #history {
 	background-image: url('history.gif');
 }
-#commandbar #upload {
+#commandbar #addfile {
 	background-image: url('upload.gif');
 }
 #commandbar #createfolder {
 	background-image: url('createfolder.gif');
+}
+#commandbar #createfile {
+	background-image: url('createfile.gif');
+}
+/* details plugin */
+#commandbar #showdetails {
+	background-image: url('details.gif');
+	cursor: pointer;
+}
+.row div.details {
+	position: relative;
+	left: 3.0em;
+	height: 1.8em;
+}
+.row div.details span {
+	margin: 0.4em;
 }
 /* directory listing */
 .row {

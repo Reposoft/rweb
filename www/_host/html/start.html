@@ -2,13 +2,32 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta name="Generator" content="Repos"></meta>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
-<title>Repos default startpage</title>
+<title>Repos startpage</title>
+
+<!-- allow edit online, will overwrite <head> at save: <meta name="Generator" content="Repos"></meta> -->
+
+<!-- default theme and other supported themes, needed to see the difference after styleswitch -->
+<link rel="stylesheet" title="repos" type="text/css" href="/repos/style/global.css" media="screen" />
+<link rel="alternate stylesheet" title="pe" type="text/css" href="/repos/themes/pe/style/global.css" media="screen" />
+
+<!-- styleswitch switch support from this page, insetad of link to /repos/scripts/styleswitch/ -->
+<script type="text/javascript" src="/repos/scripts/head.js"></script>
+<script type="text/javascript" src="/repos/scripts/styleswitch/styleswitch.js"></script>
+
 </head>
+
+<!-- <body onload="switchStylestyle('pe');"> -->
 <body>
+
 <h2>Welcome to our <a href="/repos/">Repos</a> host</h2>
-<h3> &nbsp; &nbsp; <a href="/?login">login</a></h3>
-<p>This is the startpage for a new installation. It can be modified by administrators.
+<p><big> &nbsp;&raquo;&nbsp;<a href="/?login">login</a></big></p>
+
+<!--
+<p>Switch theme: <a href="/repos/scripts/styleswitch/serversideSwitch.html?style=repos" rel="repos" class="styleswitch">repos</a> / <a href="/repos/scripts/styleswitch/serversideSwitch.html?style=pe" rel="pe" class="styleswitch">pe</a></p>
+-->
+
+<p>&nbsp;</p>
+<p style="color:gray;"><small>This is the startpage for a new installation. It can be modified by administrators.</small></p>
 </body>
 </html>
