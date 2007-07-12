@@ -58,7 +58,7 @@ you will see only a long line of characters.</p>
 {=/if}
 <h3><a id="history" href="log/?target={=$target}&rev={=$rev}">View history</a></h3>
 <p>View the commits that this file has been involved in.</p>
-<h3><a id="useurl" href="#urltext" onblur="document.getElementById('url').select();">Use the URL</a></h3>
+<h3><a id="useurl" href="#urlcopy" onblur="document.getElementById('urlcopy').select();">Use the URL</a></h3>
 <!--{if $file,isLatestRevision}-->
 <p>The URL is a global ID for the file.
 In e-mails it can be used instead of attachments.
@@ -83,7 +83,7 @@ You need to use a version control (Subversion) client like Repos.</p>
 </div>
 </div>
 <div id="footer">
-<a name="urltext"></a><input id="url" title="Ctrl+C to copy the URL to clipboard" name="url" type="text" readonly="readonly" value="{=$file,url}" onclick="this.select();"/>
+<input id="urlcopy" title="Ctrl+C to copy the URL to clipboard" name="url" type="text" readonly="readonly" value="{=$file,url}" onclick="this.select();"/>
 </div>
 </body>
 </html>

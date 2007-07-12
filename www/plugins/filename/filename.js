@@ -26,6 +26,7 @@ function fileExtensionRead() {
 }
 
 function getFileExtension(filename) {
+	if (!filename) return '';
 	var j = filename.match(/\.(\w*$)/);
 	if (j) {
 		filenamePluginExtension = j[0];		// saves the extension only if it exists
@@ -59,6 +60,8 @@ function checkNewFileExtension() {
 		var i = getFileExtension(newFileName);
 		if (!i) {
 			$('.remember-extension').val(addFileExtension(newFileName));
+			// remove the class so that this is not done again if the user removes the extension
+			$('.remember-extension').removeClass('remember-extension');
 		} else {
 			filenamePluginExtension = i;
 		}

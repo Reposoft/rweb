@@ -38,13 +38,16 @@ div p {
 }
 
 /* input box in footer with the full url */
-#footer #url {
+#footer #urlcopy {
 	width: 98%;
 	text-align: center;
 	border: 0px;
-	color: #999999;
-	font-size: smaller;	
+	margin: 0px;
+	color: #808080;
 	background: none;
+}
+#footer > #urlcopy {
+	font-size: 95%;
 }
 /* common activities, same id as commands */
 div#activities p {
