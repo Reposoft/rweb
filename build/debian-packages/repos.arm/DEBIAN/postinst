@@ -80,13 +80,13 @@ fi
 # rewrite needed for mass virtual hosts
 #if [ ! -e /etc/apache2/mods-enabled/rewrite.load ]
 
-if [ ! -e /bin/bin/gzip ]
+if [ ! -e /usr/bin/gzip ]
 then
  echo "Repos 1.1 is hardcoded to use /usr/bin/gzip"
  ln -sv /bin/gzip /usr/bin/gzip
 fi
 
-if [ ! -e /bin/bin/gzip ]
+if [ ! -e /usr/bin/gzip ]
 then
  ln -sv /bin/gunzip /usr/bin/gunzip
 fi
@@ -128,6 +128,9 @@ cp -v /var/www/html/repos/_host/html/* /var/www/html/
 echo "Make www-data memeber of shadow group, to enable mod-auth-pam"
 echo "This means it can be readable by anyone who can run CGI scripts, see libapache2-mod-auth-pam README"
 usermod -G shadow www-data
+
+echo "Lock smarty templates"
+chmod -R a-w /var/www/html/repos/lib/smarty/cache/templates_c
 
 echo "Restart apache2"
 /etc/init.d/apache2 restart

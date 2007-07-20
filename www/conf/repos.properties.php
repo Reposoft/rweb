@@ -14,6 +14,7 @@
  * @see Presentation
  * @package conf
  */
+define('REPOS_VERSION','@Dev@');
 
 // Configuration array can be set before inport. If not it will be read from file.
 if (!isset($_repos_config)) {
@@ -41,6 +42,13 @@ function reportErrorText($n, $message, $trace) {
 	}
 }
 set_error_handler('reportError');
+
+// special handling of build flags
+define('REPOS_VERSION_ARM','-bubba');
+if (strpos(REPOS_VERSION, REPOS_VERSION_ARM)) {
+	strpos(phpversion(),'4.3.10')===0 or die('Server mismatch. This Repos release requires PHP for ARM.');
+	PHP_OS=='Linux' or die('Distribution mistmatch. This Repos release requires Debian.');
+}
 
 // cookie settings
 define('REPO_KEY', 'repo');

@@ -35,4 +35,8 @@ do
  fi
 done
 
+echo "Create /tmp/eaccelerator and chmod it 777"
+mkdir /tmp/eaccelerator
+chmod 0777 /tmp/eaccelerator
+
 exit 0
