@@ -329,10 +329,11 @@ function xmlEncodePath($path) {
 function _getConfigFolder() {
 	static $c = null;
 	if (!is_null($c)) return $c;
-	$c = dirname(dirname(dirname(dirname(__FILE__)))).DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR;
+	$here = __FILE__; //does not work with inclides: $_SERVER['SCRIPT_FILENAME'];
+	$c = dirname(dirname(dirname(dirname($here)))).DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR;
 	if (file_exists($c)) return $c;
 	// old location
-	$c = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'repos-config'.DIRECTORY_SEPARATOR;
+	$c = dirname(dirname(dirname($here))).DIRECTORY_SEPARATOR.'repos-config'.DIRECTORY_SEPARATOR;
 	if (file_exists($c)) return $c;
 	trigger_error('Could not find configuration file location ../../admin/ or ../repos-config/', E_USER_ERROR);
 }
