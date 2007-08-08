@@ -330,7 +330,7 @@ function _getConfigFolder() {
 	static $c = null;
 	if (!is_null($c)) return $c;
 	$here = dirname(__FILE__); // absolute path independent of includes, seems to resolve symlinks on all platforms
-	if (strncmp($_SERVER['SCRIPT_FILENAME'], dirname($here), strlen(dirname($here)))!=0) {
+	if (strncmp($_SERVER['SCRIPT_FILENAME'], strtr(dirname($here),"\\",'/'), strlen(dirname($here)))!=0) {
 		// How to get the symlinked path as in $_SERVER[SCRIPT_FILENAME] for _this_ file (not script)?
 		// solve for location "/repos/", to allow central upgrades and local config for multiple hosts
 		if ($symlinked = substr($_SERVER['SCRIPT_FILENAME'], 0, strrpos($_SERVER['SCRIPT_FILENAME'],'/repos/')+7)) {
