@@ -329,11 +329,20 @@ function xmlEncodePath($path) {
 function _getConfigFolder() {
 	static $c = null;
 	if (!is_null($c)) return $c;
-	$here = __FILE__; //does not work with inclides: $_SERVER['SCRIPT_FILENAME'];
-	$c = dirname(dirname(dirname(dirname($here)))).DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR;
+	$here = dirname(__FILE__); // absolute path independent of includes, seems to resolve symlinks on all platforms
+	if (strncmp($_SERVER['SCRIPT_FILENAME'], dirname($here), strlen(dirname($here)))!=0) {
+		// How to get the symlinked path as in $_SERVER[SCRIPT_FILENAME] for _this_ file (not script)?
+		// solve for location "/repos/", to allow central upgrades and local config for multiple hosts
+		if ($symlinked = substr($_SERVER['SCRIPT_FILENAME'], 0, strrpos($_SERVER['SCRIPT_FILENAME'],'/repos/')+7)) {
+			$c = dirname(dirname($symlinked)).DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR;
+			if (file_exists($c)) return $c;
+		}
+	}
+	// ../../admin/
+	$c = dirname(dirname(dirname($here))).DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR;
 	if (file_exists($c)) return $c;
 	// old location
-	$c = dirname(dirname(dirname($here))).DIRECTORY_SEPARATOR.'repos-config'.DIRECTORY_SEPARATOR;
+	$c = dirname(dirname($here)).DIRECTORY_SEPARATOR.'repos-config'.DIRECTORY_SEPARATOR;
 	if (file_exists($c)) return $c;
 	trigger_error('Could not find configuration file location ../../admin/ or ../repos-config/', E_USER_ERROR);
 }
