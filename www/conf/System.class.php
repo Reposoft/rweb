@@ -159,6 +159,7 @@ class System {
 	/**
 	 * Manages the common temp dir for repos-php. Temp is organized in subfolders per operation.
 	 * This method returns an existing temp folder; to get a new empty folder use {@link getTempFolder}.
+	 * The method uses the internal System::_getSystemTemp() to get the starting point
 	 * @param String $subfolder optional name of a subfolder in the application temp folder, no slashes
 	 * @return absolute path to temp, or the subfolder of temp, with trailing slash
 	 */
@@ -182,7 +183,7 @@ class System {
 	}
 	
 	/**
-	 * Return a new empty temporary file
+	 * Return a new empty temporary file on the application temp area.
 	 * @param String $subfolder (optional) category (like 'upload'), subfolder to temp where the file will be created.
 	 */
 	function getTempFile($subfolder=null) {
@@ -190,7 +191,7 @@ class System {
 	}
 	
 	/**
-	 * Return a new, empty, temporary folder.
+	 * Return a new, empty, temporary folder in the application temp area.
 	 * @param String $subfolder optional category (like 'upload')
 	 * @see getApplicationTemp
 	 */
@@ -432,7 +433,7 @@ class System {
 			trigger_error("Security error: local write not allowed in \"$path\". It is not absolute.", E_USER_ERROR);
 		}
 		$tmp = System::_getSystemTemp(); // segfault if inside strBegins
-		if (strBegins($path, $tmp)) {
+		if (stristr($path, $tmp)==$path) {
 			return true;
 		}
 		if (strContains($path, 'repos')) {

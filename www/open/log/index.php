@@ -52,6 +52,7 @@ if ($rev) {
 
 // read the log to memory, size is limited and the browser needs the complete xml before rendering anyway
 if ($command->exec()) { 
+	handleAuthenticationError($url, $command->getOutput());
 	trigger_error('Could not read log for URL '.$url.': '.implode(" \n",$command->getOutput()), E_USER_ERROR);
 }
 $log = $command->getOutput();
@@ -102,4 +103,22 @@ setContentType('text/xml');
 echo $head;
 echo implode("\n", $log);
 echo $foot;
+
+/**
+ * If the output of a subversion command says authorization failed,
+ * it might be because we have not requested authentication.
+ * In that case we can send the authentication header and redo the request.
+ * This should be rare because browsers by default resend credentials,
+ * but it happens if for example the user authenticated in the repository, like /data/,
+ * and this service is located at a different url, like /repos/.
+ * @param array $output result of svn command with english locale
+ */
+function handleAuthenticationError($targetUrl, $output) {
+	if (getReposUser()!==false) return;
+	if (preg_match('/authorization\s+failed/',$output[1])) {
+		$realm = getAuthName($targetUrl);
+		askForCredentials($realm);
+		exit; // need extra exit because the one in askForCredentials might exit the include only
+	}
+}
 ?>

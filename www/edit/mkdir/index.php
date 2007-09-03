@@ -30,21 +30,14 @@ function createNewFolder($name, $message) {
 	global $folderRule;
 	$template = Presentation::getInstance();
 	$newurl = getTargetUrl().$name;
-	$dir = tmpdir();
+	$tmp = System::getTempFolder('emptyfolders');
 	$edit = new SvnEdit('import');
 	$edit->setMessage($message);
-	$edit->addArgPath($dir);
+	$edit->addArgPath($tmp);
 	$edit->addArgUrl($newurl);
 	$edit->exec();
-	System::deleteFolder($dir);
+	System::deleteFolder($tmp);
 	displayEdit($template, getTargetUrl());
 }
 
-// Creates a directory with a unique name
-// at the specified with the specified prefix.
-// Returns directory name on success, false otherwise
-function tmpdir()
-{
-	return System::getTempFolder('emptyfolders');
-}
 ?>
