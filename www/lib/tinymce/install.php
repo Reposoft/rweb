@@ -9,7 +9,7 @@ $report = new Report('Install TinyMCE');
 $repos_package = "tinymce";
 $home = "http://tinymce.moxiecode.com/";
 
-$version = "2_1_1_1";
+$version = "2_1_2";
 $archive = "http://downloads.sourceforge.net/tinymce/tinymce_$version.zip?download";
 $license = "http://wiki.moxiecode.com/index.php/TinyMCE:License";
 
