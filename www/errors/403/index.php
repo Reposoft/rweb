@@ -22,6 +22,7 @@ if (!isRepositoryUrl($url)) {
 	exit;
 }
 
+// find the nearest allowed parent folder
 require('../../account/login.inc.php');
 
 // note that we have to do getParent first here, because parent may also be this page
@@ -31,6 +32,14 @@ while ($status!=200 && ($parent=getParent($near))!==false) {
 	$near = login_getFirstNon404Parent($parent, $status);
 }
 
+// if nearest accessible folder is server root (parent of repository root), user is leaving a project - show startpage
+$outside = getParent(getRepository());
+if ($near == $outside) {
+	$startpage = asLink(getWebapp().'open/start/');
+	header('Location: '.$startpage);
+}
+
+// if user is authorized to one of the parent folders in the repository, show a link
 $p->showErrorNoRedirect('
 Your user account does not have access rights to URL '.$url.'.
 '
