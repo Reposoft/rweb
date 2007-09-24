@@ -27,7 +27,7 @@ function initSwitch() {
 
 function switchStylestyle(styleName)
 {
-	$('link[@rel*=style][@title]').each(function(i) 
+	$('link[rel*=style][title]').each(function(i) 
 	{
 		this.disabled = true;
 		if (this.getAttribute('title') == styleName) {this.disabled = false;}

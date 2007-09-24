@@ -31,7 +31,7 @@ Repos.syntax.load = function() {
 
 Repos.syntax.activate = function() {
 	Repos.info('activating syntax highlighting');
-	$('textarea[@readonly]').each( function() {
+	$('textarea[readonly]').each( function() {
 		var textarea = this;
 		Repos.info('Found readonly textarea class="'+textarea.getAttribute('class')+'" name="'+textarea.name+'"');
 		for(type in Repos.syntax.map) {
