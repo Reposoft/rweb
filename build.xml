@@ -191,7 +191,7 @@
 	
 	<target name="get.rhino">
 		<get dest="${encode.js.jar}" usetimestamp="true"
-			src="http://repo1.maven.org/maven2/rhino/js/1.6R5/js-1.6R5.jar"/>
+			src="http://repo1.maven.org/maven2/rhino/js/1.6R7/js-1.6R7.jar"/>
 	</target>
 	
 	<target name="encode.javascript" depends="get.rhino"
@@ -273,6 +273,15 @@
 			basedir="${target.folder}" includes="${app.name}/**"/>
 	</target>
 	
+	<target name="package.backuphost" depends="dist.clean" description="Minimal repos distribution for mirror hosts (no web)">
+		<tar destfile="${package.backuphost.filename}.tgz" compression="gzip">
+			<tarfileset dir="${target.folder}">
+				<include name="${app.name}/conf/**"/>
+				<include name="${app.name}/admin/**"/>
+			</tarfileset>
+		</tar>
+	</target>
+
 	<target name="package.tests" if="package.tests.filename"
 			description="Create a package with the test sources">
 		<!-- problems with utf-8 characters: <tar destfile="${package.tests.gzip}" compression="gzip" -->
@@ -280,7 +289,7 @@
 			basedir="${development.folder}" includes="test/**"/>
 	</target>
 	
-	<target name="dist" depends="package.gzip,package.zip,package.tests"
+	<target name="dist" depends="package.gzip,package.zip,package.backuphost,package.tests"
 			description="Run all packaging activities">
 	</target>
 	

@@ -40,5 +40,14 @@
 <li class="depends">The page must import <a href="http://jquery.com">jQuery</a> before this script</li>
 </ul>
 
+<h2 class="service" id="list">POST</h2>
+<ul class="service-specification">
+<li class="datatype">text/plain</li>
+<li class="description">An HTTP post request to a repository file url overwrites the file with the posted contents</li>
+<li class="parameter"><em>usertext</em> The posted plaintext contents for a new version</li>
+<li class="example">&nbsp;</li>
+<li class="note">Subversion does not respond to post, so without the service layer a 404 error is returned</li>
+</ul>
+
 </body>
 </html>
