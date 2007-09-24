@@ -93,4 +93,5 @@ function ReposResourceId(text){this.text=text;this.getRelease=function(){if(/@De
 
 $(document).ready(function(){if($('body.repository').length==1){Repos.addScript('plugins/dateformat/dateformat.js');Repos.addScript('plugins/details/details.js');}
 if($('body.log').length==1){Repos.addScript('plugins/dateformat/dateformat.js');}
+if($('body.log').length==1){Repos.addScript('plugins/logfilter/logfilter.js');}
 if($('body.resource').length==1){Repos.addScript('plugins/thumbnails/thumbnails.js');}});

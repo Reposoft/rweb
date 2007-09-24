@@ -1,6 +1,10 @@
 #return {
 	background-image: url(../commands/16x16/parent.png);
 }
+#commandbar #showpaths {
+	background-image: url('../commands/24x24/details.png');
+	cursor: pointer;
+}
 .logentry > div {
 	padding-top: 1px;
 	padding-bottom: 1px;
