@@ -23,6 +23,7 @@ div.section h2 {
 	margin: 0px;
 	padding-left: 1em;
 	background-color: #E9F4C9;
+	background: url(headlinebg.png) bottom repeat-x;
 	color: #666633;
 }
 

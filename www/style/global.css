@@ -120,6 +120,7 @@ a.folder {
 #commandbar {
 	min-width: 980px;
 	height: 1.9em;
+	background: url(commandbarbg.png) top repeat-x;
 	background-color: #ECF1EF;
 	padding: 3px;
 	border-bottom: 1px solid #CCCCCC;
@@ -146,7 +147,7 @@ a.folder {
 	height: 20px;
 	float: left;
 	border-top: 1px solid #CCCCCC;
-	background-color: #F4F4F4;
+	background: url(footerbg.png) top repeat-x;
 	color: #999999;
 	font-size: 85.5%;
 }
