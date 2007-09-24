@@ -49,8 +49,10 @@
 		<xsl:param name="url" select="concat(../@repo,$target)"/>
 		<div id="commandbar">
 			<a id="repository" href="{$url}">current version</a>
-			<a id="history" href="../log/?target={$target}&amp;rev={../@rev}">history for version <xsl:value-of select="../@rev"/></a>
-			<a id="historycurrent" href="../log/?target={$target}">history of current version</a>
+			<a id="history" href="../log/?target={$target}&amp;rev={../@rev}">show history<xsl:if test="../@rev"> for version <xsl:value-of select="../@rev"/></xsl:if></a>
+			<xsl:if test="../@rev">
+				<a id="historycurrent" href="../log/?target={$target}">history of current version</a>
+			</xsl:if>
 		</div>
 		<h2>
 			<a class="folder" href="{@path}"><xsl:value-of select="../@name"/></a>

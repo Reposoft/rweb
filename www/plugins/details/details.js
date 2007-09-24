@@ -9,19 +9,27 @@
 
 $(document).ready(function() {
 	details_read();
+	// for repository listings, add details button
+	if ($('.repository #fullpath').size() > 0) {
+		details_button();	
+	}
 });
 
+function details_button() {
+	var command = $('<span id="showdetails">');
+	if ($('.row').size() > 0) {
+		command = $('<a id="showdetails" name="showdetails"/>');
+		command.click(function() { detailsToggle(this); });
+	}
+	command.append('show details').appendTo('#commandbar');
+}
+
+// show details for an existing element (page designer sets target with the 'title' attribute)
 function details_read() {
 	var e = $('body').find('div.details');
 	if (e.size() > 0) {
 		$.get('/repos/open/list/?target='+encodeURIComponent(e.attr("title")), function(xml) {
 				details_write(e, $('/lists/list/entry', xml)); });
-	}
-	// add command
-	if ($('.repository #fullpath').size() > 0) {
-		var command = $('<a id="showdetails" name="showdetails">show details</a>');
-		command.appendTo($('#commandbar'));
-		command.click(function() { detailsToggle(this); });
 	}
 }
 
@@ -38,8 +46,8 @@ function details_write(e, entry) {
 			e.addClass('noaccess');
 			$('.username', e).append('(no access)'); // temporary solution
 		} else {
-			$('.username', e).append($('commit/author', this).text());
-			$('.datetime', e).append($('commit/date', this).text());
+			$('.username', e).append($('commit>author', this).text());
+			$('.datetime', e).append($('commit>date', this).text());
 		}
 		$('.revision', e).append($('commit', this).attr('revision'));
 		var folder = details_isFolder(this);
@@ -74,14 +82,14 @@ function details_repository() {
 	//var path = $('body.repository').find('#fullpath');
 	var path = $('#fullpath');
 	if (path.size()==0) return;
+	var url = Repos.getWebapp() + 'open/list/?target='+encodeURIComponent(path.text());
 	$.ajax({
 		type: 'GET',
-		url: '/repos/open/list/?target='+encodeURIComponent(path.text()),
+		url: url,
 		dataType: 'xml',
 		error: function() { $('#showdetails').removeClass('loading').text('error'); },
 		success: function(xml){
-			//console.log(url + ': '+$(xml).text());
-			$('/lists/list/entry', xml).each(function() {
+			$('lists>list>entry', xml).each(function() {
 				var name = $('name', this).text();
 				if (this.getAttribute('kind')=='dir') name = name + '/';
 				var row = new ReposFileId(name).find('row');
@@ -106,7 +114,7 @@ function details_isLocked(entry) {
 }
 
 function details_isNoaccess(entry) {
-	return $('commit/author', entry).size() == 0;
+	return $('commit>author', entry).size() == 0;
 }
 
 /**

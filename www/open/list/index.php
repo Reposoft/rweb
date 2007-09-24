@@ -37,13 +37,17 @@ $head = '<?xml version="1.0"?>
 $foot = '</lists>';
 $extra = strlen($head) + strlen($foot);
 
-header('Content-Type: text/xml; charset=utf-8');
-header('Content-Length: '.($list->getContentLength() + strlen($head) + strlen($foot)));
-
 $out = $list->getOutput();
+$linebreak = "\n";
+$length = $list->getContentLength() + strlen($head) + strlen($foot);
+if ($linebreak) $length += count($out)*strlen($linebreak);
+
+header('Content-Type: text/xml; charset=utf-8');
+header('Content-Length: '.$length);
+
 echo($head);
 for ($i=0; $i<count($out); $i++) {
-	echo($out[$i]);
+	echo($out[$i].$linebreak);
 }
 echo($foot);
 
