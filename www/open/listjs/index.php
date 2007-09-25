@@ -73,46 +73,47 @@ if (!isset($_GET['selector'])) {
 // import configuration from query string to settings json object
 $settings = '{';
 foreach ($_GET as $k => $v) {
-	$settings .= "'$k':'$v',\n";
+	// '#' is a tricky character in urls, and selector will never be a tag name, so assume word means ID
+	if ($k=='selector' && preg_match('/^[\w\d-]+$/',$v)) $v = '#'.$v;
+	$settings .= "'$k':'$v',";
 }
-$settings .= '}';
+$settings = substr($settings,0,strlen($settings)-1).'}';
 
 // by integrating data and script, the contents can be loaded cross-domain from page head
+// "o" is the output function
 $script = '
-(function(jQ, url, list, settings) {
+(function(jQ,url,list,set) {
 
 	var s = jQ.extend({
-		selector: "reposlist",
-	}, settings);
-	// # is a tricky character in urls
-	if (/\w+/.test(s.selector)) s.selector="#"+s.selector;
+		selector: "#reposlist",
+	},set);
 
-	this.svndetail = function(class,value) {
+	this.o = function(class,value) {
 		return jQ("<span/>").addClass(class).append(value);
 	};
 	
 	jQ().ready( function() {
-		var parent = jQ(s.selector);
+		var p = jQ(s.selector);
 		for (var f in list) {
 			var d = list[f];
-			var e = jQ("<li/>").addClass(d.kind).appendTo(parent);
+			var e = jQ("<li/>").addClass(d.kind).appendTo(p);
 			jQ("<a/>").attr("href",url+"/"+f).append(f).appendTo(e);
-			e.append(svndetail("revision",d.commit.revision));
+			e.append(o("revision",d.commit.revision));
 			if (d.commit.author) {
-				e.append(svndetail("username",d.commit.author));
-				e.append(svndetail("datetime",d.commit.date));	
+				e.append(o("username",d.commit.author));
+				e.append(o("datetime",d.commit.date));	
 			} else {
 				e.addClass("noaccess");
 			}
 			if (d.kind=="file") {
-				e.append(svndetail("filesize",d.size));
+				e.append(o("filesize",d.size));
 			}
 			if (d.lock) {
 				e.addClass("locked");
-				var o = svndetail("lock","").appendTo(e);
-				o.append(svndetail("username",d.lock.owner));
-				o.append(svndetail("datetime",d.lock.created));
-				o.append(svndetail("message",d.lock.comment));
+				var l = o("lock","").appendTo(e);
+				l.append(o("username",d.lock.owner));
+				l.append(o("datetime",d.lock.created));
+				l.append(o("message",d.lock.comment));
 			}
 		}
 	} );
@@ -120,7 +121,7 @@ $script = '
 ';
 
 // simple minimize
-$script = preg_replace('/^\s+/m',' ',$script);
+$script = preg_replace('/^\s+/m','',$script);
 
 header('Content-Length: '.(strlen($xml)+strlen($script)));
 echo($xml);

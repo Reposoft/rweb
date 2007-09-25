@@ -35,9 +35,11 @@
 <ul class="service-specification">
 <li class="datatype">text/javascript</li>
 <li class="description">A javascript that writes a folder contents to an HTML element</li>
-<li class="parameter"><em>selector</em> CSS selector for the UL element to add contents to</li>
+<li class="parameter"><em>(no selector)</em>Without GET parameters, this service returns the svn list as an object "svn" in JSON.</li>
+<li class="parameter"><em>selector</em> CSS selector for the UL element to add contents to.
+If the selector is a string of <code>a-z0-9_-</code>, an '#' will be prepended by the service (because #id is the most common selector, and URLs with brackets are tricky)</li>
 <li class="example">&nbsp;</li>
-<li class="depends">The page must import <a href="http://jquery.com">jQuery</a> before this script</li>
+<li class="depends">The page must import <a href="http://jquery.com">jQuery</a> before using this script with a selector</li>
 </ul>
 
 <h2 class="service" id="list">POST</h2>
