@@ -7,6 +7,7 @@
 <script type="text/javascript" src="http://localhost/repos/scripts/lib/jquery/jquery.js"/>
 <script type="text/javascript" src="http://localhost/data/demoproject/trunk/?svn=listjs&selector=testlist"/>
 <script type="text/javascript" src="listjs-tree.js"/>
+
 <style type="text/css">
 body {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
@@ -23,17 +24,28 @@ h1, h2, h3 {
 	font-weight: normal;
 }
 /* repos listjs layout */
-.svnlist ul {
-	padding: 0px;
-	list-style: none;
-} 
-.svnlist ul li {
-	display: inline;
-	margin: 0.2em;
-	padding: 0.2em;
+li.noaccess {
+	text-decoration: line-through;
 }
-li.dir {
-	list-style-type: circle;
+li.locked a {
+	color: #777;
+}
+span.revision {
+	border: 1px dotted green;
+}
+span.lock {
+	padding-left: 2em;
+	border: 1px dotted #777;
+}
+li span {
+	width: 10em;
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	padding-left: 0.2em;
+	padding-right: 0.2em;
+}
+.empty a {
+	color: #666;
 }
 </style>
 </head>

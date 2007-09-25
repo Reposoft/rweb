@@ -3,7 +3,7 @@
 
 $().ready( function() {
 	var svnlist = $('#testlist');
-	$('<p>Click folders to expand</p>').insertAfter(svnlist);
+	$('<p>Click "+" at folders to expand</p>').insertAfter(svnlist);
 	svnlist_add_expand(svnlist);
 } );
 
@@ -14,18 +14,23 @@ function svnlist_add_expand(parent) {
 	$('li.dir',parent).each( function() {
 	 	var href = $('a:first', this).attr('href') + '?svn=listjs&';
 		var nextid = 'svn' + svnlist_add_expand_count++;
-		$('<a/>').append('+').attr('href','#tree').prependTo(this).toggle(
+		$('<a/>').append('+ ').attr('href','#tree').prependTo(this).toggle(
 			function() {
-				$(this).html('-');
+				$(this).html('- ');
 				$('<ul/>').attr('id',nextid).appendTo($(this).parent()).append('<li class="loading">loading...</li>');
 				$.getScript(href + 'selector='+nextid, function(){
-					$('.loading','#'+nextid).remove();
-					svnlist_add_expand($('#'+nextid));
+					var ul = $('#'+nextid);
+					$('.loading',ul).remove();
+					if ($('li',ul).size()==0) {
+						//ul.append('<li>(empty)</li>');
+						$('a[href=#tree]',ul.parent().addClass('empty')).html('&nbsp; ');	
+					}
+					svnlist_add_expand(ul);
 				});
 				return false;
 			},
 			function() {
-				$(this).html('+');
+				$(this).html('+ ');
 				$('#'+nextid).remove();
 				return false; 
 			});

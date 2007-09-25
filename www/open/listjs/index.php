@@ -58,7 +58,7 @@ $xml = preg_replace('/<(\w+)\s+(\w+)="(\d+)">(.*)<\/\1>/sU','\1:{\4\2:"\3"},',$x
 // special treatment of lock, no attribute
 $xml = str_replace(array('<lock>',',</lock>'),array('lock:{','},'),$xml);
 // remove last comma and close object
-$xml = str_replace(",\n</list>\n</lists>","\n}};",$xml);
+$xml = preg_replace('/,?\s*<\/list>\s+<\/lists>/',"\n}};",$xml);
 
 // fist part of the page, just print the svnlist json
 header('Content-Type: text/javascript; charset=utf-8');
@@ -86,17 +86,41 @@ $script = '
 	}, settings);
 	// # is a tricky character in urls
 	if (/\w+/.test(s.selector)) s.selector="#"+s.selector;
+
+	this.svndetail = function(class,value) {
+		return jQ("<span/>").addClass(class).append(value);
+	};
 	
 	jQ().ready( function() {
 		var parent = jQ(s.selector);
 		for (var f in list) {
-			var en = list[f];
-			var e = jQ("<li/>").addClass(en.kind).appendTo(parent);
+			var d = list[f];
+			var e = jQ("<li/>").addClass(d.kind).appendTo(parent);
 			jQ("<a/>").attr("href",url+"/"+f).append(f).appendTo(e);
+			e.append(svndetail("revision",d.commit.revision));
+			if (d.commit.author) {
+				e.append(svndetail("username",d.commit.author));
+				e.append(svndetail("datetime",d.commit.date));	
+			} else {
+				e.addClass("noaccess");
+			}
+			if (d.kind=="file") {
+				e.append(svndetail("filesize",d.size));
+			}
+			if (d.lock) {
+				e.addClass("locked");
+				var o = svndetail("lock","").appendTo(e);
+				o.append(svndetail("username",d.lock.owner));
+				o.append(svndetail("datetime",d.lock.created));
+				o.append(svndetail("message",d.lock.comment));
+			}
 		}
 	} );
 })(jQuery, svn.path, svn.list, '.$settings.');
 ';
+
+// simple minimize
+$script = preg_replace('/^\s+/m',' ',$script);
 
 header('Content-Length: '.(strlen($xml)+strlen($script)));
 echo($xml);
