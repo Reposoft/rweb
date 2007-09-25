@@ -31,7 +31,7 @@
 <li class="example">&nbsp;</li>
 </ul>
 
-<h2 class="service" id="listjs"><span class="query">svn=</span>listjs</h2>
+<h2 class="service" id="listjs"><span class="query">svn=</span>json</h2>
 <ul class="service-specification">
 <li class="datatype">text/javascript</li>
 <li class="description">A javascript that writes a folder contents to an HTML element</li>
@@ -40,6 +40,7 @@
 If the selector is a string of <code>a-z0-9_-</code>, an '#' will be prepended by the service (because #id is the most common selector, and URLs with brackets are tricky)</li>
 <li class="example">&nbsp;</li>
 <li class="depends">The page must import <a href="http://jquery.com">jQuery</a> before using this script with a selector</li>
+<li class="note">The json service can also be used on files, for example to check lock status.</li>
 </ul>
 
 <h2 class="service" id="list">POST</h2>
