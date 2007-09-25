@@ -5,7 +5,7 @@
 <title>svn=listjs example</title>
 <link rel="shortcut icon" href="/favicon.ico"/>
 <script type="text/javascript" src="http://localhost/repos/scripts/lib/jquery/jquery.js"/>
-<script type="text/javascript" src="http://localhost/data/demoproject/trunk/?svn=listjs&selector=#testlist"/>
+<script type="text/javascript" src="http://localhost/data/demoproject/trunk/?svn=listjs&selector=testlist"/>
 <script type="text/javascript" src="listjs-tree.js"/>
 <style type="text/css">
 body {
@@ -32,6 +32,9 @@ h1, h2, h3 {
 	margin: 0.2em;
 	padding: 0.2em;
 }
+li.dir {
+	list-style-type: circle;
+}
 </style>
 </head>
 
@@ -40,6 +43,7 @@ h1, h2, h3 {
 <h1>Dynamically added svn contents</h1>
 
 <ul id="testlist">
+<li style="list-style-type:none;">Items should be added below this first one</li>
 </ul>
 
 </body>

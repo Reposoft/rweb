@@ -44,72 +44,60 @@ if ($list->exec()) trigger_error('Could not read entry for URL '.$url, E_USER_ER
 
 // xml is five levels deep
 // maximum one attribute
+
 // attribute never named same as child node
 $xml = implode($list->getOutput(),"\n");
+// define the svn variable that wraps it up
+$xml = preg_replace('/.*<list\s+path="([^"]+)">/s','svn = {path:"\1", list:{',$xml);
 // entries must have unique names in json
 $xml = preg_replace('/<entry\s+kind="(file|dir)">\s+<name>(.*)<\/name>(.*)<\/entry>/sU','"\2":{\3kind:"\1"},',$xml);
 // elements with no attributes
 $xml = preg_replace('/<(\w+)>(.*)<\/\1>\s*/','\1:"\2",',$xml);
 // elements with one attribute
 $xml = preg_replace('/<(\w+)\s+(\w+)="(\d+)">(.*)<\/\1>/sU','\1:{\4\2:"\3"},',$xml);
-// define the svn variable that wraps it up
-$xml = preg_replace('/.*<list\s+path="([^"]+)">/s','svn = {path:"\1", list:{',$xml);
+// special treatment of lock, no attribute
+$xml = str_replace(array('<lock>',',</lock>'),array('lock:{','},'),$xml);
+// remove last comma and close object
 $xml = str_replace(",\n</list>\n</lists>","\n}};",$xml);
 
 // fist part of the page, just print the svnlist json
 header('Content-Type: text/javascript; charset=utf-8');
-header('Content-Length: '.strlen($xml));
-echo($xml);
 
 // second part of the script is printed if there is a selector
-if (!isset($_REQUEST['selector'])) exit;
+if (!isset($_GET['selector'])) {
+	header('Content-Length: '.strlen($xml));
+	echo($xml);
+	exit;
+}
 
-$selector = "'".$_REQUEST['selector']."'";
+// import configuration from query string to settings json object
+$settings = '{';
+foreach ($_GET as $k => $v) {
+	$settings .= "'$k':'$v',\n";
+}
+$settings .= '}';
 
-?>
+// by integrating data and script, the contents can be loaded cross-domain from page head
+$script = '
+(function(jQ, url, list, settings) {
 
-console.log(svnlist);
-// Subversion service layer AJAX contents, requres jQuery
-
-(function () {
-	// this method was designed for XML from the beginning, currently not up to date
-	var svn_list = svn.list;
-
-	// query string parameters to the script source used to customize behaviour
-	var params = [];
+	var s = jQ.extend({
+		selector: "reposlist",
+	}, settings);
+	// # is a tricky character in urls
+	if (/\w+/.test(s.selector)) s.selector="#"+s.selector;
 	
-	// get the URL for this script, which is the same folder as the contents it lists
-	var scripts = document.getElementsByTagName('script');
-	for (i=scripts.length-1; i>=0; i--) {
-		if (!scripts[i].src) continue;
-		var m = /^(.*\/)\?svn=listjs&?(.*)$/.exec(scripts[i].src);
-		if (m && m.length > 1) {
-			if (m[2]) params = eval('({'+m[2].replace(/=/g,':"').replace(/&/g,'",')+'"})');
-			params.path = m[1];
-			break;
+	jQ().ready( function() {
+		var parent = jQ(s.selector);
+		for (var f in list) {
+			var en = list[f];
+			var e = jQ("<li/>").addClass(en.kind).appendTo(parent);
+			jQ("<a/>").attr("href",url+"/"+f).append(f).appendTo(e);
 		}
-	}
-	if (!params.path) { console.log('script path not found'); return; }
-	
-	// default settings, override with custom settings
-	var settings = $.extend({
-      selector: '#reposlist',
-      titles: true,
-      path: null
-	}, params);
-
-	//todo: write directly to body (no selector) if parent is not head
-	$().ready( function() {
-		var xml = parseXml(svn_list_xml); // domify xml string
-		$('/lists/list/entry', xml).each( function() {
-			var name = $('name', this).text();
-			var href = settings.path + name;
-			$(settings.selector).append('<li class="svnlist"><ul class="'+$(this).attr('kind')+'">'
-				+'<li class="name"><a href="'+href+'">'+name+'</a></li>'
-				+'<li class="revision">'+$('commit', this).attr('revision')+'</li>'
-				+'<li class="user">'+$('commit/author', this).text()+'</li>'
-				+'<li class="datetime">'+$('commit/date', this).text()+'</li>'
-				+'</ul></li>');
-		} );
 	} );
-}).call();
+})(jQuery, svn.path, svn.list, '.$settings.');
+';
+
+header('Content-Length: '.(strlen($xml)+strlen($script)));
+echo($xml);
+echo($script);
