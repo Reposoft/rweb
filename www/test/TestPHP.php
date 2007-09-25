@@ -50,7 +50,8 @@ $testfiles = array(
 'edit/upload/mimetype.test.php',
 'edit/upload/filewrite.test.php',
 'admin/admin.test.php',
-'admin/repos-backup.test.php'
+'admin/repos-backup.test.php',
+'admin/groupfile/groupfile.test.php'
 );
 
 if (!TEST_INTEGRATION) {
