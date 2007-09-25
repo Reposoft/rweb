@@ -10,9 +10,14 @@
  * <ul id="svnlist"></ul>
  * </code>
  *
+ * This functionality can be added in any svn repository folder
+ * by committing a list.js script to the folder that should be listed,
+ * but this dynamic approach has a few advantages:
+ * - The script can be read from a different server (when in script tag)
+ * - Script parameters can be used in AJAX calls too (read by php)
+ * 
  * @package open
  */
-header('Content-Type: text/javascript; charset=utf-8');
 
 require( dirname(dirname(__FILE__))."/SvnOpen.class.php" );
 
@@ -21,6 +26,8 @@ $url = getTargetUrl();
 
 $revisionRule = new RevisionRule();
 $rev = $revisionRule->getValue();
+
+$path = getTarget();
 
 $list = new SvnOpen('list');
 $list->addArgOption('--xml');
@@ -32,35 +39,41 @@ if ($rev) {
 
 if ($list->exec()) trigger_error('Could not read entry for URL '.$url, E_USER_ERROR);
 
+// TODO we really need a better xml parser or xml to json
+// the data must be included in the script to allow cross-domain lists
+
+// xml is five levels deep
+// maximum one attribute
+// attribute never named same as child node
+$xml = implode($list->getOutput(),"\n");
+// entries must have unique names in json
+$xml = preg_replace('/<entry\s+kind="(file|dir)">\s+<name>(.*)<\/name>(.*)<\/entry>/sU','"\2":{\3kind:"\1"},',$xml);
+// elements with no attributes
+$xml = preg_replace('/<(\w+)>(.*)<\/\1>\s*/','\1:"\2",',$xml);
+// elements with one attribute
+$xml = preg_replace('/<(\w+)\s+(\w+)="(\d+)">(.*)<\/\1>/sU','\1:{\4\2:"\3"},',$xml);
+// define the svn variable that wraps it up
+$xml = preg_replace('/.*<list\s+path="([^"]+)">/s','svn = {path:"\1", list:{',$xml);
+$xml = str_replace(",\n</list>\n</lists>","\n}};",$xml);
+
+// fist part of the page, just print the svnlist json
+header('Content-Type: text/javascript; charset=utf-8');
+header('Content-Length: '.strlen($xml));
+echo($xml);
+
+// second part of the script is printed if there is a selector
+if (!isset($_REQUEST['selector'])) exit;
+
+$selector = "'".$_REQUEST['selector']."'";
+
 ?>
+
+console.log(svnlist);
 // Subversion service layer AJAX contents, requres jQuery
 
-// temporary solution for xml string->dom, instead of failing $('<div/>').append(xml).children();
-if (typeof(parseXml)=='undefined') { function parseXml(xml) {
-   var dom = null;
-   if (window.DOMParser) {
-      try { 
-         dom = (new DOMParser()).parseFromString(xml, "text/xml"); 
-      } 
-      catch (e) { dom = null; }
-   }
-   else if (window.ActiveXObject) {
-      try {
-         dom = new ActiveXObject('Microsoft.XMLDOM');
-         dom.async = false;
-         if (!dom.loadXML(xml)) // parse error ..
-
-            window.alert(dom.parseError.reason + dom.parseError.srcText);
-      } 
-      catch (e) { dom = null; }
-   }
-   else
-      alert("cannot parse xml string!");
-   return dom;
-} };
-
 (function () {
-	var svn_list_xml = '<?php echo implode($list->getOutput(),''); ?>';
+	// this method was designed for XML from the beginning, currently not up to date
+	var svn_list = svn.list;
 
 	// query string parameters to the script source used to customize behaviour
 	var params = [];

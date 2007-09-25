@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+<script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
+</head>
+<body>
+<ul>
+<li id="list"/>
+</ul>
+</body>
+<script type="text/javascript">
+svn = {path:"http://localhost/data/demoproject/trunk", list:{
+"Policy document.html":{
+size:"2161",commit:{
+author:"test",date:"2007-09-24T08:25:36.734540Z",revision:"7"},
+kind:"file"},
+"a":{
+commit:{
+author:"test",date:"2007-09-24T09:17:34.187217Z",revision:"8"},
+kind:"dir"},
+"noaccess":{
+commit:{
+revision:"1"},
+kind:"dir"},
+"public":{
+commit:{
+author:"test",date:"2007-09-24T06:13:31.047963Z",revision:"3"},
+kind:"dir"},
+"readonly":{
+commit:{
+author:"admin",date:"2007-09-24T06:13:19.421244Z",revision:"1"},
+kind:"dir"}
+}};
+
+console.log(svn);
+
+var base = svn.path;
+var list = svn.list;
+var selector = '#list';
+var u = $('<ul class="svnlist"/>');
+for (f in list) {
+	var i = list[f];
+	console.log(f);
+	var e = $('<li/>').addClass(f.kind).append(f);
+	$('<span class="revision"/>').append(i.commit.revision).appendTo(e);
+	
+	if (i.commit.author) {
+		
+	} else {
+		e.addClass('noaccess');
+	}
+	if (f.size) $('<span class="filesize"/>').append(f.size).appendTo(e);
+	u.append(e);
+}
+$('#list').append(u);
+</script>
+
+</html>

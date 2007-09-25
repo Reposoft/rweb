@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Test SVNSL POST</title>
+</head>
+<body>
+<script type="text/javascript">
+	function doPost() {
+	var form = document.getElementById('testpost');
+	var url = form.url.value;
+	form.action = url;
+	return true;
+};
+</script>
+
+<form id="testpost" method="post" action="#">
+<fieldset>
+  <legend>POST directly to svn</legend>
+  <p>
+    <label for="url">POST to URL [not a submitted field]</label>
+    <input id="url" type="text" name="url" size="60" value="http://localhost/data/test/trunk/fa/a.txt" />
+  </p>
+  <p>
+  	<label for="usertext">text [usertext]</label><br />
+  	<textarea name="usertext" rows="20" cols="60">a</textarea>
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" type="submit" name="submit" value="Send" onclick="return doPost();" />
+  </p>
+  <p>
+  	<label for="type">mime type [type]</label>
+  	<input id="type" type="text" name="type" size="15" value="text/plain" />
+  </p>
+  <p>
+  	<label for="fromrev">based on revision [fromrev]</label>
+  	<input id="fromrev" type="text" name="fromrev" size="15" value="HEAD" />
+  </p>
+</fieldset>
+</form>
+</body>
+</html>

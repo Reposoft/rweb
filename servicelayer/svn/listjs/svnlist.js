@@ -5,9 +5,9 @@ Requires
 See also http://feather.elektrum.org/book/src.html
 
 Usage:
-Add a copy of jquery from http://jquery.com/ to the page
-Put this script in the same folder as the files and add to page using
-Include this script with optional query parameters from the same host
+Add a copy of jquery from http://jquery.com/ to the page.
+Put this script named svnlist.js in the folder that shouls be listed.
+Add a script tag with optional query parameters in html page on the same host.
 */
 
 (function () {
