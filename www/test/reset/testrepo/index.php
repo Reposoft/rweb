@@ -153,5 +153,16 @@ $report->info('<a href="../restart/">Restart apache to activate new configuratio
 $report->info('<a href="'.$conflocation.'/test/trunk/">Directly to repository test account</a>');
 $report->info('<a href="/?login">Repos login</a>');
 
+// verify that Satisfy Any is enabled, if not print error
+$publicurl = getRepository().'/demoproject/trunk/public/';
+$s = new ServiceRequest($publicurl, array(), false);
+$s->exec();
+$report->info("HTTP status is ".$s->getStatus()." at $publicurl");
+if ($s->getStatus()==401) {
+	$report->error("Public folder requires login. Verify that the repository is configured with \"Satsisfy Any\". Apache may need restart.");
+} elseif ($s->getStatus()!=200) {
+	$report->error("Repository folder is not 200 OK. Please check configuration.");
+}
+
 $report->display();
 ?>

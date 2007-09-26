@@ -43,8 +43,6 @@ $conflocation = '/testrepo';
 $here=dirname(__FILE__);
 $svnargs="--config-dir " . rtrim($here, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "test-svn-config-dir";
 
-$report->info("To use this repository, do \"Include $conffile\" from a conf-file and restart Apache.");
-
 // delete contents of the $repo folder
 // delete $userfile and $aclfile from admin folder
 // create backup folder if it does not exist, but don't delete beckup if it exists
@@ -131,6 +129,7 @@ function setup_createApacheLocation($extraDirectives='', $extraAfterLocation='')
 	global $conffile, $report, $repo, $userfile, $conflocation;
 	$report->info("create apache 2.2 config");
 	$conf = "
+	# Repos testrepo configuration, rewritten by test reset for different repository types
 	<Location $conflocation>
 	DAV svn
 	SVNIndexXSLT \"/repos/view/repos.xsl\"
@@ -155,6 +154,7 @@ function setup_createApacheLocation($extraDirectives='', $extraAfterLocation='')
 	";
 	if (System::createFileWithContents($conffile, $conf, true, true)) {
 		$report->ok("Successfully created apache config file $conffile");
+		$report->info("/$conflocation repository can be activated using \"Include $conffile\" and Apache restart.");
 	} else {
 		$report->fail("Could not create apache config file $conffile");
 	}
