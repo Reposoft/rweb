@@ -65,6 +65,7 @@ class ServiceRequest {
 	var $responseType = SERVICE_TYPE_JSON;
 	
 	// optional login, if username is null login will not be done
+	// if username is ===false basic authentication will be detected and forwarded
 	var $_username = null;
 	var $_password = '';
 	
@@ -88,7 +89,8 @@ class ServiceRequest {
 	 * @param array $parameters [String] query parameters as associative array, _not_ urlencoded
 	 * @param boolean $authenticate If false, never authenticate. Can be used to check if a resource
 	 *  requires authentication. If true, reuse current HTTP authentication for the request.
-	 *  Unlike the login(url) function, this class does not attempt to detect if the url requires login.
+	 *  If authenticate=true but there is no logged in user, the exec() method will attempt
+	 *  to detect Authorization Required header from the service, forward those headers and exit.
 	 * @return ServiceRequest which might be further configured with set* methods
 	 */
 	function ServiceRequest($service, $parameters=array(), $authenticate=true) {
@@ -123,9 +125,12 @@ class ServiceRequest {
 	 */
 	function _enableAuthentication() {
 		_servicerequest_include_login();
-		if (!isLoggedIn()) trigger_error("Service authentication required, but user is not logged in.");
-		$this->_username = getReposUser();
-		$this->_password = _getReposPass();
+		if (isLoggedIn()) {
+			$this->_username = getReposUser();
+			$this->_password = _getReposPass();
+		} else {
+			$this->_username = false;
+		}
 	}
 	
 	/**
@@ -205,7 +210,33 @@ class ServiceRequest {
 		$this->response = curl_exec($ch);
 		$this->info = curl_getinfo($ch);
 		curl_close($ch);
+		// proxy basic authentication unless authentication was explicitly disabled in constructor
+		if ($this->_username===false && $this->getStatus()==401) {
+			$this->_forwardAuthentication($this->getResponseHeaders());
+		}
 		return $this->getStatus();
+	}
+	
+	/**
+	 * Writes authentication headers and error page to the response and exits current request.
+	 * @param unknown_type $headers service response headers,
+	 * 	those relevant to authentication can be forwarded to the client.
+	 */
+	function _forwardAuthentication($headers) {
+		// show a page in case the user cancels login
+		if (class_exists('Presentation')) {
+			header($headers[0]);
+			header('WWW-Authenticate: '.$headers['WWW-Authenticate']);
+			$p = new Presentation();
+			// this call can may not send a new status header, because we need the 401
+			$p->showErrorNoRedirect('This service requires authentication', 'Authentication Required');
+			 // browser will retry the same request with authentication
+			exit;
+		} else {
+			// handle missing authentication when service is called in a non-GUI context
+			// TODO include authentication HTTP headers here too?
+			echo "This service requires authentication";
+		}		
 	}
 	
 	/**

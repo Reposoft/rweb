@@ -126,12 +126,20 @@ class TestServiceRequest extends UnitTestCase {
 	
 	function testAuthentication() {
 		$service = new ServiceRequest(getSelfUrl(), array('useryes'=>''));
+		// test the internal logic for authentication
+		if (isLoggedIn()) {
+			$this->assertEqual(getReposUser(), $service->_username, 'Authentication=true -> username should be set');
+		} else {
+			$this->assertTrue(false===$service->_username, 'Authentication=true without login -> username should be ===false');
+		}
+		// test the effects
 		$service->exec();
 		$this->assertEqual(200, $service->getStatus());
 	}
 
 	function testAuthenticationFalse() {
 		$service = new ServiceRequest(getSelfUrl(), array('userno'=>''), false);
+		$this->assertEqual(null, $service->_username, 'Explicitly disable authentication -> username should be null');
 		$service->exec();
 		$this->assertEqual(200, $service->getStatus());
 	}

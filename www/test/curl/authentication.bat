@@ -27,8 +27,8 @@ curl -s "http://localhost/repos/open/?target=/test/trunk/fa/a.txt" | grep "requi
 curl -s "http://localhost/repos/open/?target=/test/trunk/fa/a.txt" | grep "back"
 
 # In Repos 1.1, upload page on public file without login says "Service authentication required, but user is not logged in."
-curl -s "http://localhost/repos/edit/upload/?target=/demoproject/trunk/public/xmlfile.xml" | grep "authentication required" | assert []
-# should be lofin box
+curl -s "http://localhost/repos/edit/upload/?target=/demoproject/trunk/public/xmlfile.xml" | grep "requires authentication"
+# should be login box
 curl -s "http://localhost/repos/edit/upload/?target=/demoproject/trunk/public/xmlfile.xml" -I | grep "WWW-Authenticate:"
 
 # view public file without login
