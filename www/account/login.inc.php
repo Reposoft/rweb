@@ -71,7 +71,7 @@ if (isTargetSet()) {
 		header('Location: '.getSelfUrl().'?'.str_replace('target=//', 'target=/', getSelfQuery()));
 		exit;
 	}
-	targetLogin();
+	//DISABLED - trying new strategy login-if-needed in ServiceRequest and SvnOpen//targetLogin();
 }
 
 /**

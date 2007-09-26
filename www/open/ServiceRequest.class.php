@@ -223,10 +223,13 @@ class ServiceRequest {
 	 * 	those relevant to authentication can be forwarded to the client.
 	 */
 	function _forwardAuthentication($headers) {
+		// don't want post request to be resent. Authentication should really have been taken care of when form was shown.
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') trigger_error('Client should have been authenticated before submit.');
 		// show a page in case the user cancels login
 		if (class_exists('Presentation')) {
 			header($headers[0]);
 			header('WWW-Authenticate: '.$headers['WWW-Authenticate']);
+			// this is a bit different from SvnOpen which uses trigger_error, here we require html page
 			$p = new Presentation();
 			// this call can may not send a new status header, because we need the 401
 			$p->showErrorNoRedirect('This service requires authentication', 'Authentication Required');

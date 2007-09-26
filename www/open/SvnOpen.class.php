@@ -211,11 +211,56 @@ class SvnOpen {
 	}
 	
 	/**
-	 * Runs the svn command
+	 * Runs the svn command.
+	 * If the svn client returns authorization failed, and if there is presentation going on, 
+	 * request authentication from user.
 	 * @return int the exit code
 	 */
 	function exec() {
-		return $this->command->exec();
+		return $this->_execSvnResult($this->command->exec());
+	}
+	
+	/**
+	 * Svn commands produce parseable output after exec, for which this method may provide special handling.
+	 *
+	 * @param int $execResult the exit code of an executed svn command
+	 * @return the same exit code, or special cases
+	 */
+	function _execSvnResult($execResult) {
+		if (!$execResult) return $execResult;
+		$output = $this->getOutput();
+		if ($execResult==1) {
+			if (preg_match('/authorization\s+failed/',$output[1])) {
+				$this->handleAuthenticationError();
+			}
+		}
+	}
+	
+	/**
+	 * If the output of a subversion command says authorization failed,
+	 * it might be because we have not requested authentication.
+	 * In that case we can send the authentication header and redo the request.
+	 * This should be rare because browsers by default resend credentials,
+	 * but it happens if for example the user authenticated in the repository, like /data/,
+	 * and this service is located at a different url, like /repos/.
+	 * @param String $targetUrl optional specific url to get Realm from
+	 */
+	function handleAuthenticationError($targetUrl=false) {
+		if (headers_sent()) {
+			echo("Authentication error. Headers already sent.");
+		}
+		if (!function_exists('getReposUser')) return; // don't do anything if login is not activated
+		if (getReposUser()!==false) return; // already logged in, probably invalid credentials
+		// don't want post request to be resent. Authentication should really have been taken care of when form was shown.
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') trigger_error('Client should have been authenticated before submit.');
+		if (!$targetUrl) $targetUrl = getRepository();
+		// svn command's authentication error does not reveal realm name
+		$realm = getAuthName($targetUrl);
+		askForCredentials($realm);
+		// show message regardless of output type (XML/HTML/plaintext/json)
+		trigger_error('This service requires authentication',E_USER_NOTICE);
+		// require new request with credentials
+		exit;
 	}
 	
 	/**
