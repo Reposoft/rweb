@@ -114,9 +114,10 @@ class TestSystem extends UnitTestCase {
 		$this->assertTrue(isAbsolute($dir1));
 		$this->assertTrue(isFolder($dir1));
 		// clean up
-		$this->assertTrue(strBegins($dir1, System::getApplicationTemp()), "$dir1 should be a subfolder of app temp");
+		$apptemp = System::getApplicationTemp();
+		$this->assertTrue(stristr($dir1, $apptemp)==$dir1, "$dir1 should be a subfolder of app temp $apptemp");
 		rmdir($dir1);
-		$this->assertTrue(strBegins($dir2, System::getApplicationTemp()));
+		$this->assertTrue(stristr($dir2, $apptemp)==$dir2);
 		rmdir($dir2);
 	}
 	
@@ -125,7 +126,7 @@ class TestSystem extends UnitTestCase {
 		$this->assertTrue(strEnds($dir1, '/'));
 		$this->assertTrue(strpos($dir1, '/mytest/')>0);
 		// clean up
-		$this->assertTrue(strBegins($dir1, System::getApplicationTemp('mytest')));
+		$this->assertTrue(stristr($dir1, System::getApplicationTemp('mytest'))==$dir1);
 		rmdir($dir1);
 	}
 	

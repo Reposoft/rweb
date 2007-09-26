@@ -99,7 +99,7 @@ class TestValidation extends UnitTestCase {
 		$url = dirname($_SERVER['SCRIPT_URI']).'/';
 		$params = array(VALIDATION_KEY=>'','name'=>'somename');
 		
-		$s = new ServiceRequest($url, $params);
+		$s = new ServiceRequest($url, $params, false);
 		$this->sendMessage("Request url: ".$s->_buildUrl());
 		$s->exec();
 		$this->assertEqual(200, $s->getStatus(), "Should have got a response. %s");
@@ -121,7 +121,7 @@ class TestValidation extends UnitTestCase {
 		
 		$url = dirname($_SERVER['SCRIPT_URI']).'/';
 		$params = array(VALIDATION_KEY=>'', 'testuser'=>'tes');
-		$s = new ServiceRequest($url, $params);
+		$s = new ServiceRequest($url, $params, false);
 		$s->exec();
 		$result = $s->getResponse();
 		$this->assertEqual($expected, $json->decode($result));

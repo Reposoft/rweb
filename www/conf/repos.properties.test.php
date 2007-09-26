@@ -152,6 +152,12 @@ class TestReposProperties extends UnitTestCase {
 			urlSpecialChars("$host/&%#/"));
 	}
 	
+	function testIsRepositoryUrl() {
+		$this->assertTrue(isRepositoryUrl(getRepository()),getRepository().' is a repository url. %s');
+		$this->assertFalse(isRepositoryUrl(getSelfRoot()),getSelfRoot().' is not a repository url. %s');
+		$this->assertFalse(isRepositoryUrl(getSelfRoot().'/repos/'),getSelfRoot().'/repos/ is not a repository url. %s');
+	}
+	
 }
 
 testrun(new TestReposProperties());

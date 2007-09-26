@@ -165,6 +165,9 @@ Node-action: delete
 		// that take a lot of time are those with one huge revision.
 		$repo = System::getTempFolder('backuptest');
 		exec('svnadmin create "'.$repo.'"');
+		// svnadmin create by default write protects some repository internals (stopping test cleanup on windows)
+		chmod($repo.'db'.DIRECTORY_SEPARATOR.'format',0755);
+		chmod($repo.'format',0755);
 		// run the test
 		loadDumpfile($tmp, $repo);
 		exec('svnadmin verify "'.$repo.'" 2>&1', $output, $result);

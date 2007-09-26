@@ -87,6 +87,9 @@ class TestAdmin extends UnitTestCase {
 		$this->assertTrue(isRepository($dir), "Created repository in $dir. %s");
 		// test getHeadRevisionNumber
 		$this->assertEqual(0, getHeadRevisionNumber($dir));
+		// svnadmin create by default write protects some repository internals (stopping test cleanup on windows)
+		chmod($dir.'db'.DIRECTORY_SEPARATOR.'format',0755);
+		chmod($dir.'format',0755);
 		// clean
 		System::deleteFolder($dir);
 	}

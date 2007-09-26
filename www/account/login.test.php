@@ -65,16 +65,16 @@ class Login_include_Test extends UnitTestCase {
 		$this->expectError(new PatternExpectation('* not a repository *'));
 		// reportErrorInTest does not force 'return' so there will be extra errors
 		$this->expectError(new AnythingExpectation());
-		$this->expectError(new AnythingExpectation());
-		$this->expectError(new AnythingExpectation());
+		$this->expectError(new AnythingExpectation()); // one too many of these may cause error in next test
 		$result = verifyLogin(getSelfRoot());
-		
+	}
+	
+	function testVerifyLoginNotRepositoryUrl2() {
 		$this->expectError(new PatternExpectation('* not a repository *'));
 		// reportErrorInTest does not force 'return' so there will be extra errors
 		$this->expectError(new AnythingExpectation());
 		$this->expectError(new AnythingExpectation());
-		$result = verifyLogin(getSelfRoot().'/repos/'); // code exists if there is no trailing slash
-		
+		$result = verifyLogin(getSelfRoot().'/repos/'); // code exits if there is no trailing slash
 	}
 	
 	function testGetTarget() {

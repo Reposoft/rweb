@@ -85,6 +85,7 @@ class ResourceExistsRule extends Rule {
 	}
 	function valid($fieldvalue) {
 		$s = new ServiceRequest(getRepository().$fieldvalue);
+		$s->setSkipBody();
 		$s->exec();
 		if($s->getStatus() == 301){
 			$headers = $s->getResponseHeaders();

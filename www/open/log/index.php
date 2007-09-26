@@ -116,9 +116,10 @@ echo $foot;
 function handleAuthenticationError($targetUrl, $output) {
 	if (getReposUser()!==false) return;
 	if (preg_match('/authorization\s+failed/',$output[1])) {
+		// svn command's authentication error does not reveal realm name
 		$realm = getAuthName($targetUrl);
 		askForCredentials($realm);
-		exit; // need extra exit because the one in askForCredentials might exit the include only
+		exit; // need extra exit because the one in askForCredentials might exit the include only (?)
 	}
 }
 ?>

@@ -20,7 +20,7 @@ curl -s -u test:test -I "http://localhost/repos/open/?target=/test/trunk/fa/a.tx
 curl -s -u test:test -I "http://localhost/repos/edit/?target=/test/trunk/fa/a.txt" | grep "200 OK"
 
 # view without authentication, should show login box
-curl -s "http://localhost/repos/open/?target=/test/trunk/fa/a.txt" -I | grep "401 Authorization required"
+curl -s "http://localhost/repos/open/?target=/test/trunk/fa/a.txt" -I | grep "401 Authorization Required"
 curl -s "http://localhost/repos/open/?target=/test/trunk/fa/a.txt" -I | grep "WWW-Authenticate: Basic realm"
 # if user hits cancel, show explanation and back button
 curl -s "http://localhost/repos/open/?target=/test/trunk/fa/a.txt" | grep "requires login"

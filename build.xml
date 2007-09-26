@@ -263,6 +263,13 @@
 		<delete dir="${target.folder}/compile.excludes"/>
 	</target>
 	
+	<target name="docs" depends="docs.phpdoc">
+	</target>
+	
+	<target name="docs.phpdoc" description="Code docs, requires: pear install PhpDocumentor">
+		<exec executable="${development.folder}/lib/phpdoc/makedocs.bat" dir="${development.folder}/lib/phpdoc/"/>
+	</target>
+	
 	<target name="package.gzip" depends="dist.clean" description="Create distributable archive">
 		<tar destfile="${package.filename}.tgz" compression="gzip"
 			basedir="${target.folder}" includes="${app.name}/**"/>

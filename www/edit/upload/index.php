@@ -72,7 +72,7 @@ function getLog($targetUrl) {
 	return $result;
 }
 	
-function showUploadForm() {	
+function showUploadForm() {
 	$template = Presentation::getInstance();
 	$target = getTarget();
 	$targeturl = getTargetUrl();

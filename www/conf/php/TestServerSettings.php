@@ -52,7 +52,8 @@ class TestServerSettings extends UnitTestCase {
 	}
 	
 	function testOutputBuffering() {
-		$this->assertEqual(0, ini_get('output_buffering'), "output_buffering: For passthrough of resources and reports we don't want output buffering. %s");
+		$this->assertEqual(0, ini_get('output_buffering'), "output_buffering: For passthrough of resources and reports we don't want output buffering. %s".
+			". The application works with output buffering too, but users may experience delayed responses in some cases.");
 		$this->assertEqual(0, ini_get('implicit_flush'), "For performance reasons we don't want implicit flush. We do flush() when needed. ");
 	}
 
@@ -62,20 +63,30 @@ class TestServerSettings extends UnitTestCase {
 	}
 
 	function testMbString() {
-		$this->assertEqual("UTF-8", ini_get('mbstring.internal_encoding'), "mbstring.internal_encoding: %s");
-		$this->assertEqual("Neutral", ini_get('mbstring.language'), "mbstring.language: %s");
-		$this->assertEqual("auto", ini_get('mbstring.detect_order'), "mbstring.detect_order: %s");
+		$this->assertEqual("neutral", strtolower(ini_get('mbstring.language')), "mbstring.language: %s");
+		
 		$this->assertFalse(ini_get('mbstring.substitute_character'), "mbstring.substitute_character: Input that can't be converted should cause error message. %s");
 		$this->assertEqual(0, ini_get('mbstring.func_overload'), "mbstring.func_overload: Mb should be called explicitly, not silently. %s");
-		// expecting UTF-8 input, but no automatic input conversion because input from browser should be valid already (if not, we throw an error)
-		$this->assertEqual("UTF-8", ini_get('mbstring.http_input'), "mbstring.http_input: %s");
 		// the above is not required, it seems, at least not in linux
 		$this->assertFalse(ini_get('mbstring.encoding_translation'), "mbstring.encoding_translation: Automatic encoding translation (mbstring.encoding_translation) should be Off. %s");
 		// no automatic output conversion
 		$this->assertEqual("", ini_get('output_handler'), "output_handler: No output handler should be set, because default is to not buffer output. %s");
 		$this->assertEqual(0, ini_get('mbstring.http_output'), "mbstring.http_output: mbstring is not the output handler, so there is no need for a http_output setting. %s");
 		// what is mbstring.strict_detection available from php 5.1.2?
+
+		// make sure there are no unwanted explicit settings
+		if (ini_get('mbstring.detect_order')) {
+			$this->assertEqual("auto", ini_get('mbstring.detect_order'), "mbstring.detect_order: %s");
+		}
+		if (ini_get('mbstring.internal_encoding')) {
+			$this->assertEqual("UTF-8", ini_get('mbstring.internal_encoding'), "mbstring.internal_encoding: %s");
+		}
+		// expecting UTF-8 input, but no automatic input conversion because input from browser should be valid already (if not, we throw an error)
+		if (ini_get('mbstring.http_input') != 'pass') {
+			$this->assertEqual("UTF-8", ini_get('mbstring.http_input'), "mbstring.http_input: %s, must be default or UTF-8");
+		}
 	}
+	
 }
 
 testrun(new TestServerSettings());
