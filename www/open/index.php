@@ -46,4 +46,19 @@ if ($fromrev) $p->assign('fromrev', $fromrev);
 // all set
 $p->display();
 
+/*
+> curl -s "http://localhost/repos/open/?target=/test/trunk/fa/a.txt" -I
+127.0.0.1 - - [26/Sep/2007:09:06:37 +0200] "HEAD /data/test/trunk/fa/a.txt?serv=json HTTP/1.1" 401 -
+127.0.0.1 - - [26/Sep/2007:09:06:38 +0200] "HEAD /data/test/trunk/fa/a.txt?serv=json HTTP/1.1" 401 -
+127.0.0.1 - - [26/Sep/2007:09:06:37 +0200] "HEAD /repos/open/?target=/test/trunk/fa/a.txt HTTP/1.1" 401 -
+
+> curl -s "http://localhost/repos/open/?target=/test/trunk/fa/a.txt"
+127.0.0.1 - - [26/Sep/2007:09:08:46 +0200] "HEAD /data/test/trunk/fa/a.txt?serv=json HTTP/1.1" 401 -
+127.0.0.1 - - [26/Sep/2007:09:08:46 +0200] "HEAD /data/test/trunk/fa/a.txt?serv=json HTTP/1.1" 401 -
+127.0.0.1 - - [26/Sep/2007:09:08:47 +0200] "PROPFIND /data/test/trunk/fa/a.txt HTTP/1.1" 401 836
+127.0.0.1 - "" [26/Sep/2007:09:08:47 +0200] "PROPFIND /data/test/trunk/fa/a.txt HTTP/1.1" 401 836
+127.0.0.1 - "" [26/Sep/2007:09:08:47 +0200] "PROPFIND /data/test/trunk/fa/a.txt HTTP/1.1" 401 836
+127.0.0.1 - - [26/Sep/2007:09:08:46 +0200] "GET /repos/open/?target=/test/trunk/fa/a.txt HTTP/1.1" 401 1967
+*/
+
 ?>

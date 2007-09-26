@@ -253,7 +253,7 @@ class SvnOpen {
 		if (getReposUser()!==false) return; // already logged in, probably invalid credentials
 		// don't want post request to be resent. Authentication should really have been taken care of when form was shown.
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') trigger_error('Client should have been authenticated before submit.');
-		if (!$targetUrl) $targetUrl = getRepository();
+		if (!$targetUrl) $targetUrl = getRepository(); // using the targetUrl would be better, _if_ there was service request caching
 		// svn command's authentication error does not reveal realm name
 		$realm = getAuthName($targetUrl);
 		askForCredentials($realm);

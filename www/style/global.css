@@ -204,6 +204,9 @@ span.action {
 #commandbar #repository {
 	background-image: url('commands/24x24/repository.png');
 }
+#commandbar #start {
+	background-image: url('commands/24x24/start.png');
+}
 #commandbar #parent {
 	background-image: url('commands/24x24/parent.png');
 }

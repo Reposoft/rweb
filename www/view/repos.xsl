@@ -91,12 +91,13 @@
 		<xsl:call-template name="commandbar">
 			<xsl:with-param name="parentlink">
 				<xsl:choose>
+					<!-- disabled for 1.2
 					<xsl:when test="string-length($startpage)>0 and $pathlinks='/'">
 						<xsl:value-of select="$startpage"/>
 					</xsl:when>
 					<xsl:when test="string-length($startpage)>0 and not($tool)">
 						<xsl:value-of select="$startpage"/>
-					</xsl:when>
+					</xsl:when> -->
 					<xsl:when test="/svn/index/updir">../</xsl:when>
 					<xsl:otherwise></xsl:otherwise>
 				</xsl:choose>
@@ -120,7 +121,10 @@
 			</xsl:call-template>
 		</xsl:param>
 		<div id="commandbar">
-			<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
+		<img src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
+		<xsl:if test="$startpage">
+			<a id="start" class="command translate" href="{$startpage}">start</a>
+		</xsl:if>
 		<xsl:if test="string-length($parentlink)>0">
 			<a id="parent" class="command translate" href="{$parentlink}">up</a>
 		</xsl:if>
