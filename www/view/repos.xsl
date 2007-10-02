@@ -22,21 +22,10 @@
 	<xsl:param name="editUrl"><xsl:value-of select="$web"/>edit/</xsl:param>
 	<!-- we don't want to force the CSS to set margins everywhere -->
 	<xsl:param name="spacer" select="' &#160; '"/>
-	<!-- starpage to use as parent directory of 'trunk' -->
+	<!-- optional startpage to enable home button and special link for project, empty to disable -->
 	<xsl:param name="startpage"><xsl:value-of select="$web"/>open/start/</xsl:param>
 	<!-- the recognized top level folders for project tools separated by slash -->
-	<xsl:param name="tools">/trunk/branches/tags/tasks/templates/messages/calendar/</xsl:param>
-	<!-- TODO followConversions: maintain repository conversions, meaning that:
-	- 'trunk',' branches', 'tags' can not be renamed or removed
-	-  (actually nothing in the same dir as 'trunk' can be renamed or removed).
-	- There is no button to go to parent folder in trunk.
-	- If there is such a button it leads to a start page where the folders that the user has access to are listed.
-	- The subdirectories of 'branches' and 'tags' are treated as 'trunk' (no remove, no go up).
-	- These rules are void if there is a 'trunk', 'branches' or 'tags' in the parent path of the folder
-	-  (so that it is legal to make a folder named 'tags' inside a project).
-	- Of course these rules only apply to this web client, they are not enforced in the repository.
-	- Implementing this affects the choice of $parentpath and the places where we check for $editUrl.
-	-->
+	<xsl:param name="tools">/trunk/branches/tags/tasks/templates/messages/calendar/administration/</xsl:param>
 	<!-- document skeleton -->
 	<xsl:template match="/">
 		<html xmlns="http://www.w3.org/1999/xhtml">
@@ -75,14 +64,22 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="folders" select="substring($fullpath, string-length($tool)+2)"/>
-		 --><xsl:param name="folders" select="$fullpath"/>
-		<xsl:param name="homelink">
-			<xsl:call-template name="getReverseUrl">
-				<xsl:with-param name="url" select="$folders"/>
-			</xsl:call-template>
-		</xsl:param>
+		 -->
 		<xsl:param name="projectname">
-			<xsl:call-template name="getProjectName"/>
+			<!-- enable project concept only when there is a startpage? - <xsl:if test="$startpage"> -->
+				<xsl:call-template name="getProjectName"/>
+			<!-- </xsl:if> -->
+		</xsl:param>
+		<xsl:param name="folders" select="substring($fullpath, string-length($projectname)+2)"/>
+		<xsl:param name="homelink">
+			<xsl:if test="$startpage">
+				<xsl:value-of select="concat($startpage,concat('#',$projectname))"/>
+			</xsl:if>
+			<xsl:if test="not($startpage)">
+				<xsl:call-template name="getReverseUrl">
+					<xsl:with-param name="url" select="substring($folders, 2)"/>
+				</xsl:call-template>
+			</xsl:if>
 		</xsl:param>
 		<xsl:param name="pathlinks">
 			<xsl:call-template name="getFolderPathLinks">
@@ -305,13 +302,12 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- get the home folder, like /project/trunk/ or /branches/, see $tools --> 
-	<xsl:template name="getToolPath">
+	<!-- <xsl:template name="getToolPath">
 		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
 		<xsl:param name="this" select="substring-before(substring($path, 2), '/')"/>
 		<xsl:value-of select="$this"/>
 		<xsl:value-of select="'/'"/>
 		<xsl:choose>
-			<!-- TODO use $tools, maybe combine with getFolderPathLinks -->
 			<xsl:when test="contains($this, 'trunk') or contains($this, 'administration')">
 			</xsl:when>
 			<xsl:when test="not(contains($path, '/'))">
@@ -322,7 +318,7 @@
 				</xsl:call-template>
 			</xsl:when>
 		</xsl:choose>
-	</xsl:template>
+	</xsl:template> -->
 	<!-- get the path back, as multiple "../", to get to the path that uses 'url' to get to the current path -->
 	<xsl:template name="getReverseUrl">
 		<xsl:param name="url"/>
