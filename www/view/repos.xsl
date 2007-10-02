@@ -143,8 +143,10 @@
 		<xsl:param name="projectname"/>
 		<xsl:param name="homelink"/>
 		<xsl:param name="pathlinks"/>
+		<!-- it is not trivial to check if a tool has already been found in path, so instead we assume that tools are only in project root -->
+		<xsl:param name="trytools" select="@path=concat('/',$projectname)"/>
 		<span id="fullpath" style="display:none"><xsl:value-of select="$fullpath"/></span>
-		<h2>
+		<h2 id="path">
 			<a id="home" href="{$homelink}">
 				<span class="projectname">
 					<xsl:value-of select="$projectname"/>
@@ -155,6 +157,7 @@
 		</h2>
 		<xsl:apply-templates select="dir">
 			<xsl:sort select="@name"/>
+			<xsl:with-param name="trytools" select="$trytools"/>
 		</xsl:apply-templates>
 		<xsl:apply-templates select="file">
 			<xsl:sort select="@name"/>
@@ -177,20 +180,20 @@
 				</xsl:with-param>
 			</xsl:call-template>
 		</xsl:param>
+		<xsl:param name="trytools"/>
 		<xsl:param name="classadd">
-			<xsl:if test="contains($tools,@href)">
-				<!-- todo: don't toolify if any tool is already found in parent path ($folderpath) -->
+			<xsl:if test="$trytools and contains($tools,@href)">
 				<xsl:value-of select="concat(' tool tool-',@name)"/>
 			</xsl:if>
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
-		<div id="row:{$id}" class="row n{$n mod 4}">
+		<div id="row:{$id}" class="row n{$n mod 4}{$classadd}">
 			<div class="actions">
-				<a id="view:{$id}" class="action" href="{$href}">view</a>
+				<a id="view:{$id}" class="action action-view" href="{$href}">view</a>
 				<xsl:if test="$editUrl">
-					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={$target}">rename</a>
-					<a id="copy:{$id}" class="action"  href="{$editUrl}copy/?target={$target}">copy</a>
-					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={$target}">delete</a>
+					<a id="rename:{$id}" class="action action-rename" href="{$editUrl}rename/?target={$target}">rename</a>
+					<a id="copy:{$id}" class="action action-copy"  href="{$editUrl}copy/?target={$target}">copy</a>
+					<a id="delete:{$id}" class="action action-delete" href="{$editUrl}delete/?target={$target}">delete</a>
 				</xsl:if>
 			</div>
 			<a id="open:{$id}" class="folder{$classadd}" href="{$href}">
