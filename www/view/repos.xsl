@@ -69,12 +69,13 @@
 	<!-- body contents -->
 	<xsl:template match="index">
 		<xsl:param name="fullpath" select="concat(/svn/index/@path,'/')"/>
-		<xsl:param name="tool">
+		<!-- <xsl:param name="tool">
 			<xsl:call-template name="getToolPath">
 				<xsl:with-param name="path" select="$fullpath"/>
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="folders" select="substring($fullpath, string-length($tool)+2)"/>
+		 --><xsl:param name="folders" select="$fullpath"/>
 		<xsl:param name="homelink">
 			<xsl:call-template name="getReverseUrl">
 				<xsl:with-param name="url" select="$folders"/>
@@ -105,7 +106,6 @@
 		</xsl:call-template>
 		<xsl:call-template name="contents">
 			<xsl:with-param name="fullpath" select="$fullpath"/>
-			<xsl:with-param name="tool" select="$tool"/>
 			<xsl:with-param name="homelink" select="$homelink"/>
 			<xsl:with-param name="projectname" select="$projectname"/>
 			<xsl:with-param name="pathlinks" select="$pathlinks"/>
@@ -143,7 +143,6 @@
 	<!-- directory listing -->
 	<xsl:template name="contents">
 		<xsl:param name="fullpath"/>
-		<xsl:param name="tool"/>
 		<xsl:param name="projectname"/>
 		<xsl:param name="homelink"/>
 		<xsl:param name="pathlinks"/>
@@ -290,15 +289,19 @@
 				<xsl:value-of select="$f"/>
 			</a>
 			<xsl:value-of select="'/'"/>
-			<xsl:call-template name="getFolderPathLinks">
-				<xsl:with-param name="folders" select="$rest"/>
-				<xsl:with-param name="return" select="substring-after($return,'/')"/>
-				<xsl:with-param name="classadd">
-					<xsl:if test="'1'">
-						<xsl:value-of select="' toolchild'"/>
-					</xsl:if>
-				</xsl:with-param>
-			</xsl:call-template>
+			<xsl:if test="string-length($classadd)=0">
+				<xsl:call-template name="getFolderPathLinks">
+					<xsl:with-param name="folders" select="$rest"/>
+					<xsl:with-param name="return" select="substring-after($return,'/')"/>
+				</xsl:call-template>
+			</xsl:if>
+			<xsl:if test="string-length($classadd)>0">
+				<xsl:call-template name="getFolderPathLinks">
+					<xsl:with-param name="folders" select="$rest"/>
+					<xsl:with-param name="return" select="substring-after($return,'/')"/>
+					<xsl:with-param name="classadd" select="' toolchild'"/>
+				</xsl:call-template>
+			</xsl:if>
 		</xsl:if>
 	</xsl:template>
 	<!-- get the home folder, like /project/trunk/ or /branches/, see $tools --> 
