@@ -364,8 +364,11 @@ class Presentation {
 		$this->enableRedirect($pageid);
 		$nexturl = $this->_getStaticWebappUrl() . 'view/?result=' . rawurlencode($pageid) . '&w=0';
 		ignore_user_abort(true);
-		header("Refresh: 1; $nexturl");
-		echo '<html><body><h4>Processing...</h4></body></html>'; // same string as in view/index.php
+		// quite the same response as in view/index.php wait
+		$page = '<html><body><h4>Processing...</h4></body></html>';
+		header('Refresh: 1; url='.$nexturl);
+		header('Content-Length: '.strlen($page));
+		echo $page;
 		ob_flush();flush(); // according to the docs this is still not 100% reliable
 	}
 	

@@ -14,6 +14,11 @@
 #commandbar #createfile {
 	background-image: url('../commands/24x24/createfile.png');
 }
+/* special folders */
+.tool-trunk {
+	background-image: url('16x16/folder.png');
+}
+.toolchild {}
 /* details plugin */
 #commandbar #showdetails {
 	background-image: url('../commands/24x24/details.png');

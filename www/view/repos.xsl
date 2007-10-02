@@ -269,25 +269,35 @@
 				<xsl:with-param name="url" select="$rest"/>
 			</xsl:call-template>
 		</xsl:param>
+		<xsl:param name="classadd">
+			<xsl:if test="contains($tools,concat('/',concat($f,'/')))">
+				<xsl:value-of select="concat(' tool tool-',$f)"/>
+			</xsl:if>
+		</xsl:param>
 		<xsl:param name="id">
 			<xsl:call-template name="getFileID">
 				<xsl:with-param name="filename" select="$return"/>
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:if test="not(string-length($rest)>0)">
-			<span id="folder" class="path">
+			<span id="folder" class="path{$classadd}">
 				<xsl:value-of select="$f"/>
 				<xsl:value-of select="'/'"/>
 			</span>
 		</xsl:if>
 		<xsl:if test="string-length($rest)>0">
-			<a id="{$id}" href="{$return}">
+			<a id="{$id}" href="{$return}" class="path{$classadd}">
 				<xsl:value-of select="$f"/>
 			</a>
 			<xsl:value-of select="'/'"/>
 			<xsl:call-template name="getFolderPathLinks">
 				<xsl:with-param name="folders" select="$rest"/>
 				<xsl:with-param name="return" select="substring-after($return,'/')"/>
+				<xsl:with-param name="classadd">
+					<xsl:if test="'1'">
+						<xsl:value-of select="' toolchild'"/>
+					</xsl:if>
+				</xsl:with-param>
 			</xsl:call-template>
 		</xsl:if>
 	</xsl:template>
