@@ -177,6 +177,12 @@
 				</xsl:with-param>
 			</xsl:call-template>
 		</xsl:param>
+		<xsl:param name="classadd">
+			<xsl:if test="contains($tools,@href)">
+				<!-- todo: don't toolify if any tool is already found in parent path ($folderpath) -->
+				<xsl:value-of select="concat(' tool tool-',@name)"/>
+			</xsl:if>
+		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<div id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
@@ -187,7 +193,7 @@
 					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={$target}">delete</a>
 				</xsl:if>
 			</div>
-			<a id="open:{$id}" class="folder" href="{$href}">
+			<a id="open:{$id}" class="folder{$classadd}" href="{$href}">
 				<xsl:value-of select="@name"/>
 			</a>
 		</div>

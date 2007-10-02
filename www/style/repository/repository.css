@@ -18,6 +18,9 @@
 .tool-trunk {
 	background-image: url('16x16/folder.png');
 }
+.row a.tool-trunk { /* higher specificity needed to alter folder icon in list */
+	background-image: url('../commands/16x16/repository.png'); 	
+}
 .toolchild {}
 /* details plugin */
 #commandbar #showdetails {
