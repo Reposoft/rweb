@@ -123,7 +123,7 @@ function displayEdit(&$presentation, $nextUrl=null, $headline=null, $summary=nul
 	$presentation->assign('nexturl',$nextUrl);
 	$presentation->assign('headline',$headline);
 	$presentation->assign('summary',$summary);
-	$presentation->enableRedirect();
+	//done in each operation, after validation: $presentation->enableRedirectWaiting();
 	//exit;
 	$presentation->display(dirname(__FILE__) . '/edit_done.html');
 }

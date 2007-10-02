@@ -156,6 +156,10 @@ class Presentation {
 		if (!isset($instance)) {
 			$c = __CLASS__;
 			$instance = new $c;
+			if (true && function_exists('displayEdit') && isset($_GET[SUBMIT])) {
+				// automatic redirect-after-post
+				$instance->enableRedirectWaiting();
+			}
 		}
 		return $instance;
 	}
@@ -284,9 +288,14 @@ class Presentation {
 		// to get predictable cache path, always use forward slashes
 		$resource_name = strtr($resource_name, '\\', '/');
 		// custom processing for redirect before display
-		if (!headers_sent() && //debug:// false && 
-			$this->isRedirectBeforeDisplay()) {
-			$file = System::getTempFile('pages');
+		if ($this->isRedirectBeforeDisplay()) {
+			if ($this->redirectBeforeDisplay===true) {
+				if (headers_sent()) trigger_error('Failed to redirect to result page - output started already', E_USER_ERROR);
+				$file = System::getTempFile('pages');
+			} else {
+				$file = System::getApplicationTemp('pages').$this->redirectBeforeDisplay;	
+			}
+			if (!$file) trigger_error('Failed to write response because server file could not be opened', E_USER_ERROR);
 			$pagecontents = $this->fetch($resource_name, $cache_id, $compile_id);
 			$handle = fopen($file, "w");
 			fwrite($handle, $pagecontents);
@@ -340,13 +349,24 @@ class Presentation {
 
 	/**
 	 * Use redirect before page is displayed. Useful as redirect-after-post.
+	 * @param boolean true to enable redirect, false to disable
 	 */	
 	function enableRedirect($doRedirectBeforeDisplay=true) {
 		$this->redirectBeforeDisplay = $doRedirectBeforeDisplay;
 	}
 	
 	function isRedirectBeforeDisplay() {
-		return $this->redirectBeforeDisplay;
+		return $this->redirectBeforeDisplay != false;
+	}
+	
+	function enableRedirectWaiting() {
+		$pageid = uniqid();
+		$this->enableRedirect($pageid);
+		$nexturl = $this->_getStaticWebappUrl() . 'view/?result=' . rawurlencode($pageid) . '&w=0';
+		ignore_user_abort(true);
+		header("Location: $nexturl");
+		echo '<html><body><h4>Processing...</h4></body></html>'; // same string as in view/index.php
+		ob_flush();flush(); // according to the docs this is still not 100% reliable
 	}
 	
 	/**
