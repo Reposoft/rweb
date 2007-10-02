@@ -123,7 +123,10 @@ function displayEdit(&$presentation, $nextUrl=null, $headline=null, $summary=nul
 	$presentation->assign('nexturl',$nextUrl);
 	$presentation->assign('headline',$headline);
 	$presentation->assign('summary',$summary);
-	//done in each operation, after validation: $presentation->enableRedirectWaiting();
+	if (!$presentation->isRedirectBeforeDisplay()) {
+		// always do redirect after post, even if redirectWaiting is not enabled
+		$presentation->enableRedirectWaiting();
+	}
 	//exit;
 	$presentation->display(dirname(__FILE__) . '/edit_done.html');
 }

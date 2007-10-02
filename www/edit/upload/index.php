@@ -14,7 +14,11 @@ addPlugin('validation');
 addPlugin('filename');
 addPlugin('dateformat');
 
-define('MAX_FILE_SIZE', 1024*1024*10);
+// the only use for the numeric value is the MAX_FILE_SIZE parameter in the form, which is good for what?
+// without it we could just append 'b' to the ini value
+$maxsize = ini_get('upload_max_filesize');
+if (($p = strpos($maxsize,'M'))) $maxsize = substr($maxsize, 0, $p) * 1024 * 1024;
+define('MAX_FILE_SIZE',$maxsize); // now we haven't checked max post size, we assume it is high enough
 
 define('UPLOAD_MAX_TIME', 10*60);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

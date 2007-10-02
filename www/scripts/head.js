@@ -6,8 +6,10 @@
 if(document.documentElement&&document.documentElement.namespaceURI&&document.createElementNS){document.createElement=function(t){return document.createElementNS(document.documentElement.namespaceURI,t);};}
 
 // ======= allow console.log in all browsers =========
+/*
 if(!("console"in window)||!("firebug"in console))
 {var names=["log","debug","info","warn","error","assert","dir","dirxml","group","groupEnd","time","timeEnd","count","trace","profile","profileEnd"];window.console={};for(var i=0;i<names.length;++i){window.console[names[i]]=function(){};}}
+*/
 
 // ===================================================
 /*
@@ -91,7 +93,14 @@ function ReposResourceId(text){this.text=text;this.getRelease=function(){if(/@De
 // ===================================================
 // load plugins for pages that can not add <script> statically
 
-$(document).ready(function(){if($('body.repository').length==1){Repos.addScript('plugins/dateformat/dateformat.js');Repos.addScript('plugins/details/details.js');}
-if($('body.log').length==1){Repos.addScript('plugins/dateformat/dateformat.js');}
-if($('body.log').length==1){Repos.addScript('plugins/logfilter/logfilter.js');}
-if($('body.resource').length==1){Repos.addScript('plugins/thumbnails/thumbnails.js');}});
+$(document).ready(function(){
+if($('body').is('.repository')){
+Repos.addScript('plugins/dateformat/dateformat.js');
+Repos.addScript('plugins/details/details.js');
+Repos.addScript('plugins/readme/readme.js');
+}else if($('body').is('.log')){
+Repos.addScript('plugins/dateformat/dateformat.js');
+Repos.addScript('plugins/logfilter/logfilter.js');
+}else if($('body').is('.resource')){
+Repos.addScript('plugins/thumbnails/thumbnails.js');
+}});
