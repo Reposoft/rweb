@@ -21,6 +21,7 @@ function shouldShow($entrypoint) {
 }
 
 // if the user logged in directly to the repository, we need the cookie to be set
+// TODO can this redirect be avoided now that service request forwards authentication?
 if (!isLoggedIn()) {
 	header("Location: /?login");
 	exit;
