@@ -188,7 +188,10 @@
 		<xsl:param name="url"/><!-- should be target maybe -->
 		<xsl:param name="size"/>
 		<xsl:param name="next"/>
-		<p>Limited to <xsl:value-of select="$size"/> entries. <a id="next" href="{$url}&amp;torev={$next}&amp;limit={$size}">Show next page.</a></p>
+		<p>
+			<span>Limited to <xsl:value-of select="$size"/> entries.</span>
+			<a id="next" href="{$url}&amp;torev={$next}&amp;limit={$size}">Show next page.</a>
+		</p>
 	</xsl:template>
 	<!-- links to select revisions -->
 	<xsl:template name="limitrev">

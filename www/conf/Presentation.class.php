@@ -88,6 +88,18 @@ function getUserLocale() {
 	return $locale;	
 }
 
+/**
+ * Same function as repos.xsl:getFileId and fileid.js
+ * Replaces filename characters not valid in xhtml ids with _.
+ * Note that a prefix of some kind is needed because ids must start with letter.
+ *
+ * @param String $name the file name, UTF-8 encoding, not urlencoded
+ */
+function getFileId($name) {
+	$e = rawurlencode($name);
+	return preg_replace('/[%\/\(\)@&]/','_',$e);
+}
+
 // ------- plugin functionality ----------
 // all plugins should declare a function [name]_getHeadTags($webapp)
 // that returns an array of HTML tags to be added to head, with $webapp as repos url

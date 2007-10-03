@@ -79,7 +79,7 @@ function eraseCookie(name)
 // ===================================================
 /**
  * Repos shared script logic (c) 2006 Staffan Olsson www.repos.se
- * @version $Id: pending $
+ * @version $Id: repos.js 3476 2007-10-03 06:30:59Z solsson $
  */
 var Repos={};Repos.getWebapp=function(){var tags=document.getElementsByTagName("head")[0].childNodes;var me=/scripts\/head\.js(\??.*)$|scripts\/shared\/repos\.js$/;var t,n;for(var i=0;i<tags.length;i++){t=tags[i];if(!t.tagName)continue;n=t.tagName.toLowerCase();if(n=='script'&&t.src&&t.src.match(me)){this.repos_webappRoot=t.src.replace(me,'');}}
 if(!this.repos_webappRoot)return'/repos/';return this.repos_webappRoot;};Repos.url=Repos.getWebapp();Repos.addScript=function(src,loadEventHandler){var srcUrl=Repos.url+src;if(/:\/\/localhost[:\/]/.test(window.location.href))srcUrl+='?'+(new Date().getTime());var s=document.createElement('script');s.type="text/javascript";s.src=srcUrl;document.getElementsByTagName('head')[0].appendChild(s);return s;};Repos.addCss=function(src){var s=document.createElement('link');s.type="text/css";s.rel="stylesheet";s.href=Repos.url+src;document.getElementsByTagName('head')[0].appendChild(s);return s;};Repos.reportError=function(error){var strError=Repos._errorToString(error);var id=Repos.generateId();Repos._storeError(strError,id);var msg="Repos has run into a script error:\n"+strError+"\n\nThe details of this error have been logged so we can fix the issue. "+"\nFeel free to contact support@repos.se about this error, ID \""+id+"\"."+"\n\nBecause of the error, this page may not function properly.";Repos._alertError(msg);};Repos._errorToString=function(error){if(typeof(error)=='Error'){return Repos._exceptionToString(error);}

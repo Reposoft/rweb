@@ -73,7 +73,11 @@
 		<xsl:param name="folders" select="substring($fullpath, string-length($projectname)+2)"/>
 		<xsl:param name="homelink">
 			<xsl:if test="$startpage">
-				<xsl:value-of select="concat($startpage,concat('#',$projectname))"/>
+				<xsl:value-of select="$startpage"/>
+				<xsl:value-of select="'#p:'"/>
+				<xsl:call-template name="getFileId">
+					<xsl:with-param name="filename" select="$projectname"/>
+				</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="not($startpage)">
 				<xsl:call-template name="getReverseUrl">
@@ -166,7 +170,7 @@
 	<!-- generate directory -->
 	<xsl:template match="dir">
 		<xsl:param name="id">
-			<xsl:call-template name="getFileID"/>
+			<xsl:call-template name="getFileId"/>
 		</xsl:param>
 		<xsl:param name="href">
 			<xsl:call-template name="getHref"/>
@@ -207,7 +211,7 @@
 			<xsl:call-template name="getFiletype"/>
 		</xsl:param>
 		<xsl:param name="id">
-			<xsl:call-template name="getFileID"/>
+			<xsl:call-template name="getFileId"/>
 		</xsl:param>
 		<xsl:param name="href">
 			<xsl:call-template name="getHref"/>
@@ -275,12 +279,12 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="classadd">
-			<xsl:if test="contains($tools,concat('/',concat($f,'/')))">
+			<xsl:if test="contains($tools,concat('/',$f,'/'))">
 				<xsl:value-of select="concat(' tool tool-',$f)"/>
 			</xsl:if>
 		</xsl:param>
 		<xsl:param name="id">
-			<xsl:call-template name="getFileID">
+			<xsl:call-template name="getFileId">
 				<xsl:with-param name="filename" select="$return"/>
 			</xsl:call-template>
 		</xsl:param>
@@ -357,7 +361,7 @@
 	</xsl:template>
 	<!-- make valid HTML id for file or folder, matching [A-Za-z][A-Za-z0-9:_.-]*  -->
 	<!-- ids should always start with letters, so a prefix like 'file:' must be prepended -->
-	<xsl:template name="getFileID">
+	<xsl:template name="getFileId">
 		<xsl:param name="filename" select="@href"/>
 		<xsl:value-of select="translate($filename,'%/()@&amp;+=,~$!','____________')"/>
 	</xsl:template>

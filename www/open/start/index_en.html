@@ -24,7 +24,7 @@ and the tools in each project.</p>
 <!--{assign var='projectname' value=$entry->getDisplayname()}-->
 <!--{* tools array should be read only once because it is a service call *}-->
 <!--{assign var='projecttools' value=$entry->getTools()}-->
-<div class="section">
+<div class="section" id="p:{=$projectname|getFileId}">
 <h2>
 <!--{* todo: make a smarter link, trunk/ if existing, project root if no trunk *}-->
 <span class="{=if $projectname eq $userfullname}username{=else}projectname{=/if}">{=$projectname}</span>

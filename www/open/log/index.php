@@ -71,7 +71,7 @@ for ($i=0; $i<count($log); $i++) {
 		$lastrev = $matches[1];
 	}
 	if ($limited) {
-		$log[$i] = ''; // unset not needed (would destory loop), empty lines make no difference after logentry
+		$log[$i] = ''; // replace extra entry's xml with empty line (unset would destory loop)
 		$line = '';
 	}
 	$size += strlen($line)+1; // newline will be added

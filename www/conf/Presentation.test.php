@@ -151,6 +151,21 @@ class TestPresentation extends UnitTestCase {
 				.'&target='.LEFT_DELIMITER.'$target|rawurlencode'.RIGHT_DELIMITER.'">', $result);		
 	}
 
+	function testGetFileId() {
+		$this->assertEqual(getFileId('aB'), 'aB', 'Preserve case. %s');
+		$this->assertEqual(getFileId('a.-_B'), 'a.-_B', 'Preserve dot dash underscore. %s');
+		$this->assertEqual(getFileId('a:B'), 'a:B', 'Preserve colon. %s');
+		$this->assertEqual(getFileId('a%b'), 'a_25b', 'precent -> urlencode -> replace encode-percent with _. %s');
+		$this->assertEqual(getFileId('a b'), 'a_20b', 'precent -> urlencode -> replace encode-percent with _. %s');
+		$this->assertEqual(getFileId('a*'), '2_2a', 'escape codes should be lower case as in subversion. %s');	
+	}
+	
+	function testGetFileIdUtf8() {
+		// difficult to test unless we know that this php file is UTF-8 encoded
+		$s = "h\xc3\xa5-\xc3\x85.txt";
+		$this->assertEqual(getFileId($s), 'h_c3_a5-_c3_85.txt');
+	}
+	
 }
 
 testrun(new TestPresentation());
