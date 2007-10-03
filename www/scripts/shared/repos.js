@@ -201,7 +201,7 @@ Repos._log = function(level, msg) {
 		console.log(msg);
 	} else if (typeof(window.console) != 'undefined') { // Safari 'defaults write com.apple.Safari IncludeDebugMenu 1'
 		window.console.log(msg);
-	} else if (level < Repos.logleve.error) {
+	} else if (level < Repos.loglevel.error) {
 		return;
 	} else if (typeof(Components)!='undefined' && typeof(Component.utils)!='undefined') { // Firefox console
 		Components.utils.reportError(msg);

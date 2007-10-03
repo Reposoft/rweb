@@ -12,8 +12,6 @@ addPlugin('password');
 addPlugin('filename');
 addPlugin('acl');
 
-define('MAX_FILE_SIZE', 1024*1024*10);
-
 // name only exists for new files, not for new version requests
 new FilenameRule("name");
 new NewFilenameRule("name", getTarget());
@@ -34,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 		// new file has a default type wich can be changed with query param
 		$template->assign('type', isset($_GET['type']) ? $_GET['type'] : 'txt');
 	}
-	$template->assign('maxfilesize',MAX_FILE_SIZE);
 	$template->assign('target',$target);
 	$template->assign('targeturl', getTargetUrl());
 	$template->display();
