@@ -263,11 +263,13 @@
 		<delete dir="${target.folder}/compile.excludes"/>
 	</target>
 	
-	<target name="docs" depends="docs.phpdoc, docs.runtime">
+	<target name="docs" depends="docs.phpdoc, docs.php, docs.js">
 		<echo file="${docs.folder}/index.html">
 			<![CDATA[<html><body>
+			<h1>Generated Repos source documentation</h1>
 			<ul>
 			<li><a href="php-api/html/index.html">PHP API</a></li>
+			<li><a href="js-api/html/index.html">Javascript</a></li>
 			</ul>
 			</body></html>]]>
 		</echo>
@@ -281,19 +283,16 @@
 			classpath="${tools.folder}/docs/ant_doxygen.jar" />
 	</target>
 	
-	<target name="docs.runtime" depends="docs.doxygen">
+	<target name="docs.php" depends="docs.doxygen">
 		<!-- the doxygen task sucks because error output is not displayed -->
 		<!-- use build/docs/makedocs.bat to troubleshoot and see syntax warnings -->
-		<doxygen configfilename="${tools.folder}/docs/doxygen-repos.cfg"/>
-		<!--
-			<property name="PROJECT_NAME" value="Repos PHP" />
-			<property name="INPUT" value="${development.folder}" />
-			<property name="RECURSIVE" value="yes" />
-			<property name="OUTPUT_DIRECTORY" value="${docs.folder}/php-api"/>
-			<property name="EXCLUDE_PATTERNS" value="*/.svn/* */lib/* *.test*"/>
-			<property name="EXTRACT_ALL" value="yes"/>
-		</doxygen>
-		-->
+		<doxygen configfilename="${tools.folder}/docs/doxygen-php.cfg"/>
+	</target>
+
+	<target name="docs.js" depends="docs.doxygen">
+		<!-- the doxygen task sucks because error output is not displayed -->
+		<!-- use build/docs/makedocs.bat to troubleshoot and see syntax warnings -->
+		<doxygen configfilename="${tools.folder}/docs/doxygen-js.cfg"/>
 	</target>
 	
 	<target name="docs.phpdoc" if="false" description="DEPRECATED Code docs, requires: pear install PhpDocumentor">
