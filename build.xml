@@ -263,10 +263,40 @@
 		<delete dir="${target.folder}/compile.excludes"/>
 	</target>
 	
-	<target name="docs" depends="docs.phpdoc">
+	<target name="docs" depends="docs.phpdoc, docs.runtime">
+		<echo file="${docs.folder}/index.html">
+			<![CDATA[<html><body>
+			<ul>
+			<li><a href="php-api/html/index.html">PHP API</a></li>
+			</ul>
+			</body></html>]]>
+		</echo>
 	</target>
 	
-	<target name="docs.phpdoc" description="Code docs, requires: pear install PhpDocumentor">
+	<target name="docs.doxygen">
+		<property name="docs.folder" value="${basedir}/docs"
+				description="part of OUTPUT_DIRECTORY in doxygen config files"/>
+		<mkdir dir="${docs.folder}"/>
+		<taskdef name="doxygen" classname="org.doxygen.tools.DoxygenTask"
+			classpath="${tools.folder}/docs/ant_doxygen.jar" />
+	</target>
+	
+	<target name="docs.runtime" depends="docs.doxygen">
+		<!-- the doxygen task sucks because error output is not displayed -->
+		<!-- use build/docs/makedocs.bat to troubleshoot and see syntax warnings -->
+		<doxygen configfilename="${tools.folder}/docs/doxygen-repos.cfg"/>
+		<!--
+			<property name="PROJECT_NAME" value="Repos PHP" />
+			<property name="INPUT" value="${development.folder}" />
+			<property name="RECURSIVE" value="yes" />
+			<property name="OUTPUT_DIRECTORY" value="${docs.folder}/php-api"/>
+			<property name="EXCLUDE_PATTERNS" value="*/.svn/* */lib/* *.test*"/>
+			<property name="EXTRACT_ALL" value="yes"/>
+		</doxygen>
+		-->
+	</target>
+	
+	<target name="docs.phpdoc" if="false" description="DEPRECATED Code docs, requires: pear install PhpDocumentor">
 		<exec executable="${development.folder}/lib/phpdoc/makedocs.bat" dir="${development.folder}/lib/phpdoc/"/>
 	</target>
 	

@@ -23,7 +23,7 @@ require_once(dirname(__FILE__) . '/simpletest/scorer.php');
 *	  @package SimpleTest
 *	  @subpackage UnitTester
    */
-class HtmlReporter extends SimpleReporter {
+class ReposHtmlReporter extends SimpleReporter {
     var $_character_set;
     
     var $report;

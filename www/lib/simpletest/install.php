@@ -8,7 +8,7 @@ $report->info("Simpletest is installing...");
 $repos_package = "simpletest";
 $home = "simpletest.sourceforge.net";
 
-$version = "1.0.1beta";
+$version = "1.0.1beta2";
 $archive = "http://switch.dl.sourceforge.net/sourceforge/simpletest/simpletest_$version.tar.gz";
 
 $basedir = dirname(__FILE__);
@@ -65,6 +65,7 @@ $exceptionsfile = $dir.'/simpletest/exceptions.php';
 if (!file_exists($exceptionsfile)) $report->fatal("Could not locate $exceptionsfile, download must have failed.");
 if (substr(phpversion(),0,1)=='4') {
 	$fh = fopen($exceptionsfile, 'w');
+	if (!$fh) $report->fatal("Could not write to $exceptionsfile. Simpletest installation not complete.");
 	fwrite($fh, "<?php /* removed by repos because it was not PHP4 compatible */ ?>");
 	fclose($fh);
 }

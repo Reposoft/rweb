@@ -5,6 +5,9 @@
 
 // see http://simpletest.sourceforge.net/ for documentation
 
+// This setup was designed for simpletest 1.0.1beta1 to get a minimum of boilerplate code in test cases.
+// Newer feature such as autorun.php have not been evaluated.
+
 error_reporting(E_ALL);
 
 // allow other scripts to detect that they are running from a test case
@@ -55,7 +58,7 @@ function setTestUserNotLoggedIn() {
 	_getReposPass(false);
 }
 
-$reporter = new HtmlReporter();
+$reporter = new ReposHtmlReporter();
 function testrun(&$testcase) {
 	global $reporter;
 	$testcase->run($reporter);

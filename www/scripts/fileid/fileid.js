@@ -6,9 +6,14 @@
  * Converts file or folder names for URLs to IDs,
  * to give the exact same result as Subversion's UTF-8 urlencode in the svn index XML
  * combined with the getFileId template in repos.xsl.
+ * Escaped characters' hex code should be lowercase.
  *
  * All HTML ids must start with a letter, so ids must _always_ be prefixed
  * before they are used. The conventions is prefix:id.
+ * 
+ * See http://www.w3.org/TR/xhtml1/#C_8 Fragment Identifiers:
+ * "When defining fragment identifiers to be backward-compatible, only 
+ * strings matching the pattern [A-Za-z][A-Za-z0-9:_.-]* should be used."
  */
 function ReposFileId(name) {
 	this.name = name;
