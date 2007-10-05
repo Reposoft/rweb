@@ -57,7 +57,11 @@
 	</xsl:template>
 	<!-- body contents -->
 	<xsl:template match="index">
-		<xsl:param name="fullpath" select="concat(/svn/index/@path,'/')"/>
+		<xsl:param name="fullpath">
+			<xsl:call-template name="getHref">
+				<xsl:with-param name="href" select="concat(/svn/index/@path,'/')"/>
+			</xsl:call-template>
+		</xsl:param>
 		<!-- <xsl:param name="tool">
 			<xsl:call-template name="getToolPath">
 				<xsl:with-param name="path" select="$fullpath"/>
@@ -91,6 +95,7 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:call-template name="commandbar">
+			<xsl:with-param name="target" select="$fullpath"/>
 			<xsl:with-param name="parentlink">
 				<xsl:choose>
 					<!-- disabled for 1.2
@@ -116,11 +121,7 @@
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
 		<xsl:param name="parentlink"/>
-		<xsl:param name="target">
-			<xsl:call-template name="getHref">
-				<xsl:with-param name="href" select="@path"/>
-			</xsl:call-template>
-		</xsl:param>
+		<xsl:param name="target"/>
 		<div id="commandbar">
 		<div class="left">
 		<xsl:if test="$startpage">
@@ -130,11 +131,10 @@
 			<a id="parent" class="command translate" href="{$parentlink}">up</a>
 		</xsl:if>
 		<xsl:if test="$editUrl">
-			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={$target}/">new&#xA0;folder</a>
-			<a id="createfile" class="command translate" href="{$editUrl}file/?target={$target}/">new&#xA0;document</a>
-			<a id="addfile" class="command translate" href="{$editUrl}upload/?target={$target}/">add&#xA0;file</a>
+			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={$target}">new&#xA0;folder</a>
+			<a id="addfile" class="command translate" href="{$editUrl}upload/?target={$target}">add&#xA0;file</a>
 		</xsl:if>
-		<a id="history" class="command translate" href="{$web}open/log/?target={$target}/">folder&#xA0;history</a>
+		<a id="history" class="command translate" href="{$web}open/log/?target={$target}">folder&#xA0;history</a>
 		<a id="refresh" class="command translate" href="#" onclick="window.location.reload( true )">refresh</a>
 		</div>
 		<div class="right">
@@ -171,6 +171,12 @@
 		<xsl:apply-templates select="file">
 			<xsl:sort select="@name"/>
 		</xsl:apply-templates>
+		<div class="actions">
+			<xsl:if test="$editUrl">
+				<a id="createfile" class="command translate" href="{$editUrl}file/?target={$fullpath}">Create new text document</a>
+				<a id="repos-editors" class="command translate" href="/repos-editors">other editors</a>
+			</xsl:if>
+		</div>
 	</xsl:template>
 	<!-- generate directory -->
 	<xsl:template match="dir">
