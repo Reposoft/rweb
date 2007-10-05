@@ -91,7 +91,7 @@ class Rule {
 	/**
 	 * Represents the actual validation logic.
 	 * 
-	 * Don't rely on that this methid runs the validation loginc.
+	 * Don't rely on that this method runs the validation loginc.
 	 * Subclasses may override validate($value) instead,
 	 * to have different messages for different types of errors,
 	 * which leaves this function undefined.
@@ -237,7 +237,7 @@ function _validation_trigger_error($msg) {
 		trigger_error($msg . ' (Unexpected: headers have already been sent, so HTTP 412 could not be set)', E_USER_WARNING);
 		return; 
 	}
-	header('HTTP/1.1 412 Precondition Failed');
+	//leave the status code to the error handler// header('HTTP/1.1 412 Precondition Failed');
 	trigger_error($msg, E_USER_WARNING);
 }
 

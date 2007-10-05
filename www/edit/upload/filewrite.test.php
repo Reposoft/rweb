@@ -85,6 +85,39 @@ class TestFilewrite extends UnitTestCase {
 		clearstatcache();
 		$this->assertEqual(6+2, filesize($tmp), "Should have used the same newline type as in posted text. %s");	
 	}	
+
+	function testGetNewlineType() {
+		$tmp = System::getTempFile('uploadtest');
+		System::deleteFile($tmp);
+		System::createFileWithContents($tmp, $text = "abc\nd");
+		$this->assertEqual("\n", getNewlineType($tmp));
+		System::deleteFile($tmp);
+		System::createFileWithContents($tmp, $text = "abc\r");
+		$this->assertEqual("\r", getNewlineType($tmp));
+		System::deleteFile($tmp);
+		System::createFileWithContents($tmp, $text = "abc\r\nd");
+		$this->assertEqual("\r\n", getNewlineType($tmp));
+	}
+	
+	function testGetNewlineTypeDefault() {
+		$tmp = System::getTempFile('uploadtest');
+		System::deleteFile($tmp);
+		System::createFileWithContents($tmp, $text = "");
+		$this->assertEqual(false, getNewlineType($tmp));
+		System::deleteFile($tmp);
+		System::createFileWithContents($tmp, $text = "ABC\tE");
+		$this->assertEqual(false, getNewlineType($tmp));
+	}
+	
+	function testGetNewlineTypeInconsistent() {
+		$tmp = System::getTempFile('uploadtest');
+		System::deleteFile($tmp);
+		System::createFileWithContents($tmp, $text = "abc\r\nX\n\n");
+		$this->assertEqual("\r\n", getNewlineType($tmp));
+		System::deleteFile($tmp);
+		System::createFileWithContents($tmp, $text = "abc\n\r\nX\r\n");
+		$this->assertEqual("\n", getNewlineType($tmp));		
+	}
 	
 }
 

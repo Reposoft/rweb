@@ -73,6 +73,9 @@ class NewFilenameRule extends Rule {
 }
 
 /**
+ * Checks that a resource exists
+ * and that access is granted publicly or to the acthenticated user.
+ * 
  * Operations are validated upon commit, but since 'svn import'
  * will create any missing parent folders in the new path we must
  * validate parent folder explicitly.

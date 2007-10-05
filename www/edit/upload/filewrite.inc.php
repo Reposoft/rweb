@@ -91,6 +91,7 @@ function getNewlineType($existingFile) {
 		fclose($f);
 		if (strEnds($line, "\r\n")) return "\r\n";
 		if (strEnds($line, "\n")) return "\n";
+		if (strEnds($line, "\r")) return "\r";
 		return false;
 }
 

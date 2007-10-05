@@ -570,11 +570,16 @@ function Presentation_removeIndentation($tpl_source, &$smarty) {
 // plug in to repos.properties.php's error handling solution
 if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $message, $trace) {
 	if ($n==E_USER_ERROR || $n==E_USER_WARNING || $n==E_USER_NOTICE) {
+		$label = "Error:";
+		if ($n==E_USER_WARNING) $label = "Validation error:";
+		if ($n==E_USER_NOTICE) $label = "Notice:";
 		$p = Presentation::getInstance();
 		if (headers_sent()) {
-			echo("<strong>Error:</strong> ".nl2br($message)."<!-- Error level $n. Stack trace:\n$trace -->"); exit;
+			echo("<strong>$label</strong> ".nl2br($message)."<!-- Error level $n. Stack trace:\n$trace -->"); exit;
 		} else {
-			$p->showErrorNoRedirect("Error: ".nl2br($message)."<!-- Error level $n. Stack trace:\n$trace -->");
+			if ($n==E_USER_WARNING) header('HTTP/1.1 412 Precondition Failed');
+			if ($n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error');
+			$p->showErrorNoRedirect("$label ".nl2br($message)."<!-- Error level $n. Stack trace:\n$trace -->");
 		}
 		exit(1);
 	}

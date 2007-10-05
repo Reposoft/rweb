@@ -17,7 +17,9 @@ new FilenameRule("name");
 new NewFilenameRule("name", getTarget());
 new EditTypeRule('type'); // type is not required for this page, but it is for the form action page
 
-if ($_SERVER['REQUEST_METHOD']=='GET') {
+if ($_SERVER['REQUEST_METHOD']=='GET' || $_SERVER['REQUEST_METHOD']=='HEAD') {
+	new ResourceExistsRule();
+	Validation::expect();
 	$template = Presentation::getInstance();
 	$target = getTarget();
 	$targeturl = getTargetUrl();

@@ -24,7 +24,9 @@ if (!isset($_repos_config)) {
 // ----- global settings -----
 // PHP4 does not have exceptions, so we use 'trigger_error' as throw Exception.
 // - code should not do 'exit' after trigger_error, because that does not allow unit testing.
-// - code should report E_USER_ERROR for server errors and E_USER_WARNING for user errors
+// - code should report: 
+//   * E_USER_ERROR for server errors
+//   * E_USER_WARNING for user errors, like invalid parameters
 function reportError($n, $message, $file, $line) {
 	$trace = _getStackTrace();
 	if (function_exists('reportErrorToUser')) { // formatted error reporting
@@ -36,7 +38,14 @@ function reportError($n, $message, $file, $line) {
 // default error reporting, for errors that occur before presentation is initialized
 function reportErrorText($n, $message, $trace) {
 	if ($n!=2048) { // E_STRICT not defined in php 4
-		if ($n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error');
+		// validation error
+		if ($n==E_USER_WARNING) {
+			header('HTTP/1.1 412 Precondition Failed');
+			echo("Validation error: $message\n<pre>\n$trace</pre>");
+			exit;
+		}
+		// other errors
+		if ($n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error'); 
 		echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>");
 		exit;
 	}
