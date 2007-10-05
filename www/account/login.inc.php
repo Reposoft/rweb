@@ -286,7 +286,7 @@ function isTargetSet() {
  * @return target in repository from query paramters WITH tailing slash if it is a directory, false if 'target' is not set
  */
 function getTarget() {
-	if(!isTargetSet()) trigger_error('This page is expected to have a "target", but the parameter was not set.');
+	if(!isTargetSet()) trigger_error('This page is expected to have a "target", but the parameter was not set.', E_USER_WARNING);
 	return login_decodeQueryParam($_REQUEST,'target');
 }
 

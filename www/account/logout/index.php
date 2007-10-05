@@ -29,8 +29,20 @@ if (isset($_GET['logout']) && $_GET['logout']=='verify') {
 	if (isset($_SERVER['PHP_AUTH_USER'])) {
 		doLogout();
 	} else {
-		// the browser must first see the authentication headers for this page to allow logout using 401 headers
-		askForCredentialsBeforeLogout();
+		// gives a warning that the site is trying to log in as void user: showCouldNotLogOutPage();
+		// would confuse users: askForCredentialsBeforeLogout();
+		if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+			doLogoutIE();
+		} else {
+			// Sending only 401 is actually not allowed in HTTP 1.1, and this logout is not effective,
+			// but I don't know a better way to do this.
+			// The problem is that we can't know at /?logout if the user is authenticated to the repository
+			// or if it was just a visitor to a public url.
+			// We must assume that there is no authenticated user. The server administrator can set up a
+			// rewrite for ?logout or ?svn=logout at repository urls so that credentials will be included to logout.
+			header('HTTP/1.1 401 Unauthorized');
+			doLogoutVoid(); // clears username cookie (which probably wasn't set if user logged in at repository)
+		}
 	}
 }
 
@@ -50,6 +62,9 @@ function doLogout() {
 	showLoggingOutPage();
 }
 
+/**
+ * Say Unauthorized to the user LOGIN_VOID_USER from {@see showCouldNotLogOutPage}.
+ */
 function doLogoutVoid() {
 	header('HTTP/1.1 401 Unauthorized');
 	showAfterLogoutPage();
@@ -91,16 +106,20 @@ function showLoggingOutPage() {
 }
 
 function showCouldNotLogOutPage() {
-	if (strstr ($_SERVER['HTTP_USER_AGENT'], "MSIE")) {
-		// redirect including a password is illegal in IE
-		$presentation = Presentation::getInstance();
-		$presentation->assign('nexturl', getAfterLogoutUrl());
-		$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/logout-ie'));
+	if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+		doLogoutIE();
 	} else {
 		// redirecting to the exact same url with user 'void', expecting the next 401 header to make browser enough confused to clear auth cache
 		$logout_url = str_replace('://', '://'.LOGIN_VOID_USER.':(logged-out)@', getVerifyUrl());
 		header("Location: $logout_url");
 	}
+}
+
+function doLogoutIE() {
+	// redirect including a password is illegal in IE
+	$presentation = Presentation::getInstance();
+	$presentation->assign('nexturl', getAfterLogoutUrl());
+	$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/logout-ie'));
 }
 
 ?>
