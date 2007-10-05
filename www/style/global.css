@@ -46,6 +46,16 @@ pre {
 code {
 	font-size: 1.1em;
 }
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+.clearer {
+	clear: both;
+	font-size: 0;
+}
 /* <abbr> not supported by IE6 */
 acronym, span.explain {
 	cursor: help;
@@ -119,7 +129,7 @@ a.folder {
 /* common page elements, may also be layouted for each tool */
 #commandbar {
 	min-width: 980px;
-	height: 1.9em;
+	/* height: 1.9em; */
 	background: url(commandbarbg.png) top repeat-x;
 	background-color: #ECF1EF;
 	padding: 3px;
@@ -241,12 +251,7 @@ span.action {
 	background-image: url('commands/24x24/serverroot.png');
 }
 #commandbar #logout {
-	position: absolute;
-	left: 800px;
-	padding-top: 0px;
-	padding-bottom: 0px;
 	background-image: url('commands/24x24/logout.png');
-	border-right: none;
 }
 /* general class for loading animation */
 .loading {
