@@ -16,7 +16,7 @@ if (file_exists('dp.SyntaxHighlighter/')) {
 $repos_package = "SyntaxHighlighter";
 $home = "http://code.google.com/p/syntaxhighlighter/";
 
-$version = "1.5.0";
+$version = "1.4.1";
 $archive = "http://syntaxhighlighter.googlecode.com/files/SyntaxHighlighter_$version.zip";
 $license = "http://www.opensource.org/licenses/lgpl-license.php";
 
