@@ -10,7 +10,7 @@ dp.sh.Brushes.Wiki = function()
 		];
 
 	this.CssClass = 'syntax-wiki';
-}
+};
 
 dp.sh.Brushes.Wiki.prototype	= new dp.sh.Highlighter();
 dp.sh.Brushes.Wiki.Aliases	= ['wiki'];

@@ -8,12 +8,11 @@ dp.sh.Brushes.Acl = function()
 		{ regex: new RegExp('= *r *$', 'gm'), css: 'readonly' },
 		{ regex: new RegExp('= *rw *$', 'gm'), css: 'readwrite' },
 		{ regex: new RegExp('\\[groups\\]', 'gm'), css: 'groups' },
-		{ regex: new RegExp('^@[\\S]+', 'gm'), css: 'group' },
-		//{ regex: new RegExp(this.GetKeywords(keywords), 'gm'), css: 'keyword' }
+		{ regex: new RegExp('^@[\\S]+', 'gm'), css: 'group' }
 		];
 
 	this.CssClass = 'syntax-acl';
-}
+};
 
 dp.sh.Brushes.Acl.prototype	= new dp.sh.Highlighter();
 dp.sh.Brushes.Acl.Aliases	= ['acl'];

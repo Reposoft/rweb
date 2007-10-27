@@ -10,7 +10,7 @@ dp.sh.Brushes.Diff = function()
 		];
 
 	this.CssClass = 'syntax-diff';
-}
+};
 
 dp.sh.Brushes.Diff.prototype	= new dp.sh.Highlighter();
 dp.sh.Brushes.Diff.Aliases	= ['diff'];
