@@ -171,11 +171,13 @@
 		<xsl:apply-templates select="file">
 			<xsl:sort select="@name"/>
 		</xsl:apply-templates>
-		<div class="actions">
-			<xsl:if test="$editUrl">
-				<a id="createfile" class="command translate" href="{$editUrl}file/?target={$fullpath}">Create new text document</a>
-				<a id="repos-editors" class="command translate" href="/repos-editors">other editors</a>
-			</xsl:if>
+		<div class="row contentcommands">
+			<div class="actions">
+				<xsl:if test="$editUrl">
+					<a id="repos-edit" class="translate" href="{$editUrl}file/?target={$fullpath}">Create new text</a>
+					<a id="repos-editor" class="translate" href="/repos-editors">other editors</a>
+				</xsl:if>
+			</div>
 		</div>
 	</xsl:template>
 	<!-- generate directory -->
@@ -206,8 +208,8 @@
 			<div class="actions">
 				<a id="view:{$id}" class="action action-view" href="{$href}">view</a>
 				<xsl:if test="$editUrl">
-					<a id="rename:{$id}" class="action action-rename" href="{$editUrl}rename/?target={$target}">rename</a>
 					<a id="copy:{$id}" class="action action-copy"  href="{$editUrl}copy/?target={$target}">copy</a>
+					<a id="rename:{$id}" class="action action-rename" href="{$editUrl}rename/?target={$target}">rename</a>
 					<a id="delete:{$id}" class="action action-delete" href="{$editUrl}delete/?target={$target}">delete</a>
 				</xsl:if>
 			</div>
@@ -242,8 +244,8 @@
 				<a id="view:{$id}" class="action" href="{$web}open/?target={$target}">view</a>
 				<xsl:if test="$editUrl">
 					<a id="edit:{$id}" class="action" href="{$editUrl}?target={$target}">edit</a>
-					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={$target}">rename</a>
 					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={$target}">copy</a>
+					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={$target}">rename</a>
 					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={$target}">delete</a>
 					<a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={$target}">upload&#xA0;changes</a>
 				</xsl:if>

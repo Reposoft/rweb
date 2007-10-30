@@ -11,8 +11,18 @@
 #commandbar #createfolder {
 	background-image: url('../commands/24x24/createfolder.png');
 }
-#commandbar #createfile {
-	background-image: url('../commands/24x24/createfile.png');
+/* commands in index */
+.contentcommands a {
+	background-position: left center;
+	background-repeat: no-repeat;
+	margin: 0.2em;
+	padding-left: 18px;
+}
+#repos-edit {
+	background-image: url('../commands/16x16/edit.png');
+}
+#repos-editor {
+	background-image: url('../commands/16x16/editor.png');
 }
 /* special folders */
 #path .tool {
@@ -21,11 +31,11 @@
 	padding-left: 17px;
 }
 #path .tool-trunk, .row .tool-trunk {
-	background-image: url('../commands/16x16/repository.png');
+	background-image: url('../tools/16x16/trunk.png');
 }
 .toolchild {}
 .tool a.action-rename, .tool a.action-delete {
-	color: #bb5555;
+	text-decoration: line-through;
 }
 /* details plugin */
 #commandbar #showdetails {
