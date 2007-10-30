@@ -55,7 +55,7 @@ if (!$found) {
 fclose($f);
 fclose($tmp);
 if (!copy($tmpfile, USERS_PATH)) {
-	trigger_error("Failed to write new password file to ".USERS_PATH);
+	trigger_error("Failed to write new password file to ".USERS_PATH, E_USER_ERROR);
 }
 System::deleteFile($tmpfile);
 

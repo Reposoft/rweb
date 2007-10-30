@@ -143,8 +143,10 @@ function resetPassword($username, $email=null) {
 	fclose($f);
 	fclose($tmp);
 	if ($found) {
-		System::deleteFile(USERS_PATH);
-		rename($tempfile, USERS_PATH);
+		if (!copy($tempfile, USERS_PATH)) {
+			trigger_error("Failed to write new password file to ".USERS_PATH, E_USER_ERROR);
+		}
+		System::deleteFile($tempfile);
 		return $password;	
 	}
 	return false;
