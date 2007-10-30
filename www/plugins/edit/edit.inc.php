@@ -118,7 +118,16 @@ function editGetNewDocument($bodyContents) {
 	$p->assign('title', 'text');
 	$p->assign('generator', 'Repos');
 	$p->assign('body', $bodyContents);
-	return $p->fetch($template);
+	$doc = $p->fetch($template);
+	// use the template's newline type in the entire document
+	if(preg_match('/(\r?\n)/', $doc, $matches)) {
+		if ($matches[1]=="\n") {
+			$doc = str_replace("\r\n","\n",$doc);
+		} else {
+			$doc = preg_replace('/(?<!\r)\n/',"\r\n",$doc);
+		}
+	}
+	return $doc;
 }
 
 ?>

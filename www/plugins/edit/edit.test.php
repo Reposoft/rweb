@@ -17,10 +17,12 @@ function getLastWrite() {
 	global $written;
 	return $written;
 }
+$mock_smarty_fetch = '<html><body>a</body></html>';
 class SmartyMock {
 	function assign($a, $b) {}
 	function fetch($t) {
-		return '<html><body>a</body></html>';
+		global $mock_smarty_fetch;
+		return $mock_smarty_fetch;
 	}
 }
 function smarty_getInstance() {
@@ -216,6 +218,18 @@ class TestEditPlugin extends UnitTestCase {
 		$result = editIndentHtmlDocument($html);
 		$this->assertEqual("\n\nX\n", $result);
 		
+	}
+	
+	function testGetNewDocumentNewlines() {
+		global $mock_smarty_fetch;
+		
+		$mock_smarty_fetch = "<html>\n<body>\nABC\r\n</body>\n</html>";
+		$doc = editGetNewDocument('');
+		$this->assertEqual("<html>\n<body>\nABC\n</body>\n</html>",$doc);
+		
+		$mock_smarty_fetch = "<html>\r\n<body>A\nBC\n</body>\r\n</html>";
+		$doc = editGetNewDocument('');
+		$this->assertEqual("<html>\r\n<body>A\r\nBC\r\n</body>\r\n</html>",$doc);
 	}
 }
 
