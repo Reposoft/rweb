@@ -5,49 +5,29 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Repos web application</title>
 <link rel="shortcut icon" href="/favicon.ico"/>
-<!-- the CSS must be placed after the head script so it is not updated according to theme settings -->
 <link href="style/global.css" rel="stylesheet" type="text/css"/>
-<link href="style/docs.css" rel="stylesheet" type="text/css"/>
+<link href="style/layout.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="scripts/head.js"></script>
 <style type="text/css">
-body {
-	min-width: 760px;
-}
-#banner {
-	height:104px;
-	margin: 0px;
-	padding: 0px;
-	background-image:url(style/logo/2005-05-09_19-24-22.jpg);
-	background-position:right;
-	background-repeat:no-repeat;
-}
 #releaseversion {
 	font-weight: bold;
 	color: #000000;
 }
 </style>
 </head>
-<body onLoad="">
-<div id="contents">
-<table width="760" align="center" class="columns" border="0" cellspacing="0">
-  <tr>
-  	<th id="banner" align="left" valign="middle" colspan="3">
-		<img alt="repos.se" src="style/logo/repos4.png" width="288" height="72" border="0" hspace="16" vspace="16"/>
-		<img alt="Versionshantering &aring;t folket" src="style/logo/bannertext.png" width="424" height="40" border="0" hspace="0" vspace="0" title="photo: Hj&auml;lmaren, Sweden (c) Staffan Olsson."/>
-	</th>
-  </tr>
-  <tr align="center">
-  	<td id="explain" colspan="3" style="border-left: 0px; border-right: 0px; padding:16px; ">
-  	Repos version <span id="releaseversion" class="versiondisplay">@Dev@</span>
-  	</td>
-  </tr>
-  <tr>
-	<th scope="col" align="left">Server status</th>
-	<th scope="col" align="left">Repository status</th>
-	<th scope="col" align="left">Installed libraries</th>
-  </tr>
-  <tr valign="top">
-    <td width="33%" style="border-left: 0px;">
+<body>
+
+<div id="commandbar">
+</div>
+
+<div id="intro">
+<h1>Repos Web</h1>
+<p>Release <span id="releaseversion" class="versiondisplay">@Dev@</span></p>
+</div>
+
+<div class="column" style="width:33%">
+<div class="section">
+<h2>Server status</h2>
 <p id="serverprimary"></p>
 <script type="text/javascript">
 $.getJSON('view/service/?s=SERVER', function(json) {
@@ -77,8 +57,12 @@ $.getJSON('view/service/?s=LICENSE', function(json) {
 	}
 });
 </script>
-    </td>
-    <td width="33%" id="repositorystatus">
+</div>
+</div>
+
+<div class="column" style="width:33%">
+<div id="repositorystatus" class="section">
+<h2>Repository status</h2>
 <!-- if this page is visited a lot, this section should probably be removed -->
 <script type="text/javascript">
 $.getJSON('view/service/?s=STATUS', function(json) {
@@ -95,8 +79,12 @@ $.getJSON('view/service/?s=STATUS', function(json) {
 	}
 });
 </script>
-    </td>
-    <td width="34%" style="border-right: 0px;" id="libstatus">
+</div>
+</div>
+
+<div class="column" style="width:33%">
+<div id="libstatus" class="section">
+<h2>Installed libraries</h2>
 <!-- if this page is visited a lot, this section should probably be removed -->
 <script type="text/javascript">
 $.getJSON('lib/install.php', function(json) {
@@ -112,12 +100,12 @@ $.getJSON('lib/install.php', function(json) {
 	}
 });
 </script>
-    </td>
-  </tr>
-  <tr><td colspan="3" align="center"><small>This application makes use of cookies. 
-  See the Repos <a id="agreement" href="docs/agreement/" target="_blank">terms and conditions</a> before login.</small></td></tr>
-  <tr>
-  	<td colspan="3" align="center">
+</div>
+</div>
+
+<div class="clearer"></div>
+
+<div>
 		<a id="serverroot" href="/" title="server root">startpage</a> &nbsp; 
 		| &nbsp; <a id="login" href="/?login" title="Your account">log in</a> &nbsp;
 		| &nbsp; <a id="lostpassword" href="account/reset/" title="Get temporary password">lost&nbsp;password?</a> &nbsp;
@@ -125,14 +113,17 @@ $.getJSON('lib/install.php', function(json) {
 		| &nbsp; <a id="accountcreate" href="account/create/" title="As administrator, create new login">admin&nbsp;create&nbsp;account</a> &nbsp; 
 		| &nbsp; <a href="scripts/styleswitch/">select&nbsp;theme</a> &nbsp; 
 		<!-- | &nbsp; <a href="docs/">online&nbsp;documentation</a> -->
-  </tr>
-</table>
+<div>
+
+<div id="footer">
+This application makes use of cookies. 
+See the Repos <a id="agreement" href="docs/agreement/" target="_blank">terms and conditions</a> before login.  
+
+<span class="legal">
+<span>Repos @Dev@</span>
+&copy; 2007 repos.se
+</span>
 </div>
-<!--
-<div id="news">
-<iframe src="/repos/view/service/?url=https://www.repos.se/sweden/staffan/messages.xml" id="feed" name="feed" style="display:none" frameborder="0" scrolling="auto"></iframe>
-</div>
--->
-<div id="releaseversion" class="versiondisplay" style="display:none">Repos @Dev@</div>
+
 </body>
 </html>

@@ -1,7 +1,5 @@
 @charset "utf-8";
 /* repos.se documentation styles, only needed in the default theme */
-/* share the default styles */
-@import url(global.css);
 /* documentation specific styles */
 a[target="_blank"] {
 	padding-right: 16px;

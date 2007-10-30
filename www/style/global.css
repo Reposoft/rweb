@@ -26,6 +26,7 @@ a:hover {
 h1 {
 	font-weight: normal;
 	font-size: 1.8em;
+	color: #444444;
 }
 h2 {
 	font-weight: normal;
@@ -37,6 +38,10 @@ h3 {
 	margin-bottom: 3px;
 	font-size: 1.1em;
 	letter-spacing: 0.1em;
+}
+h1 em, h2 em, h3 em {
+	font-style: normal;
+	color: #99CC00;
 }
 pre {
 	font-size: 1.2em;
