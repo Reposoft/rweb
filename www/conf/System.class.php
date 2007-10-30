@@ -269,17 +269,29 @@ class System {
 	
 	function _getSpecialCommand($name) {
 		if ($name == 'htpasswd') {
-			// on linux it is usually installed with apache2
-			if (!System::isWindows()) return USRBIN . 'htpasswd2';
-			// on windows with repos ENV set we assume repos server
-			if (isset($_SERVER['REPOS_PRIMARY'])) {
+			$try = array();
+			if (System::isWindows()) {
+				// default apache install location
+				$try[] = 'C:\Program files\Apache Software Foundation\Apache2.2\bin\htpasswd.exe';
+				$try[] = 'C:\Program files\Apache Software Foundation\Apache2.0\bin\htpasswd.exe';
+				$try[] = 'C:\Program\Apache Software Foundation\Apache2.2\bin\htpasswd.exe';
+				$try[] = 'C:\Program\Apache Software Foundation\Apache2.0\bin\htpasswd.exe';
+				// apache may be docroot parent
 				$docroot = strtr($_SERVER['DOCUMENT_ROOT'],'/','\\');
-				$apache = dirname($docroot)."\\apache\\bin\\";
-				return "{$apache}htpasswd.exe";
+				$apache = dirname($docroot)."\\apache\\bin";
+				$try[] = "$apache\\htpasswd.exe";
+			} else {
+				$try[] = USRBIN . 'htpasswd';
+				$try[] = USRBIN . 'htpasswd2';
+			}
+			// test absolute paths
+			foreach ($try as $p) {
+				if (file_exists($p)) return $p;
 			}
 			// if not assume it is in PATH
 			return 'htpasswd';
 		}
+		// other commands
 		return false;
 	}
 	
