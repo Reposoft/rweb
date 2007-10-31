@@ -49,6 +49,7 @@
 				<include name="index.html"/>
 				<include name="open/start/*.html"/>
 				<include name="view/*.xsl"/>
+				<include name="scripts/head.js"/>
 			</fileset>
 		</copy>
 	</target>
