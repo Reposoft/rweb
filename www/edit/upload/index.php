@@ -9,7 +9,7 @@ require("../SvnEdit.class.php");
 require('filewrite.inc.php');
 // required for the temporary mime type solution for HTML below
 require_once("../ServiceRequestEdit.class.php");
-addPlugin('edit');
+require('../file/EditTypeRule.class.php');//addPlugin('edit');
 addPlugin('validation');
 addPlugin('filename');
 addPlugin('dateformat');
@@ -58,6 +58,7 @@ function getLog($targetUrl) {
 	$limit = 10;
 	$svnlog = new SvnOpen('log');
 	$svnlog->addArgOption('-q');
+	$svnlog->addArgOption('--stop-on-copy'); // based-on-revision can't handle renamed files
 	$svnlog->addArgOption('--limit', $limit, false);
 	$svnlog->addArgUrl($targetUrl);
 	$svnlog->exec();

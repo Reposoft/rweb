@@ -7,7 +7,7 @@
  */
 require("../../conf/Presentation.class.php" );
 require("../SvnEdit.class.php" );
-addPlugin('edit');
+require('EditTypeRule.class.php');//addPlugin('edit');
 addPlugin('password');
 addPlugin('filename');
 addPlugin('acl');
