@@ -24,8 +24,7 @@ function TestX() {
 	};
 	
 }
-TestX.prototype = new TestCase;
-testrun(new TestX());
+testrun(TestX);
 </script>
 
  */
@@ -62,7 +61,7 @@ var _head = document.getElementsByTagName('head')[0];
 // import the unit testing library, this makes sure that there is a TestCase class
 var s = document.createElement("script");
 s.type = "text/javascript";
-s.src = path + "lib/ecmaunit/ecmaunit.js";
+s.src = path + "unittest/ecmaunit/ecmaunit.js";
 _head.appendChild(s);	
 
 // import stylesheets

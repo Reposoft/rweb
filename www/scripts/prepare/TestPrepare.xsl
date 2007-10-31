@@ -15,7 +15,7 @@
 <link href="../../style/docs.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="ReposPrepare.js"></script>
 <!-- can not use unittest.js, because it uses code from prepare -->
-<script type="text/javascript" src="../lib/ecmaunit/ecmaunit.js"></script>
+<script type="text/javascript" src="../unittest.js"></script>
 
 </head>
 <body>
@@ -44,12 +44,7 @@ function TestPrepare() {
 	};
 	
 }
-TestPrepare.prototype = new TestCase;
-
-var testcase = new TestPrepare();
-var placeholder = document.getElementById('testlog');
-testcase.initialize(new HTMLReporter(placeholder));
-testcase.runTests();
+testrun(TestPrepare);
 
 </script>
 
