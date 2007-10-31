@@ -1,0 +1,67 @@
+<project name="repos-js" default="head.js" basedir=".">
+
+	<!-- Repos javascript architecture is based on jQuery, jquery.com -->
+	
+	<!-- The head.js file is built and committed to source -->
+	<!-- It may also be rebuilt with external plugins after deployment -->
+	
+	<!-- === Javascript build configuration === -->
+	<property name="plugins.external.folder" location="../../repos-plugins" />
+	<!-- Customer-specific plugins may override build settings -->
+	<property file="${plugins.external.folder}/build.properties" />
+	
+	<available file="${plugins.external.folder}" property="plugins.external.include" />
+	
+	<property name="build.folder" value="build" />
+	<property name="build.jar" value="${build.folder}/js.jar" description="Rhino JS Engine" />
+	<property name="build.script" value="${build.folder}/min.js"/>
+
+	<property name="intro.folder" value="./reposin" />
+	<property name="outro.folder" value="./reposout" />
+	<property name="lib.folder" value="./lib" />	
+	<property name="api.folder" value="./reposapi" />	
+	<property name="plugins.folder" value="../plugins" />
+	
+	<property name="excludes.default" value="**/*.test.js,**/test/**" />
+	
+	<property name="head.js.file" value="./head.js" />
+	
+	<!-- === End configuration, start build === -->
+
+	<target name="head.js.concat"
+		description="Concatenate all script parts to one big file">
+		<echo message="Collecting parts for ${head.js.file}" />
+		<concat destfile="${head.js.file}.big">
+			<fileset dir="${intro.folder}" includes="**/*.js" excludes="${excludes.default}" />
+			<fileset dir="${lib.folder}" includes="jquery/*.js"/>
+			<fileset dir="${lib.folder}" includes="**/*.js" excludes="jquery/**,${excludes.default}"/>
+			<fileset dir="${api.folder}" includes="**/*.js" excludes="${excludes.default}" />
+			<fileset dir="${plugins.folder}" includes="**/*.js" excludes="${excludes.default}" />
+			<fileset dir="${plugins.external.folder}" includes="**/*.js" excludes="${excludes.default}" />
+			<fileset dir="${outro.folder}" includes="**/*.js" excludes="${excludes.default}" />
+		</concat>
+		<echo message="${head.js.file}.big built." />
+	</target>
+
+	<target name="compress" depends="head.js.concat"
+		description="Remove all comments and whitespace, no compression">
+		<echo message="Building ${head.js.file}" />
+		<java jar="${build.jar}" fork="true">
+			<arg value="${build.script}" />
+			<arg value="${head.js.file}.big" />
+			<arg value="${head.js.file}" />
+		</java>
+		<echo message="${head.js.file} built." />
+	</target>
+
+	<target name="test">
+	</target>
+
+	<target name="clean">
+		<delete file="${head.js.file}.big" />
+	</target>
+
+	<target name="head.js" depends="compress">
+	</target>
+	
+</project>

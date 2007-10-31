@@ -92,7 +92,7 @@ function TestRepos() {
 	}
 	
 	this.testAddScript = function() {
-		var e = Repos.addScript('scripts/shared/otherscript.js');
+		var e = Repos.addScript('scripts/shared/otherscript.test.js');
 		this.assertEquals('object', typeof(e));
 		this.assertEquals(document.getElementsByTagName('head')[0],e.parentNode);
 	}
