@@ -117,6 +117,10 @@ function editGetNewDocument($bodyContents) {
 	$p = smarty_getInstance();
 	$p->assign('title', 'text');
 	$p->assign('generator', 'Repos');
+	//$cssUrl = '/home/';
+	//derive from webapp url? use current host:
+	$cssUrl = str_replace('https://','http://',getSelfRoot()).'/home/';
+	$p->assign('cssUrl', $cssUrl);
 	$p->assign('body', $bodyContents);
 	$doc = $p->fetch($template);
 	// use the template's newline type in the entire document

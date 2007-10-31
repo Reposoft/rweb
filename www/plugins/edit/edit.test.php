@@ -28,6 +28,10 @@ class SmartyMock {
 function smarty_getInstance() {
 	return new SmartyMock();
 }
+// used in html template handling
+function getSelfRoot() {
+	return 'http://localhost/testing/';
+}
 
 class TestEditPlugin extends UnitTestCase {
 
