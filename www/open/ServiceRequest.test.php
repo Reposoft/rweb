@@ -3,7 +3,8 @@
 // -- mock account ---
 function targetLogin() {};
 function isLoggedIn() {return true;};
-function getReposUser() {return 'Test User';};
+$test_user = 'Test User';
+function getReposUser() {global $test_user; return $test_user;};
 function _getReposPass() {return 'pwd';};
 // -----------
 
@@ -142,6 +143,14 @@ class TestServiceRequest extends UnitTestCase {
 		$this->assertEqual(null, $service->_username, 'Explicitly disable authentication -> username should be null');
 		$service->exec();
 		$this->assertEqual(200, $service->getStatus());
+	}
+	
+	function testAuthenticationEmptyUsername() {
+		global $test_user;
+		$test_user = '';
+		$service = new ServiceRequest(getSelfUrl(), array('useryes'=>''));
+		$this->expectError('This request must be authenticated, but username is empty.');
+		$service->exec();
 	}
 	
 	function testForUrl() {

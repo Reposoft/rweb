@@ -263,6 +263,7 @@ class ServiceRequest {
 		}
 		// authentication
 		if (!is_null($this->_username)) {
+			if ($this->_username == '') trigger_error('This request must be authenticated, but username is empty.', E_USER_ERROR);
 			curl_setopt($ch, CURLOPT_USERPWD, 
 				$this->_username.':'.$this->_password);
 		}
