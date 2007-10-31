@@ -123,7 +123,6 @@
 		<xsl:param name="parentlink"/>
 		<xsl:param name="target"/>
 		<div id="commandbar">
-		<div class="left">
 		<xsl:if test="$startpage">
 			<a id="start" class="command translate" href="{$startpage}">start</a>
 		</xsl:if>
@@ -136,7 +135,6 @@
 		</xsl:if>
 		<a id="history" class="command translate" href="{$web}open/log/?target={$target}">folder&#xA0;history</a>
 		<a id="refresh" class="command translate" href="#" onclick="window.location.reload( true )">refresh</a>
-		</div>
 		<div class="right">
 		<a id="logout" class="command translate" href="/?logout">logout</a>
 		<img style="margin:0.2em;vertical-align:middle;" src="{$static}style/logo/repos1.png" border="0" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
@@ -175,7 +173,6 @@
 			<div class="actions">
 				<xsl:if test="$editUrl">
 					<a id="repos-edit" class="translate" href="{$editUrl}file/?target={$fullpath}">Create new text</a>
-					<a id="repos-editor" class="translate" href="/repos-editors">other editors</a>
 				</xsl:if>
 			</div>
 		</div>

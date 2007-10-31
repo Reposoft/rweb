@@ -39,6 +39,9 @@ h3 {
 	font-size: 1.1em;
 	letter-spacing: 0.1em;
 }
+h1, h2, h3 {
+	clear:both;
+}
 h1 em, h2 em, h3 em {
 	font-style: normal;
 	color: #99CC00;
@@ -176,6 +179,8 @@ a.folder {
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 #commandbar a, #commandbar span {
+	float:left;
+	display:inline;
 	background-position: left center;
 	background-repeat: no-repeat;
 	font-size: 82.5%;
