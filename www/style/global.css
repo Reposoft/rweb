@@ -143,6 +143,13 @@ a.folder {
 	padding: 3px;
 	border-bottom: 1px solid #CCCCCC;
 }
+#commandbar:after {
+    content: "."; 
+    display: block; 
+    height: 0; 
+    clear: both; 
+    visibility: hidden;
+}
 .row {
 	padding: 1px;
 	border-bottom: 1px solid #FFFFFF;
