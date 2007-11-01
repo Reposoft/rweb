@@ -437,7 +437,7 @@ class Presentation {
 	function _getAllHeadTags($webapp, $stylePath) {
 		$head = '';
 		// metadata
-		if (isTargetSet()) {
+		if (function_exists('isTargetSet') && isTargetSet()) {
 			$head = $head . '<meta name="repos-target" content="'.getTarget().'" />';
 		}
 		// shared css and scripts
