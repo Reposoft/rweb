@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="repos-service" content="open/testservice/" />
+<meta name="repos-target" content="/a+b/folder(1)/file-x.txt" />
+<title>Repos jquery selector</title>
+
+<!-- now the real instance of jquery -->
+<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="repos.js"></script>
+<script type="text/javascript" src="../unittest/testwalk.js"></script>
+
+</head>
+<body>
+
+<script type="text/javascript">
+
+// test Repos getters that we depend on
+assert(Repos.getService(),'open/testservice/','Should read service id from meta tag for default context');
+assert(Repos.getTarget(),'/a+b/folder(1)/file-x.txt','Should read service id from meta tag for default context');
+
+// service matching
+assert(Repos.isService('open/testservice/'), 'Identical service strings should match');
+assert(Repos.isService('open/anotherservice/')===false, 'No service match');
+assert(Repos.isService('open/testservice')===false, 'Service selector must have trailing slash');
+// unless service is cached we can mock it
+var S = '';
+var _s = Repos.getService;
+Repos.getService = function() { return S; };
+assert(Repos.isService(''), 'How do we express repository browsing service?');
+Repos.getService = _s;
+
+// test comparisons
+assert(Repos.isTarget('/a+b/folder(1)/file-x.txt'), 'Target selector starting with /, identical with target');
+assert(Repos.isTarget('*.txt'), 'Using asterisk to match filetype');
+
+// the goal of all this - the selectors
+assert($(':repos-service(open/noservice/)'), 'All selectors return a jquery bucket');
+assert($(':repos-service(open/testservice/)'));
+assert($(':repos-service(open/testservice/)').size()>0, "$(':repos-service(open/testservice/') currently matches all elements");
+assert($().filter(':repos-service(open/testservice/)').size(), 1, "$().filter(':repos-service(open/testservice/)')");
+assert($().filter(':repos-service(open/testservice/)').get(0), document, 'Only repos selector -> return document');
+
+assert($(':repos-service(open/noservice/)').size()==0, "$(':repos-service(open/noservice/') shoud get empty bucket");
+
+assert($().filter(':repos-target(/a+b/folder(1)/file-x.txt)'));
+assert($().filter(':repos-target(/a+b/folder(1)/file-x.txt)').size(), 1);
+assert($().filter(':repos-target(/a+b/folder(1)/file-x.txt)').get(0), document);
+
+assert($().filter(':repos-target(*.txt)').get(0), document);
+assert($().filter(':repos-target(/a+*/folder(*)/file-x.txt)').get(0), document);
+assert($().filter(':repos-target(/a+b/folder(1)*file-x.txt)').get(0), document);
+
+assert($().filter(':repos-target(/a+*/folder(*)/file-x.tx)').size(), 0);
+
+</script>
+
+</body>
+</html>

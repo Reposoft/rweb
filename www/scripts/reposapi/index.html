@@ -3,19 +3,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>repos: shared javascript</title>
-<!-- the script, with a realistic url that can be used to find webappRoot -->
-<script type="text/javascript" src="../../scripts/shared/repos.js"></script>
-<!-- unit testing must be imported after Repos, so it can override functions -->
-<script type="text/javascript" src="../unittest.js"></script>
-<!-- dependencies -->
 <script type="text/javascript" src="../lib/jquery/jquery.js"></script>
-<script language="javascript" type="text/javascript" src="../lib/firebug/firebug.js"></script>
+<!-- the script, with a realistic url that can be used to find webappRoot -->
+<script type="text/javascript" src="../../scripts/reposapi/repos.js"></script>
+<!-- unit testing must be imported after Repos, so it can override functions -->
+<script type="text/javascript" src="../unittest/testwalk.js"></script>
 </head>
 
 <body>
 <h1>Repos shared script API</h1>
 <ul>
 <li><code>Repos.url</code> (the web application root, with trailing slash)</li>
+<li><code>:repos-service</code> and <code>:repos-target</code> <a href="selector.html">selectors</a></li>
+<li><code>$.depends</code></li>
 <li><code>Repos.reportError(error)</code></li>
 <li><code>Repos.addScript(srcFromWebappRoot)</code></li>
 <li><code>Repos.addCss(srcFromWebappRoot)</code></li>
@@ -28,84 +28,14 @@ because it was not reliable. Can be found in reposweb-1.1-B1.
 <h2>unit tests</h2>
 <p>The unit test library overrides Repos.reportError, so it can't be tested, but the surrounding functions can be.</p>
 <p>Hit Ctrl+Shift+L for Firebug light debug console.</p>
+
 <script type="text/javascript">
 
-function TestRepos() {
-    
-    this.setUp = function() {
-    };
+assert($.depends,'$.depends plugin should be defined');
+assert($.depends($.fn), 'Existing object satisfies depends');
+assert($.depends($.NonExistingObject), false, 'No object, depends should return nothing (or empty bucket?)');
+// Od should it be a selector?
 
-	this.testErrorToString = function() {
-		e = 'abc';
-		this.assertEquals('abc', Repos._errorToString(e));
-	}
-	
-	this.testErrorToStringException = function() {
-		e = new Error('abc');
-		this.assertTrue(Repos._errorToString(e).length > 3);
-	}
-
-	this.testExceptionToString = function() {
-		e = new Error('my bad');
-		msg = Repos._exceptionToString(e);
-		this.assertTrue(msg.indexOf('my bad')>=0, "Should contain the exception message");
-	};
-
-	this.testExceptionToStringContainsFilename = function() {
-		e = new Error();
-		msg = Repos._exceptionToString(e);
-		this.assertTrue(msg.indexOf('/shared/')>=0, "Should contain the script URL");
-	};
-	
-	this.testGenerateId = function() {
-		id1 = Repos._generateId();
-		id2 = Repos._generateId();
-		this.assertTrue((''+id1) != (''+id2));
-	}
-	
-	this.testAlertError = function() {
-		Repos._alertError('this is a test error message');
-	}
-	
-	this.testLogError = function() {
-		// this message sholuld end up in a server error log
-		Repos._storeError('repos.js unit test message');
-	}
-	
-	this.testLogInfo = function() {
-		Repos.info('this is an info message');
-	}
-	
-	this.testGetWebapp = function() {
-		// Firefox creates an absolute URL: this.assertEquals('../../', Repos.getWebapp());
-		this.assertTrue(/\.\.\/\.\.\/|https?:\/\/.*\/.*\/$/.test(Repos.getWebapp()));
-	}
-	
-	this.testUrl = function() {
-		this.assertEquals(Repos.getWebapp(), Repos.url);
-	}
-
-	this.testAddCss = function() {
-		var e = Repos.addCss('scripts/shared/othercss.css');
-		this.assertEquals('object', typeof(e));
-		this.assertEquals(document.getElementsByTagName('head')[0],e.parentNode);
-	}
-	
-	this.testAddScript = function() {
-		var e = Repos.addScript('scripts/shared/otherscript.test.js');
-		this.assertEquals('object', typeof(e));
-		this.assertEquals(document.getElementsByTagName('head')[0],e.parentNode);
-	}
-	
-	this.testAddScriptNonExisting = function() {
-		// no warning will be given
-		var e = Repos.addScript('scripts/shared/nonexisting.js');
-		this.assertEquals('object', typeof(e));
-	}
-	
-}
-
-testrun(TestRepos);
 </script>
 
 </body>
