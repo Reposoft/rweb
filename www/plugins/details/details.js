@@ -21,7 +21,7 @@ function details_button() {
 		command = $('<a id="showdetails" name="showdetails"/>');
 		command.click(function() { detailsToggle(this); });
 	}
-	command.append('show details').appendTo('#commandbar>*:first');
+	command.append('show details').appendTo('#commandbar');
 }
 
 // show details for an existing element (page designer sets target with the 'title' attribute)

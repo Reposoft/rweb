@@ -3,8 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- repos metadata -->
 <meta name="repos-service" content="open/testservice/" />
 <meta name="repos-target" content="/a+b/folder(1)/file-x.txt" />
+<!--  -->
 <title>Repos jquery selector</title>
 
 <!-- now the real instance of jquery -->
@@ -50,10 +52,16 @@ assert($().filter(':repos-target(/a+b/folder(1)/file-x.txt)').size(), 1);
 assert($().filter(':repos-target(/a+b/folder(1)/file-x.txt)').get(0), document);
 
 assert($().filter(':repos-target(*.txt)').get(0), document);
-assert($().filter(':repos-target(/a+*/folder(*)/file-x.txt)').get(0), document);
-assert($().filter(':repos-target(/a+b/folder(1)*file-x.txt)').get(0), document);
+assert($().filter(':repos-target(/a+*/folder(*)/file-x.txt)').get(0), document, 'should support multiple wildcards');
+assert($().filter(':repos-target(/a+b/folder(1)*file-x.txt)').get(0), document, 'wildcard should match separator "/" too');
 
 assert($().filter(':repos-target(/a+*/folder(*)/file-x.tx)').size(), 0);
+
+var T = '/administration/repos.accs';
+var _t = Repos.getTarget;
+Repos.getTarget = function() { return T; };
+assert($().filter(':repos-target(/administration/repos.accs)'),'match');
+Repos.getTarget = _t;
 
 </script>
 

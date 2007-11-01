@@ -19,6 +19,18 @@ jQuery.extend(jQuery.expr[':'], {
 });
 
 /**
+ * Override the standard jQuery ready with one that does nothing if the selector does not match
+ */
+_r = jQuery.fn.ready;
+jQuery.fn.ready = function(f) {
+	if (this && !this.length) return;
+	return _r(f);
+};
+
+// test the above case
+$('body.nonexisting').ready(function() { console.warn('ready executed for empty bucket'); });
+	
+/**
  * Checks plugin dependencies using syntax:
  * $.depends($.differentplugin).depends($.fn.differentplugin).ready( function() {...} );
  * @param {Object, String} currently only functions are accepted, not function names
@@ -75,9 +87,11 @@ Repos.getService = function(context) {
 Repos.isTarget = function(selector,context) {
 	var s = selector;
 	s = s.replace(/([.+^${}()\[\]\/])/g, '\\$1'); // escaping valid path characters
-	s = s.replace('*','.+');
-	var r = new RegExp('^'+s.replace('*','.*')+'$');
-	return r.test(Repos.getTarget());
+	s = s.replace(/\*/g,'.*');
+	var r = new RegExp('^'+s+'$');
+	var t = Repos.getTarget();
+	var is = r.test(t);
+	return is;
 };
 
 /**

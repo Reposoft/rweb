@@ -104,14 +104,8 @@ function getFileId($name) {
 // all plugins should declare a function [name]_getHeadTags($webapp)
 // that returns an array of HTML tags to be added to head, with $webapp as repos url
 
-$plugins = array(); // Shouldn't be used outside this file; shouldnt be needed at all
 function addPlugin($name) {
-	global $plugins;
-	if (in_array($name, $plugins)) return; // already loaded
-	$inc = dirname(dirname(__FILE__))."/plugins/$name/$name.inc.php";
-	if (!file_exists($inc)) trigger_error("The page tried to load a plugin '$name' that does not exist", E_USER_ERROR);
-	require_once($inc);
-	$plugins[] = $name;
+	// deprecated
 }
 
 // -------- the template class ------------
@@ -441,31 +435,23 @@ class Presentation {
 	 * @param stylePath the path to the current theme's 'style/' directory
 	 */
 	function _getAllHeadTags($webapp, $stylePath) {
-		$head = $this->_getLinkCssTag($webapp.$stylePath.'global.css');
+		$head = '';
+		// metadata
+		if (isTargetSet()) {
+			$head = $head . '<meta name="repos-target" content="'.getTarget().'" />';
+		}
+		// shared css and scripts
+		$head = $head . $this->_getLinkCssTag($webapp.$stylePath.'global.css');
 		foreach ($this->extraStylesheets as $css) {
 			$head = $head . $this->_getLinkCssTag($webapp.$stylePath.$css);
 		}
-		$head = $head . $this->_getPluginHeadTags($webapp);
 		// allow the pages to avoid javascripts if no plugins are loaded
-		if (strContains($head, '<script ')) {
-			$head = '<script type="text/javascript" src="'.$webapp.'scripts/head.js"></script>'.$head;
-		}
+		$head = $head . '<script type="text/javascript" src="'.$webapp.'scripts/head.js"></script>';
 		return $head;
 	}
 	
 	function _getLinkCssTag($href) {
 		return '<link href="'.$href.'" rel="stylesheet" type="text/css"></link>';
-	}
-	
-	function _getPluginHeadTags($webapp) {
-		global $plugins;
-		$h = array();
-		/* plugin head tags temporarily disabled
-		for ($i=0; $i<count($plugins); $i++) {
-			$ph = call_user_func($plugins[$i].'_getHeadTags', $webapp);
-			$h = array_merge($ph, $h);
-		} */
-		return implode("\n", $h);
 	}
 	
 	/**
