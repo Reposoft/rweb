@@ -4,8 +4,8 @@
  *
  * @package
  */
-addPlugin('edit');
-addPlugin('syntax');
+//addPlugin('edit');
+//addPlugin('syntax');
 
 function acl_getHeadTags($webapp) {
 	if (strEnds(getSelfUrl(), '/upload/')) return array(); // upload is used for saving the file

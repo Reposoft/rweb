@@ -104,7 +104,7 @@ function getFileId($name) {
 // all plugins should declare a function [name]_getHeadTags($webapp)
 // that returns an array of HTML tags to be added to head, with $webapp as repos url
 
-$_plugins = array();
+$plugins = array(); // Shouldn't be used outside this file; shouldnt be needed at all
 function addPlugin($name) {
 	global $plugins;
 	if (in_array($name, $plugins)) return; // already loaded
@@ -460,10 +460,11 @@ class Presentation {
 	function _getPluginHeadTags($webapp) {
 		global $plugins;
 		$h = array();
+		/* plugin head tags temporarily disabled
 		for ($i=0; $i<count($plugins); $i++) {
 			$ph = call_user_func($plugins[$i].'_getHeadTags', $webapp);
 			$h = array_merge($ph, $h);
-		}
+		} */
 		return implode("\n", $h);
 	}
 	

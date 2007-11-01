@@ -5,18 +5,6 @@
  * @package plugins
  */
 
-/**
- * Shared between edit/file/ and edit/upload/
- * @package edit
- */
-class EditTypeRule extends Rule {
-	function valid($value) {
-		return ($value = 'upload' 
-			|| $value == 'txt' 
-			|| $value == 'html');
-	}
-}
-
 function edit_isTinyMCEInstalled() {
 	return file_exists(dirname(dirname(dirname(__FILE__))).'/lib/tinymce/tinymce/');	
 }

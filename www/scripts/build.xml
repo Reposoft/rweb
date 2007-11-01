@@ -37,7 +37,7 @@
 			<fileset dir="${lib.folder}" includes="**/*.js" excludes="jquery/**,${excludes.default}"/>
 			<fileset dir="${api.folder}" includes="**/*.js" excludes="${excludes.default}" />
 			<fileset dir="${plugins.folder}" includes="**/*.js" excludes="${excludes.default}" />
-			<fileset dir="${plugins.external.folder}" includes="**/*.js" excludes="${excludes.default}" />
+			<fileset dir="${plugins.external.folder}" includes="**/*.load.js"/>
 			<fileset dir="${outro.folder}" includes="**/*.js" excludes="${excludes.default}" />
 		</concat>
 		<echo message="${head.js.file}.big built." />
@@ -52,6 +52,15 @@
 			<arg value="${head.js.file}" />
 		</java>
 		<echo message="${head.js.file} built." />
+	</target>
+	
+	<target name="dev" depends="head.js.concat"
+		description="Use full script with comments in runtime (development only)">
+		<concat destfile="${head.js.file}">
+			<header filtering="no" trimleading="yes">/* DEVELOPMENT USE ONLY */</header>
+			<fileset file="${head.js.file}.big"/>
+		</concat>
+		<echo message="DEVELOPMENT VERSION: ${head.js.file} built." />
 	</target>
 
 	<target name="test">
