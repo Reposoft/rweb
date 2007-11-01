@@ -36,11 +36,11 @@ $('body.nonexisting').ready(function() { console.warn('ready executed for empty 
  * @param {Object, String} currently only functions are accepted, not function names
  */
 jQuery.depends = function(func) {
-		if (typeof func != 'function') {
-		console.error('Repos customization error. This plugin\'s dependencies are not met.');
-		// TODO return dummy so that event add is avoided?
-	}
-	return jQuery;
+	if ($.isFunction(func)) return jQuery;
+	
+	console.error('Repos customization error. This plugin\'s dependencies are not met.');
+	// TODO return dummy so that event add is avoided?
+	return new jQuery([]);
 };
 
 /**
@@ -102,6 +102,16 @@ Repos.isTarget = function(selector,context) {
 Repos.isService = function(selector,target) {
 	return (Repos.getService() == selector);
 };
+
+/**
+ * Reads the username cookie
+ * @return {String} false if user not authenticated through repos, else username
+ */
+Repos.getUser = function() {
+	var u = $.cookie('account');
+	if (u) return u;
+	return false;
+}
 
 	/*
 	 Dynamic loading of scripts and css has been disabled,

@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>repos: shared javascript</title>
 <script type="text/javascript" src="../lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="../lib/jquery.cookie/jquery.cookie.js"></script>
 <!-- the script, with a realistic url that can be used to find webappRoot -->
 <script type="text/javascript" src="../../scripts/reposapi/repos.js"></script>
 <!-- unit testing must be imported after Repos, so it can override functions -->
@@ -16,7 +17,8 @@
 <li><code>Repos.url</code> (the web application root, with trailing slash)</li>
 <li><code>:repos-service</code> and <code>:repos-target</code> <a href="selector.html">selectors</a></li>
 <li><code>$.depends</code></li>
-<li><code>Repos.reportError(error)</code></li>
+<li><code>Repos.getUser</code></li>
+
 <li><code>Repos.addScript(srcFromWebappRoot)</code></li>
 <li><code>Repos.addCss(srcFromWebappRoot)</code></li>
 </ul>
@@ -32,9 +34,18 @@ because it was not reliable. Can be found in reposweb-1.1-B1.
 <script type="text/javascript">
 
 assert($.depends,'$.depends plugin should be defined');
-assert($.depends($.fn), 'Existing object satisfies depends');
-assert($.depends($.NonExistingObject), false, 'No object, depends should return nothing (or empty bucket?)');
-// Od should it be a selector?
+assert($.depends($.fn), jQuery, 'Existing object satisfies depends');
+// TODO
+assert($.depends($.NonExistingObject), 'No object, depends should return nothing (or empty bucket?)');
+// Or should it be a selector?
+
+// user functions
+var USERNAME_KEY = 'account'; // cookie name from repos
+var u = $.cookie(USERNAME_KEY);
+$.cookie(USERNAME_KEY, 'bamse');
+assert(Repos.getUser(), 'bamse', 'should get username from cookie when authenticated through repos');
+$.cookie(USERNAME_KEY, null);
+assert(Repos.getUser()===false, 'getUser should return false for no account');
 
 </script>
 

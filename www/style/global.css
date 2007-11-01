@@ -137,18 +137,10 @@ a.folder {
 /* common page elements, may also be layouted for each tool */
 #commandbar {
 	min-width: 980px;
-	/* height: 1.9em; */
 	background: url(commandbarbg.png) top repeat-x;
 	background-color: #ECF1EF;
 	padding: 3px;
 	border-bottom: 1px solid #CCCCCC;
-}
-#commandbar:after {
-    content: "."; 
-    display: block; 
-    height: 0; 
-    clear: both; 
-    visibility: hidden;
 }
 .row {
 	padding: 1px;
@@ -186,7 +178,6 @@ a.folder {
 }
 /* command = commandbar button, <a> is  active, <span> is greyed out */
 #commandbar a, #commandbar span {
-	float:left;
 	display:inline;
 	background-position: left center;
 	background-repeat: no-repeat;
@@ -207,6 +198,10 @@ a.folder {
 }
 #commandbar span {
 	color: #BBBBBB;
+}
+#commandbar img {
+	margin: 0.2em;
+	vertical-align: middle;
 }
 /* action is for buttons inside listings, <a> is  active, <span> is greyed out */
 a.action {

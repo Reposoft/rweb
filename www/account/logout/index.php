@@ -85,7 +85,7 @@ function getAfterLogoutUrl() {
 }
 
 function getVerifyUrl() {
-	$url = getSelfUrl() . '?logout=verify';
+	$url = asLink(getSelfUrl()) . '?logout=verify';
 	if (isset($_GET['go'])) {
 		$url .= '&go='.$_GET['go'];
 	}
