@@ -35,6 +35,7 @@ $('body.nonexisting').ready(function() { console.warn('ready executed for empty 
  * $.depends($.differentplugin).depends($.fn.differentplugin).ready( function() {...} );
  * @param {Object, String} currently only functions are accepted, not function names
  */
+// TODO make this suck less or remove it
 jQuery.depends = function(func) {
 	if ($.isFunction(func)) return jQuery;
 	
@@ -111,6 +112,14 @@ Repos.getUser = function() {
 	var u = $.cookie('account');
 	if (u) return u;
 	return false;
+};
+
+// jQuery plugin to show messages
+jQuery.fn.say = function(level, text, tooltip) {
+	var e = $('<span/>').addClass(level).attr('title', tooltip).html(text);
+	//not good at handling page edges: //if (e.Tooltip) e.Tooltip();
+	$('h1,h2,h3',this).eq(0).after(e);
+	this.filter('input').parent().append(e);
 }
 
 	/*

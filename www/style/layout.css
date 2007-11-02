@@ -137,3 +137,10 @@ label {
 input.required {
 	background: url(required.png) top right no-repeat;	
 }
+fieldset span {
+	display: block;
+}
+fieldset span.note, fieldset span.warning, fieldset span.error {
+	margin-left: 12.6em;
+	width: auto;
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>$.say: dynamically added messages</title>
+<link type="text/css" rel="stylesheet" href="../../style/global.css"></link>
+
+<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="../lib/dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../lib/tooltip/tooltip.js"></script>
+<!-- the script, with a realistic url that can be used to find webappRoot -->
+<script type="text/javascript" src="../../scripts/reposapi/repos.js"></script>
+<!-- unit testing must be imported after Repos, so it can override functions -->
+<script type="text/javascript" src="../unittest/testwalk.js"></script>
+
+</head>
+<body>
+
+<div id="commandbar">
+</div>
+
+<div id="intro">
+<h1>Sample layout</h1>
+<p>This page tests the dynamically added messages</p>
+</div>
+
+<div class="column">
+<div class="section">
+<form action="#">
+<fieldset>
+  <legend>template form</legend>
+  <p>
+    <label for="name">file name</label>
+    <input id="name" type="text" name="name" />
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" type="submit" name="submit" value="Send" />
+  </p>
+  <p>
+    <label for="button"></label>
+    <button id="button" type="submit">Press</button>
+  </p>
+</fieldset>
+</form>
+</div>
+</div>
+
+<div class="column">
+<div class="section">
+<h2>A section</h2>
+<p>Paragraph</p>
+<p>Paragraph</p>
+</div>
+</div>
+
+<div class="clearer"/>
+
+<script type="text/javascript">
+
+assert($.fn.say);
+
+$('body').say('note','body info','printed using $.fn.say');
+
+$('#name').say('warning','Still empty','this warning tells you that a value is desperately needed');
+
+</script>
+
+</body>
+</html>
