@@ -21,9 +21,6 @@
 #repos-edit {
 	background-image: url('../commands/16x16/edit.png');
 }
-#repos-editor {
-	background-image: url('../commands/16x16/editor.png');
-}
 /* special folders */
 #path .tool {
 	background-position: left center;

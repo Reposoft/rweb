@@ -440,6 +440,9 @@ class Presentation {
 		if (function_exists('isTargetSet') && isTargetSet()) {
 			$head = $head . '<meta name="repos-target" content="'.getTarget().'" />';
 		}
+		if (function_exists('getService')) {
+			$head = $head . '<meta name="repos-service" content="'.getService().'" />';
+		}
 		// shared css and scripts
 		$head = $head . $this->_getLinkCssTag($webapp.$stylePath.'global.css');
 		foreach ($this->extraStylesheets as $css) {

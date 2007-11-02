@@ -12,24 +12,42 @@ var Repos = {};
  * $(':repos-target(*.user').ready( ... only if target matches ... );
  * $(':repos-service(open/log/).ready( ... only for log service ... );
  * </code>
+ * Note that this can not be used with $().ready, use Repos.ready instead
  */
 jQuery.extend(jQuery.expr[':'], {
 	'repos-target'		: 'Repos.isTarget(m[3],a)',
 	'repos-service'	: 'Repos.isService(m[3],a)'
 });
+// Note that this can not be used with $().ready,
+// because jQuery runs ready for empty selections too,
+// use Repos.ready instead
+//$('body.nonexisting').ready(function() { console.warn('ready executed for empty bucket'); });
 
 /**
- * Override the standard jQuery ready with one that does nothing if the selector does not match
+ * Replaces $().ready since jQuery ready runs even if selector is empty.
+ * @param {String} repos selector starting with :
+ * @param {Function} fn for jQuery().ready
  */
-_r = jQuery.fn.ready;
-jQuery.fn.ready = function(f) {
-	if (this && !this.length) return;
-	return _r(f);
+Repos.ready = function(selector, fn) {
+	return $('html'+selector).size() && $().ready(fn);
+};
+/**
+ * Shorthand for Repos.ready(':repos-target(t)',fn)
+ * @param {String} t
+ * @param {Function} fn
+ */
+Repos.target = function(t, fn) {
+	return Repos.isTarget(t) && $().ready(fn);
+};
+/**
+ * Shorthand for Repos.ready(':repos-service(s)',fn)
+ * @param {String} s
+ * @param {Function} fn
+ */
+Repos.service = function(s, fn) {
+	return Repos.isService(s) && $().ready(fn);
 };
 
-// test the above case
-$('body.nonexisting').ready(function() { console.warn('ready executed for empty bucket'); });
-	
 /**
  * Checks plugin dependencies using syntax:
  * $.depends($.differentplugin).depends($.fn.differentplugin).ready( function() {...} );
@@ -70,13 +88,15 @@ Repos.getWebapp = function() {
 Repos.url = Repos.getWebapp();
 
 Repos.getTarget = function(context) {
-	var t = $('meta[name=repos-target]');
-	return t.attr('content');
+	var t = document.getElementsByName('repos-target');
+	if (t.length==0) return false;
+	return t[0].getAttribute('content');
 };
 
 Repos.getService = function(context) {
-	var s = $('meta[name=repos-service]');
-	return s.attr('content');
+	var s = document.getElementsByName('repos-service');
+	if (s.length==0) return false;
+	return s[0].getAttribute('content');
 };
 
 /**
@@ -115,12 +135,23 @@ Repos.getUser = function() {
 };
 
 // jQuery plugin to show messages
-jQuery.fn.say = function(level, text, tooltip) {
-	var e = $('<span/>').addClass(level).attr('title', tooltip).html(text);
+jQuery.fn.say = function(message) {
+	if (typeof message == 'string') message = {text:message};
+	var m = jQuery.extend({
+		tag:'span',
+		level:'note',
+		text:'',
+		title:false,
+		id:false
+	},message);
+	
+	var e = $('<'+m.tag+'/>').addClass(m.level).html(m.text);
+	if (m.title) e.attr('title',m.title);
+	if (m.id) e.attr('id',m.id);
 	//not good at handling page edges: //if (e.Tooltip) e.Tooltip();
 	$('h1,h2,h3',this).eq(0).after(e);
 	this.filter('input').parent().append(e);
-}
+};
 
 	/*
 	 Dynamic loading of scripts and css has been disabled,

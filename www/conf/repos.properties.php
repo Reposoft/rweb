@@ -194,17 +194,24 @@ function getRequestUri() {
 }
 
 /**
- * The current URL without query string
- * Complete url = getSelfUrl().'?'.getSelfQuery();
+ * @return the path to the current script without query string
  */
-function getSelfUrl() {
+function getSelfPath() {
 	$uri = getRequestUri();
 	$q = strpos($uri, '?');
 	if ($q > 0) {
 		$uri = substr($uri, 0, $q);
 	}
+	return $uri;
+}
+
+/**
+ * The current URL without query string
+ * Complete url = getSelfUrl().'?'.getSelfQuery();
+ */
+function getSelfUrl() {
 	// $_SERVER['SCRIPT_NAME'] can not be used because it always contains the filename
-	return getSelfRoot() . $uri;
+	return getSelfRoot() . getSelfPath();
 }
 
 /**
@@ -216,6 +223,17 @@ function getSelfQuery() {
 	$q = strpos($uri, '?');
 	if ($q == 0) return '';
 	return substr($uri, $q+1);
+}
+
+/**
+ * The service is the path to the current repos tool.
+ * This implementation assumes that webapp is a top level folder in docroot.
+ */
+function getService() {
+	$p = getSelfPath();
+	$s = strpos($p,'/',1);
+	$e = strrpos($p,'/');
+	return substr($p,$s+1,$e-$s);
 }
 
 /**

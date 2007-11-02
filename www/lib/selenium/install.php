@@ -29,7 +29,10 @@ if(download($archive, $tmp)) {
 	$report->fatal("Download failed.");
 }
 
-decompressZip($tmp, $dir);
+//decompressZip($tmp, $dir);
+// 0.8.3 is not packed in a folder
+mkdir($extracted_folder);
+decompressZip($tmp, $extracted_folder);
 
 rename($extracted_folder."core/", $core_folder);
 

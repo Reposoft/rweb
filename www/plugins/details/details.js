@@ -7,13 +7,10 @@
  * $Id$
  */
 
-$(document).ready(function() {
-	details_read();
-	// for repository listings, add details button
-	if ($('.repository #fullpath').size() > 0) {
-		details_button();	
-	}
-});
+Repos.service('index/', details_button);
+
+Repos.service('view/', details_read);
+Repos.service('edit/', details_read);
 
 function details_button() {
 	var command = $('<span id="showdetails">');
@@ -79,10 +76,9 @@ function details_writeLock(e, entry) {
 }
 
 function details_repository() {
-	//var path = $('body.repository').find('#fullpath');
-	var path = $('#fullpath');
-	if (path.size()==0) return;
-	var url = Repos.getWebapp() + 'open/list/?target='+encodeURIComponent(path.text());
+	var path = Repos.getTarget();
+	if (!path) return;
+	var url = Repos.getWebapp() + 'open/list/?target='+encodeURIComponent(path);
 	$.ajax({
 		type: 'GET',
 		url: url,

@@ -33,6 +33,9 @@
 				<!-- if search crawlers has access, contents should not be cached -->
 				<meta name="robots" content="noarchive"/>
 				<link rel="shortcut icon" href="/favicon.ico"/>
+				<!-- repos metadata -->
+				<meta name="repos-service" content="open/log/" />
+				<meta name="repos-target" content="{/log/@target}" />
 				<!-- default stylesheet -->
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}log/log.css"/>
@@ -69,7 +72,6 @@
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="contents">
-		<span id="fullpath" style="display:none"><xsl:value-of select="@target"/></span>
 		<h1>History of <a class="folder" href="{@repo}{@target}"><xsl:value-of select="@name"/></a></h1>
 		<xsl:apply-templates select="logentry"/>
 		<xsl:if test="@limit">

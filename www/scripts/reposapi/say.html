@@ -61,9 +61,9 @@
 
 assert($.fn.say);
 
-$('body').say('note','body info','printed using $.fn.say');
+$('body').say('body info');
 
-$('#name').say('warning','Still empty','this warning tells you that a value is desperately needed');
+$('#name').say({level:'warning',text:'Still empty',title:'desperately needed'});
 
 </script>
 

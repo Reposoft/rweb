@@ -158,6 +158,17 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertFalse(isRepositoryUrl(getSelfRoot().'/repos/'),getSelfRoot().'/repos/ is not a repository url. %s');
 	}
 	
+	function testGetService() {
+		$_SERVER['REQUEST_URI'] = '/repos/open/';
+		$this->assertEqual(getService(),'open/','repos-service should be the uri without webapp and without file. %s');
+		$_SERVER['REQUEST_URI'] = '/repos/open/index.php';
+		$this->assertEqual(getService(),'open/','Script filename is not part of the service, only folders. %s');
+		$_SERVER['REQUEST_URI'] = '/repos/open/file/';
+		$this->assertEqual(getService(),'open/file/','Subfolder. %s');
+		$_SERVER['REQUEST_URI'] = '/subfolder/repos/open/';
+		$this->assertEqual(getService(),'repos/open/','Currently we assume that repos is a top level folder. %s');
+	}
+	
 }
 
 testrun(new TestReposProperties());

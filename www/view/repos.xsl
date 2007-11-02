@@ -7,6 +7,10 @@
   Note that browser transformations only work if the
   stylesheet is read from the same domain as the XML
 -->
+<!-- TODO for 1.2
+* Old #fullpath concept has been removed in favor of meta tags
+* Project concept should probably be removed. Do like in repos style.
+ -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
 	<!-- start transform -->
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
@@ -38,6 +42,9 @@
 				<!-- if search crawlers has access, contents should not be cached -->
 				<meta name="robots" content="noarchive"/>
 				<link rel="shortcut icon" href="/favicon.ico"/>
+				<!-- repos metadata -->
+				<meta name="repos-service" content="index/" />
+				<meta name="repos-target" content="{/svn/index/@path}/" />
 				<!-- default stylesheets -->
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>
@@ -151,7 +158,6 @@
 		<xsl:param name="pathlinks"/>
 		<!-- it is not trivial to check if a tool has already been found in path, so instead we assume that tools are only in project root -->
 		<xsl:param name="trytools" select="@path=concat('/',$projectname)"/>
-		<span id="fullpath" style="display:none"><xsl:value-of select="$fullpath"/></span>
 		<h2 id="path">
 			<a id="home" href="{$homelink}">
 				<span class="projectname">

@@ -22,6 +22,9 @@
 			<!-- if search crawlers has access, contents should not be cached -->
 			<meta name="robots" content="noarchive"/>
 			<link rel="shortcut icon" href="/favicon.ico"/>
+			<!-- repos metadata -->
+			<meta name="repos-service" content="open/list/" />
+			<meta name="repos-target" content="{/lists/@target}" />
 			<!-- default stylesheets -->
 			<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
 			<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>

@@ -2,13 +2,10 @@
  * Repos history filter (c) 2006 repos.se
  */
 
-$(document).ready(function() {
-	var fp = $('#fullpath');
-	if (fp.size() == 0) return;
-	// don't hide paths if this is folder history
-	var p = fp.text();
-	if (p.charAt(p.length - 1)=='/') return;
-	repos_logfilter(p);
+Repos.service('open/log/', function() {
+	var t = Repos.getTarget();
+	if (t.charAt(t.length-1)=='/') return;
+	repos_logfilter(t);
 });
 
 /**

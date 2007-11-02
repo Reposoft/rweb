@@ -16,15 +16,15 @@
 			.append('<a id="accountedit" href="'+w+'edit/file/?target=/'+u+'/administration/repos.user">Edit account</a>');
 	};
 	
-	$().filter(':repos-target(/administration/repos.accs)').ready( function() {
+	Repos.target('/administration/repos.accs', function() {
 		admin();
 	});
 	
-	$().filter(':repos-target(/'+u+'/administration/)').ready( function() {
+	Repos.target('/'+u+'/administration/', function() {
 		user();
 	});
 
-	$().filter(':repos-target(/'+u+'/administration/repos.user)').ready( function() {
+	Repos.target('/'+u+'/administration/repos.user', function() {
 		user();
 	});
 

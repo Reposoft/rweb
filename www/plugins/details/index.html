@@ -3,13 +3,18 @@
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 <title>repos: details plugin test page</title>
+
+<meta name="repos-service" content="index/" />
+<meta name="repos-target" content="/demoproject/trunk/public/" />
+
 <!-- plugins -->
 <script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../scripts/reposapi/repos.js"></script>
 <script type="text/javascript" src="details.js"></script>
 <!-- if the dateformat plugin is present, date output will be formatted -->
 <script type="text/javascript" src="../dateformat/dateformat.js"></script>
-<!-- requires the fileid script, which should be found in head.js -->
-<script type="text/javascript" src="../../scripts/fileid/fileid.js"></script>
+<!-- requires the fileid plugin -->
+<script type="text/javascript" src="../fileid/fileid.js"></script>
 <!-- for unit testing -->
 <script type="text/javascript" src="../../scripts/unittest.js"></script>
 <!-- needs the repository css -->
@@ -27,16 +32,16 @@
 <p>Last edited by: <span class="username"></span></p>
 <p>Last edited: <span class="datetime"></span></p>
 </div>
+<p>TODO currenty this test page matches only repos service "index/"</p>
 
 <h2>Directory listing example</h2>
 <p>If the folder does not exist there should be an error message.</p>
 <div class="repository">
 <div id="commandbar"><span>a command</span></div>
-<p id="fullpath" title="#fullpath element required" style="font-family: monospace;">/demoproject/trunk/public/</p>
-<div id="row:website_"><span>website</span></div>
-<div id="row:images_"><span>images</span></div>
-<div id="row:xmlfile.xml"><span>xmlfile.xml</span></div>
-<div id="row:locked-file.txt"><span>locked-file.txt</span></div>
+<div class="row" id="row:website_"><span>website</span></div>
+<div class="row" id="row:images_"><span>images</span></div>
+<div class="row" id="row:xmlfile.xml"><span>xmlfile.xml</span></div>
+<div class="row" id="row:locked-file.txt"><span>locked-file.txt</span></div>
 </div>
 
 <h2>unit tests</h2>
