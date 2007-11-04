@@ -265,19 +265,10 @@
 	</target>
 	
 	<target name="docs" depends="docs.phpdoc, docs.php, docs.js">
-		<echo file="${docs.folder}/index.html">
-			<![CDATA[<html><body>
-			<h1>Generated Repos source documentation</h1>
-			<ul>
-			<li><a href="php-api/html/index.html">PHP API</a></li>
-			<li><a href="js-api/html/index.html">Javascript</a></li>
-			</ul>
-			</body></html>]]>
-		</echo>
 	</target>
 	
 	<target name="docs.doxygen">
-		<property name="docs.folder" value="${basedir}/docs"
+		<property name="docs.folder" value="${basedir}/documentation"
 				description="part of OUTPUT_DIRECTORY in doxygen config files"/>
 		<mkdir dir="${docs.folder}"/>
 		<taskdef name="doxygen" classname="org.doxygen.tools.DoxygenTask"
