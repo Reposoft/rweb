@@ -298,6 +298,16 @@ class TestSystem extends UnitTestCase {
 			$this->sendMessage("Can not run this test because folder '".dirname(__FILE__)."' is not writable for this user.");
 		}
 	}
+	
+	function testGetHtpasswdCommand() {
+		$h = System::getCommand('htpasswd');
+		$this->assertPattern('/\w+/', $h, $h.' should be a htpasswd command. %s');
+		$this->sendMessage('Executing: '.$h);
+		exec("$h 2>&1", $output, $ret);
+		$this->assertEqual($ret, 2, 'htpasswd command with no arguments should return exit code 2. %s');
+		$this->assertTrue(strpos(implode(' ',$output),'password'));
+		$this->sendMessage($output);
+	}
 
 }
 

@@ -29,6 +29,7 @@ function groupfileWrite($lines) {
 /**
  * Extract apache group lines from svn acl lines
  * @param array[String] $acl
+ * @return array[String] groupfile lines
  */
 function groupfileExtract($acl) {
 		

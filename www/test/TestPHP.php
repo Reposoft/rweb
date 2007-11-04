@@ -88,7 +88,7 @@ function printTestCase($file) {
 </tr>
 <tr>
 	<td>assertTextPresent</td>
-	<td>0 fails</td>
+	<td>0 failed</td>
 	<td></td>
 </tr>
 <tr>

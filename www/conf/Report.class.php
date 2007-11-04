@@ -31,7 +31,7 @@ if (!function_exists('setupResponse')) {
 // reports may be long running
 set_time_limit(60*5);
 
-$reportDate = date("Y-m-d\TH:i:sO");
+$reportDate = date("Y-m-d\TH:i:sP");
 
 $reportStartTime = time();
 
@@ -60,7 +60,7 @@ function getNewline() {
 
 function getReportTime() {
 	global $reportDate;
-    return '<span class="datetime">'.$reportDate.'</span>';
+	return $reportDate;
 }
 
 /**
@@ -307,16 +307,14 @@ class Report {
 		$this->_print('<head>');
 		$this->_print('<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>'."\n");
 		$this->_print('<title>Repos administration: ' . $title . '</title>'."\n");
+		if (function_exists('getService')) {
+			$this->_print('<meta name="repos-service" content="' . getService() . '" />');
+		}
 		$this->_print('<link href="/repos/style/global.css" rel="stylesheet" type="text/css"></link>'."\n");
 		$this->_print('<link href="/repos/style/docs.css" rel="stylesheet" type="text/css"></link>'."\n");
-		// TODO use head.js
-		$this->_print('<script src="/repos/scripts/lib/jquery/jquery.js" type="text/javascript"></script>');
-		$this->_print('<script src="/repos/plugins/tooltip/tooltip.js" type="text/javascript"></script>');
+		$this->_print('<script src="/repos/scripts/head.js" type="text/javascript"></script>');
 		$this->_print("</head>\n");
 		$this->_print("<body>\n");
-		// don't use containers, because then the prowser can not show process as the operation proceeds
-		//$this->_print("<div id=\"workspace\">\n");
-		//$this->_print("<div id=\"contents\">\n");
 		
 		$this->_print('<div id="commandbar">'."\n");
 		$this->_print('<a id="reposconf" href="'.$webapp.'conf/">config</a>'."\n");
@@ -334,6 +332,7 @@ class Report {
 	}
 	
 	function _pageEnd($code = 0) {
+		$this->_pageEndScript();
 		if (!$this->offline) $this->_print("</body></html>\n\n");
 		exit( $code );
 	}
@@ -344,20 +343,35 @@ class Report {
 		$class = $this->hasErrors() ? "failed" : "passed";
 		if ($this->offline) {
 			$this->info("-----------------------------");
-			$this->info("$this->no passes, $this->nf fails and $this->ne exceptions in $time seconds");
+			$this->info("$this->no passed, $this->nf failed, $this->ne exceptions in $time seconds");
 		} else {
-        $this->_output("<div class=\"testsummary $class\">");
-        $this->_output("<strong>" . $this->no . "</strong> passes, ");
-        $this->_output("<strong>" . $this->nf . "</strong> fails and ");
-        $this->_output("<strong>" . $this->ne . "</strong> exceptions");
-        $this->_output(" in $time seconds.");
-        $this->_output("</div>\n");
+			$this->_output("<div class=\"testsummary $class\">");
+			$this->_output(" <strong>" . $this->no . "</strong> passed,");
+			$this->_output(" <strong>" . $this->nf . "</strong> failed,");
+			$this->_output(" <strong>" . $this->ne . "</strong> exceptions");
+			$this->_output(" in $time seconds.");
+			$this->_output("</div>\n");
 		}
+	}
+
+	function _pageEndScript() {
+		if ($this->offline) return;
+		?>
+		<script type="text/javascript">
+			/* testwalk notation for marking test pages */
+			if ($('.testsummary').filter('.passed').size()>0) {
+				$('body').addClass('passed');
+			} else {
+				$('body').addClass('failed');
+			}
+			/* tooltips that can handle <pre> */
+			$('a, div, acronym').Tooltip();
+		</script>
+		<?php
 	}
 	
 	function _toggleDebug() {
 		if ($this->offline) return;
-		// thanks to jQuery
 		?>
 		<script type="text/javascript">$('.debug').hide();</script>
 		<p><a href="#" onclick="$('.debug').show()" accesskey="d">show <?php echo($this->nd); ?> <u>d</u>ebug messages</a></p>

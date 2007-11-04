@@ -278,8 +278,8 @@ class System {
 				$try[] = 'C:\Program\Apache Software Foundation\Apache2.0\bin\htpasswd.exe';
 				// apache may be docroot parent
 				$docroot = strtr($_SERVER['DOCUMENT_ROOT'],'/','\\');
-				$apache = dirname($docroot)."\\apache\\bin";
-				$try[] = "$apache\\htpasswd.exe";
+				$try[] = dirname($docroot)."\\apache\\bin\\htpasswd.exe";
+				$try[] = dirname($docroot)."\\bin\\htpasswd.exe";
 			} else {
 				$try[] = USRBIN . 'htpasswd';
 				$try[] = USRBIN . 'htpasswd2';
