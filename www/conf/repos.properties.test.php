@@ -52,7 +52,15 @@ class TestReposProperties extends UnitTestCase {
 	
 	function testUrlEncodeNamesQuery() {
 		$this->assertEqual('http://host/?a=b%2Bb&c=d%25e', urlEncodeNames('http://host/?a=b+b&c=d%e'));
-		
+	}
+
+	function testGetHost() {
+		$_SERVER['SERVER_PORT'] = 443;
+		$_SERVER['HTTPS'] = 'on';
+		$_SERVER['SERVER_NAME'] = 'my.host';
+		$this->assertEqual('http://my.host', getHost(), 'getHost should always return http, not ssl. %s');
+		$_SERVER['SERVER_PORT'] = 1443;
+		$this->assertEqual('http://my.host', getHost(), 'Never use port from https. %s');
 	}
 	
 	function testGetSelfUrl() {

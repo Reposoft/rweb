@@ -84,6 +84,7 @@ define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST
  * @return Root url of the repository for this request, no tailing slash. Not encoded.
  */
 function getRepository() {
+	if (isset($_REQUEST[REPO_KEY])) return $_REQUEST[REPO_KEY];
 	if (isset($_SERVER['ReposRepo'])) return $_SERVER['ReposRepo'];
 	return getRepositoryDefault();
 }
@@ -162,8 +163,12 @@ function getAccessFile() {
  * @return String absolute path to the standard Repos AccessFile location, which may exist
  */
 function getAccessFileDefault() {
-	$r = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : dirname(dirname(dirname(__FILE__)));
-	return dirname($r).'/admin/repos-access'; 
+	$docroot = dirname(dirname(dirname(__FILE__)));
+	if (isset($_SERVER['DOCUMENT_ROOT'])) {
+		$d = $_SERVER['DOCUMENT_ROOT']; // docroot may be incorrect, for exaple with VirtualDocumentRoot
+		if (strncmp($_SERVER['SCRIPT_FILENAME'], $d, strlen($d))==0) $docroot = $d;
+	}
+	return dirname($docroot).'/admin/repos-access';
 }
 
 /**
@@ -221,7 +226,7 @@ function getSelfRoot() {
  */
 function getHostDefault() {
 	$url = 'http://' . $_SERVER['SERVER_NAME'];
-	if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT']!=80) {
+	if (!isSSLClient() && isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT']!=80) {
 		$url .= ':'.$_SERVER['SERVER_PORT'];
 	}
 	return $url;
