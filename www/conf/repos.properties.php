@@ -98,7 +98,7 @@ function _getConfig($key) {
 	global $_repos_config;
 	if (isset($_repos_config[$key]))
 		return ($_repos_config[$key] );
-	return false;	
+	return false;
 }
 
 /**
@@ -127,6 +127,7 @@ function getRepository() {
 }
 
 /**
+ * Reads the HTTPS server variable, if "on" returns true.
  * @return boolean true if the current client uses SSL
  */
 function isSSLClient() {
@@ -171,6 +172,10 @@ function getHttpReferer() {
 // ----- helper functions for pages to refer to internal urls -----
 
 /**
+ * Get the current URL root (protocol, host and port).
+ * Protocol is httpS if isSSLClient()==true, meaning that the result
+ * is based on server configuration rather than current request,
+ * to allow for SSL proxies.
  * @return The url to the host of this request, 
  * without tailing slash because absolute urls should be appended.
  */
