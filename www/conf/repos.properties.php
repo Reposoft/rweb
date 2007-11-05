@@ -2,8 +2,11 @@
 /**
  * Repos configuration logic (c) 2004-1007 Staffan Olsson www.repos.se
  *
- * Behaviour is configurable in the file
- * ../../repos-conf/repos.properties
+ * The core, Repos Web, is only cinfigurable to a minimum.
+ * Each configuration entry has a getEntry() and getEntryDefault(),
+ * where getEntry may read server variables to get a cutom setting.
+ *  
+ * This file also configures error handling for Repos application.
  * 
  * Output (headers AND response) is controlled by either Report or Presentation.
  * 
@@ -16,12 +19,8 @@
  */
 define('REPOS_VERSION','@Dev@');
 
-// Configuration array can be set before inport. If not it will be read from file.
-if (!isset($_repos_config)) {
-       $_repos_config = parse_ini_file( _getPropertiesFile(), false );
-}
-
 // ----- global settings -----
+
 // PHP4 does not have exceptions, so we use 'trigger_error' as throw Exception.
 // - code should not do 'exit' after trigger_error, because that does not allow unit testing.
 // - code should report: 
@@ -52,6 +51,9 @@ function reportErrorText($n, $message, $trace) {
 }
 set_error_handler('reportError');
 
+// check essential configuration entries
+if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable magic_quotes"); }
+
 // special handling of build flags
 define('REPOS_VERSION_ARM','-bubba');
 if (strpos(REPOS_VERSION, REPOS_VERSION_ARM)) {
@@ -69,37 +71,7 @@ define('WEBSERVICE_KEY', 'serv'); // html, json, xml or text
 // parameter conventions
 define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST
 
-// --- application selfcheck, can be removed in releases (integration tests should check these things) ---
-if (!isset($_repos_config['repositories'])) trigger_error("No repositories configured");
-if (!isset($_repos_config['repos_web'])) trigger_error("Repos web applicaiton root not specified in configuration");
-function _denyParam($name) { if (isset($_GET[$name]) || isset($_POST[$name])) trigger_error("The parameter '$name' is reserved.", E_USER_ERROR); }
-// used for svn service layer // _denyParam(REPO_KEY);
-_denyParam(USERNAME_KEY);
-_denyParam(LOCALE_KEY);
-_denyParam(THEME_KEY);
-if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable magic_quotes"); } // tested in server test
-
 // ------ local configuration ------
-
-/**
- * Config value getter
- * @param key the configuration value key, as in repos.properties
- * @return the value corresponding to the specified key. False if key not defined.
- */ 
-function getConfig($key) {
-	// temporary selfcheck
-	if ($key=='repo_url') trigger_error("Use getRepository to get the URL");
-	if ($key=='repos_web') trigger_error("Use getWebapp to get web root URL");
-	//
-	return _getConfig($key);
-}
-
-function _getConfig($key) {
-	global $_repos_config;
-	if (isset($_repos_config[$key]))
-		return ($_repos_config[$key] );
-	return false;
-}
 
 /**
  * Returns the root URL of the repository that the current user is working with.
@@ -112,18 +84,15 @@ function _getConfig($key) {
  * @return Root url of the repository for this request, no tailing slash. Not encoded.
  */
 function getRepository() {
-	return _getConfig('repositories');
-	// --- disabled multi-repository logic ---
-	// 1: query string or cookie
-	if (isset($_REQUEST[REPO_KEY])) return $_REQUEST[REPO_KEY];
-	if (isset($_COOKIE[REPO_KEY])) return $_COOKIE[REPO_KEY];
-	// 2: referer that matches one of the configured repositories
-	$r = getConfig('repositories');
-	if (!strContains($r, ',')) return $r;
-	$ref = getHttpReferer();
-	$all = array_map('trim', explode(',', $r));
-	foreach ($all as $a) if (strBegins($ref, $a)) return $a;
-	return $all[0];
+	if (isset($_SERVER['ReposRepo'])) return $_SERVER['ReposRepo'];
+	return getRepositoryDefault();
+}
+
+/**
+ * @return String Default repository, Location /data/ at current host.
+ */
+function getRepositoryDefault() {
+	return getHost().'/data/';
 }
 
 /**
@@ -138,12 +107,23 @@ function isSSLClient() {
  * Internally URLs have the default protocol, usually 'http'
  *  - this function is for transforming to the browser's protocol.
  * Note that this is done auomatically for getWebapp().
+ * 
+ * Protocol is httpS if isSSLClient()==true, meaning that the result
+ * is based on server configuration rather than current request
+ * (to allow for SSL proxies).
+ * 
+ * The current implementation does not support custom port number for SSL.
+ * 
  * @param String $url the URL that should be presented to the user
  * @return String the URL with the current protocol for navigation.
  */
 function asLink($url) {
 	if (isSSLClient() && substr($url, 0, 5)=='http:') {
 		$url = 'https:'.substr($url, 5);
+		// currently there is no setting for custom https port numer so we use default
+		if (strpos($url,':',8) && preg_match('/^(.+)(\:\d+)(\/.*)?$/', $url, $m)) {
+			$url = $m[1].(isset($m[3])?$m[3]:'');
+		}
 	}
 	return urlSpecialChars($url);
 }
@@ -151,11 +131,57 @@ function asLink($url) {
 /**
  * Returns the URL to the root folder of the web application.
  * Can be a complete URL with host and path, as well as an absolute URL from server root.
- * It is assumed that 'repos_web' is a non-SSL url.
+ * It is assumed to be a plain http url, not ssl.
  * @return String absolute url to the repos web application URL, ending with slash
  */
 function getWebapp() {
-	return _getConfig('repos_web');
+	if (isset($_SERVER['ReposWebapp'])) return $_SERVER['ReposWebapp'];
+	return getWebappDefault();
+}
+
+/**
+ * @return String Default webapp URL: /repos-web/
+ */
+function getWebappDefault() {
+	return '/repos-web/';
+}
+
+/**
+ * Set the access control file used to display startpage.
+ * Same syntax as AuthzSVNAccessFile, can be the same file.
+ * Without an access file the start page contents will be default.
+ * @return String absolute path to the ACL
+ */
+function getAccessFile() {
+	if (isset($_SERVER['ReposAccessFile'])) return $_SERVER['ReposAccessFile'];
+	return getAccessFileDefault();
+}
+
+/**
+ * Default access file is admin/repos-access relative to document root
+ * @return String absolute path to the standard Repos AccessFile location, which may exist
+ */
+function getAccessFileDefault() {
+	$r = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : dirname(dirname(dirname(__FILE__)));
+	return dirname($r).'/admin/repos-access'; 
+}
+
+/**
+ * The locale to be used in command executions on non-Windows servers.
+ * Repos uses this only for encoding texts, not date or time formatting.
+ * There is usually no reason to change the default.
+ * @return String Locale for PHP setlocale() and Linux "locale" command.
+ */
+function getLocale() {
+	if (isset($_SERVER['ReposLocale'])) return $_SERVER['ReposLocale'];
+	return getLocaleDefault();
+}
+
+/**
+ * @return String en_US.utf8
+ */
+function getLocaleDefault() {
+	return 'en_US.utf8';
 }
 
 /**
@@ -172,20 +198,30 @@ function getHttpReferer() {
 // ----- helper functions for pages to refer to internal urls -----
 
 /**
- * Get the current URL root (protocol, host and port).
- * Protocol is httpS if isSSLClient()==true, meaning that the result
- * is based on server configuration rather than current request,
- * to allow for SSL proxies.
+ * Alias for the old function name getSelfRoot.
+ */
+function getHost() {
+	return getSelfRoot();
+}
+
+/**
+ * Get the current ReposHost: http URL root (protocol, host and port).
+ * To adapt to clients that may use SSL, call asLink(getHost().'/the/script/path/').
  * @return The url to the host of this request, 
  * without tailing slash because absolute urls should be appended.
+ * @deprecated Use the new function name getHost
  */
 function getSelfRoot() {
-	$url = 'http';
-	if(isSSLClient()) $url .= 's';
-	$url .= '://' . $_SERVER['SERVER_NAME'];
-	if($_SERVER['SERVER_PORT']==80 || $_SERVER['SERVER_PORT']==443) {
-		// standard port number, do not append
-	} else {
+	if (isset($_SERVER['ReposHost'])) return $_SERVER['ReposHost'];
+	return getHostDefault(); 
+}
+
+/**
+ * @return default host root url
+ */
+function getHostDefault() {
+	$url = 'http://' . $_SERVER['SERVER_NAME'];
+	if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT']!=80) {
 		$url .= ':'.$_SERVER['SERVER_PORT'];
 	}
 	return $url;
@@ -216,7 +252,7 @@ function getSelfPath() {
  */
 function getSelfUrl() {
 	// $_SERVER['SCRIPT_NAME'] can not be used because it always contains the filename
-	return getSelfRoot() . getSelfPath();
+	return asLink(getHost() . getSelfPath());
 }
 
 /**
@@ -288,8 +324,6 @@ function isRepositoryUrl($url) {
 	return strpos($url, getRepository())===0;
 }
 
-// ---- functions through which all command execution should go ---
-
 /**
  * Enocdes a url for use as href,
  * does not replace URL metacharacters like /, ? and : (for port number).
@@ -353,40 +387,6 @@ function xmlEncodePath($path) {
 }
 
 // ----- internal functions -----
-
-/**
- * This (private) function is needed from Command, SvnOpen and _getPropertiesFile.
- * @return the path to read configuratio file from, usually the same as admin_folder (from properties file in that folder)
- */
-function _getConfigFolder() {
-	static $c = null;
-	if (!is_null($c)) return $c;
-	$here = dirname(__FILE__); // absolute path independent of includes, seems to resolve symlinks on all platforms
-	if (strncmp($_SERVER['SCRIPT_FILENAME'], strtr(dirname($here),"\\",'/'), strlen(dirname($here)))!=0) {
-		// How to get the symlinked path as in $_SERVER[SCRIPT_FILENAME] for _this_ file (not script)?
-		// solve for location "/repos/", to allow central upgrades and local config for multiple hosts
-		if ($symlinked = substr($_SERVER['SCRIPT_FILENAME'], 0, strrpos($_SERVER['SCRIPT_FILENAME'],'/repos/')+7)) {
-			$c = dirname(dirname($symlinked)).DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR;
-			if (file_exists($c)) return $c;
-		}
-	}
-	// ../../admin/
-	$c = dirname(dirname(dirname($here))).DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR;
-	if (file_exists($c)) return $c;
-	// old location
-	$c = dirname(dirname($here)).DIRECTORY_SEPARATOR.'repos-config'.DIRECTORY_SEPARATOR;
-	if (file_exists($c)) return $c;
-	trigger_error('Could not find configuration file location ../../admin/ or ../repos-config/', E_USER_ERROR);
-}
-
-function _getPropertiesFile() {
-	$propertiesFile =  _getConfigFolder().'repos.properties';
-	if (!file_exists($propertiesFile)) {
-		trigger_error("Repos configuration file $propertiesFile not found.");
-		exit;
-	}
-	return $propertiesFile;
-}
 
 function _getStackTrace() {
 	$o = '';

@@ -212,13 +212,8 @@ function _getLoginUrl($urlWithoutLogin) {
 /**
  * @param targetUrl The absolute URI of the resource
  * @return realm (string) authentication realm or false if login not required
- * TODO this method can no longer be used to check if authentication is needed. Create a method isProtected?
  */
 function getAuthName($targetUrl) {
-	$conf = getConfig('repo_realm');
-	if ($conf && strpos($targetUrl, $conf)==0) {
-		return $conf;
-	}
 	return login_getAuthNameFromRepository($targetUrl);
 }
  

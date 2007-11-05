@@ -12,6 +12,7 @@ require( ReposWeb.'conf/Presentation.class.php' );
  * for example if there is a local SSL proxy
  */
 function getClientAddress() {
+	// TODO check $_SERVER["HTTP_CLIENT_IP"]?
 	if (isset($_SERVER['HTTP_X_FORWARDED_SERVER'])) {
 		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			if ($_SERVER['HTTP_X_FORWARDED_SERVER']='127.0.0.1') {

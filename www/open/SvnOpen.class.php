@@ -14,10 +14,21 @@ require_once(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php'
 define('HEAD','HEAD');
 
 // *** Subversion client usage ***
-define('SVN_CONFIG_DIR', _getConfigFolder().'svn-config-dir' . DIRECTORY_SEPARATOR);
-if (!file_exists(SVN_CONFIG_DIR)) {
-	trigger_error('Config folder for svn commands does not exist. '.
-		'Run \'svn --config-dir "'.SVN_CONFIG_DIR.'" info\' (preferrably as webserver user) to create.', E_USER_ERROR);
+define('SVN_CONFIG_DIR', System::getApplicationTemp().'svn-config-dir/');
+if (!file_exists(SVN_CONFIG_DIR)) svnCreateConfigDir(SVN_CONFIG_DIR);
+
+/**
+ * Sets up a new config dir with the default repos svn client configuration.
+ * @param String $path absolute path for the --config-dir parameter with trailing slash.
+ */
+function svnCreateConfigDir($path) {
+	$c = new Command('svn');
+	$c->addArgOption('--config-dir', $path);
+	$c->addArgOption('info');
+	$c->exec();
+	// custom config, assuming the format of the default svn config file
+	$reposconfig = dirname(dirname(__FILE__)).'/conf/svn-client-config';
+	copy($reposconfig, $path.'config');
 }
 
 /**

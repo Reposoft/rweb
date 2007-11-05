@@ -17,7 +17,7 @@
  */
 
 if (!class_exists('System')) require(dirname(__FILE__).'/System.class.php');
-if (!function_exists('_getConfigFolder')) require(dirname(__FILE__).'/repos.properties.php');
+if (!function_exists('getLocale')) require(dirname(__FILE__).'/repos.properties.php');
 
 // the actual command execution, can be mocked
 if (!function_exists('_command_run')) {
@@ -28,6 +28,7 @@ if (!function_exists('_command_run')) {
 	 *   Last element is the return code (use array_pop to remove).
 	 */
 	function _command_run($cmd, &$output) {
+		setlocale(LC_ALL, getLocale()); // per process, needed every time
 		exec($cmd, $output, $returnvalue);
 		return $returnvalue;
 	}
@@ -37,21 +38,10 @@ if (!function_exists('_command_passthru')) {
 	 * @return the exit code of the execution. Any messages have been passed through.
 	 */
 	function _command_passthru($cmd) {
+		setlocale(LC_ALL, getLocale()); // per process, needed every time
 		passthru($cmd, $returnvalue);
 		return $returnvalue;
 	}
-}
-
-/**
- * Might be nessecary to run all commands through a script that sets up a proper execution environment
- * for example locale for subversion.
- * @return wrapper script name if needed, or empty string if not needed
- */
-function _command_getScriptWrapper() {
-	if (System::isWindows()) {
-		return '';
-	}
-	return _getConfigFolder().'reposrun.sh';
 }
 
 /**
@@ -280,7 +270,7 @@ class Command {
 		if (!$tofile) $redirect = ' 2>&1';
 		// take care of encoding and wrapping, arguments have already been escaped
 		$argumentsString = System::toShellEncoding($argumentsString);
-		$wrapper = _command_getScriptWrapper();
+		$wrapper = ''; // no longer used
 		if (strlen($wrapper)>0) {
 			// make one argument (to the wrapper) of the entire command
 			// the arguments in the argumentsString are already escaped and surrounded with quoutes where needed

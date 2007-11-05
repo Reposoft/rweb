@@ -13,6 +13,50 @@ require( ReposWeb.'conf/Command.class.php' );
 
 define('TEMP_FILE_EXTENSION', '.temporary');
 
+// --- configuration ---
+
+/**
+ * Config value getter
+ * @param key the configuration value key, as in repos.properties
+ * @return the value corresponding to the specified key. False if key not defined.
+ */ 
+function getConfig($key) {
+	// temporary selfcheck
+	if ($key=='repo_url') trigger_error("Use getRepository to get the URL");
+	if ($key=='repos_web') trigger_error("Use getWebapp to get web root URL");
+	//
+	return _getConfig($key);
+}
+
+function _getConfig($key) {
+	static $_repos_config = null;
+	if ($_repos_config == null) {
+		$_repos_config = parse_ini_file( _getPropertiesFile(), false );
+	}
+	if (isset($_repos_config[$key]))
+		return ($_repos_config[$key] );
+	return false;
+}
+
+/**
+ * Gets the path to the host administration folder.
+ * @return the path to read configuratio file from, usually the same as admin_folder (from properties file in that folder)
+ */
+function _getConfigFolder() {
+	$docroot = dirname(dirname(__FILE__));
+	if (isset($_SERVER['DOCUMENT_ROOT'])) $docroot = $_SERVER['DOCUMENT_ROOT'];
+	return dirname($r).'/admin/';
+}
+
+function _getPropertiesFile() {
+	$propertiesFile =  _getConfigFolder().'repos.properties';
+	if (!file_exists($propertiesFile)) {
+		trigger_error("Repos configuration file $propertiesFile not found.");
+		exit;
+	}
+	return $propertiesFile;
+}
+
 // --- output functions ---
 
 // override theme function
@@ -135,7 +179,7 @@ function getFilename($prefix, $fromrev, $torev) {
  * @return revision number formatted as fixed length string
  */
 function formatRev($number) {
-	if ($number > 9000000)
+	if ($number > 2147483647)
 		error("Rediculously high revision number $number");
 	return sprintf("%07s",$number);
 }

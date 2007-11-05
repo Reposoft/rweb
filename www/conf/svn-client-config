@@ -1,0 +1,24 @@
+# Repos default configuration for internal svn client
+
+[auth]
+# Repos disables this for each command; avoid admin mistakes:
+store-passwords = no
+
+[helpers]
+
+[tunnels]
+
+[miscellany]
+# log-encoding = latin1
+# use-commit-times = yes
+# no-unlock = yes
+enable-auto-props = yes
+
+[auto-props]
+
+# Repos auto-props
+*.png = svn:mime-type=image/png
+*.gif = svn:mime-type=image/gif
+*.jpg = svn:mime-type=image/jpeg
+*.pdf = svn:mime-type=application/pdf
+# allow svn to identify binary files for the rest, like .doc

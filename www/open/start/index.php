@@ -29,7 +29,7 @@ if (!isLoggedIn()) {
 
 // read the ACL and create a tree for the user
 $user = getReposUser();
-$acl = getConfig('admin_folder').getConfig('access_file');
+$acl = getAccessFile();
 if (!is_file($acl)) {
 	trigger_error("Can not read Access Control List", E_USER_ERROR);
 }

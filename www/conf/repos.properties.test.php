@@ -11,7 +11,8 @@ class TestReposProperties extends UnitTestCase {
 	// -------- configuration -------- 
 	
 	function testGetWebapp() {
-		$this->assertTrue(strEnds(getWebapp(),'/repos/'), "Currently repos must be installed in /repos/");
+		$this->assertTrue(strlen(getWebapp())>0, "There should be a webapp url. %s");
+		$this->assertTrue(!strContains(getWebapp(),'https:'), "Webapp should normally be plain http. %s");
 	}
 	
 	/* disabled multi-repository functionality
@@ -83,7 +84,8 @@ class TestReposProperties extends UnitTestCase {
 		$_SERVER['HTTPS'] = 'on';
 		$_SERVER['SERVER_NAME'] = 'my.host';
 		$_SERVER['REQUEST_URI'] = '/';
-		$this->assertEqual('https://my.host:123/', getSelfUrl());
+		//$this->assertEqual('https://my.host:123/', getSelfUrl());
+		$this->assertEqual('https://my.host/', getSelfUrl(), 'Repos does not support custom port on https. %s');
 	}
 
 	function testGetSelfUrlFile() {
@@ -126,6 +128,37 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('http://my.host/test/', getSelfUrl());
 	}
 	
+	function testAsLink() {
+		unset($_SERVER['HTTPS']);
+		$host = 'http://my.host:1088/a/b/c/d';
+		$this->assertEqual('http://my.host:1088/a/b/c/d',
+			asLink($host), 'asLink should not change http url unless HTTPS=on. %s');
+	}
+	
+	function testAsLinkHttps() {
+		// test that asLink calls urlSpecialChars
+		$_SERVER['HTTPS'] = 'on';
+		$this->assertEqual('https://my.host', asLink('http://my.host'),
+			'asLink should change to https when HTTPS=on. %s');
+		$this->sendMessage('administrator can only configure the non-ssl url, and we cant guess SSL port number');
+		$this->assertEqual('https://my.host', asLink('http://my.host:88'),
+			'Currently repos does not support custom port number for SSL. Should be removed. %s');
+		$this->assertEqual('https://my.host/a/b', asLink('http://my.host:88/a/b'),
+			'Currently repos does not support custom port number for SSL. Should be removed. %s');
+				
+		$this->assertEqual('https://my.host', asLink('https://my.host'), 'Request is already HTTPS. Do nothing. %s');
+		$this->assertEqual('https://my.host:1443', asLink('https://my.host:1443'), 'Keep https and port. %s');		
+		unset($_SERVER['HTTPS']);
+		$this->assertEqual('https://my.host', asLink('https://my.host'), 'Url is alreadh HTTPS. Do nothing. %s');
+	}
+	
+	function testAsLinkSpecialChars() {
+		unset($_SERVER['HTTPS']);
+		$host = getSelfRoot();
+		$this->assertEqual("$host/%26%25%23/",
+			asLink("$host/&%#/"), 'asLink should call urlSpecialChars. %s');
+	}
+	
 	function testUrlSpecialChars() {
 		// percent must be encoded before any other encoding
 		$this->assertEqual('http://my.host/%25',
@@ -145,14 +178,8 @@ class TestReposProperties extends UnitTestCase {
 		
 	}
 	
-	function testAsLink() {
-		// test that asLink calls urlSpecialChars
-		$host = getSelfRoot();
-		$this->assertEqual("$host/%26%25%23/",
-			urlSpecialChars("$host/&%#/"));
-	}
-	
 	function testIsRepositoryUrl() {
+		$this->sendMessage('repository:', getRepository());
 		$this->assertTrue(isRepositoryUrl(getRepository()),getRepository().' is a repository url. %s');
 		$this->assertFalse(isRepositoryUrl(getSelfRoot()),getSelfRoot().' is not a repository url. %s');
 		$this->assertFalse(isRepositoryUrl(getSelfRoot().'/repos/'),getSelfRoot().'/repos/ is not a repository url. %s');
