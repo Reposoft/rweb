@@ -7,16 +7,17 @@
 
 // svn propset svn:keywords "Rev" configuration.php
 $rev = strtr('$Rev$','$',' ');
-require("../../conf/System.class.php" );
-require("../../conf/repos.properties.php" );
+require( '../../reposweb.inc.php' );
+require( ReposWeb.'conf/System.class.php' );
+require( ReposWeb.'conf/repos.properties.php' );
 
 // TODO port this to Report presentation
-require("../../conf/Report.class.php" );
+require( ReposWeb.'conf/Report.class.php' );
 
 // page contents
 $links = array(
 	'index.php' => 'Administration menu',
-	'../conf/index.php' => 'Check configuration'
+	ReposWebapp.'conf/index.php' => 'Check configuration'
 	);
 $sections = array(
 	'repository' => 'How to create the repository',
@@ -82,9 +83,9 @@ if ( isset($_GET['download']) ) {
 	<html>
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title><?php echo $title ?></title>
-	<link href="../../style/global.css" rel="stylesheet" type="text/css">
-	<link href="../../style/docs.css" rel="stylesheet" type="text/css">
+	<title><?php echo $title; ?></title>
+	<link href="<?php echo ReposWebapp; ?>style/global.css" rel="stylesheet" type="text/css">
+	<link href="<?php echo ReposWebapp; ?>style/docs.css" rel="stylesheet" type="text/css">
 	</head>
 	
 	<body>

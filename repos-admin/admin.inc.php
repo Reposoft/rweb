@@ -5,9 +5,11 @@
  * 
  * @package admin
  */
-require_once( dirname(dirname(__FILE__)) . "/conf/System.class.php" );
-require_once( dirname(dirname(__FILE__)) . "/conf/repos.properties.php" );
-require_once( dirname(dirname(__FILE__)) . '/conf/Command.class.php' );
+
+require( dirname(__FILE__).'/reposweb.inc.php' );
+require( ReposWeb.'conf/System.class.php' );
+require( ReposWeb.'conf/repos.properties.php' );
+require( ReposWeb.'conf/Command.class.php' );
 
 define('TEMP_FILE_EXTENSION', '.temporary');
 

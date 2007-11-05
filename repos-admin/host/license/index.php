@@ -5,7 +5,8 @@
  * @package
  */
 
-require('../../conf/Presentation.class.php');
+require( '../../reposweb.inc.php' );
+require( ReposWeb.'conf/Presentation.class.php' );
 
 // license entries that should not be printed
 $skip = array(

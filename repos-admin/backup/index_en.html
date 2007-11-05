@@ -9,7 +9,7 @@
 
 <div id="commandbar">
 <a id="reposconf" href="{=$webapp}conf/">config</a>
-<a id="reposadmin" href="{=$webapp}admin/">admin</a>
+<a id="reposadmin" href="/repos-admin/">admin</a>
 <a id="repostest" href="{=$webapp}test/">test</a>
 <a id="reposroot" href="../">repos root</a>
 <a id="serverroot" href="/">server root</a>
@@ -56,7 +56,7 @@ to <span id="backuprevision" class="revision">{=$lastrev}</span>
 <!--{if $headrev gt $lastrev }-->
 <p>The repository has revisions up to <span class="revision">{=$headrev}</span> 
 that are newer than the latest backup <span class="revision">{=$lastrev}</span></p>
-<form action="backup/">
+<form action="store/">
 <p>Regular automated backups is preferred, but you can also 
 <input type="submit" id="backuprun" name="backuprun" value="run incremental backup manually"/>
 </p></form>
@@ -66,7 +66,7 @@ that are newer than the latest backup <span class="revision">{=$lastrev}</span><
 <input type="submit" id="backupload" name="backupload" value="load new backup files into repository"/>
 </p></form>
 <!--{else}-->
-<p>Every revision is backed up. <a id="backuprun" href="backup/">Backup</a>
+<p>Every revision is backed up. <a id="backuprun" href="store/">Backup</a>
 will report that no further backup is needed now.</p>
 <!--{/if}-->
 </td></tr>

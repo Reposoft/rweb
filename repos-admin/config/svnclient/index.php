@@ -6,8 +6,9 @@
  * @package admin
  */
 
-require('../../open/SvnOpen.class.php');
-require('../../conf/Report.class.php');
+require( '../../reposweb.inc.php' );
+require( ReposWeb.'open/SvnOpen.class.php' );
+require( ReposWeb.'conf/Report.class.php' );
 
 $report = new Report("Repos internal SVN client configuration");
 

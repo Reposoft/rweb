@@ -4,7 +4,8 @@
  *
  * @package
  */
-require('../../conf/Presentation.class.php'); 
+require( '../../reposweb.inc.php' );
+require( ReposWeb.'conf/Presentation.class.php' ); 
 
 /**
  * Client address is not always same as REMOTE_ADDRESS,

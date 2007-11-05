@@ -4,7 +4,9 @@
  *
  * @package admin
  */
-require('../../conf/Presentation.class.php');
+
+require( '../reposweb.inc.php' );
+require( ReposWeb.'conf/Presentation.class.php' );
 
 $p = Presentation::getInstance();
 $p->display();

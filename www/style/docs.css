@@ -37,6 +37,17 @@ table.rows td {
 .failed {
 	background-color: #ffddbb;	
 }
+/* testwalk */
+body.passed {
+	background-color: transparent;
+	border-left: 3px solid #ddffbb;
+	border-right: 3px solid #ddffbb;
+}
+body.failed {
+	background-color: transparent;
+	border-left: 3px solid #ffddbb;
+	border-right: 3px solid #ffddbb;
+}
 .testsummary {
 	padding: 0.4em;
 	margin-top: 0.4em;

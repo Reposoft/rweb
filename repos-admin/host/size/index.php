@@ -5,8 +5,9 @@
  * @package admin
  */
 
-require(dirname(dirname(dirname(__FILE__))).'/conf/Command.class.php');
-require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
+require( '../../reposweb.inc.php' );
+require( ReposWeb.'conf/Command.class.php' );
+require( ReposWeb.'conf/Report.class.php' );
 
 $r = new Report('Storage space used for this repos host');
 

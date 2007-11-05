@@ -5,8 +5,8 @@
  * 
  * @package admin
  */
- 
-require( dirname(__FILE__) . '/repos-backup.inc.php' );
+
+require( dirname(__FILE__) . '/backup/repos-backup.inc.php' );
 
 define("EXIT_OK", 0);
 define("EXIT_ABNORMAL", 1);

@@ -1,10 +1,16 @@
+<?php
+
+require('../reposweb.inc.php');
+header('Cache-Control: no-cache');
+
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>repos: php unittests</title>
-<link href="../style/global.css" rel="stylesheet" type="text/css" />
-<link href="../style/docs.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo ReposWebapp; ?>style/global.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo ReposWebapp; ?>style/docs.css" rel="stylesheet" type="text/css" />
 <style>
 #suiteTable td {
 	margin: 0px;
@@ -26,55 +32,33 @@
 if (!defined('TEST_INTEGRATION')) define('TEST_INTEGRATION', true);
 
 $testfiles = array(
-'conf/php/TestServerSettings.php',
-'conf/System.test.php',
-'conf/repos.properties.test.php',
-'conf/Presentation.test.php',
-'conf/Report.test.php',
-'conf/Command.test.php',
-'account/account.test.php',
-'account/login.test.php',
-'account/login.testi.php',
-'account/RepositoryTree.test.php',
-'open/SvnOpen.test.php',
-'open/SvnOpenFile.test.php',
-'open/SvnOpenFile.testi.php',
-'open/ServiceRequest.test.php',
-'open/ServiceRequest.testi.php',
-'edit/SvnEdit.test.php',
-'edit/PresentEdit.test.php',
-'edit/merge/conflicthandler.test.excel.php',
-'edit/merge/xmlConflictHandler.test.php',
-'plugins/validation/Validation.test.php',
-'plugins/edit/edit.test.php',
-'edit/upload/mimetype.test.php',
-'edit/upload/filewrite.test.php',
+'admin.test.php',
+'backup/repos-backup.test.php',
+'users/groupfile/groupfile.test.php'
 );
 
-if (!TEST_INTEGRATION) {
-	$testfiles = array_filter($testfiles, 'isNotIntegrationTest');
-}
-
-function isNotIntegrationTest($testName) {
-	return !isIntegrationTest($testName);
-}
-
-function isIntegrationTest($testName) {
-	return strpos($testName, '.testi.');
+function printTestIndex($testfiles) {
+	$seleniumUrl = '../../repos/lib/selenium/core/TestRunner.html?test=%2Frepos-admin%2Ftest%2Findex.php';
+	echo("<tr><td><b>repos.se PHP Unit Tests</b></td></tr>\n");
+	foreach ($testfiles as $file) {
+		echo("<tr><td><a href=\"../$file\">$file</a></td></tr>\n");
+	}
+	echo ("</tbody></table>\n");
+	echo('<p><a class="action" id="run" href="'.$seleniumUrl.'">Run in selenium</a></p>');
+	echo('<p><a class="action" id="back" href="./" target="_top" accesskey="b">&lt <u>b</u>ack</a></p>');
 }
 
 function printTestSuite($testfiles) {
-	echo("<tr><td><b>repos.se PHP Test Suite</b></td></tr>\n");
+	echo("<tr><td><b>repos.se PHP Selenium Test Suite</b></td></tr>\n");
 	foreach ($testfiles as $file) {
-		$name = substr($file, strpos($file, '/')+1);
-		echo("<tr><td><a href=\"?file=$file\">$name</a></td></tr>\n");
+		echo("<tr><td><a href=\"?file=$file\">$file</a></td></tr>\n");
 	}
 	echo ("</tbody></table>\n");
 	echo('<p><a class="action" id="back" href="./" target="_top" accesskey="b">&lt <u>b</u>ack</a></p>');
 }
 
 function printTestCase($file) {
-	$url = '/repos/'.$file;
+	$url = '/repos-admin/'.$file;
 ?>
 <tr><td rowspan="1" colspan="3"><?php echo($file); ?></td></tr>
 </thead><tbody>
@@ -108,8 +92,10 @@ if (isset($_GET['file'])) {
 		trigger_error("$file is not a known testcase", E_USER_ERROR);
 	}
 	printTestCase($file);
-} else {
+} else if (isset($_GET['thisIsChrome'])) {
 	printTestSuite($testfiles);
+} else {
+	printTestIndex($testfiles);
 }
 
 ?>

@@ -4,7 +4,9 @@
  *
  * @package admin
  */
-require('../../account/account.inc.php');
+
+require( '../../reposweb.inc.php' );
+require( ReposWeb.'account/account.inc.php' );
 
 Validation::expect('username');
 adminResetPassword($_GET['username']);

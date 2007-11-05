@@ -10,7 +10,8 @@ define('PASSWORD_FILE', 'administration/repos.user');
 // repository ACL
 define('ACL_FILE', 'administration/repos.accs');
 
-require('../../open/ServiceRequest.class.php');
+require_once( dirname(dirname(dirname(__FILE__))).'/reposweb.inc.php' );
+require( ReposWeb.'open/ServiceRequest.class.php' );
 
 function exportUsers($rev, $repo, $changes) {
 	// TODO fix so that this is the last operaton, or redirect user to login page after commit

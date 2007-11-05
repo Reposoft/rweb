@@ -5,14 +5,14 @@
  * @package
  */
 
-require('../admin.inc.php');
-require('../../conf/Presentation.class.php');
+require( '../../admin.inc.php' );
+require( ReposWeb.'conf/Presentation.class.php' );
 
 function isPlugin($folderEntry) {
 	return strpos($folderEntry, '.') === false;
 }
 
-$pluginsFolder = dirname(dirname(dirname(__FILE__))).'/plugins/';
+$pluginsFolder = ReposWeb.'plugins/';
 $pluginContents = getDirContents($pluginsFolder);
 $plugins = array_filter($pluginContents, 'isPlugin');
 

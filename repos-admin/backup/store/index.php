@@ -7,7 +7,7 @@
 
 require('../repos-backup.inc.php');
 
-require(dirname(dirname(dirname(__FILE__))) . "/conf/Report.class.php" );
+require( ReposWeb.'/conf/Report.class.php' );
 $report = new Report();
 
 $report->info("Run backup script, creating gzip archives of all revisions up to the current one.");

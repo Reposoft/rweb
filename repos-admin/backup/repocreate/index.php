@@ -6,7 +6,7 @@
  */
 require('../repos-backup.inc.php');
 
-require(dirname(dirname(dirname(__FILE__))) . "/conf/Report.class.php" );
+require( ReposWeb.'/conf/Report.class.php' );
 $report = new Report();
 
 $repodir = getConfig('local_path');

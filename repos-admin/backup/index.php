@@ -5,10 +5,8 @@
  * @package admin
  */
 
-require( dirname(dirname(__FILE__)) . '/conf/Presentation.class.php' );
-require( dirname(__FILE__) . '/admin.inc.php' );
-
-addPlugin('dateformat');
+require( '../admin.inc.php' );
+require( ReposWeb.'conf/Presentation.class.php' );
 
 //$report = new Report('System status');
 

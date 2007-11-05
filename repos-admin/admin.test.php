@@ -4,7 +4,7 @@
 // import the script under test
 require('admin.inc.php');
 // import testing framework, see http://www.lastcraft.com/simple_test.php
-require("../lib/simpletest/setup.php");
+require('test/setup.php');
 
 class TestAdmin extends UnitTestCase {
 
@@ -27,6 +27,10 @@ class TestAdmin extends UnitTestCase {
 	
 	function testGetRepositoryNameSpaces() {
 		$this->assertEqual('test_repo', getRepositoryName('/repos/test repo/'));
+	}
+	
+	function testGetRepositoryNameSpacesSuffix() {
+		$this->assertEqual('test_repo', getRepositoryName('/repos/test repo-repository/'));
 	}
 	
 	function testGetRepositoryNameUppercase() {

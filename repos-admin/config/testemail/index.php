@@ -4,8 +4,10 @@
  *
  * @package admin
  */
-require('../../account/account.inc.php');
-require('../../conf/Report.class.php');
+
+require( '../../reposweb.inc.php' );
+require( ReposWeb.'account/account.inc.php' );
+require( ReposWeb.'conf/Report.class.php' );
 
 if (isset($_GET[SUBMIT])) {
 	if (!isset($_GET['email'])) trigger_error('"email" not set');

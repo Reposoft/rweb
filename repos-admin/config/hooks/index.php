@@ -4,10 +4,11 @@
  *
  * @package admin
  */
-require('../../conf/repos.properties.php');
-require('../../conf/System.class.php');
-require('../../conf/Report.class.php');
-if (!class_exists('Command')) require('../../conf/Command.class.php');
+require( '../../reposweb.inc.php' );
+require( ReposWeb.'conf/repos.properties.php' );
+require(	ReposWeb.'conf/System.class.php' );
+require( ReposWeb.'conf/Report.class.php' );
+if (!class_exists('Command')) require( ReposWeb.'conf/Command.class.php' );
 
 // there might be special requirements for output from hook scripts
 function hookOutput($echo) {
