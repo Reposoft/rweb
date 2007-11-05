@@ -185,9 +185,19 @@ class System {
 	/**
 	 * Return a new empty temporary file on the application temp area.
 	 * @param String $subfolder (optional) category (like 'upload'), subfolder to temp where the file will be created.
+	 * @param String $suffix (optional) end of file name, like .txt
 	 */
-	function getTempFile($subfolder=null) {
-		return strtr(tempnam(rtrim(System::getApplicationTemp($subfolder),'/'), ''), "\\", '/');
+	function getTempFile($subfolder=null, $suffix='') {
+		$f = System::getTempPath($subfolder, $suffix);
+		if (!touch($f)) trigger_error('Failed to create temp file '.$f, E_USER_ERROR);
+		return $f;
+	}
+	
+	/**
+	 * @return a non-existing absolute path in the temp area, no trailing slash
+	 */
+	function getTempPath($subfolder=null, $suffix='') {
+		return System::getApplicationTemp($subfolder).uniqid().$suffix;
 	}
 	
 	/**
@@ -196,21 +206,10 @@ class System {
 	 * @see getApplicationTemp
 	 */
 	function getTempFolder($subfolder=null) {
-       // Use PHP's tmpfile function to create a temporary
-       // directory name. Delete the file and keep the name.
-       $tempname = System::getTempFile($subfolder);
-       $tempname = toPath($tempname);
-       if (!$tempname)
-               return false; // TODO trigger error
-
-       if (!unlink($tempname))
-               return false; // TODO trigger error
-
-       // Create the temporary directory and returns its name.
-       if (mkdir($tempname))
-               return $tempname.'/';
-
-       return false;
+		$f = System::getTempPath($subfolder).'/';
+		// Create the temporary directory and returns its name.
+		if (mkdir($f)) return $f;
+		trigger_error('Failed to create temp folder '.$f, E_USER_ERROR);
 	}
 	
 	// ------ functions to keep scripts portable -----

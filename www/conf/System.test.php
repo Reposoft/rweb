@@ -130,6 +130,12 @@ class TestSystem extends UnitTestCase {
 		rmdir($dir1);
 	}
 	
+	function testGetTempFile() {
+		$f = System::getTempFile('mytest','.txt');
+		$this->assertTrue(file_exists($f), 'getTempFile should return existing file. %s');
+		$this->assertTrue(substr($f,strlen($f)-4), '.txt', 'Should get extension. %s');
+	}
+	
 	function testCreateAndDeleteFile() {
 		$dir = System::getTempFolder();
 		$file = $dir.'file.txt';

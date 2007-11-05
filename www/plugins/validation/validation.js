@@ -1,8 +1,10 @@
 
+/* not reliable, might abort submit if for some reason event handler is called twice
 $(document).ready(function() {
-	$('#submit').click(function() {
-		if ($('#submit.loading').length==1) return false;
-		$('#submit').addClass('loading');
+	var s = $('#submit');
+	s.click(function() {
+		if (s.is('.loading')) return false;
+		s.addClass('loading');
 		return true;
 	} );
 } );
@@ -10,3 +12,4 @@ $(document).ready(function() {
 $(window).unload(function() {
 	$('#submit').removeClass('loading');
 } );
+*/
