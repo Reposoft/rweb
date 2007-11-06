@@ -26,10 +26,29 @@
 </div>
 
 <div id="startbuttons" class="column" style="width: 50%">
-&nbsp;
+<!--{if $auth.repos}-->
+<div><a href="/?logout" id="logout">logout</a></div>
+<!--{else}-->
+<div><a href="/?login" id="login">login</a></div>
+<!--{/if}-->
+
+<div>&nbsp;</div>
+<div><a href="/">&laquo; home</a></div>
 </div>
 
 <div id="startconfig" class="column" style="width: 49%">
+<div class="section">
+<h2>Login status</h2>
+<!--{if $auth.repos}-->
+<p>Logged in through Repos as user {=$auth.repos}.</p>
+<!--{elseif $auth.http}-->
+<!-- this should be the exception, which we cannot always detect -->
+<p>Logged in at {=$repository} as user {=$auth.repos}.</p>
+<!--{else}-->
+<p>Not logged in through Repos</p>
+<!--{/if}-->
+</div>
+
 <div class="section">
 <h2>Server settings</h2>
 <dl>
