@@ -186,6 +186,11 @@ class TestReposProperties extends UnitTestCase {
 		
 	}
 	
+	function testGetRepositoryDefault() {
+		$r = getRepositoryDefault();
+		$this->assertPattern('/[\w-]+$/', $r, 'Repository should not end with slash. %s');
+	}
+	
 	function testIsRepositoryUrl() {
 		$this->sendMessage('repository:', getRepository());
 		$this->assertTrue(isRepositoryUrl(getRepository()),getRepository().' is a repository url. %s');

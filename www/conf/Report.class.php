@@ -364,8 +364,6 @@ class Report {
 			} else {
 				$('body').addClass('failed');
 			}
-			/* tooltips that can handle <pre> */
-			$('a, div, acronym').Tooltip();
 		</script>
 		<?php
 	}

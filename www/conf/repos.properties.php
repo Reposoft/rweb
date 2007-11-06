@@ -93,7 +93,7 @@ function getRepository() {
  * @return String Default repository, Location /data/ at current host.
  */
 function getRepositoryDefault() {
-	return getHost().'/data/';
+	return getHost().'/data';
 }
 
 /**
