@@ -1,0 +1,52 @@
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Repos Web: version control</title>
+<!--{$head}-->
+</head>
+
+<body>
+
+<!--{*
+<div id="commandbar">
+<div class="right">
+<a href="/?logout" id="logout">logout</a>
+<img src="{=$webapp}style/logo/repos1.png" border="0" width="72" height="18" alt="repos.se" title="repos.se content management"/>
+</div>
+<a class="need-at-least-one-command" href="#"></a>
+</div>
+*}-->
+
+<div id="intro">
+<h1>
+<img src="{=$webapp}style/logo/repos4.png" border="0" align="absmiddle" width="288" height="72" alt="repos.se"/>
+</h1>
+</div>
+
+<div id="startbuttons" class="column" style="width: 50%">
+&nbsp;
+</div>
+
+<div id="startconfig" class="column" style="width: 49%">
+<div class="section">
+<h2>Server settings</h2>
+<dl>
+<dt>Repository URL</dt>
+<dd>{=$repository}/</dd>
+<dt>Repos Web URL</dt>
+<dd>{=$webapp}</dd>
+<dt>Server URL</dt>
+<dd>{=$host}/</dd>
+</dt>
+</div>
+</div>
+
+<div id="footer">
+<span id="releaseversion" class="versiondisplay">Repos @Dev@</span>
+<span class="legal">Repos is a web platform for version control with <a target="_blank" href="http://subversion.tigris.org/">Subversion</a>, see <a id="agreement" href="{=$webapp}docs/agreement/" target="_blank">terms and conditions</a></span>
+</div>
+
+</body>
+</html>
