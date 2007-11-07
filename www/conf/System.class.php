@@ -195,6 +195,7 @@ class System {
 	
 	/**
 	 * @return a non-existing absolute path in the temp area, no trailing slash
+	 * @param $suffix may not contain /
 	 */
 	function getTempPath($subfolder=null, $suffix='') {
 		return System::getApplicationTemp($subfolder).uniqid().$suffix;
@@ -353,12 +354,14 @@ class System {
 	
 	/**
 	 * replaces mkdir().
-	 * @deprecated use System::createFolder
 	 */
 	function createFolder($absolutePath) {
 		System::_authorizeFilesystemModify($absolutePath);
 		if (!isFolder($absolutePath)) {
 			trigger_error("Path \" $absolutePath\" is not a valid folder name.", E_USER_ERROR); return false;
+		}
+		if (!is_writable(getParent($absolutePath))) {
+			trigger_error("Can not create \"$absolutePath\" because parent is not writable", E_USER_ERROR); return false;
 		}
 		return mkdir($absolutePath);
 	}

@@ -52,7 +52,7 @@ class TestServiceRequest extends UnitTestCase {
 	function testGetUrl() {
 		$service = new ServiceRequest('test/', array('a'=>'b'));
 		$url = $service->_buildUrl();
-		$this->assertEqual(getWebapp().'test/?a=b&'.WEBSERVICE_KEY.'='.$service->responseType,
+		$this->assertEqual(getWebappUrl().'test/?a=b&'.WEBSERVICE_KEY.'='.$service->responseType,
 			$url, "Should have built a GET url with an extra 'serv' parameter. %s");
 	}
 	
@@ -70,6 +70,23 @@ class TestServiceRequest extends UnitTestCase {
 		$this->assertEqual('HTTP/1.1 200 OK', $processed[0]);
 		$this->assertEqual('Apache 2.0', $processed['Server']);
 	}
+	
+	function testBuildUrlService() {
+		$s = new ServiceRequest('', array());
+		$s->uri = 'open/json/';
+		$url = $s->_buildUrl();
+		$this->assertNotEqual('open/json/',$url);
+		$this->assertTrue(strstr($url, getWebapp()), 'Should have added webapp to the service uri');
+		$this->assertTrue(strpos($url, '://'), 'Must contain a hostname even if webapp is a path: $url. %s');
+	}
+
+	function testBuildUrlPath() {
+		$s = new ServiceRequest('', array());
+		$s->uri = '/repos-admin/config/hooks/';
+		$url = $s->_buildUrl();
+		$this->assertNotEqual('/repos-admin/config/hooks/',$url);
+		$this->assertTrue(strstr($url, getHost().'/repos-admin/config/hooks/'), "Should have added host, got: $url. %s");
+	}	
 	
 	function testExec() {
 		$service = new ServiceRequest('', array());
@@ -96,6 +113,17 @@ class TestServiceRequest extends UnitTestCase {
 			$this->assertTrue(strlen(trim($h))>0);
 		}
 	}
+	
+	function testExcecAbsolutePath() {
+		$path = substr(getSelfUrl(), strlen(getHost()));
+		$this->sendMessage("Using url without host: $path");
+		$service = new ServiceRequest(getSelfUrl(), array());
+		
+		$this->sendMessage($service->_buildUrl());
+		$service->exec();
+		$headers = $service->getResponseHeaders();
+		$this->assertEqual('HTTP/1.1 200 OK', $headers[0]);
+	}	
 	
 	function testExcecNoService() {
 		$service = new ServiceRequest(getSelfUrl(), array());

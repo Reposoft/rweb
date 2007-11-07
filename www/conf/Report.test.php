@@ -25,6 +25,10 @@ class TestReport extends UnitTestCase {
 		$this->report->printed = '';
 	}
 	
+	function testGetWebapp() {
+		$this->assertTrue(Report::getWebapp(),'Report should be able to resolve webapp root. %s');
+	}
+	
 	function testInitialize() {
 		// want an empty output buffer after setup
 		$this->assertTrue(strlen($this->report->printed)==0);

@@ -23,7 +23,7 @@ if (!class_exists('System')) require(dirname(__FILE__).'/System.class.php');
 /**
  * Use the configuration entry disable_caching to mark a general development mode
  */
-define('PRESENTATION_DEBUG_MODE', isset($_SERVER['ReposDisableCaching']) ? true : false); // enable/disable smarty caching
+define('PRESENTATION_DEBUG_MODE', isset($_SERVER['ReposTestDisableCaching']) ? true : false); // enable/disable smarty caching
 define('TEMPLATE_CACHING', !PRESENTATION_DEBUG_MODE);
 // allow automatic validation during development, true->application/xhtml+xml, false->text/html
 define('PRESENTATION_XTHML', PRESENTATION_DEBUG_MODE && strpos($_SERVER['HTTP_USER_AGENT'],'Gecko'));

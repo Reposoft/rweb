@@ -148,6 +148,17 @@ function getWebappDefault() {
 }
 
 /**
+ * Used instead of getWebapp() where a complete URL is nessecary.
+ * getWebapp() is always preferred because it gives less problems with http/https.
+ * @return String A complete URL to the webapp (never path from root)
+ */
+function getWebappUrl() {
+	$w = getWebapp();
+	if (strpos($w,'://')) return $w;
+	return getHost().getWebapp();
+}
+
+/**
  * Set the access control file used to display startpage.
  * Same syntax as AuthzSVNAccessFile, can be the same file.
  * Without an access file the start page contents will be default.

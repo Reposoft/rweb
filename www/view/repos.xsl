@@ -17,8 +17,8 @@
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
 	<xsl:param name="title">repos: </xsl:param>
 	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
-	<xsl:param name="web">/repos/</xsl:param>
-	<xsl:param name="static">/repos/</xsl:param>
+	<xsl:param name="web">/repos-web/</xsl:param>
+	<xsl:param name="static">/repos-web/</xsl:param>
 	<!-- static contents urls, set to {$web}style/ for default theme -->
 	<xsl:param name="cssUrl"><xsl:value-of select="$static"/>style/</xsl:param>
 	<xsl:param name="cssUrl-pe"><xsl:value-of select="$static"/>themes/pe/style/</xsl:param>

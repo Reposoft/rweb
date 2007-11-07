@@ -20,17 +20,27 @@ $report = new Report('set up test repository');
 // name the temp dir where the repository will be. This dir will be removed recursively.
 //$test_repository_folder="test.repos.se";
 
-$allow = getConfig('allow_reset');
-if ($allow != 1) $report->fatal('Not allowed to reset this repository. Set allow_reset=1 in config file');
 
 // --- valriables used by all reset scripts ---
-$repo = getConfig('local_path');
-$admin = getConfig('admin_folder');
-$backup = getConfig('backup_folder');
+function testCheck($path, $w=true) {
+	global $report;
+	if (!file_exists($path)) $report->fatal('Repos integration tests require standard host structure. Missing '.$path);
+	if ($w && !is_writable($path)) $report->fatal('Repos integration test reset must be able to write to '.$path);
+	return $path;
+}
+$host = dirname($_SERVER["DOCUMENT_ROOT"]).'/';
+$repo = testCheck($host.'repo/');
+$admin = testCheck($host.'admin/',false);
+$backup = testCheck($host.'backup/');
+// for post-commit export in testrpo:
+testCheck($host.'html/home/');
 
-$userfile = $admin . getConfig('users_file');
-$aclfile = $admin . getConfig('access_file');
+$userfile = testCheck($admin.'repos-users');
+$aclfile = testCheck($admin.'repos-access');
 // --------------------------------------------
+
+$allow = isset($_SERVER['ReposTestAllowReset']) && $_SERVER['ReposTestAllowReser']='on';
+if ($allow != 1) $report->fatal('Not allowed to reset this repository. Set server environment "ReposTestAllowReset" to "on".');
 
 // the apache config file to include from the subversion host
 // generated config does not contain a VirtualHost directive,
@@ -92,6 +102,7 @@ function setup_getTempWorkingCopy() {
 function setup_createHooks() {
 	global $report;
 	$url = 'admin/hooks/';
+	$report->info('Hook setup requires repos-admin component, service: '.$url);
 	$params = array('create' => 'post-commit');
 	$s = new ServiceRequest($url, $params, false);
 	$s->setResponseType(SERVICE_TYPE_TEXT);
@@ -127,7 +138,6 @@ function setup_createTestUsers() {
 
 function setup_createApacheLocation($extraDirectives='', $extraAfterLocation='') {
 	global $conffile, $report, $repo, $userfile, $conflocation;
-	$report->info("create apache 2.2 config");
 	$conf = "
 	# Repos testrepo configuration, rewritten by test reset for different repository types
 	<Location $conflocation>
@@ -152,12 +162,7 @@ function setup_createApacheLocation($extraDirectives='', $extraAfterLocation='')
 	</Location>
 	$extraAfterLocation
 	";
-	if (System::createFileWithContents($conffile, $conf, true, true)) {
-		$report->ok("Successfully created apache config file $conffile");
-		$report->info("/$conflocation repository can be activated using \"Include $conffile\" and Apache restart.");
-	} else {
-		$report->fail("Could not create apache config file $conffile");
-	}
+	$report->info('Recommending the following apache configuration, note specifically Satisfy Any/All:'."<pre>".htmlspecialchars($conf).'</pre>');
 }
 
 function setup_replaceInFile($absolutePath, $replacements) {

@@ -39,17 +39,29 @@ function _getConfig($key) {
 }
 
 /**
+ * Resolves document folder, primarily from DOCUMENT_ROOT server variable,
+ * secondarily as the parent folder of this file's folder.
+ */
+function getDocumentRoot() {
+	$docroot = dirname(dirname(__FILE__));
+	if (isset($_SERVER['DOCUMENT_ROOT'])) $docroot = $_SERVER['DOCUMENT_ROOT'];
+	return $docroot.'/';
+}
+
+/**
  * Gets the path to the host administration folder.
  * @return the path to read configuratio file from, usually the same as admin_folder (from properties file in that folder)
  */
-function _getConfigFolder() {
-	$docroot = dirname(dirname(__FILE__));
-	if (isset($_SERVER['DOCUMENT_ROOT'])) $docroot = $_SERVER['DOCUMENT_ROOT'];
-	return dirname($r).'/admin/';
+function getAdminFolder() {
+	return getAdminFolderDefault();
+}
+
+function getAdminFolderDefault() {
+	return getParent(getDocumentRoot()).'admin/';
 }
 
 function _getPropertiesFile() {
-	$propertiesFile =  _getConfigFolder().'repos.properties';
+	$propertiesFile =  getAdminFolder().'repos.properties';
 	if (!file_exists($propertiesFile)) {
 		trigger_error("Repos configuration file $propertiesFile not found.");
 		exit;

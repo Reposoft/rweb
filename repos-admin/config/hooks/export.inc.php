@@ -29,6 +29,7 @@ function _exportUserPassword($username) {
 	$r = new ServiceRequest($url, array('username'=>$username), false);
 	$r->exec();
 	if ($r->isOK()) {
+		print_r($r->getResponse());
 		hookOutput("Successfully exported password for user $username\n");
 	} else {
 		hookOutput("Error for user $username: ".$r->getResponse()."\n");
@@ -49,6 +50,7 @@ function exportAdministration($rev, $repo, $changes) {
 
 /**
  * do the exports specified by config file
+ * TODO fix so that export is not aborted on a single failure such as no write access.
  *
  * @param unknown_type $rev
  * @param unknown_type $repo
@@ -96,8 +98,8 @@ function exportOptional($rev, $repo, $changes) {
  */
 function getRealPath($hostFolder) {
 	$known_folders = array(
-		'admin' => getConfig('admin_folder'),
-		'html' => toPath(dirname(dirname(dirname(dirname(__FILE__)))).'/'),
+		'admin' => getAdminFolder(),
+		'html' => getDocumentRoot(),
 		'backup' => getConfig('backup_folder'),
 		'repo' => getConfig('local_path')
 	);

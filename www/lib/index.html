@@ -11,9 +11,9 @@
 <body>
 <div id="commandbar">
 <!-- same as in Report -->
-<a id="reposconf" href="/repos/conf/">config</a>
-<a id="reposadmin" href="/repos/admin/">admin</a>
-<a id="repostest" href="/repos/test/">test</a>
+<a id="reposconf" href="../conf/">config</a>
+<a id="reposadmin" href="../admin/">admin</a>
+<a id="repostest" href="../test/">test</a>
 </div>
 
 <div id="intro">
@@ -55,7 +55,8 @@ $.getJSON('install.php', function(json) {
 	$('#libstatus').append('<h2>Current status</h2>');
 	for (var id in json) {
 		$('#libstatus').append('<p>'+json[id].name+': '
-			+ (json[id].installed ? 'installed' : 'not present')
+			+ (json[id].error ? 'error reading status at '+json[id].install : ''
+			+ (json[id].installed ? 'installed' : 'not present'))
 			+ '</p>');
 	}
 });

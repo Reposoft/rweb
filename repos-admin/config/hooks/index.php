@@ -4,9 +4,7 @@
  *
  * @package admin
  */
-require( '../../reposweb.inc.php' );
-require( ReposWeb.'conf/repos.properties.php' );
-require(	ReposWeb.'conf/System.class.php' );
+require( dirname(dirname(dirname(__FILE__))).'/admin.inc.php' );
 require( ReposWeb.'conf/Report.class.php' );
 if (!class_exists('Command')) require( ReposWeb.'conf/Command.class.php' );
 
@@ -180,7 +178,7 @@ function checkHookScript($path, $scriptType, $report) {
 function getHookCommand($scriptType, $revVariable=null, $repoVariable=null) {
 	$curl = System::getCommand('curl');
 	$curl = $curl .= ' -s';
-	$url = getWebapp().'admin/hooks/?run='.$scriptType;
+	$url = getWebappUrl().'admin/hooks/?run='.$scriptType;
 	if ($revVariable) $url .= '&rev='.$revVariable;
 	if ($repoVariable) $url .= '&repo='.$repoVariable;
 	// verify that repos is configured correctly

@@ -83,6 +83,25 @@ class Report {
 	var $test = false; // true inside a test case
 	
 	/**
+	 * Report must be able to run without repos.properties.php
+	 * so it should be able to resolve webapp url on its own.
+	 * @static 
+	 */
+	function getWebapp() {
+		//if (function_exists('getWebapp')) return getWebapp();
+		if (isset($_SERVER['ReposWebapp'])) return $_SERVER['ReposWebapp'];
+		return Report::getWebappDefault();	
+	}
+
+	/**
+	 * @return String /repos-web/
+	 * @static 
+	 */
+	function getWebappDefault() {
+		return '/repos-web/';
+	}
+	
+	/**
 	 * Creates a new report, which is a new page.
 	 * @param boolean $plaintext Overrides the default detection of offline/online output: true to get plaintext output, false to get html.
 	 */
@@ -299,7 +318,7 @@ class Report {
 	}
 	
 	function _pageStart($title) {
-		$webapp = '/repos/';
+		$webapp = Report::getWebapp();
 		if (!$this->offline) {
 		$this->_print('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"');
 		$this->_print(' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n");
@@ -310,9 +329,9 @@ class Report {
 		if (function_exists('getService')) {
 			$this->_print('<meta name="repos-service" content="' . getService() . '" />');
 		}
-		$this->_print('<link href="/repos/style/global.css" rel="stylesheet" type="text/css"></link>'."\n");
-		$this->_print('<link href="/repos/style/docs.css" rel="stylesheet" type="text/css"></link>'."\n");
-		$this->_print('<script src="/repos/scripts/head.js" type="text/javascript"></script>');
+		$this->_print('<link href="'.$webapp.'style/global.css" rel="stylesheet" type="text/css"></link>'."\n");
+		$this->_print('<link href="'.$webapp.'style/docs.css" rel="stylesheet" type="text/css"></link>'."\n");
+		$this->_print('<script src="'.$webapp.'scripts/head.js" type="text/javascript"></script>');
 		$this->_print("</head>\n");
 		$this->_print("<body>\n");
 		

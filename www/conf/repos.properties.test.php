@@ -15,6 +15,11 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertTrue(!strContains(getWebapp(),'https:'), "Webapp should normally be plain http. %s");
 	}
 	
+	function testGetWebappUrl() {
+		$this->assertEqual(strstr(getWebappUrl(),'http'), getWebappUrl(), 'Should start with protocol. %s');
+		$this->assertTrue(strpos(getWebappUrl(),'://'), getWebappUrl(), 'Should contain ://. %s');
+	}
+	
 	/* disabled multi-repository functionality
 	function testGetRepository() {
 		global $_repos_config;

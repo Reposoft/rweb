@@ -34,7 +34,8 @@ foreach($libraries as $lib) {
 	out("$lib: {name:\"$lib\", install:\"$installurl\", ");
 	$s = new ServiceRequest($installurl, $params, false);
 	if ($s->exec()!=200) {
-		out("error:".$s->getStatus()." },\n");
+		$c = $s->getStatus();
+		out("error:".($c ? $c : '"no response"')." },\n");
 		continue;
 	}
 	out("installed:");

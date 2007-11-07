@@ -22,6 +22,7 @@
  * 
  * @package test
  */
+define('REPOS_TEST_WEBAPP','/repos-web/');
 
 if (!defined('TEST_INTEGRATION')) define('TEST_INTEGRATION', true);
 
@@ -74,7 +75,7 @@ function printTestSuite($testfiles) {
 }
 
 function printTestCase($file) {
-	$url = '/repos/'.$file;
+	$url = REPOS_TEST_WEBAPP.$file;
 ?>
 <tr><td rowspan="1" colspan="3"><?php echo($file); ?></td></tr>
 </thead><tbody>

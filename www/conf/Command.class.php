@@ -19,6 +19,14 @@
 if (!class_exists('System')) require(dirname(__FILE__).'/System.class.php');
 if (!function_exists('getLocale')) require(dirname(__FILE__).'/repos.properties.php');
 
+if (!function_exists('_command_env')) {
+	function _command_env() {
+		$locale = getLocale();
+		putenv('LC_CTYPE='.$locale);
+		setlocale(LC_CTYPE, getLocale());
+	}
+}
+
 // the actual command execution, can be mocked
 if (!function_exists('_command_run')) {
 	/**
@@ -28,7 +36,7 @@ if (!function_exists('_command_run')) {
 	 *   Last element is the return code (use array_pop to remove).
 	 */
 	function _command_run($cmd, &$output) {
-		setlocale(LC_ALL, getLocale()); // per process, needed every time
+		_command_env();
 		exec($cmd, $output, $returnvalue);
 		return $returnvalue;
 	}
@@ -38,7 +46,7 @@ if (!function_exists('_command_passthru')) {
 	 * @return the exit code of the execution. Any messages have been passed through.
 	 */
 	function _command_passthru($cmd) {
-		setlocale(LC_ALL, getLocale()); // per process, needed every time
+		_command_env();
 		passthru($cmd, $returnvalue);
 		return $returnvalue;
 	}

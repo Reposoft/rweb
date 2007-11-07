@@ -69,7 +69,7 @@ class RepositoryTree {
 		$this->_user = $username;
 		$this->_acl = $this->_parseToAcl($aclFile, $this->_user);
 		if ($this->_acl === false) {
-			exit;
+			trigger_error('Failed to parse repository ACL', E_USER_ERROR);
 		}
 		$this->_groups = $this->_getGroupsForUser($this->_acl, $this->_user);
 		$this->_entries = $this->_getEntryPointsForUserOrGroup($this->_acl, $this->_user, $this->_groups);

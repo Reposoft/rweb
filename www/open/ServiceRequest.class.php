@@ -279,7 +279,8 @@ class ServiceRequest {
 	 */
 	function _buildUrl() {
 		$url = urlEncodeNames($this->uri); // curl does not encode
-		if (!strpos($url,'://')) $url = getWebapp().$url;
+		if (substr($url,0,1)=='/') $url = getHost().$url;
+		if (!strpos($url,'://')) $url = getWebappUrl().$url;
 		$url .= strpos($url, '?') ? '&' : '?';
 		foreach ($this->parameters as $key => $value) {
 			$url .= $key.'='.rawurlencode($value).'&';
