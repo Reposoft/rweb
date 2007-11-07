@@ -50,6 +50,7 @@ $testfiles = array(
 'plugins/edit/edit.test.php',
 'edit/upload/mimetype.test.php',
 'edit/upload/filewrite.test.php',
+'open/json/listjson.test.php',
 );
 
 if (!TEST_INTEGRATION) {

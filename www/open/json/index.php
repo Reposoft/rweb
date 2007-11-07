@@ -19,7 +19,7 @@
  * @package open
  */
 
-require( dirname(dirname(__FILE__))."/SvnOpen.class.php" );
+require('listjson.php');
 
 Validation::expect('target');
 $url = getTargetUrl();
@@ -27,47 +27,17 @@ $url = getTargetUrl();
 $revisionRule = new RevisionRule();
 $rev = $revisionRule->getValue();
 
-$path = getTarget();
-
-$list = new SvnOpen('list');
-$list->addArgOption('--xml');
-if ($rev) {
-	$list->addArgUrlPeg($url, $rev);
-} else {
-	$list->addArgUrl($url);
-}
-
-if ($list->exec()) trigger_error('Could not read entry for URL '.$url, E_USER_ERROR);
-
-// TODO we really need a better xml parser or xml to json
-// the data must be included in the script to allow cross-domain lists
-
-// xml is five levels deep
-// maximum one attribute
-
-// attribute never named same as child node
-$xml = implode($list->getOutput(),"\n");
-// define the svn variable that wraps it up
-$xml = preg_replace('/.*<list\s+path="([^"]+)">/s','svn = {path:"\1", list:{',$xml);
-// entries must have unique names in json
-$xml = preg_replace('/<entry\s+kind="(file|dir)">\s+<name>(.*)<\/name>(.*)<\/entry>/sU','"\2":{\3kind:"\1"},',$xml);
-// elements with no attributes
-$xml = preg_replace('/<(\w+)>(.*)<\/\1>\s*/','\1:"\2",',$xml);
-// elements with one attribute
-$xml = preg_replace('/<(\w+)\s+(\w+)="(\d+)">(.*)<\/\1>/sU','\1:{\4\2:"\3"},',$xml);
-// special treatment of lock, no attribute
-$xml = str_replace(array('<lock>',',</lock>'),array('lock:{','},'),$xml);
-// remove last comma and close object
-$xml = preg_replace('/,?\s*<\/list>\s+<\/lists>/',"\n}};",$xml);
-
-// fist part of the page, just print the svnlist json
-header('Content-Type: text/javascript; charset=utf-8');
+$json = getListJson($url, $rev);
 
 // second part of the script is printed if there is a selector
 if (!isset($_GET['selector'])) {
-	header('Content-Length: '.strlen($xml));
-	echo($xml);
+	header('Content-Length: '.strlen($json));
+	echo($json);
 	exit;
+} else {
+	// put the data in a variable for the bundled script below
+	// the data must be included in the script to allow cross-domain listings
+	$json = 'svn = '.$json.';';
 }
 
 // import configuration from query string to settings json object
@@ -123,6 +93,6 @@ $script = '
 // simple minimize
 $script = preg_replace('/^\s+/m','',$script);
 
-header('Content-Length: '.(strlen($xml)+strlen($script)));
-echo($xml);
+header('Content-Length: '.(strlen($json)+strlen($script)));
+echo($json);
 echo($script);
