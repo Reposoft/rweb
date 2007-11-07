@@ -59,7 +59,7 @@ class TestServerSettings extends UnitTestCase {
 
 	function testDefaultEncoding() {
 		$this->assertEqual("text/html", ini_get('default_mimetype'), "default_mimetype: %s");
-		$this->assertEqual("UTF-8", ini_get('default_charset'), "default_charser: %s");
+		$this->assertEqual("UTF-8", ini_get('default_charset'), "default_charset: %s".' This is not nessecary if all pages have correct headers.');
 	}
 
 	function testMbString() {
@@ -84,6 +84,20 @@ class TestServerSettings extends UnitTestCase {
 		// expecting UTF-8 input, but no automatic input conversion because input from browser should be valid already (if not, we throw an error)
 		if (ini_get('mbstring.http_input') != 'pass') {
 			$this->assertEqual("UTF-8", ini_get('mbstring.http_input'), "mbstring.http_input: %s, must be default or UTF-8");
+		}
+	}
+	
+	function testLocale() {
+		exec('locale -a 2>&1', $locales, $r);
+		$rlocale = 'en_US.utf8'; // TODO let this test require repos.properties.php and use getLocale()
+		if ($r==0) {
+			$this->assertTrue(in_array($rlocale, $locales), 'Locale '.$rlocale.' not found in '.implode(',',$locales));
+		} else {
+			if (System::isWindows) {
+				$this->sendMessage('Locale command not available, but this is windows so that\'s ok');
+			} else {
+				$this->fail('The package "locale" is required, got '.implode(" ",$locales));
+			}
 		}
 	}
 	
