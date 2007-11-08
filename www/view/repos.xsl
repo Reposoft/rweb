@@ -58,9 +58,13 @@
 				<xsl:with-param name="href" select="concat(/svn/index/@path,'/')"/>
 			</xsl:call-template>
 		</xsl:param>
+		<xsl:param name="tool">
+			<xsl:call-template name="getTool"/>
+		</xsl:param>
 		<xsl:param name="pathlinks">
 			<xsl:call-template name="getFolderPathLinks">
 				<xsl:with-param name="folders" select="$folder"/>
+				<xsl:with-param name="toolcheck" select="string-length($tool)>1 or $tool='.'"/>
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:call-template name="commandbar">
@@ -78,6 +82,7 @@
 		<xsl:call-template name="contents">
 			<xsl:with-param name="folder" select="$folder"/>
 			<xsl:with-param name="pathlinks" select="$pathlinks"/>
+			<xsl:with-param name="toolcheck" select="$tool='.'"/>
 		</xsl:call-template>
 		<xsl:call-template name="footer"/>
 	</xsl:template>
@@ -110,14 +115,13 @@
 	<xsl:template name="contents">
 		<xsl:param name="folder"/>
 		<xsl:param name="pathlinks"/>
-		<!-- it is not trivial to check if a tool has already been found in path, so instead we assume that tools are only in project root -->
-		<xsl:param name="trytools" select="not(substring-after(substring(@path,2),'/'))"/>
+		<xsl:param name="toolcheck"/>
 		<h2 id="path">
 			<xsl:copy-of select="$pathlinks"/>
 		</h2>
 		<xsl:apply-templates select="dir">
 			<xsl:sort select="@name"/>
-			<xsl:with-param name="trytools" select="$trytools"/>
+			<xsl:with-param name="toolcheck" select="$toolcheck"/>
 		</xsl:apply-templates>
 		<xsl:apply-templates select="file">
 			<xsl:sort select="@name"/>
@@ -147,9 +151,9 @@
 				</xsl:with-param>
 			</xsl:call-template>
 		</xsl:param>
-		<xsl:param name="trytools"/>
+		<xsl:param name="toolcheck"/>
 		<xsl:param name="classadd">
-			<xsl:if test="$trytools and contains($tools,@href)">
+			<xsl:if test="$toolcheck and contains($tools,@href)">
 				<xsl:value-of select="concat(' tool tool-',@name)"/>
 			</xsl:if>
 		</xsl:param>
@@ -229,6 +233,7 @@
 	<!-- divide a path into its elements and make one link for each, expects folders to end with '/' -->
 	<xsl:template name="getFolderPathLinks">
 		<xsl:param name="folders"/>
+		<xsl:param name="toolcheck"/>
 		<xsl:param name="f" select="substring-before($folders, '/')"/>
 		<xsl:param name="rest" select="substring-after($folders, concat($f,'/'))"/>
 		<xsl:param name="return">
@@ -238,11 +243,17 @@
 		</xsl:param>
 		<xsl:param name="classadd">
 			<xsl:choose>
-				<xsl:when test="contains($tools,concat('/',$f,'/'))">
+				<xsl:when test="$toolcheck and contains($tools,concat('/',$f,'/'))">
 					<xsl:value-of select="concat(' tool tool-',$f)"/>
 				</xsl:when>
-				<xsl:otherwise>
+				<xsl:when test="$toolcheck">
 					<xsl:value-of select="' projectname'"/>
+				</xsl:when>
+				<xsl:when test="string-length($folders)>=string-length(/svn/index/@path)">
+					<xsl:value-of select="' projectname'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="''"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:param>
@@ -258,24 +269,39 @@
 			</span>
 		</xsl:if>
 		<xsl:if test="string-length($rest)>0">
-			<a id="{$id}" href="{$return}" class="path{$classadd}">
-				<xsl:value-of select="$f"/>
-			</a>
+			<xsl:if test="string-length($f)>0">
+				<a id="{$id}" href="{$return}" class="path{$classadd}">
+					<xsl:value-of select="$f"/>
+				</a>
+			</xsl:if>
 			<span class="separator{$classadd}"><xsl:value-of select="'/'"/></span>
-			<xsl:if test="$classadd=' projectname'">
-				<xsl:call-template name="getFolderPathLinks">
-					<xsl:with-param name="folders" select="$rest"/>
-					<xsl:with-param name="return" select="substring-after($return,'/')"/>
-				</xsl:call-template>
-			</xsl:if>
-			<xsl:if test="$classadd!=' projectname'">
-				<xsl:call-template name="getFolderPathLinks">
-					<xsl:with-param name="folders" select="$rest"/>
-					<xsl:with-param name="return" select="substring-after($return,'/')"/>
-					<xsl:with-param name="classadd" select="' toolchild'"/>
-				</xsl:call-template>
-			</xsl:if>
+			<xsl:call-template name="getFolderPathLinks">
+				<xsl:with-param name="folders" select="$rest"/>
+				<xsl:with-param name="return" select="substring-after($return,'/')"/>
+				<xsl:with-param name="toolcheck" select="$toolcheck and not(contains($classadd,' tool '))"/>
+			</xsl:call-template>
 		</xsl:if>
+	</xsl:template>
+	<!-- check if path contains an element that matches a tool name -->
+	<xsl:template name="getTool">
+		<xsl:param name="list" select="$tools"/>
+		<xsl:param name="folder" select="concat(/svn/index/@path,'/')"/>
+		<xsl:param name="check" select="concat(substring-before($list,'/'),'/')"/>
+		<xsl:choose>
+			<xsl:when test="string-length($check)>1 and contains($folder,concat('/',$check))">
+ 				<xsl:value-of select="substring-before($check,'/')"/>
+			</xsl:when>
+			<xsl:when test="/svn/index/dir[@href=$check]">
+				<xsl:value-of select="'.'"/>
+			</xsl:when>
+			<xsl:when test="string-length($list)>0">
+				<xsl:call-template name="getTool">
+					<xsl:with-param name="list" select="substring-after($list,'/')"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	<!-- get the path back, as multiple "../", to get to the path that uses 'url' to get to the current path -->
 	<xsl:template name="getReverseUrl">
