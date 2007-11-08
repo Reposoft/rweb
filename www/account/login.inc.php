@@ -394,11 +394,6 @@ function login_setUserSettings() {
 		trigger_error('User not logged in. Can not store username.', E_USER_ERROR);
 	}
 	setcookie(USERNAME_KEY, $user, 0, '/');
-	
-	if (!isset($_COOKIE[THEME_KEY])) {
-		$style = ''; // default theme is standard
-		setcookie(THEME_KEY, $style, time()+7*24*3600, '/');	
-	}
 }
 
 function login_clearUsernameCookie() {

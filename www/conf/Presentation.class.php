@@ -50,13 +50,6 @@ function setupResponse() {
 
 // -------- user settings from cookies ---------
 
-function getUserTheme($user = '') {
-	if (!isset($_COOKIE[THEME_KEY])) return '';
-	$style = $_COOKIE[THEME_KEY];
-	if ($style=='repos') return ''; // default stylesheet title is 'repos'
-	return "themes/$style/";
-}
-
 $possibleLocales = array(
 	'sv' => 'Svenska',
 	'en' => 'English',
@@ -280,10 +273,11 @@ class Presentation {
 			return $this->displayInternal();
 		}
 		// set common head tags
-		$this->assign('head', $this->_getThemeHeadTags());
+		$webapp = $this->_getStaticWebappUrl();
+		$this->assign('head', $this->_getHeadTags($webapp));
 		$this->assign('referer', $this->getReferer());
 		$this->assign('userhome', $this->getUserhome());
-		$this->assign('webapp', $this->_getStaticWebappUrl());
+		$this->assign('webapp', $webapp);
 		if ($this->isUserLoggedIn()) {
 			$this->assign('logout', '/?logout');
 		}
@@ -407,10 +401,10 @@ class Presentation {
 	}
 	
 	/**
-	 * @param the stylesheet path, given without starting '/' from the style/ path in any theme
+	 * @param the stylesheet path, relative to "style/"
 	 */
-	function addStylesheet($urlRelativeToTheme) {
-		$this->extraStylesheets[] = $urlRelativeToTheme;
+	function addStylesheet($url) {
+		$this->extraStylesheets[] = $url;
 	}
 	
 	/**
@@ -424,17 +418,9 @@ class Presentation {
 	}
 	
 	/**
-	 * Get the contents of the $head parameter in templates.
+	 * @param stylePath the folder containing global.css, relative to webapp
 	 */
-	function _getThemeHeadTags() {
-		$theme = getUserTheme();
-		return $this->_getAllHeadTags($this->_getStaticWebappUrl(), $theme.'style/');
-	}
-	
-	/**
-	 * @param stylePath the path to the current theme's 'style/' directory
-	 */
-	function _getAllHeadTags($webapp, $stylePath) {
+	function _getHeadTags($webapp, $stylePath='style/') {
 		$head = '';
 		// metadata
 		if (function_exists('isTargetSet') && isTargetSet()) {

@@ -8,7 +8,6 @@
 	<xsl:param name="web">/repos/</xsl:param>
 
 	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>style/</xsl:param>
-	<xsl:param name="cssUrl-pe"><xsl:value-of select="$web"/>themes/pe/style/</xsl:param>
 	
 	<xsl:param name="spacer" select="'&#160; '"/>
 	
@@ -28,9 +27,6 @@
 			<!-- default stylesheets -->
 			<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
 			<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>
-			<!-- alternative stylesheets -->
-			<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}global.css"/>
-			<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}repository/repository.css"/>
 			<!-- install the repos script bundle -->
 			<script type="text/javascript" src="{$web}scripts/head.js"></script>
 		</head>

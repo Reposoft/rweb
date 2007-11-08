@@ -21,7 +21,6 @@
 	<xsl:param name="static">/repos-web/</xsl:param>
 	<!-- static contents urls, set to {$web}style/ for default theme -->
 	<xsl:param name="cssUrl"><xsl:value-of select="$static"/>style/</xsl:param>
-	<xsl:param name="cssUrl-pe"><xsl:value-of select="$static"/>themes/pe/style/</xsl:param>
 	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
 	<xsl:param name="editUrl"><xsl:value-of select="$web"/>edit/</xsl:param>
 	<!-- we don't want to force the CSS to set margins everywhere -->
@@ -48,9 +47,6 @@
 				<!-- default stylesheets -->
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>
-				<!-- alternative stylesheets -->
-				<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}global.css"/>
-				<link title="pe" rel="alternate stylesheet" type="text/css" href="{$cssUrl-pe}repository/repository.css"/>
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$static}scripts/head.js"></script>
 			</head>

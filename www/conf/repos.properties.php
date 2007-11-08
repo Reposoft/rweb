@@ -65,7 +65,6 @@ if (strpos(REPOS_VERSION, REPOS_VERSION_ARM)) {
 define('REPO_KEY', 'repo');
 define('USERNAME_KEY', 'account');
 define('LOCALE_KEY', 'lang');
-define('THEME_KEY', 'style'); // to match stylesheet switcher
 define('WEBSERVICE_KEY', 'serv'); // html, json, xml or text
 
 // parameter conventions

@@ -35,7 +35,7 @@ class TestPresentation extends UnitTestCase {
 	function testAddStylesheet() {
 		$p = Presentation::getInstance();
 		$p->addStylesheet('repository/repository.css');
-		$head = $p->_getAllHeadTags('http://localhost/webapp/', '/mytheme/style/');
+		$head = $p->_getHeadTags('http://localhost/webapp/', '/mytheme/style/');
 		$x = strpos($head, 'mytheme/style/repository/repository.css');
 		$this->assertTrue($x > 0);
 		$this->assertNoErrors();
