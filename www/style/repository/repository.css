@@ -22,16 +22,19 @@
 	background-image: url('../commands/16x16/edit.png');
 }
 /* special folders */
-#path .tool {
+.separator.projectname {
+	visibility: hidden;
+}
+#path .path.tool {
 	background-position: left center;
 	background-repeat: no-repeat;
 	padding-left: 17px;
 }
-#path .tool-trunk, .row .tool-trunk {
+#path .path.tool-trunk, .row .tool-trunk {
 	background-image: url('../tools/16x16/trunk.png');
 }
 .toolchild {}
-.tool a.action-rename, .tool a.action-delete {
+.tool .action-rename, .tool .action-delete {
 	cursor: default;
 	color: #999999;
 	text-decoration: none !important;

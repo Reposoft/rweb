@@ -60,7 +60,7 @@
 		</xsl:param>
 		<xsl:param name="pathlinks">
 			<xsl:call-template name="getFolderPathLinks">
-				<xsl:with-param name="folders" select="substring($folder,2)"/>
+				<xsl:with-param name="folders" select="$folder"/>
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:call-template name="commandbar">
@@ -254,14 +254,14 @@
 		<xsl:if test="not(string-length($rest)>0)">
 			<span id="folder" class="path{$classadd}">
 				<xsl:value-of select="$f"/>
-				<xsl:value-of select="'/'"/>
+				<span class="separator{$classadd}"><xsl:value-of select="'/'"/></span>
 			</span>
 		</xsl:if>
 		<xsl:if test="string-length($rest)>0">
 			<a id="{$id}" href="{$return}" class="path{$classadd}">
 				<xsl:value-of select="$f"/>
 			</a>
-			<xsl:value-of select="'/'"/>
+			<span class="separator{$classadd}"><xsl:value-of select="'/'"/></span>
 			<xsl:if test="$classadd=' projectname'">
 				<xsl:call-template name="getFolderPathLinks">
 					<xsl:with-param name="folders" select="$rest"/>
