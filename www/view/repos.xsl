@@ -72,7 +72,7 @@
 			<xsl:with-param name="parentlink">
 				<xsl:choose>
 					<xsl:when test="/svn/index/updir">../</xsl:when>
-					<xsl:when test="string-length($startpage)>0">
+					<xsl:when test="boolean($startpage)">
 						<xsl:value-of select="$startpage"/>
 					</xsl:when>
 					<xsl:otherwise></xsl:otherwise>
@@ -98,7 +98,7 @@
 		<xsl:if test="$startpage">
 			<a id="start" class="command translate" href="{$startpage}">start</a>
 		</xsl:if>
-		<xsl:if test="string-length($parentlink)>0">
+		<xsl:if test="boolean($parentlink)">
 			<a id="parent" class="command translate" href="{$parentlink}">up</a>
 		</xsl:if>
 		<xsl:if test="$editUrl">
@@ -249,9 +249,6 @@
 				<xsl:when test="$toolcheck">
 					<xsl:value-of select="' projectname'"/>
 				</xsl:when>
-				<xsl:when test="string-length($folders)>=string-length(/svn/index/@path)">
-					<xsl:value-of select="' projectname'"/>
-				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="''"/>
 				</xsl:otherwise>
@@ -262,14 +259,17 @@
 				<xsl:with-param name="filename" select="$return"/>
 			</xsl:call-template>
 		</xsl:param>
-		<xsl:if test="not(string-length($rest)>0)">
+		<xsl:if test="not($rest)">
 			<span id="folder" class="path{$classadd}">
 				<xsl:value-of select="$f"/>
-				<span class="separator{$classadd}"><xsl:value-of select="'/'"/></span>
+				<xsl:if test="not($f)">
+					<xsl:text>/</xsl:text>
+				</xsl:if>
 			</span>
+			<span class="separator{$classadd}"><xsl:value-of select="'/'"/></span>
 		</xsl:if>
-		<xsl:if test="string-length($rest)>0">
-			<xsl:if test="string-length($f)>0">
+		<xsl:if test="boolean($rest)">
+			<xsl:if test="boolean($f)">
 				<a id="{$id}" href="{$return}" class="path{$classadd}">
 					<xsl:value-of select="$f"/>
 				</a>
@@ -294,7 +294,7 @@
 			<xsl:when test="/svn/index/dir[@href=$check]">
 				<xsl:value-of select="'.'"/>
 			</xsl:when>
-			<xsl:when test="string-length($list)>0">
+			<xsl:when test="boolean($list)">
 				<xsl:call-template name="getTool">
 					<xsl:with-param name="list" select="substring-after($list,'/')"/>
 				</xsl:call-template>
