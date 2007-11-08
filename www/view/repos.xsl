@@ -226,11 +226,6 @@
 		</span>
 		</div>
 	</xsl:template>
-	<!-- get the root folder name -->
-	<xsl:template name="getProjectName">
-		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
-		<xsl:value-of select="substring-before(substring($path,2),'/')"/>
-	</xsl:template>
 	<!-- divide a path into its elements and make one link for each, expects folders to end with '/' -->
 	<xsl:template name="getFolderPathLinks">
 		<xsl:param name="folders"/>
@@ -242,9 +237,14 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="classadd">
-			<xsl:if test="contains($tools,concat('/',$f,'/'))">
-				<xsl:value-of select="concat(' tool tool-',$f)"/>
-			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="contains($tools,concat('/',$f,'/'))">
+					<xsl:value-of select="concat(' tool tool-',$f)"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="' projectname'"/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:param>
 		<xsl:param name="id">
 			<xsl:call-template name="getFileId">
@@ -262,13 +262,13 @@
 				<xsl:value-of select="$f"/>
 			</a>
 			<xsl:value-of select="'/'"/>
-			<xsl:if test="string-length($classadd)=0">
+			<xsl:if test="$classadd=' projectname'">
 				<xsl:call-template name="getFolderPathLinks">
 					<xsl:with-param name="folders" select="$rest"/>
 					<xsl:with-param name="return" select="substring-after($return,'/')"/>
 				</xsl:call-template>
 			</xsl:if>
-			<xsl:if test="string-length($classadd)>0">
+			<xsl:if test="$classadd!=' projectname'">
 				<xsl:call-template name="getFolderPathLinks">
 					<xsl:with-param name="folders" select="$rest"/>
 					<xsl:with-param name="return" select="substring-after($return,'/')"/>
@@ -277,24 +277,6 @@
 			</xsl:if>
 		</xsl:if>
 	</xsl:template>
-	<!-- get the home folder, like /project/trunk/ or /branches/, see $tools --> 
-	<!-- <xsl:template name="getToolPath">
-		<xsl:param name="path" select="concat(/svn/index/@path,'/')"/>
-		<xsl:param name="this" select="substring-before(substring($path, 2), '/')"/>
-		<xsl:value-of select="$this"/>
-		<xsl:value-of select="'/'"/>
-		<xsl:choose>
-			<xsl:when test="contains($this, 'trunk') or contains($this, 'administration')">
-			</xsl:when>
-			<xsl:when test="not(contains($path, '/'))">
-			</xsl:when>
-			<xsl:when test="string-length($this)>0 and (contains($path, '/trunk') or contains($path, '/administration'))">
-				<xsl:call-template name="getToolPath">
-					<xsl:with-param name="path" select="substring-after($path,$this)"/>
-				</xsl:call-template>
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template> -->
 	<!-- get the path back, as multiple "../", to get to the path that uses 'url' to get to the current path -->
 	<xsl:template name="getReverseUrl">
 		<xsl:param name="url"/>

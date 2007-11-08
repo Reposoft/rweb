@@ -32,7 +32,9 @@
 }
 .toolchild {}
 .tool a.action-rename, .tool a.action-delete {
-	text-decoration: line-through;
+	cursor: default;
+	color: #999999;
+	text-decoration: none !important;
 }
 /* details plugin */
 #commandbar #showdetails {
