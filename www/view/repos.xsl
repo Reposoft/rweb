@@ -3,14 +3,7 @@
   ==== Repos Subversion directory listing layout ====
   Used as SVNIndexXSLT in repository configuration.
   (c) 2005-2007 Staffan Olsson www.repos.se
-
-  Note that browser transformations only work if the
-  stylesheet is read from the same domain as the XML
 -->
-<!-- TODO for 1.2
-* Old #fullpath concept has been removed in favor of meta tags
-* Project concept should probably be removed. Do like in repos style.
- -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
 	<!-- start transform -->
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
@@ -60,63 +53,30 @@
 	</xsl:template>
 	<!-- body contents -->
 	<xsl:template match="index">
-		<xsl:param name="fullpath">
+		<xsl:param name="folder">
 			<xsl:call-template name="getHref">
 				<xsl:with-param name="href" select="concat(/svn/index/@path,'/')"/>
 			</xsl:call-template>
 		</xsl:param>
-		<!-- <xsl:param name="tool">
-			<xsl:call-template name="getToolPath">
-				<xsl:with-param name="path" select="$fullpath"/>
-			</xsl:call-template>
-		</xsl:param>
-		<xsl:param name="folders" select="substring($fullpath, string-length($tool)+2)"/>
-		 -->
-		<xsl:param name="projectname">
-			<!-- enable project concept only when there is a startpage? - <xsl:if test="$startpage"> -->
-				<xsl:call-template name="getProjectName"/>
-			<!-- </xsl:if> -->
-		</xsl:param>
-		<xsl:param name="folders" select="substring($fullpath, string-length($projectname)+2)"/>
-		<xsl:param name="homelink">
-			<xsl:if test="$startpage">
-				<xsl:value-of select="$startpage"/>
-				<xsl:value-of select="'#p:'"/>
-				<xsl:call-template name="getFileId">
-					<xsl:with-param name="filename" select="$projectname"/>
-				</xsl:call-template>
-			</xsl:if>
-			<xsl:if test="not($startpage)">
-				<xsl:call-template name="getReverseUrl">
-					<xsl:with-param name="url" select="substring($folders, 2)"/>
-				</xsl:call-template>
-			</xsl:if>
-		</xsl:param>
 		<xsl:param name="pathlinks">
 			<xsl:call-template name="getFolderPathLinks">
-				<xsl:with-param name="folders" select="$folders"/>
+				<xsl:with-param name="folders" select="substring($folder,2)"/>
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:call-template name="commandbar">
-			<xsl:with-param name="target" select="$fullpath"/>
+			<xsl:with-param name="target" select="$folder"/>
 			<xsl:with-param name="parentlink">
 				<xsl:choose>
-					<!-- disabled for 1.2
-					<xsl:when test="string-length($startpage)>0 and $pathlinks='/'">
+					<xsl:when test="/svn/index/updir">../</xsl:when>
+					<xsl:when test="string-length($startpage)>0">
 						<xsl:value-of select="$startpage"/>
 					</xsl:when>
-					<xsl:when test="string-length($startpage)>0 and not($tool)">
-						<xsl:value-of select="$startpage"/>
-					</xsl:when> -->
-					<xsl:when test="/svn/index/updir">../</xsl:when>
 					<xsl:otherwise></xsl:otherwise>
 				</xsl:choose>
 			</xsl:with-param>
 		</xsl:call-template>
 		<xsl:call-template name="contents">
-			<xsl:with-param name="fullpath" select="$fullpath"/>
-			<xsl:with-param name="homelink" select="$homelink"/>
-			<xsl:with-param name="projectname" select="$projectname"/>
+			<xsl:with-param name="folder" select="$folder"/>
 			<xsl:with-param name="pathlinks" select="$pathlinks"/>
 		</xsl:call-template>
 		<xsl:call-template name="footer"/>
@@ -148,19 +108,11 @@
 	</xsl:template>
 	<!-- directory listing -->
 	<xsl:template name="contents">
-		<xsl:param name="fullpath"/>
-		<xsl:param name="projectname"/>
-		<xsl:param name="homelink"/>
+		<xsl:param name="folder"/>
 		<xsl:param name="pathlinks"/>
 		<!-- it is not trivial to check if a tool has already been found in path, so instead we assume that tools are only in project root -->
-		<xsl:param name="trytools" select="@path=concat('/',$projectname)"/>
+		<xsl:param name="trytools" select="not(substring-after(substring(@path,2),'/'))"/>
 		<h2 id="path">
-			<a id="home" href="{$homelink}">
-				<span class="projectname">
-					<xsl:value-of select="$projectname"/>
-				</span>
-			</a>
-			<xsl:value-of select="$spacer"/>
 			<xsl:copy-of select="$pathlinks"/>
 		</h2>
 		<xsl:apply-templates select="dir">
@@ -173,7 +125,7 @@
 		<div class="row contentcommands">
 			<div class="actions">
 				<xsl:if test="$editUrl">
-					<a id="repos-edit" class="translate" href="{$editUrl}file/?target={$fullpath}">Create new text</a>
+					<a id="repos-edit" class="translate" href="{$editUrl}file/?target={$folder}">Create new text</a>
 				</xsl:if>
 			</div>
 		</div>
