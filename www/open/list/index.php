@@ -29,7 +29,7 @@ if ($list->exec()) {
 
 // some custom parameters needed in the XML. Url needed for navigation http/https.
 $head = '<?xml version="1.0"?>
-<?xml-stylesheet type="text/xsl" href="/repos/view/list.xsl"?>
+<?xml-stylesheet type="text/xsl" href="'.asLink(getWebapp()).'view/list.xsl"?>
 <lists repo="'.asLink(getRepository()).'" target="'.xmlEncodePath(getTarget()) // @path in list is full url so it can't be used
 	.'" name="'.xmlEncodePath(getPathName(getTarget())).'"'.($rev ? ' rev="'.$rev.'"' : '').'>
 ';

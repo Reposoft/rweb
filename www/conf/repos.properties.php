@@ -117,6 +117,7 @@ function isSSLClient() {
  * 
  * @param String $url the URL that should be presented to the user
  * @return String the URL with the current protocol for navigation.
+ *  If the URL is not absolute, only encoding with urlSpecialChars will be done.
  */
 function asLink($url) {
 	if (isSSLClient() && substr($url, 0, 5)=='http:') {

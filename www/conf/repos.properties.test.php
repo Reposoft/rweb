@@ -172,6 +172,13 @@ class TestReposProperties extends UnitTestCase {
 			asLink("$host/&%#/"), 'asLink should call urlSpecialChars. %s');
 	}
 	
+	function testAsLinkNotAbsolute() {
+		$_SERVER['HTTPS'] = 'on';
+		$this->assertEqual('a/b/', asLink('a/b/'), 'Nothing should be added to relative url. %s');
+		unset($_SERVER['HTTPS']);
+		$this->assertEqual("/%26%25%23/", asLink("/&%#/"), 'asLink for paths should only call urlSpecialChars. %s');
+	}
+	
 	function testUrlSpecialChars() {
 		// percent must be encoded before any other encoding
 		$this->assertEqual('http://my.host/%25',
