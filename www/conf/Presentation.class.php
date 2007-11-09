@@ -301,7 +301,8 @@ class Presentation {
 			fwrite($handle, $pagecontents);
 			fclose($handle);
 			$nexturl = $this->_getStaticWebappUrl() . 'view/?result=' . basename($file);
-			header("Location: $nexturl");
+			// with enableRedirectWaiting the browser may have been redirected already and we just want to print the page
+			if (!headers_sent()) header("Location: $nexturl");
 		} else {
 			$this->smarty->display($resource_name, $cache_id, $compile_id);
 		}
@@ -379,12 +380,10 @@ class Presentation {
 	 * @param String $headline the contents of the <h1> tag
 	 */
 	function showError($error_msg, $headline='An error occurred') {
-		// get template from this folder, not the importing script's folder
-		$template = $this->getLocaleFile(dirname(__FILE__) . '/Error');
-		$this->enableRedirect();
-		$this->assign('headline', $headline);
-		$this->assign('error', $error_msg);
-		$this->display($template);
+		if (!$this->isRedirectBeforeDisplay()) {
+			$this->enableRedirect();
+		}
+		$this->showErrorNoRedirect($error_msg, $headline);
 	}
 	
 	/**
@@ -555,13 +554,19 @@ if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $mes
 		} else {
 			if ($n==E_USER_WARNING) header('HTTP/1.1 412 Precondition Failed');
 			if ($n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error');
-			$p->showErrorNoRedirect("$label ".nl2br($message)."<!-- Error level $n. Stack trace:\n$trace -->");
+			$p->showErrorNoRedirect("$label ".nl2br($message)."\n\n\n<!-- Error level $n. Stack trace:\n$trace -->");
 		}
 		exit(1);
-	} else {
-		ob_flush(); // try to behave the same regardless of output buffering
-		echo("Server error $n:\n$message\n\n\n$trace");
 	}
+	$p = Presentation::getInstance();
+	// TODO integrate this special case in the above error handling as well
+	// can not fall back to default error reporting if we are processing in background, need to write page to stop waiting
+	if ($p->isRedirectBeforeDisplay()) {
+		$p->showError("Server error $n: $message \n\n\n<!-- Error level $n. Stack trace:\n$trace -->");
+	}
+	// non-userfriendly error display
+	reportErrorText($n, $message, $trace);
+	
 }}
 
 ?>

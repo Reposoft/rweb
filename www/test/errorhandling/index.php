@@ -25,6 +25,8 @@ if (!isset($_GET['case'])) {
 	'60: Command exec with unknown command' => '?case=60',
 	'61: SvnOpen exec with invalid svn operation' => '?case=61',
 	'62: SvnEdit exec with invalid svn operation + displayEdit' => '?case=62',
+	'63: SvnEdit exec with redirectWaiting' => '?case=63',
+	'70: PHP5 Object Oriented notice' => '?case=70',
 	'90: output as XML' => '?case=90&serv=xml',
 	'91: output as plain text' => '?case=91&serv=text',
 	);
@@ -117,6 +119,28 @@ if ($case==62) {
 	$open->addArgOption('--invalidoperation');
 	$open->exec();
 	displayEdit(Presentation::getInstance(), './');
+}
+if ($case==63) {
+	require('../../conf/Presentation.class.php');
+	require('../../edit/SvnEdit.class.php');
+	$p = Presentation::getInstance();
+	$p->enableRedirectWaiting();
+	$open = new SvnEdit('test');
+	$open->addArgOption('--invalidoperation');
+	$open->exec();
+	displayEdit(Presentation::getInstance(), './');
+	// TODO currently this is not redirecting like the application
+}
+if ($case==70) {
+	class T {
+		var $v = 1;
+		function est() {
+			return $this->v;
+		}
+	}
+	require('../../conf/repos.properties.php');
+	echo(T::est());
+	// should produce a notice in PHP5 because A is not a static method
 }
 if ($case==90) {
 	require('../../conf/repos.properties.php');

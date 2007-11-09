@@ -27,27 +27,32 @@ define('REPOS_VERSION','@Dev@');
 //   * E_USER_ERROR for server errors
 //   * E_USER_WARNING for user errors, like invalid parameters
 function reportError($n, $message, $file, $line) {
+	// possibly ignore some error levels
+	if ($n == 2048 && isset($_SERVER['ReposIgnoreNotices'])) return;
+	// from now on handle all errors
 	$trace = _getStackTrace();
 	if (function_exists('reportErrorToUser')) { // formatted error reporting
 		call_user_func('reportErrorToUser', $n, $message, $trace);
+		// note that the custom error reporting is fully responsible for all errors, nothing is done after this
 	} else {
 		reportErrorText($n, $message, $trace);
 	}
+	// always stop after errors
+	exit(1);
 }
 // default error reporting, for errors that occur before presentation is initialized
 function reportErrorText($n, $message, $trace) {
-	if ($n!=2048) { // E_STRICT not defined in php 4
-		// validation error
-		if ($n==E_USER_WARNING) {
-			header('HTTP/1.1 412 Precondition Failed');
-			echo("Validation error: $message\n<pre>\n$trace</pre>");
-			exit;
-		}
+	// validation error
+	if ($n==E_USER_WARNING) {
+		header('HTTP/1.1 412 Precondition Failed');
+		echo("Validation error: $message\n<pre>\n$trace</pre>\n\n");
+	} else {
 		// other errors
-		if ($n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error'); 
-		echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>");
-		exit;
+		if ($n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error');
+		echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>\n\n");
 	}
+	// TODO there is some weirdness with notices and Presentation->enableRedirectWaiting
+	//  that causes PHP to output headers of vies/index.php as cleartext here
 }
 set_error_handler('reportError');
 

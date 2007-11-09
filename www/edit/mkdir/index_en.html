@@ -10,7 +10,7 @@
 <a id="repository" href="{=$repository}">return to repository</a>
 </div>
 <h1>Create subfolder</h1>
-<form id="createFolder" name="createFolder" method="get" action="#">
+<form id="createFolder" name="createFolder" method="get" action="#"><!-- TODO: should POST -->
   <fieldset>
 	<legend>New folder in <a class="folder" href="{=$repository}{=$target}">{=$target|getPathName}</a></legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
