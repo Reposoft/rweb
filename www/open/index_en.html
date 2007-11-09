@@ -39,7 +39,7 @@ This is an HTML file, so we recommend <a href="open/?target={=$target}&rev={=$re
 This is file is plain text, so we recommend <a href="file/?target={=$target}&rev={=$rev}">View in Repos</a>.
 {=/if}
 </p>
-<!--{if $fromrev}-->
+<!--{if isset($fromrev)}-->
 <p>
 View the <a href="diff/?target={=$target}&rev={=$rev}&fromrev={=$fromrev}">difference from version {=$fromrev}</a>.
 </p>

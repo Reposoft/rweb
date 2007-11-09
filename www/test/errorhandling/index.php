@@ -17,6 +17,7 @@ if (!isset($_GET['case'])) {
 	'06: showErrorNoRedirect at an instance of Presentation.class.php' => '?case=6',
 	'07: showError at an instance of Presentation.class.php' => '?case=7',
 	'13: tigger_error after require repos.properties.php and "echo" output' => '?case=13',
+	'15: Presentation->display with template variable not set' => '?case=15',
 	'16: showErrorNoRedirect at an instance of Presentation.class.php, after "display"' => '?case=16',
 	'17: showError at an instance of Presentation.class.php, after "display"' => '?case=17',
 	'23: tigger_error after require repos.properties.php, as JSON' => '?case=23&serv=json',
@@ -70,6 +71,12 @@ if ($case==13) {
 	require('../../conf/repos.properties.php');
 	echo("Page output before error.\n");
 	trigger_error("Message $case.", E_USER_ERROR);
+}
+if ($case==15) {
+	require('../../conf/Presentation.class.php');
+	$p = Presentation::getInstance();
+	// not setting the template variable 'text'
+	$p->display();
 }
 if ($case==16) {
 	require('../../conf/Presentation.class.php');
@@ -178,6 +185,7 @@ function printPage($links) {?>
 	}
 	echo('<p><a id="back" class="action" href="../">&lt; back</a></p>');
 	?>
+	<p>Note that the error display functions must be tested for two cases: output_buffering on <em>and</em> off.</p>
 	</body>
 	</html>
 	<?php

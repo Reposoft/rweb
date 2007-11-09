@@ -361,6 +361,9 @@ class Presentation {
 	}
 	
 	function enableRedirectWaiting() {
+		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+			trigger_error('Background processing is only allowed for POST requests', E_USER_ERROR);
+		}
 		$pageid = uniqid();
 		$this->enableRedirect($pageid);
 		$nexturl = $this->_getStaticWebappUrl() . 'view/?result=' . rawurlencode($pageid) . '&w=0';
@@ -544,18 +547,28 @@ function Presentation_removeIndentation($tpl_source, &$smarty) {
 
 // plug in to repos.properties.php's error handling solution
 if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $message, $trace) {
-	$label = "Unexpected error (code $n):";
+	$label = "Runtime error (code $n):";
 	if ($n==E_USER_ERROR) $label = "Server error:";
 	if ($n==E_USER_WARNING) $label = "Validation error:";
 	if ($n==E_USER_NOTICE) $label = "Notice:";
 	$p = Presentation::getInstance();
 	if ($p->isRedirectBeforeDisplay()) {
-		// allow redirect if not done yet. we have no support for sending status header with result page.
-		$p->showError("$label $message \n\n\n<!-- Error level $n. Stack trace:\n$trace -->");
-	} else {
 		if (headers_sent()) {
 			echo("<strong>$label</strong> ".nl2br($message)."\n\n\n<!-- Error level $n. Stack trace:\n$trace -->\n\n"); exit;
 		} else {
+			// allow redirect if not done yet. we have no support for sending status header with result page.
+			$p->showError("$label $message \n\n\n<!-- Error level $n. Stack trace:\n$trace -->");	
+		}
+	} else {
+		if (headers_sent()) {
+			// output already started, the best we can do is print generic html
+			echo("<strong>$label</strong> ".nl2br($message)."\n\n\n<!-- Error level $n. Stack trace:\n$trace -->\n\n"); exit;
+		} else {
+			// if output is buffered, we can clear the buffer and print an error message instead
+			if (ob_get_contents()) {
+				ob_clean();
+			}
+			// be friendly to http services, notices are still status 200
 			if ($n==E_USER_WARNING) header('HTTP/1.1 412 Precondition Failed');
 			if ($n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error');
 			// to make the status headers work we can't do redirect

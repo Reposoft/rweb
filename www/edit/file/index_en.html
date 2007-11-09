@@ -8,7 +8,7 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$repository}">return to repository</a>
-<!--{if $file}-->
+<!--{if $isfile}-->
 <a id="view" target="_blank" href="../../open/file/?target={=$target}&rev={=$file,revision}">view current version</a>
 <!--{else}-->
 
@@ -18,15 +18,15 @@
 <a name="textform"></a>
 <form id="formEdit" action="../upload/" method="post" name="formUpload">
 <fieldset>
-	<!--{if $file}-->
+	<!--{if $isfile}-->
 	<legend>Edit <a class="file" href="{=$file,url}">{=$file,filename}</a> with type {=$file,type}</legend>
 	<!--{else}-->
-	<legend>New text in <a class="folder" href="{=$repository}{=$target}">{=$target|getPathName}</a></legend>
+	<legend>New text in <a class="folder" href="{=$repository}">{=$target|getPathName}</a></legend>
 	<!--{/if}-->
   <input type="hidden" name="target" value="{=$target}"/>
   <input type="hidden" name="extension" class="current-name" value=".{=$type}"/>
   <input type="text" name="type" value="{=$type}" style="display:none"/>
-	<!--{if $file}-->
+	<!--{if $isfile}-->
 	<input type="hidden" name="fromrev" value="{=$file,revision}"/>
 	 {=*
 	 	Textarea must be on one line so it does not insert spaces.
@@ -40,7 +40,7 @@
 <!--{/if}-->
   <p>
     <label for="name">name in repository</label>
-	<!--{if $file}-->
+	<!--{if $isfile}-->
     <input type="text" id="currentname" name="currentname" value="{=$target|getPathName}" disabled="disabled" size="40" />
 	<!--{else}-->
 	<input type="text" id="name" name="name" size="40" class="required remember-extension" tabindex="2"/>

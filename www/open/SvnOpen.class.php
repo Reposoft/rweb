@@ -272,7 +272,7 @@ class SvnOpen {
 		// Authentication should really have been taken care of before form was shown.
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			trigger_error('This Subversion operation requires authentication.'
-				.' The server should have requested authentication before submit.', E_USER_ERROR);
+				.' The application should have prompted for login before allowing POST.', E_USER_ERROR);
 		}
 		// This is a read request, try to
 		if (!$targetUrl) $targetUrl = getRepository();

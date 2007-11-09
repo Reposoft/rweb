@@ -202,7 +202,7 @@ class Validation {
 		if (!empty($r)) {
 			Validation::error('Error in field "'.$rule->fieldname.'", value "'.$value.'": '.$r
 			//." \n(with script support enabled this should have been reported when the form was submitted)"
-			." \n\nClick 'back' and try again.");
+			." \n\nPlease go back and try again.");
 		}
 	}
 	/**

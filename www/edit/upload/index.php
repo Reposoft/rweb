@@ -20,9 +20,10 @@ $maxsize = ini_get('upload_max_filesize');
 if (($p = strpos($maxsize,'M'))) $maxsize = substr($maxsize, 0, $p) * 1024 * 1024;
 define('MAX_FILE_SIZE',$maxsize); // now we haven't checked max post size, we assume it is high enough
 
+// need prolonged script execution time for big uploads, seconds
 define('UPLOAD_MAX_TIME', 10*60);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	set_time_limit(BACKUP_MAX_TIME);
+	set_time_limit(UPLOAD_MAX_TIME);
 }
 
 // name only exists for new files, not for new version requests
@@ -120,7 +121,7 @@ function processNewFile($upload) {
 	// In 1.1 we don't customize mime types, but here's how to get the type from the browser
 	// If the customer wants mime types to be set, it can be configured with svn autoprops
 	// Currently we rely on autoprops to set text/html for html pages edited online
-	$clientMime = $upload->getType();
+	//$clientMime = $upload->getType();
 	// clean up
 	System::deleteFile($newfile);
 	$upload->cleanUp();

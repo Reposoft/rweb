@@ -24,17 +24,18 @@ new EditTypeRule('type'); // type is not required for this page, but it is for t
 
 if ($_SERVER['REQUEST_METHOD']=='GET' || $_SERVER['REQUEST_METHOD']=='HEAD') {
 	new ResourceExistsRule();
-	Validation::expect();
 	$template = Presentation::getInstance();
 	$target = getTarget();
 	$targeturl = getTargetUrl();
 	if (isFile($target)) {
+		$template->assign('isfile', true);
 		$file = new SvnOpenFile($target);
 		$template->assign_by_ref('file', $file);
 		$template->assign('repository', getParent($targeturl));
 		// old file has type=extension
 		$template->assign('type', $file->getExtension());
 	} else {
+		$template->assign('isfile', false);
 		$template->assign('repository', $targeturl);
 		// new file has a default type wich can be changed with query param
 		$template->assign('type', isset($_GET['type']) ? $_GET['type'] : 'txt');
