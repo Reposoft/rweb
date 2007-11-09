@@ -544,29 +544,24 @@ function Presentation_removeIndentation($tpl_source, &$smarty) {
 
 // plug in to repos.properties.php's error handling solution
 if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $message, $trace) {
-	if ($n==E_USER_ERROR || $n==E_USER_WARNING || $n==E_USER_NOTICE) {
-		$label = "Error:";
-		if ($n==E_USER_WARNING) $label = "Validation error:";
-		if ($n==E_USER_NOTICE) $label = "Notice:";
-		$p = Presentation::getInstance();
+	$label = "Unexpected error (code $n):";
+	if ($n==E_USER_ERROR) $label = "Server error:";
+	if ($n==E_USER_WARNING) $label = "Validation error:";
+	if ($n==E_USER_NOTICE) $label = "Notice:";
+	$p = Presentation::getInstance();
+	if ($p->isRedirectBeforeDisplay()) {
+		// allow redirect if not done yet. we have no support for sending status header with result page.
+		$p->showError("$label $message \n\n\n<!-- Error level $n. Stack trace:\n$trace -->");
+	} else {
 		if (headers_sent()) {
-			echo("<strong>$label</strong> ".nl2br($message)."\n\n\n<!-- Error level $n. Stack trace:\n$trace -->"); exit;
+			echo("<strong>$label</strong> ".nl2br($message)."\n\n\n<!-- Error level $n. Stack trace:\n$trace -->\n\n"); exit;
 		} else {
 			if ($n==E_USER_WARNING) header('HTTP/1.1 412 Precondition Failed');
 			if ($n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error');
-			$p->showErrorNoRedirect("$label ".nl2br($message)."\n\n\n<!-- Error level $n. Stack trace:\n$trace -->");
+			// to make the status headers work we can't do redirect
+			$p->showErrorNoRedirect("$label ".nl2br($message)."\n\n\n<!-- Error level $n. Stack trace:\n$trace -->\n\n");
 		}
-		exit(1);
 	}
-	$p = Presentation::getInstance();
-	// TODO integrate this special case in the above error handling as well
-	// can not fall back to default error reporting if we are processing in background, need to write page to stop waiting
-	if ($p->isRedirectBeforeDisplay()) {
-		$p->showError("Server error $n: $message \n\n\n<!-- Error level $n. Stack trace:\n$trace -->");
-	}
-	// non-userfriendly error display
-	reportErrorText($n, $message, $trace);
-	
 }}
 
 ?>

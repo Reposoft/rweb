@@ -129,13 +129,12 @@ if ($case==63) {
 	$open->addArgOption('--invalidoperation');
 	$open->exec();
 	displayEdit(Presentation::getInstance(), './');
-	// TODO currently this is not redirecting like the application
 }
 if ($case==70) {
 	class T {
-		var $v = 1;
 		function est() {
-			return $this->v;
+			echo "If you haven't seen an error message, E_STRICT notices are ignored";
+			echo ". \nThat's not nessecarily wrong.";
 		}
 	}
 	require('../../conf/repos.properties.php');

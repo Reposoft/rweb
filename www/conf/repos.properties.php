@@ -27,8 +27,8 @@ define('REPOS_VERSION','@Dev@');
 //   * E_USER_ERROR for server errors
 //   * E_USER_WARNING for user errors, like invalid parameters
 function reportError($n, $message, $file, $line) {
-	// possibly ignore some error levels
-	if ($n == 2048 && isset($_SERVER['ReposIgnoreNotices'])) return;
+	// We need to support PHP4 so we'll have to accept some PHP5 E_STRICT warnings, like lack of 'static' 
+	if (defined('E_STRICT') && $n == E_STRICT) return;
 	// from now on handle all errors
 	$trace = _getStackTrace();
 	if (function_exists('reportErrorToUser')) { // formatted error reporting
