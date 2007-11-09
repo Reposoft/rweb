@@ -59,7 +59,9 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="tool">
-			<xsl:call-template name="getTool"/>
+			<xsl:call-template name="getTool">
+				<!-- todo limit depth in which to look for tools -->
+			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="pathlinks">
 			<xsl:call-template name="getFolderPathLinks">
@@ -129,7 +131,7 @@
 		<div class="row contentcommands">
 			<div class="actions">
 				<xsl:if test="$editUrl">
-					<a id="repos-edit" class="translate" href="{$editUrl}file/?target={$folder}">Create new text</a>
+					<a id="repos-edit" class="translate" href="{$editUrl}file/?target={$folder}">Create Repos document</a>
 				</xsl:if>
 			</div>
 		</div>
