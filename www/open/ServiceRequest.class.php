@@ -64,7 +64,7 @@ class ServiceRequest {
 	var $parameters;
 	var $responseType = SERVICE_TYPE_JSON;
 	
-	// optional login, if username is null login will not be done
+	// optional login: if username is_null login will not be done (any 401 status returned)
 	// if username is ===false basic authentication will be detected and forwarded
 	var $_username = null;
 	var $_password = '';
@@ -219,6 +219,7 @@ class ServiceRequest {
 	
 	/**
 	 * Writes authentication headers and error page to the response and exits current request.
+	 * The result of this method should be quite close to SvnOpen->handleAuthenticationError
 	 * @param unknown_type $headers service response headers,
 	 * 	those relevant to authentication can be forwarded to the client.
 	 */
@@ -238,7 +239,7 @@ class ServiceRequest {
 		} else {
 			// handle missing authentication when service is called in a non-GUI context
 			// TODO include authentication HTTP headers here too?
-			echo "This service requires authentication";
+			trigger_error("This service requires authentication", E_USER_WARNING);
 		}		
 	}
 	
@@ -261,9 +262,9 @@ class ServiceRequest {
 		if ($this->skipBody) {
 			curl_setopt($ch, CURLOPT_NOBODY, true);
 		}
-		// authentication
-		if (!is_null($this->_username)) {
-			if ($this->_username == '') trigger_error('This request must be authenticated, but username is empty.', E_USER_ERROR);
+		// authentication, null means do not authenticate, false means user not authenticated yet
+		if (!is_null($this->_username) && $this->_username!==false) {
+			if ($this->_username === '') trigger_error('Unexpected login status, username is empty.', E_USER_ERROR);
 			curl_setopt($ch, CURLOPT_USERPWD, 
 				$this->_username.':'.$this->_password);
 		}

@@ -177,7 +177,7 @@ class TestServiceRequest extends UnitTestCase {
 		global $test_user;
 		$test_user = '';
 		$service = new ServiceRequest(getSelfUrl(), array('useryes'=>''));
-		$this->expectError('This request must be authenticated, but username is empty.');
+		$this->expectError('Unexpected login status, username is empty.');
 		$service->exec();
 	}
 	

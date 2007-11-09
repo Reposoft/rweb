@@ -241,10 +241,13 @@ class SvnOpen {
 		if (!$execResult) return $execResult;
 		$output = $this->getOutput();
 		if ($execResult==1) {
-			if (preg_match('/authorization\s+failed/',$output[1])) {
-				$this->handleAuthenticationError();
+			foreach ($output as $o) {
+				if (preg_match('/authorization\s+failed/',$o)) {
+					$this->handleAuthenticationError();
+				}
 			}
 		}
+		return $execResult;
 	}
 	
 	/**
@@ -257,20 +260,29 @@ class SvnOpen {
 	 * @param String $targetUrl optional specific url to get Realm from
 	 */
 	function handleAuthenticationError($targetUrl=false) {
-		if (headers_sent()) {
-			echo("Authentication error. Headers already sent.");
+		// First handle the case where repos login logic is not activated
+		if (!function_exists('getReposUser')) {
+			trigger_error('This Subversion operation requires Repos authentication', E_USER_ERROR);
 		}
-		if (!function_exists('getReposUser')) return; // don't do anything if login is not activated
-		if (getReposUser()!==false) return; // already logged in, probably invalid credentials
-		// don't want post request to be resent. Authentication should really have been taken care of when form was shown.
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') trigger_error('Client should have been authenticated before submit.');
-		if (!$targetUrl) $targetUrl = getRepository(); // using the targetUrl would be better, _if_ there was service request caching
-		// svn command's authentication error does not reveal realm name
+		if (isLoggedIn()) {
+			trigger_error('User '.getReposUser().' not authorized to run svn '.$this->operation
+				.($targetUrl ? ' on '.$targetUrl : ''), E_USER_WARNING);
+		}
+		// Don't want POST request to be resent.
+		// Authentication should really have been taken care of before form was shown.
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			trigger_error('This Subversion operation requires authentication.'
+				.' The server should have requested authentication before submit.', E_USER_ERROR);
+		}
+		// This is a read request, try to
+		if (!$targetUrl) $targetUrl = getRepository();
+		// TODO Use service request to forward authentication? - share code _and_ get the realm
 		$realm = getAuthName($targetUrl);
 		askForCredentials($realm);
 		// show message regardless of output type (XML/HTML/plaintext/json)
-		trigger_error('This service requires authentication',E_USER_NOTICE);
-		// require new request with credentials
+		trigger_error('This Subversion operation requires authentication.'
+			.' Please log in or return to repository.', E_USER_WARNING);
+		// now send the auth header with the error message
 		exit;
 	}
 	

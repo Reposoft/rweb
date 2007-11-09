@@ -81,6 +81,13 @@ class TestSvnOpen extends UnitTestCase {
 		$this->assertEqual('-r 1:2 "/a/b ls c/"', $o->_getArgumentsString());
 	}
 	
+	function testDetectAuthenticationFailure() {
+		$output = array();
+		$output[0] = "svn: CHECKOUT of '/data/!svn/ver/20/trunk': authorization failed (http://localhost)";
+		
+		
+	}
+	
 }
 
 testrun(new TestSvnOpen());

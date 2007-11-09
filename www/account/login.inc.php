@@ -64,13 +64,14 @@ if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/S
 // reserved username value for not-logged-in
 define('LOGIN_VOID_USER', '0');
 
-// do automatic login if a target is specified the standard way
+// automatically check target when this sscript is included
 if (isTargetSet()) {
 	// special case for the svn index anomaly that root path is "/" but no other paths have trailing slash
 	if (strpos(getTarget(), '//') === 0) {
 		header('Location: '.getSelfUrl().'?'.str_replace('target=//', 'target=/', getSelfQuery()));
 		exit;
 	}
+	// do automatic login if a target is specified the standard way
 	//DISABLED - trying new strategy login-if-needed in ServiceRequest and SvnOpen//targetLogin();
 }
 
@@ -250,18 +251,14 @@ function _login_getHttpStatus($targetUrl) {
 // ----- resource URL retreival functionality -----
 
 /**
- * Decodes query string parameters that may be cleartext paths (as in svnindex)
+ * Decodes query string parameters that may be cleartext paths (as in svnindex)-
  * @param array the server variable, for example $_GET
  * @param name the parameter name, for example 'path' as in ?path=/here/now/
  * Returns the non-escaped URL or path or filename or whatever
+ * @deprecated Currently this method does no conversion, it only checks parameter encoding, which shouldn't be needed.
  */
 function login_decodeQueryParam($array, $name) {
 	$v = $array[$name];
-	// target link for files placed in root begins with '//'
-	// it should begin with '/'
-	if(strpos($v, '//') === 0) {
-		$v = substr($v, 1);
-	}
 	if (mb_detect_encoding($v, 'UTF-8, ISO-8859-1')=='ISO-8859-1') {
 		trigger_error("The value of parameter '$name' ($v) is not valid UTF-8", E_USER_ERROR);
 	}

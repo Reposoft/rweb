@@ -11,9 +11,9 @@ $parent = new ResourceExistsRule('target');
 // explicit validation
 new NewFilenameRule('name', $parent->getValue());
 
-if (isset($_GET[SUBMIT])) {
+if (isset($_REQUEST[SUBMIT])) {
 	Validation::expect('target', 'name', 'message');
-	createNewFolder($_GET['name'],$_GET['message']); 
+	createNewFolder($_REQUEST['name'],$_REQUEST['message']); 
 } else {
 	$target = getTarget();
 	$template = Presentation::getInstance();
