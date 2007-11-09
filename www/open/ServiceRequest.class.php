@@ -239,7 +239,7 @@ class ServiceRequest {
 		} else {
 			// handle missing authentication when service is called in a non-GUI context
 			// TODO include authentication HTTP headers here too?
-			trigger_error("This service requires authentication", E_USER_WARNING);
+			trigger_error("This service requires authentication", E_USER_NOTICE);
 		}		
 	}
 	

@@ -2,9 +2,8 @@
 require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__))."/SvnEdit.class.php" );
 
-if (isset($_GET[SUBMIT])) {
-	Validation::expect('message');
-	delete($_GET['message']); 
+if ($_SERVER['REQUEST_METHOD']=='POST') {
+	delete($_REQUEST['message']); 
 } else {
 	$target = getTarget();
 	$template = Presentation::getInstance();
@@ -20,6 +19,7 @@ if (isset($_GET[SUBMIT])) {
 // it is also allowed in templates for presentation, but not in field values
 
 function delete($message) {
+	Validation::expect('target','message');
 	$edit = new SvnEdit('delete');
 	$edit->setMessage($message);
 	$edit->addArgUrl(getTargetUrl());

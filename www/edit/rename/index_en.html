@@ -21,7 +21,7 @@ You can not rename this file.</p>
 </div>
 {=if $file,isWritable and not $file,isLockedBySomeoneElse}
 <div class="column" style="width: 60%">
-<form id="rename" name="rename" method="get" action="#">
+<form id="rename" name="rename" method="post" action="#">
   <fieldset>
 	<legend>{=$file,kind|ucfirst}: <a class="{=$file,kind}" href="{=$file,url}">{=$file,filename}</a></legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />

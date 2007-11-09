@@ -1,9 +1,10 @@
 # Apache directives for the repos host
 # Not all servers read .htaccess files,
 # the directives can also be placed in server conf files
+# Note that paths from document root must be hard coded
 
-ErrorDocument 400 /repos/errors/400/
-ErrorDocument 401 /repos/errors/401/
-ErrorDocument 403 /repos/errors/403/
-ErrorDocument 404 /repos/errors/404/
-ErrorDocument 500 /repos/errors/500/
+ErrorDocument 400 /repos-web/errors/400/
+ErrorDocument 401 /repos-web/errors/401/
+ErrorDocument 403 /repos-web/errors/403/
+ErrorDocument 404 /repos-web/errors/404/
+ErrorDocument 500 /repos-web/errors/500/

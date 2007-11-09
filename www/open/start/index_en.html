@@ -43,7 +43,7 @@ and the tools in each project.</p>
 	<!--{assign var='toolpath' value=$projecttools.$toolid}-->
 	<div class="row n{=cycle values=0,1,2,3}">
 	{=* special cases not handled by open *}
-	{=if $toolid eq news}{=assign var='toolpath' value=`$toolpath`news.xml}{=/if}
+	{=if $toolid eq 'news'}{=assign var='toolpath' value=`$toolpath`news.xml}{=/if}
 	{=*{=if $toolid eq calendar}{=assign var='toolpath' value=`$toolpath``$projectname`.ics}{=/if}*}
 	<a id="{=$toolid}:{=$projectname}" class="tool {=$toolid}" href="{=$webapp}open/?target={=$entry->getPath()}/{=$toolpath}">
 	<img border="0" src="{=$webapp}style/tools/{=$toolid}.png" hspace="10" align="absmiddle"/>{=$toolid}</a>

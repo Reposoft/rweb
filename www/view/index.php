@@ -7,6 +7,8 @@ define('VIEW_TIMEOUT',ini_get('max_execution_time') - VIEW_INTERVAL);
 
 header('Content-Type: text/html; charset=utf-8');
 
+// TODO Last-modified header for ajax calls?
+
 if(isset($_GET['result'])) {
 	$resultFile = System::getApplicationTemp('pages') . $_GET['result'];
 	if(!file_exists($resultFile)){

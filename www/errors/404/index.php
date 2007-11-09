@@ -24,7 +24,7 @@ if (!isRepositoryUrl($url)) {
 require('../../account/login.inc.php');
 
 // note that we have to do getParent first here, because parent may also be this page
-$near = login_getFirstNon404Parent(getParent($url));
+$near = login_getFirstNon404Parent(getParent($url), $status);
 
 $p->showErrorNoRedirect('
 There is no file or folder with the URL '.$url.'. It might have been moved or deleted.

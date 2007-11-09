@@ -26,6 +26,7 @@ define('REPOS_VERSION','@Dev@');
 // - code should report: 
 //   * E_USER_ERROR for server errors
 //   * E_USER_WARNING for user errors, like invalid parameters
+//   * E_USER_NOTICE for information, like message to send with authentication headers
 function reportError($n, $message, $file, $line) {
 	// Allow use of @ error-control operator to suppress errors
 	if (error_reporting() == 0) return;
@@ -51,7 +52,7 @@ function reportErrorText($n, $message, $trace) {
 	} else {
 		// other errors
 		if ($n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error');
-		echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>\n\n");
+		echo("Runtime error (type $n): $message\n<pre>\n$trace</pre>\n\n");
 	}
 	// TODO there is some weirdness with notices and Presentation->enableRedirectWaiting
 	//  that causes PHP to output headers of vies/index.php as cleartext here

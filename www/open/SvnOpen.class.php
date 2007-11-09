@@ -276,12 +276,14 @@ class SvnOpen {
 		}
 		// This is a read request, try to
 		if (!$targetUrl) $targetUrl = getRepository();
-		// TODO Use service request to forward authentication? - share code _and_ get the realm
+		// TODO Use service request to forward authentication?
+		// TODO Handle this for publicly readable location, getAuthName won't work.
+		//  See _svnFolderIsWritable?
 		$realm = getAuthName($targetUrl);
 		askForCredentials($realm);
 		// show message regardless of output type (XML/HTML/plaintext/json)
 		trigger_error('This Subversion operation requires authentication.'
-			.' Please log in or return to repository.', E_USER_WARNING);
+			.' Please log in or return to repository.', E_USER_NOTICE);
 		// now send the auth header with the error message
 		exit;
 	}

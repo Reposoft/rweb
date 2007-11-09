@@ -27,19 +27,8 @@
  * All scripts working with contents are expected to include this file.
  * Other scripts can include only repos.properties.php instead.
  *
- * If 'target' resource can be resolved using getTarget(),
- * login will be done automatically using <code>tagetLogin();</code>
- *
- * If 'target' is not known the standard way, login explicitly
- * by calling:
- * <code>
- * login($targetUrl);
- * </code>
- *
- * To do authentication without accessing a specific resource, do:
- * <code>
- * askForCredentialsAndExit($realm);
- * </code>
+ * If 'target' resource can be resolved using getTarget().
+ * Require authentication using <code>tagetLogin();</code>
  *
  * Login functions return true if login was successful.
  * Login always requires a target URL. This URL is used to find
@@ -64,7 +53,7 @@ if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/S
 // reserved username value for not-logged-in
 define('LOGIN_VOID_USER', '0');
 
-// automatically check target when this sscript is included
+// automatically check target when this script is included
 if (isTargetSet()) {
 	// special case for the svn index anomaly that root path is "/" but no other paths have trailing slash
 	if (strpos(getTarget(), '//') === 0) {
@@ -105,34 +94,29 @@ function enforceSSL() {
 }
 
 /**
- * Login to the resource specified as target according to getTarget()
+ * Require login to the resource specified as target according to getTarget(),
+ * request authentication if not authenticated already.
  */
 function targetLogin() {
 	$targetUrl = getTargetUrl();
-	login($targetUrl);
-}
-
-/**
- * @param String targetUrl The resource to authenticate to
- */
-function login($targetUrl) {
 	if (isLoggedIn()) {
 		if(verifyLogin($targetUrl)) {
 			// Do nothing. Parent script resumes operation.
 		} else {
 			header('HTTP/1.0 401 Unauthorized'); // TODO should use the same header that we got from targetUrl
 			trigger_error("Access denied for target resource $targetUrl", E_USER_WARNING); // expecting exit
-			exit; // TODO remove extra 'exit' when we're sure this header really is sent and not overwritten
 		}
 	} else {
+		// Just BASIC authentication, no extra info page like in account/login/index.php
 		$realm = getAuthName($targetUrl);
 		if ($realm) {
 			askForCredentials($realm);
-			// causes a refresh
+			trigger_error('Need authentication for resource '.$targetUrl, E_USER_NOTICE);
+			exit;
 		} else {
 			// target does not need login. Parent script resumes operation.
 		}
-	}	
+	}
 }
 
 /**
@@ -212,7 +196,7 @@ function _getLoginUrl($urlWithoutLogin) {
 
 /**
  * @param targetUrl The absolute URI of the resource
- * @return realm (string) authentication realm or false if login not required
+ * @return realm (string) authentication realm, or FALSE if login not required
  */
 function getAuthName($targetUrl) {
 	return login_getAuthNameFromRepository($targetUrl);
@@ -312,15 +296,6 @@ function askForCredentials($realm) {
 	}
 	header('WWW-Authenticate: Basic realm="' . $realm . '"');
 	header('HTTP/1.1 401 Authorization Required');
-}
-
-/**
- * Once you ask for credentials the browser will send the request again with credentials.
- */
-function askForCredentialsAndExit($realm) {
-	askForCredentials($realm);
-	// does not show a message on cancel
-	exit;
 }
 
 /**

@@ -76,6 +76,8 @@ class NewFilenameRule extends Rule {
  * Checks that a resource exists
  * and that access is granted publicly or to the acthenticated user.
  * 
+ * If the resource requires login, ServiceRequest will forward that transparently.
+ * 
  * Operations are validated upon commit, but since 'svn import'
  * will create any missing parent folders in the new path we must
  * validate parent folder explicitly.
@@ -96,6 +98,18 @@ class ResourceExistsRule extends Rule {
 		}
 		return $s->getStatus() == 200;
 	}	
+}
+
+class ResourceExistsAndIsWritableRule extends ResourceExistsRule {
+	function ResourceExistsAndIsWritableRule($fieldname='target') {
+		$this->ResourceExistsRule($fieldname);
+	}
+	function valid($fieldvalue) {
+		$v = parent::valid($fieldvalue);
+		// TODO How do we check if write access is allowed
+		//  for a folder that does not require login for read access?
+		return $v;
+	}
 }
 
 // ---- presentation support ----

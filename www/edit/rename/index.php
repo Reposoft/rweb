@@ -12,7 +12,7 @@ $parent = new ResourceExistsRule('folder');
 new NewFilenameRule('newname', $parent->getValue());
 
 // dispatch
-if (isset($_GET[SUBMIT])) {
+if ($_SERVER['REQUEST_METHOD']=='POST') {
 	svnRename(); 
 } else {
 	$target = getTarget();
@@ -34,9 +34,9 @@ function svnRename() {
 	Validation::expect('target', 'folder', 'newname', 'message');
 	$edit = new SvnEdit('move');
 	$oldUrl = getTargetUrl();
-	$newUrl = getRepository().$_GET['folder'].$_GET['newname'];
-	if (isset($_GET['message'])) {
-		$edit->setMessage($_GET['message']);
+	$newUrl = getRepository().$_REQUEST['folder'].$_REQUEST['newname'];
+	if (isset($_REQUEST['message'])) {
+		$edit->setMessage($_REQUEST['message']);
 	}
 	$edit->addArgUrl($oldUrl);
 	$edit->addArgUrl($newUrl);

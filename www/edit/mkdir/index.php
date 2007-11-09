@@ -7,7 +7,7 @@ addPlugin('validation');
 // automatic validation
 new FilenameRule('name');
 // svn import: parent folder must exists, to avoid implicit create
-$parent = new ResourceExistsRule('target');
+$parent = new ResourceExistsAndIsWritableRule();
 // explicit validation
 new NewFilenameRule('name', $parent->getValue());
 
