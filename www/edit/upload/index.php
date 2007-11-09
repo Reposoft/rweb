@@ -3,16 +3,10 @@
  * Upload new version of file
  * @package edit
  */
-require("../../conf/Presentation.class.php");
-require("../SvnEdit.class.php");
+require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
+require(dirname(dirname(__FILE__)).'/SvnEdit.class.php');
 //not 1.1//require("mimetype.inc.php");
-require('filewrite.inc.php');
-// required for the temporary mime type solution for HTML below
-require_once("../ServiceRequestEdit.class.php");
-require('../file/EditTypeRule.class.php');//addPlugin('edit');
-addPlugin('validation');
-addPlugin('filename');
-addPlugin('dateformat');
+require(dirname(__FILE__).'/filewrite.inc.php');
 
 // the only use for the numeric value is the MAX_FILE_SIZE parameter in the form, which is good for what?
 // without it we could just append 'b' to the ini value
@@ -28,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // name only exists for new files, not for new version requests
 new FilenameRule("name");
-new EditTypeRule('type');
+// disabled as plain uploads don't care about type //new EditTypeRule('type');
 
 if (!isTargetSet()) {
 	trigger_error("Could not upload file. The time limit of 10 minutes may have been exceeded," 
@@ -247,7 +241,7 @@ class Upload {
 			editWriteNewVersion($_POST['usertext'], $destinationFile, $type);
 			return;
 		}
-		$current = $_FILES[$this->file_id]['tmp_name'];;
+		$current = $_FILES[$this->file_id]['tmp_name'];
 		if (is_uploaded_file($current)) {
 			$from = fopen($current, 'rb');
 			$to = fopen($destinationFile, 'wb');
