@@ -12,7 +12,7 @@ div.editlog > pre {
 	color: gray;
 }
 </style>
-<!--{if $redirect}-->
+<!--{if isset($redirect)}-->
 <meta http-equiv="refresh" content="1;url={=$redirect}" />
 <!--{/if}-->
 </head>
@@ -49,7 +49,7 @@ div.editlog > pre {
 <!--{/if}-->
 <p><a id="return" href="{=$nexturl}">return to repository</a></p>
 <script type="text/javascript">document.getElementById('return').focus();</script>
-<!--{if $redirect}-->
+<!--{if isset($redirect)}-->
 <p><small>You should be automatically redirected to <a href="{=$redirect}">{=$redirect}</a></small></p>
 <!--{/if}-->
 <!--{if $revision}-->

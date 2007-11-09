@@ -129,6 +129,7 @@ if ($case==63) {
 	$open->addArgOption('--invalidoperation');
 	$open->exec();
 	displayEdit(Presentation::getInstance(), './');
+	exit; // not allowed to echo anything because it spoils redirected display
 }
 if ($case==70) {
 	class T {
