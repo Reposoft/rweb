@@ -109,8 +109,8 @@ function showUploadForm() {
  * @param Upload $upload
  */
 function processNewFile($upload) {
-	$presentation = Presentation::getInstance();
 	Validation::expect('name', 'type');
+	$presentation = Presentation::background();
 	$newfile = System::getTempFile('upload', $upload->getName());
 	$upload->processSubmit($newfile);
 	$edit = new SvnEdit('import');
@@ -135,7 +135,7 @@ function processNewFile($upload) {
  */
 function processNewVersion($upload) {
 	Validation::expect('fromrev', 'type');
-	$presentation = Presentation::getInstance();
+	$presentation = Presentation::background();
 	$dir = System::getTempFolder('upload');
 	$repoFolder = getParent($upload->getTargetUrl());
 	// check out existing files of the given revision

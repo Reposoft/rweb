@@ -147,20 +147,33 @@ class Presentation {
 	/**
 	 * Singleton accessor, for occations when it is not known if a Presentation object has already been allocated for the request.
 	 * Static, use Presentation::getInstance().
+	 * 
 	 * @return Presentation
 	 * @static
 	 */ 
 	function getInstance() {
-		static $instance;
-		if (!isset($instance)) {
+		static $instance = null;
+		if ($instance == null) {
 			$c = __CLASS__;
 			$instance = new $c;
-			if (true && function_exists('displayEdit') && isset($_GET[SUBMIT])) {
-				// automatic redirect-after-post
-				$instance->enableRedirectWaiting();
-			}
 		}
 		return $instance;
+	}
+	
+	/**
+	 * For edit operations that want redirect-after-post, that must be enabled
+	 *  after input validation (to simplify for validation frameworks)
+	 *  but before operation starts (as soon as possible).
+	 * 
+	 * They should call this method instead of getInstance
+	 * 
+	 * @static 
+	 */
+	function background() {
+		$p = Presentation::getInstance();
+		if (isRequestService()) return $p;
+		$p->enableRedirectWaiting();
+		return $p;
 	}
 	
 	/**

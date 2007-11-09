@@ -11,7 +11,7 @@ require('../../conf/Presentation.class.php');
 require('../SvnEdit.class.php');
 addPlugin('validation');
 
-if (isset($_GET[SUBMIT])) {
+if ($_SERVER['REQUEST_METHOD']=='POST') {
 	Validation::expect('message');
 	lock($_GET['message']); 
 } else {
@@ -27,6 +27,7 @@ if (isset($_GET[SUBMIT])) {
 
 function lock($message) {
 	$targeturl = getTargetUrl();
+	$p = Presentation::background();
 	$lock = new SvnEdit('lock');
 	if (isset($_GET['message'])) {
 		$lock->setMessage($_GET['message']);
@@ -35,7 +36,6 @@ function lock($message) {
 	}
 	$lock->addArgUrl($targeturl);
 	$lock->exec();
-	$p = Presentation::getInstance();
 	if (isset($_GET['download']) && $_GET['download']) {
 		$p->assign('redirect', getWebapp().'open/download/?target='.urlencode(getTarget()));
 	}

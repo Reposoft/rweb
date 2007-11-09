@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * Set svn property. Currently only used in service requests.
  *
  * @package
  */

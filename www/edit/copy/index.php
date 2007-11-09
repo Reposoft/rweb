@@ -13,7 +13,7 @@ $tofolder = rtrim($parent->getValue(), '/').'/';// don't require tailing slash f
 new NewFilenameRule('newname', $tofolder);
 
 // dispatch
-if (isset($_GET[SUBMIT])) {
+if ($_SERVER['REQUEST_METHOD']=='POST') {
 	svnCopy($tofolder); 
 } else {
 	$target = getTarget();
@@ -30,6 +30,7 @@ if (isset($_GET[SUBMIT])) {
 
 function svnCopy($tofolder) {
 	Validation::expect('target', 'tofolder', 'newname', 'move', 'message');
+	$template = Presentation::background();
 	if ($_GET['move']==1) {
 		$edit = new SvnEdit('move');
 	} else {
@@ -43,6 +44,6 @@ function svnCopy($tofolder) {
 	$edit->addArgUrl($oldUrl);
 	$edit->addArgUrl($newUrl);
 	$edit->exec();
-	displayEdit(Presentation::getInstance());
+	displayEdit($template);
 }
 ?>

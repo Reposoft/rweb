@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 
 function svnRename() {
 	Validation::expect('target', 'folder', 'newname', 'message');
+	$template = Presentation::background();
 	$edit = new SvnEdit('move');
 	$oldUrl = getTargetUrl();
 	$newUrl = getRepository().$_REQUEST['folder'].$_REQUEST['newname'];
@@ -41,6 +42,6 @@ function svnRename() {
 	$edit->addArgUrl($oldUrl);
 	$edit->addArgUrl($newUrl);
 	$edit->exec();
-	displayEdit(Presentation::getInstance());
+	displayEdit($template);
 }
 ?>

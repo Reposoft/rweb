@@ -27,8 +27,7 @@ if (isset($_REQUEST[SUBMIT])) {
 // it is also allowed in templates for presentation, but not in field values
 
 function createNewFolder($name, $message) {
-	global $folderRule;
-	$template = Presentation::getInstance();
+	$template = Presentation::background();
 	$newurl = getTargetUrl().$name;
 	$tmp = System::getTempFolder('emptyfolders');
 	$edit = new SvnEdit('import');

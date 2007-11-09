@@ -76,7 +76,7 @@ define('LOCALE_KEY', 'lang');
 define('WEBSERVICE_KEY', 'serv'); // html, json, xml or text
 
 // parameter conventions
-define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST
+define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST, used to plug in behaviour
 
 // ------ local configuration ------
 

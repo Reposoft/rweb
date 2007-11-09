@@ -5,7 +5,7 @@ require "../SvnEdit.class.php";
 require "xmlConflictHandler.php";
 
 
-if (isset($_GET[SUBMIT])) {
+if ($_SERVER['REQUEST_METHOD']=='POST') {
 	doAutomerge($_GET['branchFile']);
 } else {
 	$target = getTarget();
@@ -37,7 +37,7 @@ function svnList($listFilesInFolder) {
 }
 
 function doAutomerge($sourceFile){
-	$p = Presentation::getInstance();
+	$p = Presentation::background();
 	$targetFile = substr($sourceFile, strrpos($sourceFile, "-")+1);
 	$source = '/demoproject/branches/'.$sourceFile;
 	$sourceUrl = getRepository().$source;	// http://localhost/LocalRepos/branches/test.xml
