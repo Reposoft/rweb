@@ -44,7 +44,7 @@ Select "delete the original" to make this a move operation.</p>
 </div>
 
 <div class="column" style="width: 70%">
-<form id="copy" name="copy" method="get" action="#">
+<form id="copy" name="copy" method="post" action="#">
 	<fieldset>
 	<legend>{=$file,kind|ucfirst}: <a class="{=$file,kind}" href="{=$file,url}">{=$file,filename}</a>
 		{=if not $file,isFolder}&nbsp;<span class="revision">{=$file,revision}</span>{=/if}</legend>

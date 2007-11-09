@@ -6,7 +6,7 @@ require "xmlConflictHandler.php";
 
 
 if ($_SERVER['REQUEST_METHOD']=='POST') {
-	doAutomerge($_GET['branchFile']);
+	doAutomerge($_POST['branchFile']);
 } else {
 	$target = getTarget();
 	$template = Presentation::getInstance();

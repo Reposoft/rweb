@@ -41,7 +41,7 @@ function details_write(e, entry) {
 		var noaccess = details_isNoaccess(this);
 		if (noaccess) {
 			e.addClass('noaccess');
-			$('.username', e).append('(no access)'); // temporary solution
+			$('.username', e).addClass('unknown').append('(unknown)'); // temporary solution
 		} else {
 			$('.username', e).append($('commit>author', this).text());
 			$('.datetime', e).append($('commit>date', this).text());
@@ -110,7 +110,8 @@ function details_isLocked(entry) {
 }
 
 function details_isNoaccess(entry) {
-	return $('commit>author', entry).size() == 0;
+	// commit>author may be empty for anonymous commit, but date seems to be empty only on no read access
+	return $('commit>date', entry).size() == 0;
 }
 
 /**

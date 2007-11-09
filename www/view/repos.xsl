@@ -131,7 +131,7 @@
 		<div class="row contentcommands">
 			<div class="actions">
 				<xsl:if test="$editUrl">
-					<a id="repos-edit" class="translate" href="{$editUrl}file/?target={$folder}">Create Repos document</a>
+					<a id="repos-edit" class="translate" href="{$editUrl}file/?target={$folder}">Repos create</a>
 				</xsl:if>
 			</div>
 		</div>

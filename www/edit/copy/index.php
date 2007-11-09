@@ -31,15 +31,15 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 function svnCopy($tofolder) {
 	Validation::expect('target', 'tofolder', 'newname', 'move', 'message');
 	$template = Presentation::background();
-	if ($_GET['move']==1) {
+	if ($_POST['move']==1) {
 		$edit = new SvnEdit('move');
 	} else {
 		$edit = new SvnEdit('copy');
 	}
 	$oldUrl = getTargetUrl();
-	$newUrl = getRepository().$tofolder.$_GET['newname'];
-	if (isset($_GET['message'])) {
-		$edit->setMessage($_GET['message']);
+	$newUrl = getRepository().$tofolder.$_POST['newname'];
+	if (isset($_POST['message'])) {
+		$edit->setMessage($_POST['message']);
 	}
 	$edit->addArgUrl($oldUrl);
 	$edit->addArgUrl($newUrl);

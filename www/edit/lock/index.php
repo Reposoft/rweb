@@ -13,7 +13,7 @@ addPlugin('validation');
 
 if ($_SERVER['REQUEST_METHOD']=='POST') {
 	Validation::expect('message');
-	lock($_GET['message']); 
+	lock($_POST['message']); 
 } else {
 	$target = getTarget();
 	$template = Presentation::getInstance();
@@ -29,14 +29,14 @@ function lock($message) {
 	$targeturl = getTargetUrl();
 	$p = Presentation::background();
 	$lock = new SvnEdit('lock');
-	if (isset($_GET['message'])) {
-		$lock->setMessage($_GET['message']);
+	if (isset($_POST['message'])) {
+		$lock->setMessage($_POST['message']);
 	} else {
 		$lock->setMessage("");
 	}
 	$lock->addArgUrl($targeturl);
 	$lock->exec();
-	if (isset($_GET['download']) && $_GET['download']) {
+	if (isset($_POST['download']) && $_POST['download']) {
 		$p->assign('redirect', getWebapp().'open/download/?target='.urlencode(getTarget()));
 	}
 	displayEdit($p, getParent($targeturl));
