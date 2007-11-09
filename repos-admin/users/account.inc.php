@@ -11,8 +11,10 @@
  *
  * @package account
  */
-if (!class_exists('Command')) require(dirname(dirname(__FILE__)).'/conf/Command.class.php');
-if (!class_exists('Validation')) require(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php');
+
+require( dirname(dirname(__FILE__)).'/admin.inc.php' );
+if (!class_exists('Command')) require(ReposWeb.'conf/Command.class.php');
+if (!class_exists('Validation')) require(ReposWeb.'plugins/validation/validation.inc.php');
 
 if (!getConfig('users_file')) {
 	trigger_error('Repos user administration is not enabled.', E_USER_ERROR);

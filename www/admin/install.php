@@ -4,9 +4,6 @@
  * that have been tightly integrated with the core when they were the same component.
  */
 
-
-require( dirname(dirname(__FILE__)).'/conf/repos.properties.php' );
-
 if (!isset($_SERVER['IS_ADMIN_CLIENT']) || !$_SERVER['IS_ADMIN_CLIENT']) {
 	// the repos-admin application can be protected using any method,
 	// but here we hard code for local service calls

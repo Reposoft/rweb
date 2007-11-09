@@ -3,7 +3,7 @@
  * Updates the server htpasswd file with a random password for a specific user.
  * 
  * This page is accessible for all users (as a lost-my-password function)
- * but unlike the repos/admin/ reset function it does not display the new password
+ * but unlike the accountreset/ reset function it does not display the new password
  * (it sends an email to the registered address)
  * and it requires a matching email address.
  *

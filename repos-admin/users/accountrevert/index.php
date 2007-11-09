@@ -8,8 +8,7 @@
  * @package account
  */
 
-require( dirname(dirname(dirname(__FILE__))).'/reposweb.inc.php' );
-require( ReposWeb.'account/account.inc.php' );
+require( dirname(dirname(__FILE__)).'/account.inc.php' );
 require( ReposWeb.'conf/Report.class.php' );
 
 $r = new Report('Update user login');

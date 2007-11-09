@@ -2,11 +2,13 @@
 /**
  * Updates the server htpasswd file with a random password for a specific user.
  *
+ * Currently quire same as the users/reset/ but in repos 1.1 this was the admin
+ * function and users/reset/ was lostpassword for everyone.
+ * 
  * @package admin
  */
 
-require( '../../reposweb.inc.php' );
-require( ReposWeb.'account/account.inc.php' );
+require( dirname(dirname(__FILE__)).'/account.inc.php' );
 
 Validation::expect('username');
 adminResetPassword($_GET['username']);
