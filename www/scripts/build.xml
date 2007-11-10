@@ -15,6 +15,7 @@
 	<property name="build.folder" value="build" />
 	<property name="build.jar" value="${build.folder}/js.jar" description="Rhino JS Engine" />
 	<property name="build.script" value="${build.folder}/min.js"/>
+	<available file="/usr/lib/sablevm" property="java.arm" description="Java running on a non-standard VM"/>
 
 	<property name="intro.folder" value="./reposin" />
 	<property name="outro.folder" value="./reposout" />
@@ -43,7 +44,7 @@
 		<echo message="${head.js.file}.big built." />
 	</target>
 
-	<target name="compress" depends="head.js.concat"
+	<target name="compress" depends="head.js.concat, compress.arm" unless="java.arm"
 		description="Remove all comments and whitespace, no compression">
 		<echo message="Building ${head.js.file}" />
 		<java jar="${build.jar}" fork="true">
@@ -52,6 +53,14 @@
 			<arg value="${head.js.file}" />
 		</java>
 		<echo message="${head.js.file} built." />
+	</target>
+	
+	<target name="compress.arm" if="java.arm" description="Avoid issues with Rhino on ARM/sablevm">
+		<echo message="Building ${head.js.file} with non-java minifier" />
+		<exec executable="${build.folder}/jsmin.arm"
+			input="${head.js.file}.big" output="${head.js.file}">
+		</exec>
+		<echo message="${head.js.file} minified." />
 	</target>
 	
 	<target name="dev" depends="head.js.concat"

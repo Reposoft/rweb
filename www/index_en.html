@@ -20,16 +20,6 @@
 
 <body>
 
-<!--{*
-<div id="commandbar">
-<div class="right">
-<a href="/?logout" id="logout">logout</a>
-<img src="{=$webapp}style/logo/repos1.png" border="0" width="72" height="18" alt="repos.se" title="repos.se content management"/>
-</div>
-<a class="need-at-least-one-command" href="#"></a>
-</div>
-*}-->
-
 <div id="intro">
 <h1>
 <img src="{=$webapp}style/logo/repos4.png" border="0" align="absmiddle" width="288" height="72" alt="repos.se"/>
@@ -37,6 +27,7 @@
 </div>
 
 <div id="startbuttons" class="column" style="width: 50%">
+<!-- use #commandbar to work for plugins regardless of position in page -->
 <div id="commandbar">
 <a id="parent" href="/"> up</a>
 

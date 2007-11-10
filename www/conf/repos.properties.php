@@ -296,8 +296,13 @@ function getSelfQuery() {
  */
 function getService() {
 	$p = getSelfPath();
+	if ($p == '/') {
+		if (strpos(getSelfQuery(),'login')===0) return 'account/login/';
+		return 'account/logout/';
+	}
 	$s = strpos($p,'/',1);
 	$e = strrpos($p,'/');
+	if ($s==$e) return 'home/';
 	return substr($p,$s+1,$e-$s);
 }
 

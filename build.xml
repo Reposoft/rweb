@@ -13,17 +13,20 @@
 	
 	<property name="cache.smarty.file" value="${tools.folder}/cached-smarty.tar"/>
 	<available file="${cache.smarty.file}" property="cache.smarty.available"/>
-	
-	<!-- rhino, used for javascript conpression, has issues with jamvm and sablevm, and Sun has no JRE for ARM -->
-	<available file="/usr/lib/sablevm" property="java.arm" description="Java running on a non-standard VM"/>
 		
 	<target name="clean" description="Clean all output folders">
 		<delete dir="${source.folder}" failonerror="true"/>
 		<delete dir="${target.folder}" failonerror="true"/>
 	</target>
 	
-	<target name="preprocess" depends="clean" description="Copy to temp folder with filter">
+	<target name="preprocess.js">
+		<echo message="Building head.js from the available scripts and plugins in source"/>
+		<ant dir="${development.folder}/scripts/"/>
+	</target>
+
+	<target name="preprocess" depends="clean, preprocess.js" description="Copy to temp folder with filter">
 		<mkdir dir="${target.folder}"/>
+		<echo message="Copying distributable application contents to intermediate folder"/>
 		<copy todir="${source.folder}" includeemptydirs="true">
 			<fileset dir="${development.folder}">
 				<exclude name="**/.svn"/>
@@ -33,7 +36,6 @@
 			</fileset>
 			<fileset dir="${development.folder}">
 				<include name="scripts/head.js"/>
-				<include name="scripts/styleswitch/**"/>
 				<include name="lib/*.html"/>
 				<include name="lib/*.php"/>
 				<include name="lib/*/*.html"/>
@@ -188,64 +190,6 @@
 		<copy tofile="${source.folder}/plugins/edit/template_en.html" file="${development.folder}/plugins/edit/template_en.html"/>
 		<!-- done, mark template cache in CACHE_DIR as complete --> 
 		<touch file="${source.folder}/lib/smarty/cache/COMPLETE"/>
-	</target>
-	
-	<target name="get.rhino">
-		<get dest="${encode.js.jar}" usetimestamp="true"
-			src="http://repo1.maven.org/maven2/rhino/js/1.6R7/js-1.6R7.jar"/>
-	</target>
-	
-	<target name="encode.javascript" depends="get.rhino"
-			description="Selects javascript encoding and processes all scripts">
-		<!-- scripts may have be suitable for different encoders, select individually -->
-		<antcall target="encode.javascript.select.jsmin"></antcall>
-		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="acl"/></antcall>
-		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="details"/></antcall>
-		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="dateformat"/></antcall>
-		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="edit"/></antcall>
-		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="filename"/></antcall>
-		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="thumbnails"/></antcall>
-		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="tooltip"/></antcall>
-		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="validation"/></antcall>
-		<antcall target="encode.javascript.plugin"><param name="js.plugin" value="syntax"/></antcall>
-		<antcall target="encode.javascript.run">
-			<param name="encode.js.source" value="${source.folder}/plugins/syntax/shBrushAcl.js"/>
-			<param name="encode.js.target" value="${source.folder}/plugins/syntax/shBrushAcl.js"/>
-		</antcall>
-		<delete file="${encode.js.script}"/>
-	</target>
-	
-	<target name="encode.javascript.plugin" description="simply a shortcut for plugin encode antcall">
-		<antcall target="encode.javascript.run">
-			<param name="encode.js.source" value="${source.folder}/plugins/${js.plugin}/${js.plugin}.js"/>
-			<param name="encode.js.target" value="${source.folder}/plugins/${js.plugin}/${js.plugin}.js"/>
-		</antcall>
-	</target>
-	
-	<target name="encode.javascript.run" depends="encode.javascript.run.arm" unless="java.arm"
-			description="Encodes a single js file using the current encoding script">
-		<echo message="Encoding ${encode.js.target}"/>
-		<java jar="${encode.js.jar}" fork="true">
-          <arg value="${encode.js.script}" />
-          <arg value="${encode.js.source}" />
-          <arg value="${encode.js.target}" />
-      </java>
-	</target>
-
-	<target name="encode.javascript.run.arm" if="java.arm">
-		<exec executable="${tools.folder}/js/jsmin.arm"
-			input="${encode.js.source}" output="${target.folder}/encoded.tmp">
-		</exec>
-		<move file="${target.folder}/encoded.tmp" tofile="${encode.js.target}" overwrite="true" />
-	</target>
-	
-	<target name="encode.javascript.select.jsmin" description="http://www.crockford.com/javascript/jsmin.html">
-		<echo file="${encode.js.script}">
-		load("build/js/jsmin.js", "build/js/writeFile.js");
-		/* have to use Rhino's built in reader (which fails in SableVM) for jsmin to work */
-		var f = jsmin('', readFile(arguments[0]), 3);
-		writeFile( arguments[1], f );
-		</echo>
 	</target>
 	
 	<target name="encode.xslt" description="minimize our xslt">

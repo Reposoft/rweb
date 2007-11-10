@@ -1,4 +1,4 @@
-
+/*
 Repos.service('edit/upload/', function() {
 	var p = '/repos-plugins/jquery.jqUploader/';
 	$.getScript(p+'jquery.flash.js', function(){
@@ -11,3 +11,4 @@ Repos.service('edit/upload/', function() {
 		});
 	});
 });
+*/
