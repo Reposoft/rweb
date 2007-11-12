@@ -142,20 +142,33 @@ a.folder {
 	padding: 3px;
 	border-bottom: 1px solid #CCCCCC;
 }
-.row {
+ul.index {
+	padding: 0;
+	margin: 0;
+}
+.index li {
+	list-style: none;
 	padding: 1px;
-	border-bottom: 1px solid #FFFFFF;
+	margin: 0;
 }
-.row:hover {
-	border-bottom: 1px dashed #CCCC99;
+.n0, .n1, .n2, .n3 {
+	background: url(rowbackground.png) bottom repeat-x;
 }
-.row div.actions {
+.n0:hover, .n1:hover, .n2:hover, .n3:hover {
+	background: url(rowbackground-hover.png) bottom repeat-x;
+}
+li img {
+	vertical-align: middle;
+}
+li ul.actions {
 	display: inline;
 	position: absolute;
 	left: 36em;
+	padding: 0;
 }
-.n0, .n1, .n2, .n3 {
-	background: url(rowbackground.png) top repeat-x;
+li ul.actions li {
+	list-style: none;
+	display: inline;
 }
 #footer {
 	margin-top: 1.5em;

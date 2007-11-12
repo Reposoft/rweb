@@ -121,20 +121,20 @@
 		<h2 id="path">
 			<xsl:copy-of select="$pathlinks"/>
 		</h2>
-		<xsl:apply-templates select="dir">
-			<xsl:sort select="@name"/>
-			<xsl:with-param name="toolcheck" select="$toolcheck"/>
-		</xsl:apply-templates>
-		<xsl:apply-templates select="file">
-			<xsl:sort select="@name"/>
-		</xsl:apply-templates>
-		<div class="row contentcommands">
-			<div class="actions">
-				<xsl:if test="$editUrl">
-					<a id="repos-edit" class="translate" href="{$editUrl}file/?target={$folder}">Repos create</a>
-				</xsl:if>
-			</div>
-		</div>
+		<ul class="index">
+			<xsl:apply-templates select="dir">
+				<xsl:sort select="@name"/>
+				<xsl:with-param name="toolcheck" select="$toolcheck"/>
+			</xsl:apply-templates>
+			<xsl:apply-templates select="file">
+				<xsl:sort select="@name"/>
+			</xsl:apply-templates>
+		</ul>
+		<ul class="contentcommands">
+			<xsl:if test="$editUrl">
+				<li><a id="repos-edit" class="translate" href="{$editUrl}file/?target={$folder}">Repos create</a></li>
+			</xsl:if>
+		</ul>
 	</xsl:template>
 	<!-- generate directory -->
 	<xsl:template match="dir">
@@ -160,19 +160,19 @@
 			</xsl:if>
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
-		<div id="row:{$id}" class="row n{$n mod 4}{$classadd}">
-			<div class="actions">
-				<a id="view:{$id}" class="action action-view" href="{$href}">view</a>
+		<li id="row:{$id}" class="n{$n mod 4}{$classadd}">
+			<ul class="actions">
+				<li><a id="view:{$id}" class="action action-view" href="{$href}">view</a></li>
 				<xsl:if test="$editUrl">
-					<a id="copy:{$id}" class="action action-copy"  href="{$editUrl}copy/?target={$target}">copy</a>
-					<a id="rename:{$id}" class="action action-rename" href="{$editUrl}rename/?target={$target}">rename</a>
-					<a id="delete:{$id}" class="action action-delete" href="{$editUrl}delete/?target={$target}">delete</a>
+					<li><a id="copy:{$id}" class="action action-copy"  href="{$editUrl}copy/?target={$target}">copy</a></li>
+					<li><a id="rename:{$id}" class="action action-rename" href="{$editUrl}rename/?target={$target}">rename</a></li>
+					<li><a id="delete:{$id}" class="action action-delete" href="{$editUrl}delete/?target={$target}">delete</a></li>
 				</xsl:if>
-			</div>
+			</ul>
 			<a id="open:{$id}" class="folder{$classadd}" href="{$href}">
 				<xsl:value-of select="@name"/>
 			</a>
-		</div>
+		</li>
 	</xsl:template>
 	<!-- generate file -->
 	<xsl:template match="file">
@@ -195,22 +195,22 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="n" select="count(/svn/index/dir) + position() - 1"/>
-		<div id="row:{$id}" class="row n{$n mod 4}">
-			<div class="actions">
-				<a id="view:{$id}" class="action" href="{$web}open/?target={$target}">view</a>
+		<li id="row:{$id}" class="n{$n mod 4}">
+			<ul class="actions">
+				<li><a id="view:{$id}" class="action" href="{$web}open/?target={$target}">view</a></li>
 				<xsl:if test="$editUrl">
-					<a id="edit:{$id}" class="action" href="{$editUrl}?target={$target}">edit</a>
-					<a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={$target}">copy</a>
-					<a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={$target}">rename</a>
-					<a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={$target}">delete</a>
-					<a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={$target}">upload&#xA0;changes</a>
+					<li><a id="edit:{$id}" class="action" href="{$editUrl}?target={$target}">edit</a></li>
+					<li><a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={$target}">copy</a></li>
+					<li><a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={$target}">rename</a></li>
+					<li><a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={$target}">delete</a></li>
+					<li><a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={$target}">upload&#xA0;changes</a></li>
 				</xsl:if>
-				<a id="history:{$id}" class="action" href="{$web}open/log/?target={$target}">view&#xA0;history</a>
-			</div>
+				<li><a id="history:{$id}" class="action" href="{$web}open/log/?target={$target}">view&#xA0;history</a></li>
+			</ul>
 			<a id="open:{$id}" class="file-{$filetype} file" href="{$href}">
 				<xsl:value-of select="@name"/>
 			</a>
-		</div>
+		</li>
 	</xsl:template>
 	<!-- extra info and logos -->
 	<xsl:template name="footer">

@@ -36,19 +36,20 @@ and the tools in each project.</p>
 <a class="folder {=if $entry->isReadOnly()}readonly{=/if}" href="{=$webapp}open/project/?target={=$entry->getPath()}/">{=$projectname}</a>
  *}-->
 </h2>
-<!--{* todo: class groupaccess *}-->
+<ul class="index">
 	<!--{* bug with generated 'foreach a as b => c' in zendguard4+php5.2, derive key *}-->
 	<!--{assign var='projecttoolids' value=$projecttools|@array_keys}-->	
 	<!--{foreach from=$projecttoolids item=toolid}-->
 	<!--{assign var='toolpath' value=$projecttools.$toolid}-->
-	<div class="row n{=cycle values=0,1,2,3}">
+	<li class="n{=cycle values=0,1,2,3}">
 	{=* special cases not handled by open *}
 	{=if $toolid eq 'news'}{=assign var='toolpath' value=`$toolpath`news.xml}{=/if}
 	{=*{=if $toolid eq calendar}{=assign var='toolpath' value=`$toolpath``$projectname`.ics}{=/if}*}
 	<a id="{=$toolid}:{=$projectname}" class="tool {=$toolid}" href="{=$webapp}open/?target={=$entry->getPath()}/{=$toolpath}">
-	<img border="0" src="{=$webapp}style/tools/{=$toolid}.png" hspace="10" align="absmiddle"/>{=$toolid}</a>
-	</div>
+	<img border="0" src="{=$webapp}style/tools/{=$toolid}.png" hspace="10"/>{=$toolid}</a>
+	</li>
 	<!--{/foreach}-->
+</ul>
 </div>
 {=if $smarty.foreach.project.iteration + $smarty.foreach.project.iteration eq $smarty.foreach.project.total
 or $smarty.foreach.project.iteration + $smarty.foreach.project.iteration - 1 eq $smarty.foreach.project.total}
