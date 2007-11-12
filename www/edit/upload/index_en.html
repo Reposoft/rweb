@@ -15,7 +15,7 @@ function autoFillFilename(path) {
 	document.getElementsByName('name')[0].value = filename;
 <!--{else}-->
 	if (filename == document.getElementById('name').value) return;
-	var m = filename.match(/-(\d+)\.?\w*$/);
+	var m = filename.match(/\(r(\d+)\)\.?\w*$/);
 	if (!m || 2 > m.length) return; 
 	var rev = m[1];
 	var button = document.getElementById('fromrev'+rev);

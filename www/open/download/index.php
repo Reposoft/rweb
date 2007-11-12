@@ -18,7 +18,7 @@ if ($file->getStatus() != 200) {
 
 $name = $file->getFilename();
 $dot = strrpos($name, '.');
-$name = substr($name, 0, $dot).'-'.$file->getRevision().substr($name,$dot);
+$name = substr($name, 0, $dot).'(r'.$file->getRevision().')'.substr($name,$dot);
 
 // IE6 needs encoded name, other browsers don't like that.
 if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
