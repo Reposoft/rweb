@@ -8,7 +8,7 @@
 <div id="commandbar">
 <a id="back" href="{=$referer}">back</a>
 <a id="parent" href="{=$userhome}">startpage</a>
-{=if $logout}
+{=if isset($logout)}
 <a id="logout" href="{=$logout}">logout</a>
 {=/if}
 </div>

@@ -316,6 +316,8 @@ function getService() {
 function isRequestService() {
 	if (isRequestNoBody()) return true;
 	if (!isset($_REQUEST[WEBSERVICE_KEY])) {
+		// This method may be used in CLI mode, in which case there are no service requests
+		if (!isset($_SERVER['REQUEST_URI'])) return false;
 		// ErrorDocument in repository might not get the proper superglobals
 		if (strpos($_SERVER['REQUEST_URI'], 'serv=') > 0) return true;
 		return false;
@@ -328,7 +330,7 @@ function isRequestService() {
  * @return boolean true if HEAD method request
  */
 function isRequestNoBody() {
-	return $_SERVER['REQUEST_METHOD']=='HEAD';
+	return isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']=='HEAD';
 }
 
 /**

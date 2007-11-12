@@ -59,7 +59,6 @@
 	<target name="compile" depends="preprocess"
 			description="Template method for compiling everything to an application folder ready for distributiion">
 		<antcall target="encode.templates"></antcall>
-		<antcall target="encode.javascript"></antcall>
 		<antcall target="encode.xslt"></antcall>
 		<antcall target="compile.excludes"></antcall>
 		<!-- attempt compile tools in order of preference, they all produce the app folder if they consider themselves available -->
@@ -182,12 +181,8 @@
 				<include name="conf/**/*.html"/>
 				<include name="account/**/*.html"/>
 				<include name="admin/**/*.html"/>
-				<include name="plugins/edit/template_en.html"/>
-				<include name="plugins/calendar/index_en.html"/>
 			</fileset>
 		</apply>
-		<!-- keep the source of some templates -->
-		<copy tofile="${source.folder}/plugins/edit/template_en.html" file="${development.folder}/plugins/edit/template_en.html"/>
 		<!-- done, mark template cache in CACHE_DIR as complete --> 
 		<touch file="${source.folder}/lib/smarty/cache/COMPLETE"/>
 	</target>
@@ -235,21 +230,28 @@
 		<exec executable="${development.folder}/lib/phpdoc/makedocs.bat" dir="${development.folder}/lib/phpdoc/"/>
 	</target>
 	
-	<target name="package.gzip" depends="dist.clean" description="Create distributable archive">
-		<tar destfile="${package.filename}.tgz" compression="gzip"
-			basedir="${target.folder}" includes="${app.name}/**"/>
+	<target name="package.web" depends="dist.clean" description="Create distributable archive">
+		<tar destfile="${package.web.filename}.tgz" compression="gzip"
+			basedir="${target.folder}" includes="${app.name}/**,${app.name}-plugins/**"/>
+		<zip destfile="${package.web.filename}.zip" encoding="UTF8"
+			basedir="${target.folder}" includes="${app.name}/**,${app.name}-plugins/**"/>
 	</target>
 
-	<target name="package.zip" depends="dist.clean" description="Create distributable archive">
-		<zip destfile="${package.filename}.zip" encoding="UTF8"
-			basedir="${target.folder}" includes="${app.name}/**"/>
+	<target name="package.admin" depends="dist.clean" description="Admin addon to Repos Web">
+		<tar destfile="${package.admin.filename}.tgz" compression="gzip">
+			<tarfileset dir="${target.folder}">
+				<include name="${app.name}-admin/**"/>
+			</tarfileset>
+		</tar>
 	</target>
 	
-	<target name="package.backuphost" depends="dist.clean" description="Minimal repos distribution for mirror hosts (no web)">
-		<tar destfile="${package.backuphost.filename}.tgz" compression="gzip">
+	<target name="package.backup" depends="dist.clean"
+			description="Standalone minimal repos distribution for mirror hosts (no web)">
+		<tar destfile="${package.backup.filename}.tgz" compression="gzip">
 			<tarfileset dir="${target.folder}">
 				<include name="${app.name}/conf/**"/>
-				<include name="${app.name}/admin/**"/>
+				<include name="${app.name}-admin/*"/>
+				<include name="${app.name}-admin/backup/**"/>
 			</tarfileset>
 		</tar>
 	</target>
@@ -261,7 +263,7 @@
 			basedir="${development.folder}" includes="test/**"/>
 	</target>
 	
-	<target name="dist" depends="package.gzip,package.zip,package.backuphost,package.tests"
+	<target name="dist" depends="package.web,package.admin,package.backup,package.tests"
 			description="Run all packaging activities">
 	</target>
 	
