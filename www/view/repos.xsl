@@ -130,11 +130,11 @@
 				<xsl:sort select="@name"/>
 			</xsl:apply-templates>
 		</ul>
+		<xsl:if test="$editUrl">
 		<ul class="contentcommands">
-			<xsl:if test="$editUrl">
-				<li><a id="repos-edit" class="translate" href="{$editUrl}file/?target={$folder}">Repos create</a></li>
-			</xsl:if>
+			<li><a id="repos-edit" class="action translate" href="{$editUrl}file/?target={$folder}">repos editor</a></li>
 		</ul>
+		</xsl:if>
 	</xsl:template>
 	<!-- generate directory -->
 	<xsl:template match="dir">
@@ -268,7 +268,7 @@
 					<xsl:text>/</xsl:text>
 				</xsl:if>
 			</span>
-			<span class="separator{$classadd}"><xsl:value-of select="'/'"/></span>
+			<span class="separator"><xsl:value-of select="'/'"/></span>
 		</xsl:if>
 		<xsl:if test="boolean($rest)">
 			<xsl:if test="boolean($f)">
@@ -276,7 +276,7 @@
 					<xsl:value-of select="$f"/>
 				</a>
 			</xsl:if>
-			<span class="separator{$classadd}"><xsl:value-of select="'/'"/></span>
+			<span class="separator"><xsl:value-of select="'/'"/></span>
 			<xsl:call-template name="getFolderPathLinks">
 				<xsl:with-param name="folders" select="$rest"/>
 				<xsl:with-param name="return" select="substring-after($return,'/')"/>

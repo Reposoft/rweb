@@ -12,25 +12,31 @@
 	background-image: url('../commands/24x24/createfolder.png');
 }
 /* commands in index */
-.contentcommands a {
+ul.contentcommands {
+	padding-left: 36em;
+	margin-top: 0.5em;
+	margin-bottom: 0;
+	list-style: none;
+}
+ul.contentcommands a {
 	background-position: left center;
 	background-repeat: no-repeat;
-	margin: 0.2em;
+	padding: 2px;
 	padding-left: 18px;
 }
 #repos-edit {
 	background-image: url('../commands/16x16/edit.png');
 }
 /* special folders */
-.separator.projectname {
-	visibility: hidden;
+#path .separator {
+	color: #777;
 }
-#path .path.tool {
+#path .tool {
 	background-position: left center;
 	background-repeat: no-repeat;
 	padding-left: 17px;
 }
-#path .path.tool-trunk, .row .tool-trunk {
+a.tool-trunk, span.tool-trunk {
 	background-image: url('../tools/16x16/trunk.png');
 }
 .toolchild {}
@@ -44,12 +50,12 @@
 	background-image: url('../commands/24x24/details.png');
 	cursor: pointer;
 }
-.row div.details {
+div.details {
 	position: relative;
 	left: 3.0em;
 	height: 1.8em;
 }
-.row div.details span {
+div.details span {
 	margin: 0.4em;
 }
 /* directory listing */
