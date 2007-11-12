@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Format filesize strings</title>
+
+<link type="text/css" rel="stylesheet" href="../../style/global.css"></link>
+
+<script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="byteformat.js"></script>
+<script type="text/javascript" src="../../scripts/unittest/testwalk.js"></script>
+
+<style type="text/css">
+.original {
+}
+.byteformat {
+	position: absolute;
+	left: 15em;
+	color: maroon;
+}
+
+</style>
+
+</head>
+<body>
+
+<h1>Byteformat</h1>
+
+<p><code>$('.integerSizeInBytes').byteformat()</code></p>
+
+<ul class="demo">
+<li>0</li>
+<li>1</li>
+<li>1000</li>
+<li>1023</li>
+<li>1024</li>
+<li>1025</li>
+<li>1000000</li>
+<li>1048576</li>
+</ul>
+
+<p>try: &nbsp;
+<input id="try" type="text" size="15" onkeyup="$('#formatted').text($(this).val()).byteformat();"/>
+&nbsp; <span id="formatted"></span>
+</p>
+
+<h2>unit tests</h2>
+<script type="text/javascript">
+
+$('#try').focus();
+
+function testFormatSizeBytes() {
+	assert($('<p>1</p>').byteformat().text(), '1 B');
+	assert($('<p>999</p>').byteformat().text(), '999 B');
+};
+
+function testFormatSizeKb() {
+	assert($('<p>1000</p>').byteformat().text(), '0.98 kB');
+	assert($('<p>1009</p>').byteformat().text(), '0.99 kB');
+	assert($('<p>1029</p>').byteformat().text(), '1.00 kB');
+	assert($('<p>'+(1024 * 10 + 51)+'</p>').byteformat().text(), '10.0 kB');
+	assert($('<p>'+(1024 * 100 + 52)+'</p>').byteformat().text(), '99.9 kB');
+	assert($('<p>'+(1024 * 1000 - 513)+'</p>').byteformat().text(), '999 kB');
+};
+
+function testFormatSizeMb() {
+	assert($('<p>'+(1024 * 1000 + 512)+'</p>').byteformat().text(), '0.98 MB');
+	assert($('<p>'+(1024 * 1024 + 511)+'</p>').byteformat().text(), '1.00 MB');
+	assert($('<p>'+(1024 * 1024 * 100)+'</p>').byteformat().text(), '100 MB');
+	assert($('<p>'+(1024 * 1024 + 1000)+'</p>').byteformat().text(), '1000 MB');
+};
+
+// demo page
+$('.demo li').each( function() {
+	var b = $(this).text();
+	$(this).empty().append('<span class="original">'+b+'</span>');
+	$('<span/>').addClass('byteformat').append(b).appendTo(this).byteformat();
+} );
+
+</script>
+
+</body>
+</html>
