@@ -43,25 +43,18 @@ function autoFillFilename(path) {
 Save the file on your hard drive, edit, then upload the new version in the form below.</p>
 <!--{/if}-->
 <!--{if $isfile}-->
-<p>As a new version of file <a class="file" href="{=$file,url}">{=$file,filename}</a>.</p>
-<div class="details" title="{=$target}" style="display: none">
-Current revision: <span class="revision"></span><br />
-Last modified <span class="datetime"></span> by <span class="username"></span><br />
-Filesize: <span class="filesize"></span><br />
-</div>
-<!-- fixed, but there is still an option to overwrite 
-<div class="warning">
-<p>File upload is a convenient feature, but not a real versioning operation.
-It <em>will</em> overwrite the existing file,
-unlike a versioning commit that would check for conflicts first.
-Please check existing contents before uploading,
-to make sure that your local changes are based on the newest version of the shared file.
-</p>
-</div>
- -->
+{=if not $file,isWritable} <p>You have read access only. You can <a href="../../open/?target={=$target}">view</a> the file but not upload new versions.</p>
+{=elseif $file,isLockedByThisUser} <p>This file is currently <strong>locked</strong> by you, so other users can not edit it.</p>
+{=elseif $file,isLockedBySomeoneElse} <p>This file is currently <strong>locked</strong> by 
+<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}. 
+You can not rename this file.</p>
+{=else}
+<p>As a new version of file <a class="file" href="{=$file,url}">{=$file,filename}</a>, current size <span class="filesize">{=$file,size|formatSize}</span>. 
+{=/if}
 <!--{else}-->
 <p>As a new file in folder {=$target}</p>
 <!--{/if}-->
+{=if $file,isWritable and not $file,isLockedBySomeoneElse}
 <form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
 <fieldset>
   <legend>Upload to repos</legend>
@@ -132,6 +125,7 @@ to make sure that your local changes are based on the newest version of the shar
   </p>
 </fieldset>
 </form>
+{=/if}
 <div id="footer">
 </div>
 </body>
