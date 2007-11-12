@@ -54,7 +54,7 @@ You can not rename this file.</p>
 <!--{else}-->
 <p>As a new file in folder {=$target}</p>
 <!--{/if}-->
-{=if $file,isWritable and not $file,isLockedBySomeoneElse}
+{=if not $isfile or $file,isWritable and not $file,isLockedBySomeoneElse}
 <form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
 <fieldset>
   <legend>Upload to repos</legend>
