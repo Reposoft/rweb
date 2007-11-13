@@ -11,7 +11,7 @@
 	<xsl:param name="title">repos: </xsl:param>
 	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
 	<xsl:param name="web">/repos-web/</xsl:param>
-	<xsl:param name="static">/repos-web/</xsl:param>
+	<xsl:param name="static"><xsl:value-of select="$web"/></xsl:param>
 	<!-- static contents urls, set to {$web}style/ for default theme -->
 	<xsl:param name="cssUrl"><xsl:value-of select="$static"/>style/</xsl:param>
 	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
