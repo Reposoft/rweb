@@ -333,7 +333,8 @@ class Presentation {
 	}
 	
 	function getDefaultTemplate() {
-		return $this->getLocaleFile(dirname($_SERVER['SCRIPT_FILENAME']).'/'.basename($_SERVER['SCRIPT_FILENAME'],".php"));
+		$script = realpath($_SERVER['SCRIPT_FILENAME']); // we have to resolve symlinks becase __FILE__ in smarty.inc.php does so
+		return $this->getLocaleFile(dirname($script).'/'.basename($script,".php"));
 	}
 	
 	/**
