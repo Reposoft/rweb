@@ -30,3 +30,9 @@ When 'locales' package is installing you get a screen to select locale.
 In the next screen chose that as default
 Chose an UTF-8 locale, like en_US.UTF-8
 
+For future apt-get upgrade, the combination of excito/bubba source and debian source might cause conflicts.
+Might need to do:
+apt-get remove bubba
+apt-get upgrade
+apt-get install bubba
+Remeber: dont reboot without an installed bubba package
