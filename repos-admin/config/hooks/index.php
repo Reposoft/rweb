@@ -61,7 +61,6 @@ function runHook_post_commit($rev, $repo) {
 	}
 	// user must be exported last, if password is changed
 	if (getConfig('users_file')) {
-		sleep(5); // password update operation needs to complete before hook is executed
 		exportUsers($rev, $repo, $changes);
 	}
 }
@@ -129,7 +128,7 @@ function showInfo() {
 				'<input type="submit" value="execute hook php"/></form>');
 				$r->info('Note that if you test with an old revision, newer configuration will be overwritten.');
 			} else {
-				$r->info('To let Repos create a hook script, delete the existing file.');
+				$r->info('To let Repos create a hook script, delete the existing hook '.$f);
 			}
 		}
 	}
@@ -172,7 +171,7 @@ function checkHookScript($path, $scriptType, $report) {
 	}
 	fclose($fh);
 	$report->fail($scriptType . ' hook for this repository does not contain the Repos integration command.');	
-	return true;
+	return false;
 }
 
 function getHookCommand($scriptType, $revVariable=null, $repoVariable=null) {

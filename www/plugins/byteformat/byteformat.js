@@ -20,7 +20,7 @@
 			if (f < 0.995) return f.toPrecision(2) + ' MB';
 			if (f < 99.95) return f.toPrecision(3) + ' MB';
 			return f.toFixed(0) + ' MB';
-		}
+		};
 		return this.each(function() {
 			var b = Number($(this).text());
 			if (b == Number.NaN) return false;

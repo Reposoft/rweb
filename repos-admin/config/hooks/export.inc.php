@@ -19,6 +19,10 @@ function exportUsers($rev, $repo, $changes) {
 	foreach ($changes as $path => $change) {
 		if ($change != 'D' && preg_match($pattern, $path, $matches)) {
 			$user = $matches[1];
+			// assume async operation and allow password update operation to complete
+			// because changed password would make the current request fail on new svn calls
+			if ($user == $_SERVER['PHP_AUTH_USER']) sleep(5);
+			// now add the new password to apache file
 			_exportUserPassword($user);
 		}
 	}
