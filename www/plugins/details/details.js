@@ -1,25 +1,38 @@
 /**
  * Repos details plugin (c) 2006 repos.se
  *
- * Simply add this script to a page together with a div class="details" or a #fullpath and row:fileId entries.
  * @author Staffan Olsson (solsson)
- * Maybe this should be refactored to classes. Can be done anytime because these functions are currently not called from anywere.
- * $Id$
  */
 
-Repos.service('index/', details_button);
+(function($) {
 
-Repos.service('view/', details_read);
-Repos.service('edit/', details_read);
-
-function details_button() {
-	var command = $('<span id="showdetails">');
-	if ($('.row').size() > 0) {
-		command = $('<a id="showdetails" name="showdetails"/>');
-		command.click(function() { detailsToggle(this); });
+function button() {
+	var index = $('.index li');
+	var c = $('<span id="showdetails">');
+	if (index.size() > 0) {
+		c = $('<a id="showdetails" name="showdetails"/>');
+		c.click( function() {
+			index.reposDetails();
+		} );
 	}
-	command.append('show details').appendTo('#commandbar');
+	c.append('show details').appendTo('#commandbar');
 }
+
+Repos.service('index/', button);
+
+$.fn.reposDetails = function(s) {
+	
+	s = $.extend({
+		url: Repos.getWebapp() + 'open/list/?target=',
+		target: Repos.getTarget(),
+		encode: true
+	}, s);
+	// encode target for use as parameter
+	if (s.encode) s.target = encodeURIComponent(s.target);
+	
+	details_repository(s.target, s.url+s.target);
+	
+};
 
 // show details for an existing element (page designer sets target with the 'title' attribute)
 function details_read() {
@@ -44,22 +57,16 @@ function details_write(e, entry) {
 			$('.username', e).addClass('unknown').append('(unknown)'); // temporary solution
 		} else {
 			$('.username', e).append($('commit>author', this).text());
-			$('.datetime', e).append($('commit>date', this).text());
+			$('.datetime', e).append($('commit>date', this).text()).dateformat();
 		}
 		$('.revision', e).append($('commit', this).attr('revision'));
 		var folder = details_isFolder(this);
 		if (!folder) {
 			var size = $('size', this).text();
-			$('.filesize', e).append(details_formatSize(size));
+			$('.filesize', e).append(size).byteformat();
 			$('.filesize', e).attr('title', size + ' bytes');
 		}
 		if (details_isLocked(this)) details_writeLock(e, this);
-		// if the dateformat plugin is present, do format
-		$('.datetime', e).each(function() {
-			if (typeof('Dateformat')!='undefined') {
-				(new Dateformat()).formatElement(this);
-			}
-		});
 	});
 	e.show();
 }
@@ -75,10 +82,7 @@ function details_writeLock(e, entry) {
 	s.append(' <span class="message">'+ $('comment', lock).text() +'</span>');
 }
 
-function details_repository() {
-	var path = Repos.getTarget();
-	if (!path) return;
-	var url = Repos.getWebapp() + 'open/list/?target='+encodeURIComponent(path);
+function details_repository(path, url) {
 	$.ajax({
 		type: 'GET',
 		url: url,
@@ -123,21 +127,9 @@ function details_addtags(e) {
 	e.append('<div class="details"><span class="revision"></span><span class="datetime"></span><span class="username"></span><span class="filesize"></span></div>');
 }
 
-function details_formatSize(strBytes) {
-	var b = Number(strBytes);
-	if (b == Number.NaN) return strBytes;
-	if (b < 1000) return strBytes + ' B';
-	var f = 1.0 * b / 1024;
-	if (f < 0.995) return f.toPrecision(2) + ' kB';
-	if (f < 999.5) return f.toPrecision(3) + ' kB';
-	f = f / 1024;
-	if (f < 0.995) return f.toPrecision(2) + ' MB';
-	if (f < 99.95) return f.toPrecision(3) + ' MB';
-	return f.toFixed(0) + ' MB';
-}
-
 function detailsToggle() {
 	$('#commandbar #showdetails').addClass('loading');
 	details_repository();
 }
 
+})(jQuery);

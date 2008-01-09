@@ -8,7 +8,7 @@
  * @package admin
  */
 
-define('ReposWeb', $_SERVER["DOCUMENT_ROOT"].'/repos-web/');
+define('ReposWeb', $_SERVER["DOCUMENT_ROOT"].'/repos/');
 define('ReposWebapp', '/repos/');
 
 ?>

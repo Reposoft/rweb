@@ -35,29 +35,29 @@ function TestDateformat() {
 	
 	this.testFormat = function() {
 		var d = "2006-09-07T12:00:00.000Z";
-		var f = new Dateformat().format(d);
+		var f = $.fn.dateformat.format(d);
 		this.assertEquals("den 7 september 2006 14:00:00", f, "Should make an iso date with no milliseconds.");
 	};
 	
 	this.testFormatElement = function() {
 		var e = document.createElement('span');
 		e.innerHTML = "2006-09-07T12:00:00.000Z";
-		new Dateformat().formatElement(e);
+		$.fn.dateformat.formatElement(e);
 		this.assertEquals("den 7 september 2006 14:00:00", e.innerHTML, "Should format the date of the element that has not been added to the DOM");
 	};
 	
 	this.testFormatAll = function() {
 		// The plugin has already executed, through onload
-		var formatted1 = $('#d1').get(0).innerHTML;
-		var formatted2 = $('#d2').get(0).innerHTML;
-		this.assertEquals(new Dateformat().format('2006-09-07T16:00:00.123456Z'), formatted1, "Should format all 'datetime' texts on load");
-		this.assertEquals(new Dateformat().format('2006-09-06T20:30:59.000Z'), formatted2, "Should format all 'datetime' texts on load");
+		var formatted1 = $('#d1').text();
+		var formatted2 = $('#d2').text();
+		this.assertEquals($.fn.dateformat.format('2006-09-07T16:00:00.123456Z'), formatted1, "Should format all 'datetime' texts on load");
+		this.assertEquals($.fn.dateformat.format('2006-09-06T20:30:59.000Z'), formatted2, "Should format all 'datetime' texts on load");
 	};
 	
 	this.testFormatEmpty = function() {
 		var e = document.createElement('span');
 		e.innerHTML = "";
-		new Dateformat().formatElement(e);
+		$.fn.dateformat.formatElement(e);
 		this.assertEquals("", e.innerHTML);
 	};
 	
@@ -65,14 +65,14 @@ function TestDateformat() {
 		var e = document.createElement('span');
 		var t = "2006-09-07T12:00:00.000Z";
 		e.innerHTML = t;
-		new Dateformat().formatElement(e);
+		$.fn.dateformat.formatElement(e);
 		// dateformat should set the class 'formatted' when successful
 		// does not work in IE // this.assertEquals('formatted', e.getAttribute('class'));
 		this.assertTrue($(e).is('.formatted'));
 		// now try to format the same tag again
 		var d = e.innerHTML;
 		this.assertTrue(t != d);
-		new Dateformat().formatElement(e);	
+		$.fn.dateformat.formatElement(e);	
 		this.assertEquals(e.innerHTML, d);
 	}
 

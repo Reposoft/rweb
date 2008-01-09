@@ -16,7 +16,6 @@
  * strings matching the pattern [A-Za-z][A-Za-z0-9:_.-]* should be used."
  */
 function ReposFileId(name) {
-	this.name = name;
 	
 	this.get = function() {
 		return this._idescape(this._urlescape(name));

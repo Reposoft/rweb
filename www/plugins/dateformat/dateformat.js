@@ -8,12 +8,16 @@
  */
 
 
-var dateformat_Reposdate = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.(\d+))?(Z|(([-+])(\d{2}):(\d{2})))/;
+var svndate = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.(\d+))?(Z|(([-+])(\d{2}):(\d{2})))/;
+
+$().ready(function(){
+	$(".datetime").dateformat();
+});
 
 // --- extensions to the date class ---
 Date.prototype.setISO8601 = function (string) {
 
-    var d = string.match(new RegExp(dateformat_Reposdate));
+    var d = string.match(svndate);
 
     var offset = 0;
     
@@ -85,20 +89,20 @@ Date.prototype.toISO8601String = function (format, offset) {
     return str;
 };
  
-// ----- Dateformat class -----
-$(document).ready(function(){
-	d = new Dateformat();
-	$(".datetime").each(function() {
-		d.formatElement(this);
-	});
-});
-
-function Dateformat() {
+/**
+ * Dateformat jQuery plugin
+ * @param {jQuery} $ the jQuery object 
+ */
+(function($) {
+$.fn.dateformat = function() {	
+	
+	// allow unit testing by adding all internal functions to this object
+	var F = $.fn.dateformat;
 	
 	/**
 	 * Verify that a string is an ISO8601 date, with date+time or only date
 	 */
-	this.isDatetime = function(text) {
+	F.isDatetime = function(text) {
 		if (typeof(text) != 'string') return false;
 		if (text.length < 8) return false;
 		if (text.length > 32) return false;
@@ -109,7 +113,7 @@ function Dateformat() {
 	/**
 	 * @param texttag element containing date time
 	 */
-	this.formatElement = function(texttag) {
+	F.formatElement = function(texttag) {
 		if ($(texttag).is('.formatted')) return;
 		var d = texttag.innerHTML;
 		if (d == null || d=='') return;
@@ -125,7 +129,7 @@ function Dateformat() {
 	 * @param xsd:dateTime/ISO 8601 date
 	 * @return string with the formatted datetime
 	 */
-	this.format = function(dateTime) {
+	F.format = function(dateTime) {
 		if (!this.isDatetime(dateTime)) {
 			throw "Invalid datetime string: " + dateTime;	
 		}
@@ -133,4 +137,10 @@ function Dateformat() {
 		d.setISO8601(dateTime);
 		return d.toLocaleString();
 	};
-}
+	
+	$(this).each( function() {
+		F.formatElement(this);
+	});
+	
+};
+})(jQuery);

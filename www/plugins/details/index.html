@@ -7,17 +7,17 @@
 <meta name="repos-service" content="index/" />
 <meta name="repos-target" content="/demoproject/trunk/public/" />
 
-<!-- plugins -->
 <script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="../../scripts/reposapi/repos.js"></script>
-<script type="text/javascript" src="details.js"></script>
-<!-- if the dateformat plugin is present, date output will be formatted -->
-<script type="text/javascript" src="../dateformat/dateformat.js"></script>
-<!-- requires the fileid plugin -->
+
 <script type="text/javascript" src="../fileid/fileid.js"></script>
-<!-- for unit testing -->
-<script type="text/javascript" src="../../scripts/unittest.js"></script>
-<!-- needs the repository css -->
+<script type="text/javascript" src="../dateformat/dateformat.js"></script>
+<script type="text/javascript" src="../byteformat/byteformat.js"></script>
+
+<script type="text/javascript" src="details.js"></script>
+
+<script type="text/javascript" src="../../scripts/unittest/testwalk.js"></script>
+
 <link rel="stylesheet" type="text/css" href="../../style/repository/repository.css"/>
 </head>
 
@@ -45,6 +45,13 @@
 </div>
 
 <h2>unit tests</h2>
+<script type="text/javascript">
+
+
+
+</script>
+
+<h3>old unit tests</h3>
 <p>Note that this page uses AJAX, so it must run from a web server.</p>
 <script type="text/javascript">
 
@@ -125,26 +132,6 @@ function TestDetails() {
 		this.assertFalse(details_isLocked(xml));
 	};
 	
-	this.testFormatSizeBytes = function() {
-		this.assertEquals('1 B', details_formatSize('1'));
-		this.assertEquals('999 B', details_formatSize('999'));
-	};
-
-	this.testFormatSizeKb = function() {
-		this.assertEquals('0.98 kB', details_formatSize('1000'));
-		this.assertEquals('0.99 kB', details_formatSize('1009'));
-		this.assertEquals('1.00 kB', details_formatSize('1029'));
-		this.assertEquals('10.0 kB', details_formatSize('' + (1024 * 10 + 51)));
-		this.assertEquals('99.9 kB', details_formatSize('' + (1024 * 100 - 52)));
-		this.assertEquals('999 kB', details_formatSize('' + (1024 * 1000 - 513)));
-	};
-	
-	this.testFormatSizeMb = function() {
-		this.assertEquals('0.98 MB', details_formatSize('' + (1024 * 1000 - 512)));
-		this.assertEquals('1.00 MB', details_formatSize('' + (1024 * 1024 + 511)));
-		this.assertEquals('100 MB', details_formatSize('' + (1024 * 1024 * 100)));
-		this.assertEquals('1000 MB', details_formatSize('' + (1024 * 1024 * 1000)));
-	};
 }
 
 function _stringToJqueryDom(xml) {
@@ -152,7 +139,7 @@ function _stringToJqueryDom(xml) {
 	return $(document.createElement('div')).append(xml).children();
 }
 
-testrun(TestDetails);
+//testrun(TestDetails);
 
 </script>
 
