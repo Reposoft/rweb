@@ -21,7 +21,7 @@ class TestPresentation extends UnitTestCase {
 	}
 	
 	function testSmartyParameters() {
-		$debugMode = getConfig('disable_caching');
+		$debugMode = false;//no config entry for this in 1.2 //getConfig('disable_caching');
 		$p = new Presentation();
 		$smarty = $p->smarty;
 		if ($debugMode) {

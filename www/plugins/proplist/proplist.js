@@ -1,4 +1,6 @@
 
+if (typeof(Repos) == 'undefined') Repos = {};
+
 Repos.proplist = {};
 
 $(document).ready( function() {

@@ -7,7 +7,7 @@
 <script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="dateformat.js"></script>
 <!-- for unit testing -->
-<script type="text/javascript" src="../../scripts/unittest.js"></script>
+<script type="text/javascript" src="../../scripts/unittest/testwalk.js"></script>
 </head>
 
 <body>
@@ -26,59 +26,49 @@
 <span id="d5" class="datetime">2006-06-06T20:30:59+02:00</span>
 <h2>unit tests</h2>
 <script type="text/javascript">
-
-function TestDateformat() {
-    this.name = 'TestDateformat';
-
-    this.setUp = function() {
-    };
 	
-	this.testFormat = function() {
-		var d = "2006-09-07T12:00:00.000Z";
-		var f = $.fn.dateformat.format(d);
-		this.assertEquals("den 7 september 2006 14:00:00", f, "Should make an iso date with no milliseconds.");
-	};
-	
-	this.testFormatElement = function() {
-		var e = document.createElement('span');
-		e.innerHTML = "2006-09-07T12:00:00.000Z";
-		$.fn.dateformat.formatElement(e);
-		this.assertEquals("den 7 september 2006 14:00:00", e.innerHTML, "Should format the date of the element that has not been added to the DOM");
-	};
-	
-	this.testFormatAll = function() {
-		// The plugin has already executed, through onload
-		var formatted1 = $('#d1').text();
-		var formatted2 = $('#d2').text();
-		this.assertEquals($.fn.dateformat.format('2006-09-07T16:00:00.123456Z'), formatted1, "Should format all 'datetime' texts on load");
-		this.assertEquals($.fn.dateformat.format('2006-09-06T20:30:59.000Z'), formatted2, "Should format all 'datetime' texts on load");
-	};
-	
-	this.testFormatEmpty = function() {
-		var e = document.createElement('span');
-		e.innerHTML = "";
-		$.fn.dateformat.formatElement(e);
-		this.assertEquals("", e.innerHTML);
-	};
-	
-	this.testFormatTwice = function() {
-		var e = document.createElement('span');
-		var t = "2006-09-07T12:00:00.000Z";
-		e.innerHTML = t;
-		$.fn.dateformat.formatElement(e);
-		// dateformat should set the class 'formatted' when successful
-		// does not work in IE // this.assertEquals('formatted', e.getAttribute('class'));
-		this.assertTrue($(e).is('.formatted'));
-		// now try to format the same tag again
-		var d = e.innerHTML;
-		this.assertTrue(t != d);
-		$.fn.dateformat.formatElement(e);	
-		this.assertEquals(e.innerHTML, d);
-	}
-
+function testFormat() {
+	var d = "2006-09-07T12:00:00.000Z";
+	var f = $.fn.dateformat.format(d);
+	assert("den 7 september 2006 14:00:00", f, "Should make an iso date with no milliseconds.");
 }
 
-testrun(TestDateformat);
+function testFormatElement() {
+	var e = document.createElement('span');
+	e.innerHTML = "2006-09-07T12:00:00.000Z";
+	$.fn.dateformat.formatElement(e);
+	assert("den 7 september 2006 14:00:00", e.innerHTML, "Should format the date of the element that has not been added to the DOM");
+}
+
+function testFormatAll() {
+	// The plugin has already executed, through onload
+	var formatted1 = $('#d1').text();
+	var formatted2 = $('#d2').text();
+	assert($.fn.dateformat.format('2006-09-07T16:00:00.123456Z'), formatted1, "Should format all 'datetime' texts on load");
+	assert($.fn.dateformat.format('2006-09-06T20:30:59.000Z'), formatted2, "Should format all 'datetime' texts on load");
+}
+
+function testFormatEmpty() {
+	var e = document.createElement('span');
+	e.innerHTML = "";
+	$.fn.dateformat.formatElement(e);
+	assert("" == e.innerHTML);
+}
+
+function testFormatTwice() {
+	var e = document.createElement('span');
+	var t = "2006-09-07T12:00:00.000Z";
+	e.innerHTML = t;
+	$.fn.dateformat.formatElement(e);
+	// dateformat should set the class 'formatted' when successful
+	// does not work in IE // assert('formatted', e.getAttribute('class'));
+	assert($(e).is('.formatted'));
+	// now try to format the same tag again
+	var d = e.innerHTML;
+	assert(t != d);
+	$.fn.dateformat.formatElement(e);	
+	assert(e.innerHTML, d);
+}
 
 </script>
 

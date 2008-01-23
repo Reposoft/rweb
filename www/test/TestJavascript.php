@@ -17,6 +17,8 @@
 <table id="suiteTable" class="rows" width="100%" border="0">
 	<tbody>
 <?php
+define('ReposWebapp','/repos-web/');
+
 $testfiles = array(
 'scripts/prepare/index.xml',
 'scripts/shared/',
@@ -37,7 +39,7 @@ function printTestSuite($testfiles) {
 }
 
 function printTestCase($file) {
-	$url = '/repos/'.$file;
+	$url = ReposWebapp.$file;
 ?>
 <tr><td rowspan="1" colspan="3"><?php echo($file); ?></td></tr>
 </thead><tbody>

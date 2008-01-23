@@ -9,7 +9,7 @@
 <script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="../../scripts/shared/repos.js"></script>
 <!-- for unit testing -->
-<script type="text/javascript" src="../../scripts/unittest.js"></script>
+<script type="text/javascript" src="../../scripts/unittest/testwalk.js"></script>
 <!-- filename plugin -->
 <script type="text/javascript" src="filename.js"></script>
 </head>
@@ -43,45 +43,36 @@ When it adds an extensions it shows a p class="note" below that says it autmatic
 
 <script type="text/javascript">
 
-function TestExtension() {
-	this.name = 'TestExtension';
-	
-	this.setUp = function() {
-	};
-	
-	this.testFileExtensionRead = function() {
-		$('.remember-extension').val('filename.txt');
-		this.assertEquals('.txt', fileExtensionRead());
-		$('.remember-extension').val('quicktime.qt');
-		this.assertEquals('.qt', fileExtensionRead());
-		$('.remember-extension').val('photo.jpeg');
-		this.assertEquals('.jpeg', fileExtensionRead());
-	};
-	
-	this.testGetFileExtension = function() {
-		this.assertEquals('.txt', getFileExtension('abcd.txt'));
-		this.assertEquals('.qt', getFileExtension('a.qt'));
-		this.assertEquals('.txt', getFileExtension('.txt'));
-		this.assertEquals('.', getFileExtension('punkt.'));
-		this.assertEquals('', getFileExtension('aahgsfahj'));
-	}
-	
-	this.testAddFileExtension = function() {
-		filenamePluginExtension = '.txt';
-		this.assertEquals('abcd.txt', addFileExtension('abcd'));
-		filenamePluginExtension = '.qt';
-		this.assertEquals('a.qt', addFileExtension('a'));
-		filenamePluginExtension = '.jpeg';
-		this.assertEquals('pic.jpeg', addFileExtension('pic'));
-		filenamePluginExtension = '.';
-		this.assertEquals('dot.', addFileExtension('dot'));
-		filenamePluginExtension = '';
-		this.assertEquals('name', addFileExtension('name'));
-	}
-	
+function testGetFileExtension() {
+	assert(getFileExtension('abcd.txt'), '.txt');
+	assert(getFileExtension('a.qt'), '.qt');
+	assert(getFileExtension('.txt'), '.txt');
+	assert(getFileExtension('punkt.'), '.');
+	assert(getFileExtension('aahgsfahj')=='');
 }
 
-testrun(TestExtension);
+function testFileExtensionRead() {
+	$('.remember-extension').val('filename.txt');
+	assert(fileExtensionRead(), '.txt');
+	$('.remember-extension').val('quicktime.qt');
+	assert(fileExtensionRead(), '.qt');
+	$('.remember-extension').val('photo.jpeg');
+	assert(fileExtensionRead(), '.jpeg');
+}
+	
+function testAddFileExtension() {
+	// using a global variable
+	filenamePluginExtension = '.txt';
+	assert(addFileExtension('abcd'), 'abcd.txt');
+	filenamePluginExtension = '.qt';
+	assert(addFileExtension('a'), 'a.qt');
+	filenamePluginExtension = '.jpeg';
+	assert(addFileExtension('pic'), 'pic.jpeg');
+	filenamePluginExtension = '.';
+	assert(addFileExtension('dot'), 'dot.');
+	filenamePluginExtension = '';
+	assert(addFileExtension('name'), 'name');
+}
 
 </script>
 </body>

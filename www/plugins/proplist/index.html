@@ -9,7 +9,7 @@
 <script type="text/javascript" src="../../scripts/shared/repos.js"></script>
 <script type="text/javascript" src="proplist.js"></script>
 <!-- for unit testing -->
-<script type="text/javascript" src="../../scripts/unittest.js"></script>
+<script type="text/javascript" src="../../scripts/unittest/testwalk.js"></script>
 </head>
 
 <body>
@@ -40,23 +40,14 @@
 
 <script type="text/javascript">
 
-function TestProplist() {
-	
-	this.setUp = function() {
-	};
-
-	this.testGetTarget = function() {
-		// from the actual element
-		var t = Repos.proplist.getTarget( document.getElementById('testnoprops') );
-		this.assertEquals('/demoproject/trunk/public/locked-file.txt', t);		
-		// from parent element
-		var t = Repos.proplist.getTarget( document.getElementById('testproplist') );
-		this.assertEquals('/demoproject/trunk/public/xmlfile.xml', t);
-	}
-
+function testGetTarget() {
+	// from the actual element
+	var t = Repos.proplist.getTarget( document.getElementById('testnoprops') );
+	assert('/demoproject/trunk/public/locked-file.txt', t);		
+	// from parent element
+	var t = Repos.proplist.getTarget( document.getElementById('testproplist') );
+	assert('/demoproject/trunk/public/xmlfile.xml', t);
 }
-
-testrun(TestProplist);
 
 </script>
 </body>

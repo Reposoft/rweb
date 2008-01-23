@@ -55,24 +55,18 @@
 <p>Note that this page uses AJAX, so it must run from a web server.</p>
 <script type="text/javascript">
 
-function TestDetails() {
-	this.name = 'TestDetails';
-	
-	this.setUp = function() {
-	};
-	
-	this.testAddTags = function() {
-		var e = document.createElement("div");
-		details_addtags($(e));
-		this.assertEquals(1, $(e).find('.revision').size());
-		this.assertEquals(1, $(e).find('.datetime').size());
-		this.assertEquals(1, $(e).find('.username').size());
-		this.assertEquals(1, $(e).find('.filesize').size());
-		this.assertEquals(4, e.getElementsByTagName('span').length);
-		this.assertEquals('', e.getElementsByTagName('span')[0].innerHTML);
-	};
+function testAddTags() {
+	var e = document.createElement("div");
+	details_addtags($(e));
+	assert(1, $(e).find('.revision').size());
+	assert(1, $(e).find('.datetime').size());
+	assert(1, $(e).find('.username').size());
+	assert(1, $(e).find('.filesize').size());
+	assert(4, e.getElementsByTagName('span').length);
+	assert('', e.getElementsByTagName('span')[0].innerHTML);
+}
 
-	this.testDetailsFile = function() {
+function testDetailsFile() {
 		var xml = '<entry kind="file"><name>test.java</name><size>123</size><commit revision="18">'
 			+ '<author>test</author><date>2006-12-06T12:00:00.123456Z</date></commit></entry>';
 		var e = document.createElement("div");
@@ -80,11 +74,11 @@ function TestDetails() {
 		
 		this.assertFalse(details_isFolder(_stringToJqueryDom(xml)));
 		details_write($(e), _stringToJqueryDom(xml));
-		this.assertEquals('test', $(e).find('.username').text());
-		this.assertEquals('123 B', $(e).find('.filesize').text());
-		this.assertTrue('' != $(e).find('.datetime').text());
-		this.assertEquals('18', $(e).find('.revision').text());
-	};
+		assert('test', $(e).find('.username').text());
+		assert('123 B', $(e).find('.filesize').text());
+		assert('' != $(e).find('.datetime').text());
+		assert('18', $(e).find('.revision').text());
+}
 	
 	this.testDetailsFolder = function() {
 		var xml = _stringToJqueryDom('<entry kind="dir"><name>public</name><commit revision="123456789">'
@@ -132,7 +126,7 @@ function TestDetails() {
 		this.assertFalse(details_isLocked(xml));
 	};
 	
-}
+
 
 function _stringToJqueryDom(xml) {
 	// trying to DOMify arbitrary xml using the innerHTML feature of browsers
