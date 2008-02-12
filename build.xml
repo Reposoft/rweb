@@ -19,6 +19,10 @@
 		<delete dir="${target.folder}" failonerror="true"/>
 	</target>
 	
+	<target name="runtest" description="run all kinds of tests"
+		depends="compile, text.xslt">
+	</target>
+	
 	<target name="preprocess.js">
 		<echo message="Building head.js from the available scripts and plugins in source"/>
 		<ant dir="${development.folder}/scripts/"/>
@@ -197,7 +201,7 @@
 		</apply>
 	</target>
 	
-	<target name="dist.clean" depends="compile" description="Delete intermediate files">
+	<target name="dist.clean" depends="" description="Delete intermediate files">
 		<echo message="Removing intermediate source folder"/>
 		<delete dir="${source.folder}"/>
 		<delete dir="${target.folder}/compile.excludes"/>
@@ -263,8 +267,8 @@
 			basedir="${development.folder}" includes="test/**"/>
 	</target>
 	
-	<target name="dist" depends="package.web,package.admin,package.backup,package.tests"
-			description="Run all packaging activities">
+	<target name="dist" description="Run all packaging activities"
+		depends="runtest,package.web,package.admin,package.backup,package.tests">
 	</target>
 	
 	<!-- below are targets that might be used during development, they do not produce packaged distribution -->
@@ -318,6 +322,25 @@
 		<!-- todo use filter to set version in DEBIAN/control, use three digit version number and extra build number -->
 		<exec dir="${target.folder}/debian-packages" executable="${target.folder}/debian-packages/package.sh">
 		</exec>
+	</target>
+
+	<!-- Continuous Integration testing -->
+	
+	<property name="test.folder" location="${target.folder}/test"/>
+	
+	<target name="test.xslt.compile">
+		<echo message="Generating sample index html from test xml"/>
+		<mkdir dir="${test.folder}/samples" />
+		<xslt force="true" basedir="${basedir}/test/xslt/index"
+			destdir="${test.folder}/samples"
+			style="${target.folder}/${app.name}/view/repos.xsl"
+			includes="**/index*.xml" extension=".html">
+			<param name="static" expression="../../repos/"/>
+			<outputproperty name="indent" value="yes"/>
+		</xslt>
+	</target>
+	
+	<target name="text.xslt" depends="test.xslt.compile">
 	</target>
 	
 </project>
