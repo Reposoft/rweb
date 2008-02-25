@@ -29,9 +29,13 @@
 	
 	<!-- === End configuration, start build === -->
 
+	<target name="compile" depends="head.js.concat">
+	</target>
+	
 	<target name="head.js.concat"
 		description="Concatenate all script parts to one big file">
 		<echo message="Collecting parts for ${head.js.file}" />
+		<echo message="Including optional plugins from ${plugins.external.folder}" />
 		<concat destfile="${head.js.file}.big">
 			<fileset dir="${intro.folder}" includes="**/*.js" excludes="${excludes.default}" />
 			<fileset dir="${lib.folder}" includes="jquery/*.js"/>
@@ -44,8 +48,11 @@
 		<echo message="${head.js.file}.big built." />
 	</target>
 
-	<target name="compress" depends="head.js.concat, compress.arm" unless="java.arm"
+	<target name="compress" depends="compile, compress.rhino, compress.arm"
 		description="Remove all comments and whitespace, no compression">
+	</target>
+	
+	<target name="compress.rhino" unless="java.arm">
 		<echo message="Building ${head.js.file}" />
 		<java jar="${build.jar}" fork="true">
 			<arg value="${build.script}" />
