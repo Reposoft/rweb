@@ -5,10 +5,13 @@
 <!--{$head}-->
 <script type="text/javascript">
 function pasteUrl() {
-	reposUrl='{=$repository}';
+	reposUrl='{=$repository}'; // http, not https
 	url=prompt('Please enter the full URL of the destination folder','');
 	if (url==null) {
 		return;
+	}
+	if (window.unescape) {
+		url = window.unescape(url);
 	}
 	if (url.indexOf('https')==0 && reposUrl.indexOf('http:')==0) {
 		r = reposUrl.replace(/http:/,"https:");
