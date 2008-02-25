@@ -121,6 +121,11 @@
 		<h2 id="path">
 			<xsl:copy-of select="$pathlinks"/>
 		</h2>
+		<xsl:if test="$editUrl">
+			<div class="contentcommands">
+				<a id="repos-edit" class="action translate" href="{$editUrl}file/?target={$folder}">add&#xA0;text</a>
+			</div>
+		</xsl:if>
 		<ul class="index">
 			<xsl:apply-templates select="dir">
 				<xsl:sort select="@name"/>
@@ -130,11 +135,6 @@
 				<xsl:sort select="@name"/>
 			</xsl:apply-templates>
 		</ul>
-		<xsl:if test="$editUrl">
-		<ul class="contentcommands">
-			<li><a id="repos-edit" class="action translate" href="{$editUrl}file/?target={$folder}">repos editor</a></li>
-		</ul>
-		</xsl:if>
 	</xsl:template>
 	<!-- generate directory -->
 	<xsl:template match="dir">

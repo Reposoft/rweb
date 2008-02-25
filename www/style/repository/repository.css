@@ -12,13 +12,10 @@
 	background-image: url('../commands/24x24/createfolder.png');
 }
 /* commands in index */
-ul.contentcommands {
-	padding-left: 36em;
-	margin-top: 0.5em;
-	margin-bottom: 0;
-	list-style: none;
+.contentcommands {
+	text-align: right;
 }
-ul.contentcommands a {
+.contentcommands a {
 	background-position: left center;
 	background-repeat: no-repeat;
 	padding: 2px;

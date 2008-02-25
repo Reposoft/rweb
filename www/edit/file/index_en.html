@@ -43,7 +43,7 @@
 	<!--{if $isfile}-->
     <input type="text" id="currentname" name="currentname" value="{=$target|getPathName}" disabled="disabled" size="40" />
 	<!--{else}-->
-	<input type="text" id="name" name="name" size="40" class="required remember-extension" tabindex="2"/>
+	<input type="text" id="name" name="name" value="{=$suggestname}" size="40" class="required remember-extension" tabindex="2"/>
 	<input type="hidden" id="create" name="create" value="yes"/>
 	<!--{/if}-->
   </p>
@@ -54,10 +54,8 @@
   <p>
     <label for="submit"></label>
     <input id="submit" type="submit" name="submit" value="Save" tabindex="4" />
-    <span> </span>
-    <input type="reset" value="Reset to original contents"/>
-    <span> </span>
-    <input type="button" value="Clear contents" onclick="tinyMCE.setContent('');"/>
+    <span> &nbsp; </span>
+    <input id="reset" type="reset" value="Reset to original contents"/>
   </p>
 </fieldset>
 </form>
