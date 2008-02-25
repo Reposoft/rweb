@@ -387,7 +387,7 @@ class Presentation {
 		header('Refresh: 1; url='.$nexturl);
 		header('Content-Length: '.strlen($page));
 		echo $page;
-		ob_flush();flush(); // according to the docs this is still not 100% reliable
+		@ob_flush();flush(); // according to the docs this is still not 100% reliable
 	}
 	
 	/**
