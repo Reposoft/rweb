@@ -57,7 +57,7 @@ Repos.service = function(s, fn) {
 jQuery.depends = function(func) {
 	if ($.isFunction(func)) return jQuery;
 	
-	console.error('Repos customization error. This plugin\'s dependencies are not met.');
+	//console.error('Repos customization error. This plugin\'s dependencies are not met.');
 	// TODO return dummy so that event add is avoided?
 	return new jQuery([]);
 };
@@ -107,8 +107,14 @@ Repos.getService = function(context) {
  */
 Repos.isTarget = function(selector,context) {
 	var s = selector;
-	s = s.replace(/([.+^${}()\[\]\/])/g, '\\$1'); // escaping valid path characters
-	s = s.replace(/\*/g,'.*');
+	// escape valid path characters
+	s = s.replace(/([.+^${}()\[\]\/])/g, '\\$1');
+	// allow *a.txt notation for matching any path ending with a.txt
+	s = s.replace(/^\*/,'**');
+	// strict ant pattern rules
+	s = s.replace(/\*\*/g,'.{0,}');
+	s = s.replace(/\*/g,'[^//]{0,}');
+	// match
 	var r = new RegExp('^'+s+'$');
 	var t = Repos.getTarget();
 	var is = r.test(t);

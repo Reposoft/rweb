@@ -10,9 +10,8 @@ document.write('<link type="text/css" rel="stylesheet" href="'+path+'testwalk/as
 
 function load() {
 	e = document.createElement('div');
-	e.id = 'assert';
+	e.id = 'assertlog';
 	document.getElementsByTagName('body')[0].appendChild(e);
-	assert.setLog('#assert');
 }
 
 $ && $().ready(load) || window.onload(load);
