@@ -20,7 +20,7 @@ $look = new Command('svnlook');
 $look->addArgOption('cat');
 $look->addArg(LOCAL_PATH);
 $look->addArg('/'.$username.'/administration/'.REPOSITORY_USER_FILE_NAME);
-if ($look->exec()) trigger_error('Incorrect username or e-mail address', E_USER_ERROR);
+if ($look->exec()) trigger_error("Failed to read account. \n".implode($look->getOutput(),"\n"), E_USER_ERROR);
 $result = $look->getOutput();
 
 $userpasswd = $result[0];
