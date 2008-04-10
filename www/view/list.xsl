@@ -5,7 +5,7 @@
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
 	<xsl:param name="title">repos list: </xsl:param>
 
-	<xsl:param name="web">/repos/</xsl:param>
+	<xsl:param name="web">/repos-web/</xsl:param>
 
 	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>style/</xsl:param>
 	
@@ -62,11 +62,13 @@
 				</span>
 			</xsl:if>
 		</h2>
-		<xsl:apply-templates select="*">
-			<xsl:with-param name="parent" select="$target"/>
-			<xsl:sort select="@kind"/>
-			<xsl:sort select="name"/>
-		</xsl:apply-templates>
+		<ul class="index list">
+			<xsl:apply-templates select="*">
+				<xsl:with-param name="parent" select="$target"/>
+				<xsl:sort select="@kind"/>
+				<xsl:sort select="name"/>
+			</xsl:apply-templates>
+		</ul>
 		<div id="footer">
 		</div>
 	</xsl:template>
@@ -86,26 +88,25 @@
 			<xsl:value-of select="'/'"/>
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
-		<div id="row:{$id}" class="row n{$n mod 4}">
+		<li id="row:{$id}" class="row n{$n mod 4}">
 			<div class="actions">
 
 			</div>
 			<a id="open:{$id}" class="folder" href="../?target={$target}&amp;rev={commit/@revision}">
 				<xsl:value-of select="name"/>
 			</a>
-			<xsl:value-of select="$spacer"/>
-			<span class="revision">
-				<xsl:value-of select="commit/@revision"/>
-			</span>
-			<xsl:value-of select="$spacer"/>
-			<span class="username">
-				<xsl:value-of select="commit/author"/>
-			</span>
-			<xsl:value-of select="$spacer"/>
-			<span class="datetime">
-				<xsl:value-of select="commit/date"/>
-			</span>
-		</div>
+			<div class="details">
+				<span class="revision">
+					<xsl:value-of select="commit/@revision"/>
+				</span>
+				<span class="username">
+					<xsl:value-of select="commit/author"/>
+				</span>
+				<span class="datetime">
+					<xsl:value-of select="commit/date"/>
+				</span>
+			</div>
+		</li>
 	</xsl:template>	
 	
 	<xsl:template match="entry[@kind='file']">
@@ -127,31 +128,29 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
-		<div id="row:{$id}" class="row n{$n mod 4}">
+		<li id="row:{$id}" class="n{$n mod 4}">
 			<div class="actions">
 
 			</div>
 			<a id="open:{$id}" class="file-{$filetype} file" href="../?target={$target}&amp;rev={commit/@revision}">
 				<xsl:value-of select="name"/>
 			</a>
-			<xsl:value-of select="$spacer"/>
-			<span class="revision">
-				<xsl:value-of select="commit/@revision"/>
-			</span>
-			<xsl:value-of select="$spacer"/>
-			<span class="username">
-				<xsl:value-of select="commit/author"/>
-			</span>
-			<xsl:value-of select="$spacer"/>
-			<span class="datetime">
-				<xsl:value-of select="commit/date"/>
-			</span>
-			<xsl:value-of select="$spacer"/>
-			<span class="filesize">
-				<xsl:value-of select="size"/>
-				<xsl:text> bytes</xsl:text>
-			</span>
-		</div>
+			<div class="details">
+				<span class="revision">
+					<xsl:value-of select="commit/@revision"/>
+				</span>
+				<span class="username">
+					<xsl:value-of select="commit/author"/>
+				</span>
+				<span class="datetime">
+					<xsl:value-of select="commit/date"/>
+				</span>
+				<span class="filesize">
+					<xsl:value-of select="size"/>
+					<xsl:text> bytes</xsl:text>
+				</span>
+			</div>
+		</li>
 	</xsl:template>
 
 	<xsl:template name="getFiletype">
