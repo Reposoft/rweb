@@ -108,7 +108,6 @@
 			<a id="addfile" class="command translate" href="{$editUrl}upload/?target={$target}">add&#xA0;file</a>
 		</xsl:if>
 		<a id="history" class="command translate" href="{$web}open/log/?target={$target}">folder&#xA0;history</a>
-		<a id="refresh" class="command translate" href="#" onclick="window.location.reload( true )">refresh</a>
 		<!-- print, possibly plugin -->
 		<!-- help, possibly plugin -->
 		</div>
