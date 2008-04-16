@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Repos tree</title>
+<link rel="stylesheet" type="text/css" media="all" href="tree.css" />
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+var reposweb = '/repos-web/';
+var json = reposweb+'open/json/'; // not using servicelayer
+function expand(id,target) {
+	var list = $('#'+id);
+	var here = target;
+	$.getScript(json+'?selector='+id+'&target='+encodeURI(here),
+		function() {
+			$('li.folder', list).each(function() {
+				var a = $('a',this);
+				var target = here + a.text()+'/'; // update in closure for recursion
+				var id = Math.random().toString().substr(2);
+				$('<ul/>').attr('id',id).appendTo(this);
+				$(this).one('mouseover',
+					function() {
+						$(this).addClass('loading');
+						expand(id,target);
+					});
+			});
+			list.parent().addClass('folder-open').removeClass('loading');
+		});
+}
+$().ready(function() {
+	$('#target').text('/demoproject/trunk/');
+	expand('root','/demoproject/trunk/');
+});
+//]]>
+</script>
+
+</head>
+<body>
+
+<h1 id="target"></h1>
+<ul id="root">
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+
+li.folder {
+	list-style-image: url(folder.gif);
+}
+li.folder-open {
+	list-style-image: url(folder-open.gif);
+}
+li.file {
+	list-style-image: url(file.gif);
+}
+li.loading {
+	list-style-image: url(ajaxload.gif);
+}

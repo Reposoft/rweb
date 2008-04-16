@@ -69,7 +69,7 @@ $script = '
 		var p = jQ(s.selector);
 		for (var f in list) {
 			var d = list[f];
-			var e = jQ("<li/>").addClass(d.kind).appendTo(p);
+			var e = jQ("<li/>").addClass(d.kind.replace(/dir/,"folder")).appendTo(p);
 			jQ("<a/>").attr("href",url+"/"+f).append(f).appendTo(e);
 			e.append(o("revision",d.commit.revision));
 			if (d.commit.author) {
