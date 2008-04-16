@@ -27,6 +27,10 @@ if ($rev) {
 }
 
 if ($list->exec()) {
+	/* recursive: very sucky - http://svn.haxx.se/users/archive-2007-04/0322.shtml
+	[0] => svn: PROPFIND request failed on '/data/demoproject/trunk/noaccess'
+    [1] => svn: PROPFIND of '/data/demoproject/trunk/noaccess': 403 Forbidden (http://localhost)
+	 */
 	trigger_error('Could not read entry for URL '.$url, E_USER_ERROR);
 }
 

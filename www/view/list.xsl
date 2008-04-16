@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
-	
+
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
 	<xsl:param name="title">repos list: </xsl:param>
@@ -8,9 +8,9 @@
 	<xsl:param name="web">/repos-web/</xsl:param>
 
 	<xsl:param name="cssUrl"><xsl:value-of select="$web"/>style/</xsl:param>
-	
+
 	<xsl:param name="spacer" select="'&#160; '"/>
-	
+
 	<xsl:template match="/">
 		<head>
 			<title>
@@ -34,11 +34,11 @@
 			<xsl:apply-templates select="*"/>
 		</body>
 	</xsl:template>
-	
+
 	<xsl:template match="lists">
 		<xsl:apply-templates select="*"/>
 	</xsl:template>
-	
+
 	<xsl:template match="list">
 		<xsl:param name="target">
 			<xsl:call-template name="getHref">
@@ -62,17 +62,26 @@
 				</span>
 			</xsl:if>
 		</h2>
-		<ul class="index list">
+		<table class="index list">
+			<thead>
+				<tr>
+					<td>path</td>
+					<td>revision</td>
+					<td>author</td>
+					<td>edited</td>
+					<td>size</td>
+				</tr>
+			</thead>
 			<xsl:apply-templates select="*">
 				<xsl:with-param name="parent" select="$target"/>
-				<xsl:sort select="@kind"/>
+				<!--<xsl:sort select="@kind"/>-->
 				<xsl:sort select="name"/>
 			</xsl:apply-templates>
-		</ul>
+		</table>
 		<div id="footer">
 		</div>
 	</xsl:template>
-	
+
 	<xsl:template match="entry[@kind='dir']">
 		<xsl:param name="parent" select="../../@target"/>
 		<xsl:param name="id">
@@ -88,27 +97,26 @@
 			<xsl:value-of select="'/'"/>
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
-		<li id="row:{$id}" class="row n{$n mod 4}">
-			<div class="actions">
+		<tr id="row:{$id}" class="row n{$n mod 4}">
+			<td class="folder">
+				<a id="open:{$id}" class="folder" href="../?target={$target}&amp;rev={commit/@revision}">
+					<xsl:value-of select="name"/>
+				</a>
+			</td>
+			<td class="revision">
+				<xsl:value-of select="commit/@revision"/>
+			</td>
+			<td class="username">
+				<xsl:value-of select="commit/author"/>
+			</td>
+			<td class="datetime">
+				<xsl:value-of select="commit/date"/>
+			</td>
+			<td>
+			</td>
+		</tr>
+	</xsl:template>
 
-			</div>
-			<a id="open:{$id}" class="folder" href="../?target={$target}&amp;rev={commit/@revision}">
-				<xsl:value-of select="name"/>
-			</a>
-			<div class="details">
-				<span class="revision">
-					<xsl:value-of select="commit/@revision"/>
-				</span>
-				<span class="username">
-					<xsl:value-of select="commit/author"/>
-				</span>
-				<span class="datetime">
-					<xsl:value-of select="commit/date"/>
-				</span>
-			</div>
-		</li>
-	</xsl:template>	
-	
 	<xsl:template match="entry[@kind='file']">
 		<xsl:param name="parent" select="../../@target"/>
 		<xsl:param name="filetype">
@@ -128,29 +136,26 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
-		<li id="row:{$id}" class="n{$n mod 4}">
-			<div class="actions">
-
-			</div>
-			<a id="open:{$id}" class="file-{$filetype} file" href="../?target={$target}&amp;rev={commit/@revision}">
-				<xsl:value-of select="name"/>
-			</a>
-			<div class="details">
-				<span class="revision">
-					<xsl:value-of select="commit/@revision"/>
-				</span>
-				<span class="username">
-					<xsl:value-of select="commit/author"/>
-				</span>
-				<span class="datetime">
-					<xsl:value-of select="commit/date"/>
-				</span>
-				<span class="filesize">
-					<xsl:value-of select="size"/>
-					<xsl:text> bytes</xsl:text>
-				</span>
-			</div>
-		</li>
+		<tr id="row:{$id}" class="n{$n mod 4}">
+			<td class="file">
+				<a id="open:{$id}" class="file-{$filetype} file" href="../?target={$target}&amp;rev={commit/@revision}">
+					<xsl:value-of select="name"/>
+				</a>
+			</td>
+			<td class="revision">
+				<xsl:value-of select="commit/@revision"/>
+			</td>
+			<td class="username">
+				<xsl:value-of select="commit/author"/>
+			</td>
+			<td class="datetime">
+				<xsl:value-of select="commit/date"/>
+			</td>
+			<td class="filesize">
+				<xsl:value-of select="size"/>
+				<xsl:text> bytes</xsl:text>
+			</td>
+		</tr>
 	</xsl:template>
 
 	<xsl:template name="getFiletype">
@@ -218,5 +223,5 @@
 				<xsl:value-of select="$href"/>
 			</xsl:otherwise>
 		</xsl:choose>
-	</xsl:template>	
+	</xsl:template>
 </xsl:stylesheet>
