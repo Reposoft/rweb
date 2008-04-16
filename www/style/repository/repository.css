@@ -36,6 +36,9 @@
 a.tool-trunk, span.tool-trunk {
 	background-image: url('../tools/16x16/trunk.png');
 }
+a.tool-administrator, span.tool-administration {
+	background-image: url('../tools/16x16/administration.png');
+}
 .toolchild {}
 .tool .action-rename, .tool .action-delete {
 	cursor: default;

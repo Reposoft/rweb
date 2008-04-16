@@ -9,14 +9,6 @@ require("../../conf/Presentation.class.php" );
 require("../SvnEdit.class.php" );
 require('EditTypeRule.class.php');//addPlugin('edit');
 
-// password file editor
-if (strEnds(getTarget(), 'repos.user')) {
-	header('Cache-Control: no-cache');
-	$url = asLink(getWebapp().'account/password/?target='.urlencode(getTarget()));
-	if (strpos(getSelfUrl(),'/edit/') === false) $url .= '&view=1';
-	header('Location: '.$url);
-}
-
 // name only exists for new files, not for new version requests
 new FilenameRule("name");
 new NewFilenameRule("name", getTarget());
@@ -45,6 +37,6 @@ if ($_SERVER['REQUEST_METHOD']=='GET' || $_SERVER['REQUEST_METHOD']=='HEAD') {
 	$template->assign('targeturl', getTargetUrl());
 	$template->display();
 } else {
-	trigger_error('This form should be posted to ../upload/.', E_USER_ERROR);	
+	trigger_error('This form should be posted to ../upload/.', E_USER_ERROR);
 }
 ?>

@@ -1,23 +1,23 @@
 <?php
 /**
  * Updates the htpasswd contents.
- * 
+ *
  * If the repository contains an invalid password file,
  * first create a temporary password, then go and fill
  * in the password on this page.
  *
  * @package account
  */
-require('../../open/SvnOpenFile.class.php');
-require('../../edit/SvnEdit.class.php');
-require('../account.inc.php');
-require('../../conf/Presentation.class.php');
+require(dirname(dirname(__FILE__)).'/account.inc.php' );
+require(ReposWeb.'open/SvnOpenFile.class.php');
+require(ReposWeb.'edit/SvnEdit.class.php');
+require(ReposWeb.'conf/Presentation.class.php');
 
 class PasswordRule extends Rule {
-	var $repeatfield; 
+	var $repeatfield;
 	function PasswordRule($fieldname='password', $repeatfieldname='passwordrepeat') {
 		$this->repeatfield = $repeatfieldname;
-		$this->Rule($fieldname, $message);
+		$this->Rule($fieldname);
 	}
 	function validate($value) {
 		if (!$value) return null;
@@ -40,9 +40,9 @@ $email = accountGetEmail($contents);
 // password form should be POSTed
 if (isset($_REQUEST[SUBMIT])) {
 	Validation::expect('username', 'fullname', 'email', 'password', 'passwordrepeat');
-	
+
 	$message = array();
-	
+
 	$pass = new PasswordRule();
 	if ($pass->getValue()) {
 		$newcontents = explode(':',accountGetEncryptedPassword($username, $pass->getValue()).":$fullname:$email");
@@ -50,30 +50,30 @@ if (isset($_REQUEST[SUBMIT])) {
 	} else {
 		$newcontents = explode(':',trim($contents));
 	}
-	
+
 	$newFullname = $_REQUEST['fullname'];
 	if ($newFullname!=$fullname) {
 		$newcontents[2] = $newFullname;
 		$message[] = 'changed name';
 		$fullname = $newFullname;
 	}
-	
+
 	$email = accountGetEmailRule('email');
 	$newEmail = $email->getValue();
-	if ($newEmail!=$email) {
+	if ($newEmail!=$email->getValue()) {
 		if (!isset($newcontents[2])) $newcontents[2] = '';
 		$newcontents[3] = $newEmail;
 		$message[] = 'changed email';
 		$email = $newEmail;
 	}
-	
+
 	$newPasswordLine = implode(':', $newcontents)."\n";
 	if (trim($newPasswordLine) == trim($contents)) {
 		Validation::error('The form contents are the same as the current version of the settings file.');
 	}
-	
+
 	savePassword($newPasswordLine, implode(', ', $message));
-		
+
 } else {
 	$template = Presentation::getInstance();
 	$template->assign('isEdit', !isset($_GET['view']) && $passwordfile->isLatestRevision());
@@ -90,7 +90,7 @@ function savePassword($filecontents, $message) {
 	$checkout->addArgUrl(getParent(getTargetUrl()));
 	$checkout->addArgPath($wc);
 	$checkout->exec();
-	$f = fopen($wc.getPathName(getTarget()), w);
+	$f = fopen($wc.getPathName(getTarget()), 'w');
 	fwrite($f, $filecontents);
 	fclose($f);
 	$commit = new SvnEdit('commit');
@@ -101,7 +101,7 @@ function savePassword($filecontents, $message) {
 		$p = Presentation::getInstance();
 		$p->assign('redirect', '/?logout');
 	}
-	
+
 	displayEdit(Presentation::getInstance());
 	// Mau cause error "svn: DELETE of '/data/!svn/act/...': authorization failed"
 	// if the new password is enforced by a post-commit hook that the commit waits for
