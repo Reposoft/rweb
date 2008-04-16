@@ -23,7 +23,7 @@ if (!file_exists(CACHE_DIR)) {
 }
 
 $home = "http://smarty.php.net";
-$version = "2.6.18";
+$version = "2.6.19";
 $archive = "$home/do_download.php?download_file=Smarty-$version.tar.gz";
 $repos_package = "Smarty";
 
@@ -42,7 +42,7 @@ if(download($archive, $tmp)) {
 	extract GZ archive
 	arg 1 is an absolute path to a gz archive
 	arg 2 is the extracted file's name
-	arg 3 is optional. default value is 1 000 000 000. it has to be larger than the extracted file 
+	arg 3 is optional. default value is 1 000 000 000. it has to be larger than the extracted file
 */
 $report->info("Extract archive...");
 if(!uncompressGZ($tmp, $tarfile, 2000000 )) {
@@ -53,7 +53,7 @@ if(!uncompressGZ($tmp, $tarfile, 2000000 )) {
 	extract TAR archive
 	arg 1 is an absolute path to a gz archive
 	arg 2 is the extracted file's name. it is optional. default value is the same path as the tar file
-	arg 3 is optional. it should be used only if a special directory from the tar file is needed.  
+	arg 3 is optional. it should be used only if a special directory from the tar file is needed.
 */
 if(uncompressTAR( $tarfile, null, "libs" )) {
 	$report->ok("Archive extracted.");
@@ -85,4 +85,4 @@ $report->ok('Fix for template caching applied');
 
 $report->ok("Done.");
 $report->display();
-?> 
+?>

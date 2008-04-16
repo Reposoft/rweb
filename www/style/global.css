@@ -71,13 +71,13 @@ acronym, span.explain {
 }
 /* layout of version control concepts, these are usually span tags */
 .file {
-	
+
 }
 a.file {
 	color: #001155;
 }
 .folder {
-	
+
 }
 a.folder {
 	color: #001133;
@@ -95,7 +95,7 @@ a.folder {
 	background: url(user.png) left no-repeat;
 }
 .filesize {
-		
+
 }
 .message {
 	font-style: italic;
@@ -132,7 +132,7 @@ a.folder {
 }
 .note {
 	background-image: url(note.png);
-	background-position: 0px 6px;	
+	background-position: 0px 6px;
 }
 /* common page elements, may also be layouted for each tool */
 #commandbar {
@@ -277,6 +277,12 @@ span.action {
 }
 #commandbar #logout {
 	background-image: url('commands/24x24/logout.png');
+}
+#commandbar #accountedit {
+	background-image: url('commands/24x24/accountedit.png');
+}
+#commandbar #listrecursive {
+	background-image: url('commands/24x24/list.png');
 }
 /* general class for loading animation */
 .loading {
