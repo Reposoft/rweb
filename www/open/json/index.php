@@ -2,7 +2,7 @@
 /**
  * A combination of open/list/ and the details plugin,
  * to allow folder contents listing from any web page.
- * 
+ *
  * Add this to the html page, with optional configuration parameters
  * <code>
  * <script type="text/javascript" src="http://localhost/data/demoproject/trunk/?svn=listjs&selector=#svnlist"/>
@@ -15,7 +15,7 @@
  * but this dynamic approach has a few advantages:
  * - The script can be read from a different server (when in script tag)
  * - Script parameters can be used in AJAX calls too (read by php)
- * 
+ *
  * @package open
  */
 
@@ -29,6 +29,9 @@ $rev = $revisionRule->getValue();
 
 $json = getListJson($url, $rev);
 
+// javascript output
+header('Content-Type: text/plain');
+
 // second part of the script is printed if there is a selector
 if (!isset($_GET['selector'])) {
 	header('Content-Length: '.strlen($json));
@@ -37,7 +40,7 @@ if (!isset($_GET['selector'])) {
 } else {
 	// put the data in a variable for the bundled script below
 	// the data must be included in the script to allow cross-domain listings
-	$json = 'svn = '.$json.';';
+	$json = 'var svn = '.$json.';';
 }
 
 // import configuration from query string to settings json object
@@ -55,13 +58,13 @@ $script = '
 (function(jQ,url,list,set) {
 
 	var s = jQ.extend({
-		selector: "#reposlist",
+		selector: "#reposlist"
 	},set);
 
-	this.o = function(class,value) {
-		return jQ("<span/>").addClass(class).append(value);
+	var o = function(c,value) {
+		return jQ("<span/>").addClass(c).append(value);
 	};
-	
+
 	jQ().ready( function() {
 		var p = jQ(s.selector);
 		for (var f in list) {
@@ -71,7 +74,7 @@ $script = '
 			e.append(o("revision",d.commit.revision));
 			if (d.commit.author) {
 				e.append(o("username",d.commit.author));
-				e.append(o("datetime",d.commit.date));	
+				e.append(o("datetime",d.commit.date));
 			} else {
 				e.addClass("noaccess");
 			}
