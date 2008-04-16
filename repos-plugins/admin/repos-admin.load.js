@@ -44,8 +44,7 @@
 	Repos.target('/'+u+'/administration/repos.user', function() {
 		if (location.href.indexOf(a)>=0) return; // already in admin
 		user();
+		Repos.service('edit/', edit);
 	});
-
-	Repos.service('edit/', edit);
 
 })();
