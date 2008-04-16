@@ -17,9 +17,10 @@ $rev = $revisionRule->getValue();
 $list = new SvnOpen('list');
 $list->addArgOption('--xml');
 $list->addArgOption('--incremental');
-if (isset($_GET['recursive']) && $_GET['recursive']) {
-	$list->addArgOption('-R');
-}
+
+$recursive = isset($_GET['recursive']) && $_GET['recursive'];
+if ($recursive) $list->addArgOption('-R');
+
 if ($rev) {
 	$list->addArgUrlPeg($url, $rev);
 } else {

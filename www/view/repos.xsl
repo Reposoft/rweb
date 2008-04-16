@@ -103,7 +103,6 @@
 		<xsl:if test="boolean($parentlink)">
 			<a id="parent" class="command translate" href="{$parentlink}">up</a>
 		</xsl:if>
-		<a id="list" class="command translate" href="{$web}open/list/?target={$target}&amp;recursive=1">list&#xA0;contents</a>
 		<xsl:if test="$editUrl">
 			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={$target}">new&#xA0;folder</a>
 			<a id="addfile" class="command translate" href="{$editUrl}upload/?target={$target}">add&#xA0;file</a>
@@ -122,11 +121,6 @@
 		<h2 id="path">
 			<xsl:copy-of select="$pathlinks"/>
 		</h2>
-		<xsl:if test="$editUrl">
-			<div class="contentcommands">
-				<a id="repos-edit" class="action translate" href="{$editUrl}file/?target={$folder}">add&#xA0;text</a>
-			</div>
-		</xsl:if>
 		<ul class="index">
 			<xsl:apply-templates select="dir">
 				<xsl:sort select="@name"/>
