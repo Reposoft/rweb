@@ -16,7 +16,7 @@
 	assertNoUnwantedPattern($p, $x)	Fail if the regex $p matches $x
 	assertNoErrors()	Fail if any PHP error occoured
 	assertError($x)	Fail if no PHP error or incorrect message
-	assertErrorPattern($p)	Fail unless the error matches the regex $p 
+	assertErrorPattern($p)	Fail unless the error matches the regex $p
 */
 
 require("../../lib/simpletest/setup.php");
@@ -31,14 +31,14 @@ class TestServerSettings extends UnitTestCase {
 		//$this->assertFalse(ini_get('display_errors'), "We handle the errors ourselves, and if we don't php should not print them as HTML");
 		$this->assertTrue(ini_get('display_errors'), "display_errors: For internal use we don't want to risk losing error messages. %s");
 	}
-	
+
 	function testFileUploads() {
 		$this->assertEqual(1, ini_get('file_uploads'), "file_uploads: File uploads should be allowed");
 		$maxsize = ini_get('upload_max_filesize');
 		$M = 1048576;
 		eval(''.str_replace('M', ' * '.$M, '$max = '.$maxsize.';'));
 		$this->assertTrue($max >= 10*$M, "upload_max_filesize: 10 MB file uploads must be allowed, but upload_max_filesize is $maxsize ($max bytes).");
-		
+
 		$maxpost = ini_get('post_max_size');
 		eval(''.str_replace('M', ' * '.$M, '$max = '.$maxpost.';'));
 		$this->assertTrue($max >= 11*$M, "post_max_size: Post max size must be a couple of kb higher than upload max size, is $maxpost ($max bytes).");
@@ -50,7 +50,7 @@ class TestServerSettings extends UnitTestCase {
 		// not needed anymore, use curl for calls:
 		//$this->assertTrue(ini_get('default_socket_timeout')<=10, "default_socket_timeout: Should be no more than 10, to make the application responsive. We have local or near local access to all resources.");
 	}
-	
+
 	function testOutputBuffering() {
 		$this->assertEqual(0, ini_get('output_buffering'), "output_buffering: For passthrough of resources and reports we don't want output buffering. %s".
 			". The application works with output buffering too, but users may experience delayed responses in some cases.");
@@ -64,7 +64,7 @@ class TestServerSettings extends UnitTestCase {
 
 	function testMbString() {
 		$this->assertEqual("neutral", strtolower(ini_get('mbstring.language')), "mbstring.language: %s");
-		
+
 		$this->assertFalse(ini_get('mbstring.substitute_character'), "mbstring.substitute_character: Input that can't be converted should cause error message. %s");
 		$this->assertEqual(0, ini_get('mbstring.func_overload'), "mbstring.func_overload: Mb should be called explicitly, not silently. %s");
 		// the above is not required, it seems, at least not in linux
@@ -86,21 +86,21 @@ class TestServerSettings extends UnitTestCase {
 			$this->assertEqual("UTF-8", ini_get('mbstring.http_input'), "mbstring.http_input: %s, must be default or UTF-8");
 		}
 	}
-	
+
 	function testLocale() {
 		exec('locale -a 2>&1', $locales, $r);
 		$rlocale = 'en_US.utf8'; // TODO let this test require repos.properties.php and use getLocale()
 		if ($r==0) {
 			$this->assertTrue(in_array($rlocale, $locales), 'Locale '.$rlocale.' not found in '.implode(',',$locales));
 		} else {
-			if (System::isWindows) {
+			if (substr(PHP_OS,0,3)=='WIN') {
 				$this->sendMessage('Locale command not available, but this is windows so that\'s ok');
 			} else {
 				$this->fail('The package "locale" is required, got '.implode(" ",$locales));
 			}
 		}
 	}
-	
+
 }
 
 testrun(new TestServerSettings());

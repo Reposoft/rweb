@@ -1,16 +1,16 @@
 <?php
 /**
  * Content streaming and templating (c) 2006-1007 Staffan Olsson www.repos.se
- * 
+ *
  * Presentation can not use the functions from /account, so user settings must be read from cookies.
  * Presentation is for all webapp pages, except administration reports.
- * 
+ *
  * PHP scripts should require this class or the Report class, depending on the type of output they produce.
- * 
+ *
  * Note that for production release,
  * Smarty caching should be ON (in smarty.inc.php)
  * and filters disabled.
- * 
+ *
  * @package conf
  * @see Report, the class used for unit tests and administration reports. Does not require repos.properties.php.
  */
@@ -55,7 +55,7 @@ $possibleLocales = array(
 	'en' => 'English',
 	'de' => 'Deutsch'
 	);
-	
+
 /**
  * Resolve locale code from: 1: GET, 2: SESSION, 3: browser
  * @return two letter language code, lower case
@@ -64,7 +64,7 @@ function getUserLocale() {
 	global $possibleLocales;
 	static $locale = null;
 	if (!is_null($locale)) return $locale;
-	$locale = 'en'; 
+	$locale = 'en';
 	if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) $locale = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 	if(array_key_exists(LOCALE_KEY,$_COOKIE)) $locale = $_COOKIE[LOCALE_KEY];
 	if(array_key_exists(LOCALE_KEY,$_GET)) $locale = $_GET[LOCALE_KEY];
@@ -78,7 +78,7 @@ function getUserLocale() {
 	} else {
 		$_COOKIE[LOCALE_KEY] = $locale;
 	}
-	return $locale;	
+	return $locale;
 }
 
 /**
@@ -89,8 +89,13 @@ function getUserLocale() {
  * @param String $name the file name, UTF-8 encoding, not urlencoded
  */
 function getFileId($name) {
-	$e = rawurlencode($name);
+	// subversion and javascript fileid uses lowercase escape codes
+	$e = preg_replace_callback('/[^A-Za-z:]+/','getFileId_lower',$name);
 	return preg_replace('/[%\/\(\)@&]/','_',$e);
+}
+
+function getFileId_lower($matches) {
+	return strtolower(rawurlencode($matches[0]));
 }
 
 // ------- plugin functionality ----------
@@ -109,7 +114,7 @@ require(dirname(dirname(__FILE__)).'/lib/smarty/smarty.inc.php' );
  *
  * This class only delegates to its internal Smarty instance,
  * so the inferface is limited to the functions mirrored from Smarty.
- * 
+ *
  * Does the following assigns for every page:
  * head = all shared head tags, place a <!--{head}--> in the <head> of the template
  * referer = the HTTP referer url, if there is one
@@ -118,19 +123,19 @@ require(dirname(dirname(__FILE__)).'/lib/smarty/smarty.inc.php' );
  * Allows two different markup delimiters:
  * <!--{ ... }-->
  * {= ... }
- * 
+ *
  * Also adds a prefilter that allows "dot" notation, but with comma, for objects
- * <code>..$foo,bar} {$foo,isBar..</code> becomes 
+ * <code>..$foo,bar} {$foo,isBar..</code> becomes
  * <code>..$foo->getBar()} {$foo->isBar()..</code>
  * Comma is used instead of dot so it can be combined with the standard Smarty
  * syntax for associative arrays.
- * 
+ *
  * All templates have the following variables, assigned in display():
  * 'head' - the common head tags.
  * 'referer' - the http referer, if there is one.
  * 'userhome' - the place which users can always return to if everything else goes wrong.
  * 'webapp' - the root URL to Repos, with trainling slash.
- * 
+ *
  * Cache settings are defined in te include file.
  */
 class Presentation {
@@ -140,17 +145,17 @@ class Presentation {
 	 * @var Smarty
 	 */
 	var $smarty;
-	
+
 	var $redirectBeforeDisplay = false;
 	var $extraStylesheets = array();
 
 	/**
 	 * Singleton accessor, for occations when it is not known if a Presentation object has already been allocated for the request.
 	 * Static, use Presentation::getInstance().
-	 * 
+	 *
 	 * @return Presentation
 	 * @static
-	 */ 
+	 */
 	function getInstance() {
 		static $instance = null;
 		if ($instance == null) {
@@ -159,15 +164,15 @@ class Presentation {
 		}
 		return $instance;
 	}
-	
+
 	/**
 	 * For edit operations that want redirect-after-post, that must be enabled
 	 *  after input validation (to simplify for validation frameworks)
 	 *  but before operation starts (as soon as possible).
-	 * 
+	 *
 	 * They should call this method instead of getInstance
-	 * 
-	 * @static 
+	 *
+	 * @static
 	 */
 	function background() {
 		$p = Presentation::getInstance();
@@ -175,7 +180,7 @@ class Presentation {
 		$p->enableRedirectWaiting();
 		return $p;
 	}
-	
+
 	/**
 	 * Constructor initializes a Smarty instance and adds custom filters.
 	 * This function does everything that is required befor compiling templates.
@@ -183,9 +188,9 @@ class Presentation {
 	 */
 	function Presentation() {
 		setupResponse();
-		
+
 		$this->smarty = smarty_getInstance();
-		
+
 		$this->smarty->register_prefilter('Presentation_useCommentedDelimiters');
 		$this->smarty->load_filter('pre', 'Presentation_useCommentedDelimiters');
 		$this->smarty->register_prefilter('Presentation_urlRewriteForHttps');
@@ -205,7 +210,7 @@ class Presentation {
 			$this->smarty->load_filter('pre', 'Presentation_noExtraContentType');
 		}
 	}
-	
+
 	/**
 	 * Customize smarty's trigger_error (for internal use, call showError instead)
 	 */
@@ -218,7 +223,7 @@ class Presentation {
 		// we never want to continue after error
 		exit;
 	}
-	
+
 	/**
 	 * assigns values to template variables
 	 *
@@ -226,9 +231,9 @@ class Presentation {
 	 * @param mixed $value the value to assign
 	 */
 	function assign($tpl_var, $value = null) {
-		$this->smarty->assign($tpl_var, $value);	
+		$this->smarty->assign($tpl_var, $value);
 	}
-	
+
 	/**
     * assigns values to template variables by reference
     *
@@ -238,7 +243,7 @@ class Presentation {
 	function assign_by_ref($tpl_var, &$value) {
 		$this->smarty->assign_by_ref($tpl_var, $value);
 	}
-	
+
 	/**
 	 * appends values to template variables
 	 *
@@ -246,9 +251,9 @@ class Presentation {
 	 * @param mixed $value the value to append
 	 */
 	function append($tpl_var, $value=null, $merge=false) {
-		$this->smarty->append($tpl_var, $value, $merge);	
+		$this->smarty->append($tpl_var, $value, $merge);
 	}
-	
+
 	/**
 	 * appends values to template variables by reference
 	 *
@@ -258,9 +263,9 @@ class Presentation {
 	function append_by_ref($tpl_var, &$value, $merge=false) {
 	    $this->smarty->append_by_ref($tpl_var, $value, $merge);
 	}
-	
+
 	/**
-	 * executes & returns or displays the template results, 
+	 * executes & returns or displays the template results,
 	 * unlike display this does not assign any common variables.
 	 *
 	 * @param string $resource_name
@@ -272,9 +277,9 @@ class Presentation {
 		// to get predictable cache path, always use forward slashes
 		$resource_name = strtr($resource_name, '\\', '/');
 		// no extra processing with fetch, just process the template with explicit assigns
-		return $this->smarty->fetch($resource_name, $cache_id, $compile_id, $display);	
+		return $this->smarty->fetch($resource_name, $cache_id, $compile_id, $display);
 	}
-	
+
 	/**
 	 * Smarty's default behaviour and some additions:
 	 * + If enableRedirect() has been called, it does a redirect before display.
@@ -306,7 +311,7 @@ class Presentation {
 				if (headers_sent()) trigger_error('Failed to redirect to result page - output started already', E_USER_ERROR);
 				$file = System::getTempFile('pages');
 			} else {
-				$file = System::getApplicationTemp('pages').$this->redirectBeforeDisplay;	
+				$file = System::getApplicationTemp('pages').$this->redirectBeforeDisplay;
 			}
 			if (!$file) trigger_error('Failed to write response because server file could not be opened', E_USER_ERROR);
 			$pagecontents = $this->fetch($resource_name, $cache_id, $compile_id);
@@ -320,7 +325,7 @@ class Presentation {
 			$this->smarty->display($resource_name, $cache_id, $compile_id);
 		}
 	}
-	
+
 	/**
 	 * Presents the assigned variables as a JSON string, and the entire page as text/plain (see the top of this script file).
 	 * Note that it is standard JSON to escape all forward slashes with a backslash.
@@ -331,12 +336,12 @@ class Presentation {
 		$json = new Services_JSON(); // SERVICES_JSON_LOOSE_TYPE?
 		echo $json->encode($data);
 	}
-	
+
 	function getDefaultTemplate() {
 		$script = realpath($_SERVER['SCRIPT_FILENAME']); // we have to resolve symlinks becase __FILE__ in smarty.inc.php does so
 		return $this->getLocaleFile(dirname($script).'/'.basename($script,".php"));
 	}
-	
+
 	/**
 	 * The one-stop-shop method to get the localized version of your template.
 	 * @return filename of the localized version for this page
@@ -352,7 +357,7 @@ class Presentation {
 		}
 		return "file_not_found $name $locale $extension";
 	}
-	
+
 	/**
 	 * Behavior can be overridden by iplementing getContentsFile($localeCode, $name, $extension)
 	 * @return the filename representing a specified locale
@@ -365,15 +370,15 @@ class Presentation {
 	/**
 	 * Use redirect before page is displayed. Useful as redirect-after-post.
 	 * @param boolean true to enable redirect, false to disable
-	 */	
+	 */
 	function enableRedirect($doRedirectBeforeDisplay=true) {
 		$this->redirectBeforeDisplay = $doRedirectBeforeDisplay;
 	}
-	
+
 	function isRedirectBeforeDisplay() {
 		return $this->redirectBeforeDisplay != false;
 	}
-	
+
 	function enableRedirectWaiting() {
 		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 			trigger_error('Background processing is only allowed for POST requests', E_USER_ERROR);
@@ -389,7 +394,7 @@ class Presentation {
 		echo $page;
 		@ob_flush();flush(); // according to the docs this is still not 100% reliable
 	}
-	
+
 	/**
 	 * Shows error page, by redirecting the browser to a page so that the URL is not tried again.
 	 *
@@ -402,10 +407,10 @@ class Presentation {
 		}
 		$this->showErrorNoRedirect($error_msg, $headline);
 	}
-	
+
 	/**
 	 * Shows error message without redirect, applicable when a browser refresh can't do any harm
-	 * 
+	 *
 	 * @param String $error_msg the body of the error page, can contain HTML tags
 	 * @param String $headline the contents of the <h1> tag
 	 */
@@ -413,16 +418,16 @@ class Presentation {
 		$template = $this->getLocaleFile(dirname(__FILE__) . '/Error');
 		$this->assign('headline', $headline);
 		$this->assign('error', $error_msg);
-		$this->display($template);		
+		$this->display($template);
 	}
-	
+
 	/**
 	 * @param the stylesheet path, relative to "style/"
 	 */
 	function addStylesheet($url) {
 		$this->extraStylesheets[] = $url;
 	}
-	
+
 	/**
 	 * Get the base URL for images and css (not javascript)
 	 */
@@ -432,7 +437,7 @@ class Presentation {
 		// even if SSL, use https for static resources too, to avoid browser warnings
 		return $w;
 	}
-	
+
 	/**
 	 * @param stylePath the folder containing global.css, relative to webapp
 	 */
@@ -454,32 +459,32 @@ class Presentation {
 		$head = $head . '<script type="text/javascript" src="'.$webapp.'scripts/head.js"></script>';
 		return $head;
 	}
-	
+
 	function _getLinkCssTag($href) {
 		return '<link href="'.$href.'" rel="stylesheet" type="text/css"></link>';
 	}
-	
+
 	/**
 	 * @return boolean true if the browser viewing the results has a logged in user
 	 */
 	function isUserLoggedIn() {
 		return function_exists('isLoggedIn') && isLoggedIn();
 	}
-	
+
 	/**
 	 * @return the current page's 'back' url, using
 	 * 1: $_REQUEST['referer'], 2: getHttpReferer() (only if it's not a result=tmp page)
 	 * if no good referer found, use javascript.
 	 */
 	function getReferer() {
-		// allow referer to be set explicitly, for example to 
+		// allow referer to be set explicitly, for example to
 		//  have the same home button thoughout a wizard
 		if (isset($_REQUEST['referer'])) {
 			return $_REQUEST['referer'];
 		}
 		// use javascript in redirect-after-post results
 		if (isset($_GET['result'])) {
-			return "javascript:history.go(-1)";	
+			return "javascript:history.go(-1)";
 		}
 		// use javascript after form, to preserve values
 		if (isset($_REQUEST[SUBMIT])) {
@@ -492,7 +497,7 @@ class Presentation {
 		// if nothing else can be found
 		return "javascript:history.go(-1)";
 	}
-	
+
 	/**
 	 * @return repos home page on this server
 	 */
@@ -508,7 +513,7 @@ class Presentation {
 function Presentation_noExtraContentType($tpl_source, &$smarty)
 {
 	if (strpos($tpl_source, 'http-equiv="Content-Type"')) {
-		return 'Application error. The template for this page contains Content-Type tag.';	
+		return 'Application error. The template for this page contains Content-Type tag.';
 	}
 	return $tpl_source;
 }
@@ -556,7 +561,7 @@ function Presentation_urlEncodeQueryString($tpl_source, &$smarty) {
 function Presentation_removeIndentation($tpl_source, &$smarty) {
 	$pattern = '/>\r?\n\s*([<{])/';
 	$replacement = '>$1';
-	return preg_replace($pattern, $replacement, $tpl_source); 
+	return preg_replace($pattern, $replacement, $tpl_source);
 }
 
 // plug in to repos.properties.php's error handling solution
@@ -571,7 +576,7 @@ if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $mes
 			echo("<strong>$label</strong> ".nl2br($message)."\n\n\n<!-- Error level $n. Stack trace:\n$trace -->\n\n"); exit;
 		} else {
 			// allow redirect if not done yet. we have no support for sending status header with result page.
-			$p->showError("$label $message \n\n\n<!-- Error level $n. Stack trace:\n$trace -->");	
+			$p->showError("$label $message \n\n\n<!-- Error level $n. Stack trace:\n$trace -->");
 		}
 	} else {
 		if (headers_sent()) {
