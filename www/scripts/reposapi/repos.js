@@ -56,7 +56,7 @@ Repos.service = function(s, fn) {
 // TODO make this suck less or remove it
 jQuery.depends = function(func) {
 	if ($.isFunction(func)) return jQuery;
-	
+
 	//console.error('Repos customization error. This plugin\'s dependencies are not met.');
 	// TODO return dummy so that event add is avoided?
 	return new jQuery([]);
@@ -136,7 +136,7 @@ Repos.isService = function(selector,target) {
  */
 Repos.getUser = function() {
 	var u = $.cookie('account');
-	if (u) return u;
+	if (u) return decodeURI(u); // should match rawurlencode in PHP
 	return false;
 };
 
@@ -150,7 +150,7 @@ jQuery.fn.say = function(message) {
 		title:false,
 		id:false
 	},message);
-	
+
 	var e = $('<'+m.tag+'/>').addClass(m.level).html(m.text);
 	if (m.title) e.attr('title',m.title);
 	if (m.id) e.attr('id',m.id);
@@ -162,16 +162,16 @@ jQuery.fn.say = function(message) {
 	/*
 	 Dynamic loading of scripts and css has been disabled,
 	 because it was not reliable. Can be found in reposweb-1.1-B1.
-	 
+
 	 Anyway, it seems like $(document).ready() in plugins work even
 	 if they are loaded dynamically. So the only limitation is that
 	 3rd party libs must be loaded in page head.
-	 
+
 	 And how about $().load()?
 	 */
 
 	// -------------- plugin setup --------------
-	
+
 	/**
 	 * Adds a javascript to the current page and evaluates it (asynchronously).
 	 * @param src script url from repos root, not starting with slash

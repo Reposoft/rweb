@@ -1,13 +1,13 @@
 <?php
 /**
  * Login integration (c) 2004-2007 Staffan Olsson www.repos.se
- * 
+ *
  * repos.se versions 1.x has no internal user database.
  * Instead, all security relies on the repository security,
  * which relies on the most tested web server there is.
  * The repository can have any authentication backend, such
  * as flat file, database or LDAP directory.
- * 
+ *
  * Repos authenticates every request against the 'target' resource
  * which is the file or filder that the user wants to reach.
  * The 'target' is the central concept here, being the identification
@@ -17,10 +17,10 @@
  * getTargetUrl(); // returns the absolute URL as the user knows it.
  * </code>
  * If login passed, use <code>getReposUser()</code> to get the account name.
- * 
+ *
  * Repos checks the HTTP headers of this direct access URL,
  * and requires the same authentication for the current page.
- * 
+ *
  * This way Repos is compatible with all browsers and subversion clients.
  * Any HTTP capable application can use this to integrate to repos.
  *
@@ -35,13 +35,13 @@
  * the AuthName. If the target resource does not require login,
  * the functions will return true without showing a login box.
  * The credentials will then be empty.
- * 
+ *
  * Note that internally, URLs should never be encoded.
- * 
+ *
  * This script produces HTTP headers, so it must be included before
  * any other output. The script does not print anything to the output stream,
  * it uses trigger_error on unexpected conditions.
- * 
+ *
  * @package account
  * @version $Id$
  */
@@ -201,7 +201,7 @@ function _getLoginUrl($urlWithoutLogin) {
 function getAuthName($targetUrl) {
 	return login_getAuthNameFromRepository($targetUrl);
 }
- 
+
 /**
  * Uses HTTP to check authentication headers for a resource.
  * Returns false if the targetUrl does not request authenticatoin
@@ -268,7 +268,7 @@ function getTarget() {
 
 /**
  * Target url is resolved from query parameters.
- * Not that this returns the non-SSL url. Use 
+ * Not that this returns the non-SSL url. Use
  * getRepositoryUrl().getTarget() for URL with same protocol as current page.
  * @param target Optional target path, if not set then getTarget() is used.
  * @return Full url of the file or directory this request targets, Not urlencoded.
@@ -287,7 +287,7 @@ function getTargetUrl($target=null) {
  * Caller may optionally print out HTML after this method is called,
  * to display a message if the user hits cancel.
  *
- * Always using Basic auth. The credentials can be used 
+ * Always using Basic auth. The credentials can be used
  * for Digest auth to the target resource anyway.
  */
 function askForCredentials($realm) {
@@ -368,7 +368,9 @@ function login_setUserSettings() {
 	if (empty($user)) {
 		trigger_error('User not logged in. Can not store username.', E_USER_ERROR);
 	}
-	setcookie(USERNAME_KEY, $user, 0, '/');
+	// note that php encodes spaces to "+" instead of %20 as in spec
+	//setcookie(USERNAME_KEY, $user, 0, '/');
+	header('Set-Cookie: '.USERNAME_KEY.'='.rawurldecode($user).'; path=/');
 }
 
 function login_clearUsernameCookie() {
