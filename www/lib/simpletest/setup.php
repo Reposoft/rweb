@@ -70,6 +70,7 @@ function reportErrorInTest($n, $message, $file, $line) {
 	global $reporter;
 	$level = $n;
 	$trace = _getStackTrace();
+	if (defined('E_STRICT') && $n == E_STRICT) return; // simpletest produces syntactic error messages
 	if (!isset($reporter->report)) reportErrorText($level, $message, $trace); // report not started yet
 	if ($level == E_USER_ERROR) {
 		$reporter->paintError("Error:   ".$message);

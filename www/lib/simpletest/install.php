@@ -8,7 +8,7 @@ $report->info("Simpletest is installing...");
 $repos_package = "simpletest";
 $home = "simpletest.sourceforge.net";
 
-$version = "1.0.1beta2";
+$version = "1.0.1";
 $archive = "http://switch.dl.sourceforge.net/sourceforge/simpletest/simpletest_$version.tar.gz";
 
 $basedir = dirname(__FILE__);
