@@ -3,12 +3,12 @@
  * System utitlity functions (c) 2006-1007 Staffan Olsson www.repos.se
  * Controls access to the filesystem and server environment.
  * Unlike repos.properties.php, these functions do not depend on configuration.
- * 
+ *
  * Some standard PHP functions should not be used in repos, except through this class.
  * - tempnam
  * - unlink
  * - exec/passthru (use Command class instead)
- * 
+ *
  * @package conf
  */
 
@@ -47,7 +47,7 @@ function isPath($path) {
 /**
  * Converts filesystem path to path that works on all OSes, with same encoding as command line.
  * Windows paths are converted from backslashes to forward slashes, and from UTF-8 to ISO-8859-1 (see toShellEncoding).
- * If a path does not use the OS encoding, functions like file_exists will only work with ASCII file names. 
+ * If a path does not use the OS encoding, functions like file_exists will only work with ASCII file names.
  * @param String $path path that might contain backslashes
  * @return String the same path, but with forward slashes
  * @package conf
@@ -73,7 +73,7 @@ function isAbsolute($path) {
  * Relative paths are those that are not absolute, including empty strings.
  * @param String $path the file system path or URL to check
  * @return boolean true if path is relative, false if not
- * @package conf 
+ * @package conf
  */
 function isRelative($path) {
 	return !isAbsolute($path);
@@ -83,7 +83,7 @@ function isRelative($path) {
  * Files are relative or absolute paths that do not end with '/'.
  * The actual filename can be retreived using getParent($path).
  * @param String $path the file system path or URL to check
- * @return boolean true if path is a file, false if not 
+ * @return boolean true if path is a file, false if not
  * @package conf
  */
 function isFile($path) {
@@ -95,7 +95,7 @@ function isFile($path) {
  * Folders are relative or absolute paths that _do_ end with '/'.
  * To check if a URL with no tailing slash is a folder, use HTTP.
  * @param String $path the file system path or URL to check
- * @return boolean true if path is a folder, false if not 
+ * @return boolean true if path is a folder, false if not
  * @package conf
  */
 function isFolder($path) {
@@ -110,7 +110,7 @@ function isFolder($path) {
 function getParent($path) {
 	if (strlen($path)<1) return false;
 	$c = substr_count($path, '/');
-	if ($c < 2 || ($c < 4 && strContains($path, '://') && !($c==3 && !strEnds($path, '/')))) return false; 
+	if ($c < 2 || ($c < 4 && strContains($path, '://') && !($c==3 && !strEnds($path, '/')))) return false;
 	$f = substr($path, 0, strrpos(rtrim($path,'/'), '/'));
 	if (strlen($f)==0 && isRelative($path)) return $f;
 	return $f.'/';
@@ -132,7 +132,7 @@ function getPathName($path) {
 
 /**
  * Non configurable global functions.
- * 
+ *
  * It is not allowed for code outside this file to do
  * any of: unlink(x), rmdir(x), touch(x), fopen(x, 'a' or 'w')
  *
@@ -140,7 +140,7 @@ function getPathName($path) {
  * @package conf
  */
 class System {
-	
+
 	/**
 	 * @return true if the web server is running windows
 	 */
@@ -155,7 +155,7 @@ class System {
 		if (System::isWindows()) return "\r\n";
 		else return "\n";
 	}
-	
+
 	/**
 	 * Manages the common temp dir for repos-php. Temp is organized in subfolders per operation.
 	 * This method returns an existing temp folder; to get a new empty folder use {@link getTempFolder}.
@@ -181,7 +181,7 @@ class System {
 		}
 		return toPath($tmpdir) . '/';
 	}
-	
+
 	/**
 	 * Return a new empty temporary file on the application temp area.
 	 * @param String $subfolder (optional) category (like 'upload'), subfolder to temp where the file will be created.
@@ -192,7 +192,7 @@ class System {
 		if (!touch($f)) trigger_error('Failed to create temp file '.$f, E_USER_ERROR);
 		return $f;
 	}
-	
+
 	/**
 	 * @return a non-existing absolute path in the temp area, no trailing slash
 	 * @param $suffix may not contain /
@@ -200,7 +200,7 @@ class System {
 	function getTempPath($subfolder=null, $suffix='') {
 		return System::getApplicationTemp($subfolder).uniqid().$suffix;
 	}
-	
+
 	/**
 	 * Return a new, empty, temporary folder in the application temp area.
 	 * @param String $subfolder optional category (like 'upload')
@@ -212,9 +212,9 @@ class System {
 		if (mkdir($f)) return $f;
 		trigger_error('Failed to create temp folder '.$f, E_USER_ERROR);
 	}
-	
+
 	// ------ functions to keep scripts portable -----
-	
+
 	/**
 	 * Converts a string from internal encoding to the encoding used for file names and commands.
 	 * @param String $string the value with internal encoding (same as no encoding)
@@ -227,7 +227,7 @@ class System {
 		}
 		return $string;
 	}
-	
+
 	/**
 	 * Get the execute path of command line operations supported by repos.
 	 * @param String $commandName Command name, i.e. 'svnadmin'.
@@ -266,16 +266,22 @@ class System {
 		}
 		return false;
 	}
-	
+
 	function _getSpecialCommand($name) {
 		if ($name == 'htpasswd') {
 			$try = array();
+			// allow config
+			if (isset($_SERVER['ReposHtpasswd'])) $try[] = $_SERVER['ReposHtpasswd'];
+			// guess
 			if (System::isWindows()) {
 				// default apache install location
 				$try[] = 'C:\Program files\Apache Software Foundation\Apache2.2\bin\htpasswd.exe';
 				$try[] = 'C:\Program files\Apache Software Foundation\Apache2.0\bin\htpasswd.exe';
 				$try[] = 'C:\Program\Apache Software Foundation\Apache2.2\bin\htpasswd.exe';
 				$try[] = 'C:\Program\Apache Software Foundation\Apache2.0\bin\htpasswd.exe';
+				// repos server install locations
+				$try[] = 'C:\Program files\ReposServer\apache\bin\htpasswd.exe';
+				$try[] = 'C:\Program\ReposServer\apache\bin\htpasswd.exe';
 				// apache may be docroot parent
 				$docroot = strtr($_SERVER['DOCUMENT_ROOT'],'/','\\');
 				$try[] = dirname($docroot)."\\apache\\bin\\htpasswd.exe";
@@ -294,9 +300,9 @@ class System {
 		// other commands
 		return false;
 	}
-	
+
 	// ----- file system helper functions ------
-	
+
 	/**
 	 * Deletes a folder and all contents. No other scripts in repos may call the 'unlink' method.
 	 * Removes the folder recursively if it is in one of the allowed locations,
@@ -310,7 +316,7 @@ class System {
 		if (!isFolder($folder)) {
 			trigger_error("Path \"$folder\" is not a folder.", E_USER_ERROR); return false;
 		}
-		
+
 		if (!file_exists($folder) || !is_dir($folder)) {
 			trigger_error("Path \"$folder\" does not exist.", E_USER_ERROR); return false;
 		}
@@ -339,7 +345,7 @@ class System {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * replaces touch().
 	 * @deprecated use System::createFile
@@ -351,7 +357,7 @@ class System {
 		}
 		return touch($absolutePath);
 	}
-	
+
 	/**
 	 * replaces mkdir().
 	 */
@@ -365,7 +371,7 @@ class System {
 		}
 		return mkdir($absolutePath);
 	}
-	
+
 	/**
 	 * replaces unlink().
 	 * @param String $file absolute path to file
@@ -388,7 +394,7 @@ class System {
 		}
 		return unlink($file);
 	}
-	
+
 	/**
 	 * Instead of createFile() and fopen+fwrite+fclose.
 	 */
@@ -400,7 +406,7 @@ class System {
 			trigger_error("Path $absolutePath already exists. Delete it first."); return false;
 		}
 		if ($convertToWindowsNewlineOnWindows) {
-			$file = fopen($absolutePath, 'wt');	
+			$file = fopen($absolutePath, 'wt');
 		} else {
 			$file = fopen($absolutePath, 'w');
 		}
@@ -408,10 +414,10 @@ class System {
 		fclose($file);
 		return $b;
 	}
-	
+
 	/**
 	 * Replaces chmod 0777, and is used internally before deleting files or folders.
-	 * Only allowes chmodding of folders that are expected to be write protected, like .svn. 
+	 * Only allowes chmodding of folders that are expected to be write protected, like .svn.
 	 * @return false if it is not allowed to chmod the path writable, or if 'chmod' function fails
 	 */
 	function _chmodWritable($absolutePath) {
@@ -419,7 +425,7 @@ class System {
 		if (strBegins($absolutePath, System::_getSystemTemp())) return chmod($absolutePath, 0777);
 		return false;
 	}
-	
+
 	/**
 	 * @todo
 	 *
@@ -428,16 +434,16 @@ class System {
 	function chmodWebRuntimeWritable($absolutePath) {
 		// what if we are running in CLI mode? we probably are not.
 	}
-	
+
 	/**
 	 * @todo
 	 *
 	 * @param unknown_type $absolutePath
 	 */
 	function chmodWebGroupWritable($absolutePath) {
-		
+
 	}
-	
+
 	/**
 	 * It is considered a serious system error if a modify path is invalid according to the internal rules.
 	 * Therefore we throw an error and do exit.
@@ -459,7 +465,7 @@ class System {
 		}
 		trigger_error("Security error: local write not allowed in \"$path\". It is not a temp or repos dir.", E_USER_ERROR);
 	}
-	
+
 	/**
 	 * Platform independen way of getting the server's temp folder.
 	 * @return String absolute path, folder, existing
@@ -487,12 +493,12 @@ class System {
 			unlink($tmpfile);
 			if (strlen($tempdir)<4) trigger_error("Attempted to use tempnam() to get system temp dir, but the result is: $tempdir", E_USER_ERROR);
 		}
-	
+
 		if (empty($tempdir)) { trigger_error('Can not get the system temp dir', E_USER_ERROR); }
-		
+
 		$tempdir = rtrim(toPath($tempdir),'/').'/';
 		if (strlen($tempdir) < 4) { trigger_error('Can not get the system temp dir, "'.$tempdir.'" is too short. Method: '.$type, E_USER_ERROR); }
-		
+
 		$tempfolder = $tempdir;
 		return $tempfolder;
 	}
