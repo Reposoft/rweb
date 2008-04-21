@@ -9,8 +9,8 @@
  *
  * @package
  */
-require('../../conf/Presentation.class.php');
-require('../../account/account.inc.php');
+require( dirname(dirname(__FILE__)).'/account.inc.php' );
+require( ReposWeb.'/conf/Presentation.class.php' );
 
 $username = accountGetUsernameRequiredRule();
 $email = accountGetEmailRequiredRule();
