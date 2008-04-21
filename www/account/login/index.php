@@ -11,17 +11,18 @@ require( dirname(dirname(dirname(__FILE__))) . "/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__)) . "/login.inc.php" );
 
 /**
- * Suggests URL that can be used to validate user credentials
+ * Suggests URL that can be used to validate user credentials.
+ * Can be set explicitly using ReposLoginUrl server environment.
  * @param String $repository absolte url to repository resorce, _with_ tailing slash
  * @param String $username The username that tries to login
  * @return array of URLs to test, in order
  */
 function getVerifyLoginUrls($repository, $username) {
 	$user = getReposUser();
+	if (isset($_SERVER['ReposLoginUrl'])) return array($_SERVER['ReposLoginUrl']);
 	return array(
 		$repository . login_encodeUsernameForURL($user) . '/',
-		$repository,
-		$repository . 'trunk/'
+		$repository
 	);
 }
 

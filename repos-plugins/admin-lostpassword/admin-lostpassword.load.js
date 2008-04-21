@@ -5,7 +5,7 @@ Repos.service('account/login/', function() {
 	var w = Repos.getWebapp();
 	var u = a+'users/reset/';
 
-	var msg = $('<p>If you have an e-mail address stored in your Repos preferences, '+
+	var msg = $('<p>Forgot your password? If you have an e-mail address stored in your Repos preferences, '+
 	'you can use the <a href="'+u+'">lost password</a> functionality. '+
 	'Otherwise ask an administrator to reset your password.</p>');
 	msg.insertBefore('#footer');
