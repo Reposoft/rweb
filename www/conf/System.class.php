@@ -222,8 +222,10 @@ class System {
 	 * @deprecated use System::toShellEncoding
 	 */
 	function toShellEncoding($string) {
-		if (System::isWindows()) {
-			return mb_convert_encoding($string, 'ISO-8859-1', 'UTF-8');
+		// looks like setlocale works on windos nowadays (see Command class) //if (System::isWindows()) {
+		// 	return mb_convert_encoding($string, 'ISO-8859-1', 'UTF-8');
+		if (isset($_SERVER['ReposShellEncoding'])) {
+			return mb_convert_encoding($string, $_SERVER['ReposShellEncoding'], 'UTF-8');
 		}
 		return $string;
 	}
