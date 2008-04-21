@@ -206,6 +206,12 @@ class ServiceRequest {
 		curl_setopt($ch, CURLOPT_HEADERFUNCTION, array(&$this, '_processHeader'));
 		// custom options
 		$this->_customize($ch);
+		// DEBUG OUTPUT
+		if (true) {
+			$debugfile = fopen(dirname(dirname(__FILE__)).'/_diag_curlverbose.txt','a+');
+			curl_setopt($ch, CURLOPT_STDERR, $debugfile);
+			curl_setopt($ch, CURLOPT_VERBOSE, true);
+		}
 		// run the request
 		$this->response = curl_exec($ch);
 		$this->info = curl_getinfo($ch);
@@ -215,6 +221,10 @@ class ServiceRequest {
 			$this->_forwardAuthentication($this->getResponseHeaders());
 		}
 		return $this->getStatus();
+		// DEBUG OUTPUT
+		if (true) {
+			fclose($debugfile);
+		}
 	}
 	
 	/**
@@ -240,7 +250,7 @@ class ServiceRequest {
 			// handle missing authentication when service is called in a non-GUI context
 			// TODO include authentication HTTP headers here too?
 			trigger_error("This service requires authentication", E_USER_NOTICE);
-		}		
+		}
 	}
 	
 	/**
