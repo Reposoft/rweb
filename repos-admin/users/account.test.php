@@ -4,7 +4,7 @@
 require("account.inc.php");
 
 // import testing framework, see http://www.lastcraft.com/simple_test.php
-require("../lib/simpletest/setup.php");
+require("../test/setup.php");
 
 class TestAccount extends UnitTestCase {
 

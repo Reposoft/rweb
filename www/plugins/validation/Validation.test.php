@@ -86,12 +86,14 @@ class TestValidation extends UnitTestCase {
 		unset($_REQUEST['myfield']);
 	}
 	
-	function testExpectedFields() {
+	function testExpectFields() {
 		$_REQUEST['myfield'] = '';
 		Validation::expect('myfield');
 		$this->assertNoErrors("Expected fields don't need a value, they just need to be defined.");
+		
+		// now expect two fields, second one missing
+		$this->expectError(new PatternExpectation('/formfield2/'),'No "formfield2" is submitted, so we should get an error'); 
 		Validation::expect('myfield', 'formfield2');
-		$this->assertErrorPattern('/formfield2/');
 		unset($_REQUEST['myfield']);
 	}
 	

@@ -34,11 +34,12 @@ if (!defined('TEST_INTEGRATION')) define('TEST_INTEGRATION', true);
 $testfiles = array(
 'admin.test.php',
 'backup/repos-backup.test.php',
+'users/account.test.php',
 'users/groupfile/groupfile.test.php'
 );
 
 function printTestIndex($testfiles) {
-	$seleniumUrl = '../../repos/lib/selenium/core/TestRunner.html?test=%2Frepos-admin%2Ftest%2Findex.php';
+	$seleniumUrl = ReposWebapp.'lib/selenium/core/TestRunner.html?test=%2Frepos-admin%2Ftest%2Findex.php';
 	echo("<tr><td><b>repos.se PHP Unit Tests</b></td></tr>\n");
 	foreach ($testfiles as $file) {
 		echo("<tr><td><a href=\"../$file\">$file</a></td></tr>\n");

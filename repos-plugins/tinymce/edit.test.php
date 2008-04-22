@@ -1,4 +1,9 @@
 <?php
+// TODO these test are good for validating XHTML indentation rules,
+// but currently not included in the test suite
+// XHTML indentation rules are not defined anywhere else
+// Coordinate with the Agile Task List project?
+
 // define any mock behaviour, the script under test might have "if(!function_defined('F') require('F.php')
 function addPlugin($n) {}
 // import the script under test
