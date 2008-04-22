@@ -22,9 +22,18 @@ $backup = getCurrentBackup($backupdir, $backupprefix);
 $p = new Presentation('Repos administration');
 $p->assign('repository', $repourl);
 $p->assign('headrev', $headrev);
+$p->assign('backupfiles', count($backup));
+
+if (count($backup)==0) {
+	$p->assign('lastrev', 0);
+	$p->display();
+} else {
+// this logic fails if there is no backup array	
 $p->assign('lastrev', $backup[count($backup) - 1][2]);
 
 $lastrev = -1;
+$p->assign('hasoverlap', false);
+$p->assign('hasgaps', false);
 foreach ($backup as $file) {
 	if ( $file[1] < $lastrev + 1 ) {
 		$p->assign('hasoverlap', true);
@@ -38,5 +47,7 @@ foreach ($backup as $file) {
 }
 
 $p->assign('backup', $backup);
-$p->assign('backupfiles', count($backup));
 $p->display();
+
+}
+?>
