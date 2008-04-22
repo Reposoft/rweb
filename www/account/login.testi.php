@@ -93,8 +93,9 @@ class Login_integraton_Test extends UnitTestCase {
 	}
 	
 	function testGetFirstNon404Parent() {
-		$url = login_getFirstNon404Parent(TESTHOST."/repos/adsfawerwreq/does/not/exist.no", $status);
-		$this->assertEqual(TESTHOST."/repos/", $url);
+		$url = login_getFirstNon404Parent(getWebappUrl()."test/adsfawerwreq/does/not/exist.no", $status);
+		$this->assertEqual(getWebappUrl()."test/", $url);
+		// this test url should be a normal resource, not a redirect
 		$this->assertEqual(200, $status);
 	}
 	
