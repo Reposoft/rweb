@@ -62,7 +62,7 @@ $script = '
 	},set);
 
 	var o = function(c,value) {
-		return jQ("<span/>").addClass(c).append(value);
+		return jQ("<span/>").addClass("details").addClass(c).append(value);
 	};
 
 	jQ().ready( function() {

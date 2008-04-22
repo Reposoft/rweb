@@ -18,6 +18,8 @@ $list = new SvnOpen('list');
 $list->addArgOption('--xml');
 $list->addArgOption('--incremental');
 
+// TODO subversion 1.5 comes with a "depth" argument instead
+// maybe that one is better at handling authirization denied in recursive list
 $recursive = isset($_GET['recursive']) && $_GET['recursive'];
 if ($recursive) $list->addArgOption('-R');
 
