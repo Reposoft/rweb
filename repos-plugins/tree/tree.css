@@ -9,10 +9,16 @@ a {
 a:hover {
 	text-decoration: underline;
 }
+#commandbar a {
+	padding: .5em;
+}
 .details {
 	display: none;
 }
 
+ul {
+	padding-left: 24px;
+}
 li.folder {
 	list-style-image: url(folder.gif);
 }

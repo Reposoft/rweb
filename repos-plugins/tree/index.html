@@ -9,6 +9,9 @@
 <script type="text/javascript">
 //<![CDATA[
 var reposweb = '/repos-web/';
+var settings = {
+	autoexpand: false
+};
 var json = reposweb+'open/json/'; // not using servicelayer
 function expand(id,target) {
   var list = $('#'+id);
@@ -27,6 +30,7 @@ function expand(id,target) {
 					$(this).parent().addClass('loading');
 					expand(id,target);
 				});
+			if (settings.autoexpand) a.trigger('mouseover');
 		});
 		list.parent().addClass('folder-open').removeClass('loading');
     },
@@ -37,14 +41,37 @@ function expand(id,target) {
   });
 };
 $().ready(function() {
-  $('#target').text('/demoproject/trunk/');
-  expand('root','/demoproject/trunk/');
+	$('#target').text('/demoproject/trunk/');
+	expand('root','/demoproject/trunk/');
+	// extras
+	reposTreeSidebar();
+	reposTreePrint();
+	reposTreeExpandAll();
 });
+function reposTreeSidebar() {
+	if (!window.sidebar) return;
+	var a = $('<a>').attr('href','#').text('as sidebar').appendTo('#commandbar').click(function() {
+		window.sidebar.addPanel('Repos Treeview Sidebar', window.location.href, '');
+	});
+};
+function reposTreePrint() {
+	var a = $('<a>').attr('href','#').text('print tree').appendTo('#commandbar').click(function() {
+		window.print();
+	});
+};
+function reposTreeExpandAll() {
+	var a = $('<a>').attr('href','#').text('expand all').appendTo('#commandbar').click(function() {
+		settings.autoexpand = true;
+		$('li.folder a').trigger('mouseover');
+	});
+};
 //]]>
 </script>
 
 </head>
 <body>
+<div id="commandbar">
+</div>
 
 <h1 id="target"></h1>
 <ul id="root">
