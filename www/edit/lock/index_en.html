@@ -24,7 +24,7 @@
   </p>
   <p>
     <label for="download">download file when locked</label>
-    <input id="download" name="download" type="checkbox" {=if $download}checked="checked"{=/if}/>
+    <input id="download" name="download" type="checkbox" {=if isset($download) and $download}checked="checked"{=/if}/>
   </p>
   <p>
     <label for="submit"></label>
@@ -32,5 +32,7 @@
   </p>
   </fieldset>
 </form>
+<div id="footer">
+</div>
 </body>
 </html>

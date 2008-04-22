@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>repos: Unlock file</title>
+<!--{$head}-->
+</head>
+
+<body>
+<div id="commandbar">
+<a id="repository" href="{=$repository}">return to repository</a>
+<a id="edit" href="../?target={=$target}">return to edit</a>
+</div>
+<h1>Unlock</h1>
+<form id="unlock" name="unlock" method="post" action="#">
+  <fieldset>
+  <legend>File: <a class="filename" href="{=$repository}/{=$target|getPathName}">{=$target|getPathName}</a></legend>
+    <input name="target" type="hidden" id="target" value="{=$target}" />
+  <p>
+    <label for="submit"></label>
+    <input id="submit" type="submit" name="submit" value="Unlock" tabindex="2" />
+  </p>
+  </fieldset>
+</form>
+<div id="footer">
+</div>
+</body>
+</html>
