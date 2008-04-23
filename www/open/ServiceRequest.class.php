@@ -207,9 +207,9 @@ class ServiceRequest {
 		// custom options
 		$this->_customize($ch);
 		// DEBUG OUTPUT
-		if (true) {
-			$debugfile = fopen(dirname(dirname(__FILE__)).'/_diag_curlverbose.txt','a+');
-			curl_setopt($ch, CURLOPT_STDERR, $debugfile);
+		$debugfile = dirname(dirname(__FILE__)).'/_repos_diag_curl.txt';
+		if ($debugfile && $debugfh = @fopen($debugfile,'a+')) {
+			curl_setopt($ch, CURLOPT_STDERR, $debugfh);
 			curl_setopt($ch, CURLOPT_VERBOSE, true);
 		}
 		// run the request
@@ -222,9 +222,7 @@ class ServiceRequest {
 		}
 		return $this->getStatus();
 		// DEBUG OUTPUT
-		if (true) {
-			fclose($debugfile);
-		}
+		if ($debugfh) fclose($debugfile);
 	}
 	
 	/**
