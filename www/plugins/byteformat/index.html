@@ -69,6 +69,14 @@ function testFormatSizeMb() {
 	assert($('<p>'+(1024 * 1024 + 1000)+'</p>').byteformat().text(), '1000 MB');
 };
 
+function testFormatIgnoreNuber() {
+	assert($('<p>A</p>').byteformat().text(), 'A', '');
+	assert($('<p>A1</p>').byteformat().text(), 'A1', '');
+	assert($('<p>1A</p>').byteformat().text(), '1A', '');
+	assert($('<p>100 kb</p>').byteformat().text(), '100 kb', '');
+	assert($('<p>1.00 MB</p>').byteformat().text(), '1.00 MB', '');
+};
+
 // demo page
 $('.demo li').each( function() {
 	var b = $(this).text();

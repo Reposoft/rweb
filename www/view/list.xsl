@@ -68,7 +68,7 @@
 					<td>path</td>
 					<td>revision</td>
 					<td>author</td>
-					<td>edited</td>
+					<td>last&#160;edited</td>
 					<td>size</td>
 				</tr>
 			</thead>
@@ -98,7 +98,7 @@
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<tr id="row:{$id}" class="row n{$n mod 4}">
-			<td class="folder">
+			<td>
 				<a id="open:{$id}" class="folder" href="../?target={$target}&amp;rev={commit/@revision}">
 					<xsl:value-of select="name"/>
 				</a>
@@ -137,7 +137,7 @@
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<tr id="row:{$id}" class="n{$n mod 4}">
-			<td class="file">
+			<td>
 				<a id="open:{$id}" class="file-{$filetype} file" href="../?target={$target}&amp;rev={commit/@revision}">
 					<xsl:value-of select="name"/>
 				</a>
@@ -153,7 +153,6 @@
 			</td>
 			<td class="filesize">
 				<xsl:value-of select="size"/>
-				<xsl:text> bytes</xsl:text>
 			</td>
 		</tr>
 	</xsl:template>

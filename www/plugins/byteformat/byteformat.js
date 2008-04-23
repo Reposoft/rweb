@@ -23,9 +23,14 @@
 		};
 		return this.each(function() {
 			var b = Number($(this).text());
-			if (b == Number.NaN) return false;
-			return $(this).html(format(b));				
+			if (!b) return false;
+			return $(this).text(format(b));				
 		});
 	};
+	
+	// autoformat filesize elements (will affect those that contain a number only)
+	$().ready(function() {
+		$('.filesize').byteformat();
+	});
 	
 })(jQuery);

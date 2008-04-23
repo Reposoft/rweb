@@ -9,8 +9,16 @@ a {
 a:hover {
 	text-decoration: underline;
 }
+h1 {
+	font-size: 140%;
+	font-weight: normal;
+}
+
 #commandbar a {
 	padding: .5em;
+}
+h1 .hostname {
+	display: block;
 }
 .details {
 	display: none;

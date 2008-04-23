@@ -33,11 +33,12 @@ h2 {
 	font-size: 1.4em;
 	color: #444444;
 }
-h3 {
+h3, thead td {
 	font-weight: normal;
 	margin-bottom: 3px;
 	font-size: 1.1em;
 	letter-spacing: 0.1em;
+	text-align: center; /* fixed width or table cell */
 }
 h1, h2, h3 {
 	clear:both;
@@ -45,6 +46,12 @@ h1, h2, h3 {
 h1 em, h2 em, h3 em {
 	font-style: normal;
 	color: #99CC00;
+}
+thead {
+	background-color: #f0f0ee;
+}
+td {
+	padding: .1em .2em .1em .2em;
 }
 pre {
 	font-size: 1.2em;
@@ -88,6 +95,7 @@ a.folder {
 	border: 1px dotted #cccc99;
 	font-size: 82.5%;
 	font-family: Arial, Helvetica, sans-serif;
+	text-align: right; /* revision might be fixed width or table cell */
 }
 .username {
 	color: #663300;
@@ -95,7 +103,7 @@ a.folder {
 	background: url(user.png) left no-repeat;
 }
 .filesize {
-
+	text-align: right;
 }
 .message {
 	font-style: italic;

@@ -3,14 +3,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Repos tree</title>
+<title>Repos Tree</title>
 <link rel="stylesheet" type="text/css" media="all" href="tree.css" />
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 var reposweb = '/repos-web/';
 var settings = {
-	autoexpand: false
+	autoexpand: false,
+	hostname: window.location.hostname,
+	repository: false, // not needed because we use /repos-web/, would be needed if we used servicelayer
+	start: '/demoproject/trunk/' // or... http://localhost/repos-web/open/start/?serv=json
 };
 var json = reposweb+'open/json/'; // not using servicelayer
 function expand(id,target) {
@@ -41,18 +44,28 @@ function expand(id,target) {
   });
 };
 $().ready(function() {
-	$('#target').text('/demoproject/trunk/');
-	expand('root','/demoproject/trunk/');
+	$('#target').text(settings.start);
+	expand('root',settings.start);
 	// extras
+	if (settings.hostname) {
+		$('<span/>').addClass('hostname').text(settings.hostname).prependTo('h1');
+	}
 	reposTreeSidebar();
 	reposTreePrint();
 	reposTreeExpandAll();
 });
 function reposTreeSidebar() {
-	if (!window.sidebar) return;
-	var a = $('<a>').attr('href','#').text('as sidebar').appendTo('#commandbar').click(function() {
-		window.sidebar.addPanel('Repos Treeview Sidebar', window.location.href, '');
-	});
+	if ($.browser.msie && $.browser.version > '6.0') {
+		// TODO test
+		var a = $('<a>').text('as sidebar').appendTo('#commandbar')
+			.target("_search").attr('href',window.location.href)
+			.title('Requires "Enable websites to use search pane" in IE7 options'); // http://www.flickr.com/photos/programwitch/274804191/
+	}
+	if (window.sidebar && window.sidebar.addPanel) {
+		var a = $('<a>').attr('href','#').text('as sidebar').appendTo('#commandbar').click(function() {
+			window.sidebar.addPanel(settings.hostname + ' ' + settings.start, window.location.href, '');
+		});
+	}
 };
 function reposTreePrint() {
 	var a = $('<a>').attr('href','#').text('print tree').appendTo('#commandbar').click(function() {
