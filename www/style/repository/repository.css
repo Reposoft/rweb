@@ -61,17 +61,23 @@ div.details span {
 /* directory listing */
 .file {
 	background-image: url('16x16/file.png');
-	background-position: left;
+	background-position: top left;
 	background-repeat: no-repeat;
 	padding-left: 30px;
 	margin-left: 10px;
 }
 .folder {
 	background-image: url('16x16/folder.png');
-	background-position: left;
+	background-position: top left;
 	background-repeat: no-repeat;
 	padding-left: 30px;
 	margin-left: 10px;
+}
+.folder-open {
+	background-image: url('16x16/folder_open.png');
+}
+.folder-noaccess {
+	background-image: url('16x16/folder_noaccess.png');
 }
 /* filetype icons */
 .file-user { background-image: url('filetypes/16x16/user.png');}

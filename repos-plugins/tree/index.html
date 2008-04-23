@@ -4,15 +4,32 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Repos Tree</title>
-<link rel="stylesheet" type="text/css" media="all" href="tree.css" />
-<script type="text/javascript" src="jquery.js"></script>
+<!-- <script type="text/javascript" src="jquery.js"></script> -->
+<script type="text/javascript" src="/repos-web/scripts/head.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="/repos-web/style/global.css" />
+<link rel="stylesheet" type="text/css" media="all" href="/repos-web/style/repository/repository.css" />
+<style type="text/css">
+ul {
+	padding-left: 1em;
+}
+.details {
+	display: none;
+}
+li {
+	list-style: none;
+}
+h1 .hostname {
+	display: block;
+	font-size: 82.5%;
+}
+</style>
 <script type="text/javascript">
 //<![CDATA[
 var reposweb = '/repos-web/';
 var settings = {
 	autoexpand: false,
 	hostname: window.location.hostname,
-	repository: false, // not needed because we use /repos-web/, would be needed if we used servicelayer
+	repository: '/data', // not needed because we use /repos-web/, would be needed if we used servicelayer
 	start: '/demoproject/trunk/' // or... http://localhost/repos-web/open/start/?serv=json
 };
 var json = reposweb+'open/json/'; // not using servicelayer
@@ -35,7 +52,7 @@ function expand(id,target) {
 				});
 			if (settings.autoexpand) a.trigger('mouseover');
 		});
-		list.parent().addClass('folder-open').removeClass('loading');
+		list.parent().filter('li').addClass('folder-open').removeClass('loading');
     },
     error: function(req, textStatus, errorThrown) {
     	// assume it is because we got access denied
@@ -50,10 +67,15 @@ $().ready(function() {
 	if (settings.hostname) {
 		$('<span/>').addClass('hostname').text(settings.hostname).prependTo('h1');
 	}
+	reposTreeBrowse();
 	reposTreeSidebar();
 	reposTreePrint();
 	reposTreeExpandAll();
+	reposTreeShowDetails();
 });
+function reposTreeBrowse() {
+	var a = $('<a>').attr('id','repository').attr('href','http://'+settings.hostname+settings.repository+settings.start).text('return to repository').appendTo('#commandbar');
+};
 function reposTreeSidebar() {
 	if ($.browser.msie && $.browser.version > '6.0') {
 		// TODO test
@@ -76,6 +98,11 @@ function reposTreeExpandAll() {
 	var a = $('<a>').attr('href','#').text('expand all').appendTo('#commandbar').click(function() {
 		settings.autoexpand = true;
 		$('li.folder a').trigger('mouseover');
+	});
+};
+function reposTreeShowDetails() {
+	var a = $('<a>').attr('id','showdetails').attr('href','#').text('show details').appendTo('#commandbar').click(function() {
+		$('.details').show();
 	});
 };
 //]]>
