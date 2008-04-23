@@ -10,10 +10,13 @@
 <link rel="stylesheet" type="text/css" media="all" href="/repos-web/style/repository/repository.css" />
 <style type="text/css">
 ul {
-	padding-left: 1em;
+	padding-left: 0px;
 }
 .details {
 	display: none;
+}
+span.details { /* tag layout is slightly different from details plugin */
+	margin: 0.4em;
 }
 li {
 	list-style: none;
@@ -68,10 +71,10 @@ $().ready(function() {
 		$('<span/>').addClass('hostname').text(settings.hostname).prependTo('h1');
 	}
 	reposTreeBrowse();
-	reposTreeSidebar();
-	reposTreePrint();
-	reposTreeExpandAll();
 	reposTreeShowDetails();
+	reposTreeExpandAll();
+	reposTreePrint();
+	reposTreeSidebar();
 });
 function reposTreeBrowse() {
 	var a = $('<a>').attr('id','repository').attr('href','http://'+settings.hostname+settings.repository+settings.start).text('return to repository').appendTo('#commandbar');
@@ -117,5 +120,6 @@ function reposTreeShowDetails() {
 <ul id="root">
 </ul>
 
+<div id="footer"></div>
 </body>
 </html>

@@ -80,6 +80,8 @@ $script = '
 			}
 			if (d.kind=="file") {
 				e.append(o("filesize",d.size));
+				var t = /\.(\w+)$/.exec(f)[1];
+				if (t) e.addClass("file-"+t);
 			}
 			if (d.lock) {
 				e.addClass("locked");
