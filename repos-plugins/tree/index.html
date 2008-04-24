@@ -112,6 +112,7 @@ $().ready(function() {
 	}
 	expand('root',settings.target);
 	var c = $('<div/>').addClass('actions').insertBefore('#footer');
+	c.wrapAll($('<div/>').css({margin:10})); // workaround: can't get css margin to work
 	reposTreeBrowse().appendTo('#commandbar');
 	reposTreeShowDetails().appendTo('#commandbar');
 	reposTreePrint().appendTo('#commandbar');
@@ -124,13 +125,14 @@ function reposTreeBrowse() {
 };
 function reposTreeSidebar() {
 	var title = 'repos: ' + settings.hostname + ' ' + settings.target;
-	var url = window.location.href.replace(/[?&]frame=_top/,'');
+	var url = window.location.href;
+	url = url.replace(/[?&]frame=_top/,'');
 	url += url.indexOf('?')>0 ? '&' : '?';
-	url += 'sidebar=true&frame=_top';
+	url += 'sidebar=true';
 	if ($.browser.msie) {
 		return $('<a/>').text('as sidebar')
 			.attr('target','_search').attr('href',url)
-			.attr('title','Requires "Enable websites to use search pane" in IE7 options'); // http://www.flickr.com/photos/programwitch/274804191/
+			.attr('title','Requires "Enable websites to use search pane" in IE7 options');
 	}
 	if (window.sidebar && window.sidebar.addPanel) {
 		return $('<a/>').attr('href','#').text('as sidebar').click(function() {
@@ -139,6 +141,7 @@ function reposTreeSidebar() {
 	}
 	// use this?: http://www.howtocreate.co.uk/tutorials/jsexamples/createSidebar.php
 	// see also: http://staff.oclc.org/~houghtoa/repository/articles/IEBrowserBarDetails/index.htm
+	// http://www.flickr.com/photos/programwitch/274804191/
 };
 function reposTreePrint() {
 	return $('<a/>').attr('href','#').text('print tree').click(function() {

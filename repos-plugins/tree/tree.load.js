@@ -12,7 +12,7 @@ function reposTreeIframe() {
 	var tree = $('<iframe/>')
 		.attr('id','repostree')
 		.attr('name','tree')
-		.attr('width',''+Math.min(500, Math.max(winw,980) - 800))
+		.attr('width',''+Math.min(500, Math.max(winw,1024) - 900))
 		.attr('height',''+Math.min(winh - 200)) // just guessing
 		//float issue?//.insertAfter('#commandbar');
 		.insertAfter('h2');
