@@ -13,7 +13,7 @@
 	display: none;
 }
 span.details { /* tag layout is slightly different from details plugin */
-	margin: .4em;
+	margin: 0 0 0 1em;
 }
 ul, li {
 	padding: 0px;
@@ -25,6 +25,25 @@ li {
 h1 .hostname {
 	display: block;
 	font-size: 82.5%;
+}
+/* currently global.css contains no extra styling of printouts */
+@media print {
+	a {
+		color: black;
+	}
+	.action {
+		display: none;
+	}
+	.folder, .file {
+		background-image: none;
+		padding-left: 0;
+	}
+	li.folder {
+		list-style: disc;
+	}
+	li.file {
+		list-style: circle;
+	}
 }
 </style>
 <script type="text/javascript">
@@ -117,8 +136,9 @@ $().ready(function() {
 	reposTreeShowDetails().appendTo('#commandbar');
 	reposTreePrint().appendTo('#commandbar');
 	reposTreeExpandAll().addClass('action').appendTo(c);
-	if (!settings.sidebar) reposTreeSidebar().addClass('action').appendTo(c);
 	reposTreeHideFiles().addClass('action').appendTo(c);
+	if (!settings.sidebar) reposTreeSidebar().addClass('action').appendTo(c);
+	if (!settings.menu) reposTreeMaximize().addClass('action').appendTo(c);
 });
 function reposTreeBrowse() {
 	return $('<a/>').attr('id','repository').attr('href','http://'+settings.hostname+settings.repository+settings.start).text('return to repository').appendTo('#commandbar');
@@ -165,6 +185,11 @@ function reposTreeHideFiles() {
 	return $('<a/>').attr('id','hidefiles').attr('href','javascript:void(0)').text('hide files').click(function() {
 		$('.file').hide();
 	});
+};
+function reposTreeMaximize() {
+	var url = window.location.href;
+	url = url.replace(/([?&])menu=\w+/,'$1');
+	return $('<a/>').attr('id','hidefiles').attr('target','_top').attr('href',url).text('maximize');
 };
 //]]>
 </script>
