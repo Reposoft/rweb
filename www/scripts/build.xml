@@ -7,6 +7,7 @@
 	
 	<!-- === Javascript build configuration === -->
 	<property name="plugins.external.folder" location="../../repos-plugins" />
+	<property name="plugins.excludes" value="" description="External plugins to excluded from build" />
 	<!-- Customer-specific plugins may override build settings -->
 	<property file="${plugins.external.folder}/build.properties" />
 	
@@ -42,7 +43,7 @@
 			<fileset dir="${lib.folder}" includes="**/*.js" excludes="jquery/**,${excludes.default}"/>
 			<fileset dir="${api.folder}" includes="**/*.js" excludes="${excludes.default}" />
 			<fileset dir="${plugins.folder}" includes="**/*.js" excludes="${excludes.default}" />
-			<fileset dir="${plugins.external.folder}" includes="**/*.load.js"/>
+			<fileset dir="${plugins.external.folder}" includes="**/*.load.js" excludes="${plugins.excludes}" />
 			<fileset dir="${outro.folder}" includes="**/*.js" excludes="${excludes.default}" />
 		</concat>
 		<echo message="${head.js.file}.big built." />
