@@ -138,15 +138,15 @@ $().ready(function() {
 	reposTreeExpandAll().addClass('action').appendTo(c);
 	reposTreeHideFiles().addClass('action').appendTo(c);
 	if (!settings.sidebar) reposTreeSidebar().addClass('action').appendTo(c);
-	if (!settings.menu) reposTreeMaximize().addClass('action').appendTo(c);
+	if (!settings.sidebar && !settings.menu) reposTreeMaximize().addClass('action').appendTo(c);
 });
 function reposTreeBrowse() {
-	return $('<a/>').attr('id','repository').attr('href','http://'+settings.hostname+settings.repository+settings.start).text('return to repository').appendTo('#commandbar');
+	return $('<a/>').attr('id','repository').attr('href','http://'+settings.hostname+settings.repository+settings.target).text('return to repository').appendTo('#commandbar');
 };
 function reposTreeSidebar() {
 	var title = 'repos: ' + settings.hostname + ' ' + settings.target;
 	var url = window.location.href;
-	url = url.replace(/[?&]frame=_top/,'');
+	url = url.replace(/([?&])frame=_top&?/,'$1');
 	url += url.indexOf('?')>0 ? '&' : '?';
 	url += 'sidebar=true';
 	if ($.browser.msie) {
@@ -188,7 +188,8 @@ function reposTreeHideFiles() {
 };
 function reposTreeMaximize() {
 	var url = window.location.href;
-	url = url.replace(/([?&])menu=\w+/,'$1');
+	url = url.replace(/([?&])menu=\w+&?/,'$1');
+	url = url.replace(/([?&])sidebar=true&?/,'$1');
 	return $('<a/>').attr('id','hidefiles').attr('target','_top').attr('href',url).text('maximize');
 };
 //]]>
