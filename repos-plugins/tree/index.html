@@ -135,7 +135,7 @@ function reposTreeSidebar() {
 			.attr('title','Requires "Enable websites to use search pane" in IE7 options');
 	}
 	if (window.sidebar && window.sidebar.addPanel) {
-		return $('<a/>').attr('href','#').text('as sidebar').click(function() {
+		return $('<a/>').attr('href','javascript:void(0)').text('as sidebar').click(function() {
 			window.sidebar.addPanel(title, url, '');
 		});
 	}
@@ -144,25 +144,25 @@ function reposTreeSidebar() {
 	// http://www.flickr.com/photos/programwitch/274804191/
 };
 function reposTreePrint() {
-	return $('<a/>').attr('href','#').text('print tree').click(function() {
+	return $('<a/>').attr('href','javascript:void(0)').text('print tree').click(function() {
 		window.print();
 	});
 };
 function reposTreeExpandAll() {
-	return $('<a/>').attr('href','#').text('expand all').click(function() {
+	return $('<a/>').attr('href','javascript:void(0)').text('expand all').click(function() {
 		settings.autoexpand = true;
 		$('li.folder a').trigger('mouseover');
 	});
 };
 function reposTreeShowDetails() {
-	return $('<a/>').attr('id','showdetails').attr('href','#').text('show details').click(function() {
+	return $('<a/>').attr('id','showdetails').attr('href','javascript:void(0)').text('show details').click(function() {
 		$('.details').show();
 	});
 };
 // TODO refactor display options to set classes that allow custom css
 // which is also valid for new tree entries
 function reposTreeHideFiles() {
-	return $('<a/>').attr('id','hidefiles').attr('href','#').text('hide files').click(function() {
+	return $('<a/>').attr('id','hidefiles').attr('href','javascript:void(0)').text('hide files').click(function() {
 		$('.file').hide();
 	});
 };
