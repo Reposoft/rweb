@@ -1,6 +1,6 @@
 
 function reposTreeIframe() {
-	var url = '/repos-plugins/tree/index.html';
+	var url = '/repos-plugins/tree/';
 	url += '?menu=false';
 	url += '&frame=_top';
 	url += '&target='+encodeURI(Repos.getTarget());

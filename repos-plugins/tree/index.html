@@ -39,7 +39,7 @@ h1 .hostname {
 	    jQuery.each(q.split('&'), function() {
 			var splitted = this.split('=');
 			var key = splitted[0];
-			var val = splitted[1];
+			var val = splitted[1] || false;
 			// convert numbers
 			if (/^[0-9.]+$/.test(val)) val = parseFloat(val);
 			// convert booleans
@@ -69,7 +69,6 @@ var settings = {
 	target: '/demoproject/trunk/' // or... http://localhost/repos-web/open/start/?serv=json
 };
 $.queryextend(settings, window.location.search);
-console.log(settings);
 
 var json = settings.web+'open/json/'; // not using servicelayer
 function expand(id,target) {
@@ -91,8 +90,10 @@ function expand(id,target) {
 				});
 			if (settings.autoexpand) a.trigger('mouseover');
 			if (settings.frame) a.attr('target',settings.frame);
+			if ($.browser.msie && settings.sidebar) a.attr('target','_main');
 		});
 		list.parent().filter('li').addClass('folder-open').removeClass('loading');
+		// TODO mark empty folders?
     },
     error: function(req, textStatus, errorThrown) {
     	// assume it is because we got access denied
@@ -105,7 +106,7 @@ $().ready(function() {
 		$('#target').text(settings.target);
 		if (settings.hostname) $('<span/>').addClass('hostname').text(settings.hostname).prependTo('h1');
 	}
-	if (!settings.menu) {
+	if (settings.sidebar || !settings.menu) {
 		$('body').css('margin-top','8px'); // http://www.w3.org/TR/CSS21/sample.html
 		$('#commandbar, #footer').hide();
 	}
@@ -115,24 +116,29 @@ $().ready(function() {
 	reposTreeShowDetails().appendTo('#commandbar');
 	reposTreePrint().appendTo('#commandbar');
 	reposTreeExpandAll().addClass('action').appendTo(c);
-	reposTreeSidebar().addClass('action').appendTo(c);
+	if (!settings.sidebar) reposTreeSidebar().addClass('action').appendTo(c);
+	reposTreeHideFiles().addClass('action').appendTo(c);
 });
 function reposTreeBrowse() {
 	return $('<a/>').attr('id','repository').attr('href','http://'+settings.hostname+settings.repository+settings.start).text('return to repository').appendTo('#commandbar');
 };
 function reposTreeSidebar() {
 	var title = 'repos: ' + settings.hostname + ' ' + settings.target;
-	var url = window.location.href.replace(/&?frame=_top/,'') + '&sidebar=true'; // FIXME, assumes query string
-	if ($.browser.msie && $.browser.version > '6.0') {
+	var url = window.location.href.replace(/[?&]frame=_top/,'');
+	url += url.indexOf('?')>0 ? '&' : '?';
+	url += 'sidebar=true&frame=_top';
+	if ($.browser.msie) {
 		return $('<a/>').text('as sidebar')
-			.target("_search").attr('href',window.location.href)
-			.title('Requires "Enable websites to use search pane" in IE7 options'); // http://www.flickr.com/photos/programwitch/274804191/
+			.attr('target','_search').attr('href',url)
+			.attr('title','Requires "Enable websites to use search pane" in IE7 options'); // http://www.flickr.com/photos/programwitch/274804191/
 	}
 	if (window.sidebar && window.sidebar.addPanel) {
 		return $('<a/>').attr('href','#').text('as sidebar').click(function() {
 			window.sidebar.addPanel(title, url, '');
 		});
 	}
+	// use this?: http://www.howtocreate.co.uk/tutorials/jsexamples/createSidebar.php
+	// see also: http://staff.oclc.org/~houghtoa/repository/articles/IEBrowserBarDetails/index.htm
 };
 function reposTreePrint() {
 	return $('<a/>').attr('href','#').text('print tree').click(function() {
@@ -150,18 +156,24 @@ function reposTreeShowDetails() {
 		$('.details').show();
 	});
 };
+// TODO refactor display options to set classes that allow custom css
+// which is also valid for new tree entries
+function reposTreeHideFiles() {
+	return $('<a/>').attr('id','hidefiles').attr('href','#').text('hide files').click(function() {
+		$('.file').hide();
+	});
+};
 //]]>
 </script>
 
 </head>
-<body>
+<body class="repos-tree">
 <div id="commandbar">
 </div>
 
 <h1 id="target"></h1>
 <ul id="root">
 </ul>
-
 <div id="footer"></div>
 </body>
 </html>
