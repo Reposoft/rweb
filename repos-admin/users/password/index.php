@@ -58,9 +58,9 @@ if (isset($_REQUEST[SUBMIT])) {
 		$fullname = $newFullname;
 	}
 
-	$email = accountGetEmailRule('email');
-	$newEmail = $email->getValue();
-	if ($newEmail!=$email->getValue()) {
+	$emailRule = accountGetEmailRule('email');
+	$newEmail = $emailRule->getValue();
+	if ($newEmail!=$email) {
 		if (!isset($newcontents[2])) $newcontents[2] = '';
 		$newcontents[3] = $newEmail;
 		$message[] = 'changed email';
