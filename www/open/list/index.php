@@ -34,7 +34,20 @@ if ($list->exec()) {
 	[0] => svn: PROPFIND request failed on '/data/demoproject/trunk/noaccess'
     [1] => svn: PROPFIND of '/data/demoproject/trunk/noaccess': 403 Forbidden (http://localhost)
 	 */
-	trigger_error('Could not read entry for URL '.$url, E_USER_ERROR);
+	// should probably have some generic logic for command fallback,
+	// * list -R / list --depth
+	// * sparse checkout at new verwion of file / old concept for svn 1.4
+	$list = new SvnOpen('list', true);
+	$list->addArgOption('--incremental');	
+	if ($rev) {
+		$list->addArgUrlPeg($url, $rev);
+	} else {
+		$list->addArgUrl($url);
+	}
+	if ($list->exec()) {
+		trigger_error('Could not read entry for URL '.$url, E_USER_ERROR);
+	}
+	// TODO flag recursive or not in result, add button to switch (greyed out if not allowed?)
 }
 
 // some custom parameters needed in the XML. Url needed for navigation http/https.
