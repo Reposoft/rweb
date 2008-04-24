@@ -1,10 +1,14 @@
 // customized formatting of file actions
 Repos.service('index/', function actionhover() {
-	$('ul.index li').mouseover(function() {
-		$('ul.index li.hover').removeClass('hover').find('.actions').css('visibility','hidden');
+	var hide = function(q) { q.removeClass('hover').find('.actions').css('visibility','hidden'); };
+	var a = function() {
+		hide($('ul.index li.hover'));
 		$(this).addClass('hover').find('.actions').css('visibility','visible');
-	}).find('.actions').css('visibility','hidden');
+	};
+	hide($('ul.index li').mouseover(a).focus(a));
 	$('ul.index').mouseout(function() {
-		$('li.hover', this).removeClass('hover').find('.actions').css('visibility','hidden');
+		hide($('li.hover', this));
 	});
+	// show first file to hint there are hidden actions (actions on folders are used rarely)
+	$('.file:first').parent().find('.actions').css('visibility','visible');
 });
