@@ -171,7 +171,7 @@ li img {
 li ul.actions {
 	display: inline;
 	position: absolute;
-	left: 36em;
+	margin-left: 35em;
 	padding: 0;
 }
 li ul.actions li {

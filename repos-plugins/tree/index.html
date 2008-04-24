@@ -28,14 +28,48 @@ h1 .hostname {
 </style>
 <script type="text/javascript">
 //<![CDATA[
-var reposweb = '/repos-web/';
+
+// plugin, from stilbuero.de, can be simplified if only the jQuery.extend api is used
+(function(jQuery) {
+	jQuery.querystring = function(s) {
+		var r = {};
+	    var q = s.substring(s.indexOf('?') + 1); // remove everything up to the ?
+	    q = q.replace(/\&$/, ''); // remove the trailing &
+	    jQuery.each(q.split('&'), function() {
+			var splitted = this.split('=');
+			var key = splitted[0];
+			var val = splitted[1];
+			// convert numbers
+			if (/^[0-9.]+$/.test(val)) val = parseFloat(val);
+			// convert booleans
+			if (val == 'true') val = true;
+			if (val == 'false') val = false;
+			// ignore empty values
+			if (typeof val == 'number' || typeof val == 'boolean' || val.length > 0) r[key] = val;
+	    });
+		return r;
+	};
+	// the public api,might be possible to override standard extend with typeof (options) == 'string'
+	jQuery.queryextend = function(settings,options) {
+		options = jQuery.querystring(options);
+		jQuery.extend(settings,options);
+	};
+})($);
+
+// configuration
 var settings = {
+	web: '/repos-web/',
+	menu: true,
+	frame: false,
 	autoexpand: false,
 	hostname: window.location.hostname,
-	repository: '/data', // not needed because we use /repos-web/, would be needed if we used servicelayer
-	start: '/demoproject/trunk/' // or... http://localhost/repos-web/open/start/?serv=json
+	repository: '/data', // not nessecary when json url is repos-web, but used in menu
+	target: '/demoproject/trunk/' // or... http://localhost/repos-web/open/start/?serv=json
 };
-var json = reposweb+'open/json/'; // not using servicelayer
+$.queryextend(settings, window.location.search);
+console.log(settings);
+
+var json = settings.web+'open/json/'; // not using servicelayer
 function expand(id,target) {
   var list = $('#'+id);
   var here = target;
@@ -44,7 +78,7 @@ function expand(id,target) {
     url: json+'?selector='+id+'&target='+encodeURI(here),
     success: function() {
 		$('li.folder', list).each(function() {
-			var a = $('a',this);
+			var a = $('a',this); // created by list script
 			var target = here + a.text()+'/'; // update in closure for recursion
 			var id = Math.random().toString().substr(2);
 			$('<ul/>').attr('id',id).appendTo(this);
@@ -54,22 +88,24 @@ function expand(id,target) {
 					expand(id,target);
 				});
 			if (settings.autoexpand) a.trigger('mouseover');
+			if (settings.frame) a.attr('target',settings.frame);
 		});
 		list.parent().filter('li').addClass('folder-open').removeClass('loading');
     },
     error: function(req, textStatus, errorThrown) {
     	// assume it is because we got access denied
-		list.parent().addClass('folder-noaccess').removeClass('loading');
+		list.parent().filter('li').addClass('folder-noaccess').removeClass('loading');
 	}
   });
 };
 $().ready(function() {
-	$('#target').text(settings.start);
-	expand('root',settings.start);
-	// extras
-	if (settings.hostname) {
-		$('<span/>').addClass('hostname').text(settings.hostname).prependTo('h1');
+	if (settings.menu) {
+		$('#target').text(settings.target);
+		if (settings.hostname) $('<span/>').addClass('hostname').text(settings.hostname).prependTo('h1');
+	} else {
+		$('#commandbar, #footer').hide();
 	}
+	expand('root',settings.target);
 	reposTreeBrowse();
 	reposTreeShowDetails();
 	reposTreeExpandAll();
