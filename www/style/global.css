@@ -294,6 +294,9 @@ span.action {
 #commandbar #listrecursive {
 	background-image: url('commands/24x24/list.png');
 }
+#commandbar #repostree {
+	background-image: url('commands/24x24/tree.png');
+}
 /* general class for loading animation */
 .loading {
 	background-image: url('loading.gif') ! important;

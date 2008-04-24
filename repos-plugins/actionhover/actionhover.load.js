@@ -10,5 +10,5 @@ Repos.service('index/', function actionhover() {
 		hide($('li.hover', this));
 	});
 	// show first file to hint there are hidden actions (actions on folders are used rarely)
-	$('.file:first').parent().find('.actions').css('visibility','visible');
+	$('.file:first').parent().find('.actions').css('visibility','visible'); // don't hover
 });

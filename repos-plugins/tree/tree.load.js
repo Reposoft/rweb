@@ -21,7 +21,7 @@ function reposTreeIframe() {
 };
 
 Repos.service('index/', function() {
-	var a = $('<a href="#">show tree</a>').appendTo('#commandbar').click(function() {
+	var a = $('<a href="#">show tree</a>').attr('id','repostree').appendTo('#commandbar').click(function() {
 		reposTreeIframe();
 	});
 });
