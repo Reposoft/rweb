@@ -157,22 +157,22 @@ ul.index {
 .index li {
 	list-style: none;
 	padding: 1px;
-	margin: 0;
+	margin: 0px;
 }
 .n0, .n1, .n2, .n3 {
 	background: url(rowbackground.png) bottom repeat-x;
 }
-.n0:hover, .n1:hover, .n2:hover, .n3:hover {
+/* li.hover is for the actionhover plugin, :hover is no-javascript solution */
+li.hover, .n0:hover, .n1:hover, .n2:hover, .n3:hover {
 	background: url(rowbackground-hover.png) bottom repeat-x;
 }
 li img {
 	vertical-align: middle;
 }
 li ul.actions {
-	display: inline;
 	position: absolute;
 	margin-left: 35em;
-	padding: 0;
+	padding: 0px;
 }
 li ul.actions li {
 	list-style: none;
