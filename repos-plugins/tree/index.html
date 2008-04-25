@@ -59,6 +59,7 @@ h1 .hostname {
 			var splitted = this.split('=');
 			var key = splitted[0];
 			var val = splitted[1] || false;
+			val = decodeURI(val);
 			// convert numbers
 			if (/^[0-9.]+$/.test(val)) val = parseFloat(val);
 			// convert booleans
@@ -110,6 +111,8 @@ function expand(id,target) {
 			if (settings.autoexpand) a.trigger('mouseover');
 			if (settings.frame) a.attr('target',settings.frame);
 			if ($.browser.msie && settings.sidebar) a.attr('target','_main');
+			// IE7 has problems with search bar and http->https redirect
+			a.attr('href', a.attr('href').replace('http:','https:'));
 		});
 		list.parent().filter('li').addClass('folder-open').removeClass('loading');
 		// TODO mark empty folders?
