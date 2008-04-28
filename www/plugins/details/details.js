@@ -15,7 +15,7 @@ function button() {
 			index.reposDetails();
 		} );
 	}
-	c.append('show details').appendTo('#commandbar');
+	c.html('show&nbsp;details').appendTo('#commandbar');
 }
 
 Repos.service('index/', button);

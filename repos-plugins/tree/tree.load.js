@@ -12,7 +12,7 @@ function reposTreeIframe() {
 	var tree = $('<iframe/>')
 		.attr('id','repostree')
 		.attr('name','tree')
-		.attr('width',''+Math.min(500, Math.max(winw,1024) - 900))
+		.attr('width',''+Math.min(500, Math.max(winw,1024) - 840))
 		.attr('height',''+Math.min(winh - 200)) // just guessing
 		//float issue?//.insertAfter('#commandbar');
 		.insertAfter('h2');
@@ -21,7 +21,7 @@ function reposTreeIframe() {
 };
 
 Repos.service('index/', function() {
-	var a = $('<a href="#">show tree</a>').attr('id','repostree').appendTo('#commandbar').click(function() {
+	var a = $('<a href="#">show&nbsp;tree</a>').attr('id','repostree').appendTo('#commandbar').click(function() {
 		reposTreeIframe();
 	});
 });
