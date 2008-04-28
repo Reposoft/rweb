@@ -85,6 +85,7 @@ var settings = {
 	sidebar: false, // autodetect?
 	autoexpand: false,
 	hostname: window.location.hostname,
+	https: window.location.href.substr(0,6)=='https:',
 	repository: '/data', // not nessecary when json url is repos-web, but used in menu
 	target: '/demoproject/trunk/' // or... http://localhost/repos-web/open/start/?serv=json
 };
@@ -109,10 +110,12 @@ function expand(id,target) {
 					expand(id,target);
 				});
 			if (settings.autoexpand) a.trigger('mouseover');
+		});
+		$('li a', list).each(function() {
+			var a = $(this);
 			if (settings.frame) a.attr('target',settings.frame);
 			if ($.browser.msie && settings.sidebar) a.attr('target','_main');
-			// IE7 has problems with search bar and http->https redirect
-			a.attr('href', a.attr('href').replace('http:','https:'));
+			if (settings.https)	a.attr('href', a.attr('href').replace('http:','https:'));
 		});
 		list.parent().filter('li').addClass('folder-open').removeClass('loading');
 		// TODO mark empty folders?
