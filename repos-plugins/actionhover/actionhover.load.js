@@ -5,10 +5,12 @@ Repos.service('index/', function actionhover() {
 		hide($('ul.index li.hover'));
 		$(this).addClass('hover').find('.actions').css('visibility','visible');
 	};
+	// show actions on mouseover and key focus
 	hide($('ul.index li').mouseover(a).focus(a));
 	$('ul.index').mouseout(function() {
 		hide($('li.hover', this));
 	});
 	// show first file to hint there are hidden actions (actions on folders are used rarely)
-	$('.file:first').parent().find('.actions').css('visibility','visible'); // don't hover
+	var first = $('.file:first').parent().find('.actions').css('visibility','visible'); // don't hover
+	$('ul.index').one('mouseover', function() { first.css('visibility','hidden'); })
 });

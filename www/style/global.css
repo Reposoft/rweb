@@ -173,8 +173,9 @@ li img {
 }
 li ul.actions {
 	position: absolute;
-	margin-left: 35em;
+	margin-left: 25em;
 	padding: 0px;
+	background-color: white;
 }
 li ul.actions li {
 	list-style: none;

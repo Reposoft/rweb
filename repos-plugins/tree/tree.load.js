@@ -18,10 +18,17 @@ function reposTreeIframe() {
 		.insertAfter('h2');
 	tree.attr('src',url);
 	tree.css('float','left');
+	return tree;
 };
 
 Repos.service('index/', function() {
-	var a = $('<a href="#">show&nbsp;tree</a>').attr('id','repostree').appendTo('#commandbar').click(function() {
-		reposTreeIframe();
+	var tree = false;
+	var a = $('<a href="#">show&nbsp;tree</a>').attr('id','repostree').appendTo('#commandbar').toggle(function() {
+		if (!tree) tree = reposTreeIframe();
+		tree.show();
+		$(this).html('hide&nbsp;tree');
+	},function() {
+		tree.hide();
+		$(this).html('show&nbsp;tree');
 	});
 });
