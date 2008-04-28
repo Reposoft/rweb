@@ -195,12 +195,12 @@ class Presentation {
 		$this->smarty->load_filter('pre', 'Presentation_useCommentedDelimiters');
 		$this->smarty->register_prefilter('Presentation_urlRewriteForHttps');
 		$this->smarty->load_filter('pre', 'Presentation_urlRewriteForHttps');
+		$this->smarty->register_prefilter('Presentation_urlEncodeQueryString');
+		$this->smarty->load_filter('pre', 'Presentation_urlEncodeQueryString');
 		$this->smarty->register_prefilter('Presentation_useDotNotationForObjects');
 		$this->smarty->load_filter('pre', 'Presentation_useDotNotationForObjects');
 		$this->smarty->register_prefilter('Presentation_removeIndentation');
 		$this->smarty->load_filter('pre', 'Presentation_removeIndentation');
-		$this->smarty->register_prefilter('Presentation_urlEncodeQueryString');
-		$this->smarty->load_filter('pre', 'Presentation_urlEncodeQueryString');
 		if (PRESENTATION_XTHML) {
 			$this->smarty->register_prefilter('Presentation_useXmlEntities');
 			$this->smarty->load_filter('pre', 'Presentation_useXmlEntities');
@@ -551,6 +551,8 @@ function Presentation_urlRewriteForHttps($tpl_source, &$smarty) {
 
 /**
  * Rawurlencode every 'target' query parameter value (if there is no passthru function for it already)
+ * Note that object properties should be accessed using "object,property" notation instead of ->
+ * Complex expressions should be placed in an 'assign' first before used in urls.
  */
 function Presentation_urlEncodeQueryString($tpl_source, &$smarty) {
 	$pattern = '/(href)=\"([^"]*\?[^"]*target=)\{=\$([\w,.]+)\}/';

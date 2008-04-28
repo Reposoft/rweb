@@ -149,6 +149,19 @@ class TestPresentation extends UnitTestCase {
 				.'&target='.LEFT_DELIMITER.'$target'.RIGHT_DELIMITER.'">', $smarty);
 		$this->assertEqual('<a id="test" href="?rev='.LEFT_DELIMITER.'$rev'.RIGHT_DELIMITER
 				.'&target='.LEFT_DELIMITER.'$target|rawurlencode'.RIGHT_DELIMITER.'">', $result);
+
+		// support our own object notation
+		$result = Presentation_urlEncodeQueryString(
+			'<a id="test" href="?rev='.LEFT_DELIMITER.'$rev'.RIGHT_DELIMITER
+				.'&target='.LEFT_DELIMITER.'$object,property'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a id="test" href="?rev='.LEFT_DELIMITER.'$rev'.RIGHT_DELIMITER
+				.'&target='.LEFT_DELIMITER.'$object,property|rawurlencode'.RIGHT_DELIMITER.'">', $result);	
+		// don't care if the url continues after first template variable
+		$result = Presentation_urlEncodeQueryString(
+			'<a href="{=$webapp}open/?target='.LEFT_DELIMITER.'$entry,path'.RIGHT_DELIMITER
+				.'/'.LEFT_DELIMITER.'=$toolpath'.RIGHT_DELIMITER.'" ', $smarty);
+		$this->assertEqual(	'<a href="{=$webapp}open/?target='.LEFT_DELIMITER.'$entry,path|rawurlencode'.RIGHT_DELIMITER
+				.'/'.LEFT_DELIMITER.'=$toolpath'.RIGHT_DELIMITER.'" ', $result);	
 	}
 
 	function testGetFileId() {

@@ -31,9 +31,9 @@ and the tools in each project.</p>
 <h2>
 <!--{* todo: make a smarter link, trunk/ if existing, project root if no trunk *}-->
 <span class="{=if $projectname eq $userfullname}username{=else}projectname{=/if}">{=$projectname}</span>
-{=if !$entry->getPath()}&nbsp;root{=/if}
+{=if !$entry,path}&nbsp;root{=/if}
 <!--{* 
-<a class="folder {=if $entry->isReadOnly()}readonly{=/if}" href="{=$webapp}open/project/?target={=$entry->getPath()}/">{=$projectname}</a>
+<a class="folder {=if $entry->isReadOnly()}readonly{=/if}" href="{=$webapp}open/project/?target={=$entry,path}/">{=$projectname}</a>
  *}-->
 </h2>
 <ul class="index">
@@ -42,10 +42,8 @@ and the tools in each project.</p>
 	<!--{foreach from=$projecttoolids item=toolid}-->
 	<!--{assign var='toolpath' value=$projecttools.$toolid}-->
 	<li class="n{=cycle values=0,1,2,3}">
-	{=* special cases not handled by open *}
-	{=if $toolid eq 'news'}{=assign var='toolpath' value=`$toolpath`news.xml}{=/if}
-	{=*{=if $toolid eq calendar}{=assign var='toolpath' value=`$toolpath``$projectname`.ics}{=/if}*}
-	<a id="{=$toolid}:{=$projectname}" class="tool {=$toolid}" href="{=$webapp}open/?target={=$entry->getPath()}/{=$toolpath}">
+	<!--{* entry path will be encoded by the urlEncodeQueryString filter, toolpath wo'nt, and here's also an unecoded slash *}-->
+	<a id="{=$toolid}:{=$projectname}" class="tool {=$toolid}" href="{=$webapp}open/?target={=$entry,path}/{=$toolpath}">
 	<img border="0" src="{=$webapp}style/tools/{=$toolid}.png" hspace="10"/>{=$toolid}</a>
 	</li>
 	<!--{/foreach}-->

@@ -359,6 +359,7 @@ function isRepositoryUrl($url) {
  * Enocdes a url for use as href,
  * does not replace URL metacharacters like /, ? and : (for port number).
  * In other words: escapes URL metacharacters, but only if they are not needed to browse to the URL
+ * This is quite equivalent to javascript's encodeURI (see http://www.the-art-of-web.com/javascript/escape/)
  */
 function urlEncodeNames($url) {
 	$q = strpos($url, '?');

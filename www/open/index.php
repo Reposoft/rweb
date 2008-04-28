@@ -10,9 +10,11 @@
 require(dirname(dirname(__FILE__)).'/conf/Presentation.class.php');
 require(dirname(__FILE__)."/SvnOpenFile.class.php" );
 
+/* deprecated
 addPlugin('dateformat');
 addPlugin('thumbnails');
 addPlugin('proplist');
+*/
 
 // get file to open
 $target = getTarget();
@@ -30,9 +32,14 @@ if ($file->isFolder()) {
 	if ($rev) {
 		// for old revisions SvnOpenFile detects folder even if trailing slash is missing
 		if (!strEnds($target, '/')) $target .= '/';
-		header('Location: '.getWebapp().'open/list/?target='.urlencode($target).'&rev='.$rev);
+		header('Location: '.getWebapp().'open/list/?target='.rawurlencode($target).'&rev='.$rev);
 	} else {
-		header('Location: '.asLink($file->getUrl()));
+		if (strpos($_SERVER['HTTP_USER_AGENT'],'MSIE 6')) { // IE6 is unable to handle utf-8 in Location header
+			// asLink/urlSpecialChars and urlEncodeNames cannot be combined
+			header('Location: '.asLink(getRepository()).urlEncodeNames($target));
+		} else {
+			header('Location: '.asLink($file->getUrl()));
+		}
 	}
 	exit;
 }
