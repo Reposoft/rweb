@@ -4,6 +4,10 @@
  */
 var Repos = {};
 
+// bonus, abbreviate som code patterns
+jQuery.browser.sucks = jQuery.browser.msie && jQuery.browser.version == '6.0';
+jQuery.browser.sucksless = jQuery.browser.msie && !jQuery.browser.sucks;
+
 /**
  * Repos selectors (c) 2007 Staffan Olsson www.repos.se
  * These selectors are the possible pointcuts for dynamically added plugins.

@@ -60,7 +60,7 @@ You can not rename this file.</p>
     <p style="border:1px solid white;margin-bottom:0;margin-top:0;">
       {=if $smarty.foreach.log.first}
       <label for="fromrev{=$r}">based on version <span class="revision">{=$r}</span></label>
-      <input id="fromrev{=$r}" type="radio" name="fromrev" value="{=$r}"/>
+      <input id="fromrev{=$r}" type="radio" name="fromrev" value="{=$r}" />
       <span class="username">{=$e.user}</span> <span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span>
       <!-- <span> (this is the current version)</span> --><br />
       {=else}

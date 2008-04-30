@@ -1,6 +1,6 @@
 // IE6 is buggy on back and refresh if there are non-ascii characters in query string
 // which we can not avoid when using SVNIndexXSLT
-if ($.browser.msie && $.browser.version == '6.0') {
+if ($.browser.sucks) {
 	/* breaks back button
 	var s = window.location.search.replace(/[\u0080-\uFFFF]+/g, function(s) {
 		return encodeURI(s);

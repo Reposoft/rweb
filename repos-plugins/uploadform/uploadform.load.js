@@ -35,7 +35,8 @@ function autoFillFilename(path) {
 			text:'From the filename it looks like changes are based on revision '+rev+'. But there is no such revision. Please check that it is the correct file.'
 			});
 	} else {
-		button.checked = "checked";
+		enableBased();
+		$(button).attr('checked','checked').trigger('change');
 		$('body').say({
 			title:'autodetect file revision',
 			text:'Automatically selected &quot;based on version&quot; '+rev+', because your filename ends with (r'+rev+').'
@@ -44,20 +45,48 @@ function autoFillFilename(path) {
 	}
 }
 
-
 function hideBased() {
 	var org = $('#based-on-revision');
+
+	var check = $('<input name="tempcheckbox" type="checkbox"/>');
+	var simple = $('<p/>').append('<label>&nbsp;</label>').append(check).append('<span> check for conflicts based on when the file was downloaded</span>');
+	simple.attr('title','leave unchecked to simply overwrite the latest version');
+	simple.insertBefore(org.hide());
+	simple.css('margin-bottom','.2em');
+		
 	var val = $("input[name='fromrev']:checked", org).val();
-	if (val != 'HEAD') return; // don't simplify if a revision was selected
-	
-	var check = $('<input name="tempcheckbox" type="checkbox" checked="checked"/>');
-	var simple = $('<p/>').append('<label>skip conflict check</label>').append(check).append('<span>Overwrite current version</span>');
-	simple.insertAfter(org.hide());
-	
+	if (val != 'HEAD') enableBased();
+
 	check.change(function() {
-		simple.remove();
-		org.show();
+		if ($(this).is(':checked')) {
+			enableBased();
+		} else {
+			org.hide();
+		}
 	});
+	
+	// IE6 fails to trigger onchange for checkboxes and radio buttons
+	if ($.browser.sucks) check.click(enableBased);
+}
+
+function enableBased() {
+	$('#based-on-revision').show();
+	
+	$("input[name='fromrev']").change(function(){
+		var c = $(this);
+		if (c.is(':checked')) {
+			if (c.val()=='HEAD') {
+				$("input[name='tempcheckbox']").removeAttr('disabled');
+			} else {
+				$("input[name='tempcheckbox']").attr('disabled','disabled');
+			}
+		}
+	}).click(function() {
+		if ($.browser.sucks) $(this).trigger('change');
+	});
+
+	// as long as there is a checkbox for this we must make sure it is checked if enabled programmatically
+	$("input[name='tempcheckbox']").attr('checked','checked');
 }
 
 })();
