@@ -307,11 +307,10 @@ class Presentation {
 		$resource_name = strtr($resource_name, '\\', '/');
 		// custom processing for redirect before display
 		if ($this->isRedirectBeforeDisplay()) {
-			if ($this->redirectBeforeDisplay===true) {
+			$file = $this->redirectBeforeDisplay; // absolute path if enableRedirectWithOutputFile was used
+			if ($file===true) {
 				if (headers_sent()) trigger_error('Failed to redirect to result page - output started already', E_USER_ERROR);
 				$file = System::getTempFile('pages');
-			} else {
-				$file = System::getApplicationTemp('pages').$this->redirectBeforeDisplay;
 			}
 			if (!$file) trigger_error('Failed to write response because server file could not be opened', E_USER_ERROR);
 			$pagecontents = $this->fetch($resource_name, $cache_id, $compile_id);
@@ -374,6 +373,10 @@ class Presentation {
 	function enableRedirect($doRedirectBeforeDisplay=true) {
 		$this->redirectBeforeDisplay = $doRedirectBeforeDisplay;
 	}
+	
+	function enableRedirectWithOutputFile($absolutePath) {
+		$this->redirectBeforeDisplay = $absolutePath;
+	}
 
 	function isRedirectBeforeDisplay() {
 		return $this->redirectBeforeDisplay != false;
@@ -384,15 +387,20 @@ class Presentation {
 			trigger_error('Background processing is only allowed for POST requests', E_USER_ERROR);
 		}
 		$pageid = uniqid();
-		$this->enableRedirect($pageid);
+		$file = System::getApplicationTemp('pages').$pageid;
+		$this->enableRedirectWithOutputFile($file);
+		// create the file so the view page knows the process is running
+		touch($file);
+		// the view url
 		$nexturl = $this->_getStaticWebappUrl() . 'view/?result=' . rawurlencode($pageid) . '&w=0';
+		// let this page continue
 		ignore_user_abort(true);
-		// quite the same response as in view/index.php wait
-		$page = '<html><body><h4>Processing...</h4></body></html>';
-		header('Refresh: 1; url='.$nexturl);
-		header('Content-Length: '.strlen($page));
-		echo $page;
-		@ob_flush();flush(); // according to the docs this is still not 100% reliable
+		// redirect-after-post to the waiting page
+		header('Location: '.$nexturl);
+		echo 'Should have been redirected to result page.'; // browser will redirect before this is displayed
+		@ob_flush();flush(); // make sure headers have been sent
+		//sleep(2);//test
+		// note that this page continues execution in the background
 	}
 
 	/**
@@ -455,7 +463,6 @@ class Presentation {
 		foreach ($this->extraStylesheets as $css) {
 			$head = $head . $this->_getLinkCssTag($webapp.$stylePath.$css);
 		}
-		// allow the pages to avoid javascripts if no plugins are loaded
 		$head = $head . '<script type="text/javascript" src="'.$webapp.'scripts/head.js"></script>';
 		return $head;
 	}
