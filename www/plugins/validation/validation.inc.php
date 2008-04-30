@@ -233,10 +233,11 @@ class Validation {
 }
 
 function _validation_trigger_error($msg) {
+	/* not compatible with background processing
 	if (headers_sent()) {
 		trigger_error($msg . ' (Unexpected: headers have already been sent, so HTTP 412 could not be set)', E_USER_WARNING);
 		return; 
-	}
+	} */
 	//leave the status code to the error handler// header('HTTP/1.1 412 Precondition Failed');
 	trigger_error($msg, E_USER_WARNING);
 }

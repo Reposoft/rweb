@@ -2,17 +2,8 @@
 
 require("../../conf/Presentation.class.php" );
 require("../SvnEdit.class.php" );	
-addPlugin('validation');
-
-// automatic validation
-new FilenameRule('name');
-// svn import: parent folder must exists, to avoid implicit create
-$parent = new ResourceExistsAndIsWritableRule();
-// explicit validation
-new NewFilenameRule('name', $parent->getValue());
 
 if (isset($_REQUEST[SUBMIT])) {
-	Validation::expect('target', 'name', 'message');
 	createNewFolder($_REQUEST['name'],$_REQUEST['message']); 
 } else {
 	$target = getTarget();
@@ -28,6 +19,14 @@ if (isset($_REQUEST[SUBMIT])) {
 
 function createNewFolder($name, $message) {
 	$template = Presentation::background();
+	// automatic validation
+	new FilenameRule('name');
+	// svn import: parent folder must exists, to avoid implicit create
+	$parent = new ResourceExistsAndIsWritableRule();
+	// explicit validation
+	new NewFilenameRule('name', $parent->getValue());
+	// check required fields and process
+	Validation::expect('target', 'name', 'message');
 	$newurl = getTargetUrl().$name;
 	$tmp = System::getTempFolder('emptyfolders');
 	$edit = new SvnEdit('import');

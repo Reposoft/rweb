@@ -582,12 +582,8 @@ if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $mes
 	if ($n==E_USER_NOTICE) $label = "Notice:";
 	$p = Presentation::getInstance();
 	if ($p->isRedirectBeforeDisplay()) {
-		if (headers_sent()) {
-			echo("<strong>$label</strong> ".nl2br($message)."\n\n\n<!-- Error level $n. Stack trace:\n$trace -->\n\n"); exit;
-		} else {
-			// allow redirect if not done yet. we have no support for sending status header with result page.
-			$p->showError("$label $message \n\n\n<!-- Error level $n. Stack trace:\n$trace -->");
-		}
+		// Show error in redirect page. Result page currently has no support for sending status header.
+		$p->showError("$label $message \n\n\n<!-- Error level $n. Stack trace:\n$trace -->");
 	} else {
 		if (headers_sent()) {
 			// output already started, the best we can do is print generic html
