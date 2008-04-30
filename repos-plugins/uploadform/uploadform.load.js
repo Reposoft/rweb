@@ -66,7 +66,9 @@ function hideBased() {
 	});
 	
 	// IE6 fails to trigger onchange for checkboxes and radio buttons
-	if ($.browser.sucks) check.click(enableBased);
+	if ($.browser.sucks) check.click(function() {
+		$(this).trigger('change');
+	});
 }
 
 function enableBased() {

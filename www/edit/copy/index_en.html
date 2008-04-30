@@ -4,6 +4,7 @@
 <title>repos: Copy or move</title>
 <!--{$head}-->
 <script type="text/javascript">
+//<![CDATA[
 function pasteUrl() {
 	reposUrl='{=$repository}'; // http, not https
 	url=prompt('Please enter the full URL of the destination folder','');
@@ -27,6 +28,7 @@ function pasteUrl() {
 function setMove(move) {
 	button = document.getElementsByName('submit')[0].value = move ? "Move" : "Copy";
 }
+//]]>
 </script>
 </head>
 
@@ -62,7 +64,9 @@ Select "delete the original" to make this a move operation.</p>
 	</p>
 	<p>
 		<label for="tofolder">to folder</label>
-		<input id="tofolder" name="tofolder" type="text" size="40" value="{=$folder}" class="required" />	
+		<input id="tofolder" name="tofolder" type="text" size="40" value="{=$folder}" class="required" />
+		<br />
+		<label>&nbsp;</label>
 		<a class="action" href="#" onclick="pasteUrl()">paste&nbsp;the&nbsp;full&nbsp;URL</a>	
 	</p>
 	<p>
@@ -70,7 +74,7 @@ Select "delete the original" to make this a move operation.</p>
 		<input name="newname" type="text" id="newname" class="required remember-extension" size="40" value="{=$oldname}"/>
 	</p>
 	<p>
-		<label for="move">delete the original</label>
+		<label for="moveyes">delete the original</label>
 		<!--{if $file,isWriteAllow}-->
 			<input id="moveyes" name="move" type="radio" value="1" onchange="setMove(this.checked)"/> Yes 
 			<input id="moveno" name="move" type="radio" value="0" checked="checked" onchange="setMove(!this.checked)" /> No

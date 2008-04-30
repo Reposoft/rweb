@@ -4,7 +4,7 @@
  */
 var Repos = {};
 
-// bonus, abbreviate som code patterns
+// bonus, abbreviate some code patterns
 jQuery.browser.sucks = jQuery.browser.msie && jQuery.browser.version == '6.0';
 jQuery.browser.sucksless = jQuery.browser.msie && !jQuery.browser.sucks;
 
