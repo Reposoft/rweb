@@ -14,6 +14,7 @@ require_once( dirname(dirname(__FILE__))."/open/SvnOpenFile.class.php" );
 require_once(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php');
 
 // ---- standard rules that the pages can instantiate ----
+define('REPOS_FILENAME_MAX_LENGTH',200);
 
 /**
  * Shared validation rule representing file- or foldername restrictions.
@@ -38,7 +39,7 @@ class FilenameRule extends RuleRegexp {
 		if (empty($value)) return $this->required ? 'This is a required field' : null;
 		if ($value=='.') return 'The name "." is not a valid filename';
 		if ($value=='..') return 'The name ".." is not a valid filename';
-		if (mb_strlen($value) > 205) return "max length 200"; // excluding file extension
+		if (mb_strlen($value) > REPOS_FILENAME_MAX_LENGTH) return "max length "+REPOS_FILENAME_MAX_LENGTH; // excluding file extension
 		return parent::validate($value);
 	}
 }
@@ -372,9 +373,8 @@ class SvnEdit {
 	 *  summary lines will always be visible, use \n as line break
 	 */
 	function _show($description=null) {
-		$result = $this->getResult();
 		$logEntry = array(
-			'result' => str_replace('Committed revision','Committed version',$this->getResult()),
+			'result' => _edit_svnOutput($this->getResult()),
 			'operation' => $this->getOperation(),
 			'message' => $this->getMessage(),
 			'successful' => $this->isSuccessful(),
@@ -389,9 +389,24 @@ class SvnEdit {
 			// overwrite existing values, so that the last command decides the result
 			$smartyTemplate->assign($logEntry);	
 		} else {
-			// TODO call report?
+			trigger_error('Failed to display edit output', E_USER_ERROR);
 		}
 	}
 
+}
+
+/**
+ * Filter svn output so it is safe for presentation
+ * @param String $str
+ */
+function _edit_svnOutput($s) {
+	// usability
+	$s = str_replace('Committed revision','Committed version',$s);
+	$s = preg_replace('/^svn:/','',$s);
+	// system integrity
+	$a = System::getApplicationTemp();
+	$s = str_ireplace($a, '', $s);
+	if (System::isWindows()) $s = str_ireplace(str_replace("/","\\",$a), '', $s);
+	return $s;
 }
 ?>

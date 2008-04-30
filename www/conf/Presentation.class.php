@@ -392,7 +392,7 @@ class Presentation {
 		// create the file so the view page knows the process is running
 		touch($file);
 		// the view url
-		$nexturl = $this->_getStaticWebappUrl() . 'view/?result=' . rawurlencode($pageid) . '&w=0';
+		$nexturl = $this->_getStaticWebappUrl() . 'view/?result=' . rawurlencode($pageid);
 		// let this page continue
 		ignore_user_abort(true);
 		// redirect-after-post to the waiting page
@@ -401,6 +401,7 @@ class Presentation {
 		@ob_flush();flush(); // make sure headers have been sent
 		//sleep(2);//test
 		// note that this page continues execution in the background
+		// FIXME is there some way now to display fatal PHP errors?
 	}
 
 	/**

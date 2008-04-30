@@ -160,15 +160,15 @@ class SvnEditTest extends UnitTestCase
 	function testFilenameMaxLength() {
 		// this is actually a recommendation but we handle it like a rule
 		$r = new FilenameRule('file');
-		$this->assertNull($r->validate(str_repeat('a', 50+4)));
-		$this->assertNotNull($r->validate(str_repeat('a', 51+4)), "max length 50 + extension .123");
+		$this->assertNull($r->validate(str_repeat('a', REPOS_FILENAME_MAX_LENGTH)));
+		$this->assertNotNull($r->validate(str_repeat('a', REPOS_FILENAME_MAX_LENGTH+1)), "max length 50 + extension .123");
 	}
 	
 	function testFilenameMaxLengthUTF8() {
 		// this is actually a recommendation but we handle it like a rule
 		$r = new FilenameRule('file');
-		$this->assertNull($r->validate(str_repeat("\x81", 50+4)));
-		$this->assertNotNull($r->validate(str_repeat("\x81", 51+4)), "max length 50 + extension .123");
+		$this->assertNull($r->validate(str_repeat("\x81", REPOS_FILENAME_MAX_LENGTH)));
+		$this->assertNotNull($r->validate(str_repeat("\x81", REPOS_FILENAME_MAX_LENGTH+1)), "max length 50 + extension .123");
 	}
 	
 	function testFilenameRuleSpecialCases() {
@@ -189,6 +189,12 @@ class SvnEditTest extends UnitTestCase
 		$_REQUEST['folder'] = getSelfUrl().'nonexistingresource/';
 		$this->expectError(new PatternExpectation('/does not exist/'));
 		$r = new ResourceExistsRule('folder');
+	}
+	
+	function testFilterOutput() {
+		$this->assertEqual(_edit_svnOutput('a Committed revision: 8'), 'a Committed version: 8');
+		$this->assertEqual(_edit_svnOutput('svn: hello svn'), ' hello svn');
+		$this->assertEqual(_edit_svnOutput('abc '.System::getApplicationTemp().' def'), 'abc  def');
 	}
 	
 }
