@@ -20,7 +20,7 @@ You can not rename this file.</p>
 {=/if}
 </div>
 {=if $file,isWritable and not $file,isLockedBySomeoneElse}
-<div class="column" style="width: 60%">
+<div class="column" style="width: 70%">
 <form id="rename" name="rename" method="post" action="#">
   <fieldset>
 	<legend>{=$file,kind|ucfirst}: <a class="{=$file,kind}" href="{=$file,url}">{=$file,filename}</a></legend>

@@ -110,8 +110,8 @@ div#activities p {
 fieldset {
 	border: 2px solid #E9F4C9;
 	border-collapse:collapse;
+	margin: 0 1em 1em 1em;
 	padding: 1em;
-	margin: 1em;
 }
 fieldset p {
 	clear: left;
@@ -123,8 +123,7 @@ legend {
 	color: #666633;
 	font-size: 1.1em;
 	letter-spacing: 0.1em;
-	padding-left: 1em;
-	padding-right: 1em;
+	padding: 0 1em 0 1em;
 }
 label {
 	float:left;
