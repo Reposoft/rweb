@@ -3,11 +3,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Insert title here</title>
+<title>Verify XSLT output</title>
+<style type="text/css">
+.assert {
+	display: block;
+}
+.failed {
+	background-color: red;
+}
+</style>
 <script type="text/javascript" src="../jquery.js"></script>
 <script type="text/javascript" src="../../../www/scripts/unittest/testwalk/assert.js"></script>
-<script type="text/javascript" src="htmltest.js"></script>
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="htmltest.js?args=tests.js"></script>
 </head>
 <body>
 

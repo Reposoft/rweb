@@ -142,20 +142,29 @@ Repos.getUser = function() {
 
 // jQuery plugin to show messages
 jQuery.fn.say = function(message) {
+	$('.temporarymessage').remove();
+	if (!message) return; // allow $().say(); to clear message
+	
 	if (typeof message == 'string') message = {text:message};
 	var m = jQuery.extend({
-		tag:'span',
+		tag:'div',
 		level:'note',
 		text:'',
 		title:false,
-		id:false
+		id:false,
+		temporary:true
 	},message);
-
+	
 	var e = $('<'+m.tag+'/>').addClass(m.level).html(m.text);
+	
+	if (m.temporary) e.addClass('temporarymessage');
+	
 	if (m.title) e.attr('title',m.title);
 	if (m.id) e.attr('id',m.id);
-	//not good at handling page edges: //if (e.Tooltip) e.Tooltip();
+	
+	// append after first headline
 	$('h1,h2,h3',this).eq(0).after(e);
+	// move to after input if that's whats in the bucket
 	this.filter('input').parent().append(e);
 };
 
