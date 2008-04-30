@@ -173,6 +173,9 @@ class Validation {
 	 * @see _respond method for service call validation error (connected to a filedname)
 	 */
 	function error($message) {
+		// TODO currently validation errors are not displayed in the form
+		$message = $message." \n\nPlease go back to correct the error.";
+		// use validation error code
 		_validation_trigger_error($message);
 	}
 	/**
@@ -200,9 +203,7 @@ class Validation {
 	function _run(&$rule, $value) {
 		$r = $rule->validate($value);
 		if (!empty($r)) {
-			Validation::error('Error in field "'.$rule->fieldname.'", value "'.$value.'": '.$r
-			//." \n(with script support enabled this should have been reported when the form was submitted)"
-			." \n\nPlease go back and try again.");
+			Validation::error('Error in field "'.$rule->fieldname.'", value "'.$value.'": '.$r);
 		}
 	}
 	/**

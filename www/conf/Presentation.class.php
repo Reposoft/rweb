@@ -583,11 +583,12 @@ if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $mes
 	$p = Presentation::getInstance();
 	if ($p->isRedirectBeforeDisplay()) {
 		// Show error in redirect page. Result page currently has no support for sending status header.
-		$p->showError("$label $message \n\n\n<!-- Error level $n. Stack trace:\n$trace -->");
+		$p->showError("$label ".nl2br($message)." \n\n\n<!-- Error level $n. Stack trace:\n$trace -->");
 	} else {
 		if (headers_sent()) {
 			// output already started, the best we can do is print generic html
-			echo("<strong>$label</strong> ".nl2br($message)."\n\n\n<!-- Error level $n. Stack trace:\n$trace -->\n\n"); exit;
+			// FIXME assuming html. should be different output if response is text/plain
+			echo("<strong>$label</strong> ".nl2br($message)."\n\n\n<!-- Error level $n. Stack trace:\n$trace -->\n\n");
 		} else {
 			// if output is buffered, we can clear the buffer and print an error message instead
 			if (ob_get_contents()) {

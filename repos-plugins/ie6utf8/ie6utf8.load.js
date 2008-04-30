@@ -6,3 +6,5 @@ if ($.browser.msie && $.browser.version == '6.0') {
 	});
 	if (s && s != window.location.search) window.location = window.location.pathname + s;
 }
+
+// Repos.service('index/', /* could also replace target value in all links to avoid redirect, but with the service layer it won't be nessecary */);

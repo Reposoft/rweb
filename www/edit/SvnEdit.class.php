@@ -65,8 +65,8 @@ class NewFilenameRule extends Rule {
 			return;
 		}
 		if ($s->getStatus()==403) return "The URL has access denied, so $target can not be used.";
-		if ($s->isFolder()) return 'There is already a folder named "'.basename($target).'". Chose a different name.';
-		return 'There is already a file named "'.basename($target).'". Chose a different name.';
+		if ($s->isFolder()) return 'There is already a folder named "'.basename($target).'". Choose a different name.';
+		return 'There is already a file named "'.basename($target).'". Choose a different name.';
 	}
 	function _getPath($fieldvalue) {
 		return $this->_pathPrefix.$fieldvalue;

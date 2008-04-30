@@ -163,7 +163,7 @@ function processNewVersion($upload) {
 	$diff->addArgPath($dir . $filename);	// addArgPath needs utf8 encoded argument. $updatefile has to be converted to ISO-8859-1 in toShellEncoding function in order file_exists function to work
 	if ($diff->exec()) trigger_error('Could not read difference between current and uploaded file.', E_USER_ERROR);
 	// can not do a validation rule on multipart POST
-	if (count($diff->getOutput())==0) trigger_error('Uploaded file is identical to the existing.', E_USER_WARNING);
+	if (count($diff->getOutput())==0) Validation::error('The uploaded file is identical to the latest version in repository.', E_USER_WARNING);
 	// always do update before commit
 	updateAndHandleConflicts($dir, $presentation);
 	// create the commit command
@@ -253,7 +253,8 @@ class Upload {
 			fclose($from);
 			unlink($current); // because we don't use move_uploaded_file anymore
 		} else {
-			trigger_error("Could not access the uploaded file ".$this->getOriginalFilename(), E_USER_ERROR);
+			if ($n = $this->getOriginalFilename()) trigger_error("Could not access the uploaded file ", E_USER_ERROR);
+			Validation::error('A local file must be selected for upload');
 		}
 	}
 	
