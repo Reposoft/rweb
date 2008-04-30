@@ -26,7 +26,7 @@ from the the history for the <a class="folder" href="{=$file,folderUrl}">parent 
 <div class="column" style="width: 70%">
 <form id="delete" name="delete" method="post" action="#">
 	<fieldset>
-	<legend>Delete {=$file,kind} <a class="{=$file,kind}" href="{=$file,url}">{=$file,filename}</a></legend>
+	<legend>Delete <a class="{=$file,kind}" href="{=$file,url}" title="open {=$file,kind}: {=$file,filename}">{=$file,kind}</a></legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
   <p>
     <label for="name">delete</label>

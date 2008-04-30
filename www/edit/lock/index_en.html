@@ -12,10 +12,10 @@
 <h1>Lock</h1>
 <form id="lock" name="lock" method="post" action="#">
 	<fieldset>
-	<legend>File: <a class="filename" href="{=$repository}/{=$target|getPathName}">{=$target|getPathName}</a></legend>
+	<legend>Lock <a class="filename" href="{=$repository}/{=$target|getPathName}" title="open file: {=$target|getPathName}">file</a></legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
   <p>
-    <label for="name">lock</label>
+    <label for="name">filename</label>
     <input id="name" name="name" type="text" value="{=$target}" disabled="disabled" size="40"/>
   </p>  
   <p>

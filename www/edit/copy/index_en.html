@@ -49,7 +49,7 @@ Select "delete the original" to make this a move operation.</p>
 <div class="column" style="width: 70%">
 <form id="copy" name="copy" method="post" action="#">
 	<fieldset>
-	<legend>{=$file,kind|ucfirst}: <a class="{=$file,kind}" href="{=$file,url}">{=$file,filename}</a></legend>
+	<legend>Copy or Move <a class="{=$file,kind}" href="{=$file,url}" title="open {=$file,kind}: {=$file,filename}">{=$file,kind}</a></legend>
 		<input name="target" type="hidden" id="target" value="{=$target}" />
 	<p>
 		<label for="name">copy the current</label>
@@ -94,15 +94,11 @@ Select "delete the original" to make this a move operation.</p>
 <div class="column" style="width: 29%">
 <div class="section">
 <h2>Cheap copies</h2>
-<p>Copies inside the repository take no extra storage space.
-This copy would be just a reference to version 
+<p>The copy would work like a duplicate, but in fact be a reference to version 
 {=if not $file,isFolder}<span class="revision">{=$file,revision}</span>{=/if}
- at the old location.
+ at the old location, called a &quot;cheap copy&quot; because it takes no extra storage space.
 </p>
 <p>That is why copy and move are the same operations.</p>
-<p>Thus, a copy can be a good way to share the {=$file,kind} as it looks now,
-but not share future versions.
-</p>
 </div>
 </div>
 <div id="footer">

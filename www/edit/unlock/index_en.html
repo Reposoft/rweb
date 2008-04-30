@@ -13,8 +13,12 @@
 <h1>Unlock</h1>
 <form id="unlock" name="unlock" method="post" action="#">
   <fieldset>
-  <legend>File: <a class="filename" href="{=$repository}/{=$target|getPathName}">{=$target|getPathName}</a></legend>
+  <legend>Unlock <a class="filename" href="{=$repository}/{=$target|getPathName}" title="open file: {=$target|getPathName}">file</a></legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
+  <p>
+    <label for="name">unlock</label>
+    <input id="name" name="name" type="text" value="{=$target}" disabled="disabled" size="40"/>
+  </p>
   <p>
     <label for="submit"></label>
     <input id="submit" type="submit" name="submit" value="Unlock" tabindex="2" />

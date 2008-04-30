@@ -19,9 +19,9 @@
 <form id="formEdit" action="../upload/" method="post" name="formUpload">
 <fieldset>
 	<!--{if $isfile}-->
-	<legend>Edit <a class="file" href="{=$file,url}">{=$file,filename}</a> with type {=$file,type}</legend>
+	<legend>Edit <a class="file" href="{=$file,url}" title="open file: {=$file,filename}">text file</a> with type {=$file,type}</legend>
 	<!--{else}-->
-	<legend>New text in <a class="folder" href="{=$repository}">{=$target|getPathName}</a></legend>
+	<legend>New text file</legend>
 	<!--{/if}-->
   <input type="hidden" name="target" value="{=$target}"/>
   <input type="hidden" name="extension" class="current-name" value=".{=$type}"/>
