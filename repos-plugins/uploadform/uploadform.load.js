@@ -8,6 +8,8 @@ Repos.service('edit/upload/', function() {
 	$('#userfile').change(function() {
 		autoFillFilename($(this).val());	
 	});
+	// enable simplified form
+	hideBased();
 });
 	
 function autoFillFilename(path) {
@@ -40,6 +42,22 @@ function autoFillFilename(path) {
 			+ ' This is now a true versioning operation, as it will check for conflicts with any changes made by others since you downloaded the file.'
 			});
 	}
+}
+
+
+function hideBased() {
+	var org = $('#based-on-revision');
+	var val = $("input[name='fromrev']:checked", org).val();
+	if (val != 'HEAD') return; // don't simplify if a revision was selected
+	
+	var check = $('<input name="tempcheckbox" type="checkbox" checked="checked"/>');
+	var simple = $('<p/>').append('<label>skip conflict check</label>').append(check).append('<span>Overwrite current version</span>');
+	simple.insertAfter(org.hide());
+	
+	check.change(function() {
+		simple.remove();
+		org.show();
+	});
 }
 
 })();
