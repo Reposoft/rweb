@@ -5,6 +5,10 @@
  * @package open
  */
 
+// TODO add another method to list start page entries that is based on current access rights from a readable root folder
+// maybe simplified by using the new svn list --depth in subverison 1.5
+// Might have different subclasses of the RepositoryTree interface
+
 /**
  * Tool naming conventions in repos,
  * the folders to look for in a project folder.

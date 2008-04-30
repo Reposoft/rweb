@@ -6,27 +6,6 @@
 <!--{if $download}-->
 <meta http-equiv="refresh" content="1;url={=$download}" />
 <!--{/if}-->
-<script type="text/javascript">
-function autoFillFilename(path) {
-	var pos = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
-	if (0 >= pos) return;
-	var filename = path.substring(pos + 1);
-<!--{if not $isfile}-->
-	document.getElementsByName('name')[0].value = filename;
-<!--{else}-->
-	if (filename == document.getElementById('name').value) return;
-	var m = filename.match(/\(r(\d+)\)\.?\w*$/);
-	if (!m || 2 > m.length) return; 
-	var rev = m[1];
-	var button = document.getElementById('fromrev'+rev);
-	if (!button) {
-		alert('From the filename it looks like changes are based on revision '+rev+'. But there is no such revision. Please check that it is the same document.');
-	} else {
-		button.checked = "checked";
-	}
-<!--{/if}-->
-}
-</script>
 <!--{$head}-->
 </head>
 
@@ -63,7 +42,7 @@ You can not rename this file.</p>
   <p>
     <label for="userfile">local file</label>
 	 <input type="hidden" name="MAX_FILE_SIZE" value="{=$maxfilesize}" />
-    <input type="file" id="userfile" name="userfile" class="required current-name" size="40" onchange="autoFillFilename(value)" tabindex="1" />
+    <input type="file" id="userfile" name="userfile" class="required current-name" size="40" tabindex="1" />
     <span class="note">Maximum file size {=$maxfilesize|formatSize}</span>
   </p>
   <p>
