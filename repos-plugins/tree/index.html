@@ -141,10 +141,10 @@ $().ready(function() {
 	reposTreeBrowse().appendTo('#commandbar');
 	reposTreeShowDetails().appendTo('#commandbar');
 	reposTreePrint().appendTo('#commandbar');
+	if (!settings.sidebar && !settings.menu) reposTreeMaximize().addClass('action').appendTo(c);
 	reposTreeExpandAll().addClass('action').appendTo(c);
 	reposTreeHideFiles().addClass('action').appendTo(c);
 	if (!settings.sidebar) reposTreeSidebar().addClass('action').appendTo(c);
-	if (!settings.sidebar && !settings.menu) reposTreeMaximize().addClass('action').appendTo(c);
 });
 function reposTreeBrowse() {
 	return $('<a/>').attr('id','repository').attr('href','http://'+settings.hostname+settings.repository+settings.target).text('return to repository').appendTo('#commandbar');
