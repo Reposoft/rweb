@@ -4,12 +4,15 @@
 var isnew = true;
 
 Repos.service('edit/upload/', function() {
-	isnew = $('#name').val().length == 0;
+	var isadd = !$('#name').is(':disabled');
+	// copy filename from selected local file
 	$('#userfile').change(function() {
 		autoFillFilename($(this).val());	
 	});
 	// enable simplified form
-	hideBased();
+	if (!isadd) hideBased();
+	// enable progress screen (not bar) at upload
+	enableSubmitOverlay();
 });
 	
 function autoFillFilename(path) {
@@ -43,6 +46,17 @@ function autoFillFilename(path) {
 			+ ' This is now a true versioning operation, as it will check for conflicts with any changes made by others since you downloaded the file.'
 			});
 	}
+}
+
+function enableSubmitOverlay() {
+	$('form').submit(function(ev) {
+		$('body > *').hide();
+		var o = $('<div id="overlay"/>').appendTo('body');
+		var w = $('<span class="wait">Uploading file...</span>').appendTo(o);
+		window.setInterval(function() {
+			w.append('.');
+		}, 1000);
+	});
 }
 
 function hideBased() {
