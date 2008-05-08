@@ -295,7 +295,10 @@ span.action {
 #commandbar #logout {
 	background-image: url('commands/24x24/logout.png');
 }
-#commandbar #accountedit {
+#commandbar #login {
+	background-image: url('commands/24x24/login.png');
+}
+#commandbar #accountedit, #commandbar #lostpassword {
 	background-image: url('commands/24x24/accountedit.png');
 }
 #commandbar #listrecursive {

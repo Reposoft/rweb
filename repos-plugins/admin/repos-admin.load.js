@@ -10,7 +10,7 @@
 			$('#commandbar').append('<a id="lostpassword" href="'+w+'admin/lostpassword/">Lost password</a>');
 			// TODO extract to separate function and plug in to login pages as well
 		}
-		$('#commandbar').append('<a id="reposadmin" href="'+a+'">Repos Admin</a>');
+		// not wanted for most users // $('#commandbar').append('<a id="reposadmin" href="'+a+'">Repos Admin</a>');
 	}
 
 	function admin() {
@@ -33,12 +33,10 @@
 
 	Repos.service('home/', home);
 
-	Repos.target('/administration/repos.accs', function() {
-		admin();
-	});
+	Repos.target('/administration/repos.accs', admin);
 
 	Repos.target('/'+u+'/administration/', function() {
-		user();
+		Repos.service('index/', user);
 	});
 
 	Repos.target('/'+u+'/administration/repos.user', function() {
