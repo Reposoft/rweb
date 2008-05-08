@@ -85,7 +85,7 @@ function loginAndRedirectToHomeDir() {
 	} elseif (isset($_GET['login']) && $_GET['login'] == 'user') {
 		$realm = getAuthName($repo);
 		if(!$realm) {
-			$check = '<a href="'.getWebapp().'test/headers/?check='.rawurlencode($repo).'">Check HTTP headers</a> for 401 Authorization Required.';
+			$check = 'Expected header 401 Authorization Required.';
 			trigger_error("Server configuration error: No login realm was found for repository $repo. \n$check", E_USER_ERROR);
 		}
 		askForCredentials($realm);
