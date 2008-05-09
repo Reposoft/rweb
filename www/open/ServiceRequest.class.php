@@ -34,9 +34,11 @@ define('SERVICE_TYPE_JSON', 'json');
  * Predefined services
  */
 define('SERVICE_LOG', 'open/log/');
-define('SERVICE_ACL', 'account/acl/');
+// TODO someone might be surprised when repos-admin is hard coded here, used from repos-admin/account/create/
+define('SERVICE_ACL', '/repos-admin/account/acl/');
 /**
  * Protected services that can be called internally for any client.
+ * TODO not valid in repos 1.2
  */
 define('SERVICE_PUBLIC_LICENSE', 'admin/license/');
 define('SERVICE_PUBLIC_SERVER', 'admin/aboutserver/');

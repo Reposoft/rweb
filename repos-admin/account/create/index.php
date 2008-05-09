@@ -4,10 +4,10 @@
  *
  * @package
  */
-require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php'); 
-require(dirname(dirname(dirname(__FILE__))).'/edit/SvnEdit.class.php');
-require(dirname(dirname(dirname(__FILE__))).'/edit/ServiceRequestEdit.class.php');
 require(dirname(dirname(__FILE__)).'/account.inc.php');
+require(ReposWeb.'conf/Presentation.class.php'); 
+require(ReposWeb.'edit/SvnEdit.class.php');
+require(ReposWeb.'edit/ServiceRequestEdit.class.php');
 
 if (isset($_GET[SUBMIT])) {
 	accountGetUsernameRequiredRule();

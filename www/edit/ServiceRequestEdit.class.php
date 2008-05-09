@@ -31,6 +31,7 @@ class ServiceRequestEdit extends ServiceRequest {
 	 */
 	function getCommittedRevision() {
 		$data = $this->getResponseJsonToArray();
+		if (isset($data['error'])) trigger_error($data['error'], E_USER_ERROR);
 		$lastOperation = $data['operation'];
 		$lastResult = $data['result'];
 		$lastRevision = $data['revision'];
