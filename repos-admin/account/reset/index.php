@@ -24,14 +24,14 @@ if (isset($_GET[SUBMIT])) {
 }
 
 function userResetPassword($username, $email) {
-	$newpass = resetPassword($username, $email);
+	$newpass = resetPassword($username, $email, $fullname); // extract fullname in pass-by-reference variable
 	if (!$newpass) {
 		trigger_error('No user found with username "'.$username.'" and e-mail "'.$email.'".', E_USER_WARNING);
 		exit;
 	}
 	
 	$result = accountSendPasswordEmail($username, $newpass, $email, $fullname);
-	if ($result===false) showResult("Administration E-mail not enabled, new password is $password");
+	if ($result===false) showResult("Message to ".($fullname ? $fullname : $username).":\nAdministration E-mail not enabled, new password is $newpass");
 	elseif ($result) showResult("Outgoing emails are disabled on this server. Here's what should have been sent: \n\n$result");
 	else showResult("A new password has been emailed to address $email.");
 }

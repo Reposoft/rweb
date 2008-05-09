@@ -116,9 +116,10 @@ function accountGetEncryptedPassword($username, $password) {
  *
  * @param String $username existing user
  * @param String $email optional email address that must match the username
+ * @param String $fullname optional variable to store the user's name read from the password file
  * @return String the new password, false if username or username+password not found
  */
-function resetPassword($username, $email=null) {
+function resetPassword($username, $email=null, &$fullname=null) {
 	$password = getRandomPassword($username);
 	$pass = accountGetEncryptedPassword($username, $password);
 	
@@ -137,7 +138,8 @@ function resetPassword($username, $email=null) {
         $buffer = fgets($f);
         if (preg_match($pattern, $buffer)) {
         		$found = true;
-        		$pass .= ':'.accountGetFullName(trim($buffer)).':'.accountGetEmail(trim($buffer));
+        		$fullname = accountGetFullName(trim($buffer));
+        		$pass .= ':'.$fullname.':'.accountGetEmail(trim($buffer));
         		$buffer = "$pass\n";
         }
         fwrite($tmp, $buffer);
