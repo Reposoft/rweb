@@ -13,6 +13,8 @@ define('ACL_FILE', 'administration/repos.accs');
 require_once( dirname(dirname(dirname(__FILE__))).'/reposweb.inc.php' );
 require( ReposWeb.'open/ServiceRequest.class.php' );
 
+define('REPOS_ADMIN_SERVICE_REVERT', getHost().'/repos-admin/users/accountrevert/'); // There is no abstraction for repos-admin path yet
+
 function exportUsers($rev, $repo, $changes) {
 	// TODO fix so that this is the last operaton, or redirect user to login page after commit
 	$pattern = '/^([^\/]+)\/'.preg_quote(PASSWORD_FILE, '/').'$/';
@@ -29,7 +31,7 @@ function exportUsers($rev, $repo, $changes) {
 }
 
 function _exportUserPassword($username) {
-	$url = getWebapp().'admin/accountrevert/';
+	$url = REPOS_ADMIN_SERVICE_REVERT;
 	$r = new ServiceRequest($url, array('username'=>$username), false);
 	$r->exec();
 	if ($r->isOK()) {

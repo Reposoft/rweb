@@ -386,6 +386,9 @@ class Presentation {
 		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 			trigger_error('Background processing is only allowed for POST requests', E_USER_ERROR);
 		}
+		if (isRequestService()) {
+			trigger_error('Background processing not allowed for service requests', E_USER_ERROR);
+		}
 		$pageid = uniqid();
 		$file = System::getApplicationTemp('pages').$pageid;
 		$this->enableRedirectWithOutputFile($file);

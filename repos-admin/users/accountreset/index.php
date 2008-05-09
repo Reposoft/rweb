@@ -8,7 +8,7 @@
  * @package admin
  */
 
-require( dirname(dirname(__FILE__)).'/account.inc.php' );
+require( '../../account/account.inc.php' );
 
 Validation::expect('username');
 adminResetPassword($_GET['username']);

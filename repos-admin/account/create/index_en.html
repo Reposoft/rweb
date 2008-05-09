@@ -7,11 +7,12 @@
 
 <body>
 <div id="commandbar">
-<a id="admin" href="../../admin/">return to admin</a>
+<a id="back" href="{=$referer}">back</a>
+<a id="reposadmin" href="/repos-admin/">repos&nbsp;admin</a>
 </div>
 <h1>Create user</h1>
 <p>The new account will be added to the repository if the currently authenticated user has administrator access.</p>
-<form id="createFolder" name="createFolder" method="get" action="#">
+<form id="createFolder" name="createFolder" method="post" action="#">
   <fieldset>
   <legend>New Repos account</legend>
   <input name="target" type="hidden" id="target" value="{=$target}" />
@@ -33,5 +34,8 @@
   </p>
   </fieldset>
 </form>
+
+<div id="footer">
+</div>
 </body>
 </html>

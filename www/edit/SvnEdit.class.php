@@ -141,7 +141,7 @@ function displayEdit(&$presentation, $nextUrl=null, $headline=null, $summary=nul
 	$presentation->assign('nexturl',$nextUrl);
 	$presentation->assign('headline',$headline);
 	$presentation->assign('summary',$summary);
-	if (!$presentation->isRedirectBeforeDisplay()) {
+	if (!isRequestService() && !$presentation->isRedirectBeforeDisplay()) {
 		// always do redirect after post, even if redirectWaiting is not enabled
 		$presentation->enableRedirectWaiting();
 	}

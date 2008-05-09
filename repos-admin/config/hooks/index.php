@@ -177,7 +177,8 @@ function checkHookScript($path, $scriptType, $report) {
 function getHookCommand($scriptType, $revVariable=null, $repoVariable=null) {
 	$curl = System::getCommand('curl');
 	$curl = $curl .= ' -s';
-	$url = getWebappUrl().'admin/hooks/?run='.$scriptType;
+	//repos1.1//$url = getWebappUrl().'admin/hooks/?run='.$scriptType;
+	$url = getHost().'/repos-admin/config/hooks/?run='.$scriptType;
 	if ($revVariable) $url .= '&rev='.$revVariable;
 	if ($repoVariable) $url .= '&repo='.$repoVariable;
 	// verify that repos is configured correctly

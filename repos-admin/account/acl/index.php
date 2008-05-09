@@ -14,9 +14,10 @@
 define('ADMIN_FOLDER', '/administration/');
 define('ACCESS_FILE', 'repos.accs');
 
-require('../../open/SvnOpenFile.class.php');
-require('../../edit/SvnEdit.class.php');
-require('../../conf/Presentation.class.php');
+require('../../admin.inc.php');
+require(ReposWeb.'open/SvnOpenFile.class.php');
+require(ReposWeb.'edit/SvnEdit.class.php');
+require(ReposWeb.'conf/Presentation.class.php');
 
 $file = new SvnOpenFile(ADMIN_FOLDER.ACCESS_FILE);
 
@@ -35,15 +36,17 @@ if ($checkout->exec('Checked out current ACL')) {
 $acl = $wc.ACCESS_FILE;
 
 // select operation
-if (isset($_GET['create'])) {
-	$username = $_GET['create'];
+if (isset($_REQUEST['create'])) {
+	$username = $_REQUEST['create'];
 	aclCreateUser($username, $acl);
 	aclCommit($wc, "Created access for new account '$username' to personal folder.");
-}
-if (isset($_GET['delete'])) {
-	$username = $_GET['delete'];
+} else if (isset($_REQUEST['delete'])) {
+	$username = $_REQUEST['delete'];
 	aclDeleteUser($username, $acl);
 	aclCommit($wc, "Deleted access control for folder '/$username'.");
+} else {
+	System::deleteFolder($wc);
+	trigger_error('No operation selected', E_USER_ERROR);
 }
 
 System::deleteFolder($wc);
@@ -52,6 +55,7 @@ $next = getTargetUrl(ADMIN_FOLDER);
 $p = Presentation::getInstance();
 $p->assign('target', $file->getPath()); // assigned by the other edit pages for commandbar
 displayEdit($p, $next);
+// page done. below are helper functions.
 
 // shared commit changes logic
 function aclCommit($wc, $commitMessage) {

@@ -9,14 +9,14 @@ require(ReposWeb.'conf/Presentation.class.php');
 require(ReposWeb.'edit/SvnEdit.class.php');
 require(ReposWeb.'edit/ServiceRequestEdit.class.php');
 
-if (isset($_GET[SUBMIT])) {
+if ($_SERVER['REQUEST_METHOD']=='POST') {
 	accountGetUsernameRequiredRule();
 	accountGetUsernameNotReservedRule();
 	accountGetUsernameNotExistingRule();
-	$username = $_GET['username'];
+	$username = $_REQUEST['username'];
 	$emailRule = accountGetEmailRule();
 	$email = $emailRule->getValue();
-	$fullname = $_GET['fullname'];
+	$fullname = $_REQUEST['fullname'];
 	$password = getRandomPassword($username);
 	
 	accountCreateUserFolder(getTargetUrl(), $username, $password, $email, $fullname);

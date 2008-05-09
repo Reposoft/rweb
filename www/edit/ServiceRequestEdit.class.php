@@ -16,6 +16,7 @@ class ServiceRequestEdit extends ServiceRequest {
 	
 	function ServiceRequestEdit($service, $parameters=array(), $authenticate=true) {
 		$this->ServiceRequest($service, $parameters, $authenticate);
+		$this->setCustomHttpMethod('POST'); // all operation that edit data should be POST according to HTTP spec
 	}
 	
 	function getResponseJsonToArray() {

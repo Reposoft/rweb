@@ -14,9 +14,9 @@
 
 	function admin() {
 	 	$('#commandbar')
-			.append('<a href="'+a+'account/create/">Create account</a>')
+			.append('<a id="accountedit" href="'+a+'account/create/">Create account</a>') //using accountedit as id to get the same icon
 			.append('<a href="'+a+'account/delete/">Delete account</a>')
-			.append('<a id="reposadmin" href="'+a+'admin/">Repos Admin</a>')
+			.append('<a id="reposadmin" href="'+a+'">Repos Admin</a>')
 	};
 
 	function user() {
