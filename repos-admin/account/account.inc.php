@@ -188,13 +188,12 @@ function accountSendPasswordEmail($username, $password, $email, $fullname=null) 
 	$fullname = htmlspecialchars($fullname);
 	if (htmlspecialchars($email)!=$email) trigger_error('Invalid e-mail address '.$email, E_USER_ERROR);
 	
-	$webapp = getWebapp();
 	$repository = getRepository();
 	preg_match('/(\w+:\/\/)([^\/]+)\/.*/', $repository, $matches);
 	$hostname = $matches[2];
 	$host = $matches[1].$hostname.'/';
 
-	$subject = "Your Repos account $username";
+	$subject = "Your Repos Account $username";
 	$body = "$fullname,
 
 A temporary password has been generated at $hostname
@@ -202,9 +201,7 @@ for your account $username:
 $password
 
 You can log in at $host?login.
-After that, please change password from the administration folder.
-Or proceed to edit the password file directly at:
-{$webapp}edit/?target=/".urlencode($username)."/administration/".REPOSITORY_USER_FILE_NAME."
+After that, please change password from your administration folder.
 
 ";
 	$body = str_replace("\r\n", "\n", $body);
