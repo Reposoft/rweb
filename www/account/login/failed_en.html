@@ -8,12 +8,12 @@
 <body>
 <div id="commandbar">
 <a id="reposroot" href="{=$start|asLogoutUrl}">startpage</a>
-<a href="{=$nexturl}">try again</a>
+<a id="login" href="{=$nexturl}">try again</a>
 </div>
 
 <h2>Login failed</h2>
 <p>Invalid username or password. Tested the following repository locations: <code>{=$targeturl}</code>.</p>
-<p>Please <a id="login" href="{=$nexturl}">try again</a> with a different username or password.</p>
+<p>Please <a id="loginlink" href="{=$nexturl}">try again</a> with a different username or password.</p>
 
 <p>If you did not get a log in box, a previous login is cached by the browser.
 You may need to close the browser to force removal of the invalid credentials.</p>
@@ -21,7 +21,7 @@ You may need to close the browser to force removal of the invalid credentials.</
 <div id="footer">
 </div>
 <script type="text/javascript">
-document.getElementById('login').focus();
+document.getElementById('loginlink').focus();
 </script>
 </body>
 </html>

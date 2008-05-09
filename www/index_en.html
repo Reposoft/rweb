@@ -34,8 +34,18 @@
 <!--{if $auth.repos}-->
 <a id="start" href="open/start/">startpage</a>
 <a id="logout" href="/?logout">logout</a>
+<script type="text/javascript">
+//<![CDATA[
+document.getElementById('start').focus();
+//]]>
+</script>
 <!--{else}-->
 <a id="login" href="/?login">login</a>
+<script type="text/javascript">
+//<![CDATA[
+document.getElementById('login').focus();
+//]]>
+</script>
 <!--{/if}-->
 
 </div>
@@ -63,7 +73,7 @@
 <dd>{=$webapp}</dd>
 <dt>Server URL</dt>
 <dd>{=$host}/</dd>
-</dt>
+</dl>
 </div>
 </div>
 
