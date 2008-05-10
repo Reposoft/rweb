@@ -4,24 +4,16 @@
 	var a = '/repos-admin/';
 	var u = Repos.getUser();
 
-	function home() {
-		if (!u) { // lost password should have the access control of repos web, not repos admin
-			$('#commandbar').append('<a id="lostpassword" href="'+a+'account/reset/">Lost password</a>');
-			// TODO extract to separate function and plug in to login pages as well
-		}
-		// not wanted for most users // $('#commandbar').append('<a id="reposadmin" href="'+a+'">Repos Admin</a>');
-	}
-
 	function admin() {
 	 	$('#commandbar')
-			.append('<a id="accountedit" href="'+a+'account/create/">Create account</a>') //using accountedit as id to get the same icon
-			.append('<a href="'+a+'account/delete/">Delete account</a>')
-			.append('<a id="reposadmin" href="'+a+'">Repos Admin</a>')
+			.append('<a id="accountedit" href="'+a+'account/create/">Create&nbsp;account</a>') //using accountedit as id to get the same icon
+			.append('<a href="'+a+'account/delete/">Delete&nbsp;account</a>')
+			.append('<a id="reposadmin" href="'+a+'">Repos&nbsp;Admin</a>')
 	};
 
 	function user() {
 	 	$('#commandbar')
-			.append('<a id="accountedit" href="'+a+'account/password/?target=/'+u+'/administration/repos.user">Edit account</a>');
+			.append('<a id="accountedit" href="'+a+'account/password/?target=/'+u+'/administration/repos.user">Edit&nbsp;account</a>');
 	};
 
 	function edit() {
@@ -29,8 +21,6 @@
 		e.attr('href', e.attr('href').replace(/^file\//, a+'account/password/'));
 		e.text('Edit as password file');
 	};
-
-	Repos.service('home/', home);
 
 	Repos.target('/administration/repos.accs', admin);
 
