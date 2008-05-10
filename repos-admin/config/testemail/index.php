@@ -5,8 +5,8 @@
  * @package admin
  */
 
-require( '../../reposweb.inc.php' );
-require( ReposWeb.'account/account.inc.php' );
+//not needed when we include account.inc//require( '../../reposweb.inc.php' );
+require( '../../account/account.inc.php' );
 require( ReposWeb.'conf/Report.class.php' );
 
 if (isset($_GET[SUBMIT])) {

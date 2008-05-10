@@ -5,7 +5,7 @@
  * @package admin
  */
 
-require( '../admin.inc.php' );
+require( 'repos-backup.inc.php' );
 require( ReposWeb.'conf/Presentation.class.php' );
 
 //$report = new Report('System status');
