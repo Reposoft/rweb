@@ -2,22 +2,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Repos administration</title>
+<title>Repos Administration</title>
 <!--{$head}-->
 </head>
 <body>
 
 <div id="commandbar">
-<a id="reposconf" href="{=$webapp}conf/">config</a>
-<a id="reposadmin" href="/repos-admin/">admin</a>
-<a id="reposadmin" href="/repos-backup/">admin</a>
-<a id="repostest" href="{=$webapp}test/">test</a>
-<a id="reposroot" href="../">repos root</a>
+<!--{* using old ids because they have icons *}-->
+<a id="reposroot" href="{=$webapp}">repos&nbsp;web</a>
+<a id="reposconf" href="/repos-backup/">repos&nbsp;backup</a>
 <a id="serverroot" href="/">server root</a>
 </div>
 
 <div id="intro">
-<h1>Repos administration</h1>
+<h1>Repos Administration</h1>
 </div>
 
 <div class="column" style="width: 60%">
@@ -47,7 +45,7 @@
 
 <div class="section" id="aboutserver">
 <h2>Server information</h2>
-<p><a id="reposlicense" href="license/">License</a></p>
+<p><a id="reposlicense" href="host/license/">License</a></p>
 <p>Repos primary? <span id="serverprimary"></span></p>
 <script type="text/javascript">
 $.getJSON('host/aboutserver/?serv=json', function(json) {

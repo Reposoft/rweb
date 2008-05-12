@@ -21,8 +21,13 @@ if (function_exists('zend_get_id')) {
 }
 
 if (function_exists('zend_loader_file_licensed')) {
-	$license = array_diff_key(zend_loader_file_licensed(), $skip);
-	$p->assign('license', $license);
+	$zend = zend_loader_file_licensed();
+	if (is_array($zend)) {
+		$license = array_diff_key(zend_loader_file_licensed(), $skip);
+		$p->assign('license', $license);
+	} else {
+		$p->assign('license', false);
+	}
 }
 
 $p->display();

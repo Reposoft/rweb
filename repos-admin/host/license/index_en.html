@@ -8,9 +8,7 @@
 <body>
 
 <div id="commandbar">
-<a id="reposconf" href="{=$webapp}conf/">config</a>
-<a id="reposadmin" href="{=$webapp}admin/">admin</a>
-<a id="repostest" href="{=$webapp}test/">test</a>
+<a id="reposadmin" href="../../">admin</a>
 </div>
 
 <h1>Repos license</h1>
@@ -27,7 +25,7 @@
 
 <div id="footer">
 {=if $hostid}
-<input title="Server Host ID" type="text" id="url" size="25" value="{=$hostid}"  readonly="readonly" onclick="this.select();"/>
+<input title="Server Host ID" type="text" id="url" size="35" value="{=$hostid}"  readonly="readonly" onclick="this.select();"/>
 {=/if}
 </div>
 </body>
