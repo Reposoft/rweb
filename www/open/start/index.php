@@ -30,19 +30,26 @@ if (!isLoggedIn()) {
 
 // read the ACL and create a tree for the user
 $user = getReposUser();
+$repo = getRepository();
 $acl = getAccessFile();
-if (!is_file($acl)) {
-	trigger_error("Can not read Access Control List", E_USER_ERROR);
+if (!$acl || !is_file($acl)) {
+	// TODO add another method to list start page entries that is based on current access rights from a readable root folder
+	// maybe simplified by using the new svn list --depth in subverison 1.5
+	// Might have different subclasses of the RepositoryTree interface
+	// Until that's implemented, use subversion index as startpage instead, if access is allowed
+	$s = new ServiceRequest($repo.'/');
+	if ($s->exec()==200) {
+		header("Location: ".$repo.'/');
+		exit;
+	}
+	// no acl, no read access to repo root -> give up
+	trigger_error("Can not show start page because it requires an Access Control List or read access to repository root", E_USER_ERROR);
 }
 $tree = new RepositoryTree($acl, $user);
 
-// don't know why this is here
-$repo = getRepository();
-if (empty($repo)) trigger_error("Can not get repository url", E_USER_ERROR);
-
 $entrypoints = array_filter($tree->getEntryPoints(), 'shouldShow');
 if (count($entrypoints)==0) {
-	trigger_error('This username has not been given access to any folders that match the Repos conventions. '.
+	trigger_error('The access control file does not list any projects for this login. '. // no folders that match Subverson or Repos project conventions
 		'Try <a href="'.$repo.'/">repository root</a>.', E_USER_ERROR);
 	// TODO make a template instead of an error message, like this...
 	$p = Presentation::getInstance();

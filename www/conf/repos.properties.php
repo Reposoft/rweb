@@ -174,7 +174,8 @@ function getWebappUrl() {
  */
 function getAccessFile() {
 	if (isset($_SERVER['ReposAccessFile'])) return $_SERVER['ReposAccessFile'];
-	return getAccessFileDefault();
+	$default = getAccessFileDefault();
+	if (!is_file($default)) return false;
 }
 
 /**
