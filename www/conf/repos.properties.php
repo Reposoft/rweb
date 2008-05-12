@@ -296,11 +296,16 @@ function getSelfQuery() {
  */
 function getService() {
 	$p = getSelfPath();
+	// extract from path
 	if ($p == '/') {
 		if (strpos(getSelfQuery(),'login')===0) return 'account/login/';
 		return 'account/logout/';
 	}
-	$s = strpos($p,'/',1);
+	$s = 0;
+	// repos-admin and repos-backup alway have the same path (not configurable in 1.2)
+	if (!preg_match('/^\/repos-(admin|backup)\//', $p)) {
+		$s = strpos($p,'/',1);
+	}
 	$e = strrpos($p,'/');
 	if ($s==$e) return 'home/';
 	return substr($p,$s+1,$e-$s);

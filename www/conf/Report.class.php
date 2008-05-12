@@ -336,9 +336,13 @@ class Report {
 		$this->_print("<body>\n");
 		
 		$this->_print('<div id="commandbar">'."\n");
-		$this->_print('<a id="reposconf" href="'.$webapp.'conf/">config</a>'."\n");
-		$this->_print('<a id="reposadmin" href="'.$webapp.'admin/">admin</a>'."\n");
-		$this->_print('<a id="repostest" href="'.$webapp.'test/">test</a>'."\n");
+		// all pages with reports are somewhere in the repos hierarchy
+		$this->_print('<a id="parent" href="../">up</a>'."\n");
+		// webapp home
+		$this->_print('<a id="reposroot" href="'.$webapp.'">repos&nbsp;web</a>'."\n");
+		// hardcoded paths to repos-admin and repos-backup, without checking if they are installed
+		$this->_print('<a id="reposadmin" href="/repos-admin/">admin</a>'."\n");
+		$this->_print('<a id="repostest" href="/repos-backup/">backup</a>'."\n");
 		$this->_print('</div>');
 		
 		$this->_print("<h1>$title</h1>\n");
