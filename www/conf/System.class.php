@@ -104,7 +104,8 @@ function isFolder($path) {
 
 /**
  * @param String $path the file system path or URL to check
- * @return The parent folder if isFolder($path), the folder if isFile($path), false if there is no parent
+ * @return The parent folder if isFolder($path), the folder if isFile($path), false if there is no parent.
+ * 	With trailing slash.
  * @package conf
  */
 function getParent($path) {

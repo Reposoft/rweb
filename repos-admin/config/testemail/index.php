@@ -20,10 +20,10 @@ if (isset($_GET[SUBMIT])) {
 }
 
 function emailShowInfo() {
-	$adminemail = getConfig('administrator_email');
+	$adminemail = getAdministratorEmail();
 	$r = new Report('Test Repos application e-mails');
 	// reset password
-	if (!$adminemail) $r->warn('administrator_email not set');
+	if (!$adminemail) $r->warn('administrator email not set');
 	$r->info('<form action="./" method="get">'.
 	'Test password email to address <input name="email" type="text" size="40" value="'.$adminemail.'"/>'.
 	'<input type="submit" name="submit" value="password"/> (only a test, does not affect accounts)</form>');

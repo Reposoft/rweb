@@ -38,6 +38,30 @@ function _getConfig($key) {
 	return false;
 }
 
+function getAdministratorEmail() {
+	if (isset($_SERVER['REPOS_ADMIN_EMAIL'])) {
+		// allow outgoing email to be disabled
+		if (!$_SERVER['REPOS_ADMIN_EMAIL']) return false;
+		// custom email overrides apache administrator email
+		return $_SERVER['REPOS_ADMIN_EMAIL'];
+	} else if (isset($_SERVER['SERVER_ADMIN']) && strstr($_SERVER['SERVER_ADMIN'],'@')) {
+		// server configuration
+		return $_SERVER['SERVER_ADMIN'];
+	} else {
+		// disable email
+		return false;
+	}
+}
+
+function getAdminUserFile() {
+	// TODO
+	// sadly we can't read the apache configuration entries set for mod_dav_svn in the repository
+}
+
+function getAdminAccessFile() {
+	// TODO
+}
+
 /**
  * Resolves document folder, primarily from DOCUMENT_ROOT server variable,
  * secondarily as the parent folder of this file's folder.
@@ -69,64 +93,4 @@ function _getPropertiesFile() {
 	return $propertiesFile;
 }
 
-// --- output functions ---
-
-// override theme function
-function getTheme() {
-	return "/themes/simple"; 
-}
-
-function getTime() { // still used in backup
-	return getReportTime();
-}
-
-// Currently all shared backup methods require a global Report instance $report
-function html_start() {}
-function debug($message) {global $report; $report->debug($message); }
-function info($message) {global $report; $report->ok(getTime().' '.$message); }
-function fail($message) {global $report; $report->fail(getTime().' '.$message); }
-function warn($message) {global $report; if($report) $report->warn(getTime().' '.$message); }
-function error($message) {global $report; $report->error(getTime().' '.$message); }
-function fatal($message) {global $report; $report->fatal(getTime().' '.$message); } // deprecated
-function html_end($code = 0) {global $report; $report->display(); }
-
-// --- basic repository examination ---
-// read-only operations. The actual processing is in the backup script which uses these functions.
-
-/**
- * @return true if path points to a repository accessible using svnlook
-function isRepository($localPath) {
-	if (!file_exists($localPath))
-		return false;
-	$command = new Command('svnlook');
-	$command->addArgOption('uuid', $localPath);
-	if ($command->exec()) return false;
-	return strlen(array_pop($command->getOutput())) > 0;	
-}
- */
-
-/**
- * The same HEAD revision number must be used thorughout backup, or a concurrent transaction could cause invalid backup
- * @return revision number integer
-function getHeadRevisionNumber($repository) {
-	$command = System::getCommand("svnlook") . " youngest $repository";
-	$output = array();
-	$return = 0;
-	$rev = (int) exec($command, $output, $return);
-	if ($return!=0)
-		trigger_error("Could not get revision number using $command", E_USER_ERROR);
-	return $rev;
-}
- */
-
-// --- helper functions ---
-
-/**
- * Send message to the administrator whose address is specified in repos.properties
-DELETE UNUSED
-function notifyAdministrator($text) {
-	$address = getConfig('administrator_email');
-	error("Did not notifyAdministrator. Method not implemented.");
-}
- */
 ?>

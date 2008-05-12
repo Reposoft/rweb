@@ -180,7 +180,7 @@ function getRandomPassword($username) {
  */
 function accountSendPasswordEmail($username, $password, $email, $fullname=null) {
 	$emailEnable = true;
-	$from = getConfig('administrator_email');
+	$from = getAdministratorEmail();
 	if (!$from) $emailEnable = false; // don't send email
 	
 	if (!$fullname) $fullname = $username;

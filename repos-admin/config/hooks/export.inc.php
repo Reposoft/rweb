@@ -5,7 +5,7 @@
  * @package admin
  */
 
-// user account password file
+// repository user account password file
 define('PASSWORD_FILE', 'administration/repos.user');
 // repository ACL
 define('ACL_FILE', 'administration/repos.accs');
@@ -14,6 +14,14 @@ require_once( dirname(dirname(dirname(__FILE__))).'/reposweb.inc.php' );
 require( ReposWeb.'open/ServiceRequest.class.php' );
 
 define('REPOS_ADMIN_SERVICE_REVERT', getHost().'/repos-admin/account/accountrevert/'); // There is no abstraction for repos-admin path yet
+
+function getAdminExportFile() {
+	// export logic will be rewritten for repos 1.3 so here we offer a sensible default for using the old export file concept
+	// same folder as access control
+	$path = getParent(getAdminAccessFile()).'repos-exports';
+	if (file_exists($path)) return $path;
+	return false;
+}
 
 function exportUsers($rev, $repo, $changes) {
 	// TODO fix so that this is the last operaton, or redirect user to login page after commit
@@ -63,8 +71,8 @@ function exportAdministration($rev, $repo, $changes) {
  * @param unknown_type $changes
  */
 function exportOptional($rev, $repo, $changes) {
-	if (!getConfig('exports_file')) trigger_error('No exports defined. Set "exports_file" in repos.properties.');
-	$exportsFile = getConfig('admin_folder').getConfig('exports_file');
+	$exportsFile = getAdminExportFile();
+	if (!$exportsFile) return false; // no optional exports will be done
 	
 	$exports = parse_ini_file($exportsFile);
 	$patterns = array();

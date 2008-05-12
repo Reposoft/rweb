@@ -133,16 +133,6 @@ function getCurrentBackup($backupPath, $fileprefix) {
 	return getBackupInfo($files, $fileprefix);
 }
 
-// --- helper functions ---
-
-/**
- * Send message to the administrator whose address is specified in repos.properties
- */
-function notifyAdministrator($text) {
-	$address = getConfig('administrator_email');
-	error("Did not notifyAdministrator. Method not implemented.");
-}
-
 // --- backup support
 
 /**

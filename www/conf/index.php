@@ -9,6 +9,9 @@
  * @package conf
  */
 
+// configuration display not updated for repos 1.2
+echo "Not a repos service. Contains shared scripts.";exit;
+
 // default configuration includes, the way they should be referenced in php files
 require_once( dirname(__FILE__) . '/repos.properties.php' );
 require_once( dirname(__FILE__) . '/Command.class.php' );
@@ -37,7 +40,6 @@ $links = array(
 	);
 $requiredConfig = array(
 	'repos_web' => 'The url of this website',
-	// not used in 1.0 //'administrator_email' => 'Administrator E-mail',
 	'repositories' => 'Repoisitory address or addresses',
 	'local_path' => 'Local path of repository',
 	'admin_folder' => 'Administration folder',
