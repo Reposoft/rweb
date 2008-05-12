@@ -4,7 +4,8 @@
  *
  * @package admin
  */
-require( dirname(dirname(dirname(__FILE__))).'/admin.inc.php' );
+require( '../../admin.inc.php' );
+require( '../../admin-authorize.inc.php'); // modifies local repository config and exports to file system
 require( ReposWeb.'conf/Report.class.php' );
 if (!class_exists('Command')) require( ReposWeb.'conf/Command.class.php' );
 

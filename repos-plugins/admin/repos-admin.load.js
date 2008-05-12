@@ -5,10 +5,15 @@
 	var u = Repos.getUser();
 
 	function admin() {
+		$('#commandbar')
+			.append('<a id="reposadmin" href="'+a+'">Repos&nbsp;Admin</a>');
+	}
+
+	function useradmin() {
 	 	$('#commandbar')
 			.append('<a id="accountedit" href="'+a+'account/create/">Create&nbsp;account</a>') //using accountedit as id to get the same icon
-			.append('<a href="'+a+'account/delete/">Delete&nbsp;account</a>')
-			.append('<a id="reposadmin" href="'+a+'">Repos&nbsp;Admin</a>')
+			.append('<a href="'+a+'account/delete/">Delete&nbsp;account</a>');
+		admin();
 	};
 
 	function user() {
@@ -22,7 +27,9 @@
 		e.text('Edit as password file');
 	};
 
-	Repos.target('/administration/repos.accs', admin);
+	Repos.target('/administration/', admin);
+
+	Repos.target('/administration/repos.accs', useradmin);
 
 	Repos.target('/'+u+'/administration/', function() {
 		Repos.service('index/', user);

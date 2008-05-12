@@ -20,11 +20,14 @@ if (!defined('REPOS_ADMIN_PARAMETER')) define('REPOS_ADMIN_PARAMETER', 'ReposAdm
 // Server authorization has priority both for allow and deny
 if (array_key_exists(REPOS_ADMIN_PARAMETER, $_SERVER)) {
 	if ($_SERVER[REPOS_ADMIN_PARAMETER]) {
-		// autorized, continue	
+		// autorized, resume execution in caller script	
 	} else {
 		header('HTTP/1.0 401 Unauthorized');
 		trigger_error("Access denied by server configuration.", E_USER_WARNING); // expecting exit
 	}
+} else if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
+	// By default allow local access if admin parameter is not set
+	// Authorized, resume execution in caller script
 } else {
 	// Not authrized in server, use repos administration access check
 	require_once( dirname(__FILE__).'/reposweb.inc.php' );
@@ -35,7 +38,7 @@ if (array_key_exists(REPOS_ADMIN_PARAMETER, $_SERVER)) {
 	
 	// Use repos-web login logic
 	if(verifyLogin($administrationUrl)) {
-		// Do nothing. Parent script resumes operation.
+		// Authorized, resume execution in caller script
 	} else {
 		header('HTTP/1.0 401 Unauthorized');
 		trigger_error("This resource is for administators only. "

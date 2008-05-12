@@ -7,6 +7,7 @@
 
 //not needed when we include account.inc//require( '../../reposweb.inc.php' );
 require( '../../account/account.inc.php' );
+require( '../../admin-authorize.inc.php' ); // sends email
 require( ReposWeb.'conf/Report.class.php' );
 
 if (isset($_GET[SUBMIT])) {

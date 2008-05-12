@@ -7,6 +7,7 @@
  */
 
 require( '../../reposweb.inc.php' );
+require( '../../admin-authorize.inc.php' ); // displays local configuration paths
 require( ReposWeb.'open/SvnOpen.class.php' );
 require( ReposWeb.'conf/Report.class.php' );
 

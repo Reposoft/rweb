@@ -4,6 +4,7 @@
  * 
  * @package admin
  */
+echo "Deprecated for Repos 1.2";exit;
 
 // svn propset svn:keywords "Rev" configuration.php
 $rev = strtr('$Rev$','$',' ');
