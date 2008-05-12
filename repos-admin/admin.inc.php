@@ -15,19 +15,7 @@ define('TEMP_FILE_EXTENSION', '.temporary');
 
 // --- configuration ---
 
-/**
- * Config value getter
- * @param key the configuration value key, as in repos.properties
- * @return the value corresponding to the specified key. False if key not defined.
- */ 
-function getConfig($key) {
-	// temporary selfcheck
-	if ($key=='repo_url') trigger_error("Use getRepository to get the URL");
-	if ($key=='repos_web') trigger_error("Use getWebapp to get web root URL");
-	//
-	return _getConfig($key);
-}
-
+// the old properties file concept
 function _getConfig($key) {
 	static $_repos_config = null;
 	if ($_repos_config == null) {
@@ -44,22 +32,33 @@ function getAdministratorEmail() {
 		if (!$_SERVER['REPOS_ADMIN_EMAIL']) return false;
 		// custom email overrides apache administrator email
 		return $_SERVER['REPOS_ADMIN_EMAIL'];
-	} else if (isset($_SERVER['SERVER_ADMIN']) && strstr($_SERVER['SERVER_ADMIN'],'@')) {
-		// server configuration
-		return $_SERVER['SERVER_ADMIN'];
-	} else {
-		// disable email
-		return false;
 	}
+	return getAdministratorEmailDefault();
+}
+
+function getAdministratorEmailDefault() {
+	// user server's administrator email if it contans @
+	if (isset($_SERVER['SERVER_ADMIN']) && strstr($_SERVER['SERVER_ADMIN'],'@')) return $_SERVER['SERVER_ADMIN'];
+	// disable email
+	return false;
+}
+
+function getAdminLocalRepo() {
+	// old config structure
+	return _getConfig('local_path');
 }
 
 function getAdminUserFile() {
 	// TODO
 	// sadly we can't read the apache configuration entries set for mod_dav_svn in the repository
+	// old config structure
+	return _getConfig('admin_folder')._getConfig('users_file');
 }
 
 function getAdminAccessFile() {
 	// TODO
+	// old config structure
+	return _getConfig('admin_folder')._getConfig('access_file');
 }
 
 /**

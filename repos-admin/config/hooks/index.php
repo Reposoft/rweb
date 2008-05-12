@@ -30,7 +30,7 @@ if (isset($_GET['create'])) {
 	if (!in_array($type, $known_hooks)) trigger_error($type.' is not a supported hook', E_USER_ERROR);
 	if (!isset($_GET['rev'])) trigger_error('Revision required for hook '.$type, E_USER_ERROR);
 	//if (!isset($_GET['repo'])) trigger_error('Repository path required for hook '.$type, E_USER_ERROR);
-	$repo = getConfig('local_path');
+	$repo = getAdminLocalRepo();
 	$func = 'runHook_'.strtr($type,'-','_');
 	if (!function_exists($func)) {
 		trigger_error('Can not execute '.$type.' hook. No Repos function for it.', E_USER_ERROR);
@@ -42,7 +42,7 @@ if (isset($_GET['create'])) {
 	if (!in_array($type, $known_hooks)) trigger_error($type.' is not a supported hook', E_USER_ERROR);
 	if (!isset($_GET['rev'])) trigger_error('Revision required for hook '.$type, E_USER_ERROR);
 	//if (!isset($_GET['repo'])) trigger_error('Repository path required for hook '.$type, E_USER_ERROR);
-	$repo = getConfig('local_path');
+	$repo = getAdminLocalRepo();
 	testRun($type, $_GET['rev'], $repo);
 } else {
 	showInfo();
@@ -55,13 +55,13 @@ function runHook_post_commit($rev, $repo) {
 	if (!is_numeric($rev)) trigger_error('Hooks require a numeric revision number.', E_USER_ERROR);
 	if (!isAbsolute($repo)) trigger_error('Repository path must be absolute.', E_USER_ERROR);
 	$changes = hooksGetChanges($rev, $repo);
-	if (getConfig('access_file')) exportAdministration($rev, $repo, $changes);
+	if (getAdminAccessFile()) exportAdministration($rev, $repo, $changes);
 	// don't fail if exports file is configured but missing (should be an error message in conf/)
-	if (getConfig('exports_file') && file_exists(getConfig('admin_folder').getConfig('exports_file'))) {
+	if (getAdminExportFile() && file_exists(getAdminAccessFile())) {
 		exportOptional($rev, $repo, $changes);
 	}
 	// user must be exported last, if password is changed
-	if (getConfig('users_file')) {
+	if (getAdminUserFile()) {
 		exportUsers($rev, $repo, $changes);
 	}
 }
@@ -141,7 +141,7 @@ function showTestCommand($type) {
 }
 
 function getHookScriptPath($type) {
-	$local = getConfig('local_path');
+	$local = getAdminLocalRepo();
 	$hook = $local.'hooks/'.$type;
 	if (System::isWindows()) {
 		$hook .= '.bat';

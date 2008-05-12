@@ -16,14 +16,14 @@ require( dirname(dirname(__FILE__)).'/admin.inc.php' );
 if (!class_exists('Command')) require(ReposWeb.'conf/Command.class.php');
 if (!class_exists('Validation')) require(ReposWeb.'plugins/validation/validation.inc.php');
 
-if (!getConfig('users_file')) {
-	trigger_error('Repos user administration is not enabled.', E_USER_ERROR);
-}
 // Relevant configuration entries
-define('USERS_PATH', getConfig('admin_folder').getConfig('users_file'));
-define('LOCAL_PATH', getConfig('local_path'));
+define('USERS_PATH', getAdminUserFile());
+define('LOCAL_PATH', getAdminLocalRepo());
 // Repos convention for the per-user htpasswd file
 define('REPOSITORY_USER_FILE_NAME', 'repos.user');
+
+if (!getAdminUserFile()) trigger_error('Repos users file path not defined', E_USER_ERROR);
+if (!file_exists(getAdminUserFile())) trigger_error('Repos users file not found', E_USER_ERROR);
 
 /**
  * @return Rule that has processed the field validatoin

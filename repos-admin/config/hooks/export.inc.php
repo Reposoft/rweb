@@ -51,12 +51,10 @@ function _exportUserPassword($username) {
 }
 
 function exportAdministration($rev, $repo, $changes) {
-	if (!getConfig('admin_folder')) trigger_error("Admin folder not set", E_USER_ERROR);
-	if (!getConfig('access_file')) trigger_error("Access file not set", E_USER_ERROR);
 	$pattern = '/^'.preg_quote(ACL_FILE, '/').'$/';
 	foreach ($changes as $path => $change) {
 		if ($change != 'D' && preg_match($pattern, $path, $matches)) {
-			$destination = getConfig('admin_folder').getConfig('access_file');
+			$destination = getAdminAccessFile();
 			_exportFile($repo, $path, $rev, $destination);
 		}
 	}	
@@ -114,11 +112,10 @@ function getRealPath($hostFolder) {
 	$known_folders = array(
 		'admin' => getAdminFolder(),
 		'html' => getDocumentRoot(),
-		'backup' => getConfig('backup_folder'),
-		'repo' => getConfig('local_path')
+		'repo' => getAdminLocalRepo()
 	);
 	if (!array_key_exists($hostFolder, $known_folders)) {
-		trigger_error("Export target '$target' is not recognized.", E_USER_ERROR);
+		trigger_error("Export target '$hostFolder' is not recognized.", E_USER_ERROR);
 		exit; // for the sake of security
 	}
 	return $known_folders[$hostFolder];
