@@ -5,10 +5,13 @@
  * This operation is done by post-commit hooks,
  * and users that have got a new password by email and want to revert the reset.
  * 
+ * Requires administrator access, @see admin-authorize.inc.php
+ * 
  * @package account
  */
 
 require( '../../account/account.inc.php' );
+require('../../admin-authorize.inc.php'); // uses svnlook locally and updates local user file
 require( ReposWeb.'conf/Report.class.php' );
 
 $r = new Report('Update user login');

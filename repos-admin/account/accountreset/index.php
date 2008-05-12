@@ -5,10 +5,13 @@
  * Currently quire same as the users/reset/ but in repos 1.1 this was the admin
  * function and users/reset/ was lostpassword for everyone.
  * 
+ * Requires administrator access, @see admin-authorize.inc.php
+ * 
  * @package admin
  */
 
 require( '../../account/account.inc.php' );
+require('../../admin-authorize.inc.php'); // updates local user file
 
 Validation::expect('username');
 adminResetPassword($_GET['username']);
