@@ -1,6 +1,7 @@
 <?php
 // adapt the standard selenium test runner to our application
-$s = '/repos/lib/selenium/core/';
+define('ReposWebapp','/repos-web/');
+$s = ReposWebapp.'lib/selenium/core/';
 
 // do <?php echo $s; X> for each src="
 

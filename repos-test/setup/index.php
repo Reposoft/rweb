@@ -53,7 +53,7 @@ if (array_key_exists('root', $_GET)) {
 }
 
 // go to start page for repository browser tests
-header("Location: /testrepo/test/trunk/");
-
+//header("Location: /testrepo/test/trunk/");
+header("Location: /data/test/trunk/");
 
 ?>

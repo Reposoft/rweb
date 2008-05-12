@@ -12,9 +12,11 @@
  * 
  * @package test
  */
-require(dirname(dirname(dirname(__FILE__))).'/conf/Command.class.php');
-require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
-require(dirname(dirname(dirname(__FILE__))).'/open/ServiceRequest.class.php');
+require(dirname(dirname(__FILE__)).'/reposweb.inc.php');
+define('ReposAdmin','/repos-admin/');
+require(ReposWeb.'conf/Command.class.php');
+require(ReposWeb.'conf/Report.class.php');
+require(ReposWeb.'open/ServiceRequest.class.php');
 $report = new Report('set up test repository');
 
 // name the temp dir where the repository will be. This dir will be removed recursively.
@@ -101,7 +103,7 @@ function setup_getTempWorkingCopy() {
 
 function setup_createHooks() {
 	global $report;
-	$url = 'admin/hooks/';
+	$url = ReposAdmin.'config/hooks/';
 	$report->info('Hook setup requires repos-admin component, service: '.$url);
 	$params = array('create' => 'post-commit');
 	$s = new ServiceRequest($url, $params, false);

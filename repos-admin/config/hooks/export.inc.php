@@ -13,7 +13,7 @@ define('ACL_FILE', 'administration/repos.accs');
 require_once( dirname(dirname(dirname(__FILE__))).'/reposweb.inc.php' );
 require( ReposWeb.'open/ServiceRequest.class.php' );
 
-define('REPOS_ADMIN_SERVICE_REVERT', getHost().'/repos-admin/users/accountrevert/'); // There is no abstraction for repos-admin path yet
+define('REPOS_ADMIN_SERVICE_REVERT', getHost().'/repos-admin/account/accountrevert/'); // There is no abstraction for repos-admin path yet
 
 function exportUsers($rev, $repo, $changes) {
 	// TODO fix so that this is the last operaton, or redirect user to login page after commit

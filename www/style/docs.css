@@ -40,13 +40,11 @@ table.rows td {
 /* testwalk */
 body.passed {
 	background-color: transparent;
-	border-left: 3px solid #ddffbb;
-	border-right: 3px solid #ddffbb;
+	border-bottom: 10px solid #ccff99;
 }
 body.failed {
 	background-color: transparent;
-	border-left: 3px solid #ffddbb;
-	border-right: 3px solid #ffddbb;
+	border-bottom: 10px solid #ffcc99;
 }
 .testsummary {
 	padding: 0.4em;
