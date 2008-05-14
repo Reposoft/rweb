@@ -343,4 +343,20 @@
 	<target name="text.xslt" depends="test.xslt.compile">
 	</target>
 	
+	<target name="parameters" description="find repos parameters in php source files">
+		<concat destfile="${target.folder}/parameters.txt">
+			<fileset dir="www">
+				<include name="**/*.php"/>
+				<exclude name="**/*.test.php"/>
+				<exclude name="**/*.testi.php"/>
+			</fileset>
+			<filterchain>
+				<linecontains>
+					<!-- <contains value="$_SERVER["/> -->
+					<contains value="$_SERVER['REPOS_"/>
+				</linecontains>
+			</filterchain>
+		</concat>
+	</target>
+	
 </project>
