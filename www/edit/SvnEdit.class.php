@@ -60,6 +60,7 @@ class NewFilenameRule extends Rule {
 	function validate($fieldvalue) {
 		$target = $this->_getPath($fieldvalue);
 		$s = new SvnOpenFile($target);
+		if ($s->getStatus()==500) trigger_error("Validation aborted because of repository error (status 500) at $target", E_USER_ERROR);
 		if ($s->getStatus()==404) {
 			$this->_value = $fieldvalue;
 			return;

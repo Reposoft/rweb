@@ -28,6 +28,7 @@ function svnCreateConfigDir($path) {
 	$c->exec();
 	// custom config, assuming the format of the default svn config file
 	$reposconfig = dirname(dirname(__FILE__)).'/conf/svn-client-config';
+	if (!file_exists($path)) mkdir($path); // FIXME added mkdir because svn 1.5rc5 does not create config dir on svn --config-dir /x/y info
 	copy($reposconfig, $path.'config');
 }
 

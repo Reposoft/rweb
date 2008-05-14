@@ -241,6 +241,12 @@ class System {
 	 * @return Command line command, false if the command shouldn't be needed in current OS. Error message starting with 'Error:' if command name is not supported.
 	 */
 	function getCommand($command) {
+		$key = 'REPOS_EXECUTABLE_'.strtoupper($command);
+		// customized
+		if (isset($_SERVER[$key])) {
+			return $_SERVER[$key];
+		}
+		// defaults
 		if ($c = System::_getSpecialCommand($command)) {
 			return $c;
 		}

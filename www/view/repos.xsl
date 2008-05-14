@@ -20,6 +20,17 @@
 	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- optional startpage to enable home button and special link for project, empty to disable -->
 	<xsl:param name="startpage"><xsl:value-of select="$web"/>open/start/</xsl:param>
+	<!-- link up, empty to hide up button -->
+	<xsl:param name="parentlink">../</xsl:param>
+	<!-- not good for SvnParentPath: <xsl:param name="parentlink"> 
+		<xsl:choose>
+			<xsl:when test="/svn/index/updir">../</xsl:when>
+			<xsl:when test="boolean($startpage)">
+				<xsl:value-of select="$startpage"/>
+			</xsl:when>
+			<xsl:otherwise></xsl:otherwise>
+		</xsl:choose>
+	 </xsl:param> -->
 	<!-- the recognized top level folders for project tools separated by slash -->
 	<xsl:param name="tools">/trunk/branches/tags/tasks/templates/messages/calendar/administration/</xsl:param>
 	<!-- document skeleton -->
@@ -71,15 +82,6 @@
 		</xsl:param>
 		<xsl:call-template name="commandbar">
 			<xsl:with-param name="target" select="$folder"/>
-			<xsl:with-param name="parentlink">
-				<xsl:choose>
-					<xsl:when test="/svn/index/updir">../</xsl:when>
-					<xsl:when test="boolean($startpage)">
-						<xsl:value-of select="$startpage"/>
-					</xsl:when>
-					<xsl:otherwise></xsl:otherwise>
-				</xsl:choose>
-			</xsl:with-param>
 		</xsl:call-template>
 		<xsl:call-template name="contents">
 			<xsl:with-param name="folder" select="$folder"/>
@@ -90,7 +92,6 @@
 	</xsl:template>
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
-		<xsl:param name="parentlink"/>
 		<xsl:param name="target"/>
 		<div id="commandbar">
 		<div class="right">
