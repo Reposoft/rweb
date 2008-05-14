@@ -1,16 +1,16 @@
 
 (function() {
 
-var isnew = true;
+var v; // true for upload new version, false for add file
 
 Repos.service('edit/upload/', function() {
-	var isadd = !$('#name').is(':disabled');
+	v = $('#name').is(':disabled');
 	// copy filename from selected local file
 	$('#userfile').change(function() {
 		autoFillFilename($(this).val());	
 	});
 	// enable simplified form
-	if (!isadd) hideBased();
+	if (v) hideBased();
 	// enable progress screen (not bar) at upload
 	enableSubmitOverlay();
 });
@@ -21,7 +21,7 @@ function autoFillFilename(path) {
 	if (0 >= pos) return;
 	var filename = path.substring(pos + 1);
 	
-	if (isnew) {
+	if (!v) {
 		$('#name').val(filename);
 		return;
 	}
@@ -69,7 +69,9 @@ function hideBased() {
 	simple.css('margin-bottom','.2em');
 		
 	var val = $("input[name='fromrev']:checked", org).val();
-	if (val != 'HEAD') enableBased();
+	if (val && val != 'HEAD') enableBased();
+	// make sure something is always selected, even after back button click (sometimes in firefox fromrev has no value)
+	if (!val) $('#fromrevHEAD').attr('checked','checked');
 
 	check.change(function() {
 		if ($(this).is(':checked')) {

@@ -217,17 +217,16 @@ class System {
 	// ------ functions to keep scripts portable -----
 
 	/**
-	 * Converts a string from internal encoding to the encoding used for file names and commands.
+	 * Converts a string from internal encoding to the encoding used for php file functions that don't support multibyte
+	 * For Command arguments, see the encoding in that class.
 	 * @param String $string the value with internal encoding (same as no encoding)
-	 * @return String the same value encoded as the OS expects it on the command line
-	 * @deprecated use System::toShellEncoding
+	 * @return String the same value encoded as the OS expects it in php filesystem functions like unlink and file_exists
 	 */
 	function toShellEncoding($string) {
-		// looks like setlocale works on windos nowadays (see Command class) //if (System::isWindows()) {
-		// 	return mb_convert_encoding($string, 'ISO-8859-1', 'UTF-8');
-		if (isset($_SERVER['ReposShellEncoding'])) {
-			return mb_convert_encoding($string, $_SERVER['ReposShellEncoding'], 'UTF-8');
-		}
+		$to = false; // default: no special encoding
+		if (System::isWindows()) $to = 'ISO-8859-1'; // assume something
+		if (isset($_SERVER['REPOS_SHELL_ENCODING'])) $to = $_SERVER['REPOS_SHELL_ENCODING'];
+		if ($to) $string = mb_convert_encoding($string, $to, 'UTF-8');
 		return $string;
 	}
 

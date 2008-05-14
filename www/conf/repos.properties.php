@@ -213,10 +213,11 @@ function getDocrootDefault() {
  * The locale to be used in command executions on non-Windows servers.
  * Repos uses this only for encoding texts, not date or time formatting.
  * There is usually no reason to change the default.
+ * @see System::toShellEncoding for php file encoding (which doesn't always follow system locale)
  * @return String Locale for PHP setlocale() and Linux "locale" command.
  */
 function getLocale() {
-	if (isset($_SERVER['ReposLocale'])) return $_SERVER['ReposLocale'];
+	if (isset($_SERVER['REPOS_LOCALE'])) return $_SERVER['REPOS_LOCALE'];
 	return getLocaleDefault();
 }
 
