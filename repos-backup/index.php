@@ -11,11 +11,11 @@ require( ReposWeb.'conf/Presentation.class.php' );
 //$report = new Report('System status');
 
 $repourl = getRepository();
-$repodir = getConfig('local_path');
+$repodir = getBackupRepo();
 if ( !isRepository($repodir) )
 	trigger_error("Repository '$repourl' is not available locally. If the folder is empty, try <a href=\"create/\">create</a>.", E_USER_ERROR);
 $headrev = getHeadRevisionNumber($repodir);
-$backupdir = getConfig( 'backup_folder' );
+$backupdir = getBackupFolder();
 $backupprefix = getPrefix( $repodir );
 $backup = getCurrentBackup($backupdir, $backupprefix);
 

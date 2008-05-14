@@ -10,7 +10,7 @@ require('../repos-backup.inc.php' );
 require( ReposWeb.'/conf/Report.class.php' );
 $report = new Report();
 
-$repo = getConfig('local_path');
+$repo = getBackupRepo();
 
 $command = new Command('svnadmin');
 $command->addArgOption('verify', $repo);

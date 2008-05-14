@@ -183,12 +183,30 @@ function getAccessFile() {
  * @return String absolute path to the standard Repos AccessFile location, which may exist
  */
 function getAccessFileDefault() {
-	$docroot = dirname(dirname(dirname(__FILE__)));
+	
+	return dirname(dirname(getDocroot())).'/admin/repos-access';
+}
+
+/**
+ * @return docroot folder with trailing slash
+ */
+function getDocroot() {
+	return getDocrootDefault();
+}
+
+/**
+ * Guess docroot from DOCUMENT_ROOT server variable, with fallback to repos-web's parent folder
+ * @return docroot folder with trailing slash
+ */
+function getDocrootDefault() {
+	// __FILE__ is no good because it resolves symlinks //$docroot = dirname(dirname(dirname(__FILE__)));
+	$docroot = false;
 	if (isset($_SERVER['DOCUMENT_ROOT'])) {
 		$d = $_SERVER['DOCUMENT_ROOT']; // docroot may be incorrect, for exaple with VirtualDocumentRoot
 		if (strncmp($_SERVER['SCRIPT_FILENAME'], $d, strlen($d))==0) $docroot = $d;
 	}
-	return dirname($docroot).'/admin/repos-access';
+	if ($docroot && is_dir($docroot)) return $docroot.'/';
+	trigger_error('Could not resolve document root. Server parameter must be set to avoid this default.', E_USER_ERROR);
 }
 
 /**

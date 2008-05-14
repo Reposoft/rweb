@@ -11,7 +11,7 @@ require('../repos-backup.inc.php' );
 require( ReposWeb.'/conf/Report.class.php' );
 $report = new Report();
 
-$backupFolder = getConfig('backup_folder');
+$backupFolder = getBackupFolder();
 
 verifyMD5($backupFolder);
 

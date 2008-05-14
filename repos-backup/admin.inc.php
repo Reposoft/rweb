@@ -16,57 +16,29 @@ define('TEMP_FILE_EXTENSION', '.temporary');
 // --- configuration ---
 
 /**
- * Config value getter
- * @param key the configuration value key, as in repos.properties
- * @return the value corresponding to the specified key. False if key not defined.
- */ 
-function getConfig($key) {
-	// temporary selfcheck
-	if ($key=='repo_url') trigger_error("Use getRepository to get the URL");
-	if ($key=='repos_web') trigger_error("Use getWebapp to get web root URL");
-	//
-	return _getConfig($key);
-}
-
-function _getConfig($key) {
-	static $_repos_config = null;
-	if ($_repos_config == null) {
-		$_repos_config = parse_ini_file( _getPropertiesFile(), false );
-	}
-	if (isset($_repos_config[$key]))
-		return ($_repos_config[$key] );
-	return false;
+ * Default config for repos-backup is derived from a common parent folder.
+ * Anyone who doesn't like this default can set explicit config values like Folder and Repo.
+ * @return default folder containing backup structure
+ */
+function getBackupHostDefaultRoot() {
+	return getParent(getDocrootDefault());
 }
 
 /**
- * Resolves document folder, primarily from DOCUMENT_ROOT server variable,
- * secondarily as the parent folder of this file's folder.
+ * @return the configured folder for backup data, with fallback to a repos default
  */
-function getDocumentRoot() {
-	$docroot = dirname(dirname(__FILE__));
-	if (isset($_SERVER['DOCUMENT_ROOT'])) $docroot = $_SERVER['DOCUMENT_ROOT'];
-	return $docroot.'/';
+function getBackupFolder() {
+	if (isset($_SERVER['REPOS_BACKUP_FOLDER'])) return $_SERVER['REPOS_BACKUP_FOLDER'];
+	return getBackupHostDefaultRoot().'backup/';
 }
 
 /**
- * Gets the path to the host administration folder.
- * @return the path to read configuratio file from, usually the same as admin_folder (from properties file in that folder)
+ * @return path to the local subversion repository folder for svnadmin access, with trailing slash
  */
-function getAdminFolder() {
-	return getAdminFolderDefault();
-}
-
-function getAdminFolderDefault() {
-	return getParent(getDocumentRoot()).'admin/';
-}
-
-function _getPropertiesFile() {
-	$propertiesFile =  getAdminFolder().'repos.properties';
-	if (!file_exists($propertiesFile)) {
-		trigger_error("Repos configuration file $propertiesFile not found.");
-		exit;
-	}
-	return $propertiesFile;
+function getBackupRepo() {
+	// not depending on repos-admin //return getAdminLocalRepo();
+	if (isset($_SERVER['REPOS_LOCAL_REPO'])) return $_SERVER['REPOS_LOCAL_REPO'];
+	return getBackupHostDefaultRoot().'repo/';
 }
 
 // --- output functions ---

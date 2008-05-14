@@ -9,7 +9,7 @@ require('../repos-backup.inc.php');
 require( ReposWeb.'conf/Report.class.php' );
 $report = new Report();
 
-$repodir = getConfig('local_path');
+$repodir = getBackupRepo();
 if ( !is_dir($repodir)) {
 	fatal("The configured repository folder '$repodir' does not exist.");
 }
@@ -22,7 +22,7 @@ if ( !isRepository($repodir) ) {
 $headrev = getHeadRevisionNumber($repodir);
 debug("Repository '$repodir' contains revisions up to $headrev");
 
-$backupdir = getConfig( 'backup_folder' );
+$backupdir = getBackupFolder();
 $backupprefix = getPrefix( $repodir );
 $backup = getCurrentBackup($backupdir, $backupprefix);
 $files = count($backup);

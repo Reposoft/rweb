@@ -58,7 +58,9 @@ function getAdminUserFile() {
 function getAdminAccessFile() {
 	// TODO
 	// old config structure
-	return _getConfig('admin_folder')._getConfig('access_file');
+	//return _getConfig('admin_folder')._getConfig('access_file');
+	// from repos-web
+	return getAccessFile();
 }
 
 /**

@@ -14,10 +14,10 @@ $report->info("Run backup script, creating gzip archives of all revisions up to 
 $report->debug("Locking the repository until backup is complete."); // TODO do we?
 
 //$repourl = getRepository();
-$repodir = getConfig('local_path');
+$repodir = getBackupRepo();
 if ( !isRepository($repodir) )
 	fatal("repository '$repodir' is not available locally");
-$backupdir = getConfig( 'backup_folder' );
+$backupdir = getBackupFolder();
 $backupprefix = getPrefix( $repodir );
 
 dump($repodir, $backupdir, $backupprefix);

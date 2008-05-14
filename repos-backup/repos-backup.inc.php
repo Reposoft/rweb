@@ -14,6 +14,10 @@ define('BACKUP_MAX_TIME', 30*60); // maximum time in seconds for dumping and pac
 // don't stop in the middle of backup operations
 ignore_user_abort(true);
 
+/**
+ * Get some place to temporarily read and write backup data to
+ * @return path
+ */
 function getNewBackupTempFile() {
 	return System::getTempFile('backup'); // TODO prefix?
 }
