@@ -313,12 +313,30 @@ class SvnEdit {
 	 * @return int the exit code
 	 */
 	function exec($description=null) {
+		$result = $this->execNoDisplay();
+		$this->_show($description);
+		return $result;
+	}
+	
+	/**
+	 * Like exec but does not display result if command fails, good for fallback situations.
+	 * @return int the exic code
+	 */
+	function execNoDisplayOnError() {
+		$result = $this->execNoDisplay();
+		if ($result == 0) $this->_show($description);
+		return $result;
+	}
+	
+	/**
+	 * Executes command without displaying results in Presentation.
+	 * @return int the exit code
+	 */
+	function execNoDisplay() {
 		if ($this->commitWithMessage) { // commands expecting a message need this even if it is empty
 			$this->command->addArgOption('-m', $this->message);
 		}
-		$result = $this->command->exec();
-		$this->_show($description);
-		return $result;
+		return $this->command->exec();
 	}
 	
 	/**
