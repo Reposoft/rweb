@@ -143,6 +143,9 @@ function verifyLogin($targetUrl) {
 	// accepted codes
 	if ($s==200) return true;
 	if ($s==401 || $s==403) return false;
+	// note that 500 is returned if SvnParentPath is used and the target points to a nonexisting repository
+	if ($s==500 && $targetUrl == getRepository().'/'.$user.'/') return false; // make default login urls work with SvnParentPath
+	// unknown status, probably 500
 	trigger_error("The target URL '$targetUrl' can not be used to validate login. Returned HTTP status code '$s'.", E_USER_ERROR);
 	return false;
 }

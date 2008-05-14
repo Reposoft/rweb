@@ -199,14 +199,13 @@ function getDocroot() {
  * @return docroot folder with trailing slash
  */
 function getDocrootDefault() {
-	// __FILE__ is no good because it resolves symlinks //$docroot = dirname(dirname(dirname(__FILE__)));
-	$docroot = false;
+	$docroot = dirname(dirname(dirname(__FILE__)));
 	if (isset($_SERVER['DOCUMENT_ROOT'])) {
 		$d = $_SERVER['DOCUMENT_ROOT']; // docroot may be incorrect, for exaple with VirtualDocumentRoot
 		if (strncmp($_SERVER['SCRIPT_FILENAME'], $d, strlen($d))==0) $docroot = $d;
 	}
 	if ($docroot && is_dir($docroot)) return $docroot.'/';
-	trigger_error('Could not resolve document root. Server parameter must be set to avoid this default.', E_USER_ERROR);
+	trigger_error('Could not resolve document root. Server parameters must be set.', E_USER_ERROR);
 }
 
 /**

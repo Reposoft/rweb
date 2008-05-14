@@ -9,10 +9,14 @@
  * for logout to be effective with all URLs on the server.
  */
 
-$_webapp = '/repos-web/';
-if (isset($_SERVER['ReposWebapp'])) $_webapp = $_SERVER['ReposWebapp'];
-if (substr_count($_webapp, '/') > 3) $_webapp = substr($_webapp, strpos($_webapp,'/',8)); 
-$_path = dirname(__FILE__) . $_webapp;
+$_path = dirname(dirname(dirname(__FILE__))).'/';
+$_webapp = isset($_SERVER['ReposWebapp']) ? $_SERVER['ReposWebapp'] : '/repos-web/';
+
+// this file might have been copied to server root
+if (!file_exists($_path.'conf/repos.properties.php')) {
+	if (substr_count($_webapp, '/') > 3) $_webapp = substr($_webapp, strpos($_webapp,'/',8)); // remove http://hostname/
+	$_path = dirname(__FILE__) . $_webapp;
+}
 
 // disable caching in this page because it redirects
 header('Cache-Control: no-cache');
