@@ -23,7 +23,7 @@ $backupprefix = getPrefix( $repodir );
 dump($repodir, $backupdir, $backupprefix);
 $report->debug("Backup operation completed.");
 
-$report->info('<p><a id="back" href="../" class="action">return to admin page</a></p>');
+$report->info('<p><a id="back" href="../" class="action">return to backup status page</a></p>');
 
 $report->display();
 

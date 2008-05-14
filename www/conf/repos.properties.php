@@ -175,7 +175,9 @@ function getWebappUrl() {
 function getAccessFile() {
 	if (isset($_SERVER['ReposAccessFile'])) return $_SERVER['ReposAccessFile'];
 	$default = getAccessFileDefault();
+	// validating default here, maybe not very smart
 	if (!is_file($default)) return false;
+	return $default;
 }
 
 /**
@@ -183,8 +185,7 @@ function getAccessFile() {
  * @return String absolute path to the standard Repos AccessFile location, which may exist
  */
 function getAccessFileDefault() {
-	
-	return dirname(dirname(getDocroot())).'/admin/repos-access';
+	return getParent(getDocroot()).'admin/repos-access';
 }
 
 /**
