@@ -2,13 +2,11 @@
 /**
  * Defines the dependency to Repos Web-
  * 
- * Sets a constant ReposWeb with the webapp path.
- * Sets a constant ReposWebapp with the webapp url.
+ * Sets a constant ReposWeb with the root path for includes
  * 
  * @package admin
  */
 
-define('ReposWeb', $_SERVER["DOCUMENT_ROOT"].'/repos-web/');
-define('ReposWebapp', '/repos-web/');
+define('ReposWeb', isset($_SERVER['REPOS_LOCAL_WEB']) ? $_SERVER['REPOS_LOCAL_WEB'] : $_SERVER["DOCUMENT_ROOT"].'/repos-web/');
 
 ?>

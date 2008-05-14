@@ -28,8 +28,10 @@ function getBackupHostDefaultRoot() {
  * @return the configured folder for backup data, with fallback to a repos default
  */
 function getBackupFolder() {
-	if (isset($_SERVER['REPOS_BACKUP_FOLDER'])) return $_SERVER['REPOS_BACKUP_FOLDER'];
-	return getBackupHostDefaultRoot().'backup/';
+	$b = getBackupHostDefaultRoot().'backup/';
+	if (isset($_SERVER['REPOS_BACKUP_FOLDER'])) $b = $_SERVER['REPOS_BACKUP_FOLDER'];
+	if ( !preg_match("/[\\/\\\\]$/", $b) ) trigger_error('Backup folder path must end with slash', E_USER_ERROR);
+	return $b;
 }
 
 /**

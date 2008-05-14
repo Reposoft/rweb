@@ -255,9 +255,9 @@ class System {
 			case 'svn':
 				return ( $w ? 'svn' : USRBIN . 'svn' );
 			case 'svnlook':
-				return ( $w ? 'svnlook' : USRBIN . 'svnlook' );
+				return ( getParent(System::getCommand('svn')) . 'svnlook' );
 			case 'svnadmin':
-				return ( $w ? 'svnadmin' : USRBIN . 'svnadmin' );
+				return ( getParent(System::getCommand('svn')) . 'svnadmin' );
 			case 'gzip':
 				return ( $w ? false : USRBIN . 'gzip' );
 			case 'gunzip':

@@ -13,7 +13,7 @@ require( ReposWeb.'conf/Presentation.class.php' );
 $repourl = getRepository();
 $repodir = getBackupRepo();
 if ( !isRepository($repodir) )
-	trigger_error("Repository '$repourl' is not available locally. If the folder is empty, try <a href=\"create/\">create</a>.", E_USER_ERROR);
+	trigger_error("Repository '$repourl' is not available locally. A path that points to a subversion repository folder should be configured.", E_USER_ERROR);
 $headrev = getHeadRevisionNumber($repodir);
 $backupdir = getBackupFolder();
 $backupprefix = getPrefix( $repodir );
