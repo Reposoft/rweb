@@ -73,6 +73,7 @@ function getLog($targetUrl) {
 }
 	
 function showUploadForm() {
+	header("Cache-Control: no-cache, must-revalidate"); // the history part of the form must be updated after successful upload to avoid strange conflicts - disable caching until we have a better solution
 	$template = Presentation::getInstance();
 	$target = getTarget();
 	$targeturl = getTargetUrl();
@@ -133,19 +134,35 @@ function processNewVersion($upload) {
 	$dir = System::getTempFolder('upload');
 	$repoFolder = getParent($upload->getTargetUrl());
 	// check out existing files of the given revision
+	$filename = $upload->getName();
 	$fromrev = $upload->getFromrev();
+	// try svn 1.5 sparse checkout, with fallback to non-recursive complete checkout
 	$checkout = new SvnEdit('checkout');
-	$checkout->addArgOption('--non-recursive');
+	$checkout->addArgOption('--depth', 'empty', false);
 	if ($fromrev) $checkout->addArgOption('-r', $fromrev, false);
 	$checkout->addArgUrl($repoFolder);
 	$checkout->addArgPath($dir);
 	$checkout->exec();
-	if (!$checkout->isSuccessful()) {
-		$presentation->showError("Could not read current version of file "
-			.$upload->getTargetUrl().". ".$checkout->getResult());
+	if ($checkout->isSuccessful()) {
+		// fetch only the file we're editing
+		$update = new SvnOpen('update'); //hidden
+		if ($fromrev) $checkout->addArgOption('-r', $fromrev, false); // repeat the revision number from sparce checkout
+		$update->addArgPath($dir . $filename);
+		if ($update->exec()) trigger_error('Failed to get target file from repository.', E_USER_ERROR);
+	} else {
+		// fallback: svn 1.4 and older
+		$checkout = new SvnEdit('checkout');
+		$checkout->addArgOption('--non-recursive');
+		if ($fromrev) $checkout->addArgOption('-r', $fromrev, false);
+		$checkout->addArgUrl($repoFolder);
+		$checkout->addArgPath($dir);
+		$checkout->exec();
+		if (!$checkout->isSuccessful()) {
+			$presentation->showError("Could not read current version of file "
+				.$upload->getTargetUrl().". ".$checkout->getResult());
+		}
 	}
 	// upload file to working copy
-	$filename = $upload->getName();
 	$updatefile = toPath($dir . $filename);	// file_exists needs the argument in ISO-8859-1 format 
 	if(!file_exists($dir.'/.svn') || !file_exists($updatefile)) {
 		$presentation->showError('Can not read current version of the file named "'
@@ -169,7 +186,7 @@ function processNewVersion($upload) {
 	// create the commit command
 	$commit = new SvnEdit('commit');
 	$commit->setMessage($upload->getMessage());
-	$commit->addArgPath($dir);
+	$commit->addArgPath($dir . $filename); // only commit the file
 	// locks are not set in this working copy -- reclaim
 	if ($upload->isLocked()) {
 		$unlock = new SvnOpen('unlock');
