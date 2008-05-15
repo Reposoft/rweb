@@ -20,7 +20,9 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 	$file = new SvnOpenFile($target);
 	$template->assign_by_ref('file', $file);
 	$template->assign('target', $target);
-	$template->assign('folder', getParent($target));
+	$folder = getParent($target);
+	if (!$folder) $folder = '/'; // getParent resturns empty string for file in root
+	$template->assign('folder', $folder);
 	$template->assign('oldname', getPathName($target));
 	$template->assign('repository', getRepository());
 	$template->display();
