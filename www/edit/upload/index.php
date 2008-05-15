@@ -170,7 +170,13 @@ function processNewVersion($upload) {
 		$presentation->showError('Can not read current version of the file named "'
 			.$filename.'" from repository path "'.$repoFolder.'"');
 	}
-	
+	// check for versioned symbolic links, so we don't overwrite local file.
+	// with sparse checkout for svn 1.5 this solves the security issue with versioned symlinks
+	if (is_link($updatefile)) {
+		$presentation->showError('The file "'.$filename.'" is a symbolic link (svn:special).'
+			.' It can not be overwritten with uploaded contents.');
+	}
+	// delete current working copy file and get the uploaded file instead
 	System::deleteFile($updatefile);
 	$upload->processSubmit($updatefile);
 	if(!file_exists($updatefile)) {
