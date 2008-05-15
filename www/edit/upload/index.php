@@ -145,10 +145,10 @@ function processNewVersion($upload) {
 	$checkout->execNoDisplayOnError();
 	if ($checkout->isSuccessful()) {
 		// fetch only the file we're editing
-		$update = new SvnEdit('update');
-		if ($fromrev) $checkout->addArgOption('-r', $fromrev, false); // repeat the revision number from sparce checkout
-		$update->addArgPath($dir . $filename);
-		if ($update->execNoDisplay()) trigger_error('Failed to get target file from repository.', E_USER_ERROR);
+		$sparse = new SvnEdit('update');
+		if ($fromrev) $sparse->addArgOption('-r', $fromrev, false); // repeat the revision number from sparse checkout
+		$sparse->addArgPath($dir . $filename);
+		if ($sparse->execNoDisplay()) trigger_error('Failed to get target file from repository.', E_USER_ERROR);
 	} else {
 		// fallback: svn 1.4 and older
 		$checkout = new SvnEdit('checkout');

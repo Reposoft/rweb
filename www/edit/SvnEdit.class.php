@@ -322,7 +322,7 @@ class SvnEdit {
 	 * Like exec but does not display result if command fails, good for fallback situations.
 	 * @return int the exic code
 	 */
-	function execNoDisplayOnError() {
+	function execNoDisplayOnError($description=null) {
 		$result = $this->execNoDisplay();
 		if ($result == 0) $this->_show($description);
 		return $result;
