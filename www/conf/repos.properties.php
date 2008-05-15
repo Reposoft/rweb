@@ -47,11 +47,11 @@ function reportError($n, $message, $file, $line) {
 function reportErrorText($n, $message, $trace) {
 	// validation error
 	if ($n==E_USER_WARNING) {
-		header('HTTP/1.1 412 Precondition Failed');
+		if (!headers_sent()) header('HTTP/1.1 412 Precondition Failed');
 		echo("Validation error: $message\n<pre>\n$trace</pre>\n\n");
 	} else {
 		// other errors
-		if ($n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error');
+		if (!headers_sent() && $n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error');
 		echo("Runtime error (type $n): $message\n<pre>\n$trace</pre>\n\n");
 	}
 	// TODO there is some weirdness with notices and Presentation->enableRedirectWaiting

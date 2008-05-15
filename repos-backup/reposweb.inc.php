@@ -7,6 +7,8 @@
  * @package admin
  */
 
-define('ReposWeb', isset($_SERVER['REPOS_LOCAL_WEB']) ? $_SERVER['REPOS_LOCAL_WEB'] : $_SERVER["DOCUMENT_ROOT"].'/repos-web/');
+define('ReposWeb', isset($_SERVER['REPOS_LOCAL_WEB']) ?
+	$_SERVER['REPOS_LOCAL_WEB']
+	: dirname(dirname(__FILE__)).'/repos-web/');
 
 ?>

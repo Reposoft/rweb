@@ -13,6 +13,19 @@ require( ReposWeb.'conf/Command.class.php' );
 
 define('TEMP_FILE_EXTENSION', '.temporary');
 
+// --- command line parameters ---
+if (isset($argc) && $argc>1) {
+	function repos_config_arg($a) {
+		if (preg_match('/^--([a-z-]+)=(.*)$/', $a, $m)) {
+			$conf = 'REPOS_'.strtoupper(strtr($m[1],'-','_'));
+			$_SERVER[$conf] = $m[2];
+		} else {
+			trigger_error('Unrecognized repos argument '.$a, E_USER_ERROR);
+		}
+	}
+	for ($i=1; $i<count($argv); $i++) repos_config_arg($argv[$i]);
+}
+
 // --- configuration ---
 
 /**
@@ -28,8 +41,10 @@ function getBackupHostDefaultRoot() {
  * @return the configured folder for backup data, with fallback to a repos default
  */
 function getBackupFolder() {
-	$b = getBackupHostDefaultRoot().'backup/';
-	if (isset($_SERVER['REPOS_BACKUP_FOLDER'])) $b = $_SERVER['REPOS_BACKUP_FOLDER'];
+	$b = isset($_SERVER['REPOS_BACKUP_FOLDER'])
+		? $_SERVER['REPOS_BACKUP_FOLDER']
+		: getBackupHostDefaultRoot().'backup/';
+	//validate
 	if ( !preg_match("/[\\/\\\\]$/", $b) ) trigger_error('Backup folder path must end with slash', E_USER_ERROR);
 	return $b;
 }
@@ -39,8 +54,10 @@ function getBackupFolder() {
  */
 function getBackupRepo() {
 	// not depending on repos-admin //return getAdminLocalRepo();
-	if (isset($_SERVER['REPOS_LOCAL_REPO'])) return $_SERVER['REPOS_LOCAL_REPO'];
-	return getBackupHostDefaultRoot().'repo/';
+	$r = isset($_SERVER['REPOS_LOCAL_REPO'])
+		? $_SERVER['REPOS_LOCAL_REPO']
+		: getBackupHostDefaultRoot().'repo/';
+	return $r;
 }
 
 // --- output functions ---
@@ -73,6 +90,11 @@ function html_end($code = 0) {global $report; $report->display(); }
 function isRepository($localPath) {
 	if (!file_exists($localPath))
 		return false;
+	// performance is not an issue here so we have time to validate the command first
+	$command = new Command('svnlook');
+	$command->addArg('--version');
+	if ($command->exec()) trigger_error('The svnlook executable is not properly configured', E_USER_ERROR);
+	// check repository
 	$command = new Command('svnlook');
 	$command->addArgOption('uuid', $localPath);
 	if ($command->exec()) return false;

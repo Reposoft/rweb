@@ -5,7 +5,7 @@
  * @package admin
  */
 
-require('../repos-backup.inc.php');
+require( dirname(dirname(__FILE__)).'/repos-backup.inc.php' ); // relative to file for command line
 
 require( ReposWeb.'/conf/Report.class.php' );
 $report = new Report();
