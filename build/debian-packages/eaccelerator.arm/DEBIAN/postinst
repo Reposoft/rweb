@@ -6,31 +6,33 @@ if [ "$1" != "configure" ]; then
  exit 0
 fi
 
+ETCPHP="/etc/php5"
+
 for SAPI in apache cgi cli apache2
 do
- if [ -f /etc/php4/$SAPI/php.ini ]
+ if [ -f $ETCPHP/$SAPI/php.ini ]
  then
-  if grep -q eaccelerator.so /etc/php4/$SAPI/php.ini
+  if grep -q eaccelerator.so $ETCPHP/$SAPI/php.ini
   then
-   echo "Not updating /etc/php4/$SAPI/php.ini, 'eaccelerator.so' alredy exists"
+   echo "Not updating $ETCPHP/$SAPI/php.ini, 'eaccelerator.so' alredy exists"
   else
-   echo "Adding eaccelerator extension and configuration to /etc/php4/$SAPI/php.ini"
-   echo "" >> /etc/php4/$SAPI/php.ini
-   echo "; --- eaccelerator ----" >> /etc/php4/$SAPI/php.ini
-   echo "extension=\"eaccelerator.so\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.shm_size=\"16\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.cache_dir=\"/tmp/eaccelerator\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.enable=\"1\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.optimizer=\"1\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.check_mtime=\"1\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.debug=\"0\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.filter=\"\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.shm_max=\"0\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.shm_ttl=\"0\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.shm_prune_period=\"0\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.shm_only=\"0\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.compress=\"1\"" >> /etc/php4/$SAPI/php.ini
-   echo "eaccelerator.compress_level=\"9\"" >> /etc/php4/$SAPI/php.ini
+   echo "Adding eaccelerator extension and configuration to $ETCPHP/$SAPI/php.ini"
+   echo "" >> $ETCPHP/$SAPI/php.ini
+   echo "; --- eaccelerator ----" >> $ETCPHP/$SAPI/php.ini
+   echo "extension=\"eaccelerator.so\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.shm_size=\"16\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.cache_dir=\"/tmp/eaccelerator\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.enable=\"1\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.optimizer=\"1\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.check_mtime=\"1\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.debug=\"0\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.filter=\"\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.shm_max=\"0\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.shm_ttl=\"0\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.shm_prune_period=\"0\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.shm_only=\"0\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.compress=\"1\"" >> $ETCPHP/$SAPI/php.ini
+   echo "eaccelerator.compress_level=\"9\"" >> $ETCPHP/$SAPI/php.ini
   fi
  fi
 done
