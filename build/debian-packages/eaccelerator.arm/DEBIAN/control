@@ -4,6 +4,6 @@ Section: web
 Priority: optional
 Architecture: arm
 Essential: no
-Depends: php5 (= 5:5.2.0-8)
+Depends: php5 (= 5:5.2.0-8+etch11)
 Maintainer: Staffan Olsson <solsson@gmail.com>
 Description: eAccelerator for a specific php build, compiled on bubba with /usr/bin/phpize, ./configure --enable-eaccelerator=shared --with-php-config=/usr/bin/php-config --with-eaccelerator-userid=www-data
