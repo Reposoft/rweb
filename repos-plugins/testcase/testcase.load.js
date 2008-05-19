@@ -6,16 +6,16 @@ Repos.service('index/', function() {
 
 	var m = window.location.hash.match(/repostestcase-(R\d+)-(\d+)/);
 	if (!m) return;
+	var section = m[1];
+	var reqnum = m[2];
 
 	// depending on the readme plugin
 	$('.contentcommands').append(
 		'<a class="action" href="'+Repos.url+'edit/text/'
-		+'?suggestname='+''+'.testcase.txt'
+		+'?suggestname='+(reqnum ? reqnum : '')+'.testcase.txt'
 		+'&target='+encodeURIComponent(Repos.getTarget())+'">'
 		+'Add&nbsp;testcase</a>');
 
-	var section = m[1];
-	var reqnum = m[2];
 	$('.index a.folder').each(function() {
 		$f = $(this);
 		var id = $f.parent().attr('id'); 
