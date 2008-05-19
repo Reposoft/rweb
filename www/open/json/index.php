@@ -47,7 +47,7 @@ if (!isset($_GET['selector'])) {
 $settings = '{';
 foreach ($_GET as $k => $v) {
 	// '#' is a tricky character in urls, and selector will never be a tag name, so assume word means ID
-	if ($k=='selector' && preg_match('/^[\w\d-]+$/',$v)) $v = '#'.$v;
+	//if ($k=='selector' && preg_match('/^[\w\d-]+$/',$v)) $v = '#'.$v;
 	$settings .= "'$k':'$v',";
 }
 $settings = substr($settings,0,strlen($settings)-1).'}';
@@ -66,7 +66,8 @@ $script = '
 	};
 
 	jQ().ready( function() {
-		var p = jQ(s.selector);
+		var p = document.getElementById(s.selector) || jQ(s.selector); p = $(p); //jQuery cant handle ":" in id
+		if (!p.is("ul,ol")) p = $("<ul/>").appendTo(p);
 		for (var f in list) {
 			var d = list[f];
 			var e = jQ("<li/>").addClass(d.kind=="dir"?"folder":d.kind).appendTo(p);

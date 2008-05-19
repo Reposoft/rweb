@@ -6,10 +6,11 @@
 <script type="text/javascript">
 // mock
 Repos = {};
-Repos.webapp = '/repos-web/';
+Repos.url = '/repos-web/';
 Repos.service = function(s, f) {
 	if (s=='index/') $().ready(f);
 };
+Repos.getTarget = function() { return '/demoproject/trunk/test/'; };
 
 // end mock
 </script>
@@ -22,17 +23,19 @@ Repos.service = function(s, f) {
 <p class="contentcommands">
 </p>
 
-<p>
-<a href="1-something.testcase.txt">1-something.testcase.txt</a>
-</p>
+<div>
+<a class="file" href="1-something.testcase.txt">1-something.testcase.txt</a>
+<ul class="actions">
+</ul>
+</div>
 
 <p>
-<a href="#repostestcase-R4-123">specify test case</a>
+<a href="#repostestcase-R4-123">specify test case (requires refresh)</a>
 </p>
 
 <ul class="index">
 <li id="r1"><a class="folder" href="R1%20First%20requirements%20section">R1 First requirements section</a></li>
-<li id="r2"><a class="folder" href="http://localhost/data/repo/test/">R4 Another requirements section</a></li>
+<li id="r2"><a class="folder" href="R4%20Usability">R4 Usability</a></li>
 </ul>
 
 </body>
