@@ -16,7 +16,7 @@ Repos.service('index/', function() {
 	var w = Repos.getWebapp();
 	var t = encodeURI(Repos.getTarget());
 	var a = $('<a/>').attr('id','repos-edit').addClass('action')
-		.attr('href', w+'edit/file/?target='+t+'&suggestname=repos.txt').html('add&nbsp;text');
+		.attr('href', w+'edit/text/?target='+t+'&suggestname=repos.txt').html('add&nbsp;text');
 	// currently no other plugin uses contentcommands
 	$('<div/>').addClass('contentcommands').append(a).insertAfter('#path');
 } );
