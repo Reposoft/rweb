@@ -8,10 +8,11 @@ require('../../conf/Presentation.class.php');
 require('../SvnEdit.class.php');
 
 Validation::expect('target','name','value');
-svnPropset(getTarget,
-	$_REQUEST['name'], $_REQUEST['value']);
+svnPropset(getTarget(),
+	$_REQUEST['name'], $_REQUEST['value'],
+	isset($_REQUEST['message']) ? $_REQUEST['message'] : null);
 
-function svnPropset($target, $name, $value) {
+function svnPropset($target, $name, $value, $message=null) {
 	$presentation = Presentation::getInstance();
 	$workingCopy = System::getTempFolder('propset');
 	$targetFolder = getParent(getTargetUrl());
@@ -30,7 +31,8 @@ function svnPropset($target, $name, $value) {
 	// commit
 	$commit = new SvnEdit('commit');
 	$commit->addArgPath($workingCopy);
-	$commit->addArgOption('-m',"Set property '$name' to '$value'");
+	if ($message==null) $message = "Set property '$name' to '$value'";
+	$commit->addArgOption('-m',$message);
 	$commit->exec();
 	// clean up
 	System::deleteFolder($workingCopy);

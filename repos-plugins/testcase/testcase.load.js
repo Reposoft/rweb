@@ -73,14 +73,19 @@ function reposTestcaseReport(status) {
 	var propertyname = "repos:testresult";
 	$.ajax({type: "POST",
 		url: Repos.url+"edit/propset/",
-		data: {name: propertyname,
+		data: {
+			serv: 'json',
+			target: Repos.getTarget(),
+			name: propertyname,
 			value: status,
 			message: status + (m ? ' - '+m : '')
 		},
 		success: function(msg) {
-			$('body').say("Test result saved as svn property repos:testresult");
+			//$('body').say("Test result saved as svn property repos:testresult");
 			if ($('#usertext').val() != reposTestcaseOriginalContents) {
-				$('body').say("Testcase contents has changed. You should Save the form.");
+				alert("Test status saved. \nTestcase contents has changed. You should Save the form.");
+			} else {
+				alert("Test status saved as svn property "+propertyname);
 			}
 		},
 		error: function() {
@@ -114,12 +119,12 @@ Repos.service('edit/text/', function() {
 
 	reposTestcaseOriginalContents = $('#usertext').val();
 
-	$('<button type="submit">FAIL test and save</button>')
-		.click(reposTestcaseFail).insertAfter('#submit')
-		.css('background-color','#ffddbb'); // same as in repos unit tests
-	$('<button type="submit">PASS test and save</button>')
-		.click(reposTestcasePass).insertAfter('#submit')
+	$('<button type="submit">PASS test</button>')
+		.click(reposTestcasePass).insertBefore('#submit')
 		.css('background-color','#ddffbb'); // same as in repos unit tests
+	$('<button type="submit">FAIL test</button>')
+		.click(reposTestcaseFail).insertBefore('#submit')
+		.css('background-color','#ffddbb'); // same as in repos unit tests
 
 });
 
