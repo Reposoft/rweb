@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET' || $_SERVER['REQUEST_METHOD']=='HEAD') {
 	$target = getTarget();
 	$targeturl = getTargetUrl();
 	if (isFile($target)) {
+		header("Cache-Control: no-cache, must-revalidate"); // the hidden field fromrev MUST be updated after successful POST to avoid strange conflicts - disable caching until we have a better solution
 		$template->assign('isfile', true);
 		$file = new SvnOpenFile($target);
 		$template->assign_by_ref('file', $file);

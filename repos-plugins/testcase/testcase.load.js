@@ -2,21 +2,10 @@
  * Repos test management (c) 2008 Staffan Olsson
  */
 
-reposTestcase = function() {
-	$t = $(this);
-	$a = $('<a class="action" href="'+Repos.url+'edit/text/?target='+Repos.getTarget()+$t.attr('href')+'">run&nbsp;test</a>')
-		.prepend('<img src="'+Repos.url+'style/commands/16x16/repostest.png" border="0"/>');
-	$('<li/>').append($a).appendTo($('.actions', $t.parent()));
-	//$t.css('background-image', Repos.url+'style/commands/16x16/repostest.png');
-};
-
 Repos.service('index/', function() {
 
 	var m = window.location.hash.match(/repostestcase-(R\d+)-(\d+)/);
 	if (!m) return;
-
-	// visual
-	$("a.file[href$='.testcase.txt']").each(reposTestcase);
 
 	// depending on the readme plugin
 	$('.contentcommands').append(
@@ -31,27 +20,60 @@ Repos.service('index/', function() {
 		$f = $(this);
 		var id = $f.parent().attr('id'); 
 		// only process folder matching test section
-		if (!(new RegExp("^"+section+"[\\s_%]")).test($f.text())) return;
+		if (!new RegExp("^"+section+"[\\s_%]").test($f.text())) return;
 		// forward hash to that folder
 		var href = $f.attr('href');
 		$f.attr('href', href+window.location.hash);			
-		// try to list contents
-		//alert(Repos.url+'open/json/?selector='+id+'&target='+Repos.getTarget()+href);
-		$.ajax({
-			dataType: 'script',
-			url: Repos.url+'open/json/?selector='+id+'&target='+Repos.getTarget()+href,
-			success: function() {
-			},
-			error: function(req, textStatus, errorThrown) {
-				alert('testcase script error');
-			}
-		});
+		// automatically go to the folder
+		window.location.href = $f.attr('href');
 	});
+	
+	// inside section folder
+	var correctSection = new RegExp("/"+section+"[\\s_%]").test(Repos.getTarget());
+	
+	// visual
+	$("a.file[href$='.testcase.txt']").each(function() {
+		$t = $(this);
+		$a = $('<a class="action" href="'+Repos.url+'edit/text/?target='+Repos.getTarget()+$t.attr('href')+'">run&nbsp;test</a>')
+			.prepend('<img src="'+Repos.url+'style/commands/16x16/repostest.png" border="0"/>');
+		if (correctSection) {
+			if (new RegExp('^0*'+reqnum+"[\\D]").test($(this).text())) {
+				$a.css('background-color','#ff9');
+				$(this).css('background-color','#ff9');
+			}
+		}
+		$('<li/>').append($a).appendTo($('.actions', $t.parent()));		
+	});	
 	
 });
 
+function reposTestcasePass() {
+	return reposTestcaseReport('pass');
+}
+function reposTestcaseFail() {
+	return reposTestcaseReport('fail');
+}
+function reposTestcaseReport(status) {
+	var oldlog = $('#message').val();
+	$('#message').val(status);
+	var m = prompt('Optional: describe result of execution','');
+	if (m === null) return false; // cancel
+	var timestamp = new Date().toISO8601String(); // depends on repos internal dateformat code
+	var text = timestamp + ' ' + status;
+	if (m) text += ' (' + m + ')';
+	$('#usertext').val(
+		$('#usertext').val()+"\n"+text+"\n"
+	);
+	return true;
+}
+
 Repos.service('edit/text/', function() {
-	if (/\.testcase\.txt$/.test(Repos.target)) {
-		alert('pass/fail');
+	if (Repos.isTarget('**/*.testcase.txt')) {
+		$('<button type="submit">FAIL test and save</button>')
+			.click(reposTestcaseFail).insertAfter('#submit');
+		$('<button type="submit">PASS test and save</button>')
+			.click(reposTestcasePass).insertAfter('#submit');
 	}
 });
+
+
