@@ -47,7 +47,8 @@ if (!isset($_GET['selector'])) {
 $settings = '{';
 foreach ($_GET as $k => $v) {
 	// '#' is a tricky character in urls, and selector will never be a tag name, so assume word means ID
-	//if ($k=='selector' && preg_match('/^[\w\d-]+$/',$v)) $v = '#'.$v;
+	// note that jQuery can not handle colon (":") in id selector, although it is a vaild id character
+	if ($k=='selector' && preg_match('/^[\w\d-]+$/',$v)) $v = '#'.$v;
 	$settings .= "'$k':'$v',";
 }
 $settings = substr($settings,0,strlen($settings)-1).'}';
@@ -66,7 +67,7 @@ $script = '
 	};
 
 	jQ().ready( function() {
-		var p = document.getElementById(s.selector) || jQ(s.selector); p = $(p); //jQuery cant handle ":" in id
+		var p = jQ(s.selector);
 		if (!p.is("ul,ol")) p = $("<ul/>").appendTo(p);
 		for (var f in list) {
 			var d = list[f];
