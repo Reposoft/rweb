@@ -91,8 +91,11 @@ define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST, u
  * @return Root url of the repository for this request, no tailing slash. Not encoded.
  */
 function getRepository() {
+	// requet parameter
 	if (isset($_REQUEST[REPO_KEY])) return $_REQUEST[REPO_KEY];
-	if (isset($_SERVER['ReposRepo'])) return $_SERVER['ReposRepo'];
+	// server configuration
+	if (isset($_SERVER['REPOS_REPO'])) return $_SERVER['REPOS_REPO'];
+	if (isset($_SERVER['ReposRepo'])) return $_SERVER['ReposRepo']; // TODO deprecated, remove
 	return getRepositoryDefault();
 }
 
@@ -144,7 +147,8 @@ function asLink($url) {
  * @return String absolute url to the repos web application URL, ending with slash
  */
 function getWebapp() {
-	if (isset($_SERVER['ReposWebapp'])) return $_SERVER['ReposWebapp'];
+	if (isset($_SERVER['REPOS_WEBAPP'])) return $_SERVER['REPOS_WEBAPP'];
+	if (isset($_SERVER['ReposWebapp'])) return $_SERVER['ReposWebapp']; // TODO deprecated, remove 
 	return getWebappDefault();
 }
 
@@ -173,7 +177,8 @@ function getWebappUrl() {
  * @return String absolute path to the ACL
  */
 function getAccessFile() {
-	if (isset($_SERVER['ReposAccessFile'])) return $_SERVER['ReposAccessFile'];
+	if (isset($_SERVER['REPOS_ACCESS_FILE'])) return $_SERVER['REPOS_ACCESS_FILE'];
+	if (isset($_SERVER['ReposAccessFile'])) return $_SERVER['ReposAccessFile']; // TODO deprecated, remove
 	$default = getAccessFileDefault();
 	// validating default here, maybe not very smart
 	if (!is_file($default)) return false;
