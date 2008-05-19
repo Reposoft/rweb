@@ -34,7 +34,7 @@ you can always refer to the file as it is now.</p>
 <p>The file is <strong>locked</strong> by you. We recommend you <a href="upload/?target={=$target}">Upload new version</a>.</p>
 {=elseif $file,typeDiscrete eq 'text' and $file,size lt 10240}
 <p>This is a small text file. We recommend you 
-<a href="file/?target={=$target}">Edit in Repos</a>.</p>
+<a href="text/?target={=$target}">Edit in Repos</a>.</p>
 {=elseif $file,typeDiscrete eq 'text'}
 <p>This is a text file. There is no need to lock it.
 <a href="../open/download/?target={=$target}&rev={=$rev}">Download</a>,
@@ -66,7 +66,7 @@ This means that only one user at a time can work with the file.
 <p>
 If you have already downloaded and edited the file, upload your changes to create a new verison.
 </p>
-<h3><a id="editfile" href="file/?target={=$target}">Edit in Repos</a></h3>
+<h3><a id="editfile" href="text/?target={=$target}">Edit in Repos</a></h3>
 <p>
 Plaintext file formats can be conveniently edited in your browser.
 No locking is needed, and when you save it creates a new version of the file.
