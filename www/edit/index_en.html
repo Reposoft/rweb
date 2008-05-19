@@ -32,10 +32,10 @@ you can always refer to the file as it is now.</p>
 <h2>Edit</h2>
 {=if $file,isLockedByThisUser}
 <p>The file is <strong>locked</strong> by you. We recommend you <a href="upload/?target={=$target}">Upload new version</a>.</p>
-{=elseif $file,typeDiscrete eq 'text' and $file,size lt 10240}
-<p>This is a small text file. We recommend you 
+{=elseif $file,isPlaintext and $file,size lt 102400}
+<p>This is a text file that's not too big. We recommend you 
 <a href="text/?target={=$target}">Edit in Repos</a>.</p>
-{=elseif $file,typeDiscrete eq 'text'}
+{=elseif $file,isPlaintext}
 <p>This is a text file. There is no need to lock it.
 <a href="../open/download/?target={=$target}&rev={=$rev}">Download</a>,
 edit on your computer, then <a href="upload/?target={=$target}">upload new version</a>.</p>
