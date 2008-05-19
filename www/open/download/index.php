@@ -26,7 +26,9 @@ if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 }
 
 header('Content-Type: '.$file->getType());
-header('Content-Length: '.$file->getSize());
+// FIXME this size will be incorrect, and truncate the file, 
+// if there are svn:keyword insertions //header('Content-Length: '.$file->getSize());
+// (SvnOpenFile uses 'svn cat'; passthru or incremental sending is needed to save memory)
 header('Content-Disposition: attachment; filename="'.$name.'"');
 
 $file->sendInline();

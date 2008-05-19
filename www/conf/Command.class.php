@@ -48,9 +48,6 @@ if (!function_exists('_command_passthru')) {
 	function _command_passthru($cmd) {
 		_command_env();
 		passthru($cmd, $returnvalue);
-		// There has been rare cases when not all contents were sent to the client
-		// We have no content-length header here so we'd better flush immediately
-		@ob_flush();flush(); // with php you never know
 		return $returnvalue;
 	}
 }
