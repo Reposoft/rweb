@@ -10,7 +10,7 @@
  */
 
 $_path = dirname(dirname(dirname(__FILE__))).'/';
-$_webapp = isset($_SERVER['ReposWebapp']) ? $_SERVER['ReposWebapp'] : '/repos-web/';
+$_webapp = isset($_SERVER['REPOS_WEBAPP']) ? $_SERVER['REPOS_WEBAPP'] : '/repos-web/';
 
 // this file might have been copied to server root
 if (!file_exists($_path.'conf/repos.properties.php')) {

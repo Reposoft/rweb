@@ -35,14 +35,14 @@ $repo = testCheck($host.'repo/');
 $admin = testCheck($host.'admin/',false);
 $backup = testCheck($host.'backup/');
 // for post-commit export in testrpo:
-testCheck($host.'html/home/');
+// not mandatory anymore //testCheck($host.'html/home/');
 
 $userfile = testCheck($admin.'repos-users');
 $aclfile = testCheck($admin.'repos-access');
 // --------------------------------------------
 
-$allow = isset($_SERVER['ReposTestAllowReset']) && $_SERVER['ReposTestAllowReser']='on';
-if ($allow != 1) $report->fatal('Not allowed to reset this repository. Set server environment "ReposTestAllowReset" to "on".');
+$allow = isset($_SERVER['REPOS_TEST_ALLOW_RESET']) && $_SERVER['REPOS_TEST_ALLOW_RESET']='on';
+if ($allow != 1) $report->fatal('Not allowed to reset this repository. Set server environment "REPOS_TEST_ALLOW_RESET" to "on".');
 
 // the apache config file to include from the subversion host
 // generated config does not contain a VirtualHost directive,
