@@ -11,7 +11,7 @@
 error_reporting(E_ALL);
 
 // allow other scripts to detect that they are running from a test case
-define('TEST',$_SERVER['SCRIPT_FILENAME']);
+define('REPOSTEST',$_SERVER['SCRIPT_FILENAME']);
 
 // ----- string helper functions that should have been in php, now copied from repos.properties -----
 if (!function_exists('strBegins')) { function strBegins($str, $sub) { return (substr($str, 0, strlen($sub)) === $sub); } }

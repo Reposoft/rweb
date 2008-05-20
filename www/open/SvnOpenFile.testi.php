@@ -5,6 +5,8 @@
 require("SvnOpenFile.class.php");
 // import testing framework, see http://www.lastcraft.com/simple_test.php
 require("../lib/simpletest/setup.php");
+// rely on SvnEdit for setup in some test cases
+require("../edit/SvnEdit.class.php");
 
 class TestIntegrationSvnOpenFile extends UnitTestCase {
 	
@@ -144,11 +146,37 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 	}
 	
 	function testFileNoExtensionRev() {
-		// TODO should really delete the file in head to get a good test
 		$revWhenAdded = 6; 
 		$file = new SvnOpenFile("/test/trunk/TESTACCOUNT", $revWhenAdded);
 		$this->assertEqual(200, $file->getStatus());
 		$this->assertEqual('file', $file->getKind());
+	}
+
+	function testFileNoExtensionRevNotInHead() {
+		// setup
+		$target = '/test/trunk/TESTTEMP';
+		$url = getRepository().$target;
+		$tmp = System::getTempFile('test','');
+		$import = new SvnEdit('import');
+		$import->addArgFilename($tmp);
+		$import->addArgUrl($url);
+		if ($import->execNoDisplay()) {
+			$this->fail('Failed to import test file');
+			$this->sendMessage($import->getOutput());
+			return;
+		}
+		
+		$revWhenAdded = $import->getCommittedRevision();
+		$delete = new SvnEdit('rm');
+		$delete->setMessage('testFileNoExtensionRevNotInHead');
+		$delete->addArgUrl($url);
+		$this->assertFalse($delete->exec(),'delete test file');
+		// test
+		$file = new SvnOpenFile($target, $revWhenAdded);
+		$this->assertEqual(200, $file->getStatus());
+		$this->assertEqual('file', $file->getKind());
+		// cleanp
+		System::deleteFile($tmp);
 	}
 	
 	function testFolder() {
@@ -235,6 +263,31 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertTrue($file->isFolder());
 		$this->assertFalse($file->isLatestRevision());
 		$this->assertFalse($file->isReadableInHead());
+	}
+	
+	function testFolderDeletedDotInName() {
+		// setup
+		$target = '/test/trunk/branch1.2';
+		$url = getRepository().$target;
+		$tmp = System::getTempFolder('test','');
+		$import = new SvnEdit('import');
+		$import->addArgFilename($tmp);
+		$import->addArgUrl($url);
+		if ($import->execNoDisplay()) {
+			$this->fail('Failed to import test folder');
+			$this->sendMessage($import->getOutput());
+		}
+		$revWhenAdded = $import->getCommittedRevision();
+		$delete = new SvnEdit('rm');
+		$delete->setMessage('testFolderDeletedDotInName');
+		$delete->addArgUrl($url);
+		$this->assertFalse($delete->exec(),'delete folder file');
+		// test
+		$file = new SvnOpenFile($target, $revWhenAdded);
+		$this->assertEqual(200, $file->getStatus());
+		$this->assertEqual('folder', $file->getKind());
+		// cleanp
+		System::deleteFolder($tmp);
 	}
 	
 	function testFileInRenamedFolderNotEdited() {

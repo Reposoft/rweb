@@ -173,7 +173,7 @@ function displayEdit(&$presentation, $nextUrl=null, $headline=null, $summary=nul
  * 
  * Server errors should still be reported with trigger_error('...', E_USER_ERROR);
  * 
- * This method is for the special case where the 
+ * This method is for the special case where the svn operation returns no message.
  *
  * @param Smarty $presentation
  * @param String $errorMessage
@@ -219,8 +219,8 @@ class SvnEdit {
 	 */
 	var $command;
 	
-	var $message; // not escaped
-	var $commitWithMessage = false; // allow for example checkout to run without a -m
+	var $message = ''; // not escaped
+	var $commitWithMessage; // allow for example checkout to run without a -m
 
 	/**
 	 * Constructor
@@ -229,6 +229,8 @@ class SvnEdit {
 	 */
 	function SvnEdit($subversionOperation) {
 		$this->command = new SvnOpen($subversionOperation);
+		// default commit message setting, can always be enabled with setMessage
+		$this->commitWithMessage = ($subversionOperation=='commit' || $subversionOperation=='import');
 	}
 	
 	/**
@@ -407,8 +409,10 @@ class SvnEdit {
 			$smartyTemplate->append('log', $logEntry);
 			// overwrite existing values, so that the last command decides the result
 			$smartyTemplate->assign($logEntry);	
+		} else if (defined('REPOSTEST')) {
+			// running test case, not nessecary to display edit output
 		} else {
-			trigger_error('Failed to display edit output', E_USER_ERROR);
+			trigger_error('Can not display edit output', E_USER_NOTICE);
 		}
 	}
 
