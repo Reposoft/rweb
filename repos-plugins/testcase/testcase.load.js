@@ -22,10 +22,15 @@ Repos.service('index/', function() {
 		// only process folder matching test section
 		if (!new RegExp("^"+section+"[\\s_%]").test($f.text())) return;
 		// forward hash to that folder
-		var href = $f.attr('href');
-		$f.attr('href', href+window.location.hash);			
-		// automatically go to the folder
-		window.location.href = $f.attr('href');
+		var href = $f[0].href || $f.attr('href');
+		var sectionhref = href + window.location.hash;
+		// either update urls //$f.attr('href', href+window.location.hash);
+		// or automatically go to the folder
+		//alert('Redirecting to '+sectionhref);
+		// This is needed so Amir's IE6 doesn't create an endless loop of new windows
+		window.setTimeout(function() {
+			window.location.href = sectionhref;
+		}, 500);
 	});
 	
 	// inside section folder
