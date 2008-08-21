@@ -42,3 +42,5 @@ if (file_exists(dirname(__FILE__).'/home/index.html')) {
 } else {
 	header("Location: ".$_webapp);
 }
+
+?>
