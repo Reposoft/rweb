@@ -8,13 +8,16 @@ use warnings FATAL => 'all';
 
 # ISSUE: Looks like /usr/lib/perl5/Apache/TestHarnessPHP.pm
 # is hard coded to use Test::Harness 2.38, not newer like 3.13
-
-use base 'Apache::TestRunPHP';
+# Also TestRunPHP uses its own hardcoded php.ini which we can't use
+# TODO: Try to solve the TestHarnessPHP issue and use our own PHPRC env to 
+# choose php.ini per host (see TestRunPHP source), and then use TestRunPHP again.
+#use base 'Apache::TestRunPHP';
+use base 'Apache::TestRunPerl';
 
 my $T = main::->new;
 
 # This project has no Module::Build script so we'll generate TEST from here
-Apache::TestRunPHP->generate_script();
+Apache::TestRunPerl->generate_script();
 
 $T->run(@ARGV);
 

@@ -1,0 +1,12 @@
+
+# Additional php config
+# TODO use auto_prepend_file instead to be able to append to existing include_path
+php_value include_path ".:@ServerRoot@/php-include"
+
+# Shared configuration for all hosts
+<Directory @ServerRoot@/..>
+	
+	DirectoryIndex index.html index.php
+	
+</Directory>
+
