@@ -14,6 +14,7 @@ echo *
 echo Verify that repos admin command line interface is available:
 php %ADMINPATH%commands.php
 echo *
+echo The following is executed from the host folder:
 echo *
 echo Sample usage:
 echo *
@@ -21,7 +22,7 @@ echo php %ADMINPATH%commands.php dump
 echo *
 echo php %ADMINPATH%commands.php dump %TESTREPO% C:\srv\backup
 echo *
-echo php %ADMINPATH%commands.php verify %TESTREPO%
+echo php html/repos-backup/verify/index.php --backup-folder=backup/
 echo *
 echo php %ADMINPATH%commands.php verifyMD5 C:\srv\backup
 echo *

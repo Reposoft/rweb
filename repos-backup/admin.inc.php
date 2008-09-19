@@ -54,6 +54,9 @@ function getBackupFolder() {
  */
 function getBackupRepo() {
 	// not depending on repos-admin //return getAdminLocalRepo();
+	// new name
+	if (isset($_SERVER['REPOS_REPO_FOLDER'])) return $_SERVER['REPOS_REPO_FOLDER'];
+	// old name
 	$r = isset($_SERVER['REPOS_LOCAL_REPO'])
 		? $_SERVER['REPOS_LOCAL_REPO']
 		: getBackupHostDefaultRoot().'repo/';
