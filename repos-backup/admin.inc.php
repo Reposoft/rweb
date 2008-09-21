@@ -136,9 +136,17 @@ function getCurrentBackup($backupPath, $fileprefix) {
 
 /**
  * Creates a filename prefix for bakup files
- * @return valid filename representing an absolute repository path, ending with "-"
+ * @return REPOS_BACKUP_PREFIX environment variable or default prefix based on repository path
  */
 function getPrefix($repository) {
+	if (isset($_SERVER['REPOS_BACKUP_PREFIX'])) return $_SERVER['REPOS_BACKUP_PREFIX'];
+	return getPrefixDefault($repository);
+}
+
+/**
+ * @return default prefix representing absolute repository path, ending with "-"
+ */
+function getPrefixDefault($repository) {
 	if ( ':'==substr($repository,1,1) )
 		$repository = substr($repository,2);
 	// return ( "svnrepo" . rtrim(strtr($repository, "/\\", "--"),"-") . "-" );

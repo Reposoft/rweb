@@ -51,6 +51,7 @@ function isTextmode() {
 }
 
 /**
+ * The Report can quite easily print everything as TAP comments and the summary as ok/not ok
  * @flag expected TAP (Test Anything Protocol) output
  */
 function isTAP() {
@@ -166,6 +167,7 @@ class Report {
 		$this->_lineend();
 	}
 	
+	// I'm not sure right now what the difference between this and outputline is supposed to be
 	function _testoutput($class, $message) {
 		$s='i';
 		if ($class=='passed') $s='=';
@@ -174,12 +176,15 @@ class Report {
 		if ($class=='warning') $s='?';
 		if ($class=='error') $s='!';
 		if ($this->offline) {
+			if (isTAP()) $s = '# '.$s;
 			$this->_output(" $s $message");
+			$this->_lineend();
 		} else if ($this->test) {
 			$message = str_replace('"','&quot;', $message);
 			$this->_output("<acronym class=\"$class\" title=\"");
 			$this->_output($message);
 			$this->_output("\">$s</acronym>");
+			$this->_lineend();
 		} else {
 			$this->_outputline($class, " $s $message");
 		}
@@ -256,8 +261,6 @@ class Report {
 	// prepare for line contents
 	function _linestart($class='normal') {
 		if ($this->offline) {
-			if (isTAP() && $class=='ok') $this->_print("ok ");
-			if (isTAP() && $class=='error') $this->_print("not ok ");
 			if (isTAP()) $this->_print("# ");
 			if ($class=='ok') $this->_print("== ");
 			if ($class=='warning') $this->_print("?? ");
