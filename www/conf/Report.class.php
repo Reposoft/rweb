@@ -51,6 +51,14 @@ function isTextmode() {
 }
 
 /**
+ * @flag expected TAP (Test Anything Protocol) output
+ */
+function isTAP() {
+	// Currently all text output implies TAP format
+	return isTextmode() && true;
+}
+
+/**
  * @return newline character for this OS, or always \n if output is web
  */
 function getNewline() {
@@ -248,6 +256,9 @@ class Report {
 	// prepare for line contents
 	function _linestart($class='normal') {
 		if ($this->offline) {
+			if (isTAP() && $class=='ok') $this->_print("ok ");
+			if (isTAP() && $class=='error') $this->_print("not ok ");
+			if (isTAP()) $this->_print("# ");
 			if ($class=='ok') $this->_print("== ");
 			if ($class=='warning') $this->_print("?? ");
 			if ($class=='error') $this->_print("!! ");	
@@ -366,6 +377,7 @@ class Report {
 		$class = $this->hasErrors() ? "failed" : "passed";
 		if ($this->offline) {
 			$this->info("-----------------------------");
+			if (isTAP()) $this->_print($this->hasErrors() ? "not ok " : "ok ");
 			$this->info("$this->no passed, $this->nf failed, $this->ne exceptions in $time seconds");
 		} else {
 			$this->_output("<div class=\"testsummary $class\">");
