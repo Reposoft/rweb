@@ -176,8 +176,7 @@ class Report {
 		if ($class=='warning') $s='?';
 		if ($class=='error') $s='!';
 		if ($this->offline) {
-			if (isTAP()) $s = '# '.$s;
-			$this->_output(" $s $message");
+			$this->_output(isTAP() ? "# $s $message" : " $s $message");
 			$this->_lineend();
 		} else if ($this->test) {
 			$message = str_replace('"','&quot;', $message);
