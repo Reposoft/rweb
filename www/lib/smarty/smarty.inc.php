@@ -10,7 +10,7 @@ require(dirname(__FILE__).'/libs/Smarty.class.php');
 define('LEFT_DELIMITER', '{=');
 define('RIGHT_DELIMITER', '}');
 
-// the four cache subdirectories must be writable by webserver
+// default cache folder inside application folder, which might be used instead of temp location (see below)
 define('CACHE_DIR', dirname(__FILE__).'/cache/');
 
 // in production cache may be precompiled, which is then flagged using a file
@@ -32,6 +32,7 @@ define('TEMPLATE_BASE', strtr(dirname(dirname(dirname(__FILE__))), '\\', '/'));
  */
 function smarty_getInstance() {
 	$s = new Smarty();
+	$cache = CACHE_DIR;
 
 	if (defined('TEMPLATE_CACHING') && TEMPLATE_CACHING===false) {
 		$s->caching = false;
@@ -41,13 +42,18 @@ function smarty_getInstance() {
 		$s->compile_check = false;
 		$s->caching = false; // never cache the result of templates	
 	} else {
-		$s->caching = false;	
+		$s->caching = false;
+		// Do not cache inside application folder
+		if (!is_writable($cache)) { // should we check this? isn't temp always preferrable unless precompiled/production templates?
+			$cache = System::getApplicationTemp('smarty-cache');
+			if (!file_exists($cache.'templates_c/')) mkdir($cache.'templates_c/');
+		}
 	}
 	
-	$s->template_dir = CACHE_DIR.'templates/';
-	$s->compile_dir = CACHE_DIR.'templates_c/';
-	$s->config_dir = CACHE_DIR.'configs/';
-	$s->cache_dir = CACHE_DIR.'cache/';
+	$s->template_dir = $cache.'templates/';
+	$s->compile_dir = $cache.'templates_c/';
+	$s->config_dir = $cache.'configs/';
+	$s->cache_dir = $cache.'cache/';
 
 	$s->left_delimiter = LEFT_DELIMITER;
 	$s->right_delimiter = RIGHT_DELIMITER;
