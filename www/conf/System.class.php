@@ -12,8 +12,6 @@
  * @package conf
  */
 
-define('USRBIN', '/usr/bin/');
-
 // ----- string helper functions that should have been in php -----
 function strBegins($str, $sub) { return (substr($str, 0, strlen($sub)) === $sub); }
 function strEnds($str, $sub) { return (substr($str, strlen($str) - strlen($sub)) === $sub); }
@@ -252,25 +250,25 @@ class System {
 		$w = System::isWindows();
 		switch($command) {
 			case 'svn':
-				return ( $w ? 'svn' : USRBIN . 'svn' );
+				return ( 'svn' );
 			case 'svnlook':
 				return ( getParent(System::getCommand('svn')) . 'svnlook' );
 			case 'svnadmin':
 				return ( getParent(System::getCommand('svn')) . 'svnadmin' );
 			case 'gzip':
-				return ( $w ? false : USRBIN . 'gzip' );
+				return ( 'gzip' );
 			case 'gunzip':
-				return ( $w ? false : USRBIN . 'gunzip' );
+				return ( 'gunzip' );
 			case 'whoami':
 				return 'whoami';
 			case 'env':
-				return ( $w ? 'set' : USRBIN . 'env' );
+				return ( $w ? 'set' : 'env' );
 			case 'du':
-				return ( $w ? false : USRBIN . 'du' );
+				return ( $w ? false : 'du' );
 			case 'curl':
-				return ( $w ? 'curl' : USRBIN . 'curl' );
+				return ( 'curl' );
 			case 'wget':
-				return ( $w ? 'wget' : USRBIN . 'wget' );
+				return ( 'wget' );
 		}
 		return false;
 	}
@@ -295,8 +293,8 @@ class System {
 				$try[] = dirname($docroot)."\\apache\\bin\\htpasswd.exe";
 				$try[] = dirname($docroot)."\\bin\\htpasswd.exe";
 			} else {
-				$try[] = USRBIN . 'htpasswd';
-				$try[] = USRBIN . 'htpasswd2';
+				$try[] = '/usr/bin/htpasswd';
+				$try[] = '/usr/bin/htpasswd2';
 			}
 			// test absolute paths
 			foreach ($try as $p) {
