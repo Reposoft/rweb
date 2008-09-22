@@ -13,11 +13,18 @@
  * @package test
  */
 require(dirname(dirname(__FILE__)).'/reposweb.inc.php');
-define('ReposAdmin','/repos-admin/');
+define('ReposAdminUrl','/repos-admin/'); // used for hooks creation
 require(ReposWeb.'conf/Command.class.php');
 require(ReposWeb.'conf/Report.class.php');
 require(ReposWeb.'open/ServiceRequest.class.php');
 $report = new Report('set up test repository');
+
+/**
+ * @return true if running in web server, false if in CLI
+ */
+function isOnline() {
+	return isset($_SERVER['SERVER_NAME']);
+}
 
 // name the temp dir where the repository will be. This dir will be removed recursively.
 //$test_repository_folder="test.repos.se";
@@ -103,9 +110,16 @@ function setup_getTempWorkingCopy() {
 
 function setup_createHooks() {
 	global $report;
-	$url = ReposAdmin.'config/hooks/';
-	$report->info('Hook setup requires repos-admin component, service: '.$url);
 	$params = array('create' => 'post-commit');
+	// Currently hooks can not be created offline without major changes to repos-admin
+	// Since major changes to the entire hooks concept is more important, we'll wait
+	if (!isOnline()) {
+		$report->info('Running offline so hooks will not be created');
+		return;
+	}
+	// online
+	$url = ReposAdminUrl.'config/hooks/';
+	$report->info('Hook setup requires repos-admin component, service: '.$url);
 	$s = new ServiceRequest($url, $params, false);
 	$s->setResponseType(SERVICE_TYPE_TEXT);
 	$s->exec();

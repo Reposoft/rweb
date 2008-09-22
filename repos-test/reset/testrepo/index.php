@@ -62,7 +62,7 @@ if (!file_exists("$exportContents.svn")) { //setup_svn("info \"$exportContents\"
 setup_svn("add {$wc}*");
 
 // demo repository should not contain unsupported tools
-if (strContains(getRepository(), 'demo')) {
+if (isOnline() && strContains(getRepository(), 'demo')) {
 	setup_svn("revert {$wc}demoproject/branches/");
 	setup_svn("revert {$wc}demoproject/tags/");
 	setup_svn("revert {$wc}demoproject/tasks/");
@@ -112,7 +112,7 @@ setup_svn('commit --username test -m "using vector drawings directly in homepage
 $newsfile = $wc."demoproject/messages/news.xml";
 setup_replaceInFile($newsfile, array(
 	'{=$date}' => date('Y-m-d\TH:i:sO'),
-	'{=$repository}' => getSelfRoot().'/testrepo'
+	'{=$repository}' => isOnline() ? getHost().getRepository() : 'http://example.com/testrepo'
 ));
 $calendarfile = $wc."demoproject/calendar/demoproject.ics";
 setup_replaceInFile($calendarfile, array(
@@ -154,6 +154,7 @@ $report->info('<a href="'.$conflocation.'/test/trunk/">Directly to repository te
 $report->info('<a href="/?login">Repos login</a>');
 
 // verify that Satisfy Any is enabled, if not print error
+if (isOnline()) {
 $publicurl = getRepository().'/demoproject/trunk/public/';
 $s = new ServiceRequest($publicurl, array(), false);
 $s->exec();
@@ -162,6 +163,7 @@ if ($s->getStatus()==401) {
 	$report->error("Public folder requires login. Verify that the repository is configured with \"Satsisfy Any\". Apache may need restart.");
 } elseif ($s->getStatus()!=200) {
 	$report->error("Repository folder is not 200 OK. Please check configuration.");
+}
 }
 
 $report->display();
