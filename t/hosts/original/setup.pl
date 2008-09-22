@@ -3,11 +3,15 @@
 my $host = __FILE__;
 $host =~ s|/[^/]*$||g;
 $basedir = $host.'/../../..';
+$h = "$basedir/t/hosts/original";
 
-print `php $basedir/t/hosts/original/setup.php`;
+print `mkdir -p $h/repo $h/admin $h/backup`;
+print `touch $h/admin/repos-users`;
 
-print `mv $basedir/t/hosts/original/admin/repos-users $basedir/t/hosts/original/admin/repos-users.old`;
-print `$basedir/t/hosts/original/repos-auth-reset.sh $basedir/t/hosts/original`;
-print `cat $basedir/t/hosts/original/admin/repos-users.old >> $basedir/t/hosts/original/admin/repos-users`;
-print `rm $basedir/t/hosts/original/admin/repos-users.old`;
+print `php $h/setup.php`;
+
+print `mv $h/admin/repos-users $h/admin/repos-users.old`;
+print `$h/repos-auth-reset.sh $h`;
+print `cat $h/admin/repos-users.old >> $h/admin/repos-users`;
+print `rm $h/admin/repos-users.old`;
 

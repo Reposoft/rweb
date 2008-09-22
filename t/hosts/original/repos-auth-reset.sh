@@ -23,7 +23,7 @@ then
 fi
 
 # read users
-/usr/bin/svnlook tree --full-paths $REPO \
+svnlook tree --full-paths $REPO \
     | grep "^[^/]*\/administration\/repos\.user" \
     | xargs -I '{}' svnlook cat $REPO '{}' \
     > $USERFILE.tmp
@@ -32,7 +32,7 @@ cp $USERFILE.tmp $USERFILE
 rm $USERFILE.tmp
 
 # read access control
-/usr/bin/svnlook cat $REPO administration/repos.accs > $ACCSFILE.tmp
+svnlook cat $REPO administration/repos.accs > $ACCSFILE.tmp
 echo "Overwrite current ACL, $(cat $ACCSFILE | wc -l) lines, with administration/repos.accs, $(cat $ACCSFILE.tmp | wc -l) lines"
 cp $ACCSFILE.tmp $ACCSFILE
 rm $ACCSFILE.tmp
