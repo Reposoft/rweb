@@ -8,7 +8,10 @@
  * @package admin
  */
 
-if (!defined('ReposWeb')) define('ReposWeb', $_SERVER["DOCUMENT_ROOT"].'/repos-web/');
+if (!defined('ReposWeb')) define('ReposWeb',
+		isset($_SERVER['REPOS_LOCAL_WEB']) ?
+		$_SERVER['REPOS_LOCAL_WEB']
+		: dirname(dirname(__FILE__)).'/repos-web/');
 if (!defined('ReposWebapp')) define('ReposWebapp', '/repos-web/');
 
 ?>
