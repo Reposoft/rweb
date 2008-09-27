@@ -1,5 +1,5 @@
 <?php
-
+require('../../conf/Report.class.php');
 require('json.php');
 
 $report = new Report('Install Smarty');

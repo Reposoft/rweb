@@ -5,20 +5,18 @@ $basedir =~ s/\s+$//; # command output comes with ending newline
 
 print "# Running test from basedir $basedir\n";
 
-# or use File::Find?
-#die "find $basedir/www -type f -name '*.test.php'";
-my @tests = `find $basedir/www -type f -name '*.test.php'`;
+my @installs = `find $basedir/www/lib -mindepth 2 -maxdepth 2 -type f -name 'install.php'`;
 
-my $count = @tests;
+my $count = @installs;
 
 print "1..$count\n";
 
-foreach (@tests) {
-	# currently tests are written to run from their own folder (includes are relative)
+foreach (@installs) {
+	# currently installation scripts are written to run from their own folder (includes are relative)
 	/(.*\/)([\w.]+)/; # match agains $_;
 	$folder = $1;
 	$file = $2;
-	print "#\n# test: $folder - $file\n";
+	print "# Install: $folder - $file\n";
 	chdir $folder;
 	print `php $file`;
 	! $? or print "not ok # $file failed\n";
