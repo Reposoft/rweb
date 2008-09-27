@@ -63,7 +63,7 @@ function isTAP() {
  * @return newline character for this OS, or always \n if output is web
  */
 function getNewline() {
-	if (isOffline() && System::isWindows()) return "\n\r";
+	if (isOffline() && substr(PHP_OS, 0, 3)=='WIN') return "\n\r";
 	else return "\n";
 }
 

@@ -21,6 +21,6 @@ foreach (@tests) {
 	print "# test: $folder - $file\n";
 	chdir $folder;
 	print `php $file`;
-	! $? or print "not ok # executionn of $file failed\n";
+	! $? or print "not ok # $file failed\n";
 }
 

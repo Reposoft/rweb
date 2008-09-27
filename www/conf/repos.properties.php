@@ -200,7 +200,7 @@ function getDocroot() {
 	return getDocrootDefault();
 }
 
-/**
+/**get
  * Guess docroot from DOCUMENT_ROOT server variable, with fallback to repos-web's parent folder
  * @return docroot folder with trailing slash
  */
@@ -261,7 +261,7 @@ function getHost() {
  * @deprecated Use the new function name getHost
  */
 function getSelfRoot() {
-	if (isset($_SERVER['ReposHost'])) return $_SERVER['ReposHost'];
+	if (isset($_SERVER['REPOS_HOST'])) return $_SERVER['REPOS_HOST'];
 	return getHostDefault(); 
 }
 

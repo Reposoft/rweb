@@ -186,6 +186,8 @@ class SvnEditTest extends UnitTestCase
 	}
 	
 	function testParentFolderExists() {
+		$_SERVER['SERVER_NAME'] = 'example.com';
+		$_SERVER['REQUEST_URI'] = rawurlencode('/test/');
 		$_REQUEST['folder'] = getSelfUrl().'nonexistingresource/';
 		$this->expectError(new PatternExpectation('/does not exist/'));
 		$r = new ResourceExistsRule('folder');

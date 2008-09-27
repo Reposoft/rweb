@@ -8,7 +8,6 @@ function getReposUser() {global $test_user; return $test_user;};
 function _getReposPass() {return 'pwd';};
 // -----------
 
-
 require("ServiceRequest.class.php");
 
 // responses for testing
@@ -50,9 +49,10 @@ require("../lib/simpletest/setup.php");
 class TestServiceRequest extends UnitTestCase {
 	
 	function testGetUrl() {
+		$_SERVER['REPOS_HOST'] = 'http://example.com';
 		$service = new ServiceRequest('test/', array('a'=>'b'));
 		$url = $service->_buildUrl();
-		$this->assertEqual(getWebappUrl().'test/?a=b&'.WEBSERVICE_KEY.'='.$service->responseType,
+		$this->assertEqual('http://example.com/repos-web/test/?a=b&'.WEBSERVICE_KEY.'='.$service->responseType,
 			$url, "Should have built a GET url with an extra 'serv' parameter. %s");
 	}
 	
@@ -86,7 +86,16 @@ class TestServiceRequest extends UnitTestCase {
 		$url = $s->_buildUrl();
 		$this->assertNotEqual('/repos-admin/config/hooks/',$url);
 		$this->assertTrue(strstr($url, getHost().'/repos-admin/config/hooks/'), "Should have added host, got: $url. %s");
-	}	
+	}
+		
+	function testForUrl() {
+		$s = ServiceRequest::forUrl('http://host.se/a/b.php?c=d&e=f');
+		$this->assertEqual('http://host.se/a/b.php', $s->uri);
+		$this->assertEqual(2, count($s->parameters));
+		$this->assertEqual('f', $s->parameters['e']);
+	}
+
+	// ------- The tests below here use exec() without any mocks, so they are really integration tests --------		
 	
 	function testExec() {
 		$service = new ServiceRequest('', array());
@@ -179,13 +188,6 @@ class TestServiceRequest extends UnitTestCase {
 		$service = new ServiceRequest(getSelfUrl(), array('useryes'=>''));
 		$this->expectError('Unexpected login status, username is empty.');
 		$service->exec();
-	}
-	
-	function testForUrl() {
-		$s = ServiceRequest::forUrl('http://host.se/a/b.php?c=d&e=f');
-		$this->assertEqual('http://host.se/a/b.php', $s->uri);
-		$this->assertEqual(2, count($s->parameters));
-		$this->assertEqual('f', $s->parameters['e']);
 	}
 	
 }
