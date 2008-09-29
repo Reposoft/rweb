@@ -5,6 +5,9 @@ require("../lib/simpletest/setup.php");
 // the test reporter also uses this class, so here we need require_once
 require_once("Report.class.php");
 
+// this should be rather accurate before any test code has been executed
+$guess_offline = !isset($_SERVER['REQUEST_URI']);
+
 // override the real class with custom behaviours for test
 class SaveReport extends Report {
 	var $printed = '';
@@ -65,7 +68,8 @@ class TestReport extends UnitTestCase {
 	}
 	
 	function testIsOffline() {
-		$this->assertTrue(isOffline()!==isset($_SERVER['REQUEST_URI']));
+		global $guess_offline;
+		return $this->assertTrue(isOffline()==$guess_offline);
 	}
 }
 

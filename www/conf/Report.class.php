@@ -40,7 +40,7 @@ $reportStartTime = time();
  */
 function isOffline() {
 	// maybe there is some clever CLI detection, but this works too
-	return !isset($_SERVER['REQUEST_URI']);
+	return isset($_SERVER["argc"]) && $_SERVER["argc"] > 0;
 }
 
 /**

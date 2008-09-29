@@ -74,14 +74,6 @@ class ReposHtmlReporter extends SimpleReporter {
      *    @access public
      */
     function paintFooter($test_name) {
-    	// don't trust Repost class counters yet
-		print "<!-- ";
-        print $this->getTestCaseProgress() . "/" . $this->getTestCaseCount();
-        print " test cases complete: ";
-        print $this->getPassCount() . " passes, ";
-        print $this->getFailCount() . " fails, ";
-        print $this->getExceptionCount() . " exceptions. ";
-        print "-->\n";
         $this->report->display();
     }
 
