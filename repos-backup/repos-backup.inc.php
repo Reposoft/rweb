@@ -9,10 +9,25 @@ require( dirname(__FILE__) . '/admin.inc.php' );
 
 define('BACKUP_SCRIPT_VERSION','$LastChangedRevision$');
 define('BACKUP_SIZE', 100*1024*1024); // recommended unpacked size of dump files
-define('BACKUP_MAX_TIME', 30*60); // maximum time in seconds for dumping and packing one backup increment (with the above size)
+// maximum time in seconds for dumping and packing one backup increment (with the above size)
+define('MIN_BACKUP_MAX_TIME', 30*60); 
 
 // don't stop in the middle of backup operations
 ignore_user_abort(true);
+
+/**
+ * Allows batch operations to restore available execution time after successful subtask.
+ * This is called after each increment of 
+ */
+function backup_refresh_time_limit() {
+	static $maxtime = -1;
+	if ($maxtime < 0) {
+		$maxtime = 0; // unlimited
+		$inivalue = @ini_get('max_execution_time');
+		if ($inivalue > 0) $maxtime = max(MIN_BACKUP_MAX_TIME, $inivalue);
+	}
+	set_time_limit($maxtime);
+}
 
 /**
  * Get some place to temporarily read and write backup data to
@@ -77,7 +92,7 @@ function dump($repository, $backupPath, $fileprefix) {
  * @return true if successful, in which case there is a $backupPath/$fileprefix[revisions].svndump.gz file
  */
 function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) {
-	set_time_limit(BACKUP_MAX_TIME); // each increment can take 30 minutes to back up
+	backup_refresh_time_limit(); // each increment can take 30 minutes to back up
 	debug('Time limit for this increment is '.ini_get('max_execution_time').' seconds');
 	$starttime = time();
 	$extension = ".svndump";
@@ -171,7 +186,7 @@ function load($repository, $backupPath, $fileprefix) {
 		if ( $head > 0 && $file[1] != $head + 1 )
 			fatal("Revision number gap at $file[0] starting at revision $file[1], repository is at revision " . $head);
 		// read the files into repo
-		set_time_limit(BACKUP_MAX_TIME);
+		backup_refresh_time_limit();
 		$head = $file[2];
 		$return = loadDumpfile($backupPath . $file[0], $repository);
 		if ($return != 0) {
@@ -187,7 +202,7 @@ function load($repository, $backupPath, $fileprefix) {
  * @return true if repository is valid
  */
 function verify($repository) {
-	set_time_limit(BACKUP_MAX_TIME);
+	backup_refresh_time_limit();
 	$command = new Command('svnadmin');
 	$command->addArgOption('verify', $repository);
 	if ($command->exec()) {
@@ -207,7 +222,7 @@ function verifyMD5($path) {
 	$sums = getMD5sums( $path );
 	$ok = true;
 	foreach ( $sums as $file => $md5 ) {
-		set_time_limit(BACKUP_MAX_TIME);
+		backup_refresh_time_limit();
 		if ( ! file_exists( $path . DIRECTORY_SEPARATOR . $file ) ) {
 			error( "File $file listed in MD5 sums file does not exist in $path" );
 			continue;
