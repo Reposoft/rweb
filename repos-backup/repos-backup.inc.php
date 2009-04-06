@@ -336,8 +336,10 @@ function loadDumpfile($file, $repository) {
 	if ($command->exec()) {
 		$message = analyzeBackupLoadError($command->getOutput());
 		warn($message);
+		warn('Leaving temp file for inspection at '.$tmpfile);
+	} else {
+		System::deleteFile( $tmpfile );
 	}
-	System::deleteFile( $tmpfile );
 	return $command->getExitcode();
 }
 
@@ -356,10 +358,11 @@ function analyzeBackupLoadError($output) {
 		foreach ($output as $line) {
 			if (preg_match('/Committed revision (\d+)/i', $line, $matches)) {
 				$ok .= ', '.$matches[1];
-			}
-			if (preg_match('/not found.*transaction\D+(\d+)-(\d+)\D+path (.*)/', $line, $matches)) {
+			} else if (preg_match('/not found.*transaction\D+(\d+)-(\d+)\D+path (.*)/', $line, $matches)) {
 				$error .= 'Backup integrity error. Reference to a file '.$matches[3]
 					.' in revision '.$matches[1].' that does not exist.';
+			} else {
+				$error .= '"'.$line.'" ';
 			}
 		}
 		// return something?
@@ -387,11 +390,16 @@ function gunzipInternal($compressedfile, $tofile) {
 		} 
 		gzclose($zp);
 		fclose($fp);
-		debug("Wrote $sum bytes to $tofile, from compressed $compressedfile.");
 	} else {
 		fclose($fp);
 		return false;
 	}
+	// selfcheck
+	if (sizeof($tofile) != $sum) {
+		error("Wrote $sum bytes to $tofile, from compressed $compressedfile, but size is ".sizeof($tofile));
+		return false;
+	}
+	debug("Wrote $sum bytes to $tofile, from compressed $compressedfile.");
 	return $sum;   
 }
 
