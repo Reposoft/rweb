@@ -395,8 +395,8 @@ function gunzipInternal($compressedfile, $tofile) {
 		return false;
 	}
 	// selfcheck
-	if (sizeof($tofile) != $sum) {
-		error("Wrote $sum bytes to $tofile, from compressed $compressedfile, but size is ".sizeof($tofile));
+	if (filesize($tofile) != $sum) {
+		error("Wrote $sum bytes to $tofile, from compressed $compressedfile, but size is ".filesize($tofile));
 		return false;
 	}
 	debug("Wrote $sum bytes to $tofile, from compressed $compressedfile.");
