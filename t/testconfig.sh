@@ -49,3 +49,7 @@ if [ ! -L htdocs/index.php ]
 then
 	ln -s $(pwd)/../www/_host/html/* htdocs/
 fi
+
+echo "Automatic host setup is not implemented, so after server start"
+echo "you need to manually cd hosts/original/ and execute setup.pl"
+
