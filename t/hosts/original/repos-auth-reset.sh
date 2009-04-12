@@ -12,7 +12,7 @@ ACCSFILE=$HOST/admin/repos-access
 
 if [ -z "$HOST" ]
 then
-    echo "First argument must be a hostname"
+    echo "First argument must be a host path"
         exit 1
 fi
 
@@ -22,21 +22,25 @@ then
         exit 1
 fi
 
-# read users
 svnlook tree --full-paths $REPO \
     | grep "^[^/]*\/administration\/repos\.user" \
     | xargs -I '{}' svnlook cat $REPO '{}' \
     > $USERFILE.tmp
-echo "Overwrite current $(cat $USERFILE | wc -l) users with $(cat $USERFILE.tmp | wc -l) users from repository" 
+echo "Overwriting current $(cat $USERFILE | wc -l) users with $(cat $USERFILE.tmp | wc -l) users from repository" 
 cp $USERFILE.tmp $USERFILE
 rm $USERFILE.tmp
 
 # read access control
 svnlook cat $REPO administration/repos.accs > $ACCSFILE.tmp
-echo "Overwrite current ACL, $(cat $ACCSFILE | wc -l) lines, with administration/repos.accs, $(cat $ACCSFILE.tmp | wc -l) lines"
+echo "Overwriting current ACL, $(cat $ACCSFILE | wc -l) lines, with administration/repos.accs, $(cat $ACCSFILE.tmp | wc -l) lines"
 cp $ACCSFILE.tmp $ACCSFILE
 rm $ACCSFILE.tmp
 
-# at the same time homepage should be exported
-svn export file:///srv/www/vhosts/repos.se/$HOST/repo/administration/homepage/ $HOST/html/home
+# at the same time homepage should be exported, if we can get a url for svn client
+echo "Getting the file URL to use the testrepo from local svn client"
+URL="file://$(realpath $HOST/repo)" # found no better way than using the realpath command
+rm -Rf $HOST/html/home
+svn export $URL/administration/homepage/ $HOST/html/home
 chmod -R g+w $HOST/html/home
+echo "Exported $(ls $HOST/html/home | wc -l) homepage files to $HOST/html/home"
+
