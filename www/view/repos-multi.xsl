@@ -81,7 +81,11 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:call-template name="commandbar">
-			<xsl:with-param name="target" select="$folder"/>
+			<xsl:with-param name="target">
+				<xsl:value-of select="$folder"/>
+				<xsl:text>&#38;base=</xsl:text>
+				<xsl:value-of select="@base"/>
+			</xsl:with-param>
 		</xsl:call-template>
 		<xsl:call-template name="contents">
 			<xsl:with-param name="folder" select="$folder"/>
@@ -147,6 +151,8 @@
 					<xsl:value-of select="@href"/>
 				</xsl:with-param>
 			</xsl:call-template>
+			<xsl:text>&#38;base=</xsl:text>
+			<xsl:value-of select="../@base"/>
 		</xsl:param>
 		<xsl:param name="toolcheck"/>
 		<xsl:param name="classadd">
@@ -188,6 +194,8 @@
 					<xsl:value-of select="@href"/>
 				</xsl:with-param>
 			</xsl:call-template>
+			<xsl:text>&#38;base=</xsl:text>
+			<xsl:value-of select="../@base"/>
 		</xsl:param>
 		<xsl:param name="n" select="count(/svn/index/dir) + position() - 1"/>
 		<li id="row:{$id}" class="n{$n mod 4}">

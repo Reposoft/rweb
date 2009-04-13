@@ -9,9 +9,13 @@
 	
 	SetEnv REPOS_TEST_ALLOW_RESET on
 
-	# currently access file path is used for test setup to get host structure folder
-	SetEnv REPOS_REPO /repos
+	# is there a parameter for the generated hostname?
+	SetEnv REPOS_REPO http://localhost:8531/repos
+	# needed because currently access file path is used for test setup to get host structure folder
 	SetEnv REPOS_ACCESS_FILE @ServerRoot@/hosts/original/admin/repos-access
+
+	# during xsl development
+	Header add Cache-Control "max-age=0, must-revalidate"
 
 	<Location /repos>
 		DAV svn
@@ -30,6 +34,9 @@
 		#AuthzSVNAccessFile @ServerRoot@/hosts/multirepo/admin/repos-access
 		#Satisfy Any
 		
+		# Svn module does not set caching behavior as expected for dynamic contents
+		Header add Cache-Control "max-age=0, must-revalidate"
 	</Location>
 
 </VirtualHost>
+

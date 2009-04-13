@@ -91,6 +91,17 @@ define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST, u
  * @return Root url of the repository for this request, no tailing slash. Not encoded.
  */
 function getRepository() {
+	// wrapper that adds support for multiple repositories using 'base' param
+	if (isset($_REQUEST['base'])) {
+		return getRepositoryRoot().'/'.$_REQUEST['base'];		
+	}
+	return getRepositoryRoot();
+}
+
+/**
+ * Internal, getRepository wraps this function and adds support for SVNParentPath.
+ */
+function getRepositoryRoot() {
 	// requet parameter
 	if (isset($_REQUEST[REPO_KEY])) return $_REQUEST[REPO_KEY];
 	// server configuration
