@@ -2,7 +2,7 @@
 if (!class_exists('System')) require(dirname(dirname(dirname(__FILE__))).'/conf/System.class.php');
 
 if (!file_exists(dirname(__FILE__).'/libs/')) {
-	trigger_error("Smarty 'libs' folder has not been installed. Go to repos/lib/ to install it.");
+	trigger_error("Smarty 'libs' folder has not been installed. Go to repos-web/lib/ to install it.");
 }
 require(dirname(__FILE__).'/libs/Smarty.class.php');
 

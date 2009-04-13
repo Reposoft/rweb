@@ -8,8 +8,8 @@ $home = "selenium.openqa.org";
 $report = new Report("Install $repos_package");
 $report->info("$repos_package is installing...");
 
-$version = "0.8.3";
-$archive = "http://release.openqa.org/selenium-core/$version/selenium-core-$version.zip";
+$version = "1.0-beta-2";
+$archive = "http://release.seleniumhq.org/selenium-core/$version/selenium-core-$version.zip";
 
 $basedir = dirname(__FILE__);
 $dir = strtr($basedir, "\\", '/');
