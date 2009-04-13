@@ -17,7 +17,7 @@
 		DAV svn
 		SVNAutoversioning on
 
-		SVNIndexXSLT "/repos-web/view/repos.xsl"
+		SVNIndexXSLT "/repos-web/view/repos-multi.xsl"
 
 		SVNParentPath @ServerRoot@/hosts/multirepo/repos
 		SVNListParentPath on
