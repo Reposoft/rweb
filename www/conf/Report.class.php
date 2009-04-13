@@ -183,7 +183,7 @@ class Report {
 			$this->_output("<acronym class=\"$class\" title=\"");
 			$this->_output($message);
 			$this->_output("\">$s</acronym>");
-			$this->_lineend();
+			$this->_print(getNewline());//multiple results in same div//$this->_lineend();
 		} else {
 			$this->_outputline($class, " $s $message");
 		}
