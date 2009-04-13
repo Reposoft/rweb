@@ -26,9 +26,9 @@
 		AuthName "repos test multirepo"
 		AuthUserFile @ServerRoot@/hosts/multirepo/admin/repos-users
 		Require valid-user
-		#AuthzSVNAccessFile @ServerRoot@/hosts/multirepo/admin/repos-access
 
-		Satisfy Any
+		#AuthzSVNAccessFile @ServerRoot@/hosts/multirepo/admin/repos-access
+		#Satisfy Any
 		
 	</Location>
 
