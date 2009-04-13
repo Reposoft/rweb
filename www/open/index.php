@@ -50,6 +50,9 @@ $p->assign_by_ref('file', $file);
 $p->assign('rev', $rev);
 $p->assign('target', getTarget());
 if ($fromrev) $p->assign('fromrev', $fromrev);
+// before entering smarty template code, read some file info so that in the event of access error
+// a formatted error page is presented (errors in template can ony be presented in plaintext)
+$file->getRevision(); // maybe file->isFolder above will be sufficient if SvnOpenFile is simplified.
 // all set
 $p->display();
 
