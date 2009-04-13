@@ -2,7 +2,7 @@
 /**
  * Repos configuration logic (c) 2004-1007 Staffan Olsson www.repos.se
  *
- * The core, Repos Web, is only cinfigurable to a minimum.
+ * The core, Repos Web, is only configurable to a minimum.
  * Each configuration entry has a getEntry() and getEntryDefault(),
  * where getEntry may read server variables to get a cutom setting.
  *  
