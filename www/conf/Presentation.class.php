@@ -197,6 +197,9 @@ class Presentation {
 		$this->smarty->load_filter('pre', 'Presentation_urlRewriteForHttps');
 		$this->smarty->register_prefilter('Presentation_urlEncodeQueryString');
 		$this->smarty->load_filter('pre', 'Presentation_urlEncodeQueryString');
+		$this->smarty->register_prefilter('Presentation_supportRepoBase');
+		$this->smarty->load_filter('pre', 'Presentation_supportRepoBase');
+		$this->smarty->load_filter('pre', 'Presentation_urlEncodeQueryString');
 		$this->smarty->register_prefilter('Presentation_useDotNotationForObjects');
 		$this->smarty->load_filter('pre', 'Presentation_useDotNotationForObjects');
 		$this->smarty->register_prefilter('Presentation_removeIndentation');
@@ -299,6 +302,8 @@ class Presentation {
 		if ($this->isUserLoggedIn()) {
 			$this->assign('logout', '/?logout');
 		}
+		// support mod_dav_svn's @base attrubute for multirepo
+		if (isset($_REQUEST['base'])) $this->assign('base', $_REQUEST['base']);
 		// display
 		if (!$resource_name) {
 			$resource_name = $this->getDefaultTemplate();
@@ -579,9 +584,11 @@ function Presentation_urlEncodeQueryString($tpl_source, &$smarty) {
  * This filter in combination with the extra assign in Presentation adds @base support to all pages.
  */
 function Presentation_supportRepoBase($tpl_source, &$smarty) {
-	$pattern = '/(href)=\"([^"]*)\?([^"]*target=)/';
-	$replacement = '$1="$2?base={=$base}&$3';
-	return preg_replace($pattern, $replacement, $tpl_source);
+	$patterns[0] = '/(href)=\"([^"]*)\?([^"]*target=)/';
+	$replacements[0] = '$1="$2?base={=$base}&$3';
+	$patterns[1] = '/(<input [^>]*name="target")/';
+	$replacements[1] = '<input type="hidden" name="base" value="{=$base}"/>$1';
+	return preg_replace($patterns, $replacements, $tpl_source);
 }
 
 function Presentation_removeIndentation($tpl_source, &$smarty) {

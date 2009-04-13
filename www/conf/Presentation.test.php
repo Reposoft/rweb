@@ -174,7 +174,15 @@ class TestPresentation extends UnitTestCase {
 		$result = Presentation_supportRepoBase(
 			'<a id="test" href="edit/?rev=X&target='.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'">', $smarty);
 		$this->assertEqual('<a id="test" href="edit/?base={=$base}&rev=X&target='.LEFT_DELIMITER
-			.'$var'.RIGHT_DELIMITER.'">', $result);		
+			.'$var'.RIGHT_DELIMITER.'">', $result);
+
+		// forms
+		$result = Presentation_supportRepoBase(
+			'<form><input type="hidden" name="target" value="dontcare"/></form>', $smarty);
+		// TODO the filters under test are not delimiter indpendent, so why should all the tests be so
+		$this->assertEqual('<form><input type="hidden" name="base" value="'
+			.LEFT_DELIMITER.'$base'.RIGHT_DELIMITER.
+			'"/><input type="hidden" name="target" value="dontcare"/></form>', $result);
 	}
 
 	function testGetFileId() {
