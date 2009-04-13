@@ -210,9 +210,9 @@
 	<target name="docs" depends="docs.phpdoc, docs.php, docs.js">
 	</target>
 	
-	<target name="docs.doxygen">
-		<property name="docs.folder" value="${basedir}/documentation"
+	<target name="docs.doxygen">		<property name="docs.folder" value="${basedir}/documentation"
 				description="part of OUTPUT_DIRECTORY in doxygen config files"/>
+		<echo message="generating Doxygen docs to ${docs.folder}"/>
 		<mkdir dir="${docs.folder}"/>
 		<taskdef name="doxygen" classname="org.doxygen.tools.DoxygenTask"
 			classpath="${tools.folder}/docs/ant_doxygen.jar" />
