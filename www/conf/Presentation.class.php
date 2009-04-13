@@ -571,6 +571,19 @@ function Presentation_urlEncodeQueryString($tpl_source, &$smarty) {
 	return preg_replace($pattern, $replacement, $tpl_source);
 }
 
+
+/**
+ * The @base attribute from mod_dav_svn would be easy to handle in a stateful application,
+ * but in repos REST style pages we have to add it to every resource URL.
+ * We do it here instead of in each page.
+ * This filter in combination with the extra assign in Presentation adds @base support to all pages.
+ */
+function Presentation_supportRepoBase($tpl_source, &$smarty) {
+	$pattern = '/(href)=\"([^"]*)\?([^"]*target=)/';
+	$replacement = '$1="$2?base={=$base}&$3';
+	return preg_replace($pattern, $replacement, $tpl_source);
+}
+
 function Presentation_removeIndentation($tpl_source, &$smarty) {
 	$pattern = '/>\r?\n\s*([<{])/';
 	$replacement = '>$1';

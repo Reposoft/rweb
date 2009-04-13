@@ -164,6 +164,19 @@ class TestPresentation extends UnitTestCase {
 				.'/'.LEFT_DELIMITER.'=$toolpath'.RIGHT_DELIMITER.'" ', $result);	
 	}
 
+	function testPrefilter_supportRepoBase() {
+		$result = Presentation_supportRepoBase(
+			'<a id="test" href="edit/?target='.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a id="test" href="edit/?base={=$base}&target='.LEFT_DELIMITER
+			.'$var'.RIGHT_DELIMITER.'">', $result);
+
+		// target does not need to be the first query param
+		$result = Presentation_supportRepoBase(
+			'<a id="test" href="edit/?rev=X&target='.LEFT_DELIMITER.'$var'.RIGHT_DELIMITER.'">', $smarty);
+		$this->assertEqual('<a id="test" href="edit/?base={=$base}&rev=X&target='.LEFT_DELIMITER
+			.'$var'.RIGHT_DELIMITER.'">', $result);		
+	}
+
 	function testGetFileId() {
 		$this->assertEqual(getFileId('aB'), 'aB', 'Preserve case. %s');
 		$this->assertEqual(getFileId('a.-_B'), 'a.-_B', 'Preserve dot dash underscore. %s');
