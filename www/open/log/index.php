@@ -82,6 +82,7 @@ $head = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 $head .= '<?xml-stylesheet type="text/xsl" href="' . STYLESHEET . '"?>' . "\n";
 $head .= '<log repo="'.asLink(getRepository()).'" target="'.xmlEncodePath(getTarget())
 	.'" name="'.xmlEncodePath(getPathName(getTarget())).'" web="'.asLink(getWebapp()).'"';
+if (isset($_REQUEST['base'])) $head .= ' base="'.$_REQUEST['base'].'"';
 if ($singlefile) $head .= ' file="'.xmlEncodePath(getPathName(getTarget())).'"';
 if ($limited) $head .= ' limit="'.$limit.'" limitrev="'.$lastrev.'"';
 $head .= ">\n";
