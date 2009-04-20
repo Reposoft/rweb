@@ -121,6 +121,10 @@ a.folder {
 .projectname {
 	color: #663300;
 }
+#base {
+	color: gray;
+	margin-right: .2em;
+}
 /* elements to get user's attention  */
 .error, .warning, .note {
 	padding-left: 26px;
