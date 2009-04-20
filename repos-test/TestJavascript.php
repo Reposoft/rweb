@@ -20,10 +20,10 @@
 define('ReposWebapp','/repos-web/');
 
 $testfiles = array(
-'scripts/prepare/index.xml',
-'scripts/shared/',
-'scripts/resourceid/',
-'scripts/fileid/',
+'scripts/reposapi/',
+//'scripts/reposapi/index.xml',
+'plugins/resourceid/',
+'plugins/fileid/',
 'plugins/dateformat/',
 'plugins/details/'
 );

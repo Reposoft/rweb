@@ -8,9 +8,10 @@
  */
 
 // display the headers of a page in the application
-require('../../conf/System.class.php');
-require('../../open/ServiceRequest.class.php');
-require('../../account/login.inc.php');
+require('../reposweb.inc.php');
+require(ReposWeb.'conf/System.class.php');
+require(ReposWeb.'open/ServiceRequest.class.php');
+require(ReposWeb.'account/login.inc.php');
 
 // quick links to common header checks
 $repo_root = getRepository();

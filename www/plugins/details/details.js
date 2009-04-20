@@ -1,5 +1,5 @@
 /**
- * Repos details plugin (c) 2006 repos.se
+ * Repos details plugin (c) 2006-2009 repos.se
  *
  * @author Staffan Olsson (solsson)
  */
@@ -38,7 +38,7 @@ $.fn.reposDetails = function(s) {
 function details_read() {
 	var e = $('body').find('div.details');
 	if (e.size() > 0) {
-		$.get('/repos/open/list/?target='+encodeURIComponent(e.attr("title")), function(xml) {
+		$.get(Repos.getWebapp() + 'open/list/?target='+encodeURIComponent(e.attr("title")), function(xml) {
 				details_write(e, $('/lists/list/entry', xml)); });
 	}
 }
