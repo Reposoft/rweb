@@ -123,6 +123,7 @@
 		<xsl:param name="pathlinks"/>
 		<xsl:param name="toolcheck"/>
 		<h2 id="path">
+			<span id="base"><xsl:value-of select="/svn/index/@base"/></span>
 			<xsl:copy-of select="$pathlinks"/>
 		</h2>
 		<ul class="index">

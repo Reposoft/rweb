@@ -142,6 +142,8 @@
 			<xsl:call-template name="getHref">
 				<xsl:with-param name="href" select="."/>
 			</xsl:call-template>
+			<xsl:text>&#38;base=</xsl:text>
+			<xsl:value-of select="/log/@base"/>
 		</xsl:param>
 		<div class="row log-{@action}">
 			<xsl:if test="@action='A'">
