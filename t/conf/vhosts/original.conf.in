@@ -12,6 +12,9 @@
 	# currently access file path is used for test setup to get host structure folder
 	SetEnv REPOS_ACCESS_FILE @ServerRoot@/hosts/original/admin/repos-access
 
+	# during development browsers should revalidate on each request for static resources too
+	Header add Cache-Control "max-age=0, must-revalidate"
+
 	<Location /data>
 		DAV svn
 		SVNAutoversioning on
@@ -27,6 +30,9 @@
 		AuthzSVNAccessFile @ServerRoot@/hosts/original/admin/repos-access
 
 		Satisfy Any
+
+		# automatic refresh of contents
+		Header add Cache-Control "max-age=0, must-revalidate"
 		
 	</Location>
 
