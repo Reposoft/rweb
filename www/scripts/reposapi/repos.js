@@ -1,5 +1,5 @@
 /**
- * Repos shared script logic (c) 2006 Staffan Olsson www.repos.se
+ * Repos shared script logic (c) 2006-2009 Staffan Olsson www.repos.se
  * @version $Id$
  */
 var Repos = {};
@@ -171,6 +171,21 @@ jQuery.fn.say = function(message) {
 	// move to after input if that's whats in the bucket
 	this.filter('input').parent().append(e);
 };
+
+/**
+ * Multi-repo support.
+ * Customize jQuery.ajax to transparently support 'base' parameter
+ * (otherwise every plugin would need if-else for SVNPath/SVNParentPath)
+ * It is still undecided how the GUI knows if server user SVNParentPath.
+ */
+(function supportMultiRepo() {
+	_jQ_ajax = jQuery.ajax;
+	jQuery.ajax = function(options) {
+		var base = $('#base').text();
+		if (base && options.url.match(/[?&]target=/)) options.url += '&base=' + base;
+		_jQ_ajax(options);
+	};
+})();
 
 	/*
 	 Dynamic loading of scripts and css has been disabled,
