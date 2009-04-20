@@ -85,14 +85,16 @@ define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST, u
  * This is the only folder in repos that is _not_ returned with a tailing slash,
  * the reason being that target URLs are defined as absolute URLs from repository root.
  *
- * If a REPO_KEY request parameter or cookie exists, the value of it is returned.
- * If not, configuration is used. If there is many repositories, the one matching
- * the http referrer is used.
+ * If a REPO_KEY request parameter exists, the value of it is returned.
+ * If not, server configuration is used.
+ * For multi-repo (SVNParentPath) support the value of 'base' request parameter is added
+ * to the configured repository.
+ *
  * @return Root url of the repository for this request, no tailing slash. Not encoded.
  */
 function getRepository() {
 	// wrapper that adds support for multiple repositories using 'base' param
-	if (isset($_REQUEST['base'])) {
+	if (isset($_REQUEST['base']) && strlen($_REQUEST['base'])>0) {
 		return getRepositoryRoot().'/'.$_REQUEST['base'];		
 	}
 	return getRepositoryRoot();

@@ -303,7 +303,7 @@ class Presentation {
 			$this->assign('logout', '/?logout');
 		}
 		// support mod_dav_svn's @base attrubute for multirepo
-		if (isset($_REQUEST['base'])) $this->assign('base', $_REQUEST['base']);
+		$this->assign('base', isset($_REQUEST['base']) ? $_REQUEST['base'] : '');
 		// display
 		if (!$resource_name) {
 			$resource_name = $this->getDefaultTemplate();

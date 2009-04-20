@@ -20,34 +20,38 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertTrue(strpos(getWebappUrl(),'://'), getWebappUrl(), 'Should contain ://. %s');
 	}
 	
-	/* disabled multi-repository functionality
 	function testGetRepository() {
-		global $_repos_config;
 		unset($_REQUEST[REPO_KEY]);
-		unset($_COOKIE[REPO_KEY]);
-		$this->assertTrue(strlen(getRepository())>0);
-		$this->assertTrue(strContains(getRepository(), '://'), "getRepository() should return a full url");
-		$real = $_repos_config['repositories'];
-		$_repos_config['repositories'] = "http://my.host/repo/";
-		$this->assertEqual('http://my.host/repo/', getRepository());
-		// test multiple configured repositories
-		$_repos_config['repositories'] = "http://my.host/repo1/, http://my.host/repo2/";
-		$this->assertEqual('http://my.host/repo1/', getRepository());
-		// if there is a cookie referer should have no effect
-		$_SERVER['HTTP_REFERER'] = 'http://my.host/repo2/file.txt';
-		$this->assertEqual('http://my.host/repo2/', getRepository());
-		unset($_SERVER['HTTP_REFERER']);
-		$_repos_config['repositories'] = $real;
+		unset($_REQUEST['base']);
+		$repoFromConfiguration = getRepository();
+		$this->assertTrue(strlen($repoFromConfiguration)>0);
+		$_REQUEST[REPO_KEY] = 'http://where-we-work.com/repo';
+		$this->assertEqual('http://where-we-work.com/repo', getRepository());
 	}
-	
-	function testGetRepositoryFromRepoParameterAndCookie() {
-		$_COOKIE[REPO_KEY] = "https://host/c/";
-		$_REQUEST['repo'] = "https://host/r/";
-		$this->assertEqual('https://host/r/', getRepository());
-		unset($_REQUEST['repo']);
-		$this->assertEqual('https://host/c/', getRepository());
+
+	function testGetRepositoryConfiguredRelativeToServerRoot() {
+		// this syntax allows repository to be configured with any hostname and port
+		unset($_REQUEST[REPO_KEY]);
+		unset($_REQUEST['base']);
+		$_SERVER['REPOS_REPO'] = '/my-repository';
+		$this->assertEqual(getSelfRoot().'/my-repository', getRepository());
 	}
-	*/
+
+	function testGetRepositoryWithBase() {
+		unset($_REQUEST[REPO_KEY]);
+		$_REQUEST['base'] = 'me3';
+		$_SERVER['REPOS_REPO'] = 'http://where-we-work.com/parent';
+		// TODO maybe we need some syntax to disable multi-repo even if 'base' param is present
+		$this->assertEqual('http://where-we-work.com/parent/me3', getRepository());
+		$_REQUEST['base'] = '';
+		$this->assertEqual('http://where-we-work.com/parent', getRepository(), 'Empty base does not count. %s');
+	}
+
+	function testGetRepositoryRepoKeyAndBase() {
+		$_REQUEST[REPO_KEY] = 'http://where-we-work.com/svn';
+		$_REQUEST['base'] = 'me3';
+		$this->assertEqual('http://where-we-work.com/svn', getRepository(), 'Repo key overrides repo AND base. %s');
+	}
 	
 	function testUrlEncodeNames() {
 		$this->assertEqual('https://host/r%25p', urlEncodeNames('https://host/r%p'));
