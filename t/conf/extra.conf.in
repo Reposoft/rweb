@@ -7,6 +7,8 @@ php_value include_path ".:@ServerRoot@/php-include"
 <Directory @ServerRoot@/..>
 	
 	DirectoryIndex index.html index.php
+	# Index listing needed for some development navigation
+	Options Indexes
 	
 </Directory>
 
