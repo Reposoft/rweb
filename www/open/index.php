@@ -32,7 +32,9 @@ if ($file->isFolder()) {
 	if ($rev) {
 		// for old revisions SvnOpenFile detects folder even if trailing slash is missing
 		if (!strEnds($target, '/')) $target .= '/';
-		header('Location: '.getWebapp().'open/list/?target='.rawurlencode($target).'&rev='.$rev);
+		// does not use getRepository so "base" must be added manually
+		$b = isset($_REQUEST['base']) ? '&base='.$_REQUEST['base'] : '';
+		header('Location: '.getWebapp().'open/list/?target='.rawurlencode($target).$b.'&rev='.$rev);
 	} else {
 		if (strpos($_SERVER['HTTP_USER_AGENT'],'MSIE 6')) { // IE6 is unable to handle utf-8 in Location header
 			// asLink/urlSpecialChars and urlEncodeNames cannot be combined
