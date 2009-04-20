@@ -34,7 +34,7 @@ class TestReposProperties extends UnitTestCase {
 		unset($_REQUEST[REPO_KEY]);
 		unset($_REQUEST['base']);
 		$_SERVER['REPOS_REPO'] = '/my-repository';
-		$this->assertEqual(getSelfRoot().'/my-repository', getRepository());
+		$this->assertEqual(geHost().'/my-repository', getRepository());
 	}
 
 	function testGetRepositoryWithBase() {
