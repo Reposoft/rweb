@@ -4,6 +4,8 @@ function reposTreeIframe() {
 	url += '?menu=false';
 	url += '&frame=_top';
 	url += '&target='+encodeURI(Repos.getTarget());
+	// explicit 'base' support
+	if ($('#base').length) url += '&base=' + $('#base').text();
 	// window width and height, no shared repos function for this yet
 	var de = document.documentElement;
 	var winw = window.innerWidth || self.innerWidth || (de&&de.clientWidth) || document.body.clientWidth;

@@ -49,7 +49,8 @@ h1 .hostname {
 <script type="text/javascript">
 //<![CDATA[
 
-// plugin, from stilbuero.de, can be simplified if only the jQuery.extend api is used
+// plugin to read query string parameters
+// from stilbuero.de, can be simplified if only the jQuery.extend api is used
 (function(jQuery) {
 	jQuery.querystring = function(s) {
 		var r = {};
@@ -87,9 +88,12 @@ var settings = {
 	hostname: window.location.hostname,
 	https: window.location.href.substr(0,6)=='https:',
 	repository: '/data', // not nessecary when json url is repos-web, but used in menu
+	base: false,
 	target: '/demoproject/trunk/' // or... http://localhost/repos-web/open/start/?serv=json
 };
 $.queryextend(settings, window.location.search);
+// multi-repo support
+if (settings.base) settings.repository += '/' + settings.base;
 
 var json = settings.web+'open/json/'; // not using servicelayer
 function expand(id,target) {
@@ -97,7 +101,7 @@ function expand(id,target) {
   var here = target;
   $.ajax({
     dataType: 'script',
-    url: json+'?selector='+id+'&target='+encodeURI(here),
+    url: json+'?selector='+id+'&target='+encodeURI(here)+(settings.base ? '&base='+settings.base : ''),
     success: function() {
 		$('li.folder', list).each(function() {
 			var a = $('a',this); // created by list script
