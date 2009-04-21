@@ -26,6 +26,7 @@ function download($url, $localTargetFile) {
 	curl_setopt($ch, CURLOPT_TIMEOUT, 480);
 	curl_setopt($ch, CURLOPT_VERBOSE, 0);
 	$fh = fopen($localTargetFile, 'w');
+	if (!$fh) trigger_error("Failed to write to $localTargetFile", E_USER_ERROR);
 	curl_setopt($ch, CURLOPT_FILE, $fh);
 	$result = curl_exec($ch);
 	$info = curl_getinfo($ch);
@@ -34,6 +35,7 @@ function download($url, $localTargetFile) {
 	echo ("Got $info[url] with status $info[http_code] after $info[redirect_count] redirects.\n");
 	if (!$result) {
 		System::deleteFile($localTargetFile);
+		trigger_error("Download failed for $info[url].\n", E_USER_ERROR);
 	} else {
 		echo ("Downloaded $info[size_download] bytes of type '$info[content_type]' in $info[total_time] seconds.\n");
 	}
@@ -47,6 +49,7 @@ function download($url, $localTargetFile) {
  * @param String $destination folder to extract to. Will attempt to create it if it does not exist.
  */
 function decompressZip( $sourceFile, $destination, $chmod=0775) {
+	if (!file_exists($sourceFile)) trigger_error("File not found: $sourceFile", E_USER_ERROR);
 	if (!strEnds($destination, '/')) $destination .= '/';
 	$zip = zip_open($sourceFile);
 

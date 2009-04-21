@@ -4,12 +4,12 @@ require '../uncompress.php';
 $report = new Report('Install TinyMCE');
 
 
-// PHP unit testing framework
+// TinyMCE for repos html editor plugin
 
 $repos_package = "tinymce";
 $home = "http://tinymce.moxiecode.com/";
 
-$version = "2_1_2";
+$version = "3_2_2_3";
 $archive = "http://downloads.sourceforge.net/tinymce/tinymce_$version.zip?download";
 $license = "http://wiki.moxiecode.com/index.php/TinyMCE:License";
 
@@ -30,17 +30,20 @@ if(download($archive, $tmp)) {
 	$report->fatal("Download failed.");
 }
 
-decompressZip($tmp, $dir);
+// tinymce 3 is not zipped in a 'tinymce' folder
+//decompressZip($tmp, $dir);
+mkdir($extracted_folder);
+decompressZip($tmp, $extracted_folder);
 
 System::deleteFile($tmp);
 
-$version = "1_1_0";
+$version = "2_0_2";
 $archive = "http://downloads.sourceforge.net/tinymce/tinymce_compressor_php_$version.zip?download";
 $license = "http://wiki.moxiecode.com/index.php/TinyMCE:License";
 
 $basedir = dirname(__FILE__).'/tinymce/jscripts/tiny_mce';
 $dir = strtr($basedir, "\\", '/');
-$tmp = $dir.'/downloaded.tmp';
+$tmp = $dir.'/downloaded_compressor.tmp';
 $extracted_folder = "$dir/";
 
 if(download($archive, $tmp)) $report->info("Download complete.");
