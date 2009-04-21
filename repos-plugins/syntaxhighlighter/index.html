@@ -5,39 +5,45 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Client-side syntax highlighting plugin</title>
 <!-- dependencies -->
-<script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
-<script type="text/javascript" src="../../scripts/shared/repos.js"></script>
-<!-- firebug for any browser -->
-<script language="javascript" type="text/javascript" src="../../scripts/lib/firebug/firebug.js"></script>
-<!-- dp.SyntaxHighlighter css included here, because Repos.addCss does not work in IE6 -->
+<script type="text/javascript" src="/repos-web/scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="/repos-web/scripts/reposapi/repos.js"></script>
+<!-- firebug for any browser
+<script language="javascript" type="text/javascript" src="/repos-web/scripts/lib/firebug/firebug.js"></script> -->
+<!-- SyntaxHighlighter css included here, because Repos.addCss does not work in IE6 -->
 <link type="text/css" rel="stylesheet" href="syntax.css"></link>
+<link type="text/css" rel="stylesheet" href="/repos-web/lib/syntaxhighlighter/sh/styles/shCore.css"></link> 
+<link type="text/css" rel="stylesheet" href="/repos-web/lib/syntaxhighlighter/sh/styles/shThemeDefault.css"></link>
 <!-- all the dpSyntaxHighligher scripts, normally loaded dynamically (by php) -->
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shCore.js"></script>
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushCSharp.js"></script>
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushPhp.js"></script>
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushJScript.js"></script>
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushJava.js"></script>
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushVb.js"></script>
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushSql.js"></script>
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushXml.js"></script>
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushDelphi.js"></script>
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushPython.js"></script>
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushRuby.js"></script>
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushCss.js"></script>
-<script class="javascript" src="../../lib/dpsyntax/dp.SyntaxHighlighter/Scripts/shBrushCpp.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shCore.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shBrushCSharp.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shBrushPhp.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shBrushJScript.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shBrushJava.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shBrushVb.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shBrushSql.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shBrushXml.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shBrushDelphi.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shBrushPython.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shBrushRuby.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shBrushCss.js"></script>
+<script class="javascript" src="/repos-web/lib/syntaxhighlighter/sh/scripts/shBrushCpp.js"></script>
+<!-- repos brushes -->
+<script class="javascript" src="/repos-plugins/syntaxhighlighter/shBrushDiff.js"></script>
+<script class="javascript" src="/repos-plugins/syntaxhighlighter/shBrushAcl.js"></script>
+<script class="javascript" src="/repos-plugins/syntaxhighlighter/shBrushWiki.js"></script>
 <!-- the plugin -->
-<script type="text/javascript" src="../../plugins/syntax/syntax.js"></script>
+<script type="text/javascript" src="/repos-plugins/syntaxhighlighter/syntax.js"></script>
 <!-- for unit testing -->
-<script type="text/javascript" src="../../scripts/unittest.js"></script>
+<script type="text/javascript" src="/repos-web/scripts/unittest/testwalk.js"></script>
 </head>
 <body>
 <h1>Client-side syntax highlighting</h1>
-<p>Using <a href="http://www.dreamprojections.com/SyntaxHighlighter/">dp.SyntaxHighlighter</a>.
-See <a href="../../lib/">lib/</a> folder.</p>
+<p>Using <a href="http://alexgorbatchev.com/wiki/SyntaxHighlighter">SyntaxHighlighter</a>.
+See <a href="/repos-web/lib/">lib/</a> folder.</p>
 <p><a href="javascript:syntaxHide()">show plain text</a> &nbsp; 
 <a href="javascript:syntaxShow()">show syntax highlighting</a> &nbsp;
 </p>
-<p>Note that dp.SyntaxHighlighter does <strong>not work</strong> for 'application/xhtml+xml' pages.</p>
+<p>Note that SyntaxHighlighter does <strong>not work</strong> for 'application/xhtml+xml' pages.</p>
 <p><a href="syntax.test.php">PHP test</a></p>
 <h2>Javascript</h2>
 <textarea id="text:file.js" rows="4" cols="60" name="myjs" class="application_x-javascript js" readonly="readonly">
@@ -65,12 +71,58 @@ $(document).ready(function() {
 &lt;textarea rows="4" cols="60" name="demo"&gt;
 ../textarea&gt;
 &gt;/textarea&lt;
+&lt;/textarea&gt;
 </textarea>
 
 <h2>Not readonly</h2>
 <textarea id="text:file.txt" rows="2" cols="60" name="myhtml" class="text_html htm">
 This textarea does not have readonly="readonly"
 </textarea>
+
+<h1>Repos brushes</h2>
+
+<h2>Subversion diff</h2>
+<p>Diff for file <span class="file" href="">http://localhost:8530/data/demoproject/trunk/Policy document.html</span> from version <span class="revision">2</span> to <span class="revision">8</span></p>
+<textarea id="file" cols="82" rows="10" name="file" class="diff" readonly="readonly" >Index: Policy document.html
+===================================================================
+--- Policy document.html	(revision 2)
++++ Policy document.html	(revision 8)
+@@ -7,7 +7,7 @@
+ &lt;/head&gt;
+ &lt;body&gt;
+
+-&lt;h1&gt;Demoproject data storage policy&lt;/h1&gt;
++&lt;h1&gt;Demoproject&lt;/h1&gt;
+ &lt;p&gt;All project artefacts are stored in this repository.
+ That way we all know where the latest version is, and we can use the URLs instead of attachments.
+ &lt;/p&gt;
+@@ -32,6 +32,6 @@
+ That is default in Office 2007, but in Office 2003 you need to manually select &amp;quot;xml&amp;quot; in the Save As dialog.
+ &lt;/p&gt;
+ &lt;p&gt;For text documents, HTML is a good format.&lt;/p&gt;
+-&lt;p&gt;Feel free to update this document.&lt;/p&gt;
++&lt;p&gt;Feel free to update this document.&lt;/p&gt;
+ &lt;/body&gt;
+ &lt;/html&gt;
+</textarea>
+
+<h2>Subversion ACL</h2>
+<textarea id="text:repos.accs" rows="6" cols="60" name="myhtml" class="accs" readonly="readonly">
+[groups]
+administrators = admin
+demoproject = svensson, test, Sv@n s-on, admin
+
+[/]
+@administrators = rw
+
+[/administration]
+@administrators = rw
+
+[/svensson]
+svensson = rw
+* =
+</textarea>
+<p>&nbsp;</p>
 
 </body>
 </html>

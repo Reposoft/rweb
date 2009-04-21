@@ -17,7 +17,7 @@ $libraries = array(
 'smarty',
 'simpletest',
 'selenium',
-'dpsyntax',
+'syntaxhighlighter',
 'tinymce',
 //'phpicalendar',
 //'imagemagick'

@@ -1,18 +1,17 @@
-dp.sh.Brushes.Acl = function()
+SyntaxHighlighter.brushes.Acl = function()
 {
 	var keywords =	'r rw';
 
 	this.regexList = [
-		{ regex: new RegExp('^\\[\\/.*\\]', 'gm'), css: 'path' },
-		{ regex: new RegExp('= *$', 'gm'), css: 'noaccess' },
-		{ regex: new RegExp('= *r *$', 'gm'), css: 'readonly' },
-		{ regex: new RegExp('= *rw *$', 'gm'), css: 'readwrite' },
-		{ regex: new RegExp('\\[groups\\]', 'gm'), css: 'groups' },
-		{ regex: new RegExp('^@[\\S]+', 'gm'), css: 'group' }
+		{ regex: new RegExp('^\\[\\/.*\\]', 'gm'), css: 'syntax-acl-path' },
+		{ regex: new RegExp('= *$', 'gm'), css: 'syntax-acl-noaccess' },
+		{ regex: new RegExp('= *r *$', 'gm'), css: 'syntax-acl-readonly' },
+		{ regex: new RegExp('= *rw *$', 'gm'), css: 'syntax-acl-readwrite' },
+		{ regex: new RegExp('\\[groups\\]', 'gm'), css: 'syntax-acl-groups' },
+		{ regex: new RegExp('^@[\\S]+', 'gm'), css: 'syntax-acl-group' }
 		];
 
-	this.CssClass = 'syntax-acl';
 };
 
-dp.sh.Brushes.Acl.prototype	= new dp.sh.Highlighter();
-dp.sh.Brushes.Acl.Aliases	= ['acl'];
+SyntaxHighlighter.brushes.Acl.prototype	= new SyntaxHighlighter.Highlighter();
+SyntaxHighlighter.brushes.Acl.aliases	= ['acl'];
