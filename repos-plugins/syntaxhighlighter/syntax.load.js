@@ -27,15 +27,19 @@ Repos.syntax.map["htp"] = "htp";
 // but we need to know them before they are loaded
 
 Repos.syntax.bundled = ['Css', 'Java', 'Plain', 'Sql', 'Bash', 'Delphi', 'JScript', 'Python', 'Vb', 'Cpp', 'Perl', 'Ruby', 'Xml', 'CSharp', 'Groovy', 'Php', 'Scala', 'Diff'];
-//Repos.syntax.custom = ['Diff', 'Acl', 'Wiki']; 
-Repos.syntax.custom = ['Acl', 'Wiki']; // have to use the bundled diff instead of ours or rendering fails silently
+Repos.syntax.custom = ['Diff', 'Acl', 'Wiki'];
+Repos.syntax.loading = 0;
 
 $().ready(function() {
-	//$.getScript(Repos.syntax.path + 'scripts/shCore.js', function() {
+	// load css
+	$('<link type="text/css" rel="stylesheet" href="'+Repos.syntax.path+'styles/shCore.css"></link>').appendTo('head');
+	$('<link type="text/css" rel="stylesheet" href="'+Repos.syntax.path+'styles/shThemeDefault.css"></link>').appendTo('head');
+	$('<link type="text/css" rel="stylesheet" href="'+Repos.syntax.plugin+'syntax.css"></link>').appendTo('head');
+	// load SyntaxHighlighter engine
+	$.getScript(Repos.syntax.path + 'scripts/shCore.js', function() {
 		// looks like it is not immediately available
-		//window.setTimeout(Repos.syntax.setup, 100);
-		Repos.syntax.setup();
-	//} );
+		window.setTimeout(Repos.syntax.setup, 100);
+	} );
 } );
 
 // sets classes on all elements that  sho
@@ -60,22 +64,34 @@ Repos.syntax.setup = function() {
 	} );
 	// when all brushes have finished loading, highlight all
 	// (API does not support highlight single element)
-	//$().ajaxStop(function(){
-		Repos.syntax.enable();
-	//});
+	var loadstatus = $('<p/>').text('Loading ' + Repos.syntax.loading + ' brushes...').appendTo('body');
+	var intervalID = setInterval(function() {
+		if (Repos.syntax.loading) return;
+		clearInterval(intervalID);
+		setTimeout(Repos.syntax.enable, 100); // don't know why it does not work immediately
+		loadstatus.remove();
+	}, 100);
 };
 
 Repos.syntax.load = function(brush) {
-	if (brush == 'js') brush == 'jscript'; // until we handle SyntaxHighlighter's aliases
+	if (brush == 'js') brush = 'jscript'; // until we handle SyntaxHighlighter's aliases
 	for(i in Repos.syntax.bundled) {
 		if (brush == Repos.syntax.bundled[i].toLowerCase()) {
-			//$.getScript(Repos.syntax.path + 'scripts/shBrush' + Repos.syntax.bundled[i] + '.js');
+			Repos.syntax.loading++;
+			$.getScript(Repos.syntax.path + 'scripts/shBrush' + Repos.syntax.bundled[i] + '.js',
+				function() { Repos.syntax.loading--; });
+		}
+	}
+	for(i in Repos.syntax.custom) {
+		if (brush == Repos.syntax.custom[i].toLowerCase()) {
+			Repos.syntax.loading++;
+			$.getScript(Repos.syntax.plugin + 'shBrush' + Repos.syntax.custom[i] + '.js',
+				function() { Repos.syntax.loading--; });
 		}
 	}
 };
 
 Repos.syntax.enable = function() {
-	//console.log('Enabling all');
-	//window.setTimeout(SyntaxHighlighter.all, 500);
-	SyntaxHighlighter.all();
+	//SyntaxHighlighter.all(); // must be called before window.onload triggers
+	SyntaxHighlighter.highlight(); // see source code for all() method
 };

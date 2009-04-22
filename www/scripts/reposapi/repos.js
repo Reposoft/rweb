@@ -82,7 +82,7 @@ Repos.getWebapp = function() {
 			this.repos_webappRoot = t.src.replace(me, '');
 		}
 	}
-	if (!this.repos_webappRoot) return '/repos/'; // best guess
+	if (!this.repos_webappRoot) return '/repos-web/'; // best guess
 	return this.repos_webappRoot;
 };
 
