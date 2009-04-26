@@ -5,17 +5,18 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Repos thumbnails plugin</title>
 <!-- plugins -->
-<script type="text/javascript" src="../../scripts/lib/jquery/jquery.js"></script>
-<script type="text/javascript" src="../../scripts/shared/repos.js"></script>
+<script type="text/javascript" src="/repos-web/scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="/repos-web/scripts/reposapi/repos.js"></script>
 <!-- for unit testing -->
-<script type="text/javascript" src="../../scripts/unittest.js"></script>
+<script type="text/javascript" src="/repos-web/scripts/unittest/testwalk.js"></script>
 <!-- css is loaded dynamically by unittest.js, so thumbnails will be loaded last -->
-<script type="text/javascript" src="thumbnails.js"></script>
+<script type="text/javascript" src="imagemagick.load.js"></script>
 </head>
 <body>
 
 <h1>Repos thumbnailer plugin</h1>
-<p>Thumbnailing is built in as open/thumb/, but not integrated with the urser interface.
+<p>Thumbnails are created using imagemagick from a PHP script in this plugin folder.
+Thumbnails are added to the interface using a javascript plugin.
 This plugin identifies "open" links and adds thumbnail button. 
 Should be possible, in repository view, to click a command that adds thumbnails to all image files in the list,
 even when there are no "thmbnail" classes. 
@@ -24,7 +25,7 @@ Might be combined with thickbox to show the image in a popup instead of a new pa
 
 <h2>Embed in page without javascript</h2>
 <p>
-<img src="../../open/thumb/?target=/demoproject/trunk/public/images/b.gif&rev=" align="middle" border="1"/> 
+<img src="/repos-plugins/imagemagick/convert/?target=/demoproject/trunk/public/images/b.gif&rev=" align="middle" border="1"/> 
 &lt;- you should see an image with 1px border here (or a white pixel if thumbnailer is not installed).
 </p>
 
@@ -48,7 +49,7 @@ Currently there is no error message as image for this. Should be a rare type of 
 </p>
  
 <h2>Error message as image</h2>
-<p><img src="../../open/thumb/?target=/demoproject/trunk/nonexisting.gif&rev=1" align="middle" border="1"/>
+<p><img src="/repos-web/open/thumb/?target=/demoproject/trunk/nonexisting.gif&rev=1" align="middle" border="1"/>
 Paste the image url in new window to get text error. Or use 'Display image' in firefox.
 </p>
 
