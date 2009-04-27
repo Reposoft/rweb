@@ -1,5 +1,9 @@
 <?PHP
 
+// TODO check that error_reporting is On in php.ini, becaue it is impossible to
+// run /repos-web/conf/php/TestServerSettings.php until simpletest is installed,
+// and installation errors might not be displayed
+
 // TODO create a generic install helper script, with these functions and also help for download
 
 require (dirname(dirname(__FILE__)).'/conf/System.class.php');

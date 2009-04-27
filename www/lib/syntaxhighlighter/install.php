@@ -4,6 +4,7 @@ require '../uncompress.php';
 
 $report = new Report('Install SyntaxHighlighter');
 
+// todo check for file inside sh/ so that it is not detected as installed if unzip has failed
 if (file_exists('sh/')) {
 	$report->ok("SyntaxHighlighter is already installed, done.");
 	$report->display();
