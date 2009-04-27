@@ -15,6 +15,13 @@
 	# during development browsers should revalidate on each request for static resources too
 	Header add Cache-Control "max-age=0, must-revalidate"
 
+	# Repos error pages
+	ErrorDocument 400 /repos-web/errors/400/
+	ErrorDocument 401 /repos-web/errors/401/
+	ErrorDocument 403 /repos-web/errors/403/
+	ErrorDocument 404 /repos-web/errors/404/
+	ErrorDocument 500 /repos-web/errors/500/
+
 	<Location /data>
 		DAV svn
 		SVNAutoversioning on
