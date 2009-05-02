@@ -425,7 +425,7 @@ class Report {
 				this.innerHTML=''+i;
 				var error = this.getAttribute('title');
 				var span = document.createElement('span');
-				span.innerHTML = '<small>['+i+'] '+error+'</small>';
+				$('<small/>').text('['+i+'] '+error).appendTo(span); // TODO real jQuery for this function
 				span.style.display = 'block';
 				this.parentNode.parentNode.appendChild(span);
 			});
