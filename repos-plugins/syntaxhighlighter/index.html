@@ -6,6 +6,10 @@
 <!-- dependencies -->
 <script type="text/javascript" src="/repos-web/scripts/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="/repos-web/scripts/reposapi/repos.js"></script>
+<!-- mock -->
+<script type="text/javascript">
+Repos.getService = function() { return 'open/file/'; };
+</script>
 <!-- firebug for any browser
 <script language="javascript" type="text/javascript" src="/repos-web/scripts/lib/firebug/firebug.js"></script> -->
 <!-- the plugin -->

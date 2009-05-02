@@ -28,9 +28,10 @@ Repos.syntax.map["htp"] = "htp";
 
 Repos.syntax.bundled = ['Css', 'Java', 'Plain', 'Sql', 'Bash', 'Delphi', 'JScript', 'Python', 'Vb', 'Cpp', 'Perl', 'Ruby', 'Xml', 'CSharp', 'Groovy', 'Php', 'Scala', 'Diff'];
 Repos.syntax.custom = ['Diff', 'Acl', 'Wiki'];
-Repos.syntax.loading = 0;
+Repos.syntax.brushes = 0;
+Repos.syntax.loaded = 0;
 
-$().ready(function() {
+Repos.service('open/file/', function() {
 	// load css
 	$('<link type="text/css" rel="stylesheet" href="'+Repos.syntax.path+'styles/shCore.css"></link>').appendTo('head');
 	$('<link type="text/css" rel="stylesheet" href="'+Repos.syntax.path+'styles/shThemeDefault.css"></link>').appendTo('head');
@@ -64,9 +65,9 @@ Repos.syntax.setup = function() {
 	} );
 	// when all brushes have finished loading, highlight all
 	// (API does not support highlight single element)
-	var loadstatus = $('<p/>').text('Loading ' + Repos.syntax.loading + ' brushes...').appendTo('body');
+	var loadstatus = $('<p/>').text('Loading ' + Repos.syntax.brushes + ' brushes...').appendTo('body');
 	var intervalID = setInterval(function() {
-		if (Repos.syntax.loading) return;
+		if (Repos.syntax.loaded < Repos.syntax.brushes) return;
 		clearInterval(intervalID);
 		setTimeout(Repos.syntax.enable, 100); // don't know why it does not work immediately
 		loadstatus.remove();
@@ -77,16 +78,16 @@ Repos.syntax.load = function(brush) {
 	if (brush == 'js') brush = 'jscript'; // until we handle SyntaxHighlighter's aliases
 	for(i in Repos.syntax.bundled) {
 		if (brush == Repos.syntax.bundled[i].toLowerCase()) {
-			Repos.syntax.loading++;
+			Repos.syntax.brushes++;
 			$.getScript(Repos.syntax.path + 'scripts/shBrush' + Repos.syntax.bundled[i] + '.js',
-				function() { Repos.syntax.loading--; });
+				function() { Repos.syntax.loaded++; });
 		}
 	}
 	for(i in Repos.syntax.custom) {
 		if (brush == Repos.syntax.custom[i].toLowerCase()) {
-			Repos.syntax.loading++;
+			Repos.syntax.brushes++;
 			$.getScript(Repos.syntax.plugin + 'shBrush' + Repos.syntax.custom[i] + '.js',
-				function() { Repos.syntax.loading--; });
+				function() { Repos.syntax.loaded++; });
 		}
 	}
 };
