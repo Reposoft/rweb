@@ -12,6 +12,13 @@ Repos.service('index/', function() {
 		});
 		return;
 	}
+	// OR readme as XHTML
+	readme = $('a.file[href=repos.html]')[0];
+	if (typeof readme != 'undefined') {
+		$('body').say({id:'repos-readme'});
+		$('#repos-readme').load(readme.href);
+		return;
+	}
 	// else, display button to add readme if it does not exist
 	var w = Repos.getWebapp();
 	var t = encodeURI(Repos.getTarget());
