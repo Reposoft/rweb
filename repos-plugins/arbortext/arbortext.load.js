@@ -16,12 +16,14 @@ Repos.service('open/', function() {
 	// provide access to verbose info
 	$('#activities p:first').appendTo($('#activities')).show();
 	$('#activities h3').each(function() {
-		$(this).mouseover(function() {
-			$(this).css('background-color','yellow');
-			$(this).one('mouseout', function() {
-				$(this).css('background-color',null);	
+		$(this).hover(function() {
+				$('<div id="action-help"/>').addClass('section')
+					.appendTo($(this).parent().parent())
+					.append('<h3>' + $(this).text() + '</h3>')
+					.append('<p>' + $(this).next().html() + '</p>');
+			}, function() {
+				$('#action-help').remove();
 			});
-		});
 	});
 	// load properties automatically
 	$().bind('repos-proplist-loaded', function(event, container) {
