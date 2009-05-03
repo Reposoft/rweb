@@ -48,6 +48,7 @@
 				<!-- repos metadata -->
 				<meta name="repos-service" content="index/" />
 				<meta name="repos-target" content="{/svn/index/@path}/" />
+				<meta name="repos-base" content="{/svn/index/@base}" />
 				<!-- default stylesheets -->
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>

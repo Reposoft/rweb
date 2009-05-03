@@ -9,14 +9,9 @@ $(document).ready( function() {
 
 Repos.proplist.init = function() {
 	$('.proplist').each( function() {
-		var target = Repos.proplist.getTarget(this);
+		var target = Repos.getTarget(this);
 		if (target) Repos.proplist.addClick(this, target);
 	} );
-};
-
-Repos.proplist.getTarget = function(elem) {
-	if ($(elem).attr('title')) return $(elem).attr('title');
-	return $(elem).parent().attr('title');
 };
 
 Repos.proplist.addClick = function(container, target) {

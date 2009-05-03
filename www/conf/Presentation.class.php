@@ -295,7 +295,6 @@ class Presentation {
 		}
 		// set common head tags
 		$webapp = $this->_getStaticWebappUrl();
-		$this->assign('head', $this->_getHeadTags($webapp));
 		$this->assign('referer', $this->getReferer());
 		$this->assign('userhome', $this->getUserhome());
 		$this->assign('webapp', $webapp);
@@ -304,6 +303,8 @@ class Presentation {
 		}
 		// support mod_dav_svn's @base attrubute for multirepo
 		$this->assign('base', isset($_REQUEST['base']) ? $_REQUEST['base'] : '');
+		// the dynamic part of the html header
+		$this->assign('head', $this->_getHeadTags($webapp));
 		// display
 		if (!$resource_name) {
 			$resource_name = $this->getDefaultTemplate();
@@ -467,6 +468,13 @@ class Presentation {
 		if (function_exists('getService')) {
 			$head = $head . '<meta name="repos-service" content="'.getService().'" />';
 		}
+		// metadata for multi-repo
+		// unlike svn's index xml, Repos should set repos-base only if there is an SVNParentPath
+		// (or, if the xslt always writes repos-base, we should do so here too)
+		$base = $this->smarty->get_template_vars('base');
+		if ($base) {
+			$head = $head . '<meta name="repos-base" content="'.$base.'" />';
+		}		
 		// shared css and scripts
 		$head = $head . $this->_getLinkCssTag($webapp.$stylePath.'global.css');
 		foreach ($this->extraStylesheets as $css) {

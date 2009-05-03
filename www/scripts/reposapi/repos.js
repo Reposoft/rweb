@@ -92,6 +92,9 @@ Repos.getWebapp = function() {
 Repos.url = Repos.getWebapp();
 
 Repos.getTarget = function(context) {
+	// functionality from the proplist plugin
+	if (typeof context != 'undefined' && $(context).attr('title')) return $(context).attr('title');
+	// target for this page
 	var t = document.getElementsByName('repos-target');
 	if (t.length==0) return false;
 	return t[0].getAttribute('content');
@@ -179,9 +182,13 @@ jQuery.fn.say = function(message) {
  * It is still undecided how the GUI knows if server user SVNParentPath.
  */
 (function supportMultiRepo() {
+
+	var t = document.getElementsByName('repos-base');
+	if (t.length==0) return;
+	var base = t[0].getAttribute('content');
+
 	_jQ_ajax = jQuery.ajax;
 	jQuery.ajax = function(options) {
-		var base = $('#base').text();
 		if (base && options.url.match(/[?&]target=/)) options.url += '&base=' + base;
 		_jQ_ajax(options);
 	};
