@@ -28,6 +28,8 @@ cat /etc/apache2/mods-enabled/*.conf \
 # run with forwarded arguments like -trace=debug to build TEST script
 # -configure parameter is added because running tests from this script is not prefered
 
+# -maxclients X is a good parameter, particularly since operations do subrequets
+
 # Sadly it is not possible to run this script's logic from inside TEST.PL because Apache::TestRun does 'exit'
 # (tried in revision 4051)
 
