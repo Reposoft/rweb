@@ -7,6 +7,10 @@ $(document).ready( function() {
 	Repos.proplist.init();
 } );
 
+// --- Event definitions ---
+$().bind('repos-proplist-loaded', function(event, proplistParent){});
+// ---
+
 Repos.proplist.init = function() {
 	$('.proplist').each( function() {
 		var target = Repos.getTarget(this);
@@ -16,7 +20,7 @@ Repos.proplist.init = function() {
 
 Repos.proplist.addClick = function(container, target) {
 	var call = Repos.url+'open/proplist/?target='+target;
-	var link = $('<a href="'+call+'">Versioned properties</a>')
+	var link = $('<a class="action-load" href="'+call+'">Versioned properties</a>')
 		.click( function() {
 			var e = $(this);
 			e.text(' ...').addClass('loading');
@@ -26,6 +30,7 @@ Repos.proplist.addClick = function(container, target) {
 				dataType: 'json',
 				success: function(json) {
 					Repos.proplist.present(e.parent(), json);
+					$().trigger('repos-proplist-loaded', [e.parent()]);
 					e.remove();
 				},
 				error: function() {
@@ -44,7 +49,7 @@ Repos.proplist.present = function(jqElem, json) {
 	} else if (json.proplist.length == 0) {
 		jqElem.append('<p>No properties set</p>');
 	} else {
-		list = $('<dl><lh>Versioned properties</lh></dl>');
+		list = $('<dl class="properties"><lh>Versioned properties</lh></dl>');
 		for (var prop in json.proplist) {
 			list.append('<dt>'+prop+'</dt><dd>'+json.proplist[prop]+'</dd>');
 		}

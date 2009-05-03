@@ -33,7 +33,7 @@ h2 {
 	font-size: 1.4em;
 	color: #444444;
 }
-h3, thead td {
+h3, thead td, lh {
 	font-weight: normal;
 	margin-bottom: 3px;
 	font-size: 1.1em;
@@ -252,6 +252,17 @@ a.action {
 }
 span.action {
 	display: none;
+}
+/* dl is for name-value lists */
+dt {
+	float: left;
+	clear: left;
+	width: 100px;
+	text-align: right;
+	font-style: italic;
+	margin-right: 1em;
+}
+dd {
 }
 /* common commands */
 #commandbar #back {
