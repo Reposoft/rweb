@@ -18,7 +18,6 @@ Repos.service('edit/upload/', function() {
 function autoFillFilename(path) {
 	$().say();
 	var pos = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
-	if (0 >= pos) return;
 	var filename = path.substring(pos + 1);
 	
 	if (!v) {
