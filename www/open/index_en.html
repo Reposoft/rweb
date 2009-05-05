@@ -78,6 +78,12 @@ You need to use a version control (Subversion) client like Repos.</p>
 <p>Last edited at: <span class="datetime">{=$file,date}</span></p>
 <p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
 <p>Content type: <span>{=$file,type}</span></p>
+<!--{if $file,isLocked}-->
+<p class="lock">Locked by 
+<span class="username">{=$file,lockOwner}</span> <span class="datetime">{=$file,lockCreated}</span>
+{=if $file,lockComment}<br /> <span class="message">{=$file,lockComment}</span>{=/if}
+</p>
+<!--{/if}-->
 <div class="proplist" title="{=$file,path}">
 </div>
 </div>
