@@ -73,13 +73,11 @@ You need to use a version control (Subversion) client like Repos.</p>
 <div class="column" style="width: 40%">
 <div id="filedetails" class="section">
 <h2>File details</h2>
-<dl>
-<dt>Version number</dt><dd class="revision">{=$file,revision}</dd>
-<dt>Last edited by</dt><dd class="username">{=$file,author}</dd>
-<dt>Last edited at</dt><dd class="datetime">{=$file,date}</dd>
-<dt>File size</dt><dd class="filesize">{=$file,size|formatSize}</dd>
-<dt>Content type</dt><dd>{=$file,type}</dd>
-</dl>
+<p>Version number: <span class="revision">{=$file,revision}</span></p>
+<p>Last edited by: <span class="username">{=$file,author}</span></p>
+<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
+<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
+<p>Content type: <span>{=$file,type}</span></p>
 <div class="proplist" title="{=$file,path}">
 </div>
 </div>
