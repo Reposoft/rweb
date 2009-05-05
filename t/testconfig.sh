@@ -33,7 +33,9 @@ cat /etc/apache2/mods-enabled/*.conf \
 # Sadly it is not possible to run this script's logic from inside TEST.PL because Apache::TestRun does 'exit'
 # (tried in revision 4051)
 
-perl ./TEST.PL -httpd_conf_extra $(pwd)/mods-enabled.httpd_conf_extra -configure $@
+# maxclients is 2 by default, but repos needs at least 3 so we set it here
+
+perl ./TEST.PL -httpd_conf_extra $(pwd)/mods-enabled.httpd_conf_extra -configure -maxclients 3 $@
 
 echo "Now run './TEST -start' to start server and './TEST -run' to test"
 
