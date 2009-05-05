@@ -7,6 +7,14 @@ Repos.service('index/', function() {
 
 });
 
+Repos.target(/\.(xml|fos|style|dcf|mcf|sgm|dita|ditamap)$/, function() {
+	if (Repos.isService('open/') || Repos.isService('edit/')) {
+		var url = $('#urlcopy').val().replace(/^https?/, 'arbortext-editor:x-svn');
+		$('<h3><a href="'+url+'" style="background-image:url(/repos-plugins/arbortext/abx_icon32.png);">Open in Arbortext</a></h3><p></p>')
+			.appendTo('#activities');
+	}
+});
+
 Repos.service('open/', function() {
 	// hide verbose info	
 	$('#activities p').hide();

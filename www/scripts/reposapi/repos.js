@@ -113,6 +113,9 @@ Repos.getService = function(context) {
  * @return true if current target matches the selector
  */
 Repos.isTarget = function(selector,context) {
+	// allow regexp as selector, matching target direcly
+	if (typeof selector.test == 'function') return selector.test(Repos.getTarget(context));
+	// not regexp, handle as Ant pattern
 	var s = selector;
 	// escape valid path characters
 	s = s.replace(/([.+^${}()\[\]\/])/g, '\\$1');
@@ -123,7 +126,7 @@ Repos.isTarget = function(selector,context) {
 	s = s.replace(/\*/g,'[^//]{0,}');
 	// match
 	var r = new RegExp('^'+s+'$');
-	var t = Repos.getTarget();
+	var t = Repos.getTarget(context);
 	var is = r.test(t);
 	return is;
 };
