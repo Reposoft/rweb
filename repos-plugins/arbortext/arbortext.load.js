@@ -43,6 +43,19 @@ Repos.service('open/', function() {
 				$('#action-help').remove();
 			});
 	});
+	// properties formatting
+	var namespaces = {
+		cms: 'Content Management',
+		img: 'Image Information',
+		abx: 'Arbortext',
+      		svn: 'Subversion'
+	};
+	var namespace = function(v) {
+		return namespaces[v] || v;
+	};
+	var value = function(v, key) {
+		return v;
+	};
 	// load properties automatically
 	$().bind('repos-proplist-loaded', function(event, container) {
 		//$('.column:eq(0)').append(container).addClass('section');
@@ -57,9 +70,9 @@ Repos.service('open/', function() {
 		$('dl.properties', container).remove();
 		// separate lists per namespace
 		for (n in prop) {
-			var list = $('<dl class="properties"><lh>' + n + '</lh></dl>');
+			var list = $('<dl class="properties"><lh>' + namespace(n) + '</lh></dl>');
 			for (p in prop[n]) {
-				list.append('<dt>'+p+'</dt><dd>'+prop[n][p]+'</dd>');
+				list.append('<dt>'+p+'</dt><dd>'+value(prop[n][p])+'</dd>');
 			}
 			container.append(list);
 		}
