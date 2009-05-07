@@ -274,7 +274,7 @@
 					<xsl:text>/</xsl:text>
 				</xsl:if>
 			</span>
-			<span class="separator"><xsl:value-of select="'/'"/></span>
+			<!--<span class="separator"><xsl:value-of select="'/'"/></span>-->
 		</xsl:if>
 		<xsl:if test="boolean($rest)">
 			<xsl:if test="boolean($f)">
