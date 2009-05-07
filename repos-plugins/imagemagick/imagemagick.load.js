@@ -1,14 +1,17 @@
 
-Repos.thumbnails = new Object();
-
-Repos.thumbnails.init  = function() {
-	Repos.thumbnails.initIntro();
-	// Repos.thumbnails.initRepository();
-	// Repos.thumbnails.initLog();
+Repos.thumbnails = {
+	filetypes: 'jpg|png|gif'+
+		'|bmp|eps|pdf|ps|psd|ico|svg|tif|tiff'+
+		'|avi'+
+		'|ai'+ // some adobe formats are actually pdf or postscript
+		'' 
 };
 
-Repos.thumbnails.initIntro = function() {
+Repos.thumbnails.match = new RegExp('\.(' + Repos.thumbnails.filetypes + ')$');
+
+Repos.target(Repos.thumbnails.match, function() {
 	if ($('#intro').size()==0) return;
+	// Repos.getTarget et.al. does not provide a getRevision
 	if (window.location.search.length==0) return;
 	var href = window.location.search;
 	var target = Repos.thumbnails.getTarget(href);
@@ -17,8 +20,9 @@ Repos.thumbnails.initIntro = function() {
 	if (!src) return;
 	$('#intro').prepend('<img class="thumbnail" src="'+src+'" alt="Creating thumbnail..." border="0"/>');
 	$('#intro').append('<div style="clear: both;"></div>'); 
-};
+});
 
+// under development
 Repos.thumbnails.initRepository = function() {
 	$('a.file').each(function() {
 		var href = aTag.getAttribute('href');
@@ -29,15 +33,11 @@ Repos.thumbnails.initRepository = function() {
 		$(aTag).append('<img src="'+src+'" border="0" />');
 	} );
 };
-
 Repos.thumbnails.initLog = function() {
 };
 
 Repos.thumbnails.getSrc = function(target, rev) {
 	if (!target) return false;
-	if (!/\.(jpg|png|gif|avi|bmp|eps|pdf|ps|psd|ico|svg|tif|tiff)$/.test(target)) {
-		return false;
-	}
 	return '/repos-plugins/imagemagick/convert/?target='+target+'&rev='+rev+'&base='+Repos.getBase();
 };
 
@@ -58,8 +58,3 @@ Repos.thumbnails.getRev = function(href) {
 	// use HEAD, still a valid query parameter, DISABLES CACHING
 	return ''; 
 };
-
-// or should it be onload so that other resources load first?
-$(document).ready(function() {
-	Repos.thumbnails.init();
-} );
