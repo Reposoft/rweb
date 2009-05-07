@@ -12,6 +12,7 @@ function convertGetCommand() {
 	}
 	// expect imagemagick in path
 	return 'convert';
+	// GraphicsMagick: return 'gm convert';
 }
 
 ?>

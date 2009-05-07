@@ -5,8 +5,9 @@
  * @package
  */
 
-require('../SvnOpenFile.class.php');
-require('../../lib/imagemagick/convert.inc.php');
+require('../../reposweb.inc.php');
+require(ReposWeb.'open/SvnOpenFile.class.php');
+require('./convert.inc.php');
 define('THUMB_SIZE', 150);
 
 // create the option string to use with convert command
@@ -21,7 +22,8 @@ function getThumbnailCommand($format='', $target='-') {
 $convert = convertGetCommand();
 
 exec("$convert -version", $output, $result);
-if ($result) {
+if ($result > 1) {
+	//echo($result);print_r($output);
 	handleError('[convert not installed]','','empty.jpg');
 }
 
