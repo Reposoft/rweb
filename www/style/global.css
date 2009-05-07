@@ -42,9 +42,6 @@ h3, thead td, lh {
 thead td {
 	text-align: center;
 }
-h1, h2, h3 {
-	clear:both;
-}
 h1 em, h2 em, h3 em {
 	font-style: normal;
 	color: #99CC00;
