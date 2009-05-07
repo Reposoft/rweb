@@ -38,7 +38,7 @@ Repos.thumbnails.getSrc = function(target, rev) {
 	if (!/\.(jpg|png|gif|svg)$/.test(target)) {
 		return false;
 	}
-	return '/repos-plugins/imagemagick/convert/?target='+target+'&rev='+rev;
+	return '/repos-plugins/imagemagick/convert/?target='+target+'&rev='+rev+'&base='+Repos.getBase();
 };
 
 Repos.thumbnails.getTarget = function(href) {

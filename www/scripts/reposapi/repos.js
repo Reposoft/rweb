@@ -91,19 +91,28 @@ Repos.getWebapp = function() {
  */
 Repos.url = Repos.getWebapp();
 
+/**
+ * @return the value of a page metadata field, or false if not existing.
+ */
+Repos.getMeta = function(id) {
+	var m = document.getElementsByName('repos-'+id);
+	if (m.length==0) return false;
+	return m[0].getAttribute('content');
+};
+
 Repos.getTarget = function(context) {
 	// functionality from the proplist plugin
 	if (typeof context != 'undefined' && $(context).attr('title')) return $(context).attr('title');
 	// target for this page
-	var t = document.getElementsByName('repos-target');
-	if (t.length==0) return false;
-	return t[0].getAttribute('content');
+	return Repos.getMeta('target');
 };
 
-Repos.getService = function(context) {
-	var s = document.getElementsByName('repos-service');
-	if (s.length==0) return false;
-	return s[0].getAttribute('content');
+Repos.getService = function() {
+	return Repos.getMeta('service');
+};
+
+Repos.getBase = function() {
+	return Repos.getMeta('base') || ''; // empty string allows returned optional value to be set in query string
 };
 
 /**
@@ -185,10 +194,7 @@ jQuery.fn.say = function(message) {
  * It is still undecided how the GUI knows if server user SVNParentPath.
  */
 (function supportMultiRepo() {
-
-	var t = document.getElementsByName('repos-base');
-	if (t.length==0) return;
-	var base = t[0].getAttribute('content');
+	var base = Repos.getBase();
 
 	_jQ_ajax = jQuery.ajax;
 	jQuery.ajax = function(options) {
