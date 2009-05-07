@@ -252,12 +252,8 @@ span.action {
 }
 /* dl is for name-value lists */
 dt {
-	float: left;
-	clear: left;
-	width: 100px;
-	text-align: right;
 	font-style: italic;
-	margin-right: 1em;
+	padding-top: .3em;
 }
 dd {
 }
