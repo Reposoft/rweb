@@ -35,7 +35,7 @@ Repos.thumbnails.initLog = function() {
 
 Repos.thumbnails.getSrc = function(target, rev) {
 	if (!target) return false;
-	if (!/\.(jpg|png|gif|svg)$/.test(target)) {
+	if (!/\.(jpg|png|gif|avi|bmp|eps|pdf|ps|psd|ico|svg|tif|tiff)$/.test(target)) {
 		return false;
 	}
 	return '/repos-plugins/imagemagick/convert/?target='+target+'&rev='+rev+'&base='+Repos.getBase();
