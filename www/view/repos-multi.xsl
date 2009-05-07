@@ -8,7 +8,7 @@
 	<!-- start transform -->
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
-	<xsl:param name="title">Simonsoft CMS | <xsl:value-of select="/svn/index/@base"/></xsl:param>
+	<xsl:param name="title">repos: <xsl:value-of select="/svn/index/@base"/></xsl:param>
 	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
 	<xsl:param name="web">/repos-web/</xsl:param>
 	<xsl:param name="static"><xsl:value-of select="$web"/></xsl:param>
