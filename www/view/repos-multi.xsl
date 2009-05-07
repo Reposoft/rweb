@@ -33,8 +33,10 @@
 	 </xsl:param> -->
 	<!-- the recognized top level folders for project tools separated by slash -->
 	<xsl:param name="tools">/trunk/branches/tags/tasks/templates/messages/calendar/administration/</xsl:param>
-	<!-- true if current page is SVNParentPath's "Collection of Repositories" -->
-	<xsl:param name="svnparent"><xsl:if test="/svn/index/@path = 'Collection of Repositories'">svnparent</xsl:if></xsl:param>
+	<!-- special types of body contents, such as " static" (SVNParentPath) or " readonly" -->
+	<xsl:param name="contentclass">
+		<xsl:if test="/svn/index/@path = 'Collection of Repositories'"> static</xsl:if>
+	</xsl:param>
 	<!-- document skeleton -->
 	<xsl:template match="/">
 		<html xmlns="http://www.w3.org/1999/xhtml">
@@ -57,7 +59,7 @@
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$static}scripts/head.js"></script>
 			</head>
-			<body class="repository xml {$svnparent}">
+			<body class="repository xml {$contentclass}">
 				<xsl:apply-templates select="svn"/>
 			</body>
 		</html>

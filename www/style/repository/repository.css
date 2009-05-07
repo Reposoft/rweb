@@ -24,8 +24,11 @@
 #repos-edit {
 	background-image: url('../commands/16x16/edit.png');
 }
-/* special treatment of svn parent path collection */
-body.svnparent #commandbar a {
+/* special treatment of svn parent path/static/readonly (maybe we should have corresponding classes on actions) */
+body.static #commandbar a {
+	display: none;
+}
+body.static .contentcommands {
 	display: none;
 }
 /* special folders */
