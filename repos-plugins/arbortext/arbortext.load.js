@@ -1,13 +1,13 @@
 
 Repos.service('home/', function() {
-	$('#intro h1').empty().append('<img alt="Simonsoft logo" width="1134" height="92" border="0" align="absmiddle" alt="repos.se" src="/repos-plugins/arbortext/simonsoft_logo_polo_1_150dpi.gif"/>');
+	$('#intro h1').empty().append('<img alt="Simonsoft logo" width="567" height="46" border="0" align="absmiddle" alt="repos.se" src="/repos-plugins/arbortext/simonsoft-logo.gif"/>');
 });
 
 Repos.service('index/', function() {
 	$('.file-xml, .file-fos, .file-style, .file-dcf, .file-mcf, .file-sgm, .file-dita, .file-ditamap')
 		.css('background-image', 'url("/repos-plugins/arbortext/abx_icon.png")');
 
-	$('#commandbar #logo').attr('width','198').attr('src', '/repos-plugins/arbortext/simonsoft-name.gif');
+	$('#commandbar #logo').attr('width','156').attr('src', '/repos-plugins/arbortext/simonsoft-name.gif');
 
 });
 
