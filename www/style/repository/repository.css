@@ -24,6 +24,10 @@
 #repos-edit {
 	background-image: url('../commands/16x16/edit.png');
 }
+/* special treatment of svn parent path collection */
+body.svnparent #commandbar a {
+	display: none;
+}
 /* special folders */
 #path .separator {
 	color: #777;
