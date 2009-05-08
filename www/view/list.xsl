@@ -3,7 +3,7 @@
 
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
-	<xsl:param name="title">repos list: </xsl:param>
+	<xsl:param name="title">repos: list </xsl:param>
 
 	<xsl:param name="web">/repos-web/</xsl:param>
 
@@ -11,6 +11,13 @@
 
 	<xsl:param name="spacer" select="'&#160; '"/>
 
+	<!-- repository already has @base appended (because it comes from getRepository) but some links need it -->
+	<xsl:param name="baseparam">
+		<xsl:if test="/lists/@base">
+			<xsl:text>&#38;base=</xsl:text>
+			<xsl:value-of select="/lists/@base"/>
+		</xsl:if>
+	</xsl:param>
 	<xsl:template match="/">
 		<head>
 			<title>
@@ -24,6 +31,7 @@
 			<!-- repos metadata -->
 			<meta name="repos-service" content="open/list/" />
 			<meta name="repos-target" content="{/lists/@target}" />
+			<meta name="repos-base" content="{/lists/@base}" />
 			<!-- default stylesheets -->
 			<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
 			<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>
@@ -48,9 +56,9 @@
 		<xsl:param name="url" select="concat(../@repo,$target)"/>
 		<div id="commandbar">
 			<a id="repository" href="{$url}">current version</a>
-			<a id="history" href="../log/?target={$target}&amp;rev={../@rev}">show history<xsl:if test="../@rev"> for version <xsl:value-of select="../@rev"/></xsl:if></a>
+			<a id="history" href="../log/?target={$target}&amp;rev={../@rev}{$baseparam}">show history<xsl:if test="../@rev"> for version <xsl:value-of select="../@rev"/></xsl:if></a>
 			<xsl:if test="../@rev">
-				<a id="historycurrent" href="../log/?target={$target}">history of current version</a>
+				<a id="historycurrent" href="../log/?target={$target}{$baseparam}">history of current version</a>
 			</xsl:if>
 		</div>
 		<h2>
@@ -99,7 +107,7 @@
 		<xsl:param name="n" select="position() - 1"/>
 		<tr id="row:{$id}" class="row n{$n mod 4}">
 			<td>
-				<a id="open:{$id}" class="folder" href="../?target={$target}&amp;rev={commit/@revision}">
+				<a id="open:{$id}" class="folder" href="../?target={$target}&amp;rev={commit/@revision}{$baseparam}">
 					<xsl:value-of select="name"/>
 				</a>
 			</td>
@@ -138,7 +146,7 @@
 		<xsl:param name="n" select="position() - 1"/>
 		<tr id="row:{$id}" class="n{$n mod 4}">
 			<td>
-				<a id="open:{$id}" class="file-{$filetype} file" href="../?target={$target}&amp;rev={commit/@revision}">
+				<a id="open:{$id}" class="file-{$filetype} file" href="../?target={$target}&amp;rev={commit/@revision}{$baseparam}">
 					<xsl:value-of select="name"/>
 				</a>
 			</td>
