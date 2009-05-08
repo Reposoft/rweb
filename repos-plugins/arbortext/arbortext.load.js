@@ -3,7 +3,10 @@ document.title = document.title.replace('repos:', 'Simonsoft CMS |');
 
 // Set startpage logo
 Repos.service('home/', function() {
-	$('#intro h1').empty().append('<img alt="Simonsoft logo" width="567" height="46" border="0" align="absmiddle" alt="repos.se" src="/repos-plugins/arbortext/simonsoft-logo.gif"/>');
+	$('#intro h1').empty()
+		.append('<img alt="Simonsoft logo" width="567" height="46" border="0" align="bottom" alt="repos.se" src="/repos-plugins/arbortext/simonsoft-logo.gif"/>')
+		.append('&nbsp;&nbsp;CMS') //.append('&nbsp;&#124;&nbsp;CMS')
+		.css({fontSize:'42px',fontWeight:'bold',letterSpacing:'.1em',color:'#999'});
 });
 
 // Set special icons and repository browser logo
@@ -11,7 +14,7 @@ Repos.service('index/', function() {
 	$('.file-xml, .file-fos, .file-style, .file-dcf, .file-mcf, .file-sgm, .file-dita, .file-ditamap')
 		.css('background-image', 'url("/repos-plugins/arbortext/abx_icon.png")');
 
-	$('#commandbar #logo').attr('width','156').attr('src', '/repos-plugins/arbortext/simonsoft-name.gif');
+	$('#commandbar #logo').attr('width','134').attr('src', '/repos-plugins/arbortext/simonsoft-name.png');
 
 });
 
