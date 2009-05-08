@@ -47,6 +47,15 @@ Repos.service('open/', function() {
 			});
 	});
 	// properties formatting
+	var properties = {
+		separator: /\r?\n/g,
+		url: /([a-z+:-]+):\/\/([a-z0-9.+-]+)?(:\d+)?\/([^=;#:\s?]+)(\?[^;#:\s\/?]+)?/ig
+		// url: exclude reserved characters from http://www.w3.org/Addressing/URL/5_BNF.html#z75
+		// but allow slash and ? to make regex short
+		// hostname is optional in arbortext linkbase urls
+		// example: arbortext-editor:x-svn:///svn/demo/trunk/Storyboard_demo.xml
+		// TODO match only the complete value (between separators), not URLs in values 
+	};
 	var namespaces = {
 		cms: 'Content Management',
 		img: 'Image Information',
@@ -57,6 +66,8 @@ Repos.service('open/', function() {
 		return namespaces[v] || v;
 	};
 	var value = function(v, key) {
+		v = v.replace(properties.url, '<a href="$&">$&</a>');
+		v = v.replace(properties.separator, '<br />'); // should be in properties plugin, should be another <dd>
 		return v;
 	};
 	// load properties automatically
