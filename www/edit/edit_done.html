@@ -45,7 +45,7 @@
 <p><a id="return" class="action" href="{=$nexturl}">return to repository</a></p>
 <script type="text/javascript">document.getElementById('return').focus();</script>
 <!--{if isset($redirect)}-->
-<p><small>You should be automatically redirected to <a href="{=$redirect}">{=$redirect}</a></small></p>
+<p><small>You should be automatically redirected to <a id="meta-refresh-url" href="{=$redirect}">{=$redirect}</a></small></p>
 <!--{/if}-->
 <!--{if $revision}-->
 <!-- not supported in release 1.0: Need to know the target folder here to be able to show the log.
