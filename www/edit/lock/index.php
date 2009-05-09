@@ -37,7 +37,8 @@ function lock($message) {
 	$lock->addArgUrl($targeturl);
 	$lock->exec();
 	if (isset($_POST['download']) && $_POST['download']) {
-		$p->assign('redirect', getWebapp().'open/download/?target='.urlencode(getTarget()));
+		$p->assign('redirect', getWebapp().'open/download/?target='.urlencode(getTarget())
+			.(isset($_REQUEST['base']) ? '&base='.$_REQUEST['base'] : ''));
 	}
 	displayEdit($p, getParent($targeturl));
 }
