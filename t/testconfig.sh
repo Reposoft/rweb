@@ -34,8 +34,9 @@ cat /etc/apache2/mods-enabled/*.conf \
 # (tried in revision 4051)
 
 # maxclients is 2 by default, but repos needs at least 3 so we set it here
+MAXCLIENTS=5
 
-perl ./TEST.PL -httpd_conf_extra $(pwd)/mods-enabled.httpd_conf_extra -configure -maxclients 3 $@
+perl ./TEST.PL -httpd_conf_extra $(pwd)/mods-enabled.httpd_conf_extra -configure -maxclients $MAXCLIENTS $@
 
 echo "Now run './TEST -start' to start server and './TEST -run' to test"
 
