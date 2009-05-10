@@ -9,6 +9,9 @@
 <link rel="stylesheet" type="text/css" media="all" href="/repos-web/style/global.css" />
 <link rel="stylesheet" type="text/css" media="all" href="/repos-web/style/repository/repository.css" />
 <style type="text/css">
+body {
+	background-color: white;
+}
 .details {
 	display: none;
 }
@@ -175,9 +178,9 @@ $().ready(function() {
 	reposTreeShowDetails().appendTo('#commandbar');
 	reposTreePrint().appendTo('#commandbar');
 	if (!settings.sidebar && !settings.menu) reposTreeMaximize().addClass('action').appendTo(c);
+	if (!settings.sidebar) reposTreeSidebar().addClass('action').appendTo(c);
 	reposTreeExpandAll().addClass('action').appendTo(c);
 	reposTreeHideFiles().addClass('action').appendTo(c);
-	if (!settings.sidebar) reposTreeSidebar().addClass('action').appendTo(c);
 });
 function reposTreeBrowse() {
 	return $('<a/>').attr('id','repository')
