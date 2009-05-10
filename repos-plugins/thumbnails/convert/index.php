@@ -27,6 +27,10 @@ if ($result > 1) {
 	handleError('[convert not installed]','','empty.jpg');
 }
 
+// can't be sure that the browser automatically forwards credentials to this plugin folder
+// TODO make sure login is not required for public readable images
+targetLogin();
+
 // first get the data about the repository image
 $r = new RevisionRule();
 // Validation::expect('rev'); // explicit revision number required for caching
