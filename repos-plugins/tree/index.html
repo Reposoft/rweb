@@ -3,8 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>repos: tree view</title>
-<!-- <script type="text/javascript" src="jquery.js"></script> -->
+<title>repos: browse</title>
 <script type="text/javascript" src="/repos-web/scripts/head.js"></script>
 <link rel="stylesheet" type="text/css" media="all" href="/repos-web/style/global.css" />
 <link rel="stylesheet" type="text/css" media="all" href="/repos-web/style/repository/repository.css" />
@@ -189,7 +188,7 @@ function reposTreeBrowse() {
 		.text('return to repository').appendTo('#commandbar');
 };
 function reposTreeSidebar() {
-	var title = 'repos: ' + settings.hostname + ' ' + settings.target;
+	var title = document.title + ' ' + settings.hostname + ' ' + settings.target;
 	var url = window.location.href;
 	url = url.replace(/([?&])frame=_top&?/,'$1');
 	url += url.indexOf('?')>0 ? '&' : '?';
