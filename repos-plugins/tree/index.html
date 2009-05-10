@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Repos Tree</title>
+<title>repos: tree view</title>
 <!-- <script type="text/javascript" src="jquery.js"></script> -->
 <script type="text/javascript" src="/repos-web/scripts/head.js"></script>
 <link rel="stylesheet" type="text/css" media="all" href="/repos-web/style/global.css" />
@@ -100,6 +100,7 @@ var settings = {
 	frame: false,
 	sidebar: false, // autodetect and enable if browser supports it?
 	autoexpand: false,
+	showfiles: false,
 	hostname: window.location.hostname,
 	https: window.location.href.substr(0,6)=='https:',
 	base: false,
@@ -137,6 +138,9 @@ function expand(id,target) {
 			if ($.browser.msie && settings.sidebar) a.attr('target','_main');
 			if (settings.https)	a.attr('href', a.attr('href').replace('http:','https:'));
 		});
+		// file click events should not be bubbled
+		var addedfiles = $('li.file', list).click(function(ev) { ev.stopPropagation(); });
+		if (!settings.showfiles) addedfiles.hide();
 		// done, update classes for css
 		list.parent().filter('li').addClass('folder-open').removeClass('loading');
 		// TODO mark empty folders?
@@ -219,8 +223,17 @@ function reposTreeShowDetails() {
 // TODO refactor display options to set classes that allow custom css
 // which is also valid for new tree entries
 function reposTreeHideFiles() {
-	return $('<a/>').attr('id','hidefiles').attr('href','javascript:void(0)').html('hide&nbsp;files').click(function() {
-		$('.file').hide();
+	return $('<a/>').attr('id','hidefiles').attr('href','javascript:void(0)')
+		.html((settings.showfiles?'hide':'show')+'&nbsp;files').click(function() {
+		if (settings.showfiles) {
+			settings.showfiles = false;
+			$('.file').hide();
+			$(this).html('show&nbsp;files');	
+		} else {
+			settings.showfiles = true;
+			$('.file').show();
+			$(this).html('hide&nbsp;files');
+		}
 	});
 };
 function reposTreeMaximize() {
