@@ -15,24 +15,31 @@
 span.details { /* tag layout is slightly different from details plugin */
 	margin: 0 0 0 1em;
 }
-ul, li {
+ul, ol {
 	padding: 0px;
-	margin: 0px;
+}
+#root {
+	margin-left: 20px;
 }
 li {
 	list-style: none;
 }
+li.folder, li.file {
+	padding-left: 20px;
+	margin-left: 0px;
+}
 li.folder {
 	list-style-image: url(/repos-plugins/tree/collapsed.png);
 	list-style-position: outside;
-	list-style-type: none;
 }
 li.folder-open {
 	list-style-image: url(/repos-plugins/tree/expanded.png);	
 }
-h1 .hostname {
-	display: block;
-	font-size: 82.5%;
+h1 {
+	font-size: 1em;
+}
+h1 span {
+	margin-right: .5em;
 }
 /* currently global.css contains no extra styling of printouts */
 @media print {
@@ -148,8 +155,9 @@ function collapse(id, target) {
 
 $().ready(function() {
 	if (settings.sidebar || settings.menu) {
-		$('#target').text(settings.target);
-		if (settings.hostname) $('<span/>').addClass('hostname').text(settings.hostname).prependTo('h1');
+		var headline = $('#target').html('<span class="path">'+settings.target+'</span>');
+		if (settings.base) $('<span id="base"/>').text(settings.base).prependTo(headline);
+		if (settings.hostname) $('<span/>').addClass('hostname').text(settings.hostname).prependTo(headline);
 	}
 	if (settings.sidebar || !settings.menu) {
 		$('body').css('margin-top','8px'); // http://www.w3.org/TR/CSS21/sample.html

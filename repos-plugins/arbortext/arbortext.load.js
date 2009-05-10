@@ -5,8 +5,8 @@ document.title = document.title.replace('repos:', 'Simonsoft CMS |');
 Repos.service('home/', function() {
 	$('#intro h1').empty()
 		.append('<img alt="Simonsoft logo" width="567" height="46" border="0" align="bottom" alt="repos.se" src="/repos-plugins/arbortext/simonsoft-logo.gif"/>')
-		.append('&nbsp;&nbsp;CMS') //.append('&nbsp;&#124;&nbsp;CMS')
-		.css({fontSize:'42px',fontWeight:'bold',letterSpacing:'.1em',color:'#999'});
+		.append('&nbsp;&nbsp;CMS&nbsp;beta')
+		.css({fontSize:'42px',fontWeight:'bold',letterSpacing:'.1em',color:'#aaa'});
 });
 
 // Set special icons and repository browser logo
