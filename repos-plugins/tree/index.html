@@ -22,6 +22,14 @@ ul, li {
 li {
 	list-style: none;
 }
+li.folder {
+	list-style-image: url(/repos-plugins/tree/collapsed.png);
+	list-style-position: outside;
+	list-style-type: none;
+}
+li.folder-open {
+	list-style-image: url(/repos-plugins/tree/expanded.png);	
+}
 h1 .hostname {
 	display: block;
 	font-size: 82.5%;
@@ -78,22 +86,19 @@ h1 .hostname {
 	};
 })($);
 
-// configuration
+// configuration, defaults overridden by query string
 var settings = {
 	web: '/repos-web/',
 	menu: true,
 	frame: false,
-	sidebar: false, // autodetect?
+	sidebar: false, // autodetect and enable if browser supports it?
 	autoexpand: false,
 	hostname: window.location.hostname,
 	https: window.location.href.substr(0,6)=='https:',
-	repository: '/data', // not nessecary when json url is repos-web, but used in menu
 	base: false,
 	target: '/demoproject/trunk/' // or... http://localhost/repos-web/open/start/?serv=json
 };
 $.queryextend(settings, window.location.search);
-// multi-repo support
-if (settings.base) settings.repository += '/' + settings.base;
 
 var json = settings.web+'open/json/'; // not using servicelayer
 function expand(id,target) {
@@ -103,24 +108,29 @@ function expand(id,target) {
     dataType: 'script',
     url: json+'?selector='+id+'&target='+encodeURI(here)+(settings.base ? '&base='+settings.base : ''),
     success: function() {
+		// list item has the expand/collapse logic
 		$('li.folder', list).each(function() {
 			var a = $('a',this); // created by list script
 			var target = here + a.text()+'/'; // update in closure for recursion
 			var id = Math.random().toString().substr(2);
 			$('<ul/>').attr('id',id).appendTo(this);
-			a.one('mouseover',
-				function() {
-					$(this).parent().addClass('loading');
+			$(this).toggle(function() {
+					$(this).addClass('loading');
 					expand(id,target);
+				}, function() {
+					collapse(id,target);
 				});
-			if (settings.autoexpand) a.trigger('mouseover');
+			if (settings.autoexpand) $(this).trigger('click');
 		});
-		$('li a', list).each(function() {
+		// link clicks should be treated with default action, not bubbled to list item
+		$('li a', list).click(function(ev) { ev.stopPropagation(); })
+			.each(function() { // customize depending on page setup
 			var a = $(this);
 			if (settings.frame) a.attr('target',settings.frame);
 			if ($.browser.msie && settings.sidebar) a.attr('target','_main');
 			if (settings.https)	a.attr('href', a.attr('href').replace('http:','https:'));
 		});
+		// done, update classes for css
 		list.parent().filter('li').addClass('folder-open').removeClass('loading');
 		// TODO mark empty folders?
     },
@@ -130,6 +140,12 @@ function expand(id,target) {
 	}
   });
 };
+
+function collapse(id, target) {
+	// no use in preserving content as user expects refresh at collapse+expand
+	$('#'+id).empty().parent().removeClass('folder-open');	
+};
+
 $().ready(function() {
 	if (settings.sidebar || settings.menu) {
 		$('#target').text(settings.target);
@@ -151,7 +167,10 @@ $().ready(function() {
 	if (!settings.sidebar) reposTreeSidebar().addClass('action').appendTo(c);
 });
 function reposTreeBrowse() {
-	return $('<a/>').attr('id','repository').attr('href','http://'+settings.hostname+settings.repository+settings.target).text('return to repository').appendTo('#commandbar');
+	return $('<a/>').attr('id','repository')
+		.attr('href',settings.web + 'open/?target=' + encodeURI(settings.target || '/')
+		+ (settings.base ? '&base='+settings.base : ''))
+		.text('return to repository').appendTo('#commandbar');
 };
 function reposTreeSidebar() {
 	var title = 'repos: ' + settings.hostname + ' ' + settings.target;
