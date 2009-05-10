@@ -40,6 +40,7 @@ $file = new SvnOpenFile(getTarget(), $r->getValue());
 $extension = $file->getExtension();
 
 // verify that the source can be accessed
+// note that this requires host-wide login, not only /repos-web/, now that this runs in /repos-plugins
 if ($file->getStatus() != 200) {
 	handleError($file->getStatus(), "Could not read ".$file->getPath()." ".$r->getValue());
 }
