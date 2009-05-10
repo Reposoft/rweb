@@ -123,6 +123,7 @@ function expand(id,target) {
 			var id = Math.random().toString().substr(2);
 			$('<ul/>').attr('id',id).appendTo(this);
 			$(this).toggle(function() {
+					if ($(this).is('.loading')) return;
 					$(this).addClass('loading');
 					expand(id,target);
 				}, function() {
@@ -210,10 +211,25 @@ function reposTreePrint() {
 	});
 };
 function reposTreeExpandAll() {
-	return $('<a/>').attr('href','javascript:void(0)').html('expand&nbsp;all').click(function() {
+	// what's the design pattern for stateful jQuery toggle with button text change?
+	var a =  $('<a/>').attr('href','javascript:void(0)')
+		.html((settings.autoexpand?'collapse':'expand')+'&nbsp;all');
+	var on = function() {
 		settings.autoexpand = true;
-		$('li.folder a').trigger('mouseover');
-	});
+		$('li.folder').not('.folder-open').trigger('click');
+		a.html('collapse&nbsp;all');
+	};
+	var off = function() {
+		settings.autoexpand = false;
+		$('#root > li.folder-open').each(function() {
+			var id = $('ul', this).attr('id') || false;
+ 			if (id) collapse(id);
+		});
+		a.html('expand&nbsp;all');
+		// TODO abort all ajax requests and remove .loading images?
+	};
+	if (settings.autoexpand) a.toggle(off, on); else a.toggle(on, off);
+	return a;
 };
 function reposTreeShowDetails() {
 	return $('<a/>').attr('id','showdetails').attr('href','javascript:void(0)').html('show&nbsp;details').click(function() {
