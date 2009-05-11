@@ -69,9 +69,36 @@ Repos.service('open/', function() {
 		return namespaces[v] || v;
 	};
 	var value = function(v, key) {
-		v = v.replace(properties.url, '<a href="$&">$&</a>');
+		if (key == 'abx:Dependencies') {
+			dependencies(v) 
+		} else {
+			v = v.replace(properties.url, '<a href="$&">$&</a>');
+		}
 		v = v.replace(properties.separator, '<br />'); // should be in properties plugin, should be another <dd>
 		return v;
+	};
+	var dependencies = function(v) {
+		var section = $('<div/>').attr('id','dependencies').addClass('section');
+		$('<h2/>').text('Dependencies').appendTo(section);
+		section.appendTo('.column:eq(1)');
+		pv = v.split(properties.separator);
+		var list = $('<ul id="dependencylist"/>').appendTo(section).css('list-style-type','circle');
+		for (p in pv) {
+			var v = pv[p];
+			if (!v) continue; // enpty after separator
+			var li = $('<li/>').appendTo(list);
+			var m = new RegExp(properties.url).exec(v); // looks like the regex has some kind of memory so every second value it won't match
+			if (!m) {
+				li.text(v);
+				continue;
+			}
+			var url = 
+				location.protocol + '//'
+				+ (m[2] ? m[2] + (m[3] || '') : location.host)
+				+ '/' + m[4]
+				+ (m[5] || '');
+			li.html('<a href="'+url+'">'+url+'</a>');
+		}
 	};
 	// load properties automatically
 	$().bind('repos-proplist-loaded', function(event, container) {
@@ -89,7 +116,7 @@ Repos.service('open/', function() {
 		for (n in prop) {
 			var list = $('<dl class="properties"><lh>' + namespace(n) + '</lh></dl>');
 			for (p in prop[n]) {
-				list.append('<dt>'+p+'</dt><dd>'+value(prop[n][p])+'</dd>');
+				list.append('<dt>'+p+'</dt><dd>'+value(prop[n][p], p)+'</dd>');
 			}
 			container.append(list);
 		}
