@@ -15,7 +15,10 @@ Repos.service('index/', function() {
 		.css('background-image', 'url("/repos-plugins/arbortext/abx_icon.png")');
 
 	$('#commandbar #logo').attr('width','134').attr('src', '/repos-plugins/arbortext/simonsoft-name.png');
+});
 
+Repos.service('open/log/', function() {
+	$('#commandbar #logo').attr('width','134').attr('src', '/repos-plugins/arbortext/simonsoft-name.png');
 });
 
 // Add custom activities for special file types
