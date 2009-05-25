@@ -4,7 +4,7 @@ Repos.service('open/file/', function() {
 	var target = Repos.getTarget();
 	// must use explicit revision number to get matching blame
 	var rev = $('.revision:first').text(); // Repos API method needed
-	var command = $('<a id="linehistory">show line history</a>').appendTo('#commandbar');
+	var command = $('<a id="linehistory" href="#">show line history</a>').appendTo('#commandbar');
 	command.toggle(function() {
 			var element = $('.syntaxhighlighter:first .lines');
 			// trust transparent @base support
@@ -37,9 +37,14 @@ Repos.linehistory = {
 			if (rev > highestrev) highestrev = rev;
 			var author = $('author', this).text();
 			//console.log(n,line,rev,author);
-			$('<span/>').addClass('username').text(author).prependTo(line);
-			$('<span/>').addClass('revision').text(rev).prependTo(line);
-		});	
+			//var tag = '<span class="linehistory"/>'; // avoid span,div,and code to bypass the terribly intrusive SyntaxHighlighter css
+			var tag = '<var class="linehistory"/>';
+			// insert into SyntaxHighlighter output
+			var after = $('.number', line);
+			var css = {float: null};
+			$(tag).addClass('username').css(css).text(author).insertAfter(after);
+			$(tag).addClass('revision').css(css).text(rev).insertAfter(after);
+		});
 	}
 };
 
