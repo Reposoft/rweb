@@ -92,12 +92,21 @@ Repos.service('open/', function() {
 				li.text(v);
 				continue;
 			}
-			var url = 
-				location.protocol + '//'
-				+ (m[2] ? m[2] + (m[3] || '') : location.host)
-				+ '/' + m[4]
+			var host = location.protocol + '//' // always use current protocol (http/https)
+				+ (m[2] ? m[2] + (m[3] || '') : location.host);
+			var url = host + '/' + m[4]
 				+ (m[5] || '');
 			li.html('<a href="'+url+'">'+url+'</a>');
+			// Show view button
+			// TODO if it is this repository we know it is Repos urls
+			// use the convention for marking repository root on any Repos host
+			var item = /(\/\w+)\^(.*)$/.exec(v);
+			if (item) {
+				$('<span class="actions"/>').append('<a class="action" href="' 
+					+ host + '/repos-web/open/?target=' + encodeURI(item[2]) // assume host's Repos Web is at repos-web
+					+ '&base=' + item[1] // we must assume there is a base because there is no notation to maek it
+					+ '">view</a>').appendTo(li);
+			}
 		}
 	};
 	// load properties automatically
