@@ -56,7 +56,8 @@ Repos.service('open/', function() {
 		// url: exclude reserved characters from http://www.w3.org/Addressing/URL/5_BNF.html#z75
 		// but allow slash and ? to make regex short
 		// hostname is optional in arbortext linkbase urls
-		// example: arbortext-editor:x-svn:///svn/demo/trunk/Storyboard_demo.xml
+		// example: arbortext-editor:x-svn:///svn/demo`/trunk/Storyboard_demo.xml
+		// ^ is not a valid URL character but used to mark repository root
 		// TODO match only the complete value (between separators), not URLs in values 
 	};
 	var namespaces = {
@@ -83,9 +84,12 @@ Repos.service('open/', function() {
 		section.appendTo('.column:eq(1)');
 		pv = v.split(properties.separator);
 		var list = $('<ul id="dependencylist"/>').appendTo(section).css('list-style-type','circle');
+		var sofar = []; // keep track of duplicates
 		for (p in pv) {
 			var v = pv[p];
 			if (!v) continue; // enpty after separator
+			if (sofar.indexOf && sofar.indexOf(v) > 0) continue;
+			sofar.push(v);
 			var li = $('<li/>').appendTo(list);
 			var m = new RegExp(properties.url).exec(v); // looks like the regex has some kind of memory so every second value it won't match
 			if (!m) {
@@ -96,7 +100,8 @@ Repos.service('open/', function() {
 				+ (m[2] ? m[2] + (m[3] || '') : location.host);
 			var url = host + '/' + m[4]
 				+ (m[5] || '');
-			li.html('<a href="'+url+'">'+url+'</a>');
+			// TODO remove the circumflex in the url variable (a better design is to match it in the regex, and reuse with view button below)
+			li.html('<a href="' + url.replace('^','') + '">' + url.substr(url.indexOf('^')+1) + '</a>');
 			// Show view button
 			// TODO if it is this repository we know it is Repos urls
 			// use the convention for marking repository root on any Repos host
