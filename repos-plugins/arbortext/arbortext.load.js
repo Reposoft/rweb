@@ -142,3 +142,24 @@ Repos.service('open/', function() {
 	});
 	$('.proplist .action-load').trigger('click');
 });
+
+// Customize readme
+$().bind('repos-readme-loaded', function(ev, container) {
+	console.log(container);
+	// support logical ids from readme edited in arbortext
+	$('a', container).each(function() {
+		var href = $(this).attr('href');
+		// need generic functions for to and from logical ID
+		var m = /^x-svn:\/\/([^\/]*)\/(.*)$/.exec(href);
+		if (m) {
+			$(this).attr('href',
+				location.protocol + '//'
+				+ (m[1] ? m[1] : location.host) + '/'
+				+ m[2].replace('^',''));
+			// link text not edited. generic function for adapting links and adding view button?
+		}
+	});
+});
+
+
+
