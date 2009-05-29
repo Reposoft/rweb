@@ -34,8 +34,7 @@ if (preg_match('/\'(\w+:\/\/\S+)\'/', $start, $matches)) {
 $proplist = array();
 $last = null;
 foreach($output as $line) {
-	preg_match('/(\s+([\w-:]+)\s:\s)?(.*)/', $line, $matches);
-	if (preg_match('/\s+([\w-:]+)\s:\s(.*)/', $line, $matches)) {
+	if (preg_match('/\s+([\w-:]+)\s:\s?(.*)/', $line, $matches)) {
 		$last = $matches[1];
 		$proplist[$last] = $matches[2];		
 	} else {
