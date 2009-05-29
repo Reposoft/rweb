@@ -25,6 +25,10 @@ Repos.service('open/log/', function() {
 Repos.target(/\.(xml|fos|style|dcf|mcf|sgm|dita|ditamap)$/, function() {
 	if (Repos.isService('open/') || Repos.isService('edit/')) {
 		var url = $('#urlcopy').val().replace(/^https?/, 'arbortext-editor:x-svn');
+		// insert root marker, TODO need Repos.getRepository, how does this work with UTF-8 chars?
+		var t = Repos.getTarget();
+		var url = url.slice(0, url.length - t.length) + '^' + t;
+		// add to page
 		$('<h3><a href="'+url+'" style="background-image:url(/repos-plugins/arbortext/abx_icon32.png);">Open in Arbortext</a></h3><p></p>')
 			.appendTo('#activities');
 	}
