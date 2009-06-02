@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>repos: Edit properties</title>
+<!--{$head}-->
+</head>
+
+<body>
+<div id="commandbar">
+<a id="repository" href="{=$repository}">return to repository</a>
+</div>
+<h1>Edit properties</h1>
+<dl id="proplist" style="display:none">
+<!--{foreach from=$keys key=i item=p}-->
+<dt>{=$p}</dt><dd>{=$values[$i]|nl2br}</dd>
+<!--{/foreach}--> 
+</dl>
+<form id="propedit" name="propedit" method="post" action="./">
+  <fieldset>
+	<legend><a class="folder" href="{=$repository}{=$target}">{=$target|getPathName}</a></legend>
+    <input name="target" type="hidden" id="target" value="{=$target}" />
+<!--{foreach from=$keys key=i item=p}-->
+  <p>
+    <!--{if $p}-->
+    <input name="keys[{=$i}]" type="hidden" id="key{=$i}" value="{=$p}" />
+    <label for="value{=$i}">{=$p}</label>
+    <!--{else}-->
+    <input type="text" name="keys[{=$i}]" id="key{=$i}" value="{=$p}" size="30" class="fixedsize"/>
+    <br /><label for="key{=$i}"></label>
+    <!--{/if}-->
+    <textarea name="values[{=$i}]" id="value{=$i}" cols="60" rows="{=$values[$i]|count_paragraphs}" >{=$values[$i]}</textarea>
+  </p>
+<!--{/foreach}-->
+  <p>
+    <label for="message">history text</label>
+    <textarea name="message" id="message" cols="30" rows="2"></textarea>
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" name="submit" type="submit" value="Save"/>
+  </p>
+  </fieldset>
+</form>
+<div id="footer">
+</div>
+</body>
+</html>

@@ -7,6 +7,7 @@
 require('../../conf/Presentation.class.php');
 require('../SvnEdit.class.php');
 
+// Note that this is not entirely RESTful as it allows edit in GET request
 Validation::expect('target','name','value');
 svnPropset(getTarget(),
 	$_REQUEST['name'], $_REQUEST['value'],
