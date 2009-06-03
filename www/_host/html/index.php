@@ -28,7 +28,7 @@ if (isset($_GET['logout'])) {
 	exit;
 }
 
-if (isset($_GET['login'])) {
+if (isset($_GET['login']) || isset($_GET['go'])) {
 	// do exactly the same thing as the repos login, but from this url
 	require($_path.'account/login/index.php');
 	exit;

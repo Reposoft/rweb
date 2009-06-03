@@ -41,6 +41,15 @@ function isHttps($repository) {
 
 function showUserLogin() {
 	$nexturl = getSelfUrl() . "?login=user";
+	if (isset($_GET['go'])) {
+		$go = $_GET['go'];
+		$nexturl .= '&go='.rawurlencode($go);
+		// if access allowed without login, redirect immediately (only for "go" login urls)
+		if (!strpos('://', $go)) $go = getHost() . $go;
+		if (200 == _login_getHttpStatus($go)) {
+			header("Location: " . $go);
+		}
+	}
 	$presentation = Presentation::getInstance();
 	$presentation->assign('nexturl', $nexturl);
 	$presentation->display($presentation->getLocaleFile(dirname(__FILE__).'/index'));
@@ -74,6 +83,12 @@ function loginAndRedirectToHomeDir() {
 			exit;
 		}
 		$try = getVerifyLoginUrls($repo, $user);
+		// if we have a redirect-after-login url use that one instead
+		if (isset($_GET['go'])) {
+			$go = $_GET['go'];
+			if (!strpos('://', $go)) $go = getHost() . $go;			
+			$try = array($go);
+		}
 		foreach ($try as $url) {
 			if (verifyLogin($url)) {
 				login_setUserSettings();
@@ -103,6 +118,7 @@ function loginAndRedirectToHomeDir() {
  * @return String absolute URL for redirect
  */
 function getStartUrl($home) {
+	if (isset($_GET['go']) && strEnds($home, $_GET['go'])) return $home;
 	return getWebapp() . 'open/start/';//.'?home='. rawurlencode($home); not needed, makes the URL ugly
 }
 
