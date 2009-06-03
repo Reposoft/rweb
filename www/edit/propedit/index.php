@@ -18,6 +18,8 @@ require('../SvnEdit.class.php');
 // (keywords are separated by whitespace)
 // Because the svn:externals property has a multiline value, we strongly recommend that you use svn propedit instead of svn propset.
 
+define('VALID_PROPERTY_NAME','/^[a-zA-Z:_][a-zA-Z0-9:_.-]*$/');
+
 if ($_SERVER['REQUEST_METHOD']=='POST') {
 	Validation::expect('target','keys','values');
 	svnPropset(getTarget(),
@@ -109,6 +111,7 @@ function svnPropset($target, $keys, $values, $message=null) {
 	foreach ($keys as $i => $name) {
 		// see rules in method documentation
 		if (!$name) continue;
+		if (!preg_match(VALID_PROPERTY_NAME, $name)) Validation::error("keys[$i] property name is invalid: $name");
 		// TODO validate name according to rule in svn book
 		if (!isset($values[$i])) {
 			$propdel = new SvnEdit('propdel');
