@@ -109,6 +109,7 @@ function svnPropset($target, $keys, $values, $message=null) {
 	foreach ($keys as $i => $name) {
 		// see rules in method documentation
 		if (!$name) continue;
+		// TODO validate name according to rule in svn book
 		if (!isset($values[$i])) {
 			$propdel = new SvnEdit('propdel');
 			$propset->addArgOption($name);
@@ -117,7 +118,6 @@ function svnPropset($target, $keys, $values, $message=null) {
 			continue;
 		}
 		$propset = new SvnEdit('propset');
-		$propset->addArgOption($name);
 		if (strContains($values[$i], "\n")) {
 			// normalize newlines TODO check if windows clients use CRLF
 			$values[$i] = str_replace("\r\n", "\n", $values[$i]);
@@ -126,10 +126,11 @@ function svnPropset($target, $keys, $values, $message=null) {
 			$fp = fopen($workingCopy.$filename.'.proptemp', 'w');
 			fwrite($fp, $values[$i]);
 			fclose($fp);
+			$propset->addArgOption($name);
 			$propset->addArgOption('--file', $proptemp);
 			// temp file will be cleaned up since it is in the wc
 		} else {		
-			$propset->addArgOption($values[$i]);
+			$propset->addArgOption($name, $values[$i]);
 		}
 		$propset->addArgPath($workingCopy.$filename);
 		if ($propset->exec("Set property '$name' to '$values[$i]'")) {
