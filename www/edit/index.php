@@ -6,9 +6,6 @@
 require(dirname(dirname(__FILE__)).'/conf/Presentation.class.php');
 require(dirname(dirname(__FILE__)).'/open/SvnOpenFile.class.php');
 
-addPlugin('dateformat');
-addPlugin('thumbnails');
-
 // old behaviour, forward to an action
 if(isset($_GET['action'])) {
 	header('Location: '.getWebapp().'edit/'.$_GET['action'].'/?'.$_SERVER['QUERY_STRING']);
@@ -18,6 +15,9 @@ if(isset($_GET['action'])) {
 $revisionRule = new RevisionRule();
 $rev = $revisionRule->getValue();
 $file = new SvnOpenFile(getTarget(), $rev);
+// read something from the file so we check authentication befor presentation starts
+$file->isWritable(); // looks like this isn't enough with the current implementation of SvnOpenFile
+$file->isLocked();
 
 $p = Presentation::getInstance();
 $p->assign_by_ref('file', $file);

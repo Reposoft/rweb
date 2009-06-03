@@ -295,7 +295,7 @@ function getTargetUrl($target=null) {
  */
 function askForCredentials($realm) {
 	if (headers_sent()) { // This should normally not happen, because only POST requests should use background processing
-		trigger_error('Authentication required. The server should have requested login already.', E_USER_ERROR);
+		trigger_error('Browser should have been automatically redirected to login page before contents were sent.', E_USER_ERROR);
 	}
 	header('WWW-Authenticate: Basic realm="' . $realm . '"');
 	header('HTTP/1.1 401 Authorization Required');
