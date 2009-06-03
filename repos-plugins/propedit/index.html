@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Repos propedit plugin</title>
+<meta name="repos-service" content="edit/propedit/" />
+<link href="/repos-web/style/global.css" rel="stylesheet" type="text/css"></link>
+<link href="/repos-web/style/layout.css" rel="stylesheet" type="text/css"></link>
+<script type="text/javascript" src="/repos-web/scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="/repos-web/scripts/reposapi/repos.js"></script>
+<script type="text/javascript" src="/repos-web/scripts/unittest/testwalk.js"></script>
+<script type="text/javascript" src="propedit.load.js"></script>
+</head>
+<body>
+
+<h1>Repos propedit usability plugin</h1>
+
+<script type="text/javascript">
+
+var rules = false;
+$().bind('repos-propedit-start', function(ev, reposPropeditRules) {
+	rules = reposPropeditRules;
+});
+
+$().ready(function() {
+	
+assert(Repos.propedit.rules,'Rules object should be defined');
+assert(rules.add, 'Start event handler should get a rules reference');
+assert(rules.suggest('sv'), 'Should get a lot of property names that start with svn');
+var keywordsRule = rules.get('svn:keywords');
+assert(keywordsRule, 'Should get Rule instance for svn:keywords');
+
+});
+
+</script>
+
+<h2>Sample form</h2>
+<form id="propedit" action="./" method="post" name="propedit">
+<fieldset>
+<legend>
+<a class="folder" href="http://localhost:8530/data/demoproject/trunk/Policy document.html">Policy document.html</a>
+</legend>
+<input type="hidden" value="" name="base"/>
+<input id="target" type="hidden" value="/demoproject/trunk/Policy document.html" name="target"/>
+<p>
+<input id="key0" type="hidden" value="mupp" name="keys[0]"/>
+<label for="value0">mupp</label>
+<textarea id="value0" rows="2" cols="60" name="values[0]">A B C D E</textarea>
+</p>
+<p>
+<input id="key1" type="hidden" value="svn:apa" name="keys[1]"/>
+<label for="value1">svn:apa</label>
+<textarea id="value1" rows="1" cols="60" name="values[1]">E</textarea>
+</p>
+<p>
+<input id="key2" type="text" size="30" value="" name="keys[2]" style="width: 860.6px;"/>
+<br/><label for="key2"></label>
+<textarea id="value2" rows="1" cols="60" name="values[2]"></textarea>
+</p>
+<p>
+<input id="key3" type="text" size="30" value="" name="keys[3]" style="width: 860.6px;"/>
+<br/><label for="key3"></label>
+<textarea id="value3" rows="1" cols="60" name="values[3]"></textarea>
+</p>
+<p>
+<label for="message">history text</label>
+<textarea id="message" rows="2" cols="30" name="message"></textarea>
+</p>
+<p>
+<label for="submit"/>
+<input id="submit" type="submit" value="Save" name="submit"/>
+</p>
+</fieldset>
+</form>
+
+
+</body>
