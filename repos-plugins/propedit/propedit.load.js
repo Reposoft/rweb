@@ -42,7 +42,15 @@ Repos.propedit = {
 			// array means enum
 			
 			// multiline regexp means multiline property
-		}
+			
+			// boolean false means don't allow edit
+		};
+		/**
+		 * Validates a property value with this rule.
+		 */
+		this.test = function(propertyValue) {
+			return true;
+		};
 	}
 };
 
@@ -61,6 +69,6 @@ Repos.service('exit/propedit/', function() {
 $().bind('repos-propedit-init', function(ev, reposPropeditRules) {
 	reposPropeditRules.add('svn:keywords', ['Date', 'Revision', 'Author', 'HeadURL', 'Id']);
 	reposPropeditRules.add('svn:mime-type', /\w+\/.+/);
-	reposPropeditRules.add('svn:ignore', /\w+\/.+/m);
+	reposPropeditRules.add('svn:ignore', /.*/m);
 });
 
