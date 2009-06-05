@@ -146,6 +146,7 @@ Repos.service('open/', function() {
 // Customize readme
 $().bind('repos-readme-loaded', function(ev, container) {
 	// support logical ids from readme edited in arbortext
+	// TODO do this for img src too
 	$('a', container).each(function() {
 		var href = $(this).attr('href');
 		// need generic functions for to and from logical ID

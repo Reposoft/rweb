@@ -6,6 +6,16 @@
 //  so delete needs only to set the value input to disabled=true
 // Add button to add new property, or add field automatically if the last empty one is used
 // There is an issue with readonly property not being displayed as readonly
+// Multiple values of enum
+
+// Arbortext cms:status
+// In Work, Released, In Translation, Obsolete
+// Arbortext view, button for edit
+// abx:* should never be writable
+
+// Backend
+//  Dash in beginning och propvalue
+//  Set only changed
 
 /**
  * Initialize propedit for a specific target
