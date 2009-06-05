@@ -1,6 +1,10 @@
 <?php
 /**
  * Edit or delete subversion properties.
+ *
+ * Due to limitations in how html forms handle spaces,
+ * 2+ spaces in a row are posted as 1 space,
+ * however this service should be able to handle 2+ spaces.
  */
 require('../../conf/Presentation.class.php');
 require('../SvnEdit.class.php');

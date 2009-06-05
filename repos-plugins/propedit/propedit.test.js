@@ -73,6 +73,11 @@ var oField = rules.get('repostest:oneliner').getFormField();
 assert('input', oField[0].node);
 assert('text', mField.attr('type'));
 
+var rField = rules.get('repostest:noedit').getFormField('read\nonly\nfrom web interface');
+assert('textarea', rField[0].node);
+assert(rField.attr('readonly'), 'form field should be read only for this property');
+assert(rField.is('.readonly'), 'readonly class should be set to allow custom css');
+
 // there is an assert library bug for this type of test
 assert('expected', {}.nonExistingProperty,  'Should fail with: expected "expected" but got undefined');
 

@@ -1,4 +1,12 @@
 
+// TODO:
+// Autocomplete for property names, show all that have a rule
+// Add button to delete a property
+//  (backend does so if the property value is not sent - empty string is still a value -
+//  so delete needs only to set the value input to disabled=true
+// Add button to add new property, or add field automatically if the last empty one is used
+// There is an issue with readonly property not being displayed as readonly
+
 /**
  * Initialize propedit for a specific target
  * @param (Repos.propedit.Rules) rules instance with api seen below
@@ -73,8 +81,24 @@ Repos.propedit = {
 		 *  Caller must set name and id on the field.
 		 */
 		this.getFormField = function(currentValue) {
+			var val = currentValue || '';
+			if (this.rule === false) {
+				if (val.indexOf('\n')>=0) {
+					return $('<textarea/>')
+						.attr('cols', 60) // same width as in static repos propedit form
+						.attr('rows', val.split('\n').length)
+						.attr('readonly', 'true')
+						.addClass('readonly')
+						.val(val);
+				} else {
+					return $('<input/>').attr('type','text')
+						.attr('size', '60')
+						.attr('readonly', 'true')
+						.addClass('readonly')
+						.val(val);
+				}
+			}
 			if (this.rule.constructor == RegExp) {
-				var val = currentValue || '';
 				if (this.rule.multiline) {
 					return $('<textarea/>')
 						.attr('cols', 60) // same width as in static repos propedit form
