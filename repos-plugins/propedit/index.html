@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Repos propedit plugin</title>
 <meta name="repos-service" content="edit/propedit/" />
+<meta name="repos-target" content="/demoproject/trunk/Policy document.html" />
 <link href="/repos-web/style/global.css" rel="stylesheet" type="text/css"></link>
 <link href="/repos-web/style/layout.css" rel="stylesheet" type="text/css"></link>
 <script type="text/javascript" src="/repos-web/scripts/lib/jquery/jquery.js"></script>
@@ -15,24 +16,7 @@
 
 <h1>Repos propedit usability plugin</h1>
 
-<script type="text/javascript">
-
-var rules = false;
-$().bind('repos-propedit-start', function(ev, reposPropeditRules) {
-	rules = reposPropeditRules;
-});
-
-$().ready(function() {
-	
-assert(Repos.propedit.rules,'Rules object should be defined');
-assert(rules.add, 'Start event handler should get a rules reference');
-assert(rules.suggest('sv'), 'Should get a lot of property names that start with svn');
-var keywordsRule = rules.get('svn:keywords');
-assert(keywordsRule, 'Should get Rule instance for svn:keywords');
-
-});
-
-</script>
+<script type="text/javascript" src="propedit.test.js"></script>
 
 <h2>Sample form</h2>
 <form id="propedit" action="./" method="post" name="propedit">
