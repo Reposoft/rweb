@@ -19,7 +19,8 @@ Repos.propedit = {
 		 */
 		add: function(property, rule) {
 			this._r[property] = this._r[property]
-				|| new Repos.propedit.Rule(); 
+				|| new Repos.propedit.Rule();
+			this._r[property].append(rule);
 		},
 		// the saved rules, propname->Repos.propedit.Rule, not to be edited directly
 		_r: {
@@ -44,13 +45,59 @@ Repos.propedit = {
 			// multiline regexp means multiline property
 			
 			// boolean false means don't allow edit
+			
+			// currently only supporting one rule, the last one added
+			this.rule = rule;
 		};
 		/**
 		 * Validates a property value with this rule.
+		 * This function can not return any info about validation error,
+		 * so the editor user interface must prevent errors.
 		 */
 		this.test = function(propertyValue) {
+			if (!this.rule) return false;
+			if (this.rule.constructor == RegExp) {
+				var m = this.rule.exec(propertyValue);
+				return m && m[0] == propertyValue;
+			}
+			if (this.rule.length) { // array
+				for (i in this.rule) {
+					if (this.rule[i] == propertyValue) return true;
+				}
+				return false;
+			}
 			return true;
 		};
+		/**
+		 * @return a jQuery instance with a form field suitable for editing this property
+		 *  Caller must set name and id on the field.
+		 */
+		this.getFormField = function(currentValue) {
+			if (this.rule.constructor == RegExp) {
+				var val = currentValue || '';
+				if (this.rule.multiline) {
+					return $('<textarea/>')
+						.attr('cols', 60) // same width as in static repos propedit form
+						.attr('rows', val.split('\n').length + 1)
+						.val(val);
+				} else {
+					return $('<input/>').attr('type','text')
+						.attr('size', '60')
+						.val(val);
+				}
+			}
+			if (this.rule.length) { // array
+				var f = $('<select/>');
+				for (i in this.rule) {
+					var v = this.rule[i];
+					var o = $('<option/>').val(v).text(v);
+					if (v == currentValue) 
+						o.attr('selected', 'true');
+					o.appendTo(f);
+				}
+				return f;
+			}
+		}
 	}
 };
 
@@ -61,14 +108,34 @@ $().ready(function() {
 });
 
 // page update, executed after trigger above
-Repos.service('exit/propedit/', function() {
+Repos.service('edit/propedit/', function() {
+	var propValFields = $('textarea'); // currently there is no class for property value fields
+	propValFields.each(function() {
+		var id = $(this).attr('id');
+		var parent = $(this).parent();
+		// existing properties have a label and a hidden field with the property name
+		var property = $('input[type="hidden"]', parent).val()
+			|| $('input[type="text"]', parent).val(); // editable name, still no form field classes
+		var value = $(this).val();
+		// get the rule and a new form field
+		var rule = Repos.propedit.Rules.get(property);
+		if (!rule) return;
+		var f = rule.getFormField(value);
+		if (!f) return;
+		// replace old value input with new
+		$(this).attr('id', id + "_old");
+		f.attr('id', id).attr('name', $(this).attr('name'));
+		//$(this).replaceAll(f);
+		$(this).remove();
+		parent.append(f);
+	});
 	
 });
 
 // immediate plugin customization, the same thing can be done from other plugins
-$().bind('repos-propedit-init', function(ev, reposPropeditRules) {
-	reposPropeditRules.add('svn:keywords', ['Date', 'Revision', 'Author', 'HeadURL', 'Id']);
-	reposPropeditRules.add('svn:mime-type', /\w+\/.+/);
-	reposPropeditRules.add('svn:ignore', /.*/m);
+$().bind('repos-propedit-init', function(ev, rules) {
+	rules.add('svn:keywords', ['Date', 'Revision', 'Author', 'HeadURL', 'Id']);
+	rules.add('svn:mime-type', /\w+\/\w+/);
+	rules.add('svn:ignore', /.*/m);
 });
 
