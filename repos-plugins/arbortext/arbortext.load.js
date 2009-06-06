@@ -148,18 +148,23 @@ Repos.service('open/', function() {
 // Customize readme
 $().bind('repos-readme-loaded', function(ev, container) {
 	// support logical ids from readme edited in arbortext
-	// TODO do this for img src too
-	$('a', container).each(function() {
-		var href = $(this).attr('href');
+	var abxToHttp = function(e, attribute) {
 		// need generic functions for to and from logical ID
-		var m = /^x-svn:\/\/([^\/]*)\/(.*)$/.exec(href);
+		var url = $(e).attr(attribute);
+		var m = /^x-svn:\/\/([^\/]*)\/(.*)$/.exec(url);
 		if (m) {
-			$(this).attr('href',
+			$(e).attr(attribute,
 				location.protocol + '//'
 				+ (m[1] ? m[1] : location.host) + '/'
 				+ m[2].replace('^',''));
 			// link text not edited. generic function for adapting links and adding view button?
 		}
+	};
+	$('a', container).each(function() {
+		abxToHttp(this, 'href');
+	});
+	$('img', container).each(function() {
+		abxToHttp(this, 'src');
 	});
 });
 
