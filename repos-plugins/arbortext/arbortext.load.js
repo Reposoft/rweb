@@ -76,8 +76,8 @@ Repos.service('open/', function() {
 	var value = function(v, key) {
 		if (key == 'abx:Dependencies') {
 			dependencies(v) 
-		} else {
-			v = v.replace(properties.url, '<a href="$&">$&</a>');
+		} else { // generic URL detection in text, the regex should only allow url-encoded urls
+			v = v.replace(properties.url, '<a href="$&">$&</a>'); // Readability can be improved by URL-decoding link text
 		}
 		v = v.replace(properties.separator, '<br />'); // should be in properties plugin, should be another <dd>
 		return v;
@@ -105,7 +105,9 @@ Repos.service('open/', function() {
 			var url = host + '/' + m[4]
 				+ (m[5] || '');
 			// TODO remove the circumflex in the url variable (a better design is to match it in the regex, and reuse with view button below)
-			li.html('<a href="' + url.replace('^','') + '">' + url.substr(url.indexOf('^')+1) + '</a>');
+			// href value should be url-encoded, like the Dependencies value
+			li.html('<a href="' + url.replace('^','') + '">'
+				+ decodeURI(url.substr(url.indexOf('^')+1)) + '</a>');
 			// Show view button
 			// TODO if it is this repository we know it is Repos urls
 			// use the convention for marking repository root on any Repos host
