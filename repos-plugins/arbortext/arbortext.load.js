@@ -164,4 +164,8 @@ $().bind('repos-readme-loaded', function(ev, container) {
 });
 
 
+$().bind('repos-propedit-init', function(ev, rules) {
+	rules.add('cms:status', ['In Work', 'Released', 'In Translation', 'Obsolete']);
+	// propedit should support this syntax to make all abx: readonly //rules.add(/^abx\:/, false); 
+});
 

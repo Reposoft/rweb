@@ -8,8 +8,6 @@
 // There is an issue with readonly property not being displayed as readonly
 // Multiple values of enum
 
-// Arbortext cms:status
-// In Work, Released, In Translation, Obsolete
 // Arbortext view, button for edit
 // abx:* should never be writable
 
@@ -36,13 +34,18 @@ Repos.propedit = {
 		 * @param rule regex for text value rule, array for enum rule, boolean false to forbid edit
 		 */
 		add: function(property, rule) {
-			this._r[property] = this._r[property]
-				|| new Repos.propedit.Rule();
-			this._r[property].append(rule);
+			if (property.constructor == RegExp) {
+				// support regexp matching of properties 
+				this._rr.push({x: property, r: new Repos.propedit.Rule(rule)});
+				return;
+			}
+			this._r[property] = this._r[property] || new Repos.propedit.Rule(rule);
 		},
 		// the saved rules, propname->Repos.propedit.Rule, not to be edited directly
 		_r: {
 		},
+		// regexp property name matching
+		_rr: [],
 		// suggest property names based on input string, returns array
 		suggest: function(input) {
 			var s = [];
@@ -53,10 +56,18 @@ Repos.propedit = {
 		},
 		// get a Repos.propedit.Rule
 		get: function(propertyName) {
-			return this._r[propertyName];
+			var p = this._r[propertyName];
+			if (p) return p;
+			// if no exact match see if a regexp matches
+			for (n in this._rr) {
+				if (this._rr[n].x.test(propertyName)) return this._rr[n].r;
+			}
 		}
 	},
-	Rule: function() {
+	Rule: function(rule) {
+		/**
+		 * Set first rule or combine existing with new rule.
+		 */
 		this.append = function(rule) {
 			// array means enum
 			
@@ -131,7 +142,9 @@ Repos.propedit = {
 				}
 				return f;
 			}
-		}
+		};
+		// constructor
+		if (typeof rule != 'undefined') this.append(rule);
 	}
 };
 

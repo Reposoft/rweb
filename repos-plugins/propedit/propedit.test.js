@@ -8,6 +8,8 @@ $().bind('repos-propedit-init', function(ev, reposPropeditRules) {
 	rules.add('repostest:oneliner', /n.*/);
 	rules.add('repostest:multiline', /^p.*/m);
 	rules.add('repostest:enum', ['', 'v1', 'v9', 'V8', 'w3']);
+	rules.add('repostest:enumMulti', [['', 'v1', 'v9', 'V8', 'w3']]);
+	rules.add(/^repostest2/, false); // noedit for all properties in this namespace
 });
 
 $().ready(function() {
@@ -46,6 +48,9 @@ assert(!enumRule.test('v8'), 'not ok because enum values are case sensitive');
 
 // read-only rule
 assert(!rules.get('repostest:noedit').test('a'), 'boolean false as rules means editing is not allowed');
+
+// rule matching different properties
+assert(rules.get('repostest2:anything'), 'regexp property match');
 
 // text rules
 // i'm nut sure this modification of RegExp meaning is such a good idea
