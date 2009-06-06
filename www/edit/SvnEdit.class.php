@@ -361,9 +361,15 @@ class SvnEdit {
 	 * @return result of the subversion operation, empty string if it gave no output
 	 */
 	function getResult() {
+		$op = $this->getOperation();
 		$o = $this->getOutput();
-		if (count($o) > 0) return $o[count($o)-1];
-		return 'No output from operation '.$this->getOperation();
+		if (!count($o)) return 'No output from operation '.$op;
+		if ('commit' != $op && 'ci' != $op) return $o[count($o)-1];
+		// for commit operation we should return the revision row even if there is output below
+		foreach ($o as $r) {
+			if (strBegins($r, 'Committed revision')) return $r;
+		}
+		return 'Commit failed.';
 	}
 	
 	/**
