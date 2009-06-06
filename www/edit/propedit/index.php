@@ -22,6 +22,8 @@ require('../SvnEdit.class.php');
 // (keywords are separated by whitespace)
 // Because the svn:externals property has a multiline value, we strongly recommend that you use svn propedit instead of svn propset.
 
+// TODO this code does not remove properties,  it only uses propset
+
 define('VALID_PROPERTY_NAME','/^[a-zA-Z:_][a-zA-Z0-9:_.-]*$/');
 
 if ($_SERVER['REQUEST_METHOD']=='POST') {

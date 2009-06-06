@@ -108,7 +108,6 @@ Repos.service('open/', function() {
 			// href value should be url-encoded, like the Dependencies value
 			li.html('<a href="' + url.replace('^','') + '">'
 				+ decodeURI(url.substr(url.indexOf('^')+1)) + '</a>');
-			// Show view button
 			// TODO if it is this repository we know it is Repos urls
 			// use the convention for marking repository root on any Repos host
 			var item = /(\/\w+)\^(.*)$/.exec(v);
@@ -123,7 +122,7 @@ Repos.service('open/', function() {
 	// load properties automatically
 	$().bind('repos-proplist-loaded', function(event, container) {
 		//$('.column:eq(0)').append(container).addClass('section');
-		$('<h2/>').text('Attributes/metadata').prependTo(container);
+		var header = $('<h2/>').text('Attributes/metadata').prependTo(container);
 		// parse properties and group into namespaces
 		var prop = {};
 		$('dl.properties dt', container).each(function() {
@@ -140,7 +139,11 @@ Repos.service('open/', function() {
 			}
 			container.append(list);
 		}
-		
+		// quick link to propedit
+		$('<span class="actions"/>').append('<a class="action" href="' 
+				+ Repos.getWebapp() + 'edit/propedit/?target=' + encodeURI(Repos.getTarget())
+				+ '&base=' + Repos.getBase() + '">edit</a>')
+				.css('float','right').insertAfter(header);
 	});
 	$('.proplist .action-load').trigger('click');
 });
@@ -170,7 +173,7 @@ $().bind('repos-readme-loaded', function(ev, container) {
 
 
 $().bind('repos-propedit-init', function(ev, rules) {
-	rules.add('cms:status', ['In Work', 'Released', 'In Translation', 'Obsolete']);
+	rules.add('cms:status', ['', 'In Work', 'Released', 'In Translation', 'Obsolete']);
 	// arbotext properties should not be edited manually
 	rules.add(/^abx:/, false);
 });

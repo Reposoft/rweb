@@ -135,7 +135,7 @@ Repos.propedit = {
 				var f = $('<select/>');
 				var a = this.rule;
 				if (a.length == 1 && a[1].length) {
-					a = a[1];
+					a = a[0];
 					// TODO support multivalue enum properties
 				}
 				for (i in a) {
