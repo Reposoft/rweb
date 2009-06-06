@@ -18,7 +18,6 @@ $().ready(function() {
 		var form = $('form:first');
 		var max = $('fieldset',form).width();
 		$('input[type="text"], input[type="file"]', form)
-				.not('.fixedsize') // form designer can use this class to avoid autowidth
 				.each( function() {
 			autosize($(this), max);
 		});
