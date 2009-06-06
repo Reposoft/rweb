@@ -133,8 +133,13 @@ Repos.propedit = {
 			}
 			if (this.rule.length) { // array
 				var f = $('<select/>');
-				for (i in this.rule) {
-					var v = this.rule[i];
+				var a = this.rule;
+				if (a.length == 1 && a[1].length) {
+					a = a[1];
+					// TODO support multivalue enum properties
+				}
+				for (i in a) {
+					var v = a[i];
 					var o = $('<option/>').val(v).text(v);
 					if (v == currentValue) 
 						o.attr('selected', 'true');
@@ -176,12 +181,11 @@ Repos.service('edit/propedit/', function() {
 		$(this).remove();
 		parent.append(f);
 	});
-	
 });
 
 // immediate plugin customization, the same thing can be done from other plugins
 $().bind('repos-propedit-init', function(ev, rules) {
-	rules.add('svn:keywords', ['Date', 'Revision', 'Author', 'HeadURL', 'Id']);
+	rules.add('svn:keywords', [['Date', 'Revision', 'Author', 'HeadURL', 'Id']]);
 	rules.add('svn:mime-type', /\w+\/\w+/);
 	rules.add('svn:ignore', /.*/m);
 });

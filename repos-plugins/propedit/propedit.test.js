@@ -9,7 +9,7 @@ $().bind('repos-propedit-init', function(ev, reposPropeditRules) {
 	rules.add('repostest:multiline', /^p.*/m);
 	rules.add('repostest:enum', ['', 'v1', 'v9', 'V8', 'w3']);
 	rules.add('repostest:enumMulti', [['', 'v1', 'v9', 'V8', 'w3']]);
-	rules.add(/^repostest2/, false); // noedit for all properties in this namespace
+	rules.add(/^repostest2:/, false); // noedit for all properties in this namespace
 });
 
 $().ready(function() {
@@ -29,7 +29,7 @@ assert(rules.add, 'Start event handler should get a rules reference');
 
 assert(rules.suggest('rep'), 'Should get a lot of property names that start with sv');
 assert(rules.suggest('repostest'), 'Should get a lot of property names that start with sv');
-assert(4, rules.suggest('repostest:').length, 'The number of test rules above');
+assert(5, rules.suggest('repostest:').length, 'The number of test rules above');
 
 var keywordsRule = rules.get('svn:keywords');
 assert(keywordsRule, 'Should get built in Rule instance for svn:keywords');
