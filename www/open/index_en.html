@@ -8,6 +8,7 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$file,folderUrl}">return to repository</a>
+<a id="edit" href="../edit/?target={=$target}&rev={=$rev}">edit file</a>
 </div>
 <div id="intro">
 <h1><a class="file" href="{=$file,url}">{=$file,filename}</a> <span class="revision">{=$file,revision}</span></h1>
@@ -16,11 +17,11 @@
 This is the current version of the file.
 {=if not $file,isWritable} You have read access only.
 {=elseif $file,isLockedByThisUser} The file is currently <strong>locked</strong> by you, so other users can not edit it.
-You may <a id="edit" href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
+You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 {=elseif $file,isLockedBySomeoneElse} The file is currently <strong>locked</strong> by 
 <span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}.
 {=else}
-You may <a id="edit" href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
+You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 {=/if}
 </p>
 <!--{else}-->
