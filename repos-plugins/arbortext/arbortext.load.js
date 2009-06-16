@@ -112,10 +112,11 @@ Repos.service('open/', function() {
 			// use the convention for marking repository root on any Repos host
 			var item = /(\/\w+)\^(.*)$/.exec(v);
 			if (item) {
-				$('<span class="actions"/>').append('<a class="action" href="' 
-					+ host + '/repos-web/open/?target=' + encodeURI(item[2]) // assume host's Repos Web is at repos-web
-					+ '&base=' + item[1] // we must assume there is a base because there is no notation to maek it
-					+ '">view</a>').appendTo(li);
+				var href = host + '/repos-web/open/?target=' // assume host's Repos Web is at repos-web
+					+ encodeURIComponent(decodeURI(item[2])) // already urlencoded, but as path
+					+ '&base=' + item[1].substr(1); // TODO use the mandatory notation for repository root to deduce base (assuming this is a parentpath setup)
+				var view = $('<a>view</a>').addClass('action').attr('href', href);
+				$('<span class="actions"/>').append(view).appendTo(li);
 			}
 		}
 	};
