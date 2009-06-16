@@ -18,6 +18,7 @@ header('Content-type: text/plain');
 
 $cmd = new SvnOpen('proplist');
 $cmd->addArgOption('-v');
+if (isset($_REQUEST['rev'])) $cmd->addArgOption('-r', $_REQUEST['rev']);
 $cmd->addArgUrl($url);
 if ($cmd->exec()) {
 	trigger_error(implode("\n",$cmd->getOutput()), E_USER_ERROR);	

@@ -14,12 +14,14 @@ $().bind('repos-proplist-loaded', function(event, proplistParent){});
 Repos.proplist.init = function() {
 	$('.proplist').each( function() {
 		var target = Repos.getTarget(this);
-		if (target) Repos.proplist.addClick(this, target);
+		//var rev = Repos.getRevision(this); // method does not exist yet
+		var rev = $('.revision:first').text();
+		if (target) Repos.proplist.addClick(this, target, rev);
 	} );
 };
 
-Repos.proplist.addClick = function(container, target) {
-	var call = Repos.url+'open/proplist/?target='+target;
+Repos.proplist.addClick = function(container, target, rev) {
+	var call = Repos.url+'open/proplist/?target='+target + (rev ? '&rev=' + rev : '');
 	var link = $('<a class="action-load" href="'+call+'">Versioned properties</a>')
 		.click( function() {
 			var e = $(this);
