@@ -23,6 +23,8 @@ print @c;
 @s=`$svn import -m "first" $repofolder/hooks/post-commit.tmpl file://$repofolder/test/foo.md5`;
 print @s;
 
+# now run  backup routine
+
 #should fail, must end with slash: @b=`php $backup/store/$suffix --repo-folder=$repofolder/ --backup-folder=$backupfolder`;
 @b=`php $backup/store/$suffix --repo-folder=$repofolder/ --backup-folder=$backupfolder/`;
 print @b;

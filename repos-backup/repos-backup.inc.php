@@ -115,13 +115,13 @@ function dumpIncrement($backupPath, $repository, $fileprefix, $fromrev, $torev) 
 			// split into several dumpfiles
 			$filename = getFilename( $fileprefix, $fromrev, $torev ) . $extension;
 			info('Saved '.$size.' bytes in '.(time()-$starttime).' seconds');
-			if ((time()-$starttime) > (BACKUP_MAX_TIME / 3)) fatal("Will not have time to compress and verify within ".BACKUP_MAX_TIME." seconds.");
+			if ((time()-$starttime) > (MIN_BACKUP_MAX_TIME / 3)) fatal("Will not have time to compress and verify within ".MIN_BACKUP_MAX_TIME." seconds.");
 			return packageDumpfile($tmpfile, $backupPath.getFilename($fileprefix, $fromrev, $i).$extension) 
 				&& dumpIncrement($backupPath, $repository, $fileprefix, $i+1, $torev);
 		}
 	}
 	info('Saved up to current revision, '.$size.' bytes, in '.(time()-$starttime).' seconds');
-	if ((time()-$starttime) > (BACKUP_MAX_TIME / 3)) fatal("Will not have time to compress and verify within ".BACKUP_MAX_TIME." seconds.");
+	if ((time()-$starttime) > (MIN_BACKUP_MAX_TIME / 3)) fatal("Will not have time to compress and verify within ".MIN_BACKUP_MAX_TIME." seconds.");
 	return packageDumpfile($tmpfile, $backupPath.getFilename($fileprefix, $fromrev, $torev).$extension);
 }
 
