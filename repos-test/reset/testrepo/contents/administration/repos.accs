@@ -28,6 +28,8 @@ test = rw
 [/demoproject/trunk/public]
 @demoproject = rw
 * = r
+# special guest access for direct login
+Test User = rw
 
 [/Test User]
 Test User = rw
