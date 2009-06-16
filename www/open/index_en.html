@@ -8,7 +8,11 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$file,folderUrl}">return to repository</a>
-<a id="edit" href="../edit/?target={=$target}&rev={=$rev}">edit file</a>
+<!--{if $file,isLatestRevision}-->
+<a id="edit" href="../edit/?target={=$target}&rev={=$rev}">edit</a>
+<!--{else}-->
+<a id="view" href="?target={=$target}">view latest version</a>
+<!--{/if}-->
 </div>
 <div id="intro">
 <h1><a class="file" href="{=$file,url}">{=$file,filename}</a> <span class="revision">{=$file,revision}</span></h1>
@@ -25,7 +29,7 @@ You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 {=/if}
 </p>
 <!--{else}-->
-<p>This is an old version of the file. You can also <a id="view:currentversion" href="?target={=$target}">view current version</a>.</p>
+<p>This is an old version of the file. You can also <a href="?target={=$target}">view latest version</a>.</p>
 <!--{/if}-->
 </div>
 <div class="column" style="width: 60%">
@@ -74,11 +78,7 @@ You need to use a version control (Subversion) client like Repos.</p>
 <div class="column" style="width: 40%">
 <div id="filedetails" class="section">
 <h2>File details</h2>
-<p>Version number: <span class="revision">{=$file,revision}</span>
-<!--{if !$file,isLatestRevision}-->
-&nbsp; <a class="action" id="view:currentversion2" href="?target={=$target}">view latest version</a>
-<!--{/if}-->
-</p>
+<p>Version number: <span class="revision">{=$file,revision}</span></p>
 <p>Last edited by: <span class="username">{=$file,author}</span></p>
 <p>Last edited at: <span class="datetime">{=$file,date}</span></p>
 <p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
