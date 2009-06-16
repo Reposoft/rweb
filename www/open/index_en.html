@@ -73,7 +73,11 @@ You need to use a version control (Subversion) client like Repos.</p>
 <div class="column" style="width: 40%">
 <div id="filedetails" class="section">
 <h2>File details</h2>
-<p>Version number: <span class="revision">{=$file,revision}</span></p>
+<p>Version number: <span class="revision">{=$file,revision}</span>
+<!--{if !$file,isLatestRevision}-->
+&nbsp; <a class="action" id="view:currentversion2" href="?target={=$target}">view latest version</a>
+<!--{/if}-->
+</p>
 <p>Last edited by: <span class="username">{=$file,author}</span></p>
 <p>Last edited at: <span class="datetime">{=$file,date}</span></p>
 <p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
