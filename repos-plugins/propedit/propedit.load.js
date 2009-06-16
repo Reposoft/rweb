@@ -8,12 +8,9 @@
 // There is an issue with readonly property not being displayed as readonly
 // Multiple values of enum
 
-// Arbortext view, button for edit
-// abx:* should never be writable
-
 // Backend
-//  Dash in beginning och propvalue
-//  Set only changed
+//  Dash in beginning och propvalue makes it an illegal argument for svn command linne
+//  Do propset only if property value has changed
 
 /**
  * Initialize propedit for a specific target
@@ -103,6 +100,9 @@ Repos.propedit = {
 		 */
 		this.getFormField = function(currentValue) {
 			var val = currentValue || '';
+			if (this.rule === 0) {
+				return [];	
+			}
 			if (this.rule === false) {
 				if (val.indexOf('\n')>=0) {
 					return $('<textarea/>')
@@ -134,7 +134,7 @@ Repos.propedit = {
 			if (this.rule.length) { // array
 				var f = $('<select/>');
 				var a = this.rule;
-				if (a.length == 1 && a[1].length) {
+				if (a.length == 1 && a[0].length) {
 					a = a[0];
 					// TODO support multivalue enum properties
 				}
@@ -174,6 +174,11 @@ Repos.service('edit/propedit/', function() {
 		if (!rule) return;
 		var f = rule.getFormField(value);
 		if (!f) return;
+		// rule to hide field
+		if (!f.length) {
+			parent.remove();
+			return;	
+		}
 		// replace old value input with new
 		$(this).attr('id', id + "_old");
 		f.attr('id', id).attr('name', $(this).attr('name'));

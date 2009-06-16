@@ -5,6 +5,7 @@ $().bind('repos-propedit-init', function(ev, reposPropeditRules) {
 	
 	// define some test rules
 	rules.add('repostest:noedit', false);
+	rules.add('repostest:noshow', 0);
 	rules.add('repostest:oneliner', /n.*/);
 	rules.add('repostest:multiline', /^p.*/m);
 	rules.add('repostest:enum', ['', 'v1', 'v9', 'V8', 'w3']);
@@ -29,7 +30,7 @@ assert(rules.add, 'Start event handler should get a rules reference');
 
 assert(rules.suggest('rep'), 'Should get a lot of property names that start with sv');
 assert(rules.suggest('repostest'), 'Should get a lot of property names that start with sv');
-assert(5, rules.suggest('repostest:').length, 'The number of test rules above');
+assert(6, rules.suggest('repostest:').length, 'The number of test rules above');
 
 var keywordsRule = rules.get('svn:keywords');
 assert(keywordsRule, 'Should get built in Rule instance for svn:keywords');
@@ -48,6 +49,7 @@ assert(!enumRule.test('v8'), 'not ok because enum values are case sensitive');
 
 // read-only rule
 assert(!rules.get('repostest:noedit').test('a'), 'boolean false as rules means editing is not allowed');
+assert(!rules.get('repostest:noshow').test('a'), '0 is same as false');
 
 // rule matching different properties
 assert(rules.get('repostest2:anything'), 'regexp property match');
@@ -82,6 +84,10 @@ var rField = rules.get('repostest:noedit').getFormField('read\nonly\nfrom web in
 assert('textarea', rField[0].node);
 assert(rField.attr('readonly'), 'form field should be read only for this property');
 assert(rField.is('.readonly'), 'readonly class should be set to allow custom css');
+
+var noField = rules.get('repostest:noshow').getFormField('x');
+console.log(noField);
+assert(0, noField.length, '0 is the same rule as false, but property should not be displayed in form');
 
 // there is an assert library bug for this type of test
 assert('expected', {}.nonExistingProperty,  'Should fail with: expected "expected" but got undefined');

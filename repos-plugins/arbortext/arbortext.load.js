@@ -172,9 +172,3 @@ $().bind('repos-readme-loaded', function(ev, container) {
 });
 
 
-$().bind('repos-propedit-init', function(ev, rules) {
-	rules.add('cms:status', ['', 'In Work', 'Released', 'In Translation', 'Obsolete']);
-	// arbotext properties should not be edited manually
-	rules.add(/^abx:/, false);
-});
-
