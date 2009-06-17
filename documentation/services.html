@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Repos REST services</title>
+<style type="text/css">
+
+td {
+	border: 1px solid #ccc;
+	padding: .1em .3em .1em .3em;
+}
+thead td {
+	background-color: #ccc;
+}
+
+</style>
+</head>
+<body>
+	<h1>Repos Web REST Services</h1>
+	
+	<h2>GET &mdash; open/</h2>
+	<table>
+		<thead>
+			<tr>
+				<td class="name">name</td>
+				<td class="svn">svn command</td>
+				<td class="json">json</td>
+				<td class="xml">xml</td>
+				<td class="html">html view</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="name">open</td>
+				<td class="svn">cat</td>
+				<td class="json">plaintext</td>
+				<td class="xml">-</td>
+				<td class="html">-</td>
+			</tr>
+			<tr>
+				<td class="name">file</td>
+				<td class="svn">cat</td>
+				<td class="json">yes</td>
+				<td class="xml">-</td>
+				<td class="html">yes</td>
+			</tr>
+			<tr>
+				<td class="name">download</td>
+				<td class="svn">cat</td>
+				<td class="json">-</td>
+				<td class="xml">-</td>
+				<td class="html">-</td>
+			</tr>
+			<tr>
+				<td class="name">log</td>
+				<td class="svn">log</td>
+				<td class="json">-</td>
+				<td class="xml">yes</td>
+				<td class="html">yes (xslt)</td>
+			</tr>
+			<tr>
+				<td class="name">diff</td>
+				<td class="svn">diff</td>
+				<td class="json">yes</td>
+				<td class="xml">-</td>
+				<td class="html">yes</td>
+			</tr>
+			<tr>
+				<td class="name">blame</td>
+				<td class="svn">blame</td>
+				<td class="json">-</td>
+				<td class="xml">yes</td>
+				<td class="html">-</td>
+			</tr>
+			<tr>
+				<td class="name">list</td>
+				<td class="svn">ls</td>
+				<td class="json">-</td>
+				<td class="xml">yes</td>
+				<td class="html">yes (xslt)</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h2>POST &mdash; edit/</h2>
+	<table>
+		<thead>
+			<tr>
+				<td class="name">name</td>
+				<td class="svn">svn command</td>
+				<td class="form">html form</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="name">upload</td>
+				<td class="svn">import</td>
+				<td class="form">yes</td>
+			</tr>
+			<tr>
+				<td class="name">unlock</td>
+				<td class="svn">unlock</td>
+				<td class="form">yes</td>
+			</tr>
+			<tr>
+				<td class="name">text</td>
+				<td class="svn">checkout+(edit)+commit</td>
+				<td class="form">yes</td>
+			</tr>
+			<tr>
+				<td class="name">rename</td>
+				<td class="svn">mv</td>
+				<td class="form">yes</td>
+			</tr>
+			<tr>
+				<td class="name">propset</td>
+				<td class="svn">propset</td>
+				<td class="form">-</td>
+			</tr>
+			<tr>
+				<td class="name">propedit</td>
+				<td class="svn">propedit</td>
+				<td class="form">yes</td>
+			</tr>
+			<tr>
+				<td class="name">mkdir</td>
+				<td class="svn">add</td>
+				<td class="form">yes</td>
+			</tr>
+			<tr>
+				<td class="name">lock</td>
+				<td class="svn">lock</td>
+				<td class="form">yes</td>
+			</tr>
+			<tr>
+				<td class="name">delete</td>
+				<td class="svn">rm</td>
+				<td class="form">yes</td>
+			</tr>
+			<tr>
+				<td class="name">copy</td>
+				<td class="svn">cp/mv</td>
+				<td class="form">yes</td>
+			</tr>
+		</tbody>
+	</table>	
+	
+</body>
