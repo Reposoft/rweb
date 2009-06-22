@@ -3,7 +3,7 @@ $().bind('repos-propedit-init', function(ev, rules) {
 // -------- start of rules definitions ---------
 
 // Status should be one of the following values. Not mandatory.
-rules.add('cms:status', ['', 'In Work', 'Released', 'In Translation', 'Obsolete']);
+rules.add('cms:status', ['', 'In_Work', 'Review', 'Released', 'In_Translation', 'Obsolete']);
 
 // Arbotext properties should not be edited manually as they are set from Arbortext Editor.
 //rules.add(/^abx:/, false);
