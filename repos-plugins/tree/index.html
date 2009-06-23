@@ -206,7 +206,7 @@ function reposTreeSidebar() {
 			.attr('target','_search').attr('href',url)
 			.attr('title','Requires "Enable websites to use search pane" in IE7 options');
 	}
-	if (window.sidebar && window.sidebar.addPanel) {
+	if ($.browser.mozilla || $.browser.opera) {
 		return $('<a/>').attr('href',url).html('as&nbsp;sidebar')
 			.attr('rel','sidebar').attr('title',title);
 	}
