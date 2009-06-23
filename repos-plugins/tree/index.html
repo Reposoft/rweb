@@ -110,6 +110,12 @@ var settings = {
 };
 $.queryextend(settings, window.location.search);
 
+// http://www.howtocreate.co.uk/tutorials/jsexamples/createSidebar.php
+if (settings.sidebar) {
+	settings.frame = settings.frame ||
+		$.browser.msie ? '_main' : '_content';
+}
+
 var json = settings.web+'open/json/'; // not using servicelayer
 function expand(id,target) {
   var list = $('#'+id);
@@ -188,7 +194,9 @@ function reposTreeBrowse() {
 		.text('return to repository').appendTo('#commandbar');
 };
 function reposTreeSidebar() {
-	var title = document.title + ' ' + settings.hostname + ' ' + settings.target;
+	var title = document.title + ' ' + settings.hostname + ' '
+		+ (settings.base ? settings.base : '') 
+		+ settings.target.replace('//','/');
 	var url = window.location.href;
 	url = url.replace(/([?&])frame=_top&?/,'$1');
 	url += url.indexOf('?')>0 ? '&' : '?';
@@ -199,9 +207,8 @@ function reposTreeSidebar() {
 			.attr('title','Requires "Enable websites to use search pane" in IE7 options');
 	}
 	if (window.sidebar && window.sidebar.addPanel) {
-		return $('<a/>').attr('href','javascript:void(0)').html('as&nbsp;sidebar').click(function() {
-			window.sidebar.addPanel(title, url, '');
-		});
+		return $('<a/>').attr('href',url).html('as&nbsp;sidebar')
+			.attr('rel','sidebar').attr('title',title);
 	}
 	// use this?: http://www.howtocreate.co.uk/tutorials/jsexamples/createSidebar.php
 	// see also: http://staff.oclc.org/~houghtoa/repository/articles/IEBrowserBarDetails/index.htm
