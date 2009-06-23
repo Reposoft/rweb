@@ -1,24 +1,8 @@
-// Customize title, alternative to changing in html templates and xsl files
-document.title = document.title.replace('repos:', 'Simonsoft CMS |');
 
-// Set startpage logo
-Repos.service('home/', function() {
-	$('#intro h1').empty()
-		.append('<img alt="Simonsoft logo" width="567" height="46" border="0" align="bottom" alt="repos.se" src="/repos-plugins/arbortext/simonsoft-logo.gif"/>')
-		.append('&nbsp;&nbsp;CMS&nbsp;beta')
-		.css({fontSize:'42px',fontWeight:'bold',letterSpacing:'.1em',color:'#aaa'});
-});
-
-// Set special icons and repository browser logo
+// Set special icons for repository browsing
 Repos.service('index/', function() {
 	$('.file-xml, .file-fos, .file-style, .file-dcf, .file-mcf, .file-sgm, .file-dita, .file-ditamap')
 		.css('background-image', 'url("/repos-plugins/arbortext/abx_icon.png")');
-
-	$('#commandbar #logo').attr('width','134').attr('src', '/repos-plugins/arbortext/simonsoft-name.png');
-});
-
-Repos.service('open/log/', function() {
-	$('#commandbar #logo').attr('width','134').attr('src', '/repos-plugins/arbortext/simonsoft-name.png');
 });
 
 // Add custom activities for special file types
