@@ -3,6 +3,13 @@
 document.title = document.title.replace('repos:', 'Simonsoft CMS |');
 
 // Dynamically replace logo src, alternative to rewrite rules
+// Commandbar logo where present
+$().ready(function() {
+	$('#commandbar #logo')
+		.attr('src', '/repos-plugins/branding/logo-name.png')
+		.attr('width','134').attr('height','18');
+});
+// Welcome page
 Repos.service('home/', function() {
 	$('#intro h1').empty()
 		// tartpage logo
@@ -12,12 +19,10 @@ Repos.service('home/', function() {
 		// Startpage header style
 		.css({fontSize:'42px',fontWeight:'bold',letterSpacing:'.1em',color:'#aaa'});
 });
-
-Repos.service('index/', function() { // Browser commandbar logo
-	$('#commandbar #logo').attr('width','134').attr('src', '/repos-plugins/branding/logo-name.png');
-});
-
-Repos.service('open/log/', function() { // Log commandbar logo
-	$('#commandbar #logo').attr('width','134').attr('src', '/repos-plugins/branding/logo-name.png');
+// Projects page (if enabled)
+Repos.service('open/start/', function() {
+	$('#intro h1 img')
+		.attr('src', '/repos-plugins/branding/logo-big.png')
+		.attr('width','567').attr('height','46');
 });
 
