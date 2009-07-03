@@ -13,6 +13,8 @@ Repos.target(/\.(xml|fos|style|dcf|mcf|sgm|dita|ditamap)$/, function() {
 		var t = Repos.getTarget();
 		var url = url.slice(0, url.length - t.length) + '^' + t;
 		// add to page
+		var url = encodeURIComponent(url); // we do an extra urlencode to preserve logical-ID encoding through arbortext's single decode
+		// See Arbortext Customizing Guide section "Integrating Arbortext Editor with web pages"
 		$('<h3><a href="'+url+'" style="background-image:url(/repos-plugins/arbortext/abx_icon32.png);">Open in Arbortext</a></h3><p></p>')
 			.appendTo('#activities');
 	}
