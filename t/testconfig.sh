@@ -10,6 +10,9 @@ then
 	exit 1
 fi
 
+# first time a user runs Apache::Test a configuration dialog is displayed
+# to configure again delete global settings using #rm -Rf ~/.apache-test/
+
 # list additional modules to be enabled
 
 cat /etc/apache2/mods-enabled/*.load \

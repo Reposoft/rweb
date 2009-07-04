@@ -1,0 +1,58 @@
+OS X development environment
+--------
+
+Install Xcode and MacPorts
+
+
+$ sudo port install subversion +mod_dav_svn
+
+# Note that this apache2 is installed in /opt/local/apache2/ which is
+# not connected to the default apxs and apachectl in path
+# Use /opt/local/apache2/bin/apachectl and apxs
+
+$ # included in mod_perl2 # sudo port install p5-apache-test
+$ sudo port install mod_perl2
+
+###########################################################
+# A startup item has been generated that will aid in
+# starting apache2 with launchd. It is disabled
+# by default. Execute the following command to start it,
+# and to cause it to launch at startup:
+#
+# sudo launchctl load -w /Library/LaunchDaemons/org.macports.apache2.plist
+###########################################################
+
+
+--->  Installing mod_perl2 @2.0.3_0
+
+If this your first install, you might want to
+ * enable mod_perl in apache :
+
+cd /opt/local/apache2/libexec
+/opt/local/apache2/bin/apxs -a -e -n "perl" mod_perl.so
+
+ * And then relaunch apache 
+
+/opt/local/apache2/bin/apachectl restart
+
+--->  Activating mod_perl2 @2.0.3_0
+
+--->  Activating php5 @5.2.10_1+apache2+macosx
+To customize php, copy
+/opt/local/etc/php5/php.ini-dist (if this is a development server) or
+/opt/local/etc/php5/php.ini-recommended (if this is a production server) to
+/opt/local/etc/php5/php.ini and then make changes.
+
+If this is your first install, you need to activate PHP in your web server.
+
+To enable PHP in Apache, run
+  cd /opt/local/apache2/modules
+  /opt/local/apache2/bin/apxs -a -e -n "php5" libphp5.so
+--->  Cleaning php5
+sudo port install php5
+
+cd /opt/local/apache2/modules
+sudo /opt/local/apache2/bin/apxs -a -e -n "php5" libphp5.so
+# add "Include conf/extras-conf/mod_php.conf" to /opt/local/apache2/conf/httpd.conf
+sudo /opt/local/apache2/bin/apxs -a -e -n "dav_svn" mod_dav_svn.so
+sudo /opt/local/apache2/bin/apxs -a -e -n "authz_svn" mod_authz_svn.so
