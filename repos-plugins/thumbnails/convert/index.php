@@ -15,7 +15,10 @@ function getThumbnailCommand($format='', $target='-') {
 	$z = THUMB_SIZE;
 	if ($format) $format.=':';
 	// todo select -filter?
-	return "$format- -thumbnail {$z}x{$z}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
+	// ImageMagick
+	//return "$format- -thumbnail {$z}x{$z}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
+	// GraphicsMagick
+	return "-size {$z}x{$z} -geometry {$z}x{$z} -quality 75 - \"$target\"";
 }
 
 // verify that the graphics tool exists

@@ -1,8 +1,8 @@
 <?php
 function convertGetCommand() {
 	// ImageMagick in path
-	return 'convert';
+	//return 'convert';
 	// GraphicsMagick in path: 
-	//return 'gm convert';
+	return 'gm convert';
 }
 ?>
