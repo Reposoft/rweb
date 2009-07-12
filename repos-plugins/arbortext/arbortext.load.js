@@ -158,4 +158,31 @@ $().bind('repos-readme-loaded', function(ev, container) {
 	});
 });
 
+// Where Used
+Repos.service('open/', function() {
+	// The search term
+	var child = Repos.getTarget();
+	// REST resource for search, currently not a Repos service
+	var search = '/solr/parentchild/select/';
+	var params =  {
+			q: child
+	};
+	// how to present results
+	var presentation = function(solrXml) {
+		$('doc', solrXml).each(function() {
+			var parent = $('str[name="parentId"]', this).text();
+			console.log(parent, this);
+			$('#whereused').append('<p>' + parent + '</p>');
+		});
+	};
+	// start with an empty box
+	var section = $('<div/>').attr('id','whereused').addClass('section');
+	$('<h2/>').text('Where Used').appendTo(section);
+	section.appendTo('.column:eq(1)');
+	// perform search
+	$.get(search, params, presentation, 'xml');
+});
+
+
+
 

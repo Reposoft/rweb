@@ -10,7 +10,7 @@
 	SetEnv REPOS_TEST_ALLOW_RESET on
 
 	# is there a parameter for the generated hostname?
-	SetEnv REPOS_REPO http://localhost:8531/repos
+	SetEnv REPOS_REPO http://localhost:8530/svn
 	# needed because currently access file path is used for test setup to get host structure folder
 	SetEnv REPOS_ACCESS_FILE @ServerRoot@/hosts/original/admin/repos-access
 
@@ -24,7 +24,12 @@
 	ErrorDocument 404 /repos-web/errors/404/
 	ErrorDocument 500 /repos-web/errors/500/
 
-	<Location /repos>
+	# Proxy for indexing engine
+	ProxyPass /solr ajp://127.0.0.1:8009/solr
+	ProxyPreserveHost On
+
+	# Master repositories
+	<Location /svn>
 		DAV svn
 		SVNAutoversioning on
 
@@ -43,6 +48,31 @@
 		
 		# Svn module does not set caching behavior as expected for dynamic contents
 		Header add Cache-Control "max-age=0, must-revalidate"
+	</Location>
+	
+	# Image transforms repository
+	<Location /repos-thumbs>
+		DAV svn
+		# Transform service may use PUT to store thumbnails (because there is no simple svn overwrite without wc)
+		SVNAutoversioning on
+
+		SVNParentPath @ServerRoot@/hosts/multirepo/repos-thumbs
+		SVNListParentPath on
+
+		# Should be same authentication and authorization as main repository
+		AuthType Basic
+		AuthName "repos test multirepo"
+		AuthUserFile @ServerRoot@/hosts/multirepo/admin/repos-users
+		Require valid-user
+
+		#AuthzSVNAccessFile @ServerRoot@/hosts/multirepo/admin/repos-access
+		#Satisfy Any
+		
+		# Svn module does not set caching behavior as expected for dynamic contents
+		Header add Cache-Control "max-age=0, must-revalidate"
+		
+		# Create thumbnails on demand
+		ErrorDocument 404 /repos-plugins/thumbnails/convert/
 	</Location>
 
 </VirtualHost>
