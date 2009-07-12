@@ -9,6 +9,8 @@ require('../../reposweb.inc.php');
 require(ReposWeb.'open/SvnOpenFile.class.php');
 require('./convert.inc.php');
 define('THUMB_SIZE', 150);
+// for caching
+require(ReposWeb.'edit/SvnEdit.class.php');
 
 // create the option string to use with convert command
 function getThumbnailCommand($format='', $target='-') {
@@ -28,6 +30,12 @@ exec("$convert -version", $output, $result);
 if ($result > 1) {
 	//echo($result);print_r($output);
 	handleError('[convert not installed]','','empty.jpg');
+}
+
+// Enable caching in parallell repository, set $cacheRepo = false to disable
+$cacheRepo = preg_replace('/\b\/[^\/]+/', '/repos-thumbs', getRepository(), 1);
+if (strBegins(getSelfUrl(), $cacheRepo) && !isset($_REQUEST['target'])) {
+	trigger_error('On-demand thumbnail generation not implemented yet');
 }
 
 // can't be sure that the browser automatically forwards credentials to this plugin folder
@@ -50,6 +58,24 @@ $extension = $file->getExtension();
 // note that this requires host-wide login, not only /repos-web/, now that this runs in /repos-plugins
 if ($file->getStatus() != 200) {
 	handleError($file->getStatus(), "Could not read ".$file->getPath()." ".$r->getValue());
+}
+
+// Look for a cached file using a naming rule
+if ($cacheRepo) {
+	$transformId = THUMB_SIZE.'x'.THUMB_SIZE;
+	$revision = $file->getRevision();
+	$name = $file->getFilename();
+	$dot = strrpos($name, '.');
+	$name = substr($name, 0, $dot).'(r'.$file->getRevision().')'.".$transformId".substr($name,$dot);
+	$cacheTarget = getTarget().'/'.$revision.'/'.$name;
+	$cacheSave = getTarget().'/repos.lock';
+	$cacheUrl = $cacheRepo.$cacheTarget;
+	$existing = new ServiceRequest($cacheUrl);
+	if ($existing->exec() == 200) {
+		header("Location: $cacheUrl");
+		// TODO this resource will never change so we could set cache header
+		exit;
+	}
 }
 
 // thumbnails are small, so we can store them on disc
@@ -76,6 +102,12 @@ if ($r->getValue()) {
 
 // send from the tempfile
 showJpeg($tempfile);
+
+// store in cache
+$import = new SvnEdit('import');
+$import->addArgPath($tempfile);
+$import->addArgUrl($cacheUrl);
+$import->execNoDisplay();
 
 System::deleteFile($tempfile);
 
