@@ -1,12 +1,5 @@
 <?php
 // get the properties of a file or folder as JSON 
-/* subversion resturns something like
-Properties on 'http://localhost/testrepo/demoproject/trunk/public/xmlfile.xml':
-  svn:mime-type : text/xml
-  svn:ignore : .project
-.projectOptions
-.cache
-*/
 
 require("../SvnOpen.class.php" );
 require_once("../../lib/json/json.php" );
@@ -18,36 +11,53 @@ header('Content-type: text/plain');
 
 $cmd = new SvnOpen('proplist');
 $cmd->addArgOption('-v');
+$cmd->addArgOption('--xml');
 if (isset($_REQUEST['rev'])) $cmd->addArgOption('-r', $_REQUEST['rev']);
 $cmd->addArgUrl($url);
 if ($cmd->exec()) {
 	trigger_error(implode("\n",$cmd->getOutput()), E_USER_ERROR);	
 }
 
-$output = $cmd->getOutput();
-$start = array_shift($output);
-if (preg_match('/\'(\w+:\/\/\S+)\'/', $start, $matches)) {
-	$result['target'] = rawurldecode($matches[1]);
-} else {
-	$result['target'] = getTargetUrl(); // return an empty proplist if no properties set
-}
+$output = $cmd->getOutput(); // Currently not possible to stream command output directly to SAX parser
+echo '{';
+$isProperty = false;
 
-$proplist = array();
-$last = null;
-foreach($output as $line) {
-	if (preg_match('/\s+([\w-:]+)\s:\s?(.*)/', $line, $matches)) {
-		$last = $matches[1];
-		$proplist[$last] = $matches[2];		
-	} else {
-		if (!$last) trigger_error("Invalid property line '$line'", E_USER_ERROR);
-		$proplist[$last] .= "\n".$line;
+function propStart($parser, $name, $attrs) {
+	global $isProperty;
+	static $count = 0;
+	if ($name == 'TARGET') echo '"target": "'.$attrs['PATH'].'"';
+	if ($name == 'PROPERTY') {
+		echo ",\n";
+		if (!$count++) echo '"proplist":'."{\n";
+		echo '"'.$attrs['NAME'].'":"';
+		$isProperty = true;
 	}
 }
 
-$result['proplist'] = $proplist;
+function propEnd($parser, $name) {
+	global $isProperty;
+	if ($name == 'PROPERTY') echo '"';
+	$isProperty = false;
+}
 
-$json = new Services_JSON();
-echo $json->encode($result);
+function propData($parser, $data) {
+	global $isProperty;
+	if ($isProperty) echo str_replace("\n", '\n', $data);
+}
+
+$xml_parser = xml_parser_create();
+xml_set_element_handler($xml_parser, "propStart", "propEnd");
+xml_set_character_data_handler($xml_parser, "propData");
+for ($i = 0; $i < count($output);) {
+	if (!xml_parse($xml_parser, $output[$i]."\n", count($output) == $i++)) {
+		trigger_error(sprintf("XML error: %s at line %d",
+			xml_error_string(xml_get_error_code($xml_parser)),
+			xml_get_current_line_number($xml_parser)), E_USER_ERROR);
+	}
+}
+
+xml_parser_free($xml_parser);
+echo "}}\n";
 
 // to get all the properties of a specific type for a tree,
 // use propget -R [propertyname] path
