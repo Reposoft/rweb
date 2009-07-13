@@ -169,15 +169,29 @@ Repos.service('open/', function() {
 	};
 	// how to present results
 	var presentation = function(solrXml) {
+		var list = $('<ul/>').appendTo('#whereused');
 		$('doc', solrXml).each(function() {
 			var parent = $('str[name="parentId"]', this).text();
-			console.log(parent, this);
-			$('#whereused').append('<p>' + parent + '</p>');
+			var latestAdd = $('arr[name="addedRev"] > int:last', this).text();
+			var latestRemove = $('arr[name="removedRev"] > int:last', this).text();
+			var li = $('<li/>').appendTo(list);
+			var repository = $('#urlcopy').val().replace(Repos.getTarget(), ''); // need Repos.getRepsitory
+			li.append('<a href="' + repository + parent + '">'+parent+'</a>');
+			// roughly the same code as for dependencies above, should have a generalized event handler
+			var href = '/repos-web/open/?target=' // assume host's Repos Web is at repos-web
+				+ encodeURIComponent(parent)
+				+ '&base=' + Repos.getBase();
+			var view = $('<a>view</a>').addClass('action').attr('href', href).appendTo(li);
+			// currently this is what we know about the dependency history
+			li.append(' since <span class="revision">' + latestAdd + "</span>");
+			if (latestRemove && latestRemove > latestAdd) {
+				li.append(' from <span class="revision">' + latestRemove + "</span>");
+			}
 		});
 	};
 	// start with an empty box
 	var section = $('<div/>').attr('id','whereused').addClass('section');
-	$('<h2/>').text('Where Used').appendTo(section);
+	$('<h2/>').text('Used In').appendTo(section);
 	section.appendTo('.column:eq(1)');
 	// perform search
 	$.get(search, params, presentation, 'xml');
