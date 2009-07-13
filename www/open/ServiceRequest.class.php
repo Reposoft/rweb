@@ -209,7 +209,7 @@ class ServiceRequest {
 		// custom options
 		$this->_customize($ch);
 		// DEBUG OUTPUT
-		$debugfile = dirname(dirname(__FILE__)).'/_repos_diag_curl.txt';
+		$debugfile = false; // To enable set to path, example: dirname(dirname(__FILE__)).'/_repos_diag_curl.txt';
 		if ($debugfile && $debugfh = @fopen($debugfile,'a+')) {
 			curl_setopt($ch, CURLOPT_STDERR, $debugfh);
 			curl_setopt($ch, CURLOPT_VERBOSE, true);
