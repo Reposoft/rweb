@@ -1,0 +1,967 @@
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Sun, 12 Jul 2009 20:12:17 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Fri, 03 Jul 2009 08:21:12 GMT
+< ETag: W/"114//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/%21svn/bc/114/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Sun, 12 Jul 2009 20:12:17 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Fri, 03 Jul 2009 08:21:12 GMT
+< ETag: W/"114//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/tjo?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 404 Not Found
+< Date: Sun, 12 Jul 2009 20:12:09 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< X-Powered-By: PHP/5.2.10
+< Cache-Control: max-age=0, must-revalidate
+< Content-Length: 111
+< Content-Type: application/x-javascript
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Sun, 12 Jul 2009 20:12:09 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Fri, 03 Jul 2009 08:21:12 GMT
+< ETag: W/"114//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/tjo?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 301 Moved Permanently
+< Date: Sun, 12 Jul 2009 20:15:33 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Location: http://localhost:8530/svn/abxevent/tjo/
+< Content-Type: text/html; charset=iso-8859-1
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Sun, 12 Jul 2009 20:15:33 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:12:17 GMT
+< ETag: W/"115//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Sun, 12 Jul 2009 20:15:49 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:12:17 GMT
+< ETag: W/"115//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/%21svn/bc/115/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Sun, 12 Jul 2009 20:15:49 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:12:17 GMT
+< ETag: W/"115//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/tjoh?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 404 Not Found
+< Date: Sun, 12 Jul 2009 20:15:40 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< X-Powered-By: PHP/5.2.10
+< Cache-Control: max-age=0, must-revalidate
+< Content-Length: 112
+< Content-Type: application/x-javascript
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Sun, 12 Jul 2009 20:15:40 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:12:17 GMT
+< ETag: W/"115//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Sun, 12 Jul 2009 20:44:05 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:15:49 GMT
+< ETag: W/"116//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/%21svn/bc/116/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Sun, 12 Jul 2009 20:44:05 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:15:49 GMT
+< ETag: W/"116//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/tjoho?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 404 Not Found
+< Date: Sun, 12 Jul 2009 20:43:58 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< X-Powered-By: PHP/5.2.10
+< Cache-Control: max-age=0, must-revalidate
+< Content-Length: 113
+< Content-Type: application/x-javascript
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Sun, 12 Jul 2009 20:43:58 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:15:49 GMT
+< ETag: W/"116//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 05:33:08 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:44:05 GMT
+< ETag: W/"117//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/%21svn/bc/117/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 05:33:08 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:44:05 GMT
+< ETag: W/"117//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/tjohoj?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 404 Not Found
+< Date: Mon, 13 Jul 2009 05:32:59 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< X-Powered-By: PHP/5.2.10
+< Cache-Control: max-age=0, must-revalidate
+< Content-Length: 114
+< Content-Type: application/x-javascript
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 05:32:59 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:44:05 GMT
+< ETag: W/"117//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 05:38:20 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Mon, 13 Jul 2009 05:33:08 GMT
+< ETag: W/"118//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/%21svn/bc/118/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 05:38:20 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Mon, 13 Jul 2009 05:33:08 GMT
+< ETag: W/"118//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/tjohojh?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 404 Not Found
+< Date: Mon, 13 Jul 2009 05:38:11 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< X-Powered-By: PHP/5.2.10
+< Cache-Control: max-age=0, must-revalidate
+< Content-Length: 115
+< Content-Type: application/x-javascript
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 05:38:11 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Mon, 13 Jul 2009 05:33:08 GMT
+< ETag: W/"118//"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> MKCOL /svn/abxevent/tjo/.repos_writable_check?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+If-Match: "shouldnevermatch"
+
+< HTTP/1.1 412 Precondition Failed
+< Date: Mon, 13 Jul 2009 05:41:15 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Content-Length: 272
+< Content-Type: text/html; charset=iso-8859-1
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> MKCOL /svn/abxevent/tjo/.repos_writable_check?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+If-Match: "shouldnevermatch"
+
+< HTTP/1.1 412 Precondition Failed
+< Date: Mon, 13 Jul 2009 05:41:15 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Content-Length: 272
+< Content-Type: text/html; charset=iso-8859-1
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/tjo/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 05:41:15 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:12:17 GMT
+< ETag: W/"115//tjo"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> MKCOL /svn/abxevent/tjoh/.repos_writable_check?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+If-Match: "shouldnevermatch"
+
+< HTTP/1.1 412 Precondition Failed
+< Date: Mon, 13 Jul 2009 05:46:00 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Content-Length: 273
+< Content-Type: text/html; charset=iso-8859-1
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> MKCOL /svn/abxevent/tjoh/.repos_writable_check?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+If-Match: "shouldnevermatch"
+
+< HTTP/1.1 412 Precondition Failed
+< Date: Mon, 13 Jul 2009 05:46:00 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Content-Length: 273
+< Content-Type: text/html; charset=iso-8859-1
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/tjoh/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 05:46:00 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:15:49 GMT
+< ETag: W/"116//tjoh"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> LOCK /svn/abxevent/A%20Test%20DocBook.xml?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+If-Match: "shouldnevermatch"
+
+< HTTP/1.1 412 Precondition Failed
+< Date: Mon, 13 Jul 2009 05:46:22 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Content-Length: 265
+< Content-Type: text/html; charset=iso-8859-1
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> LOCK /svn/abxevent/A%20Test%20DocBook.xml?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+If-Match: "shouldnevermatch"
+
+< HTTP/1.1 412 Precondition Failed
+< Date: Mon, 13 Jul 2009 05:46:22 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Content-Length: 265
+< Content-Type: text/html; charset=iso-8859-1
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/A%20Test%20DocBook.xml?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 05:46:22 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Thu, 18 Jun 2009 14:48:10 GMT
+< ETag: "79//A Test DocBook.xml"
+< Accept-Ranges: bytes
+< Content-Length: 596
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/plain
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> LOCK /svn/abxevent/Slides/CMS_presentation_Ericsson.xml?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+If-Match: "shouldnevermatch"
+
+< HTTP/1.1 412 Precondition Failed
+< Date: Mon, 13 Jul 2009 06:08:55 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Content-Length: 283
+< Content-Type: text/html; charset=iso-8859-1
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/Slides/CMS_presentation_Ericsson.xml?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 06:08:55 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Thu, 02 Jul 2009 11:26:29 GMT
+< ETag: "103//Slides/CMS_presentation_Ericsson.xml"
+< Accept-Ranges: bytes
+< Content-Length: 9812
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/plain
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> LOCK /svn/abxevent/Slides/CMS_presentation_Ericsson.xml?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+If-Match: "shouldnevermatch"
+
+< HTTP/1.1 412 Precondition Failed
+< Date: Mon, 13 Jul 2009 06:12:45 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Content-Length: 283
+< Content-Type: text/html; charset=iso-8859-1
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/Slides/CMS_presentation_Ericsson.xml?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 06:12:45 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Thu, 02 Jul 2009 11:26:29 GMT
+< ETag: "103//Slides/CMS_presentation_Ericsson.xml"
+< Accept-Ranges: bytes
+< Content-Length: 9812
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/plain
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> LOCK /svn/abxevent/Slides/CMS_presentation_Ericsson.xml?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+If-Match: "shouldnevermatch"
+
+< HTTP/1.1 412 Precondition Failed
+< Date: Mon, 13 Jul 2009 06:12:53 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Content-Length: 283
+< Content-Type: text/html; charset=iso-8859-1
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/Slides/CMS_presentation_Ericsson.xml?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 06:12:53 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Thu, 02 Jul 2009 11:26:29 GMT
+< ETag: "103//Slides/CMS_presentation_Ericsson.xml"
+< Accept-Ranges: bytes
+< Content-Length: 9812
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/plain
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/tjoho/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 06:13:40 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:44:05 GMT
+< ETag: W/"117//tjoho"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/%21svn/bc/121/tjoho/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 06:13:40 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:44:05 GMT
+< ETag: W/"117//tjoho"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/tjoho/t%C3%A5rta?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 404 Not Found
+< Date: Mon, 13 Jul 2009 06:13:33 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< X-Powered-By: PHP/5.2.10
+< Cache-Control: max-age=0, must-revalidate
+< Content-Length: 125
+< Content-Type: application/x-javascript
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/tjoho/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 06:13:33 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Sun, 12 Jul 2009 20:44:05 GMT
+< ETag: W/"117//tjoho"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> MKCOL /svn/abxevent/tjoho/t%C3%A5rta/.repos_writable_check?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+If-Match: "shouldnevermatch"
+
+< HTTP/1.1 412 Precondition Failed
+< Date: Mon, 13 Jul 2009 06:13:56 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Content-Length: 281
+< Content-Type: text/html; charset=iso-8859-1
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> MKCOL /svn/abxevent/tjoho/t%C3%A5rta/.repos_writable_check?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+If-Match: "shouldnevermatch"
+
+< HTTP/1.1 412 Precondition Failed
+< Date: Mon, 13 Jul 2009 06:13:56 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Content-Length: 281
+< Content-Type: text/html; charset=iso-8859-1
+< 
+* Connection #0 to host localhost left intact
+* Closing connection #0
+* About to connect() to localhost port 8530 (#0)
+*   Trying 127.0.0.1... * connected
+* Connected to localhost (127.0.0.1) port 8530 (#0)
+* Server auth using Basic with user 'test'
+> HEAD /svn/abxevent/tjoho/t%C3%A5rta/?serv=json HTTP/1.1
+Authorization: Basic dGVzdDp0ZXN0
+User-Agent: Repos service request
+Host: localhost:8530
+Accept: */*
+Cookie: lang=en
+
+< HTTP/1.1 200 OK
+< Date: Mon, 13 Jul 2009 06:13:56 GMT
+< Server: Apache/2.2.11 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8k DAV/2 PHP/5.2.10 SVN/1.6.3 mod_perl/2.0.3 Perl/v5.8.9
+< Last-Modified: Mon, 13 Jul 2009 06:13:40 GMT
+< ETag: W/"122//tjoho/tårta"
+< Accept-Ranges: bytes
+< Cache-Control: max-age=0, must-revalidate
+< Cache-Control: max-age=0, must-revalidate
+< Content-Type: text/xml
+* no chunk, no close, no size. Assume close to signal end
+< 
+* Closing connection #0

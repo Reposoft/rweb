@@ -88,8 +88,12 @@ class TestServerSettings extends UnitTestCase {
 	}
 
 	function testLocale() {
+		$this->sendMessage('PHP_OS='.PHP_OS);
+		$this->sendMessage('Repos parses svn command output, which is localized in most svn installations, so it must set language to english.');
+		$this->sendMessage('It also needs the shell to be UTF-8 so that paths and messages can be encoded for the svn command.');
 		exec('locale -a 2>&1', $locales, $r);
 		$rlocale = 'en_US.utf8'; // TODO let this test require repos.properties.php and use getLocale()
+		if (PHP_OS == 'Darwin') $rlocale = str_replace('utf8', 'UTF-8', $rlocale); // This is what Command.class.php does in _command_env
 		if ($r==0) {
 			$this->assertTrue(in_array($rlocale, $locales), 'Locale '.$rlocale.' not found in '.implode(',',$locales));
 		} else {
