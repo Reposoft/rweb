@@ -7,18 +7,26 @@ require_once("../../lib/json/json.php" );
 $url = getTargetUrl();
 Validation::expect('target');
 
-header('Content-type: text/plain');
-
 $cmd = new SvnOpen('proplist');
 $cmd->addArgOption('-v');
 $cmd->addArgOption('--xml');
 if (isset($_REQUEST['rev'])) $cmd->addArgOption('-r', $_REQUEST['rev']);
 $cmd->addArgUrl($url);
+
+// This is for evaluation of Accept header usage. Should be aligned with WEBSERVICE_KEY concept in repos.properties.php
+if (strBegins($_SERVER['HTTP_ACCEPT'], 'text/xml')) {
+	header('Content-type: text/xml');
+	$cmd->passthru();
+	exit;
+}
+
+// Execute to buffer and return default format
 if ($cmd->exec()) {
 	trigger_error(implode("\n",$cmd->getOutput()), E_USER_ERROR);	
 }
 
 $output = $cmd->getOutput(); // Currently not possible to stream command output directly to SAX parser
+header('Content-type: text/plain');
 echo '{';
 $isProperty = false;
 
