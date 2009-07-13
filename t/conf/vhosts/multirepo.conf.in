@@ -35,7 +35,7 @@
 
 		SVNIndexXSLT "/repos-web/view/repos-multi.xsl"
 
-		SVNParentPath @ServerRoot@/hosts/multirepo/repos
+		SVNParentPath @ServerRoot@/hosts/multirepo/svn
 		SVNListParentPath on
 
 		AuthType Basic
