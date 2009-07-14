@@ -23,8 +23,27 @@ function shouldShow($entrypoint) {
 // if the user logged in directly to the repository, we need the cookie to be set
 // TODO can this redirect be avoided now that service request forwards authentication?
 // - not if we want authentication to be server wide
+// This page is special because it has no "target" that we can use to check is login is needed
+// - this means we can't use targetLogin()
 if (!isLoggedIn()) {
-	header("Location: /?login");
+	if (isset($_COOKIE[USERNAME_KEY])) {
+		// for browsers that don't automatically send credentials to pages below login url
+		// Required in Safari
+		$rootrealm = getAuthName(getRepository());
+		if ($rootrealm) {
+			askForCredentials($rootrealm);
+		} else {
+			// Account is set but repository does not require authentication
+			// How do we handle this? Try auth urls like account/login/ does?
+			trigger_error('Account could not be validated. '.
+				'Try <a href="'.getRepository().'/">repository root</a>.', E_USER_ERROR);
+		}
+	} else {
+		// most browsers would send credentials without first being proptet with Authentication Requered
+		// Having this redirect here means that start page requires login
+		// - an alternative would be to parse the acl with user "*"
+		header("Location: /?login");	
+	}
 	exit;
 }
 

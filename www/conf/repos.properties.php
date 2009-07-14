@@ -260,18 +260,19 @@ function getHttpReferer() {
 // ----- helper functions for pages to refer to internal urls -----
 
 /**
- * Alias for the old function name getSelfRoot.
+ * Get the current ReposHost: http URL root (protocol, host and port).
+ * To adapt to clients that may use SSL, i.e. remote users, 
+ *  call asLink(getHost().'/the/script/path/').
+ * @return The url to the host of this request, 
+ * without tailing slash because absolute urls should be appended.
+ * @deprecated Use the new function name getHost
  */
 function getHost() {
 	return getSelfRoot();
 }
 
 /**
- * Get the current ReposHost: http URL root (protocol, host and port).
- * To adapt to clients that may use SSL, call asLink(getHost().'/the/script/path/').
- * @return The url to the host of this request, 
- * without tailing slash because absolute urls should be appended.
- * @deprecated Use the new function name getHost
+ * @deprecated use getHost
  */
 function getSelfRoot() {
 	if (isset($_SERVER['REPOS_HOST'])) return $_SERVER['REPOS_HOST'];
