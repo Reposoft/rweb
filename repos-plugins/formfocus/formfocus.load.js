@@ -5,7 +5,6 @@ Repos.formfocus = {
 			.not('[type="hidden"]')
 			.not('[disabled]')
 			[0];
-		console.log('first', f);
 		if (typeof f != 'undefined') f.focus();
 	}
 };
@@ -14,6 +13,10 @@ Repos.formfocus = {
 	for (i = 0; i<arguments.length; i++) {
 		Repos.service(arguments[i], Repos.formfocus.first);
 	}
-})('edit/mkdir/'
-,'edit/delete/'
+})(	'edit/mkdir/'
+	,'edit/delete/'
+	,'edit/copy/'
+	,'edit/rename/'
+	,'edit/delete/'
+	,'edit/lock/'
 );
