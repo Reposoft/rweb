@@ -1,0 +1,30 @@
+
+<VirtualHost style>
+	# the server name added by Apache::Test sets correct SelfRoot in repos.properties.php
+
+	DocumentRoot @ServerRoot@/hosts/style/html
+
+	# during development browsers should revalidate on each request for static resources too
+	Header add Cache-Control "max-age=0, must-revalidate"
+
+	<Location /svn>
+		DAV svn
+
+		SVNIndexXSLT "/repos-web/view/repos.xsl"
+
+		SVNParentPath @ServerRoot@/hosts/multirepo/svn
+		SVNListParentPath on
+
+		AuthType Basic
+		AuthName "repos test multirepo"
+		AuthUserFile @ServerRoot@/hosts/multirepo/admin/repos-users
+		Require valid-user
+
+		#AuthzSVNAccessFile @ServerRoot@/hosts/multirepo/admin/repos-access
+		#Satisfy Any
+		
+		# Svn module does not set caching behavior as expected for dynamic contents
+		Header add Cache-Control "max-age=0, must-revalidate"
+	</Location>
+
+</VirtualHost>
