@@ -23,7 +23,7 @@ if (!file_exists(CACHE_DIR)) {
 }
 
 $home = "http://www.smarty.net";
-$version = "2.6.22";
+$version = "2.6.26";
 $archive = "$home/do_download.php?download_file=Smarty-$version.tar.gz";
 $repos_package = "Smarty";
 
