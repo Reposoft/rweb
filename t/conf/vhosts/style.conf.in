@@ -26,5 +26,7 @@
 		# Svn module does not set caching behavior as expected for dynamic contents
 		Header add Cache-Control "max-age=0, must-revalidate"
 	</Location>
+	
+	Include @ServerRoot@/hosts/style/html/svnservice.conf
 
 </VirtualHost>
