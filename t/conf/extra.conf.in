@@ -6,12 +6,16 @@ php_value include_path ".:@ServerRoot@/php-include"
 AddType  application/x-httpd-php         .php
 AddType  application/x-httpd-php-source  .phps
 
+# Enable python pages
+AddHandler mod_python .py
+PythonHandler mod_python.publisher
+PythonDebug On
+
 # Shared configuration for all hosts
 <Directory @ServerRoot@/..>
 	
-	DirectoryIndex index.html index.php
+	DirectoryIndex index.html index.php index.py
 	# Index listing needed for some development navigation
 	Options Indexes
 	
 </Directory>
-
