@@ -9,6 +9,23 @@ require('../../reposweb.inc.php');
 require(ReposWeb.'open/SvnOpenFile.class.php');
 require('./convert.inc.php');
 define('THUMB_SIZE', 150);
+
+/**
+ * @return the root url to the cache repo, should be the external url
+ * so that cients can read resources directly from cache.
+ * The cache repository can use caching because all URLs
+ * sent to client will include the revsion number.
+ */
+function getThumbnailCacheRepo() {
+	// TODO server setting like those read in repos.properties.php
+	// return getThumbnailCacheRepoDefault();
+	return false; // caching disabled
+}
+
+function getThumbnailCacheRepoDefault() {
+	preg_replace('/\b\/[^\/]+/', '/repos-thumbs', getRepository(), 1);
+}
+
 // for caching
 require(ReposWeb.'edit/SvnEdit.class.php');
 
@@ -33,7 +50,7 @@ if ($result > 1) {
 }
 
 // Enable caching in parallell repository, set $cacheRepo = false to disable
-$cacheRepo = preg_replace('/\b\/[^\/]+/', '/repos-thumbs', getRepository(), 1);
+$cacheRepo = getThumbnailCacheRepo();
 if (strBegins(getSelfUrl(), $cacheRepo) && !isset($_REQUEST['target'])) {
 	trigger_error('On-demand thumbnail generation not implemented yet');
 }
@@ -66,14 +83,13 @@ if ($cacheRepo) {
 	$revision = $file->getRevision();
 	$name = $file->getFilename();
 	$dot = strrpos($name, '.');
-	$name = substr($name, 0, $dot).'(r'.$file->getRevision().')'.".$transformId".substr($name,$dot);
+	$name = substr($name, 0, $dot).'(r'.$file->getRevision().')'.".$transformId".substr($name,$dot).'.jpg';
 	$cacheTarget = getTarget().'/'.$revision.'/'.$name;
 	$cacheSave = getTarget().'/repos.lock';
 	$cacheUrl = $cacheRepo.$cacheTarget;
 	$existing = new ServiceRequest($cacheUrl);
 	if ($existing->exec() == 200) {
 		header("Location: $cacheUrl");
-		// TODO this resource will never change so we could set cache header
 		exit;
 	}
 }
@@ -96,7 +112,7 @@ if($o->exec()) {
 }
 
 // thumbnails can be cached permanently if target and revsion number is in the url
-if ($r->getValue()) {
+if ($rev) {
 	header('Cache-Control: max-age=8640000');
 }
 
