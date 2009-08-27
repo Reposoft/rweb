@@ -1,5 +1,5 @@
 
-<VirtualHost multirepo>
+<VirtualHost servicelayer>
 	# the server name added by Apache::Test sets correct SelfRoot in repos.properties.php
 
 	Alias /repos-web @ServerRoot@/../www
