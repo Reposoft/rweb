@@ -165,36 +165,38 @@ Repos.service('open/', function() {
 	// REST resource for search, currently not a Repos service
 	var search = '/repos-plugins/arbortext/index/parentchild/';
 	var params =  {
-			target: child
+			target: child,
+			base: Repos.getBase(),
+			rev: null
 	};
 	// how to present results
-	var presentation = function(solrXml) {
+	var presentation = function(json) {
+		var repository = $('#urlcopy').val().replace(Repos.getTarget(), ''); // need Repos.getRepository
 		var list = $('<ul/>').appendTo('#whereused');
-		$('doc', solrXml).each(function() {
-			var parent = $('str[name="parentId"]', this).text();
-			var latestAdd = $('arr[name="addedRev"] > int:last', this).text();
-			var latestRemove = $('arr[name="removedRev"] > int:last', this).text();
+		for (parent in json) {	
 			var li = $('<li/>').appendTo(list);
-			var repository = $('#urlcopy').val().replace(Repos.getTarget(), ''); // need Repos.getRepsitory
-			li.append('<a href="' + repository + parent + '">'+parent+'</a>');
+			li.append('<a href="' + repository + parent + '">'+parent+'</a>');			
 			// roughly the same code as for dependencies above, should have a generalized event handler
 			var href = '/repos-web/open/?target=' // assume host's Repos Web is at repos-web
 				+ encodeURIComponent(parent)
 				+ '&base=' + Repos.getBase();
 			var view = $('<a>view</a>').addClass('action').attr('href', href).appendTo(li);
 			// currently this is what we know about the dependency history
-			li.append(' since <span class="revision">' + latestAdd + "</span>");
-			if (latestRemove && latestRemove > latestAdd) {
-				li.append(' from <span class="revision">' + latestRemove + "</span>");
+			if (json[parent].added) {
+				li.append(' since <span class="revision">' + json[parent].added + "</span>");
 			}
-		});
+			if (json[parent].removed) {
+				li.append(' until <span class="revision">' + json[parent].removed + "</span>");
+				// to view the last revision where this dependency existed use removed - 1
+			}
+		}
 	};
 	// start with an empty box
 	var section = $('<div/>').attr('id','whereused').addClass('section');
 	$('<h2/>').text('Used In').appendTo(section);
 	section.appendTo('.column:eq(1)');
 	// perform search
-	$.get(search, params, presentation, 'xml');
+	$.get(search, params, presentation, 'json');
 });
 
 
