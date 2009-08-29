@@ -163,9 +163,9 @@ Repos.service('open/', function() {
 	// The search term
 	var child = Repos.getTarget();
 	// REST resource for search, currently not a Repos service
-	var search = '/solr/parentchild/select/';
+	var search = '/repos-plugins/arbortext/index/parentchild/';
 	var params =  {
-			q: child
+			target: child
 	};
 	// how to present results
 	var presentation = function(solrXml) {

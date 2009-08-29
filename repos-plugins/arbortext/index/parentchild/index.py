@@ -5,8 +5,7 @@ import httplib
 # urllib.parse in python 3.1
 import urllib
 
-
-def index(target=None, rev=None):
+def index(req, target=None, rev=None):
 
 	if not target:
 		return 'Target is required'
@@ -24,7 +23,11 @@ def index(target=None, rev=None):
 	c.close()
 	if r1.status is not 200:
 		raise NameError("Query failed with status %d and response %s" % (r1.status, data))
-	return data;
+	
+	req.content_type = "text/xml"
+	req.write(data)
+	#return apache.OK
+	return
 
 def getSettings():
 	

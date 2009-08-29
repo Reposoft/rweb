@@ -24,9 +24,9 @@
 	ErrorDocument 404 /repos-web/errors/404/
 	ErrorDocument 500 /repos-web/errors/500/
 
-	# Proxy for indexing engine
-	ProxyPass /solr ajp://127.0.0.1:8009/solr
-	ProxyPreserveHost On
+	# Direct proxy for indexing engine, not needed if using repos indexing proxy
+	#ProxyPass /solr ajp://127.0.0.1:8009/solr
+	#ProxyPreserveHost On
 
 	# Master repositories
 	<Location /svn>
