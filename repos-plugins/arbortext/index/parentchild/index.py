@@ -1,5 +1,6 @@
 import sys
 import os
+import xml.dom.pulldom
 # http.client in python 3.1
 import httplib
 # urllib.parse in python 3.1
@@ -24,9 +25,18 @@ def index(req, target=None, rev=None):
 	if r1.status is not 200:
 		raise NameError("Query failed with status %d and response %s" % (r1.status, data))
 	
-	req.content_type = "text/xml"
-	req.write(data)
-	#return apache.OK
+	if "Accept" is "text/xml":
+		req.content_type = "text/xml"
+		req.write(data)
+		#return apache.OK
+		
+	json = {}
+	events = xml.dom.pulldom.parseString(data)
+	for (event, node) in events:
+		if event=="START_ELEMENT" and node.tagName=="doc":
+			events.expandNode(node)
+			req.write(node.toprettyxml())
+	
 	return
 
 def getSettings():
