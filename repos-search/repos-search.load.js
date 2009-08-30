@@ -158,6 +158,9 @@ reposSearchPresentItem = function(json) {
 		li.append('<a class="searchresultbase" href="' + root + '">' + m[1] + '</a>');
 	}
 	li.append('<a class="searchresultpath" href="' + root + m[2] + '">' + m[2] + '</a>');
-	li.append('<a class="searchresultfile" href="' + root + m[2] + m[3] + '" title="' + (json.title || '') + '">' + m[3] + '</a>');
+	li.append('<a class="searchresultfile" href="' + root + m[2] + m[3] + '">' + m[3] + '</a>');
+	if (json.title && json.title != m[3]) {
+		$('<span class="searchresulttitle">').text('  ' + json.title).appendTo(li);
+	}
 	return li;
 };
