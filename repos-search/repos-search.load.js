@@ -47,9 +47,9 @@ reposSearchSubmit = function(ev) {
 	reposSearchClose();
 	var overlay = $('<div id="searchoverlay"/>').css(reposSearchOverlayCss);
 	// start search request
-	var query = $(this).serialize();
+	var query = $('input[name=q]').val();
 	var titles = $('<div id="searchtitles"/>');
-	reposSearchQTitles(query, titles);
+	reposSearchTitles(query, titles);
 	// build results layout
 	var close = $('<span class="searchclose">close</span>').click(reposSearchClose);
 	overlay.append(close);
@@ -61,29 +61,34 @@ reposSearchSubmit = function(ev) {
 		if ($(this).is(':checked')) {
 			fulltexth.show();
 			fulltext.show();
-			reposSearchQFulltext(query, fulltext);
+			reposSearchFulltext(query, fulltext);
 		} else {
 			fulltexth.hide();
 			fulltext.hide();
 		}
 	}).appendTo(overlay);
 	overlay.append(fulltexth).append(fulltext);
-	
-	
-	
 	$('body').append(overlay);
+	overlay.append(close);
 	return false; // don't submit form
 };
 
-reposSearchQTitles = function(query, resultDiv) {
-	console.log('titles', query, resultDiv);
+reposSearchTitles = function(query, resultDiv) {
+	reposSearchAjax('/repos-search/?q=title:' + query, resultDiv);
+}
+
+reposSearchFulltext = function(query, resultDiv) {
+	reposSearchAjax('/repos-search/?q=text:' + query, resultDiv);
+}
+
+reposSearchAjax = function(url, resultDiv) {
 	resultDiv.addClass('loading');
 	$.ajax({
-		url: '/repos-search/?' + query,
+		url: url,
 		dataType: 'json',
 		success: function(json) {
 			resultDiv.removeClass('loading');
-			reposSearchQTitlesResults(json, resultDiv);
+			reposSearchResults(json, resultDiv);
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			resultDiv.removeClass('loading');
@@ -92,7 +97,7 @@ reposSearchQTitles = function(query, resultDiv) {
 	});
 };
 
-reposSearchQTitlesResults = function(json, resultDiv) {
+reposSearchResults = function(json, resultDiv) {
 	resultDiv.empty();
 	console.log(json);
 	var num = json.response.numFound;
@@ -103,14 +108,9 @@ reposSearchQTitlesResults = function(json, resultDiv) {
 	var list = $('<u/>').appendTo(resultDiv);
 	for (var i = 0; i < num; i++) {
 		var e = reposSearchPresentItem(json.response.docs[i]);
-		e.attr('id', 'searchtitlehit' + i);
+		e.addClass(i % 2 ? 'even' : 'odd');
 		e.appendTo(list);
 	}
-};
-
-reposSearchQFulltext = function(query, resultDiv) {
-	console.log('fulltext', query, resultDiv);
-	
 };
 
 /**
@@ -119,5 +119,5 @@ reposSearchQFulltext = function(query, resultDiv) {
  * @return jQuery element
  */
 reposSearchPresentItem = function(json) {
-	return $('<li>' + json.id + ' - ' + json.title + '</li>');
+	return $('<li>' + json.id + (json.title ? ' - ' + json.title : '') + '</li>');
 };
