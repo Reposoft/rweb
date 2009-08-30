@@ -12,18 +12,26 @@ reposSearchFormCss = {
 reposSearchInputCss = {
 	
 };
-reposSearchOverlayCss = {
+reposSearchDialogCss = {
 	position: 'absolute',
+	overflow: 'scroll',
 	zIndex: 1,
-	top: 30,
+	top: 50,
 	left: 30,
 	right: 30,
 	bottom: 30,
 	opacity: .8,
 	padding: 10,
+	paddingLeft: 30,
 	background: 'white',
-	border: '2px solid gray'
-}
+	border: '2px solid #efefef'
+};
+reposSearchCloseCss = {
+	width: '100%',
+	textAlign: 'right',
+	fontSize: '82.5%',
+	cursor: 'pointer'
+};
 
 $().ready(function() {
 	reposSearchShow();
@@ -38,26 +46,26 @@ reposSearchShow = function() {
 };
 
 reposSearchClose = function() {
-	$('#searchoverlay').remove();
+	$('#searchdialog').remove();
 }
 
 reposSearchSubmit = function(ev) {
 	ev.stopPropagation();
 	// create search result container
 	reposSearchClose();
-	var overlay = $('<div id="searchoverlay"/>').css(reposSearchOverlayCss);
+	var dialog = $('<div id="searchdialog"/>').css(reposSearchDialogCss);
 	// start search request
 	var query = $('input[name=q]').val();
 	var titles = $('<div id="searchtitles"/>');
 	reposSearchTitles(query, titles);
 	// build results layout
-	var close = $('<span class="searchclose">close</span>').click(reposSearchClose);
-	overlay.append(close);
-	//overlay.append('<h1>Search results</h1>'); // would be better as title bar
-	overlay.append('<h2>Matching titles</h2>').append(titles);
+	var close = $('<div class="searchclose">close</div>').css(reposSearchCloseCss).click(reposSearchClose);
+	dialog.append(close);
+	//dialog.append('<h1>Search results</h1>'); // would be better as title bar
+	dialog.append('<h2>Matching titles</h2>').append(titles);
 	var fulltexth = $('<h2/>').text('Documents containing search term').hide();
 	var fulltext = $('<div id="searchtext"/>');
-	var enablefulltext = $('<input type="checkbox">').change(function() {
+	var enablefulltext = $('<input id="enablefulltext" type="checkbox">').change(function() {
 		if ($(this).is(':checked')) {
 			fulltexth.show();
 			fulltext.show();
@@ -66,10 +74,11 @@ reposSearchSubmit = function(ev) {
 			fulltexth.hide();
 			fulltext.hide();
 		}
-	}).appendTo(overlay);
-	overlay.append(fulltexth).append(fulltext);
-	$('body').append(overlay);
-	overlay.append(close);
+	});
+	$('<p/>').append(enablefulltext).append('<label for="enablefulltext">Search contents of documetns</label>').appendTo(dialog);
+	dialog.append(fulltexth).append(fulltext);
+	close.clone(true).addClass("searchclosebottom").appendTo(dialog);
+	$('body').append(dialog);
 	return false; // don't submit form
 };
 
