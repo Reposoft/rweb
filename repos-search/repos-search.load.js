@@ -144,9 +144,20 @@ reposSearchResults = function(json, resultDiv) {
 
 /**
  * Produce the element that presents a search hit.
+ * To customize, replace this method in a script block below Repos Search import.
  * @param json the item from the solr "response.docs" array
  * @return jQuery element
  */
 reposSearchPresentItem = function(json) {
-	return $('<li>' + json.id + (json.title ? ' - ' + json.title : '') + '</li>');
+	var m = /([^\/]*)(\/?.*\/)([^\/]*)/.exec(json.id);
+	if (!m) return $("<li/>").text("Unknown match: " + json.id);
+	var li = $('<li/>');
+	var root = '/svn';
+	if (m[1]) {
+		root += '/' + m[1];
+		li.append('<a class="searchresultbase" href="' + root + '">' + m[1] + '</a>');
+	}
+	li.append('<a class="searchresultpath" href="' + root + m[2] + '">' + m[2] + '</a>');
+	li.append('<a class="searchresultfile" href="' + root + m[2] + m[3] + '" title="' + m[3] + '">' + (json.title || m[3]) + '</a>');
+	return li;
 };
