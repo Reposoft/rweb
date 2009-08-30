@@ -6,6 +6,8 @@
 	Alias /repos-admin @ServerRoot@/../repos-admin
 	Alias /repos-plugins @ServerRoot@/../repos-plugins
 	Alias /repos-test @ServerRoot@/../repos-test
+	# Evaulating a fulltext search feature
+	Alias /repos-search @ServerRoot@/../repos-search
 	
 	SetEnv REPOS_TEST_ALLOW_RESET on
 

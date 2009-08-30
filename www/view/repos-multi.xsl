@@ -58,6 +58,8 @@
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$static}scripts/head.js"></script>
+				<!-- experimental Repos Search -->
+				<script type="text/javascript" src="/repos-search/repos-search.load.js"></script>
 			</head>
 			<body class="repository xml {$contentclass}">
 				<xsl:apply-templates select="svn"/>
