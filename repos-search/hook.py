@@ -17,6 +17,9 @@ import StringIO
 import httplib
 import urllib
 
+# needed until we have a better way of detecting files/folders
+import re
+
 # needed because httplib can't post multipart
 from tempfile import NamedTemporaryFile
 import os
@@ -32,15 +35,11 @@ csvn.core.svn_cmdline_init("", csvn.core.stderr)
 parser = OptionParser()
 parser.add_option("-p", "--repository", dest="repo",
     help="A local repository path")
-parser.add_option("", "--parentpath", dest="parent", default="/svn/",
-    help="The parent path as setup in Apache. Deprecated. Defaults to %default.")
-parser.add_option("-v", "--verbose", dest="verbose",
-    action='store_true', help="verbose mode",
-    default=False)
+parser.add_option("", "--nobase", dest="nobase", action='store_true', default=False,
+    help="Set to false to disable indexing of paths prefixed with repo name (i.e. @base)."
+        + " If the index is not for SVNParentPath repsitories, this makes paths easier to read.")
 parser.add_option("-r", "--revision", dest="rev",
     help="Committed revision")
-parser.add_option("", "--logfile", dest="logfile", default="./indexing-parentchild.log",
-    help="The absolute path to logfile. Defaults to %default.")
 parser.add_option("", "--loglevel", dest="loglevel", default="info",
     help="The loglevel (standard Log4J levels, lowercase). Defaults to %default.")
 parser.add_option("", "--cloglevel", dest="cloglevel", default="info",
@@ -56,14 +55,18 @@ def openRepo(url):
     return repo
 
 def submitDelete(path, rev):
-    raise NameError('Delete not implemented')
+    logger.warn('Delete not implemented. File %s will remain in search index.' % path)
 
-def submitContents(path, rev):
+def submitContents(path, rev, base=None):
     #output = StringIO.StringIO()
     f = NamedTemporaryFile('wb')
     repo.cat(f, path.strip("/"), rev)
 
     params = {"literal.id": path, "commit": "true"}
+    # path should begin with slash so that base can be prepended
+    # this means that for indexes containing repo name paths do not begin with slash 
+    if base:
+        params["literal.id"] = base + params["literal.id"]
     """ httplib does not support posting as multipart, using tempfile instead of StringIO """
     #h = httplib.HTTPConnection('localhost', 8983)
     #h.putrequest('POST', '/solr/update/extract' + "?" + urllib.urlencode(params))
@@ -78,27 +81,46 @@ def submitContents(path, rev):
     
     # use curl
     f.flush()
-    logger.debug(f.name)
-    os.system("/usr/bin/curl -v 'http://localhost:8983/solr/update/extract?%s' -F 'myfile=@%s'"
-              % (urllib.urlencode(params), f.name))
+    logger.debug("Using temp file %s" % f.name)
+    curl = "/usr/bin/curl"
+    if logger.getEffectiveLevel() is logging.DEBUG:
+        curl = curl + " -v"
+    result = os.system("%s 'http://localhost:8983/solr/update/extract?%s' -F 'myfile=@%s'"
+              % (curl, urllib.urlencode(params), f.name))
+    if result:
+        raise NameError("Failed to submit document to index, got %d" % result)
     f.close()
+    logger.info("Successfully indexed id %s" % params["literal.id"]);
     
     
 """ global variables """
 (options, args) = parser.parse_args()
+if options.repo is None:
+    parser.print_help()
+    sys.exit(2)
 
 """ set up logger """
-logger = logging.getLogger("Indexing")
-logger.setLevel(logging.DEBUG)
+LEVELS = {'debug': logging.DEBUG,
+          'info': logging.INFO,
+          'warning': logging.WARNING,
+          'error': logging.ERROR,
+          'critical': logging.CRITICAL}
+level = LEVELS.get(options.loglevel)
+if not level:
+    raise NameError("Invalid log level %s" % options.loglevel)
+logger = logging.getLogger("Repos Search hook")
+logger.setLevel(level)
 # console
 ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-ch.setFormatter(formatter)
+ch.setLevel(level)
+ch.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
 logger.addHandler(ch)
 
 """ set up repository connection """
 repo_path = options.repo.rstrip("/")
+base = None
+if not options.nobase:
+    base = os.path.basename(repo_path)
 rev = long(options.rev)
 root = "file://" + repo_path
 logger.debug("URL is: %s" % (root))
@@ -117,9 +139,16 @@ for entry in log:
             else:
                 logger.info(" %s %s" % (value.action, key))
             
-            if value.action == 'D':
-                submitDelete(key, rev)
+            # TODO ignore folders from changed paths, or submit will throw exception
+            # How do we detect files?
+            # For now we require files to have an extension
+            if not re.match(r".*\.\w+$", key):
+                logger.debug("Ignoring %s because it is a folder" % key)
                 continue
             
-            submitContents(key, rev)
+            if value.action == 'D':
+                submitDelete(key, rev)
+                continue       
+            
+            submitContents(key, rev, base)
 
