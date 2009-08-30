@@ -75,8 +75,9 @@ reposSearchSubmit = function(ev) {
 	dialog.append(title);
 	title.append(close);
 	//dialog.append('<h1>Search results</h1>'); // would be better as title bar
-	dialog.append('<h2>Matching titles</h2>').append(titles);
-	var fulltexth = $('<h2/>').text('Documents containing search term').hide();
+	$('<h2/>').text('Titles matching "' + query + '"').appendTo(dialog);
+	dialog.append(titles);
+	var fulltexth = $('<h2/>').text('Documents containing "' + query + '"').hide();
 	var fulltext = $('<div id="searchtext"/>');
 	var enablefulltext = $('<input id="enablefulltext" type="checkbox">').change(function() {
 		if ($(this).is(':checked')) {
@@ -88,7 +89,7 @@ reposSearchSubmit = function(ev) {
 			fulltext.hide();
 		}
 	});
-	$('<p/>').append(enablefulltext).append('<label for="enablefulltext"> Search contents of documents</label>').appendTo(dialog);
+	$('<p/>').append(enablefulltext).append('<label for="enablefulltext"> Search contents</label>').appendTo(dialog);
 	dialog.append(fulltexth).append(fulltext);
 	close.clone(true).addClass("searchclosebottom").appendTo(dialog);
 	$('body').append(dialog);
