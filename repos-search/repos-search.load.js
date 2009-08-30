@@ -97,14 +97,20 @@ reposSearchSubmit = function(ev) {
 };
 
 reposSearchTitles = function(query, resultDiv) {
-	reposSearchAjax('/repos-search/?q=title:' + query, resultDiv);
+	reposSearchAjax('/repos-search/?q=title:' + encodeURIComponent(query), resultDiv);
 }
 
 reposSearchFulltext = function(query, resultDiv) {
-	reposSearchAjax('/repos-search/?q=text:' + query, resultDiv);
+	reposSearchAjax('/repos-search/?q=text:' + encodeURIComponent(query), resultDiv);
 }
 
 reposSearchAjax = function(url, resultDiv) {
+	// provide navigation info for search filtering
+	var mb = $('meta[name=repos-base]');
+	if (mb.size()) url += '&base=' + encodeURIComponent(mb.attr('content'));
+	var mt = $('meta[name=repos-target]');
+	if (mb.size()) url += '&target=' + encodeURIComponent(mt.attr('content'));
+	// query
 	resultDiv.addClass('loading');
 	$.ajax({
 		url: url,

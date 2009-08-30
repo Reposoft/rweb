@@ -198,7 +198,7 @@ jQuery.fn.say = function(message) {
 
 	_jQ_ajax = jQuery.ajax;
 	jQuery.ajax = function(options) {
-		if (base && options.url.match(/[?&]target=/)) options.url += '&base=' + base;
+		if (base && options.url.match(/[?&]target=/) && !options.url.match(/[?&]base=/)) options.url += '&base=' + base;
 		_jQ_ajax(options);
 	};
 })();
