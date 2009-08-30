@@ -7,7 +7,7 @@ from mod_python import apache
 import httplib
 import urllib
 
-def index(req, q=None, target=None, rev=None):
+def index(req, q=None, target=None, rev=None, base=None):
     
     if not q:
         return "Query (q parameter) is required"
@@ -18,6 +18,9 @@ def index(req, q=None, target=None, rev=None):
     # http.client in python 3.x
     url = settings["solrapp"] + settings["schema"] + "select/"
     params = {"version": "2.2", "wt":"json", "q": q, "start": 0, "rows": 10, "indent": "on"}
+    # filter on repository for SVNParentPath setups
+    if base:
+        params["fq"] = "id:%s/*" % base
     headers = {"Accept": "text/plain"}
     c = httplib.HTTPConnection(settings["solrhost"], settings["solrport"])
     try:
