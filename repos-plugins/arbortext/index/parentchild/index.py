@@ -1,5 +1,6 @@
 import sys
 import os
+from mod_python import apache
 # http.client in python 3.1
 import httplib
 # urllib.parse in python 3.1
@@ -17,7 +18,10 @@ def index(req, target=None, rev=None):
 	params = {'wt':'python', 'q': target, "start": 0, "rows": 10}
 	headers = {"Accept": "text/plain"}
 	c = httplib.HTTPConnection(settings["solrhost"], settings["solrport"])
-	c.request('GET', url + "?" + urllib.urlencode(params), headers=headers)
+	try:
+		c.request('GET', url + "?" + urllib.urlencode(params), headers=headers)
+	except:
+		raise apache.SERVER_RETURN, apache.HTTP_SERVICE_UNAVAILABLE
 	r1 = c.getresponse()
 	data = r1.read()
 	c.close()
