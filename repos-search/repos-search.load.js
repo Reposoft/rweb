@@ -14,31 +14,42 @@ reposSearchInputCss = {
 };
 reposSearchDialogCss = {
 	position: 'absolute',
-	overflow: 'scroll',
+	overflow: 'auto',
 	zIndex: 1,
 	top: 50,
 	left: 30,
 	right: 30,
 	bottom: 30,
-	opacity: .8,
-	padding: 10,
+	opacity: .9,
 	paddingLeft: 30,
-	background: 'white',
-	border: '2px solid #efefef'
+	paddingRight: 10,
+	backgroundColor: '#fff',
+	border: '2px solid #eee'
+};
+reposDialogTitleCss = {
+	width: '100%',
+	textAlign: 'center',
+	opacity: .7,
 };
 reposSearchCloseCss = {
-	width: '100%',
 	textAlign: 'right',
+	float: 'right',
 	fontSize: '82.5%',
 	cursor: 'pointer'
 };
+reposSearchListCss = {
+	listStyleType: 'none',
+	listStylePosition: 'inside'
+}
 
 $().ready(function() {
 	reposSearchShow();
 });
 
 reposSearchShow = function() {
-	var container = $('#commandbar');
+	// the page that includes Repos Search can provide an element with
+	// class "repossearchcontainer" to control the placement of the input box
+	var container = $('.repossearchcontainer').add('#commandbar').add('body').eq(0);
 	var box = $('<input id="searchinput" type="text" size="20" name="q"/>').css(reposSearchInputCss);
 	var form = $('<form id="searchform" action="/repos-search/"><input type="submit" style="display:none"/></form>').append(box);
 	form.css(reposSearchFormCss).appendTo(container); // TODO display settings should be set in css
@@ -55,12 +66,14 @@ reposSearchSubmit = function(ev) {
 	reposSearchClose();
 	var dialog = $('<div id="searchdialog"/>').css(reposSearchDialogCss);
 	// start search request
-	var query = $('input[name=q]').val();
+	var query = $('#searchinput').val();
 	var titles = $('<div id="searchtitles"/>');
 	reposSearchTitles(query, titles);
 	// build results layout
+	var title = $('<div class="searchdialogtitle">Repos Search</div>').css(reposDialogTitleCss);
 	var close = $('<div class="searchclose">close</div>').css(reposSearchCloseCss).click(reposSearchClose);
-	dialog.append(close);
+	dialog.append(title);
+	title.append(close);
 	//dialog.append('<h1>Search results</h1>'); // would be better as title bar
 	dialog.append('<h2>Matching titles</h2>').append(titles);
 	var fulltexth = $('<h2/>').text('Documents containing search term').hide();
@@ -75,7 +88,7 @@ reposSearchSubmit = function(ev) {
 			fulltext.hide();
 		}
 	});
-	$('<p/>').append(enablefulltext).append('<label for="enablefulltext">Search contents of documetns</label>').appendTo(dialog);
+	$('<p/>').append(enablefulltext).append('<label for="enablefulltext"> Search contents of documents</label>').appendTo(dialog);
 	dialog.append(fulltexth).append(fulltext);
 	close.clone(true).addClass("searchclosebottom").appendTo(dialog);
 	$('body').append(dialog);
@@ -114,7 +127,7 @@ reposSearchResults = function(json, resultDiv) {
 		$('<p>No matches found</p>').appendTo(resultDiv);
 		return;
 	}
-	var list = $('<u/>').appendTo(resultDiv);
+	var list = $('<u/>').css(reposSearchListCss).appendTo(resultDiv);
 	for (var i = 0; i < num; i++) {
 		var e = reposSearchPresentItem(json.response.docs[i]);
 		e.addClass(i % 2 ? 'even' : 'odd');
