@@ -90,7 +90,7 @@ def submitContents(path, rev, base=None):
     if result:
         raise NameError("Failed to submit document to index, got %d" % result)
     f.close()
-    logger.info("Successfully indexed id %s" % params["literal.id"]);
+    logger.info("Successfully indexed id: %s" % params["literal.id"]);
     
     
 """ global variables """
