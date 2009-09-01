@@ -111,16 +111,19 @@ reposSearchAjax = function(url, resultDiv) {
 	var mt = $('meta[name=repos-target]');
 	if (mb.size()) url += '&target=' + encodeURIComponent(mt.attr('content'));
 	// query
-	resultDiv.addClass('loading');
+	resultDiv.addClass('loading'); // this requires a css so we'll also append image
+	resultDiv.append('<img class="loading" src="/repos-search/loading.gif" alt="loading"/>');
 	$.ajax({
 		url: url,
 		dataType: 'json',
 		success: function(json) {
 			resultDiv.removeClass('loading');
+			$('.loading', resultDiv).remove();
 			reposSearchResults(json, resultDiv);
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			resultDiv.removeClass('loading');
+			$('.loading', resultDiv).remove();
 			resultDiv.text('Error ' + textStatus + ": " + errorThrown);
 		}
 	});
