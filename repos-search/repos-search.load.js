@@ -2,6 +2,7 @@
  * Repos Search GUI
  * Include in Repos Style header to get a search box in the menu bar.
  * Requires jQuery 1.3+
+ * $LastChangedRevision$
  */
 
 // minimal style, enough for css theming to be optional

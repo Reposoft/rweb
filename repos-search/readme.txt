@@ -19,6 +19,7 @@ run indexing as a background process (append &).
 Example for post-commit bash script:
 # full text search
 /usr/bin/python /myhost/repos-search/hook.py -p $1 -r $2 >> /mylogs/hooks.log 2>&1 &
+# for options type: python hook.py --help
 
 4.
 Add jQuery and repos-search.load.js to Repos Style <head> (in view/repos.xsl)

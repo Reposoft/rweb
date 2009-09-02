@@ -1,5 +1,6 @@
 """ mod_python.publisher service that proxies searches
-to a configured Solr backend """
+$LastChangedRevision$
+"""
 
 import sys
 import os

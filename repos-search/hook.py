@@ -3,6 +3,7 @@
 (c) Staffan Olsson reposstyle.com
 Requires Solr 1.4-dev example set up as described in:
 http://wiki.apache.org/solr/ExtractingRequestHandler
+$LastChangedRevision$
 """
 
 import logging
