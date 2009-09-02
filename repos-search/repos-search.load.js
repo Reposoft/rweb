@@ -22,14 +22,18 @@ reposSearchDialogCss = {
 	bottom: 30,
 	opacity: .9,
 	paddingLeft: 30,
-	paddingRight: 10,
+	paddingRight: 30,
 	backgroundColor: '#fff',
 	border: '2px solid #eee'
 };
-reposDialogTitleCss = {
+reposSearchDialogTitleCss = {
 	width: '100%',
 	textAlign: 'center',
 	opacity: .7,
+};
+reposSearchDialogTitleLinkCss = {
+	textDecoration: 'none',
+	color: '#333'
 };
 reposSearchCloseCss = {
 	textAlign: 'right',
@@ -40,7 +44,7 @@ reposSearchCloseCss = {
 reposSearchListCss = {
 	listStyleType: 'none',
 	listStylePosition: 'inside'
-}
+};
 
 $().ready(function() {
 	reposSearchShow();
@@ -79,7 +83,8 @@ reposSearchStart = function() {
 	var titles = $('<div id="searchtitles"/>');
 	reposSearchTitles(query, titles);
 	// build results layout
-	var title = $('<div class="searchdialogtitle">Repos Search</div>').css(reposDialogTitleCss);
+	var title = $('<div class="searchdialogtitle"/>').css(reposSearchDialogTitleCss)
+		.append($('<a target="_blank" href="http://repossearch.com/" title="repossearch.com">Repos Search</a>"').css(reposSearchDialogTitleLinkCss));
 	var close = $('<div class="searchclose">close</div>').css(reposSearchCloseCss).click(reposSearchClose);
 	dialog.append(title);
 	title.append(close);
