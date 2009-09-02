@@ -4,7 +4,7 @@
  * Requires jQuery 1.3+
  */
 
-// instead of a separate css, jQuery syntax
+// minimal style, enough for css theming to be optional
 reposSearchFormCss = {
 	display: 'inline',
 	marginLeft: 10
@@ -62,6 +62,15 @@ reposSearchClose = function() {
 
 reposSearchSubmit = function(ev) {
 	ev.stopPropagation();
+	try {
+		reposSearchStart();
+	} catch (e) {
+		if (window.console) console.error('Repos Search error', e);
+	}
+	return false; // don't submit form	
+}
+	
+reposSearchStart = function() {
 	// create search result container
 	reposSearchClose();
 	var dialog = $('<div id="searchdialog"/>').css(reposSearchDialogCss);
@@ -91,9 +100,13 @@ reposSearchSubmit = function(ev) {
 	});
 	$('<p/>').append(enablefulltext).append('<label for="enablefulltext"> Search contents</label>').appendTo(dialog);
 	dialog.append(fulltexth).append(fulltext);
+	titles.bind('repossearch-noresults', function() {
+		enablefulltext.attr('checked', true).trigger('change');
+	});
 	close.clone(true).addClass("searchclosebottom").appendTo(dialog);
 	$('body').append(dialog);
-	return false; // don't submit form
+	// publish page wide event so extensions can get hold of search events
+	$().trigger('repossearch-started', [dialog[0], titles[0], fulltext[0]]);
 };
 
 reposSearchTitles = function(query, resultDiv) {
@@ -104,44 +117,46 @@ reposSearchFulltext = function(query, resultDiv) {
 	reposSearchAjax('/repos-search/?q=text:' + encodeURIComponent(query), resultDiv);
 }
 
-reposSearchAjax = function(url, resultDiv) {
+reposSearchAjax = function(url, resultContainer) {
 	// provide navigation info for search filtering
 	var mb = $('meta[name=repos-base]');
 	if (mb.size()) url += '&base=' + encodeURIComponent(mb.attr('content'));
 	var mt = $('meta[name=repos-target]');
 	if (mb.size()) url += '&target=' + encodeURIComponent(mt.attr('content'));
 	// query
-	resultDiv.addClass('loading'); // this requires a css so we'll also append image
-	resultDiv.append('<img class="loading" src="/repos-search/loading.gif" alt="loading"/>');
+	resultContainer.addClass('loading'); // this requires a css so we'll also append image
+	resultContainer.append('<img class="loading" src="/repos-search/loading.gif" alt="loading"/>');
 	$.ajax({
 		url: url,
 		dataType: 'json',
 		success: function(json) {
-			resultDiv.removeClass('loading');
-			$('.loading', resultDiv).remove();
-			reposSearchResults(json, resultDiv);
+			resultContainer.removeClass('loading');
+			$('.loading', resultContainer).remove();
+			reposSearchResults(json, resultContainer);
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
-			resultDiv.removeClass('loading');
-			$('.loading', resultDiv).remove();
-			resultDiv.text('Error ' + textStatus + ": " + errorThrown);
+			resultContainer.removeClass('loading');
+			$('.loading', resultContainer).remove();
+			resultContainer.text('Error ' + textStatus + ": " + errorThrown);
 		}
 	});
 };
 
-reposSearchResults = function(json, resultDiv) {
-	resultDiv.empty();
+reposSearchResults = function(json, resultContainer) {
+	resultContainer.empty();
 	console.log(json);
 	var num = json.response.numFound;
 	if (num == 0) {
-		$('<p>No matches found</p>').appendTo(resultDiv);
+		$('<p>No matches found</p>').appendTo(resultContainer);
+		resultContainer.trigger('repossearch-noresults');
 		return;
 	}
-	var list = $('<u/>').css(reposSearchListCss).appendTo(resultDiv);
+	var list = $('<u/>').css(reposSearchListCss).appendTo(resultContainer);
 	for (var i = 0; i < num; i++) {
 		var e = reposSearchPresentItem(json.response.docs[i]);
 		e.addClass(i % 2 ? 'even' : 'odd');
 		e.appendTo(list);
+		resultContainer.trigger('repossearch-result', [e[0]]); // event gets the element, jQuery
 	}
 };
 
