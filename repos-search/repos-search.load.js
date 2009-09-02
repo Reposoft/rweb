@@ -16,7 +16,6 @@ reposSearchInputCss = {
 reposSearchDialogCss = {
 	position: 'absolute',
 	overflow: 'auto',
-	zIndex: 1,
 	top: 50,
 	left: 30,
 	right: 30,
