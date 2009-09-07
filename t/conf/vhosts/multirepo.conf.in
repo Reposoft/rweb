@@ -1,4 +1,13 @@
 
+# To test with pds-suse-svn1 settings change to the following after ./testconfig.sh
+#Listen 0.0.0.0:80
+#<VirtualHost _default_:80>
+#   ServerName pds-suse-svn1.pdsvision.net:80
+#	SetEnv REPOS_REPO http://pds-suse-svn1.pdsvision.net/svn # must be the same from server 
+# Then start apache as root using the command printed out by ./TEST -start
+# and edit the hosts file of the client
+# Then try the shutdown command from ./TEST -stop
+
 <VirtualHost multirepo>
 	# the server name added by Apache::Test sets correct SelfRoot in repos.properties.php
 
@@ -6,8 +15,13 @@
 	Alias /repos-admin @ServerRoot@/../repos-admin
 	Alias /repos-plugins @ServerRoot@/../repos-plugins
 	Alias /repos-test @ServerRoot@/../repos-test
+	
 	# Evaulating a fulltext search feature
-	Alias /repos-search @ServerRoot@/../repos-search
+	# This alias requires repos-serach root in workspace, outside the Directory in extra.conf.in
+	Alias /repos-search @ServerRoot@/../../repos-search/trunk
+	<Directory @ServerRoot@/../../repos-search/>
+		DirectoryIndex index.html index.php index.py
+	</Directory>
 	
 	SetEnv REPOS_TEST_ALLOW_RESET on
 
