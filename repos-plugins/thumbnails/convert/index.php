@@ -94,8 +94,10 @@ if ($cacheRepo) {
 	}
 }
 
+$thumbtype = 'png';
+
 // thumbnails are small, so we can store them on disc
-$tempfile = System::getTempFile('thumb');
+$tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 
 // create the ImageMagick command
 $convert = $convert . ' ' . getThumbnailCommand($extension, $tempfile);
@@ -117,7 +119,9 @@ if ($rev) {
 }
 
 // send from the tempfile
-showJpeg($tempfile);
+showImage($tempfile, $thumbtype);
+
+exit; // caching disabled because it seems to cause thumbnail display problems sometimes
 
 // store in cache
 $import = new SvnEdit('import');
@@ -127,9 +131,9 @@ $import->execNoDisplay();
 
 System::deleteFile($tempfile);
 
-function showJpeg($file) {
+function showImage($file, $type='jpeg') {
 	$size = filesize($file);
-	header('Content-Type: image/jpeg');
+	header('Content-Type: image/'.$type);
 	header('Content-Length: '.$size);
 	$f = fopen($file, 'rb');
 	fpassthru($f);
@@ -146,7 +150,7 @@ function handleError($code, $message, $image='error.jpg') {
 	}
 	// error image to user
 	$tempfile = dirname(__FILE__).'/'.$image;
-	showJpeg($tempfile);
+	showImage($tempfile);
 	exit;
 }
 
