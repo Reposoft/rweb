@@ -7,7 +7,7 @@ Repos.thumbnails = {
 		'' 
 };
 
-Repos.thumbnails.match = new RegExp('\.(' + Repos.thumbnails.filetypes + ')$');
+Repos.thumbnails.match = new RegExp('\.(' + Repos.thumbnails.filetypes + ')$', 'i');
 
 Repos.target(Repos.thumbnails.match, function() {
 	if ($('#intro').size()==0) return;
