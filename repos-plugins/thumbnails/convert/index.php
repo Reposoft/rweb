@@ -121,7 +121,8 @@ if ($rev) {
 // send from the tempfile
 showImage($tempfile, $thumbtype);
 
-exit; // caching disabled because it seems to cause thumbnail display problems sometimes
+// done displaying thumbnail, store in cache if enabled
+$cacheRepo or exit;
 
 // store in cache
 $import = new SvnEdit('import');
