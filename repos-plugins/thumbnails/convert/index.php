@@ -94,7 +94,11 @@ if ($cacheRepo) {
 	}
 }
 
+// jpeg is generally smaller than png but graphicsmagick produced some invalid images for line art in jpg
 $thumbtype = 'png';
+if (preg_match('/^jpe?g|raw/i', $file->getExtension())) {
+	$thumbtype = 'jpeg';
+}
 
 // thumbnails are small, so we can store them on disc
 $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
