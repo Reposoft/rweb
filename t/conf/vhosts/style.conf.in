@@ -4,12 +4,6 @@
 
 	DocumentRoot @ServerRoot@/hosts/style/html
 	
-	Alias /mapslab /Volumes/Encrypted/workspace/mapslab
-	<Directory /Volumes/Encrypted/workspace/mapslab>
-		Order deny,allow
-		Allow from all
-	</Directory>
-	
 	# Evaulating a fulltext search feature
 	# This alias requires repos-serach root in workspace, outside the Directory in extra.conf.in
 	Alias /repos-search @ServerRoot@/../../repos-search/trunk
