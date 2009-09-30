@@ -69,6 +69,7 @@ $script = '
 	jQ().ready( function() {
 		var p = jQ(s.selector);
 		if (!p.is("ul,ol")) p = $("<ul/>").appendTo(p);
+		var lastFolder = null;
 		for (var f in list) {
 			var d = list[f];
 			var e = jQ("<li/>").addClass(d.kind=="dir"?"folder":d.kind);
@@ -80,7 +81,6 @@ $script = '
 			} else {
 				e.addClass("noaccess");
 			}
-			var lastFolder = null;
 			if (d.kind=="file") {
 				e.append(o("filesize",d.size));
 				var t = /\.(\w+)$/.exec(f)[1];
@@ -93,6 +93,7 @@ $script = '
 				} else {
 					e.prependTo(p);
 				}
+				lastFolder = e;
 			}
 			if (d.lock) {
 				e.addClass("locked");
