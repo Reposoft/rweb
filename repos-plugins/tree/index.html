@@ -185,7 +185,7 @@ $().ready(function() {
 	if (!settings.sidebar && !settings.menu) reposTreeMaximize().addClass('action').appendTo(c);
 	if (!settings.sidebar) reposTreeSidebar().addClass('action').appendTo(c);
 	reposTreeHideFiles().addClass('action').appendTo(c);
-	reposTreeExpandAll().addClass('action').appendTo(c);
+	// "expand all" disabled for performance reasonse //reposTreeExpandAll().addClass('action').appendTo(c);
 });
 function reposTreeBrowse() {
 	return $('<a/>').attr('id','repository')
@@ -220,9 +220,10 @@ function reposTreePrint() {
 	});
 };
 function reposTreeExpandAll() {
-	// what's the design pattern for stateful jQuery toggle with button text change?
+	// note that without ajax queue this feature causes high load on server
 	var a =  $('<a/>').attr('href','javascript:void(0)')
 		.html((settings.autoexpand?'collapse':'expand')+'&nbsp;all');
+	// what's the design pattern for stateful jQuery toggle with button text change?
 	var on = function() {
 		settings.autoexpand = true;
 		$('li.folder').not('.folder-open').trigger('click');
