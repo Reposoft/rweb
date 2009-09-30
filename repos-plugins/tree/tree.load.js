@@ -1,11 +1,16 @@
 
-function reposTreeIframe() {
+function reposTreeGetUrl() {
 	var url = '/repos-plugins/tree/';
 	url += '?menu=false';
 	url += '&frame=_top';
 	url += '&target='+encodeURI(Repos.getTarget());
 	// explicit 'base' support
 	if ($('#base').length) url += '&base=' + $('#base').text();
+	return url;
+}
+
+function reposTreeIframe() {
+	var url = reposTreeGetUrl();
 	// window width and height, no shared repos function for this yet
 	var de = document.documentElement;
 	var winw = window.innerWidth || self.innerWidth || (de&&de.clientWidth) || document.body.clientWidth;
@@ -25,7 +30,15 @@ function reposTreeIframe() {
 
 Repos.service('index/', function() {
 	var tree = false;
-	var a = $('<a href="#">show&nbsp;tree</a>').attr('id','repostree').appendTo('#commandbar').toggle(function() {
+	var a = $('<a href="javascript:void(0)">show&nbsp;tree</a>').attr('id','repostree').appendTo('#commandbar');
+	// for browser that supports sidebar show the bookmark box directly, no iframe and no toggle
+	if ($.browser.mozilla || $.browser.opera) {
+		a.attr('href', reposTreeGetUrl() + '&sidebar=true');
+		a.attr('rel', 'sidebar');
+		a.attr('title', document.title); // the suggested bookmark name
+		return;
+	}
+	a.toggle(function() {
 		if (!tree) tree = reposTreeIframe();
 		tree.show();
 		$(this).html('hide&nbsp;tree');
