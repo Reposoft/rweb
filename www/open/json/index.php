@@ -106,6 +106,7 @@ $script = '
 			}
 		}
 		if (!n) p.parent().addClass("folder-empty");
+		if (!lastFolder) p.parent().addClass("folder-nosubfolders");
 	} );
 })(jQuery, svn.path, svn.list, '.$settings.');
 ';

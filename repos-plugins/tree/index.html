@@ -23,6 +23,9 @@ ul, ol {
 #root {
 	margin-left: 20px;
 }
+.hidefiles .file {
+	display: none;
+}
 li {
 	list-style: none;
 }
@@ -37,7 +40,7 @@ li.folder {
 li.folder-open {
 	list-style-image: url(/repos-plugins/tree/expanded.png);	
 }
-li.folder-empty {
+li.folder-empty, .hidefiles .folder-nosubfolders {
 	list-style-image: none;
 }
 h1 {
@@ -152,7 +155,6 @@ function expand(id,target) {
 		});
 		// file click events should not be bubbled
 		var addedfiles = $('li.file', list).click(function(ev) { ev.stopPropagation(); });
-		if (!settings.showfiles) addedfiles.hide();
 		// done, update classes for css
 		list.parent().filter('li').addClass('folder-open').removeClass('loading');
 		// TODO mark empty folders?
@@ -249,21 +251,18 @@ function reposTreeShowDetails() {
 		$('.details').show();
 	});
 };
-// TODO refactor display options to set classes that allow custom css
-// which is also valid for new tree entries
 function reposTreeHideFiles() {
-	return $('<a/>').attr('id','hidefiles').attr('href','javascript:void(0)')
-		.html((settings.showfiles?'hide':'show')+'&nbsp;files').click(function() {
-		if (settings.showfiles) {
-			settings.showfiles = false;
-			$('.file').hide();
-			$(this).html('show&nbsp;files');	
-		} else {
-			settings.showfiles = true;
-			$('.file').show();
-			$(this).html('hide&nbsp;files');
-		}
+	var button = $('<a href="javascript:void(0)></a>').attr('id','hidefiles');
+	button.toggle(function() {
+		$('#root').removeClass('hidefiles');
+		$(this).html('hide&nbsp;files');
+	}, function() {
+		$('#root').addClass('hidefiles');
+		$(this).html('show&nbsp;files');
 	});
+	button.trigger('click');
+	if (!settings.showfiles) button.trigger('click');
+	return button; 
 };
 function reposTreeMaximize() {
 	var url = window.location.href;
