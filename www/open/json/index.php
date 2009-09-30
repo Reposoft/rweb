@@ -71,7 +71,7 @@ $script = '
 		if (!p.is("ul,ol")) p = $("<ul/>").appendTo(p);
 		for (var f in list) {
 			var d = list[f];
-			var e = jQ("<li/>").addClass(d.kind=="dir"?"folder":d.kind).appendTo(p);
+			var e = jQ("<li/>").addClass(d.kind=="dir"?"folder":d.kind);
 			jQ("<a/>").attr("href",url+"/"+f+(d.kind=="dir"?"/":"")).append(f).appendTo(e);
 			e.append(o("revision",d.commit.revision));
 			if (d.commit.author) {
@@ -80,10 +80,19 @@ $script = '
 			} else {
 				e.addClass("noaccess");
 			}
+			var lastFolder = null;
 			if (d.kind=="file") {
 				e.append(o("filesize",d.size));
 				var t = /\.(\w+)$/.exec(f)[1];
 				if (t) e.addClass("file-"+t);
+				// insertion sort with respect to folders
+				e.appendTo(p);
+			} else {
+				if (lastFolder) {
+					e.insertAfter(lastFolder);
+				} else {
+					e.prependTo(p);
+				}
 			}
 			if (d.lock) {
 				e.addClass("locked");
