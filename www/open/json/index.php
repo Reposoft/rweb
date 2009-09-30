@@ -69,8 +69,10 @@ $script = '
 	jQ().ready( function() {
 		var p = jQ(s.selector);
 		if (!p.is("ul,ol")) p = $("<ul/>").appendTo(p);
+		var n = 0;
 		var lastFolder = null;
 		for (var f in list) {
+			n++;
 			var d = list[f];
 			var e = jQ("<li/>").addClass(d.kind=="dir"?"folder":d.kind);
 			jQ("<a/>").attr("href",url+"/"+f+(d.kind=="dir"?"/":"")).append(f).appendTo(e);
@@ -103,6 +105,7 @@ $script = '
 				l.append(o("message",d.lock.comment));
 			}
 		}
+		if (!n) p.parent().addClass("folder-empty");
 	} );
 })(jQuery, svn.path, svn.list, '.$settings.');
 ';
