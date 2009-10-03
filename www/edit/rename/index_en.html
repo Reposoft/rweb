@@ -8,6 +8,10 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$file,folderUrl}">return to repository</a>
+<a id="view" href="../../open/?target={=$target}">details</a>
+<!--{if $file,isfile}-->
+<a id="edit" href="../?target={=$target}">edit</a>
+<!--{/if}-->
 </div>
 <div class="intro">
 <h1>Rename</h1>

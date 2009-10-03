@@ -189,6 +189,13 @@ class SvnOpenFile {
 	}
 	
 	/**
+	 * @return boolean true if the entry is a file
+	 */
+	function isFile() {
+		return !$this->isFolder();
+	}
+	
+	/**
 	 * @return the repository root url without trailing slash
 	 * @static
 	 */

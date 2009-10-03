@@ -8,10 +8,9 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$repository}">return to repository</a>
+<a id="view" href="../../open/?target={=$target}">details</a>
 <!--{if $isfile}-->
-<a id="view" target="_blank" href="../../open/file/?target={=$target}&rev={=$file,revision}">view current version</a>
-<!--{else}-->
-
+<a id="edit" href="../?target={=$target}">edit</a>
 <!--{/if}-->
 </div>
 

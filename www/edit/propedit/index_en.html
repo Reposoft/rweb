@@ -8,6 +8,10 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$repository}">return to repository</a>
+<a id="view" href="../../open/?target={=$target}">details</a>
+<!--{if $file,isFile}-->
+<a id="edit" href="../?target={=$target}">edit</a>
+<!--{/if}-->
 </div>
 <h1>Edit properties</h1>
 <dl id="proplist" style="display:none">
