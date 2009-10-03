@@ -338,5 +338,12 @@ div.versiondisplay {
 }
 /* in cooperation with the actionhover plugin */
 .background .actions {
+	visibility: hidden;
+}
+.nearfocus .actions {
+	visibility: inherit;
 	opacity: 0.4;
 }
+.nearnearfocus .actions {
+	visibility: inherit;
+	opacity: 0.1;
