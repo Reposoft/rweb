@@ -5,24 +5,28 @@
 Repos.service('index/', function actionhover() {
 	var cf = 'focus';
 	var cb = 'background';
-	var f, p, pp, n, nn;
-	var foc = function() {
+	var f, p, n, pp, nn, ppp, nnn;
+	var fo = function() {
 		f = $(this).removeClass(cb).addClass(cf);
-		p = f.prev().addClass('near' + cf);
-		pp = p.prev().addClass('nearnear' + cf);
-		n = f.next().addClass('near' + cf);
-		nn = n.next().addClass('nearnear' + cf);
+		p = f.prev().addClass('n' + cf);
+		pp = p.prev().addClass('nn' + cf);
+		ppp = pp.prev().addClass('nnn' + cf);
+		n = f.next().addClass('n' + cf);
+		nn = n.next().addClass('nn' + cf);
+		nnn = nn.next().addClass('nnn' + cf);
 	};
 	var focus = function() {
 		f.removeClass(cf).addClass(cb);
-		p.removeClass('near' + cf);
-		pp.removeClass('nearnear' + cf);
-		n.removeClass('near' + cf);
-		nn.removeClass('nearnear' + cf);
-		foc.call(this);
+		p.removeClass('n' + cf);
+		pp.removeClass('nn' + cf);
+		ppp.removeClass('nnn' + cf);
+		n.removeClass('n' + cf);
+		nn.removeClass('nn' + cf);
+		nnn.removeClass('nnn' + cf);
+		fo.call(this);
 	};
 	var all = $('ul.index > li');
 	all.addClass(cb).mouseenter(focus);
 	// show first file to hint there are hidden actions (actions on folders are used rarely)
-	foc.call($('.file:first').parent().removeClass(cb));
+	fo.call($('.file:first').parent());
 });

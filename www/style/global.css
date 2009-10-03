@@ -340,10 +340,14 @@ div.versiondisplay {
 .background .actions {
 	visibility: hidden;
 }
-.nearfocus .actions {
+.nfocus .actions {
 	visibility: inherit;
 	opacity: 0.4;
 }
-.nearnearfocus .actions {
+.nnfocus .actions {
 	visibility: inherit;
-	opacity: 0.1;
+	opacity: 0.2;}
+.nnnfocus .actions {
+	visibility: inherit;
+	opacity: 0.1;
+}
