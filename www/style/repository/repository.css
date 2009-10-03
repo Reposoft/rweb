@@ -90,6 +90,9 @@ div.details span {
 	padding-left: 30px;
 	margin-left: 10px;
 }
+h2 .folder {
+	background-position: center left;	
+}
 .folder-open {
 	background-image: url('16x16/folder_open.png');
 }

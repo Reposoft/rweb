@@ -65,7 +65,12 @@
 			<a id="history" href="../log/?target={$target}&amp;rev={../@rev}{$baseparam}">show history<xsl:if test="../@rev"> for version <xsl:value-of select="../@rev"/></xsl:if></a>
 		</div>
 		<h2>
-			<a class="folder" href="{@path}"><xsl:value-of select="../@name"/></a>
+			<a class="folder" href="{@path}">
+				<xsl:if test="string-length(../@name) = 0 and ../@base">
+					<span id="base"><xsl:value-of select="../@base"/></span>
+				</xsl:if>
+				<xsl:value-of select="../@name"/>
+			</a>
 			<xsl:if test="../@rev">
 				<xsl:value-of select="$spacer"/>
 				<span class="revision">

@@ -309,7 +309,7 @@ dd {
 #commandbar #accountedit, #commandbar #lostpassword {
 	background-image: url('commands/24x24/accountedit.png');
 }
-#commandbar #listrecursive {
+#commandbar #list, #commandbar #listrecursive {
 	background-image: url('commands/24x24/list.png');
 }
 #commandbar #repostree {
