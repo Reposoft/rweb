@@ -86,6 +86,7 @@
 					<td>author</td>
 					<td>last&#160;edited</td>
 					<td>size</td>
+					<td>lock</td>
 				</tr>
 			</thead>
 			<xsl:apply-templates select="*">
@@ -130,8 +131,8 @@
 			<td class="datetime">
 				<xsl:value-of select="commit/date"/>
 			</td>
-			<td>
-			</td>
+			<td>&#160;</td>
+			<td>&#160;</td>
 		</tr>
 	</xsl:template>
 
@@ -171,6 +172,23 @@
 			</td>
 			<td class="filesize">
 				<xsl:value-of select="size"/>
+			</td>
+			<td>
+				<xsl:if test="lock">
+					<xsl:attribute name="class">lock</xsl:attribute>
+					<span class="username">
+						<xsl:if test="lock/comment">
+							<xsl:attribute name="title">
+								<xsl:value-of select="lock/comment"/>
+							</xsl:attribute>
+						</xsl:if>
+						<xsl:value-of select="lock/owner"/>
+					</span>
+					<!-- metadata useful in plugins, should not be displayed -->
+					<span class="datetime" style="display:none">
+						<xsl:value-of select="lock/created"></xsl:value-of>
+					</span>
+				</xsl:if>
 			</td>
 		</tr>
 	</xsl:template>
