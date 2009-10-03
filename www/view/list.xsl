@@ -55,11 +55,14 @@
 		</xsl:param>
 		<xsl:param name="url" select="concat(../@repo,$target)"/>
 		<div id="commandbar">
-			<a id="repository" href="{$url}">current version</a>
-			<a id="history" href="../log/?target={$target}&amp;rev={../@rev}{$baseparam}">show history<xsl:if test="../@rev"> for version <xsl:value-of select="../@rev"/></xsl:if></a>
+			<a id="repository" href="{$url}">return to repository</a>
 			<xsl:if test="../@rev">
-				<a id="historycurrent" href="../log/?target={$target}{$baseparam}">history of current version</a>
+				<!-- Note that this does not forward the 'recursive' parameter.
+					It is assumed that old versions are always listed non-recursively
+					(rev for subfolder is applied at clicks so it can still be navigated) -->
+				<a id="list" href="?target={$target}{$baseparam}">current version</a>
 			</xsl:if>
+			<a id="history" href="../log/?target={$target}&amp;rev={../@rev}{$baseparam}">show history<xsl:if test="../@rev"> for version <xsl:value-of select="../@rev"/></xsl:if></a>
 		</div>
 		<h2>
 			<a class="folder" href="{@path}"><xsl:value-of select="../@name"/></a>
