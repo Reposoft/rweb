@@ -59,7 +59,7 @@
 			<xsl:if test="../@rev">
 				<!-- Note that this does not forward the 'recursive' parameter.
 					It is assumed that old versions are always listed non-recursively
-					(rev for subfolder is applied at clicks so it can still be navigated) -->
+					(rev is applied to subfolder links so it can still be navigated) -->
 				<a id="list" href="?target={$target}{$baseparam}">current version</a>
 			</xsl:if>
 			<a id="history" href="../log/?target={$target}&amp;rev={../@rev}{$baseparam}">show history<xsl:if test="../@rev"> for version <xsl:value-of select="../@rev"/></xsl:if></a>
@@ -110,7 +110,9 @@
 		<xsl:param name="n" select="position() - 1"/>
 		<tr id="row:{$id}" class="row n{$n mod 4}">
 			<td>
-				<a id="open:{$id}" class="folder" href="../?target={$target}&amp;rev={commit/@revision}{$baseparam}">
+				<!-- <a id="open:{$id}" class="folder" href="../?target={$target}&amp;rev={commit/@revision}{$baseparam}"> -->
+				<!-- unlike files, folders are used for navigating the tree so we should preserve the explicit rev -->
+				<a id="open:{$id}" class="folder" href="../?target={$target}{$baseparam}&amp;rev={/lists/@rev}">
 					<xsl:value-of select="name"/>
 				</a>
 			</td>
