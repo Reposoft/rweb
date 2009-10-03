@@ -7,6 +7,8 @@
  * $Id$
  */
 
+// events:
+// repos-dateformat-done, Date instance
 
 var svndate = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.(\d+))?(Z|(([-+])(\d{2}):(\d{2})))/;
 
@@ -120,14 +122,18 @@ $.fn.dateformat = function() {
 		if (!this.isDatetime(d)) {
 			throw "Invalid datetime string in tag " + (texttag.id ? texttag.id : texttag.tagName) + ": " + d;	
 		}
-		var f = this.format(d);
-		texttag.innerHTML = f;
-		$(texttag).addClass('formatted');
+		var date = new Date();
+		date.setISO8601(d);
+		$(texttag).text(date.toLocaleString())
+			.addClass('formatted')
+			.trigger('repos-dateformat-done', [date]);
 	};
 	
 	/**
 	 * @param xsd:dateTime/ISO 8601 date
 	 * @return string with the formatted datetime
+	 * @deprecated No longer used because the method above needs the Date object too,
+	 *  but still called from unit tests
 	 */
 	F.format = function(dateTime) {
 		if (!this.isDatetime(dateTime)) {

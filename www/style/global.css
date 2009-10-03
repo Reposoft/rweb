@@ -351,3 +351,16 @@ div.versiondisplay {
 	visibility: inherit;
 	opacity: 0.1;
 }
+/* lock age plugin, TODO icons images with different colors */
+.lock-o {
+	background-color: #100;
+}
+.lock-oo {
+	background-color: #200;
+}
+.lock-ooo {
+	background-color: #400;
+}
+.lock-oooo {
+	background-color: #800;
+}
