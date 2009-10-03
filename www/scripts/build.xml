@@ -37,7 +37,7 @@
 		description="Concatenate all script parts to one big file">
 		<echo message="Collecting parts for ${head.js.file}" />
 		<echo message="Including optional plugins from ${plugins.external.folder}" />
-		<echo message="This build exclides: ${plugins.excludes}" />
+		<echo message="This build excludes: ${plugins.excludes}" />
 		<concat destfile="${head.js.file}.big">
 			<fileset dir="${intro.folder}" includes="**/*.js" excludes="${excludes.default}" />
 			<fileset dir="${lib.folder}" includes="jquery/*.js"/>
