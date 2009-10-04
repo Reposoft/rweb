@@ -140,7 +140,7 @@ class SvnOpenFile {
 	 * Called first in every method that requires metadata
 	 */
 	function _read() {
-		if ($this->isFolder()) trigger_error("File operation attempted on a folder.", E_USER_ERROR);
+		//if ($this->isFolder()) trigger_error("File operation attempted on a folder.", E_USER_ERROR);
 		if (!is_null($this->file)) return;
 		$this->file = $this->_readInfoSvn();
 		if (is_null($this->file)) trigger_error("Could not read file information for '$path' revision $revision in repository ".getRepository(), E_USER_ERROR);

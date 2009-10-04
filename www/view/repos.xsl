@@ -157,7 +157,7 @@
 		<xsl:param name="n" select="position() - 1"/>
 		<li id="row:{$id}" class="n{$n mod 4}{$classadd}">
 			<ul class="actions">
-				<li><a id="view:{$id}" class="action action-view" href="{$href}">view</a></li>
+				<li><a id="view:{$id}" class="action action-view" href="{$web}open/?target={$target}">details</a></li>
 				<xsl:if test="$editUrl">
 					<li><a id="copy:{$id}" class="action action-copy"  href="{$editUrl}copy/?target={$target}">copy</a></li>
 					<li><a id="rename:{$id}" class="action action-rename" href="{$editUrl}rename/?target={$target}">rename</a></li>
@@ -192,7 +192,7 @@
 		<xsl:param name="n" select="count(/svn/index/dir) + position() - 1"/>
 		<li id="row:{$id}" class="n{$n mod 4}">
 			<ul class="actions">
-				<li><a id="view:{$id}" class="action" href="{$web}open/?target={$target}">view</a></li>
+				<li><a id="view:{$id}" class="action" href="{$web}open/?target={$target}">details</a></li>
 				<li><a id="view:{$id}" class="action" href="{$web}open/download/?target={$target}">download</a></li>
 				<xsl:if test="$editUrl">
 					<li><a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={$target}">upload&#xA0;changes</a></li>
