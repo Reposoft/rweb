@@ -9,6 +9,7 @@ require( dirname(dirname(__FILE__))."/SvnOpen.class.php" );
 
 // format could be specified as paramter
 Validation::expect('target');
+$target = getTarget();
 $url = getTargetUrl();
 
 $revisionRule = new RevisionRule();
@@ -54,8 +55,8 @@ if ($list->exec()) {
 $head = '<?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="'.asLink(getWebapp()).'view/list.xsl"?>
 <lists repo="'.asLink(getRepository())
-	.'" target="'.xmlEncodePath(getTarget()) // @path in list is full url so it can't be used
-	.'" name="'.xmlEncodePath(getPathName(getTarget())).'"'
+	.'" target="'.xmlEncodePath($target) // @path in list is full url so it can't be used
+	.(strlen($target)>2 ? ' parent="'.getParent($target).'"' : '') // easier than to get parent using xslt functions
 	.($rev ? ' rev="'.$rev.'"' : '')
 	.(isset($_REQUEST['base']) ? ' base="'.$_REQUEST['base'].'"' : '')
 	.'>

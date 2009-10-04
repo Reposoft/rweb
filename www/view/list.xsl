@@ -56,6 +56,9 @@
 		<xsl:param name="url" select="concat(../@repo,$target)"/>
 		<div id="commandbar">
 			<a id="repository" href="{$url}">return to repository</a>
+			<xsl:if test="../@parent">
+				<a id="parent" class="command translate" href="?target={../@parent}{$baseparam}&amp;rev={/lists/@rev}">up</a>
+			</xsl:if>
 			<xsl:if test="../@rev">
 				<!-- Note that this does not forward the 'recursive' parameter.
 					It is assumed that old versions are always listed non-recursively
@@ -118,7 +121,7 @@
 			<td>
 				<!-- <a id="open:{$id}" class="folder" href="../?target={$target}&amp;rev={commit/@revision}{$baseparam}"> -->
 				<!-- unlike files, folders are used for navigating the tree so we should preserve the explicit rev -->
-				<a id="open:{$id}" class="folder" href="../?target={$target}{$baseparam}&amp;rev={/lists/@rev}">
+				<a id="open:{$id}" class="folder" href="?target={$target}{$baseparam}&amp;rev={/lists/@rev}">
 					<xsl:value-of select="name"/>
 				</a>
 			</td>
