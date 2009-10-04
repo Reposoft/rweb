@@ -20,7 +20,7 @@ $command->addArgRevisionRange($revfrom.':'.$revto);
 $command->addArgUrlPeg($url, $revfrom);
 
 $p = Presentation::getInstance();
-$p->assign('target', $url);
+$p->assign('target', getTarget());
 $p->assign('revfrom', $revfrom);
 $p->assign('revto', $revto);
 $existingFolder = login_getFirstNon404Parent(getParent($url), $s);

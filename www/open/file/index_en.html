@@ -8,6 +8,10 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$file,folderUrl}">return to repository</a>
+<a id="view" href="../?target={=$target}&rev={=$file,revision}">details</a>
+<!--{if $file,isLatestRevision}-->
+<a id="edit" href="../../edit/?target={=$target}">edit</a>
+<!--{/if}-->
 </div>
 
 {=if $file,status eq 200}

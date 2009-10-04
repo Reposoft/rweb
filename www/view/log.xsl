@@ -12,7 +12,7 @@
 	<!-- start transform -->
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
-	<xsl:param name="title">repos history: </xsl:param>
+	<xsl:param name="title">repos: history of </xsl:param>
 	<!-- root url for webapp resources, not using relative urls -->
 	<xsl:param name="web" select="/log/@web"/>
 	<xsl:param name="static" select="$web"/>
@@ -64,6 +64,10 @@
 		<div id="commandbar">
 		<img id="logo" src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
 		<a id="repository" href="{$repourl}">return to repository</a>
+		<!-- can't really apply revision number to details link because log is specified using fromrev and torev
+		Omitting this button because there should be one for each revision in the list.
+		<a id="view" href="../?target={@target}&amp;base={@base}">details</a>
+		 -->
 		</div>
 	</xsl:template>
 	<!-- directory listing -->
