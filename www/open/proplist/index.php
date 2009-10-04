@@ -29,10 +29,10 @@ $output = $cmd->getOutput(); // Currently not possible to stream command output 
 header('Content-type: text/plain');
 echo '{';
 $isProperty = false;
+$count = 0;
 
 function propStart($parser, $name, $attrs) {
-	global $isProperty;
-	static $count = 0;
+	global $isProperty, $count;
 	if ($name == 'TARGET') echo '"target": "'.$attrs['PATH'].'"';
 	if ($name == 'PROPERTY') {
 		echo ",\n";
@@ -43,8 +43,9 @@ function propStart($parser, $name, $attrs) {
 }
 
 function propEnd($parser, $name) {
-	global $isProperty;
+	global $isProperty, $count;
 	if ($name == 'PROPERTY') echo '"';
+	if ($count && $name == 'PROPERTIES') echo '}';
 	$isProperty = false;
 }
 
@@ -65,7 +66,7 @@ for ($i = 0; $i < count($output);) {
 }
 
 xml_parser_free($xml_parser);
-echo "}}\n";
+echo "}\n";
 
 // to get all the properties of a specific type for a tree,
 // use propget -R [propertyname] path
