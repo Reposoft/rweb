@@ -353,14 +353,14 @@ div.versiondisplay {
 }
 /* lock age plugin, TODO icons images with different colors */
 .lock-o {
-	background-color: #100;
+	background-image: url('lock-o.png');
 }
 .lock-oo {
-	background-color: #200;
+	background-image: url('lock-oo.png');
 }
 .lock-ooo {
-	background-color: #400;
+	background-image: url('lock-ooo.png');
 }
 .lock-oooo {
-	background-color: #800;
+	background-image: url('lock-oooo.png');
 }
