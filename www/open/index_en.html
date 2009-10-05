@@ -15,8 +15,9 @@
 <!--{/if}-->
 </div>
 <div id="intro">
-<h1><a class="file" href="{=$file,url}">{=$file,filename}</a> <span class="revision">{=$file,revision}</span></h1>
-<!--{if $file,isLatestRevision}-->
+<h1><a class="{=$file,kind}" href="{=$file,url}">{=$file,filename}</a> <span class="revision">{=$file,revision}</span></h1>
+<!--{if $file,isFolder}-->
+<!--{elseif $file,isLatestRevision}-->
 <p>
 This is the current version of the file.
 {=if not $file,isWritable} You have read access only.
@@ -34,8 +35,9 @@ You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 </div>
 <div class="column" style="width: 60%">
 <div id="activities" class="section">
-<h2>View file</h2>
-<p>
+<h2>View {=$file,kind}</h2>
+<!--{if $file,isFile}-->
+<p class="recommendation">
 {=if $file,size gt 102400}
 This file is bigger than 100 kb, so we recommend <a href="download/?target={=$target}&rev={=$rev}">download</a>.
 {=elseif $file,type eq 'text/html'}
@@ -44,25 +46,35 @@ This is an HTML file, so we recommend <a href="open/?target={=$target}&rev={=$re
 This is file is plain text, so we recommend <a href="file/?target={=$target}&rev={=$rev}">View in Repos</a>.
 {=/if}
 </p>
+<!--{/if}-->
 <!--{if isset($fromrev)}-->
 <p>
 View the <a href="diff/?target={=$target}&rev={=$rev}&fromrev={=$fromrev}">difference from version {=$fromrev}</a>.
 </p>
 <!--{/if}-->
+{=if $file,isFile}
 <h3><a id="open" href="open/?target={=$target}&rev={=$rev}">Open</a></h3>
 <p>This shows the file in the current window. It is good for text files, HTML and images.
 Depending on your browser, it may also work for file types like pdf, documents and spreadsheets.</p>
+{=else}
+<h3><a id="open" href="list/?target={=$target}&rev={=$rev}">List contents</a></h3>
+<p>Shows a defailed view of the folder's contents at the current revision.</p>
+{=/if}
 <h3><a id="download" href="download/?target={=$target}&rev={=$rev}">Download</a></h3>
-<p>Download this file to your hard drive. The revision number {=$file,revision}
+<p>Download this 
+{=if $file,isFile} file {=else} folder as zip archive {=/if}
+to your hard drive. The revision number {=$file,revision}
 will be appended to the filename, so you will know which version it is.</p>
-{=if $file,size lte 102400}
+{=if $file,isFile and $file,size lte 102400}
 <h3><a id="viewfile" href="file/?target={=$target}&rev={=$rev}">View in repos</a></h3>
 <p>Read the file's contents in a web page. This is like View in browser, but with menus.
 This works for text files. If the file is a binary file, like a word document,
 you will see only a long line of characters.</p>
 {=/if}
 <h3><a id="history" href="log/?target={=$target}&rev={=$rev}">View history</a></h3>
-<p>View the commits that this file has been involved in.</p>
+<p>View the commits that
+{=if $file,isFile} have changed this file or its properties
+{=else} have affected contents in this folder{=/if}.</p>
 <h3><a id="useurl" href="#urlcopy" onblur="document.getElementById('urlcopy').select();">Use the URL</a></h3>
 <!--{if $file,isLatestRevision}-->
 <p>The URL is a global ID for the file.
@@ -81,7 +93,9 @@ You need to use a version control (Subversion) client like Repos.</p>
 <p>Version number: <span class="revision">{=$file,revision}</span></p>
 <p>Last edited by: <span class="username">{=$file,author}</span></p>
 <p>Last edited at: <span class="datetime">{=$file,date}</span></p>
+<!--{if $file,isFile}-->
 <p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
+<!--{/if}-->
 <p>Content type: <span>{=$file,type}</span></p>
 <!--{if $file,isLocked}-->
 <p class="lock">Locked by 

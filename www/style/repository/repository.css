@@ -90,7 +90,7 @@ div.details span {
 	padding-left: 30px;
 	margin-left: 10px;
 }
-h2 .folder {
+h1 .folder, h2 .folder {
 	background-position: center left;	
 }
 .folder-open {
