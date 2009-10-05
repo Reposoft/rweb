@@ -18,11 +18,25 @@ if ($file->getStatus() != 200) {
 
 $name = $file->getFilename();
 $dot = strrpos($name, '.');
+if (!$dot) $dot = strlen($name);
 $name = substr($name, 0, $dot).'(r'.$file->getRevision().')'.substr($name,$dot);
 
 // IE6 needs encoded name, other browsers don't like that.
 if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 	$name = rawurlencode($name);
+}
+
+if ($file->isFolder()) {
+	require dirname(__FILE__).'/zipfolder.php';
+	$zip = reposExportZip($file);
+	header('Content-Type: application/zip');
+	header('Content-Length: '.filesize($zip));
+	header('Content-Disposition: attachment; filename="'.$name.'.zip"');
+	$z = fopen($zip, 'rb');
+	fpassthru($z);
+	fclose($z);
+	reposExportZipCleanup($zip);
+	exit;
 }
 
 header('Content-Type: '.$file->getType());
