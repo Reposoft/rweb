@@ -19,6 +19,7 @@
 		</xsl:if>
 	</xsl:param>
 	<xsl:template match="/">
+	<html>
 		<head>
 			<title>
 				<xsl:value-of select="$title"/>
@@ -41,6 +42,7 @@
 		<body class="repository xml">
 			<xsl:apply-templates select="*"/>
 		</body>
+	</html>
 	</xsl:template>
 
 	<xsl:template match="lists">
