@@ -338,19 +338,22 @@ div.versiondisplay {
 }
 /* in cooperation with the actionhover plugin */
 .background .actions {
-	visibility: hidden;
+	opacity: 0.0;
 }
 .nfocus .actions {
-	visibility: inherit;
 	opacity: 0.4;
 }
 .nnfocus .actions {
-	visibility: inherit;
-	opacity: 0.2;}
+	opacity: 0.2;
+}
 .nnnfocus .actions {
-	visibility: inherit;
 	opacity: 0.1;
 }
+.pfocus .actions {
+	opacity: 0.3;
+}
+.ppfocus .actions {
+	opacity: 0.1;}
 /* lock age plugin, TODO icons images with different colors */
 .lock-o {
 	background-image: url('lock-o.png');

@@ -8,18 +8,18 @@ Repos.service('index/', function actionhover() {
 	var f, p, n, pp, nn, ppp, nnn;
 	var fo = function() {
 		f = $(this).removeClass(cb).addClass(cf);
-		p = f.prev().addClass('n' + cf);
-		pp = p.prev().addClass('nn' + cf);
-		ppp = pp.prev().addClass('nnn' + cf);
+		p = f.prev().addClass('p' + cf);
+		pp = p.prev().addClass('pp' + cf);
+		ppp = pp.prev().addClass('ppp' + cf);
 		n = f.next().addClass('n' + cf);
 		nn = n.next().addClass('nn' + cf);
 		nnn = nn.next().addClass('nnn' + cf);
 	};
 	var focus = function() {
 		f.removeClass(cf).addClass(cb);
-		p.removeClass('n' + cf);
-		pp.removeClass('nn' + cf);
-		ppp.removeClass('nnn' + cf);
+		p.removeClass('p' + cf);
+		pp.removeClass('pp' + cf);
+		ppp.removeClass('ppp' + cf);
 		n.removeClass('n' + cf);
 		nn.removeClass('nn' + cf);
 		nnn.removeClass('nnn' + cf);
