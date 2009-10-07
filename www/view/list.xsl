@@ -103,7 +103,9 @@
 			</thead>
 			<xsl:apply-templates select="*">
 				<xsl:with-param name="parent" select="$target"/>
-				<xsl:sort select="@kind"/>
+				<xsl:if test="not(/lists/@recursive)">
+					<xsl:sort select="@kind"/>
+				</xsl:if>
 				<xsl:sort select="name"/>
 			</xsl:apply-templates>
 		</table>
