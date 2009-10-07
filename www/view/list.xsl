@@ -18,6 +18,13 @@
 			<xsl:value-of select="/lists/@base"/>
 		</xsl:if>
 	</xsl:param>
+	
+	<xsl:param name="recursiveparam">
+		<xsl:if test="/lists/@recursive">
+			<xsl:text>&#38;recursive=1</xsl:text>
+		</xsl:if>
+	</xsl:param>
+	
 	<xsl:template match="/">
 	<html>
 		<head>
@@ -59,14 +66,14 @@
 		<div id="commandbar">
 			<a id="repository" href="{$url}">return to repository</a>
 			<xsl:if test="../@parent">
-				<a id="parent" class="command translate" href="?target={../@parent}{$baseparam}&amp;rev={/lists/@rev}">up</a>
+				<a id="parent" class="command translate" href="?target={../@parent}{$baseparam}&amp;rev={/lists/@rev}{$recursiveparam}">up</a>
 			</xsl:if>
 			<xsl:if test="../@rev">
-				<!-- Note that this does not forward the 'recursive' parameter.
-					It is assumed that old versions are always listed non-recursively
-					(rev is applied to subfolder links so it can still be navigated) -->
-				<a id="list" href="?target={$target}{$baseparam}">current version</a>
+				<a id="list" href="?target={$target}{$baseparam}{$recursiveparam}">current version</a>
 			</xsl:if>
+			<!-- Note that this does not forward the 'recursive' parameter.
+					Log is always recursive, and it should be ok to list old revisions non-recursively
+					(rev is applied to subfolder links so it can still be navigated) -->
 			<a id="history" href="../log/?target={$target}&amp;rev={../@rev}{$baseparam}">show history<xsl:if test="../@rev"> for version <xsl:value-of select="../@rev"/></xsl:if></a>
 		</div>
 		<h2>
@@ -123,7 +130,7 @@
 			<td>
 				<!-- <a id="open:{$id}" class="folder" href="../?target={$target}&amp;rev={commit/@revision}{$baseparam}"> -->
 				<!-- unlike files, folders are used for navigating the tree so we should preserve the explicit rev -->
-				<a id="open:{$id}" class="folder" href="?target={$target}{$baseparam}&amp;rev={/lists/@rev}">
+				<a id="open:{$id}" class="folder" href="?target={$target}{$baseparam}&amp;rev={/lists/@rev}{$recursiveparam}">
 					<xsl:value-of select="name"/>
 				</a>
 			</td>

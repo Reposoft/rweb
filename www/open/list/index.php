@@ -59,6 +59,7 @@ $head = '<?xml version="1.0"?>
 	.(strlen($target)>2 ? ' parent="'.getParent($target).'"' : '') // easier than to get parent using xslt functions
 	.($rev ? ' rev="'.$rev.'"' : '')
 	.(isset($_REQUEST['base']) ? ' base="'.$_REQUEST['base'].'"' : '')
+	.($recursive ? ' recursive="yes"' : '')
 	.'>
 ';
 // Note that SVN returns the non-ssl url, which might break IE transformation. Could have a path here (targetUrl) too.
