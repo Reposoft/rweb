@@ -109,6 +109,7 @@ h1 .folder, h2 .folder {
 .file-exe { background-image: url('filetypes/16x16/exe.png');}
 .file-html { background-image: url('filetypes/16x16/html.png');}
 .file-htm { background-image: url('filetypes/16x16/htm.png');}
+.file-xml { background-image: url('filetypes/16x16/xml.png');}
 .file-doc { background-image: url('filetypes/16x16/doc.png');}
 .file-ai { background-image: url('filetypes/16x16/ai.png');}
 .file-bmp { background-image: url('filetypes/16x16/bmp.png');}
