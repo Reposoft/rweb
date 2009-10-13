@@ -67,13 +67,12 @@ a.tool-tags, span.tool-tags {
 	background-image: url('../commands/24x24/details.png');
 	cursor: pointer;
 }
-div.details {
-	position: relative;
-	left: 3.0em;
-	height: 1.8em;
+div.details, div.lock {
+	margin-left: 3.0em;
+	margin-bottom: .2em;
 }
-div.details span {
-	margin: 0.4em;
+div.details span, div.lock span {
+	margin-left: 0.4em;
 }
 /* directory listing */
 .file {
