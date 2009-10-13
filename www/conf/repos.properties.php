@@ -243,7 +243,7 @@ function getLocale() {
  * @return String en_US.utf8
  */
 function getLocaleDefault() {
-	return 'en_US.utf8';
+	return 'en_US.UTF-8';
 }
 
 /**

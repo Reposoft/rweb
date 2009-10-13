@@ -22,14 +22,8 @@ if (!function_exists('getLocale')) require(dirname(__FILE__).'/repos.properties.
 if (!function_exists('_command_env')) {
 	function _command_env() {
 		$locale = getLocale();
-		if (PHP_OS == 'Darwin') {
-			$locale = str_replace('utf8', 'UTF-8', $locale); // OSX names locales differently
-			putenv('LC_ALL='.$locale); // seems like LC_ALL must be set for output to be displayed in UTF-8 on OSX
-			setlocale(LC_ALL, $locale);
-		} else {
-			putenv('LC_CTYPE='.$locale);
-			setlocale(LC_CTYPE, $locale);
-		}
+		putenv('LC_ALL='.$locale);
+		setlocale(LC_ALL, $locale);
 	}
 }
 
