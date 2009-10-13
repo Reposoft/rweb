@@ -599,7 +599,7 @@ class SvnOpenFile {
 		$info->exec();
 		$result = $info->getOutput();
 		// folder support added without any changes to file handling
-		if (count($result) < 7) {
+		if (count($result) > 5 && strContains($result[5], "dir")) {
 			$info = new SvnOpen('info', true);
 			$info->addArgUrlPeg($this->url, $this->_revision);
 			if ($info->exec()) trigger_error("Could not read folder $this->url from svn.", E_USER_ERROR);
