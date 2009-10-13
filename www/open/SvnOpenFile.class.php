@@ -598,6 +598,15 @@ class SvnOpenFile {
 		$info->addArgUrlPeg($this->url, $this->_revision);
 		$info->exec();
 		$result = $info->getOutput();
+		// folder support added without any changes to file handling
+		if (count($result) < 7) {
+			$info = new SvnOpen('info', true);
+			$info->addArgUrlPeg($this->url, $this->_revision);
+			if ($info->exec()) trigger_error("Could not read folder $this->url from svn.", E_USER_ERROR);
+			$result = $info->getOutput();
+			return $this->_parseInfoXml($result);
+		}
+		// end folder hack
 		if (preg_match('/non-existent/', $result[0])) return array(); // does not exist in svn
 		if ($info->getExitcode()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
 		// and isFolder handles the case where the list returns folder contents instead of file
@@ -636,6 +645,32 @@ class SvnOpenFile {
 				$i--;
 			}
 		}
+		return $parsed;
+	}
+	
+	/**
+	 * For folders
+	 * @param $xmlArray
+	 * @return unknown_type
+	 */
+	function _parseInfoXml($xmlArray) {
+		$parsed = array();
+		$patternsInOrder = array(
+			'kind' => '/kind="([^"]+)"/',
+			'path' => '/path="([^"]+)"/',
+			'url' => '/<url>([^<]+)</', // need something between the two revision= because we should read the last one
+			'revision' => '/revision="(\d+)"/',
+			'author' => '/<author>([^<]+)</',
+			'date' => '/<date>([^<]+)</',
+		);
+		list($n, $p) = each($patternsInOrder);
+		for ($i=0; $i<count($xmlArray); $i++) {
+			if (preg_match($p, $xmlArray[$i], $matches)) {
+				$parsed[$n] = $matches[1];
+				if(!(list($n, $p) = each($patternsInOrder))) break;
+			}
+		}
+		$parsed['name'] = $parsed['path']; // looks like this is only the name
 		return $parsed;
 	}
 	
