@@ -169,6 +169,7 @@ class SvnOpenFile {
 	function isFolder() {
 		// TODO cache results
 		if (strEnds($this->path,'/')) return true;
+		if (isset($this->file['kind']) && $this->file['kind'] == 'dir') return true;
 		$this->_head();
 		if ($this->headStatus == 301) {
 			return ($this->head['Location'] == $this->url.'/');
