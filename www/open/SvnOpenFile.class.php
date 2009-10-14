@@ -596,10 +596,12 @@ class SvnOpenFile {
 		// the reason we do 'list' and not 'info' is that 'info' does not contain file size
 		$info = new SvnOpen('list', true);
 		$info->addArgUrlPeg($this->url, $this->_revision);
+		// had to require svn 1.5 for this because distinguishing between folder and file list in 1.4 is hard
+		$info->addArgOption('--depth', 'empty'); // required so that list on folder does not return contents
 		$info->exec();
 		$result = $info->getOutput();
 		// folder support added without any changes to file handling
-		if (count($result) > 5 && strContains($result[5], "dir")) {
+		if (count($result) < 7) {
 			$info = new SvnOpen('info', true);
 			$info->addArgUrlPeg($this->url, $this->_revision);
 			if ($info->exec()) trigger_error("Could not read folder $this->url from svn.", E_USER_ERROR);
