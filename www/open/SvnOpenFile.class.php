@@ -257,6 +257,10 @@ class SvnOpenFile {
 		if ($this->headStatus == 403) { // caller can check isReadableInHead to avoid this
 			trigger_error('Access denied for resource '. $this->getPath(), E_USER_ERROR);
 		}
+		// special handling for folders
+		if ($this->file['kind'] == "dir") {
+			return false; // TODO implement
+		}
 		// otherwise we assume that the ETag contains the revision number
 		$r = $this->_getHeadRevisionFromETag();
 		if ($r !== false) {
@@ -673,6 +677,7 @@ class SvnOpenFile {
 			}
 		}
 		$parsed['name'] = $parsed['path']; // looks like this is only the name
+		$parsed['size'] = null;
 		return $parsed;
 	}
 	
