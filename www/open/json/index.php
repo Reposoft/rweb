@@ -75,7 +75,8 @@ $script = '
 			n++;
 			var d = list[f];
 			var e = jQ("<li/>").addClass(d.kind=="dir"?"folder":d.kind);
-			jQ("<a/>").attr("href",url+"/"+f+(d.kind=="dir"?"/":"")).append(f).appendTo(e);
+			var name = f+(d.kind=="dir"?"/":"");
+			jQ("<a/>").attr("href",url+"/"+name).append(f).appendTo(e);
 			e.append(o("revision",d.commit.revision));
 			if (d.commit.author) {
 				e.append(o("username",d.commit.author));
@@ -104,6 +105,8 @@ $script = '
 				l.append(o("datetime",d.lock.created));
 				l.append(o("message",d.lock.comment));
 			}
+			// until live events can take arguments this event is bound to body
+			jQ().trigger("repos-tree-item-added", [e[0], set.target + name, set.base]);
 		}
 		if (!n) p.parent().addClass("folder-empty");
 		if (!lastFolder) p.parent().addClass("folder-nosubfolders");
