@@ -13,25 +13,3 @@ Repos.service('index/', function() {
 		return false;
 	});
 });
-
-/**
- * Same for file nodes in Repos Tree
- */
-Repos.service('repos-plugins/tree/', function() {
-	$().bind("repos-tree-item-added", function(ev, item, target, base) {
-		var action = Repos.getWebapp() + 'open/?target=' +  encodeURIComponent(target);
-		if (typeof base != 'undefined' && base) {
-			action = action + '&base=' + base;
-		}
-		$(item).filter('.file').children('a')
-			/* not sure this works in sidebar
-			// some info: https://developer.mozilla.org/en/Code_snippets/Sidebar
-			.click(function(ev) {
-				ev.stopPropagation();
-				var w = mainWindow.content || window;
-				w.location.href = action;
-				return false;
-			});*/
-			.attr('href', action); // no longer the real URL for right click
-	});
-});
