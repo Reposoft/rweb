@@ -9,7 +9,9 @@
 <div id="commandbar">
 <a id="repository" href="{=$file,folderUrl}">return to repository</a>
 <!--{if $file,isLatestRevision}-->
+<!--{if $file,isFile}-->
 <a id="edit" href="../edit/?target={=$target}&rev={=$rev}">edit</a>
+<!--{/if}-->
 <!--{else}-->
 <a id="view" href="?target={=$target}">view latest version</a>
 <!--{/if}-->
