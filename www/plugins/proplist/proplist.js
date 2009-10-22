@@ -48,7 +48,7 @@ Repos.proplist.addClick = function(container, target, rev) {
 Repos.proplist.present = function(jqElem, json) {
 	if (!json) {
 		jqElem.append('<p>No property list found</p>');
-	} else if (!json.proplist || !json.proplist.length) {
+	} else if (!json.proplist) {
 		jqElem.append('<p>No properties set</p>');
 	} else {
 		list = $('<dl class="properties"><lh>Versioned properties</lh></dl>');
