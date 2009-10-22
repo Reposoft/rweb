@@ -12,8 +12,9 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$nexturl}">return to repository</a>
+<a id="view" href="{=$webapp}open/?target={=$target}">view</a>
 {=if $operation eq 'commit' or $operation eq 'lock' or $operation eq 'unlock'}
-<a id="edit" href="{=$webapp}edit/?target={=$target}">return to edit</a>
+<a id="edit" href="{=$webapp}edit/?target={=$target}">edit</a>
 {=/if}
 </div>
 <!--{if $headline}-->

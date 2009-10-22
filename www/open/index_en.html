@@ -90,8 +90,9 @@ You need to use a version control (Subversion) client like Repos.</p>
 </div>
 </div>
 <div class="column" style="width: 40%">
+<!-- many plugins use the name #filedetails so the id is kept even though it is used for folders too -->
 <div id="filedetails" class="section">
-<h2>File details</h2>
+<h2>{=$file,kind|ucfirst} details</h2>
 <p>Version number: <span class="revision">{=$file,revision}</span></p>
 <p>Last edited by: <span class="username">{=$file,author}</span></p>
 <p>Last edited at: <span class="datetime">{=$file,date}</span></p>
