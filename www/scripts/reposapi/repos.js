@@ -111,6 +111,14 @@ Repos.getService = function() {
 	return Repos.getMeta('service');
 };
 
+/**
+ * TODO make this a permanent API function that works from all pages in Repos Web
+ * @return {String} root url, no trailing slash
+ */
+Repos.getRepository = function() {
+	return $('#urlcopy').val().replace(Repos.getTarget(), '');
+};
+
 Repos.getBase = function() {
 	return Repos.getMeta('base') || ''; // empty string allows returned optional value to be set in query string
 };
