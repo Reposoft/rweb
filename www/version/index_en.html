@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>repos: application version</title>
+<!--{$head}-->
+</head>
+
+<body>
+
+<div id="commandbar">
+<a id="parent" href="../">repos web</a>
+</div>
+
+<h1>Repos Web Version</h1>
+
+<p id="releaseversion">{=$v.releaseversion}</p>
+
+<h2>System</h2>
+<dl id="versionsystem">
+<!--{foreach from=$v.system key=k item=t}-->
+<dt>{=$k}</dt>
+<dd>{=$t.branch|default:''} r{=$t.revision|default:''}</dd>
+<!--{/foreach}-->
+</dl>
+
+<h2>Plugins</h2>
+<dl id="versionplugins">
+<!--{foreach from=$v.plugins key=k item=t}-->
+<dt>{=$k}</dt>
+<dd>{=$t.branch|default:''} r{=$t.revision|default:'?'}</dd>
+<!--{/foreach}-->
+</dl>
+
+<div id="footer">
+</div>
+</body>
+</html>
