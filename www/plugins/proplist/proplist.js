@@ -21,7 +21,8 @@ Repos.proplist.init = function() {
 };
 
 Repos.proplist.addClick = function(container, target, rev) {
-	var call = Repos.url+'open/proplist/?target='+target + (rev ? '&rev=' + rev : '');
+	var call = Repos.url+'open/proplist/?target=' + 
+			encodeURIComponent(target) + (rev ? '&rev=' + rev : '');
 	var link = $('<a class="action-load" href="'+call+'">Versioned properties</a>')
 		.click( function() {
 			var e = $(this);
