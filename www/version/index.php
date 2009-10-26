@@ -43,7 +43,7 @@ function getSvnInfo($path) {
 	}
 	$output = $svn->getOutput();
 	$info = _parseInfoXml($output);
-	if ($info['url'] && preg_match('/.*(trunk|branches\/\w+|tags\/\w+).+/', $info['url'], $branch)) {
+	if ($info['url'] && preg_match('/.*(trunk|branches\/[^\/]+|tags\/[^\/]+).*/', $info['url'], $branch)) {
 		$info['branch'] = $branch[1];
 	}
 	unset($info['url']);
