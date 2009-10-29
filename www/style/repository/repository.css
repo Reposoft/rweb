@@ -32,7 +32,7 @@ body.static #commandbar a {
 body.static a#start, body.static a#parent, body.static a#logout {
 	display: inline;
 }
-body.static .contentcommands {
+body.static .actions {
 	display: none;
 }
 /* special folders */

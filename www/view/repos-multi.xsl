@@ -59,7 +59,7 @@
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$static}scripts/head.js"></script>
 			</head>
-			<body class="repository xml {$contentclass}">
+			<body class="repository xml{$contentclass}">
 				<xsl:apply-templates select="svn"/>
 			</body>
 		</html>
@@ -168,7 +168,6 @@
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<li id="row:{$id}" class="n{$n mod 4}{$classadd}">
-			<xsl:if test="/svn/index/@rev &gt; 0"><!-- not for SVNParentPath root -->
 			<ul class="actions">
 				<li><a id="view:{$id}" class="action action-view" href="{$web}open/?target={$target}">details</a></li>
 				<xsl:if test="$editUrl">
@@ -177,7 +176,6 @@
 					<li><a id="delete:{$id}" class="action action-delete" href="{$editUrl}delete/?target={$target}">delete</a></li>
 				</xsl:if>
 			</ul>
-			</xsl:if>
 			<a id="open:{$id}" class="folder{$classadd}" href="{$href}">
 				<xsl:value-of select="@name"/>
 			</a>

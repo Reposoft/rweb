@@ -10,7 +10,7 @@ Repos.service('index/', function() {
 	var reqnum = m[2];
 
 	// depending on the readme plugin
-	$('.contentcommands').append(
+	$('.actions').append(
 		'<a class="action" href="'+Repos.url+'edit/text/'
 		+'?suggestname='+(reqnum ? reqnum : '')+'.testcase.txt'
 		+'&target='+encodeURIComponent(Repos.getTarget())+'">'
