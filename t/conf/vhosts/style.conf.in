@@ -34,6 +34,7 @@
 		Header add Cache-Control "max-age=0, must-revalidate"
 	</Location>
 	
-	Include @ServerRoot@/hosts/style/html/svnservice.conf
+	# Enable this when using the servicelayer branch
+	#Include @ServerRoot@/hosts/style/html/svnservice.conf
 
 </VirtualHost>
