@@ -12,7 +12,7 @@
 </div>
 <div id="intro">
 <h1><a class="file" href="{=$file,url}">{=$file,filename}</a> <span class="revision">{=$file,revision}</span></h1>
-<p>If you only need to read the file, not edit it, go to <a href="../open/?target={=$target}&rev={=$rev}">view</a>.</p> 
+<p>If you only need to read the file, not edit it, go to <a href="../open/?target={=$target}&rev={=$rev}">details</a>.</p> 
 <!--{if not $file,isLatestRevision}-->
 <p>This is an old version of the file. It can not be edited.
 You may <a href="../edit/?target={=$target}">edit current version of {=$file,filename}</a>.</p>
@@ -41,7 +41,7 @@ you can always refer to the file as it is now.</p>
 <a href="../open/download/?target={=$target}&rev={=$rev}">Download</a>,
 edit on your computer, then <a href="upload/?target={=$target}">upload new version</a>.</p>
 {=else}
-<p>This is a binary or unknown fileformat. We recommend you Download and lock.</p>
+<p>This is a binary or unknown fileformat. We recommend you Download with lock.</p>
 {=/if}
 
 {=if not $file,isLockedByThisUser}
