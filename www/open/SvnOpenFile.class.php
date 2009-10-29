@@ -423,6 +423,9 @@ class SvnOpenFile {
 	 */
 	function getAuthor() {
 		$this->_read();
+		if (!isset($this->file['author'])) {
+			return ''; // svn xml omits the author node if author is unknown
+		}
 		return $this->file['author'];
 	}
 
@@ -635,7 +638,7 @@ class SvnOpenFile {
 			'name' => '/<name>([^<]+)</',
 			'size' => '/<size>(\d+)</',
 			'revision' => '/revision="(\d+)"/',
-			'author' => '/<author>([^<]+)</',
+			'author' => '/<author>([^<]+)</', // not set by svn if empty (unknown user in last commit)
 			'date' => '/<date>([^<]+)</',
 			'locktoken' => '/<token>([^<]+)</',
 			'lockowner' => '/<owner>([^<]+)</',
@@ -647,7 +650,7 @@ class SvnOpenFile {
 			if (preg_match($p, $xmlArray[$i], $matches)) {
 				$parsed[$n] = $matches[1];
 				if(!(list($n, $p) = each($patternsInOrder))) break;
-			} else if ($n == 'lockcomment') { // optional entry
+			} else if ($n == 'author' || $n == 'lockcomment') { // optional entry
 				list($n, $p) = each($patternsInOrder);
 				$i--;
 			}
@@ -675,6 +678,9 @@ class SvnOpenFile {
 			if (preg_match($p, $xmlArray[$i], $matches)) {
 				$parsed[$n] = $matches[1];
 				if(!(list($n, $p) = each($patternsInOrder))) break;
+			} else if ($n == 'author') { // optional entry
+				list($n, $p) = each($patternsInOrder);
+				$i--;
 			}
 		}
 		$parsed['name'] = $parsed['path']; // looks like this is only the name
