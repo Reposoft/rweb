@@ -15,7 +15,8 @@ PythonDebug On
 <Directory @ServerRoot@/..>
 	
 	DirectoryIndex index.html index.php index.py
+	Options +FollowSymLinks
 	# Index listing needed for some development navigation
-	Options Indexes
+	Options +Indexes
 	
 </Directory>
