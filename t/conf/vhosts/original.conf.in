@@ -37,10 +37,11 @@
 		AuthzSVNAccessFile @ServerRoot@/hosts/original/admin/repos-access
 
 		Satisfy Any
+		# If the repository does not require authentication, check access file contents
 
 		# automatic refresh of contents
 		Header add Cache-Control "max-age=0, must-revalidate"
-		
+
 	</Location>
 
 </VirtualHost>
