@@ -22,20 +22,11 @@
 	<xsl:param name="startpage"><xsl:value-of select="$web"/>open/start/</xsl:param>
 	<!-- link up, empty to hide up button -->
 	<xsl:param name="parentlink">../</xsl:param>
-	<!-- not good for SvnParentPath: <xsl:param name="parentlink"> 
-		<xsl:choose>
-			<xsl:when test="/svn/index/updir">../</xsl:when>
-			<xsl:when test="boolean($startpage)">
-				<xsl:value-of select="$startpage"/>
-			</xsl:when>
-			<xsl:otherwise></xsl:otherwise>
-		</xsl:choose>
-	 </xsl:param> -->
 	<!-- the recognized top level folders for project tools separated by slash -->
 	<xsl:param name="tools">/trunk/branches/tags/tasks/templates/messages/calendar/administration/</xsl:param>
 	<!-- special types of body contents, such as " static" (SVNParentPath) or " readonly" -->
 	<xsl:param name="contentclass">
-		<xsl:if test="/svn/index/@path = 'Collection of Repositories'"> static</xsl:if>
+		<xsl:if test="/svn/index/@path = 'Collection of Repositories'"><xsl:value-of select="' static'"/></xsl:if>
 	</xsl:param>
 	<!-- document skeleton -->
 	<xsl:template match="/">

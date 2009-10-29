@@ -27,7 +27,7 @@
 	<!-- special types of body contents, such as " static" (SVNParentPath) or " readonly" -->
 	<xsl:param name="contentclass">
 		<xsl:if test="/svn/index/@path = 'Collection of Repositories'"><xsl:value-of select="' static'"/></xsl:if>
-	</xsl:param>	
+	</xsl:param>
 	<!-- document skeleton -->
 	<xsl:template match="/">
 		<html xmlns="http://www.w3.org/1999/xhtml">
@@ -43,13 +43,17 @@
 				<!-- repos metadata -->
 				<meta name="repos-service" content="index/" />
 				<meta name="repos-target" content="{/svn/index/@path}/" />
+				<!-- unlike svn, repos sets base only if this is an SVNParentPath setup
+				but it is impossible to know if svn xml is from a parent path setup or not 
+				<meta name="repos-base" content="{/svn/index/@base}" />
+				 -->
 				<!-- default stylesheets -->
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>
 				<!-- install the repos script bundle -->
 				<script type="text/javascript" src="{$static}scripts/head.js"></script>
 			</head>
-			<body class="repository xml">
+			<body class="repository xml{$contentclass}">
 				<xsl:apply-templates select="svn"/>
 			</body>
 		</html>
