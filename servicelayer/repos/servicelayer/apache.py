@@ -1,7 +1,6 @@
 """ Install using
 <Location /servicelayer>
-    PythonPath "sys.path+['/path/to/servicelayer']"
-    PythonFixupHandler repostesthandler
+    PythonFixupHandler repos.servicelayer.apache
 </Location>
 """
 
@@ -17,13 +16,12 @@ def uppercase(filter):
 
 def handler(req):
     req.content_type = 'text/plain'
-    req.write('looks like the handler setup works \n')
+    req.write('im here \n')
     return apache.OK
-	
+    
 def fixuphandler(req):
     req.handler = 'mod_python'
     req.register_output_filter("UPPERCASE", uppercase)
     req.add_output_filter("UPPERCASE")
     req.add_handler('PythonHandler', handler)
     return apache.OK
-

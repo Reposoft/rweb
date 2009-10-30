@@ -46,11 +46,14 @@
 
     # Test that servicelayer module is in python path and that the handler concept works
 	<Location /servicelayer>
-		PythonFixupHandler repostesthandler
+		PythonFixupHandler repos.servicelayer.testhandler
 	</Location>
 
 	# Master repositories
 	<Location /svn>
+		# enable servicelayer
+		PythonFixupHandler repos.servicelayer.apache
+	
 		DAV svn
 		SVNAutoversioning on
 
