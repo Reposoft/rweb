@@ -44,6 +44,11 @@
 	#ProxyPass /solr ajp://127.0.0.1:8009/solr
 	#ProxyPreserveHost On
 
+    # Test that servicelayer module is in python path and that the handler concept works
+	<Location /servicelayer>
+		PythonFixupHandler repostesthandler
+	</Location>
+
 	# Master repositories
 	<Location /svn>
 		DAV svn

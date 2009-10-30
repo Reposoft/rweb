@@ -6,10 +6,22 @@ php_value include_path ".:@ServerRoot@/php-include"
 AddType  application/x-httpd-php         .php
 AddType  application/x-httpd-php-source  .phps
 
-# Enable python pages
-AddHandler mod_python .py
-PythonHandler mod_python.publisher
+# Global Python settings
 PythonDebug On
+
+# Enable python pages
+# ... must be done at specific paths; it conflicts with fixuphandler doing add_handler (resulting in 404 error)
+#AddHandler mod_python .py
+#PythonHandler mod_python.publisher
+
+# In some plugins python files are used like php files
+<Directory @ServerRoot@/../repos-plugins>
+    AddHandler mod_python .py
+    PythonHandler mod_python.publisher
+</Directory>
+
+# Import servicelayer module
+PythonPath "sys.path+['@ServerRoot@/../servicelayer']"
 
 # Shared configuration for all hosts
 <Directory @ServerRoot@/..>
@@ -18,5 +30,6 @@ PythonDebug On
 	Options +FollowSymLinks
 	# Index listing needed for some development navigation
 	Options +Indexes
-	
+
 </Directory>
+
