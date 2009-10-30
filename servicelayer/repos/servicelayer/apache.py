@@ -44,23 +44,38 @@ def servicelayer(req):
     
     (address, port) = req.connection.local_addr
     url = 'http://%s:%d%s' % (address, port, req.uri)
+    # TODO find repository root for client init and use target paths for services?
     
     if req.method == 'POST':
-        req.write("Got post")
+        req.write("post not implemented\n")
+        return apache.OK
     
-    args = parse_qs(req.args)
+    args = dict()
+    if req.args:
+        args = parse_qs(req.args)
     
-    req.content_type = "text/plain"
-    req.write("Hello user: %s\n" % user_name)
-    req.write("Service will use url: %s\n" % url)
-    req.write("s parameter is %s\n" % args['s'])
+    # GET without a service should not be possible
+    if not 's' in args:
+        raise apache.SERVER_RETURN, apache.HTTP_SERVER_ERROR
+    service = args['s'][0]
     
-    req.write("URI: %s\n" % req.unparsed_uri)
-    req.write("Parse: %s\n" % (req.parsed_uri,))
-    req.write("Method is %s\n" % req.method)
-    req.write("Query string is: %s\n" % req.args)
+    accept = svn.Accept()
     
-    # try repository access
-    req.write("debug: " + svn.test(url, user))
+    client = svn.SvnAccess(url, user, accept)
+    
+    if service == 'debug':
+        response = "Hello user: %s\n" % user_name
+        response = response + "Service will use url: %s\n" % url
+        response = response + "s parameter is %s\n" % args['s']
+    elif service == 'youngest':
+        response = svn.test(url, user)
+    elif service == 'proplist':
+        response = client.proplist()
+    else:
+        raise apache.SERVER_RETURN, apache.HTTP_BAD_REQUEST
+    
+    req.content_type = accept.chosen
+    req.set_content_length(len(response))
+    req.write(response)
     
     return apache.OK

@@ -13,7 +13,7 @@ def test(url, user):
     '''
     session = csvn.repos.RemoteRepository(url, user.toCsvn())
     # this could be the implementation for ?s=youngest
-    return "Latest revision is %d" % session.latest_revnum();
+    return "Latest revision is %d" % session.latest_revnum()
 
 
 class SvnAccess(object):
@@ -22,11 +22,18 @@ class SvnAccess(object):
     '''
 
 
-    def __init__(self, targetUrl, user):
+    def __init__(self, targetUrl, user, accept):
         '''
         Constructor
         '''
-        self.repo = csvn.repos.RemoteRepository(targetUrl, user.toCsvn())
+        self.session = csvn.repos.RemoteRepository(targetUrl, user.toCsvn())
+        
+        
+    def proplist(self, rev=-1):
+        # seems to segfault regardless of argument
+        props = self.session.proplist('')
+        # assume accept json
+        return json.dumps(props, sort_keys=True, indent=4)
         
 
 class SvnEdit(SvnAccess):
@@ -64,9 +71,18 @@ class Accept:
     Specifies the requested content types
     and the type chosen by the operation
     """
-    def choose(self):
+    def __init__(self):
+        '''
+        Sets default content type
+        '''
+        self.chosen = 'text/plain'
+    
+    def choose(self, contentType):
         """ marks the chose content type from the operation """
-        pass
+        self.chosen = contentType
+
+    def getContentType(self):
+        return self.chosen
 
 
 if __name__ == "__main__":
