@@ -40,6 +40,7 @@ def servicelayer(req):
     # get user, already authenticated because this hander is invoked after auth handler
     user_pw = req.get_basic_auth_pw()
     user_name = req.user
+    user = svn.User(user_name, user_pw)
     
     (address, port) = req.connection.local_addr
     url = 'http://%s:%d%s' % (address, port, req.uri)
@@ -60,6 +61,6 @@ def servicelayer(req):
     req.write("Query string is: %s\n" % req.args)
     
     # try repository access
-    req.write("debug: " + svn.test(url, user_name, user_pw))
+    req.write("debug: " + svn.test(url, user))
     
     return apache.OK
