@@ -2,10 +2,11 @@
 import unittest
 import tempfile
 
+import csvn_setup_path
 from csvn.core import *
 from urllib import pathname2url
 from csvn.repos import LocalRepository
-
+from shutil import rmtree
 
 repolocation = os.path.join(tempfile.gettempdir(), "svn_test_repos")
 repourl = pathname2url(repolocation)
@@ -19,7 +20,7 @@ else:
   repourl = "file://" + repourl
 # the dumpfile from subversion/bindings/ctypes-python/test/test.dumpfile in svn source
 dumpfile = open(os.path.join(os.path.split(__file__)[0],
-                        'test.dumpfile'))
+                        'csvn_test.dumpfile'))
 
 
 class TestSvnAccess(unittest.TestCase):
@@ -32,8 +33,8 @@ class TestSvnAccess(unittest.TestCase):
 
     def tearDown(self):
         if os.path.exists(repolocation):
-            svn_repo_delete(repolocation, Pool())
-
+            #svn_repo_delete(repolocation, Pool())
+            rmtree(repolocation)
 
     def testType(self):
         pass
