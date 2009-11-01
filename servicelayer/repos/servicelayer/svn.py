@@ -8,6 +8,7 @@ from csvn.core import *
 from csvn.repos import RemoteRepository
 from csvn.auth import User
 
+import json
 
 def test(url, user):
     '''
@@ -36,11 +37,12 @@ class SvnAccess(object):
         t = self.session.check_path(path, rev, False)
         return csvn.core.svn_node_kind_to_word(t)
         
-    def proplist(self, rev=-1):
+    def proplist(self, path, rev=-1):
         # seems to segfault regardless of argument
-        props = self.session.proplist('')
+        props = self.session.proplist(path, rev)
         # assume accept json
-        return json.dumps(props, sort_keys=True, indent=4)
+        #return json.dumps(props, sort_keys=True, indent=4)
+        return repr(props)
         
 
 class SvnEdit(SvnAccess):
