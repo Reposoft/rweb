@@ -33,9 +33,9 @@ class SvnAccess(object):
         '''
         self.session = csvn.repos.RemoteRepository(targetUrl, user.toCsvn())
         
-    def type(self, path, rev=None):
-        t = self.session.check_path(path, rev, False)
-        return csvn.core.svn_node_kind_to_word(t)
+    def kind(self, path, rev=None):
+        k = self.session.check_path(path, rev, False)
+        return csvn.core.svn_node_kind_to_word(k)
         
     def proplist(self, path, rev=-1):
         # seems to segfault regardless of argument

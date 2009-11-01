@@ -34,11 +34,11 @@ class TestSvnAccess(unittest.TestCase):
         if os.path.exists(repolocation):
             csvn.core.svn_repos_delete(repolocation, Pool())
 
-    def testType(self):
+    def testKind(self):
         svn = SvnAccess(repourl, User('test','test'), None)
-        self.assertEqual(svn.type('trunk', 0), 'none')
-        self.assertEqual(svn.type('trunk'), 'dir')
-        self.assertEqual(svn.type('trunk/README.txt'), 'file')
+        self.assertEqual(svn.kind('trunk', 0), 'none')
+        self.assertEqual(svn.kind('trunk'), 'dir')
+        self.assertEqual(svn.kind('trunk/README.txt'), 'file')
         
     def testProplist(self):
         # README.txt should have one property called "Awesome"

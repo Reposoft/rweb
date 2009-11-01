@@ -20,6 +20,7 @@ def fixuphandler(req):
     if req.method == 'POST':
         return override(req)
     # All other methods are dav (at least until we implement PUT with log message
+    # TODO support HEAD
     if not req.method == 'GET':
         return apache.DECLINED
     if not req.args:
@@ -43,8 +44,12 @@ def servicelayer(req):
     user = svn.User(user_name, user_pw)
     
     (address, port) = req.connection.local_addr
-    url = 'http://%s:%d%s' % (address, port, req.uri)
-    # TODO find repository root for client init and use target paths for services?
+    # how do we know at what path element repository root is?
+    (x, parent, base, target) = req.uri.split('/', 3)
+    repoRootUrl = 'http://%s:%d/%s/%s' % (address, port, parent, base)
+    
+    ''' csvn fails spectacularly on trailing slashes in path '''
+    target = target.rstrip('/')
     
     if req.method == 'POST':
         req.write("post not implemented\n")
@@ -61,16 +66,24 @@ def servicelayer(req):
     
     accept = svn.Accept()
     
-    client = svn.SvnAccess(url, user, accept)
+    try:
+        client = svn.SvnAccess(repoRootUrl, user, accept)
+    except Exception as inst:
+        response = '' # + inst + "\n"
+        response = response + "Tepository: %s\n" % repoRootUrl
+        response = response + "Target: %s" % target
+        req.status = apache.HTTP_INTERNAL_SERVER_ERROR
+        req.content_type = accept.chosen
+        req.set_content_length(len(response))
+        req.write(response)
+        return
     
-    if service == 'debug':
-        response = "Hello user: %s\n" % user_name
-        response = response + "Service will use url: %s\n" % url
-        response = response + "s parameter is %s\n" % args['s']
-    elif service == 'youngest':
+    if service == 'youngest':
         response = svn.test(url, user)
+    elif service == 'kind':
+        response = client.kind(target)
     elif service == 'proplist':
-        response = client.proplist()
+        response = client.proplist(target)
     else:
         raise apache.SERVER_RETURN, apache.HTTP_BAD_REQUEST
     
