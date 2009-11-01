@@ -2,9 +2,9 @@
 
 '''
 
-import csvn
-import csvn.auth
-import csvn.repos
+from csvn.core import *
+from csvn.repos import RemoteRepository
+from csvn.auth import User
 
 
 def test(url, user):
@@ -63,7 +63,8 @@ class User():
         self.password = password
 
     def toCsvn(self):
-        return csvn.auth.User(self.username, self.password)
+        #return csvn.auth.User(self.username, self.password)
+        pass
 
 
 class Accept:
