@@ -1,5 +1,5 @@
 '''
-
+Subversion API for the Repos Web Servicelayer.
 '''
 
 from csvn.core import *
@@ -18,7 +18,9 @@ def test(url, user):
 
 class SvnAccess(object):
     '''
-    classdocs
+    Read-only subversion operations
+    
+    To be able to unit tests this class it can not have dependencies to mod_python
     '''
 
 
@@ -28,6 +30,9 @@ class SvnAccess(object):
         '''
         self.session = csvn.repos.RemoteRepository(targetUrl, user.toCsvn())
         
+    def type(self, path):
+        t = self.session.check_path(path)
+        return "" + t
         
     def proplist(self, rev=-1):
         # seems to segfault regardless of argument
@@ -55,7 +60,7 @@ class User():
     True
     '''
     
-    def __init__(self, username=None, password=None):
+    def __init__(self, username='', password=''):
         '''
         Just calling superclass constructor
         '''
@@ -63,8 +68,7 @@ class User():
         self.password = password
 
     def toCsvn(self):
-        #return csvn.auth.User(self.username, self.password)
-        pass
+        return csvn.auth.User(self.username, self.password)
 
 
 class Accept:
