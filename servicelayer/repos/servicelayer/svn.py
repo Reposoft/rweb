@@ -2,6 +2,8 @@
 Subversion API for the Repos Web Servicelayer.
 '''
 
+import csvn_setup_path
+import csvn
 from csvn.core import *
 from csvn.repos import RemoteRepository
 from csvn.auth import User
@@ -30,9 +32,9 @@ class SvnAccess(object):
         '''
         self.session = csvn.repos.RemoteRepository(targetUrl, user.toCsvn())
         
-    def type(self, path):
-        t = self.session.check_path(path)
-        return "" + t
+    def type(self, path, rev=None):
+        t = self.session.check_path(path, rev, False)
+        return csvn.core.svn_node_kind_to_word(t)
         
     def proplist(self, rev=-1):
         # seems to segfault regardless of argument
@@ -53,8 +55,8 @@ class User():
     Representing credentials.
     Should support anonymous access for repositories that do so.
     
-    >>> User('testuer', 'secret').toCsvn().username()
-    testuser
+    >>> User('testuser', 'secret').toCsvn().username()
+    'testuser'
     
     >>> User().isAnonymous()
     True
@@ -70,6 +72,9 @@ class User():
     def toCsvn(self):
         return csvn.auth.User(self.username, self.password)
 
+    def isAnonymous(self):
+        # csvn hangs on None in username
+        return self.username == ''
 
 class Accept:
     """

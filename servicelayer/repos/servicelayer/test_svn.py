@@ -2,7 +2,9 @@
 import unittest
 import tempfile
 
-import csvn_setup_path
+#import repos.servicelayer.svn
+from svn import *
+
 from csvn.core import *
 from urllib import pathname2url
 from csvn.repos import LocalRepository
@@ -22,12 +24,10 @@ else:
 dumpfile = open(os.path.join(os.path.split(__file__)[0],
                         'csvn_test.dumpfile'))
 
-
 class TestSvnAccess(unittest.TestCase):
 
     def setUp(self):
-        # Just in case a preivous test instance was not properly cleaned up
-        self.tearDown()
+        self.tearDown() # avoid "is a subdirectory of an existing repository"
         svnadmin = LocalRepository(repolocation, create=True)
         svnadmin.load(dumpfile)
 
@@ -37,8 +37,10 @@ class TestSvnAccess(unittest.TestCase):
             rmtree(repolocation)
 
     def testType(self):
-        pass
-
+        svn = SvnAccess(repourl, User('test','test'), None)
+        self.assertEqual(svn.type('trunk', 0), 'none')
+        self.assertEqual(svn.type('trunk'), 'dir')
+        self.assertEqual(svn.type('trunk/README.txt'), 'file')
 
 if __name__ == '__main__':
     unittest.main()
