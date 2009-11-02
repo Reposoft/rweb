@@ -82,7 +82,6 @@ def servicelayer(req):
         response = svn.test(url, user)
     elif service == 'kind':
         response = client.kind(target)
-        response = repr(response)
     elif service == 'proplist':
         response = client.proplist(target)
     else:

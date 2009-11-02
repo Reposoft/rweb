@@ -35,8 +35,7 @@ class SvnAccess(object):
         
     def kind(self, path, rev=None):
         k = self.session.check_path(path, rev, False)
-        return dict({'n': k, 
-                     'kind': csvn.core.svn_node_kind_to_word(k)})
+        return "%s" % csvn.core.svn_node_kind_to_word(k)
         
     def proplist(self, path, rev=-1):
         # seems to segfault regardless of argument

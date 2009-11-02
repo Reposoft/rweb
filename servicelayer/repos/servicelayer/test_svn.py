@@ -36,9 +36,9 @@ class TestSvnAccess(unittest.TestCase):
 
     def testKind(self):
         svn = SvnAccess(repourl, User('test','test'), None)
-        self.assertEqual(svn.kind('trunk', 0)['kind'], 'none')
-        self.assertEqual(svn.kind('trunk')['kind'], 'dir')
-        self.assertEqual(svn.kind('trunk/README.txt')['kind'], 'file')
+        self.assertEqual(svn.kind('trunk', 0), 'none')
+        self.assertEqual(svn.kind('trunk'), 'dir')
+        self.assertEqual(svn.kind('trunk/README.txt'), 'file')
         
     def testProplist(self):
         # README.txt should have one property called "Awesome"
