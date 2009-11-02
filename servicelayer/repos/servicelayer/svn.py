@@ -35,14 +35,15 @@ class SvnAccess(object):
         
     def kind(self, path, rev=None):
         k = self.session.check_path(path, rev, False)
-        return csvn.core.svn_node_kind_to_word(k)
+        return dict({'n': k, 
+                     'kind': csvn.core.svn_node_kind_to_word(k)})
         
     def proplist(self, path, rev=-1):
         # seems to segfault regardless of argument
         props = self.session.proplist(path, rev)
         # assume accept json
         #return json.dumps(props, sort_keys=True, indent=4)
-        return repr(props)
+        return repr(props).replace(',', ',\n')
         
 
 class SvnEdit(SvnAccess):
