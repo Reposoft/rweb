@@ -7,6 +7,11 @@ if (isset($_REQUEST[SUBMIT])) {
 	createNewFolder($_REQUEST['name'],$_REQUEST['message']); 
 } else {
 	$target = getTarget();
+	// use SvnOpenFile to check write access before showing form
+	$folder = new SvnOpenFile($target);
+	if (!$folder->isWritable()) {
+		trigger_error('Write access denied', E_USER_NOTICE);
+	}
 	$template = Presentation::getInstance();
 	$template->assign('target', $target);
 	$template->assign('repository', getRepository().$target);

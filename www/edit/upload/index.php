@@ -76,20 +76,21 @@ function showUploadForm() {
 	header("Cache-Control: no-cache, must-revalidate"); // the history part of the form must be updated after successful upload to avoid strange conflicts - disable caching until we have a better solution
 	$template = Presentation::getInstance();
 	$target = getTarget();
-	$targeturl = getTargetUrl();
 	// if target is a file then this is upload new version
-	$isfile = isFile($target);
-	if ($isfile) {
-		$file = new SvnOpenFile($target);
+	$file = new SvnOpenFile($target);
+	if (!$file->isWritable()) {
+		trigger_error('Write access denied', E_USER_NOTICE);
+	}
+	if ($file->isFile()) {
 		$template->assign_by_ref('file', $file);
 		$log = getLog($file->getUrl());
 		$template->assign_by_ref('log', $log);
-		$template->assign('repository', getParent($targeturl));
+		$template->assign('repository', getParent($file->getUrl()));
 	} else {
-		$template->assign('repository', $targeturl);
+		$template->assign('repository', $file->getUrl());
 	}
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
-	$template->assign('isfile',$isfile);
+	$template->assign('isfile',$file->isFile());
 	$template->assign('target',$target);
 	if (isset($_GET['download'])) {
 		// needs an absolute url for meta refresh
