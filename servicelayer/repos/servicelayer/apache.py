@@ -51,13 +51,22 @@ def servicelayer(req):
     ''' csvn fails spectacularly on trailing slashes in path '''
     target = target.rstrip('/')
     
-    if req.method == 'POST':
-        req.write("post not implemented\n")
-        return apache.OK
-    
     args = dict()
     if req.args:
         args = parse_qs(req.args)
+    
+    # TODO consistently use parameters p and r the same way mod_dav_svn does
+    
+    if req.method == 'POST':
+        text = args['text'][0]
+        message = args['message'][0]
+        client = svn.SvnEdit(repoRootUrl, user, message)
+        changeset = client.save(target, text)
+        response = "%d" % changeset
+        req.content_type = 'text/plain'
+        req.set_content_length(len(response))
+        req.write(response)
+        return apache.OK
     
     # GET without a service should not be possible
     if not 's' in args:

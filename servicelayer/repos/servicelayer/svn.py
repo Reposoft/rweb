@@ -8,6 +8,8 @@ from csvn.core import *
 from csvn.repos import RemoteRepository
 from csvn.auth import User
 
+import tempfile
+
 import json
 
 def test(url, user):
@@ -27,11 +29,11 @@ class SvnAccess(object):
     '''
 
 
-    def __init__(self, targetUrl, user, accept):
+    def __init__(self, rootUrl, user, accept=None):
         '''
         Constructor
         '''
-        self.session = csvn.repos.RemoteRepository(targetUrl, user.toCsvn())
+        self.session = csvn.repos.RemoteRepository(rootUrl, user.toCsvn())
         
     def kind(self, path, rev=None):
         k = self.session.check_path(path, rev, False)
@@ -47,9 +49,20 @@ class SvnAccess(object):
 
 class SvnEdit(SvnAccess):
     
-    def __init__(self, targetUrl, user, message):
-        SvnAccess(self, targetUrl, user)
+    def __init__(self, rootUrl, user, message):
+        SvnAccess.__init__(self, rootUrl, user)
+        self.message = message
         pass
+    
+    def save(self, path, text):
+        tmp = tempfile.NamedTemporaryFile()
+        tmp.write(text)
+        tmp.flush()
+        txn = self.session.txn()
+        txn.upload(path, tmp.name)
+        result = txn.commit(self.message)
+        tmp.close()
+        return result
 
 
 class User():
