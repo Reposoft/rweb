@@ -34,12 +34,8 @@ while ($status!=200 && ($parent=getParent($near))!==false) {
 
 // if nearest accessible folder is server root (parent of repository root), user is leaving a project - show startpage
 $outside = getParent(getRepository());
-if ($near == $outside 
-		// Redirect is very confusing if not coming from repository browser, should get 302 only for:
-		// > curl http://test:test@localhost/svn/repo1/ -I -H "Referer: http://localhost/svn/repo1/demo/"
-		// This has not been tested with SSL setup
-		&& getHttpReferer() && strBegins(getHttpReferer(), getRepository())
-		) {
+$userWantsStartpage = false && getHttpReferer() && isLoggedIn(); // dsabled, how can we know if it is appropriate to redirect?
+if ($userWantsStartpage && $near == $outside) {
 	$startpage = asLink(getWebapp().'open/start/?denied='.rawurlencode($url));
 	header('Location: '.$startpage);
 }
