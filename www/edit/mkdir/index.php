@@ -1,7 +1,11 @@
 <?php
 
 require("../../conf/Presentation.class.php" );
-require("../SvnEdit.class.php" );	
+require("../SvnEdit.class.php" );
+
+// Always require authentication for edit operations
+// Safari for example will not automatically POST with credentials even if it was required to authenticate to see the form
+targetLogin();
 
 if (isset($_REQUEST[SUBMIT])) {
 	createNewFolder($_REQUEST['name'],$_REQUEST['message']); 
