@@ -1,0 +1,12 @@
+[groups]
+administrators = admin
+employees = @administrators, test, svensson 
+trickynames = t-e_st@user.acc, Test User, téstüsär
+guests = @trickynames
+
+[/]
+* = 
+@employees = rw
+
+[repo1:/demo]
+@guests = r
