@@ -88,7 +88,7 @@ def servicelayer(req):
         return
     
     if service == 'youngest':
-        response = svn.test(url, user)
+        response = svn.test(repoRootUrl, user)
     elif service == 'kind':
         response = client.kind(target)
     elif service == 'proplist':
