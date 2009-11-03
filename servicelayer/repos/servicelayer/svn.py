@@ -37,7 +37,13 @@ class SvnAccess(object):
         
     def kind(self, path, rev=None):
         k = self.session.check_path(path, rev, False)
-        return "%s" % csvn.core.svn_node_kind_to_word(k)
+        if k is svn_node_none:
+            return 'none'
+        elif k is svn_node_file:
+            return 'file'
+        elif k is svn_node_dir:
+            return 'dir'
+        raise NameError('Unknown node type for ' % path)
         
     def proplist(self, path, rev=-1):
         # seems to segfault regardless of argument
