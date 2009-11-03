@@ -45,6 +45,8 @@ class TestSvnAccess(unittest.TestCase):
         svn = SvnAccess(repourl, User('test','test'), None)
         props = svn.proplist('trunk/README.txt')
         self.assertTrue(props.find("'Awesome': 'Yes'"), "Got %s" % props)
+        props = svn.proplist('trunk', 9)
+        self.assertTrue(len(props), 0)
 
 if __name__ == '__main__':
     unittest.main()
