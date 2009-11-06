@@ -34,8 +34,10 @@ while ($status!=200 && ($parent=getParent($near))!==false) {
 
 // if nearest accessible folder is server root (parent of repository root), user is leaving a project - show startpage
 $outside = getParent(getRepository());
-$userWantsStartpage = false && getHttpReferer() && isLoggedIn(); // dsabled, how can we know if it is appropriate to redirect?
-if ($userWantsStartpage && $near == $outside) {
+$userWantsStartpage = ($near == $outside) && isLoggedIn()
+	&& isset($_COOKIE[USERNAME_KEY]) // if not start page will redirect to login
+	&& strContains(getHttpReferer(), substr($url, 5)); // only if coming from subfolder, ignore http/https
+if ($userWantsStartpage) {
 	$startpage = asLink(getWebapp().'open/start/?denied='.rawurlencode($url));
 	header('Location: '.$startpage);
 }
@@ -45,7 +47,7 @@ $p->showErrorNoRedirect('
 Your user account does not have access rights to URL '.$url.'.
 '
 .($near==$url ? '' :
-'The nearest parent folder that you have access to is <a href="'.$near.'">'.$near.'</a>.'
+' The nearest parent folder that you have access to is <a href="'.$near.'">'.$near.'</a>.'
 )
 ,'Access Denied');
 
