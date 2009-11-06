@@ -35,7 +35,7 @@ while ($status!=200 && ($parent=getParent($near))!==false) {
 // if nearest accessible folder is server root (parent of repository root), user is leaving a project - show startpage
 $outside = getParent(getRepository());
 $userWantsStartpage = ($near == $outside) && isLoggedIn()
-	&& isset($_COOKIE[USERNAME_KEY]) // if not start page will redirect to login
+	&& isset($_COOKIE[USERNAME_KEY]) // make sure client is browser-like and has used the ?login function
 	&& strContains(getHttpReferer(), substr($url, 5)); // only if coming from subfolder, ignore http/https
 if ($userWantsStartpage) {
 	$startpage = asLink(getWebapp().'open/start/?denied='.rawurlencode($url));
