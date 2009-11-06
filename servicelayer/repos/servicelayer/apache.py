@@ -6,6 +6,7 @@
 
 from mod_python import apache
 from urlparse import parse_qs
+from re import match
 # the repos service
 import svn
 
@@ -25,11 +26,11 @@ def fixuphandler(req):
         return apache.DECLINED
     if not req.args:
         return apache.DECLINED
-    # All our get requests use s=[service], and subversions p and r never contain "s"
-    if req.args.find('s') == -1:
+    # All our GET requests use s=[service]
+    if not match(r'(\A|&)s=', req.args):
         return apache.DECLINED
-    # The rest is ours
-    return override(req);
+    # So the rest is ours
+    return override(req)
 
 def override(req):
     ''' Override the default content handler with our servicelayer '''
@@ -68,9 +69,9 @@ def servicelayer(req):
         req.write(response)
         return apache.OK
     
-    # GET without a service should not be possible
+    # GET without a service should not end up in this hander
     if not 's' in args:
-        raise apache.SERVER_RETURN, apache.HTTP_SERVER_ERROR
+        raise apache.SERVER_RETURN, apache.HTTP_INTERNAL_SERVER_ERROR
     service = args['s'][0]
     
     accept = svn.Accept()
