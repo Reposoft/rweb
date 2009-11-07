@@ -34,6 +34,9 @@ if (!isTargetSet()) {
 	new NewFilenameRule("name", $folderRule->getValue());
 	
 	if ($_SERVER['REQUEST_METHOD']=='GET') {
+		// Need to make sure client is authenticated before upload,
+		// because a retry after file upload would be irritating if the file is big
+		targetLogin();
 		showUploadForm();
 	} else {
 		$upload = new Upload('userfile');
