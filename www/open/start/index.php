@@ -78,6 +78,7 @@ if (count($entrypoints)==0) {
 
 $p = Presentation::getInstance();
 $p->addStylesheet('repository/repository.css');
+$p->assign('repository', $repo);
 $p->assign('denied', isset($_GET['denied']) ? $_GET['denied'] : false);
 $p->assign('userfullname',$user);
 $p->assign('repo',$repo);

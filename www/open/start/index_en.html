@@ -51,7 +51,7 @@ and the tools in each project.</p>
 	<!--{assign var='toolpath' value=$projecttools.$toolid}-->
 	<li class="n{=cycle values=0,1,2,3}">
 	<!--{* entry path will be encoded by the urlEncodeQueryString filter, toolpath wo'nt, and here's also an unecoded slash *}-->
-	<a id="{=$toolid}:{=$projectname}" class="tool {=$toolid}" href="{=$webapp}open/?target={=$entry,path}/{=$toolpath}">
+	<a id="{=$toolid}:{=$projectname}" class="tool {=$toolid}" href="{=$repository}{=$entry,path}/{=$toolpath}">
 	<img border="0" src="{=$webapp}style/tools/{=$toolid}.png" hspace="10"/>{=$toolid}</a>
 	</li>
 	<!--{/foreach}-->
