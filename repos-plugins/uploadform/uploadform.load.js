@@ -55,6 +55,7 @@ function enableSubmitOverlay() {
 		window.setInterval(function() {
 			w.append('.');
 		}, 1000);
+		return true;
 	});
 }
 
