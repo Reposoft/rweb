@@ -9,8 +9,8 @@ $report = new Report('Install TinyMCE');
 $repos_package = "tinymce";
 $home = "http://tinymce.moxiecode.com/";
 
-$version = "3_2_2_3";
-$archive = "http://downloads.sourceforge.net/tinymce/tinymce_$version.zip?download";
+$version = "3_2_7";
+$archive = "http://downloads.sourceforge.net/project/tinymce/TinyMCE/3.2.7/tinymce_${version}_jquery.zip";
 $license = "http://wiki.moxiecode.com/index.php/TinyMCE:License";
 
 $basedir = dirname(__FILE__);
@@ -30,10 +30,7 @@ if(download($archive, $tmp)) {
 	$report->fatal("Download failed.");
 }
 
-// tinymce 3 is not zipped in a 'tinymce' folder
-//decompressZip($tmp, $dir);
-mkdir($extracted_folder);
-decompressZip($tmp, $extracted_folder);
+decompressZip($tmp, $dir);
 
 System::deleteFile($tmp);
 
