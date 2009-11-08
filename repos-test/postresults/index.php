@@ -6,7 +6,8 @@
  * @package test
  */
 // use preconfigured smarty
-require('../../lib/smarty/smarty.inc.php');
+require('../reposweb.inc.php');
+require(ReposWeb.'lib/smarty/smarty.inc.php');
 // settings
 define('COOKIE_TESTCASE', 'suite_testcase');
 define('COOKIE_TESTCASE_N', 'suite_n');
