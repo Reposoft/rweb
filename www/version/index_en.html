@@ -31,6 +31,22 @@
 <!--{/foreach}-->
 </dl>
 
+<h2>Read-only services</h2>
+<dl id="versionopen">
+<!--{foreach from=$v.open key=k item=t}-->
+<dt>{=$k}</dt>
+<dd>{=$t.branch|default:''} r{=$t.revision|default:'?'}</dd>
+<!--{/foreach}-->
+</dl>
+
+<h2>Read-write services</h2>
+<dl id="versionedit">
+<!--{foreach from=$v.edit key=k item=t}-->
+<dt>{=$k}</dt>
+<dd>{=$t.branch|default:''} r{=$t.revision|default:'?'}</dd>
+<!--{/foreach}-->
+</dl>
+
 <div id="footer">
 </div>
 </body>

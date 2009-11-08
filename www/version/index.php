@@ -16,9 +16,22 @@ $v['system']['repos-web'] = getSvnInfo(ReposWeb);
 
 $v['plugins'] = array();
 $plugins = getSubfolders(ROOT.'repos-plugins/');
-
 foreach ($plugins as $p) {
 	$v['plugins'][$p] = getSvnInfo(ROOT.'repos-plugins/'.$p.'/');
+}
+
+// Repos services
+
+$v['open'] = array();
+$plugins = getSubfolders(ReposWeb.'open/');
+foreach ($plugins as $p) {
+	$v['open'][$p] = getSvnInfo(ReposWeb.'open/'.$p.'/');
+}
+
+$v['edit'] = array();
+$plugins = getSubfolders(ReposWeb.'edit/');
+foreach ($plugins as $p) {
+	$v['edit'][$p] = getSvnInfo(ReposWeb.'edit/'.$p.'/');
 }
 
 //header('Content-Type: text/plain');
