@@ -37,7 +37,8 @@ cat /etc/apache2/mods-enabled/*.conf \
 # (tried in revision 4051)
 
 # maxclients is 2 by default, but repos needs at least 3 so we set it here
-MAXCLIENTS=5
+# Double it when using SSL proxy host concept.
+MAXCLIENTS=10
 
 perl ./TEST.PL -httpd_conf_extra $(pwd)/mods-enabled.httpd_conf_extra -configure -maxclients $MAXCLIENTS $@
 
