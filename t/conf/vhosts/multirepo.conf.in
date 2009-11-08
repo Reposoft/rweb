@@ -14,7 +14,7 @@
 	# Support ssl proxy for subversion
 	RequestHeader edit Destination ^https http early
 	# Emulate env from SSLEngine on
-	SetEnvIf X-Forwarded-Server "^.*$" HTTPS=on 
+	SetEnvIf X-Forwarded-Server "^@ServerName@$" HTTPS=on 
 
 	# Install repos components
 	Alias /repos-web @ServerRoot@/../www

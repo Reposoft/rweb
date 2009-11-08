@@ -81,6 +81,7 @@ class TestReposProperties extends UnitTestCase {
 	}
 	
 	function testGetRepositoryInternal() {
+		// TODO is this really needed? Presentation layer already uses asLink(url)
 		$_SERVER['REPOS_REPO'] = 'http://localhost/svn';
 		$this->assertEqual(getRepositoryInternal(), 'http://localhost/svn');
 		// with this hard coded rule repos does not support repositories configured
