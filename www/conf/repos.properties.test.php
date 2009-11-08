@@ -59,6 +59,8 @@ class TestReposProperties extends UnitTestCase {
 		// fake apache setting
 		$_SERVER['REPOS_REPO'] = '/my-repository';
 		// host should be appended transparently when not explicitly set
+		// TODO make sure repos can not be tricked to access a different repository
+		// by a client using a fake Hostname header value
 		$this->assertEqual(getHost().'/my-repository', getRepository());
 	}
 
