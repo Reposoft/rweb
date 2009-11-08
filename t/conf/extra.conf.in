@@ -1,7 +1,4 @@
 
-# Additional php config
-# TODO use auto_prepend_file instead to be able to append to existing include_path
-php_value include_path ".:@ServerRoot@/php-include"
 # Found no way to automatically get the PHP configuration in os x
 AddType  application/x-httpd-php         .php
 AddType  application/x-httpd-php-source  .phps
