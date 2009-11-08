@@ -25,19 +25,19 @@ class Login_include_Test extends UnitTestCase {
 	
 	// composition of target url (absolute URI)
 	function testTargetUrl() {
-		$_REQUEST[REPO_KEY] = 'http://my.repo';
+		$_SERVER['REPOS_REPO'] = 'http://my.repo';
 		$_REQUEST['target'] = '/my/dir/file.txt';
 		// REPO_KEY not effective in 1.1 // $this->assertEqual('http://my.repo/my/dir/file.txt', getTargetUrl());
 		$this->assertTrue(strEnds(getTargetUrl(), '/my/dir/file.txt'));
-		unset($_REQUEST[REPO_KEY]);
+		unset($_SERVER['REPOS_REPO']);
 		unset($_REQUEST['target']);
 	}
 	
 	function testTargetUrlFromPath() {
-		$_REQUEST[REPO_KEY] = 'http://my.repo';
+		$_SERVER['REPOS_REPO'] = 'http://my.repo';
 		// REPO_KEY not effective in 1.1 // $this->assertEqual('http://my.repo/h.txt', getTargetUrl('/h.txt'));
 		$this->assertTrue(strEnds(getTargetUrl('/h.txt'), '/h.txt'));
-		unset($_REQUEST[REPO_KEY]);
+		unset($_SERVER['REPOS_REPO']);
 	}
 	
 	// getTargetUrl should throw error if there is no target

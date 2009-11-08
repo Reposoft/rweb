@@ -22,6 +22,9 @@
 	ErrorDocument 404 /repos-web/errors/404/
 	ErrorDocument 500 /repos-web/errors/500/
 
+	# Use rewrite based service layer
+	Include @ServerRoot@/../documentation/servicelayer/repos-services.conf
+
 	<Location /data>
 		DAV svn
 		SVNAutoversioning on

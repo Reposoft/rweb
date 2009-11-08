@@ -20,25 +20,24 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertTrue(strpos(getWebappUrl(),'://'), getWebappUrl(), 'Should contain ://. %s');
 	}
 	
-	function testGetRepository() {
-		unset($_REQUEST[REPO_KEY]);
+	function testGetRepositoryFromServerConfig() {
 		unset($_REQUEST['base']);
 		$repoFromConfiguration = getRepository();
 		$this->assertTrue(strlen($repoFromConfiguration)>0);
-		$_REQUEST[REPO_KEY] = 'http://where-we-work.com/repo';
+		$_SERVER['REPOS_REPO'] = 'http://where-we-work.com/repo';
 		$this->assertEqual('http://where-we-work.com/repo', getRepository());
 	}
 
 	function testGetRepositoryConfiguredRelativeToServerRoot() {
 		// this syntax allows repository to be configured with any hostname and port
-		unset($_REQUEST[REPO_KEY]);
 		unset($_REQUEST['base']);
+		// fake apache setting
 		$_SERVER['REPOS_REPO'] = '/my-repository';
-		$this->assertEqual(geHost().'/my-repository', getRepository());
+		// host should be appended transparently when not explicitly set
+		$this->assertEqual(getHost().'/my-repository', getRepository());
 	}
 
 	function testGetRepositoryWithBase() {
-		unset($_REQUEST[REPO_KEY]);
 		$_REQUEST['base'] = 'me3';
 		$_SERVER['REPOS_REPO'] = 'http://where-we-work.com/parent';
 		// TODO maybe we need some syntax to disable multi-repo even if 'base' param is present
@@ -47,10 +46,11 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('http://where-we-work.com/parent', getRepository(), 'Empty base does not count. %s');
 	}
 
-	function testGetRepositoryRepoKeyAndBase() {
-		$_REQUEST[REPO_KEY] = 'http://where-we-work.com/svn';
-		$_REQUEST['base'] = 'me3';
-		$this->assertEqual('http://where-we-work.com/svn', getRepository(), 'Repo key overrides repo AND base. %s');
+	function testGetRepositoryNotAffectedByAnythingFromClient() {
+		$_SERVER['REPOS_REPO'] = 'http://localhost/svn';
+		$_REQUEST['repo'] = 'http://where-we-work.com/svn';
+		$this->assertFalse(strContains(getRepository(), 'where-we-work.com'), 
+			'Should never be possible to change host or parent path using request or cookies. %s');
 	}
 	
 	function testUrlEncodeNames() {

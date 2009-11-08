@@ -70,7 +70,7 @@ if (strpos(REPOS_VERSION, REPOS_VERSION_ARM)) {
 }
 
 // cookie settings
-define('REPO_KEY', 'repo');
+define('REPO_KEY', 'repo'); // deprecated
 define('USERNAME_KEY', 'account');
 define('LOCALE_KEY', 'lang');
 define('WEBSERVICE_KEY', 'serv'); // html, json, xml or text
@@ -105,7 +105,7 @@ function getRepository() {
  */
 function getRepositoryRoot() {
 	// requet parameter
-	if (isset($_REQUEST[REPO_KEY])) return $_REQUEST[REPO_KEY];
+	// TODO remove (deprecated because it is a security risk) //if (isset($_REQUEST[REPO_KEY])) return $_REQUEST[REPO_KEY];
 	// server configuration
 	if (isset($_SERVER['REPOS_REPO'])) return $_SERVER['REPOS_REPO'];
 	if (isset($_SERVER['ReposRepo'])) return $_SERVER['ReposRepo']; // TODO deprecated, remove
