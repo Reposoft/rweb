@@ -98,7 +98,7 @@ class Report {
 	 */
 	function getWebapp() {
 		//if (function_exists('getWebapp')) return getWebapp();
-		if (isset($_SERVER['ReposWebapp'])) return $_SERVER['ReposWebapp'];
+		if (isset($_SERVER['REPOS_WEBAPP'])) return $_SERVER['REPOS_WEBAPP'];
 		return Report::getWebappDefault();	
 	}
 

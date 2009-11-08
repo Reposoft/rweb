@@ -70,13 +70,16 @@ if (strpos(REPOS_VERSION, REPOS_VERSION_ARM)) {
 }
 
 // cookie settings
-define('REPO_KEY', 'repo'); // deprecated
 define('USERNAME_KEY', 'account');
 define('LOCALE_KEY', 'lang');
 define('WEBSERVICE_KEY', 'serv'); // html, json, xml or text
 
 // parameter conventions
 define('SUBMIT', 'submit'); // identifies a form submit for both GET and POST, used to plug in behaviour
+
+if (isset($_REQUEST['repo'])) {
+	trigger_error('Request parameter "repo" is no longer allowed');
+}
 
 // ------ local configuration ------
 
@@ -101,6 +104,25 @@ function getRepository() {
 }
 
 /**
+ * May be used instead of {@link #getRepository} to mark that the returned
+ * value will be used for internal access, not for presentation. 
+ * This allows repos-web to optimize for faster access to the repository.
+ * Typically this is used if the external repository url is https only
+ * and the server supports http locally.
+ * The logic in this method should avoid dependence on values from client,
+ * so that the results can not be manipulated to curcumvent security.
+ * Also if this is configurable by server admin it must be made very clear that
+ * repos-web security relies on the fact that the internal svn client uses the
+ * same repository access url, proxying user authentication.
+ * Thus a change from http to file protocol has serious implications.
+ * 
+ * @return {String} Root url of the repository for this request, no tailing slash. Not encoded.
+ */
+function getRepositoryLocal() {
+	
+}
+
+/**
  * Internal, getRepository wraps this function and adds support for SVNParentPath.
  */
 function getRepositoryRoot() {
@@ -108,7 +130,6 @@ function getRepositoryRoot() {
 	// TODO remove (deprecated because it is a security risk) //if (isset($_REQUEST[REPO_KEY])) return $_REQUEST[REPO_KEY];
 	// server configuration
 	if (isset($_SERVER['REPOS_REPO'])) return $_SERVER['REPOS_REPO'];
-	if (isset($_SERVER['ReposRepo'])) return $_SERVER['ReposRepo']; // TODO deprecated, remove
 	return getRepositoryDefault();
 }
 
@@ -161,7 +182,6 @@ function asLink($url) {
  */
 function getWebapp() {
 	if (isset($_SERVER['REPOS_WEBAPP'])) return $_SERVER['REPOS_WEBAPP'];
-	if (isset($_SERVER['ReposWebapp'])) return $_SERVER['ReposWebapp']; // TODO deprecated, remove 
 	return getWebappDefault();
 }
 
@@ -191,7 +211,6 @@ function getWebappUrl() {
  */
 function getAccessFile() {
 	if (isset($_SERVER['REPOS_ACCESS_FILE'])) return $_SERVER['REPOS_ACCESS_FILE'];
-	if (isset($_SERVER['ReposAccessFile'])) return $_SERVER['ReposAccessFile']; // TODO deprecated, remove
 	$default = getAccessFileDefault();
 	// validating default here, maybe not very smart
 	if (!is_file($default)) return false;
