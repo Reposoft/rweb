@@ -131,6 +131,7 @@ class SvnOpenFile {
 	function SvnOpenFile($path, $revision=HEAD) {
 		if ($revision == null) $revision = HEAD; // allow value directly from RevisionRule->getValue
 		$this->path = $path;
+		// TODO split between internal and external use and call getRespositoryInternal where possible
 		$this->url = SvnOpenFile::getRepository().$path;
 		$this->_revision = $revision;
 		_svnOpenFile_setInstance($this);

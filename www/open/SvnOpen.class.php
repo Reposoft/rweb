@@ -276,7 +276,7 @@ class SvnOpen {
 				.' The application should have prompted for login before allowing POST.', E_USER_ERROR);
 		}
 		// This is a read request, try to
-		if (!$targetUrl) $targetUrl = getRepository();
+		if (!$targetUrl) $targetUrl = getRepositoryInternal();
 		// TODO Use service request to forward authentication?
 		// TODO Handle this for publicly readable location, getAuthName won't work.
 		//  See _svnFolderIsWritable?

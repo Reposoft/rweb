@@ -118,8 +118,9 @@ function getRepository() {
  * 
  * @return {String} Root url of the repository for this request, no tailing slash. Not encoded.
  */
-function getRepositoryLocal() {
-	
+function getRepositoryInternal() {
+	// TODO implement according to unit tests, evaluate in test ssl setup
+	return getRepository(); // same behavior as before but code can still mark its intentions by calling getRepositoryInternal
 }
 
 /**

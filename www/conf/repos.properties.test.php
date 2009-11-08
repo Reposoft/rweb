@@ -27,6 +27,31 @@ class TestReposProperties extends UnitTestCase {
 		$_SERVER['REPOS_REPO'] = 'http://where-we-work.com/repo';
 		$this->assertEqual('http://where-we-work.com/repo', getRepository());
 	}
+	
+	function testGetHostOrRepositoryDefaultHttps() {
+		// save current values before mocking
+		$https = false;
+		if ($_SERVER['HTTPS'] == 'on') $https = true;
+		$port = $_SERVER['SERVER_PORT'];
+		// mock
+		$_SERVER['HTTPS'] == 'on';
+		$_SERVER['SERVER_PORT'] == 443;
+		$_SERVER['SERVER_NAME'] = 'where-we-work.com';
+		// test
+		$this->assertEqual(getHost(), 'https://where-we-work.com');
+		$this->assertEqual(getRepositoryDefault(), 'https://where-we-work.com/svn');
+		// with a repos ssl proxy setup contents are served in http with HTTPS = on
+		$_SERVER['SERVER_PORT'] == 80;
+		$this->assertEqual(getHost(), 'http://where-we-work.com');
+		// what if the port is not standard ssl
+		$_SERVER['SERVER_PORT'] == 1443;
+		$this->assertEqual(getHost(), 'http://where-we-work.com:1443',
+			'Can not make assumption about https when port is nonstandard. %s');
+		$this->assertEqual(getRepositoryDefault(), 'http://where-we-work.com:1443/svn');
+		// unmock
+		if (!$https) unset($_SERVER['HTTPS']);
+		$_SERVER['SERVER_PORT'] = 80;
+	}
 
 	function testGetRepositoryConfiguredRelativeToServerRoot() {
 		// this syntax allows repository to be configured with any hostname and port
@@ -46,11 +71,27 @@ class TestReposProperties extends UnitTestCase {
 		$this->assertEqual('http://where-we-work.com/parent', getRepository(), 'Empty base does not count. %s');
 	}
 
-	function testGetRepositoryNotAffectedByAnythingFromClient() {
+	function testGetRepositoryShouldNotBeAffectedByClient() {
 		$_SERVER['REPOS_REPO'] = 'http://localhost/svn';
 		$_REQUEST['repo'] = 'http://where-we-work.com/svn';
 		$this->assertFalse(strContains(getRepository(), 'where-we-work.com'), 
 			'Should never be possible to change host or parent path using request or cookies. %s');
+	}
+	
+	function testGetRepositoryInternal() {
+		$_SERVER['REPOS_REPO'] = 'http://localhost/svn';
+		$this->assertEqual(getRepositoryInternal(), 'http://localhost/svn');
+		// with this hard coded rule repos does not support repositories configured
+		// only in the ssl host, but that would give very bad performance anyway
+		$_SERVER['REPOS_REPO'] = 'https://localhost/svn';
+		$this->assertEqual(getRepositoryInternal(), 'http://localhost/svn',
+			'When repository is configured as https it should be returned as http for use in subrequests. %s');
+	}
+	
+	function testGetRepositoryInternalCustomPortNumber() {
+		$_SERVER['REPOS_REPO'] = 'https://localhost:500/svn';
+		$this->assertEqual(getRepositoryInternal(), 'https://localhost:500/svn',
+			'No rule can be hardcoded for https repository with custom port number. %s');
 	}
 	
 	function testUrlEncodeNames() {
