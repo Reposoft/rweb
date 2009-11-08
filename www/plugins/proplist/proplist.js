@@ -57,10 +57,12 @@ Repos.proplist.present = function(jqElem, json) {
 		for (var prop in json.proplist) {
 			keys.push(prop);
 		}
-		keys.sort(); // TODO case insensitive
+		keys.sort(); // TODO case insensitive, or sort in backend
 		for (var i = 0; i < keys.length; i++) {
 			var prop = keys[i];
-			list.append('<dt>'+prop+'</dt><dd>'+json.proplist[prop]+'</dd>');
+			$('<dt/>').text(prop).appendTo(list);
+			// this must preserve newlines so that the value can be accessed from other plugins
+			$('<dd/>').text(json.proplist[prop]).appendTo(list);
 		}
 		jqElem.append(list);
 	}
