@@ -11,6 +11,12 @@
 <VirtualHost multirepo>
 	# the server name added by Apache::Test sets correct SelfRoot in repos.properties.php
 
+	# Support ssl proxy for subversion
+	RequestHeader edit Destination ^https http early
+	# Emulate env from SSLEngine on
+	SetEnvIf X-Forwarded-Server "^.*$" HTTPS=on 
+
+	# Install repos components
 	Alias /repos-web @ServerRoot@/../www
 	Alias /repos-admin @ServerRoot@/../repos-admin
 	Alias /repos-plugins @ServerRoot@/../repos-plugins

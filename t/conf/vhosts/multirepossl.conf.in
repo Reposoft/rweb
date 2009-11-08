@@ -1,0 +1,34 @@
+##
+## SSL Virtual Host Context
+##
+## Should be combined with some logic to set HTTPS=on for proxied requests
+##
+<VirtualHost multirepo-ssl>
+
+	# enable reverse proxying
+	ProxyRequests Off
+	<Proxy *>
+		Order deny,allow
+		Allow from all
+	</Proxy>
+
+	# proxy to non-ssl where the virtual hosts are defined, don't reverse proxy
+	RewriteEngine	on
+	# In Apacke::Test this requres that the conf.in file is read after multirepo	
+	RewriteRule	^(.*)$	http://@ServerName@:@multirepo_port@$1 [P,L]
+
+	#   SSL Engine Switch:
+	#   Enable/Disable SSL for this virtual host.
+	SSLEngine on
+
+	#   Server Certificate:
+	#   Point SSLCertificateFile at a PEM encoded certificate.  If
+	#   the certificate is encrypted, then you will be prompted for a
+	#   pass phrase.  Note that a kill -HUP will prompt again.  Keep
+	#   in mind that if you have both an RSA and a DSA certificate you
+	#   can configure both in parallel (to also allow the use of DSA
+	#   ciphers, etc.)
+	SSLCertificateFile hosts/ssl/localhost.crt
+	SSLCertificateKeyFile hosts/ssl/localhost.key
+
+</VirtualHost>
