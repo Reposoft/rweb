@@ -81,7 +81,6 @@ $p->addStylesheet('repository/repository.css');
 $p->assign('repository', $repo);
 $p->assign('denied', isset($_GET['denied']) ? $_GET['denied'] : false);
 $p->assign('userfullname',$user);
-$p->assign('repo',$repo);
 $p->assign('entrypoints',$entrypoints);
 //$p->display($p->getLocaleFile(dirname(__FILE__) . '/index-trunks')); // goes directly to trunk
 $p->display();

@@ -21,7 +21,7 @@
 <p>You were redirected to the startpage because account
 <span class="username">{=$userfullname}</span> is denied access to
 <!--{* show the url for copy-paste because user was redirected from the real repository url in an un-repos manner *}-->
-{=if $denied eq $repo|cat:'/'}repository root <span id="denied">{=$denied}</span>{=else}<span id="denied">{=$denied}</span> and its parent folders{=/if}.
+{=if $denied eq $repository|cat:'/'}repository root <span id="denied">{=$denied}</span>{=else}<span id="denied">{=$denied}</span> and its parent folders{=/if}.
 </p>
 {=else}
 <p>You are logged in with username <em>{=$userfullname}</em>.
