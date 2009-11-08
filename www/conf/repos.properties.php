@@ -137,7 +137,7 @@ function getRepositoryRoot() {
  * @return String Default repository, Location /data/ at current host.
  */
 function getRepositoryDefault() {
-	return getHost().'/data';
+	return getHost().'/svn';
 }
 
 /**
