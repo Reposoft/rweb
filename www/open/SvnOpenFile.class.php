@@ -609,6 +609,8 @@ class SvnOpenFile {
 		$info->addArgOption('--depth', 'empty'); // required so that list on folder does not return contents
 		$info->exec();
 		$result = $info->getOutput();
+		// end folder hack, error message in either first line or after some initial xml
+		if (preg_match('/non-existent/', $result[0].$result[4])) return array(); // does not exist in svn
 		// folder support added without any changes to file handling
 		if (count($result) < 7) {
 			$info = new SvnOpen('info', true);
@@ -617,8 +619,7 @@ class SvnOpenFile {
 			$result = $info->getOutput();
 			return $this->_parseInfoXml($result);
 		}
-		// end folder hack
-		if (preg_match('/non-existent/', $result[0])) return array(); // does not exist in svn
+		// error handling for both file and folder
 		if ($info->getExitcode()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
 		// and isFolder handles the case where the list returns folder contents instead of file
 		return $this->_parseListXml($result);

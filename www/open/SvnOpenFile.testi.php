@@ -53,7 +53,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertTrue($file->isLatestRevision());
 		$this->assertFalse($file->isWritable(), "The file is in a readonly folder. %2");
 		$this->assertEqual(1, $file->getRevision(), "Shouldn't have been changed since first commit. %s");
-		$this->assertEqual('text/plain', $file->getType(), "Content type not explicitly set. %s"); 
+		$this->assertEqual('text/plain', $file->getType(), "mime-type property not set so content type should be deteced by apache. %s"); 
 		$contents = $file->getContents();
 		$this->assertEqual("</html>\n", substr($contents, strlen($contents)-8), "File ends with newline. %s");
 		$contentsArray = $file->getContentsText();
