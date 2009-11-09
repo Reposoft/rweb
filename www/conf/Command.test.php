@@ -51,13 +51,6 @@ class TestCommand extends UnitTestCase {
 		}
 	}
 	
-	function testGetScriptWrapper() {
-		$this->sendMessage("only relevant on *nix");
-		if (!System::isWindows()) {
-			$this->assertTrue(file_exists(_command_getScriptWrapper()), "the script wrapper file "._command_getScriptWrapper()." does not exist");
-		}
-	}
-	
 	function testExclamationMarkInPrompt() {
 		// in interactive mode in bash, exclamation marks must be escaped
 		// but \ does not work (it is stored with the log message) so the best option is probably "$'\x21'"
