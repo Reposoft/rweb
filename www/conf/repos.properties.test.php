@@ -31,25 +31,25 @@ class TestReposProperties extends UnitTestCase {
 	function testGetHostOrRepositoryDefaultHttps() {
 		// save current values before mocking
 		$https = false;
-		if ($_SERVER['HTTPS'] == 'on') $https = true;
+		if (isset($_SERVER['HTTPS'])) $https = $_SERVER['HTTPS'];
 		$port = $_SERVER['SERVER_PORT'];
 		// mock
-		$_SERVER['HTTPS'] == 'on';
-		$_SERVER['SERVER_PORT'] == 443;
+		$_SERVER['HTTPS'] = 'on';
+		$_SERVER['SERVER_PORT'] = 443;
 		$_SERVER['SERVER_NAME'] = 'where-we-work.com';
 		// test
 		$this->assertEqual(getHost(), 'https://where-we-work.com');
 		$this->assertEqual(getRepositoryDefault(), 'https://where-we-work.com/svn');
 		// with a repos ssl proxy setup contents are served in http with HTTPS = on
-		$_SERVER['SERVER_PORT'] == 80;
+		$_SERVER['SERVER_PORT'] = 80;
 		$this->assertEqual(getHost(), 'http://where-we-work.com');
 		// what if the port is not standard ssl
-		$_SERVER['SERVER_PORT'] == 1443;
+		$_SERVER['SERVER_PORT'] = 1443;
 		$this->assertEqual(getHost(), 'http://where-we-work.com:1443',
 			'Can not make assumption about https when port is nonstandard. %s');
 		$this->assertEqual(getRepositoryDefault(), 'http://where-we-work.com:1443/svn');
 		// unmock
-		if (!$https) unset($_SERVER['HTTPS']);
+		if ($https) $_SERVER['HTTPS'] = $https;
 		$_SERVER['SERVER_PORT'] = 80;
 	}
 
@@ -59,8 +59,6 @@ class TestReposProperties extends UnitTestCase {
 		// fake apache setting
 		$_SERVER['REPOS_REPO'] = '/my-repository';
 		// host should be appended transparently when not explicitly set
-		// TODO make sure repos can not be tricked to access a different repository
-		// by a client using a fake Hostname header value
 		$this->assertEqual(getHost().'/my-repository', getRepository());
 	}
 
@@ -108,12 +106,18 @@ class TestReposProperties extends UnitTestCase {
 	}
 
 	function testGetHost() {
+		// make sure results can not be affected by values form client, such as Hostname header
+		$host = $_SERVER['HTTP_HOST'];
+		$_SERVER['HTTP_HOST'] = 'should-have-no-effect:12345';
+		// apache's host settings
 		$_SERVER['SERVER_PORT'] = 443;
 		$_SERVER['HTTPS'] = 'on';
 		$_SERVER['SERVER_NAME'] = 'my.host';
 		$this->assertEqual('http://my.host', getHost(), 'getHost should always return http, not ssl. %s');
 		$_SERVER['SERVER_PORT'] = 1443;
 		$this->assertEqual('http://my.host', getHost(), 'Never use port from https. %s');
+		// unmock
+		$_SERVER['HTTP_HOST'] = $host;
 	}
 	
 	function testGetSelfUrl() {
