@@ -130,7 +130,11 @@ function getRepositoryRoot() {
 	// requet parameter
 	// TODO remove (deprecated because it is a security risk) //if (isset($_REQUEST[REPO_KEY])) return $_REQUEST[REPO_KEY];
 	// server configuration
-	if (isset($_SERVER['REPOS_REPO'])) return $_SERVER['REPOS_REPO'];
+	if (isset($_SERVER['REPOS_REPO'])) {
+		$repo = $_SERVER['REPOS_REPO'];
+		if (strBegins($repo, '/')) $repo = getHost().$repo;
+		return $repo;
+	}
 	return getRepositoryDefault();
 }
 

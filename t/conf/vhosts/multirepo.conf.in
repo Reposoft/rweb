@@ -33,7 +33,6 @@
 	
 	SetEnv REPOS_TEST_ALLOW_RESET on
 
-	SetEnv REPOS_REPO http://@ServerName@:@multirepo_port@/svn
 	# needed because currently access file path is used for test setup to get host structure folder
 	SetEnv REPOS_ACCESS_FILE @ServerRoot@/hosts/original/admin/repos-access
 
