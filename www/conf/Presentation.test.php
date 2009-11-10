@@ -52,6 +52,12 @@ class TestPresentation extends UnitTestCase {
 		// assertion method not reliable: $this->assertReference($p, $p2);
 		$this->assertTrue($p === $p2);
 	}
+	
+	function testPrefilter_urlRewriteForHttps_simple() {
+		$result = Presentation_urlRewriteForHttps(
+			'<a href="{=$repository}/">{=$repository}/</a>', $smarty);
+		$this->assertEqual('<a href="{=$repository|asLink}/">{=$repository}/</a>', $result);
+	}
 
 	function testPrefilter_urlRewriteForHttps() {
 		$smarty = null;
