@@ -3,11 +3,8 @@ require('login.inc.php');
 require("../lib/simpletest/setup.php");
 
 // assume that if repository /testrepo exists we have a proper intergration test repository on this host
-define('TESTHOST', getSelfRoot());
+define('TESTHOST', getHost());
 define('TESTREPO', getRepository());
-//define('TESTREPO', TESTHOST."/testrepo");
-//define('TESTREPO', "http://test.repos.se/testrepo/");
-//define('TESTREPO', "http://alto.optime.se/testrepo/");
  
 class Login_integraton_Test extends UnitTestCase {
 	
@@ -33,7 +30,7 @@ class Login_integraton_Test extends UnitTestCase {
 		$this->sendMessage("The integration tests will run with the repository: ".TESTREPO);
 		
 		$url = parse_url(TESTREPO);
-		$fp = fsockopen($url['host'], $url['scheme']=='https' ? 443 : 80, $errno, $errstr, 3);
+		$fp = fsockopen($url['host'], $url['port'], $errno, $errstr, 3);
 		if (!$fp) {
    		$this->fail("Connection to test host timed out (3 s). Can not run integration tests.");
 		} else {
@@ -93,8 +90,8 @@ class Login_integraton_Test extends UnitTestCase {
 	}
 	
 	function testGetFirstNon404Parent() {
-		$url = login_getFirstNon404Parent(getWebappUrl()."test/adsfawerwreq/does/not/exist.no", $status);
-		$this->assertEqual(getWebappUrl()."test/", $url);
+		$url = login_getFirstNon404Parent(getWebappUrl()."adsfawerwreq/does/not/exist.no", $status);
+		$this->assertEqual(getWebappUrl(), $url);
 		// this test url should be a normal resource, not a redirect
 		$this->assertEqual(200, $status);
 	}
