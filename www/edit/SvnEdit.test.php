@@ -246,10 +246,10 @@ This is the post-commit hook talking
 	}
 	
 	function testFilterOutput() {
-		// not wanted anymore //$this->assertEqual(_edit_svnOutput('a Committed revision: 8'), 'a Committed version: 8');
-		$this->assertEqual(_edit_svnOutput('a Committed revision: 8'), 'a Committed revision: 8');
 		$this->assertEqual(_edit_svnOutput('svn: hello svn'), ' hello svn');
 		$this->assertEqual(_edit_svnOutput('abc '.System::getApplicationTemp().' def'), 'abc  def');
+		// TODO Do we really want the following surprising change to operation output?
+		$this->assertEqual(_edit_svnOutput('a Committed revision: 8'), 'a Committed version: 8');
 	}
 	
 }
