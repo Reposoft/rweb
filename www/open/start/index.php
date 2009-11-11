@@ -58,7 +58,7 @@ if (!$acl || !is_file($acl)) {
 	// Until that's implemented, use subversion index as startpage instead, if access is allowed
 	$s = new ServiceRequest($repo.'/');
 	if ($s->exec()==200) {
-		header("Location: ".$repo.'/');
+		header("Location: ".asLink($repo).'/');
 		exit;
 	}
 	// no acl, no read access to repo root -> give up
