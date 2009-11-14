@@ -15,7 +15,7 @@ Repos.edit = {
 })();
 
 // function to initialize editor on demand
-function Repos_loadTinyMce() {
+Repos.edit.loadTinyMce = function() {
 	// from Load on demand example at http://tinymce.moxiecode.com/examples/example_13.php
 	tinyMCE_GZ.init({
 		plugins : "autosave,inlinepopups,fullscreen,save",
@@ -25,7 +25,8 @@ function Repos_loadTinyMce() {
 		debug : false
 	}, function() {
 		tinyMCE.init({
-			mode: "textareas",
+			mode: "exact",
+			elements: 'usertext',
 			plugins: "autosave,inlinepopups,fullscreen,save",
 			theme: "advanced",
 			theme_advanced_buttons1: "formatselect,separator,cut,copy,paste,separator,undo,redo,separator,bold,italic,underline,separator,bullist,numlist,separator,link,image,hr,separator,fullscreen",
@@ -45,14 +46,19 @@ function Repos_loadTinyMce() {
 }
 
 Repos.service('edit/text/', function() {
-	if (Repos.isTarget(/.*\.x?html/)) {
+	if (/tinymce/.test(window.location.href)) { // under development, only enabled in plugin folder
+	if (Repos.isTarget(/.*\.x?html$/)) {
+		Repos.edit.loadTinyMce();
+	} else {
 		Repos.edit.enableMenu();
+		//Repos.edit.enableOnGenerator();
+	}
 	}
 });
 
 Repos.edit.enableMenu = function() {
 	if (!window.location.href.match("&type=html")) {
-		if ($('#usertext').val() == "" && $('#name').val() == "") {
+		if (!$('#usertext').val() && !$('#name').val()) {
 			$('#commandbar').append(
 				'<span id="texteditor">Plain text</span>'
 			);
@@ -62,8 +68,7 @@ Repos.edit.enableMenu = function() {
 			);
 		}
 	} else {
-		Repos.edit.loadTinyMce(Repos.edit.openTinyMce);
-		if (tinyMCE.getContent('mce_editor_0') == "" && $('#name').val() == "") {
+		if (!$('#usertext').val() && !$('#name').val()) {
 			var htmlHref = window.location.href.replace(/&type=html/,"");
 			$('#commandbar').append(
 				'<a id="texteditor" href="'+htmlHref+'" onClick="return Repos.edit.checkTinyMCEarea();">Plain text</span>'
@@ -73,20 +78,18 @@ Repos.edit.enableMenu = function() {
 				'<span id="htmleditor">HTML document</span>'
 			);
 		}
+		Repos.edit.loadTinyMce();
 	}
+};
 
+Repos.edit.enableOnGenerator = function() {
 	// check if the file contains <meta name="Generator" content="Repos" />
 	// and if it does, open it with TinyMCE.
 	var filetext = $('#usertext').val();
 	var pattern = /<meta name="Generator" content="Repos"/;
 	if (filetext.search(pattern) >= 0) {
-		Repos.edit.loadTinyMce(Repos.edit.openTinyMce);
+		Repos.edit.loadTinyMce();
 	}
-};
-
-Repos.edit.loadTinyMce = function(callback) {
-	console.log('loading tinymce scripts from ', Repos.edit.tinyMceUrl);
-	Repos_loadTinyMce();
 };
 
 Repos.edit.checkTextarea = function() {
@@ -101,9 +104,9 @@ Repos.edit.checkTextarea = function() {
 };
 
 Repos.edit.checkTinyMCEarea = function() {
-	if(!tinyMCE.getContent('mce_editor_0')){
-		return true;
-	}
+	//this method does not exist in new tinymce //if(!tinyMCE.getContent('mce_editor_0')){
+	//	return true;
+	//}
 	if(confirm("Textarea is not empty! If you proceed all contents will be lost. Proceed any way?")) {
 		return true;
 	} else {
@@ -118,12 +121,3 @@ Repos.edit.isEditPage = function() {
 Repos.edit.getCurrentType = function() {
 	return document.getElementsByName('type')[0].value;
 };
-
-/* moved to header include to do like in tinymce manual
-tinyMCE.init({
-	mode : "textareas",
-	theme : "simple",
-	editor_selector : "html",
-	content_css : "/documents.css"
-});
-*/
