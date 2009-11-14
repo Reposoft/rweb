@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET' || $_SERVER['REQUEST_METHOD']=='HEAD') {
 		$template->assign('repository', $targeturl);
 		// new file has a default type wich can be changed with query param
 		$template->assign('type', isset($_GET['type']) ? $_GET['type'] : 'txt');
-		$template->assign('suggestname', $_GET['suggestname'] ? $_GET['suggestname'] : '');
+		$template->assign('suggestname', isset($_GET['suggestname']) ? $_GET['suggestname'] : '');
 	}
 	$template->assign('target',$target);
 	$template->assign('targeturl', getTargetUrl());
