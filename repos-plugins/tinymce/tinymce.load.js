@@ -1,11 +1,20 @@
 
-
 // configuration
 Repos.edit = {
 	tinyMceUrl: Repos.getWebapp() + 'lib/tinymce/tinymce/jscripts/tiny_mce/tiny_mce_gzip.js'
 	//tinyMceUrl: Repos.getWebapp() + 'lib/tinymce/tinymce/jscripts/tiny_mce/tiny_mce.js'
 };
 
+// load TinyMCE into <head> as it designed to be
+(function() {
+	var h = document.getElementsByTagName("head")[0];
+	var s = document.createElement('script');
+	s.type = 'text/javascript';
+	s.src = Repos.edit.tinyMceUrl;
+	h.appendChild(s);
+})();
+
+// function to initialize editor on demand
 function Repos_loadTinyMce() {
 	// from Load on demand example at http://tinymce.moxiecode.com/examples/example_13.php
    tinyMCE_GZ.init({
