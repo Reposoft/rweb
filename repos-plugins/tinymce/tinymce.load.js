@@ -43,7 +43,7 @@ Repos.edit.loadTinyMce = function() {
 			width: "900"
 		});
 	});
-}
+};
 
 Repos.service('edit/text/', function() {
 	if (/tinymce/.test(window.location.href)) { // under development, only enabled in plugin folder
