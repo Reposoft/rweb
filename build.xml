@@ -331,7 +331,7 @@
 	<target name="test.xslt.compile">
 		<echo message="Generating sample index html from test xml"/>
 		<mkdir dir="${test.folder}/samples" />
-		<xslt force="true" basedir="${basedir}/test/xslt/index"
+		<xslt force="true" basedir="${basedir}/repos-test/xslt/index"
 			destdir="${test.folder}/samples"
 			style="${target.folder}/${app.name}/view/repos.xsl"
 			includes="**/index*.xml" extension=".html">

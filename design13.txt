@@ -1,0 +1,20 @@
+
+Defaut action plubin.
+Sets default action on resource links (links directly to files and folders in repository).
+
+Requires event repos-resource-show, published by anyone who has a new link to target
+
+Requires core events in repos.js
+
+rework repos.js for event handling and and utility methods (getRevision, getBase ...)
+getAction(target) returns url to that action
+getTarget(element) returns target in element for example row
+
+Check this spec: https://wiki.mozilla.org/ServerJS/Modules/SecurableModules
+package.json
+
+generate event documentation in build docs script
+
+Where is transparent @base support applied and where is it not?
+
+Join repos-multi.xsl and repos.xsl
