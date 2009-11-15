@@ -5,8 +5,10 @@
  * @package
  */
 set_time_limit(60*5); // normally set by Report.class.php, but we don't use that include here 
- 
-require('../open/ServiceRequest.class.php');
+
+$libs = dirname(__FILE__);
+
+require(dirname($libs).'/open/ServiceRequest.class.php');
 
 header('Content-Type: text/plain');
 
@@ -20,8 +22,10 @@ $libraries = array(
 'syntaxhighlighter',
 'tinymce',
 //'phpicalendar',
-//'imagemagick'
 );
+
+// TODO support for reinstalling all libs (run on command line,
+// for each lib delete subfolders and run install.php
 
 $url = getWebapp().'lib/';
 
@@ -49,4 +53,3 @@ foreach($libraries as $lib) {
 out("}\n");
 
 ?>
-
