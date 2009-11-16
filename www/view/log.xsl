@@ -35,6 +35,9 @@
 				<!-- repos metadata -->
 				<meta name="repos-service" content="open/log/" />
 				<meta name="repos-target" content="{/log/@target}" />
+				<xsl:if test="/log/@base">
+					<meta name="repos-base" content="{/log/@base}"/>
+				</xsl:if>
 				<!-- default stylesheet -->
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}log/log.css"/>
