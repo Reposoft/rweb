@@ -1,15 +1,17 @@
 
 test('format', function testFormat() {
-	var d = "2006-09-07T12:00:00.000Z";
+	var d = "1970-01-01T12:00:00.000Z";
 	var f = $.fn.dateformat.format(d);
-	equals("den 7 september 2006 14:00:00", f, "Should make an iso date with no milliseconds.");
+	equals(new Date(12 * 3600 * 1000).toLocaleString(),
+			f, "Should make an iso date with no milliseconds.");
 });
 
 test('formatElement', function testFormatElement() {
 	var e = document.createElement('span');
-	e.innerHTML = "2006-09-07T12:00:00.000Z";
+	e.innerHTML = "1970-01-01T00:00:00.000Z";
 	$.fn.dateformat.formatElement(e);
-	equals("den 7 september 2006 14:00:00", e.innerHTML, "Should format the date of the element that has not been added to the DOM");
+	equals(new Date(0).toLocaleString(), e.innerHTML, 
+			"Should format the date of the element that has not been added to the DOM");
 });
 
 test('formatAll', function testFormatAll() {
@@ -45,7 +47,7 @@ test('formatTwice', function testFormatTwice() {
 test('formatJqueryPlugin', function() {
 	var f = $('<span/>').text("2006-09-07T12:00:00.000Z").dateformat();
 	ok(typeof f != 'undefined', 'should conform to chained api convention');
-	//ok(f.is('.formatted')); // TODO change to dateformatted
+	ok(f.is('.formatted')); // TODO change to dateformatted
 });
 
 test('formatGet', function() {

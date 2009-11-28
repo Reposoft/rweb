@@ -148,5 +148,6 @@ $.fn.dateformat = function() {
 		F.formatElement(this);
 	});
 	
+	return this;
 };
 })(jQuery);
