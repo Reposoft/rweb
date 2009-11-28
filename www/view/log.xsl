@@ -69,7 +69,7 @@
 		<a id="repository" href="{$repourl}">return to repository</a>
 		<!-- can't really apply revision number to details link because log is specified using fromrev and torev
 		Omitting this button because there should be one for each revision in the list.
-		<a id="view" href="../?target={@target}&amp;base={@base}">details</a>
+		<a id="view" href="../?target={@target}{$basep}&amp;base={@base}">details</a>
 		 -->
 		</div>
 	</xsl:template>
@@ -156,17 +156,22 @@
 			<xsl:call-template name="getHref">
 				<xsl:with-param name="href" select="."/>
 			</xsl:call-template>
-			<xsl:text>&#38;base=</xsl:text>
-			<xsl:value-of select="/log/@base"/>
+		</xsl:param>
+		<xsl:param name="basep">
+			<!-- unlike mod_dav_svn repos-web returns base only in parentpath setups -->
+			<xsl:if test="/log/@base">
+				<xsl:text>&#38;base=</xsl:text>
+				<xsl:value-of select="/log/@base"/>
+			</xsl:if>
 		</xsl:param>
 		<div class="row log-{@action}">
 			<xsl:if test="@action='A'">
-				<a id="open:{$pathid}" class="folder" title="Added {.}" href="{$web}open/open/?target={$target}&amp;rev={../../@revision}">
+				<a id="open:{$pathid}" class="folder" title="Added {.}" href="{$web}open/open/?target={$target}{$basep}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
 				<xsl:value-of select="$spacer"/>
 				<xsl:if test="not(@copyfrom-path)">
-					<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}&amp;rev={../../@revision}&amp;action={@action}">view</a>
+					<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={../../@revision}&amp;action={@action}">view</a>
 				</xsl:if>
 				<xsl:if test="@copyfrom-path">
 					<span class="copied" title="Copied from {@copyfrom-path} version {@copyfrom-rev}">
@@ -177,7 +182,7 @@
 						</span>
 					</span>
 					<xsl:value-of select="$spacer"/>
-					<a id="view:{$pathid}" class="action" href="{$web}open/?target={@copyfrom-path}&amp;rev={@copyfrom-rev}&amp;action={@action}">view</a>
+					<a id="view:{$pathid}" class="action" href="{$web}open/?target={@copyfrom-path}{$basep}&amp;rev={@copyfrom-rev}&amp;action={@action}">view</a>
 				</xsl:if>
 			</xsl:if>
 			<xsl:if test="@action='D'">
@@ -185,15 +190,15 @@
 					<xsl:value-of select="."/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}&amp;rev={$fromrev}&amp;action={@action}">view</a>
+				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={$fromrev}&amp;action={@action}">view</a>
 			</xsl:if>
 			<xsl:if test="@action='M'">
-				<a id="open:{$pathid}" class="file" title="Modified {.}" href="{$web}open/open/?target={.}&amp;rev={../../@revision}">
+				<a id="open:{$pathid}" class="file" title="Modified {.}" href="{$web}open/open/?target={.}{$basep}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
 				<xsl:value-of select="$spacer"/>
-				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}&amp;rev={../../@revision}&amp;fromrev={$fromrev}&amp;action={@action}">view</a>
-				<a id="diff:{$pathid}" class="action" href="{$web}open/diff/?target={$target}&amp;rev={../../@revision}&amp;fromrev={$fromrev}">diff</a>
+				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={../../@revision}&amp;fromrev={$fromrev}&amp;action={@action}">view</a>
+				<a id="diff:{$pathid}" class="action" href="{$web}open/diff/?target={$target}{$basep}&amp;rev={../../@revision}&amp;fromrev={$fromrev}">diff</a>
 			</xsl:if>
 		</div>
 	</xsl:template>
