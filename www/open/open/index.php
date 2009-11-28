@@ -10,6 +10,7 @@ $revisionRule = new RevisionRule();
 
 $target = getTarget();
 $file = new SvnOpenFile($target, $revisionRule->getValue());
+// TODO seems like isFoder does not return true for added folder link from log
 if ($file->isFolder()) {
 	// The logic for folders is in main open/.
 	// Causes double redirect for targets that don't end with slash, but that's ok.
