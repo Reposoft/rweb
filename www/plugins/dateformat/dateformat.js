@@ -116,15 +116,16 @@ $.fn.dateformat = function() {
 	 * @param texttag element containing date time
 	 */
 	F.formatElement = function(texttag) {
-		if ($(texttag).is('.dateformatted')) return;
-		var d = texttag.innerHTML;
+		var t = $(texttag);
+		if (t.is('.dateformatted')) return;
+		var d = t.text();
 		if (d == null || d=='') return;
 		if (!this.isDatetime(d)) {
 			throw "Invalid datetime string in tag " + (texttag.id ? texttag.id : texttag.tagName) + ": " + d;	
 		}
 		var date = new Date();
 		date.setISO8601(d);
-		$(texttag).text(date.toLocaleString())
+		t.text(date.toLocaleString())
 			.addClass('dateformatted')
 			.trigger('repos-dateformat-done', [date]);
 	};
