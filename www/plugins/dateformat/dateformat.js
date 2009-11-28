@@ -116,7 +116,7 @@ $.fn.dateformat = function() {
 	 * @param texttag element containing date time
 	 */
 	F.formatElement = function(texttag) {
-		if ($(texttag).is('.formatted')) return;
+		if ($(texttag).is('.dateformatted')) return;
 		var d = texttag.innerHTML;
 		if (d == null || d=='') return;
 		if (!this.isDatetime(d)) {
@@ -125,7 +125,7 @@ $.fn.dateformat = function() {
 		var date = new Date();
 		date.setISO8601(d);
 		$(texttag).text(date.toLocaleString())
-			.addClass('formatted')
+			.addClass('dateformatted')
 			.trigger('repos-dateformat-done', [date]);
 	};
 	

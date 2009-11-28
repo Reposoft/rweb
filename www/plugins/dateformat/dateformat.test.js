@@ -36,7 +36,7 @@ test('formatTwice', function testFormatTwice() {
 	$.fn.dateformat.formatElement(e);
 	// dateformat should set the class 'formatted' when successful
 	// does not work in IE // assert('formatted', e.getAttribute('class'));
-	ok($(e).is('.formatted'));
+	ok($(e).is('.dateformatted'));
 	// now try to format the same tag again
 	var d = e.innerHTML;
 	ok(t != d);
@@ -47,7 +47,7 @@ test('formatTwice', function testFormatTwice() {
 test('formatJqueryPlugin', function() {
 	var f = $('<span/>').text("2006-09-07T12:00:00.000Z").dateformat();
 	ok(typeof f != 'undefined', 'should conform to chained api convention');
-	ok(f.is('.formatted')); // TODO change to dateformatted
+	ok(f.is('.dateformatted'));
 });
 
 test('formatGet', function() {
