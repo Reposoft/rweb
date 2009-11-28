@@ -24,11 +24,12 @@ $limit = getParameter('limit', '20');
 // revisions must exist for the given target
 // TODO add validation for revision numbers, some logic for that found in login.inc.php
 $torev = getParameter('torev');
-$fromrev = getParameter('fromrev', '{20000101T0000}');
+$fromrev = getParameter('fromrev', '0');
 
 // log a datetime interval, any dates are accepted as long as from < to
 // REMOVE and use torev and fromrev instead with conventions from 
 // http://svnbook.red-bean.com/nightly/en/svn-book.html#svn.tour.revs.numbers
+// for example value {20050101T0000}
 $todate = getParameter('todate');
 $fromdate = getParameter('fromdate');
 
@@ -52,7 +53,13 @@ if ($rev) {
 
 // read the log to memory, size is limited and the browser needs the complete xml before rendering anyway
 if ($command->exec()) {
-	trigger_error('Could not read log for URL '.$url.': '.implode(" \n",$command->getOutput()), E_USER_ERROR);
+	$message = implode(" \n",$command->getOutput());
+	if (preg_match('/.*!svn\/bc\/(\d+)(.*)\'.*path not found/', $message, $matches)) {
+		$message = "Path '$matches[2]' not found in revision $matches[1]."; 
+	}
+	require_once(dirname(dirname(dirname(__FILE__))) . "/conf/Presentation.class.php" );
+	//overridden by Presentation://header("HTTP/1.0 404 Not Found");
+	trigger_error('Could not read log for URL '.$url.".\n".$message, E_USER_ERROR);
 }
 $log = $command->getOutput();
 
