@@ -257,6 +257,20 @@ dt {
 }
 dd {
 }
+dl.collapsed lh, dl.expanded lh {
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+dl.collapsed lh {
+	background-image: url('collapsed.png');
+}
+dl.expanded lh {
+	background-image: url('expanded.png');
+}
+dl.collapsed dt, dl.collapsed dd {
+	display: none;
+}
 /* common commands */
 #commandbar #back {
 	background-image: url('commands/24x24/back.png');
