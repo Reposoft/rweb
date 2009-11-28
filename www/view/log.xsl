@@ -164,9 +164,13 @@
 				<xsl:value-of select="/log/@base"/>
 			</xsl:if>
 		</xsl:param>
+		<xsl:param name="defaultaction">
+			<xsl:text>open/</xsl:text>
+			<xsl:if test="@kind='file'">open/</xsl:if>
+		</xsl:param>
 		<div class="row log-{@action}">
 			<xsl:if test="@action='A'">
-				<a id="open:{$pathid}" class="folder" title="Added {.}" href="{$web}open/open/?target={$target}{$basep}&amp;rev={../../@revision}">
+				<a id="open:{$pathid}" class="folder" title="Added {.}" href="{$web}{$defaultaction}?target={$target}{$basep}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
 				<xsl:value-of select="$spacer"/>
@@ -193,7 +197,7 @@
 				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={$fromrev}&amp;action={@action}">view</a>
 			</xsl:if>
 			<xsl:if test="@action='M'">
-				<a id="open:{$pathid}" class="file" title="Modified {.}" href="{$web}open/open/?target={.}{$basep}&amp;rev={../../@revision}">
+				<a id="open:{$pathid}" class="file" title="Modified {.}" href="{$web}{$defaultaction}?target={.}{$basep}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
 				<xsl:value-of select="$spacer"/>
