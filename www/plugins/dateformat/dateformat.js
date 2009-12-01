@@ -20,6 +20,9 @@ $().ready(function(){
 Date.prototype.setISO8601 = function (string) {
 
     var d = string.match(svndate);
+    if (!d) {
+        throw new Error('Failed to parse date "' + string + '"');
+    }
 
     var offset = 0;
     
@@ -33,7 +36,7 @@ Date.prototype.setISO8601 = function (string) {
     if (d[5]) { date.setMinutes(d[5]); }	// d[5] = 20
     if (d[6]) { date.setSeconds(d[6]); }	// d[6] = 30
     if (d[11]) {							// d[11] = +01:00 / null
-    	offset = (Number(d[12]) * 60) + Number(d[13]);	// d[15] = +, d[16] = 01, d[17] = 00
+        offset = (Number(d[12]) * 60) + Number(d[13]);	// d[15] = +, d[16] = 01, d[17] = 00
         offset *= ((d[11] == '-') ? 1 : -1);
     }
 
@@ -92,11 +95,14 @@ Date.prototype.toISO8601String = function (format, offset) {
 };
  
 /**
- * Dateformat jQuery plugin
+ * Dateformat jQuery plugin.
+ * 
+ * Use .dateformat('get') to get the Date instance of the first element.
+ * 
  * @param {jQuery} $ the jQuery object 
  */
 (function($) {
-$.fn.dateformat = function() {	
+$.fn.dateformat = function(options) {	
 	
 	// allow unit testing by adding all internal functions to this object
 	var F = $.fn.dateformat;
@@ -113,19 +119,32 @@ $.fn.dateformat = function() {
 	};
 	
 	/**
-	 * @param texttag element containing date time
+	 * @param texttag {Element} element containing date time 
 	 */
-	F.formatElement = function(texttag) {
-		var t = $(texttag);
-		if (t.is('.dateformatted')) return;
-		var d = t.text();
-		if (d == null || d=='') return;
+	F.get = function(texttag) {
+		return texttag._dateformat || F.parse(texttag);
+	};
+	
+	F.parse = function(texttag) {
+		var d = $(texttag).text();
+		if (d == null || d=='') return false;
 		if (!this.isDatetime(d)) {
 			throw "Invalid datetime string in tag " + (texttag.id ? texttag.id : texttag.tagName) + ": " + d;	
 		}
 		var date = new Date();
 		date.setISO8601(d);
-		t.text(date.toLocaleString())
+		texttag._dateformat = date;
+		return date;
+	};
+	
+	/**
+	 * @param texttag element containing date time
+	 */
+	F.formatElement = function(texttag) {
+		if ($(texttag).is('.dateformatted')) return;
+		var date = F.parse(texttag);
+		if (!date) return false;
+		$(texttag).text(date.toLocaleString())
 			.addClass('dateformatted')
 			.trigger('repos-dateformat-done', [date]);
 	};
@@ -144,6 +163,13 @@ $.fn.dateformat = function() {
 		d.setISO8601(dateTime);
 		return d.toLocaleString();
 	};
+	
+	if (typeof options == 'string') {
+		if (options == 'get') {
+			return F.get(this[0]);
+		}
+		throw 'Unknown option ' + options;
+	}
 	
 	$(this).each( function() {
 		F.formatElement(this);

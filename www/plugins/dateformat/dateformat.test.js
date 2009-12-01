@@ -44,6 +44,18 @@ test('formatTwice', function testFormatTwice() {
 	ok(e.innerHTML, d);
 });
 
+test('formatInvalid', function() {
+	// not iso date and not .dateformatted
+	var d = $('<span>Thu Jan 1 01:00:05 1970</span>').addClass('datetime');
+	try {
+		d.dateformat();
+		ok(false, 'Should throw exception for invalid datetime');
+	} catch(e) {
+		equals(e.message, 'Unparseable date "Thu Jan 1 01:00:05 1970"');
+	}
+	equals(d.text(), 'Thu Jan 1 01:00:05 1970', 'Contents should be unchanged');
+});
+
 test('formatJqueryPlugin', function() {
 	var f = $('<span/>').text("2006-09-07T12:00:00.000Z").dateformat();
 	ok(typeof f != 'undefined', 'should conform to chained api convention');
@@ -51,6 +63,19 @@ test('formatJqueryPlugin', function() {
 });
 
 test('formatGet', function() {
-	var f = $('<span/>').text("2006-09-07T12:00:00.000Z");
-	
+	var f = $('<span/>').text("1970-01-01T00:00:04.000Z");
+	var date = f.dateformat('get');
+	ok(typeof date.getUTCFullYear != 'undefined', ".dateformat('get') should return Date");
+	equals(date.getUTCSeconds(), 4, ".dateformat('get') should parse to Date instance");
+	ok(!f.is('.dateformatted'), ".dateformat('get') should not format");
+});
+
+test('formatGetFormatted', function() {
+	var f = $('<span/>').text("1970-01-01T00:00:05.000Z").dateformat();
+	ok(f.text() != "1970-01-01T00:00:05.000Z", "should be local format now");
+	// now some other code comes along and wants to know what the formatted string means
+	var date = f.dateformat('get');
+	equals(date.getUTCSeconds(), 5, ".dateformat('get') should return Date instance for formatted");
+	var f2 = $('<span/>').text("1970-01-01T00:00:09.000Z").dateformat();
+	equals(f2.dateformat('get').getUTCSeconds(), 9, "different cached date");
 });
