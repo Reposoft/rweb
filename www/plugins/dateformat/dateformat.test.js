@@ -51,7 +51,7 @@ test('formatInvalid', function() {
 		d.dateformat();
 		ok(false, 'Should throw exception for invalid datetime');
 	} catch(e) {
-		equals(e.message, 'Unparseable date "Thu Jan 1 01:00:05 1970"');
+		equals(e.message, 'Failed to parse date "Thu Jan 1 01:00:05 1970"');
 	}
 	equals(d.text(), 'Thu Jan 1 01:00:05 1970', 'Contents should be unchanged');
 });
