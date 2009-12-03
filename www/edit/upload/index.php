@@ -144,7 +144,7 @@ function processNewVersion($upload) {
 	$checkout = new SvnEdit('checkout');
 	$checkout->addArgOption('--depth', 'empty', false);
 	if ($fromrev) $checkout->addArgOption('-r', $fromrev, false);
-	$checkout->addArgUrl($repoFolder);
+	$checkout->addArgUrl($repoFolder.'@'.$fromrev); // append the peg rev to avoid unexpected results if the given rev does not exist
 	$checkout->addArgPath($dir);
 	$checkout->execNoDisplayOnError();
 	if ($checkout->isSuccessful()) {
