@@ -618,6 +618,7 @@ class SvnOpenFile {
 			$listinfo = $this->_parseListXml($result);
 			return array_merge($listinfo, $parsed); // the revision number from svn info is the correct one (not last-changed-revision)
 		}
+		$parsed['size'] = null;
 		return $parsed;
 	}
 	
