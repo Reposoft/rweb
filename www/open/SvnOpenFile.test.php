@@ -140,11 +140,40 @@ class TestSvnOpenFile extends UnitTestCase {
 		$a = $file->_parseInfoXml($list);
 		$this->assertEqual('dir', $a['kind']);
 		$this->assertEqual('a', $a['name']); //strangely this attribute is called path
-		$this->assertEqual('21', $a['revision']);
+		$this->assertEqual('22', $a['revision']);
 		$this->assertEqual('test', $a['author']);
 		$this->assertEqual('2009-10-13T17:47:35.110024Z', $a['date']);
 	}
 	
+	function testParseInfoXmlNoAuthor() {
+		$list = explode("\n",
+			'<?xml version="1.0"?>
+			<info>
+			<entry
+			   kind="dir"
+			   path="a"
+			   revision="22">
+			<url>http://localhost:8530/svn/one/a</url>
+			<repository>
+			<root>http://localhost:8530/svn/one</root>
+			<uuid>84a31bb3-c0e4-44d0-99de-dfa94f5db521</uuid>
+			</repository>
+			<commit
+			   revision="21">
+			<date>2009-10-13T17:47:35.110024Z</date>
+			</commit>
+			
+			</entry>
+			</info>');
+		$file = new SvnOpenFile('/a');
+		$a = $file->_parseInfoXml($list);
+		$this->assertEqual('dir', $a['kind']);
+		$this->assertEqual('a', $a['name']); //strangely this attribute is called path
+		$this->assertEqual('22', $a['revision']);
+		$this->assertFalse(false, $a['author']);
+		$this->assertEqual('2009-10-13T17:47:35.110024Z', $a['date']);
+	}
+		
 	function testGetRevisionNumberFromETag() {
 		$headers = array(
 		0 => 'HTTP/1.1 200 OK',

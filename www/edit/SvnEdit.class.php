@@ -268,6 +268,15 @@ class SvnEdit {
 	}
 	
 	/**
+	 * Uniquely identifies an object in subversion, for a url (history) that may have contained different objects.
+	 * @param String $url the URL, just like addArgUrl
+	 * @param int|String $revision, the revision number to append as URL@PEG-REV
+	 */
+	function addArgUrlPeg($url, $revision) {
+		$this->command->addArgUrlPeg($url, $revision);
+	}	
+	
+	/**
 	 * @param option command line switch, will be added to commandline without encoding or quotes
 	 */	
 	function addArgOption($option, $value=null, $valueNeedsEscape=true) {

@@ -603,26 +603,22 @@ class SvnOpenFile {
 	 */
 	function _readInfoSvn() {
 		// the reason we do 'list' and not 'info' is that 'info' does not contain file size
-		$info = new SvnOpen('list', true);
+		$info = new SvnOpen('info', true);
 		$info->addArgUrlPeg($this->url, $this->_revision);
-		// had to require svn 1.5 for this because distinguishing between folder and file list in 1.4 is hard
-		$info->addArgOption('--depth', 'empty'); // required so that list on folder does not return contents
-		$info->exec();
+		if ($info->exec()) trigger_error("Could not read info $this->url from svn.", E_USER_ERROR);
 		$result = $info->getOutput();
-		// end folder hack, error message in either first line or after some initial xml
+		$parsed = $this->_parseInfoXml($result);
 		if (preg_match('/non-existent/', $result[0].$result[4])) return array(); // does not exist in svn
-		// folder support added without any changes to file handling
-		if (count($result) < 7) {
-			$info = new SvnOpen('info', true);
+		// get file size
+		if ($parsed['kind'] == 'file') {
+			$info = new SvnOpen('list', true);
 			$info->addArgUrlPeg($this->url, $this->_revision);
-			if ($info->exec()) trigger_error("Could not read folder $this->url from svn.", E_USER_ERROR);
+			if ($info->exec()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
 			$result = $info->getOutput();
-			return $this->_parseInfoXml($result);
+			$listinfo = $this->_parseListXml($result);
+			return array_merge($listinfo, $parsed); // the revision number from svn info is the correct one (not last-changed-revision)
 		}
-		// error handling for both file and folder
-		if ($info->getExitcode()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
-		// and isFolder handles the case where the list returns folder contents instead of file
-		return $this->_parseListXml($result);
+		return $parsed;
 	}
 	
 	/**
@@ -652,7 +648,7 @@ class SvnOpenFile {
 			if (preg_match($p, $xmlArray[$i], $matches)) {
 				$parsed[$n] = $matches[1];
 				if(!(list($n, $p) = each($patternsInOrder))) break;
-			} else if ($n == 'author' || $n == 'lockcomment') { // optional entry
+			} else if ($n == 'author' || $n == 'lockcomment') { // optional entry (works only right after mandatory entry)
 				list($n, $p) = each($patternsInOrder);
 				$i--;
 			}
@@ -670,8 +666,9 @@ class SvnOpenFile {
 		$patternsInOrder = array(
 			'kind' => '/kind="([^"]+)"/',
 			'path' => '/path="([^"]+)"/',
+			'revision' => '/revision="(\d+)"/', // must be the revision in <entry>, not <commit>
 			'url' => '/<url>([^<]+)</', // need something between the two revision= because we should read the last one
-			'revision' => '/revision="(\d+)"/',
+			'lastChangedRevision' => '/revision="(\d+)"/',
 			'author' => '/<author>([^<]+)</',
 			'date' => '/<date>([^<]+)</',
 		);
@@ -686,7 +683,6 @@ class SvnOpenFile {
 			}
 		}
 		$parsed['name'] = $parsed['path']; // looks like this is only the name
-		$parsed['size'] = null;
 		return $parsed;
 	}
 	
