@@ -683,6 +683,7 @@ class SvnOpenFile {
 			}
 		}
 		$parsed['name'] = $parsed['path']; // looks like this is only the name
+		if (!isset($parsed['author'])) $parsed['author'] = null;
 		return $parsed;
 	}
 	
