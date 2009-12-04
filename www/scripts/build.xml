@@ -38,7 +38,7 @@
 		<echo message="Collecting parts for ${head.js.file}" />
 		<echo message="Including optional plugins from ${plugins.external.folder}" />
 		<echo message="This build excludes: ${plugins.excludes}" />
-		<concat destfile="${head.js.file}.big">
+		<concat destfile="${head.js.file}.big" append="no">
 			<fileset dir="${intro.folder}" includes="**/*.js" excludes="${excludes.default}" />
 			<fileset dir="${lib.folder}" includes="jquery/*.js"/>
 			<fileset dir="${lib.folder}" includes="**/*.js" excludes="jquery/**,${excludes.default}"/>
