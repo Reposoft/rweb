@@ -2,7 +2,7 @@
  * Repos history filter (c) 2006 repos.se
  */
 Repos.service('open/log/', function() {
-	reposMakeCollapsible('.logentry', 'h3')
+	reposMakeCollapsible('.logentry', 'h3');
 });
 
 //quite generic for divs with headline
