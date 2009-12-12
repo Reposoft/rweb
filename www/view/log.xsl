@@ -133,6 +133,7 @@
 			<xsl:apply-templates select="paths">
 				<xsl:with-param name="fromrev" select="following-sibling::*[1]/@revision"/>
 			</xsl:apply-templates>
+			<div id="logentry_actions{@revision}" class="actions"></div>
 		</div>
 	</xsl:template>
 	<xsl:template match="paths">

@@ -171,6 +171,9 @@ ul.index {
 .n0, .n1, .n2, .n3 {
 	background: url(rowbackground.png) bottom repeat-x;
 }
+.logentry .actions {
+	margin-left: 1.2em;
+}
 /* li.hover is for the actionhover plugin, :hover is no-javascript solution */
 li.hover, .n0:hover, .n1:hover, .n2:hover, .n3:hover {
 	background: url(rowbackground-hover.png) bottom repeat-x;
@@ -257,19 +260,27 @@ dt {
 }
 dd {
 }
-dl.collapsed lh, dl.expanded lh {
+/* quite generic collapse/expand */
+div.collapsed > h3, div.expanded > h3, dl.collapsed lh, dl.expanded lh {
 	background-position: left;
 	background-repeat: no-repeat;
 	padding-left: 20px;
 }
-dl.collapsed lh {
+div.collapsed > h3, dl.collapsed lh {
 	background-image: url('collapsed.png');
 }
-dl.expanded lh {
+div.expanded > h3, dl.expanded lh {
 	background-image: url('expanded.png');
 }
-dl.collapsed dt, dl.collapsed dd {
+dl.collapsed dt, dl.collapsed dd,
+		div.collapsed .row {
 	display: none;
+}
+#commandbar #collapseall {
+	background-image: url('commands/24x24/collapseall.png');
+}
+#commandbar #expandall {
+	background-image: url('commands/24x24/expandall.png');
 }
 /* common commands */
 #commandbar #back {
