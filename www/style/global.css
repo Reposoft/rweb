@@ -267,10 +267,10 @@ div.collapsed > h3, div.expanded > h3, dl.collapsed lh, dl.expanded lh {
 	padding-left: 20px;
 }
 div.collapsed > h3, dl.collapsed lh {
-	background-image: url('collapsed.png');
+	background-image: url('commands/16x16/collapsed.png');
 }
 div.expanded > h3, dl.expanded lh {
-	background-image: url('expanded.png');
+	background-image: url('commands/16x16/expanded.png');
 }
 dl.collapsed dt, dl.collapsed dd,
 		div.collapsed .row {
