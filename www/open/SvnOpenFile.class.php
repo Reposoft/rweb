@@ -420,6 +420,15 @@ class SvnOpenFile {
 	}
 	
 	/**
+	 * 
+	 * @return int Subversion concept, != revision for example if file is unchanged inside copy of tree
+	 */
+	function getRevisionLastChanged() {
+		$this->_read();
+		return $this->file['lastChangedRevision'];
+	}
+	
+	/**
 	 * @return String Last modified, in xsd:dateTime timestamp format
 	 */
 	function getDate() {

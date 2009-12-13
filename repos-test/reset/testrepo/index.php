@@ -145,6 +145,12 @@ setup_svn("add {$wc}test/trunk/TESTACCOUNT");
 
 setup_svn('commit -m "Added integration testing folders for other repos projects" '.$wc);
 
+// Make a copy of a file to test how pegs and revision numbers behave
+setup_svn("copy {$wc}demoproject/trunk/readonly/index.html {$wc}test/trunk/copy-from-readonly.html");
+// And make a copy of a folder to see the difference
+setup_svn("copy {$wc}demoproject/trunk/readonly {$wc}test/trunk/copy-from-readonly");
+setup_svn('commit -m "Made copy of a file and a tree.\nNo changes to contents.\nFor testing peg revision et.al." '.$wc);
+
 // Clean up
 System::deleteFolder($wc);
 
