@@ -1,6 +1,11 @@
 <?php
 /**
- * Subversion file operation (c) 2006-2007 Staffan Olsson www.repos.se
+ * Subversion dir entry abstraction (c) 2006-2007 Staffan Olsson www.repos.se
+ * 
+ * Combines svn info and list with apache read operations to find
+ * all info needed about a dir entry in UI operations,
+ * inluding locks, content type and write access detection.
+ * 
  * @package open
  * @version $Id$
  */
@@ -600,6 +605,10 @@ class SvnOpenFile {
 		return 200;
 	}
 	
+	function _nonexisting() {
+		return array('path' => $this->path);
+	}
+	
 	/**
 	 * Reads all file information with a 
 	 * @return array[String] metadata name=>value, empty array or array with only path if file does not exist
@@ -608,10 +617,13 @@ class SvnOpenFile {
 		// the reason we do 'list' and not 'info' is that 'info' does not contain file size
 		$info = new SvnOpen('info', true);
 		$info->addArgUrlPeg($this->url, $this->_revision);
-		if ($info->exec()) trigger_error("Could not read info $this->url from svn.", E_USER_ERROR);
+		if ($info->exec()) {
+			//need to be able to catch this, see getStatus//trigger_error("Could not read info $this->url from svn.", E_USER_ERROR);
+			return $this->_nonexisting();
+		}
 		$result = $info->getOutput();
 		$parsed = $this->_parseInfoXml($result);
-		if (preg_match('/non-existent/', $result[0].$result[4])) return array(); // does not exist in svn
+		if (preg_match('/non-existent/', $result[0].$result[4])) return $this->_nonexisting(); // does not exist in svn
 		return $parsed;
 	}
 	

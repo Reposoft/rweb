@@ -88,7 +88,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 	function testNonexistingFile() {
 		$file = new SvnOpenFile("/demoproject/trunk/public/temp.txt", 2);
 		//$this->expectError(new PatternExpectation("/Could not read file .* from svn/"));
-		$this->assertEqual(404, $file->getStatus());
+		$this->assertEqual(404, $file->getStatus(), "The file was deleted in rev 2 and should be gone. %s");
 		// Why support this? // $this->assertEqual(2, $file->getRevision(),
 		//	 "Revision not found in svn, so return the value given to the constructor. %s");
 		$this->assertFalse($file->isWritable());
