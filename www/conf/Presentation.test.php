@@ -98,10 +98,10 @@ class TestPresentation extends UnitTestCase {
 	function testPrefilter_urlRewriteForHttps_object() {
 		$result = Presentation_urlRewriteForHttps(
 			'<a id="repository" href="{=$file,folderUrl}">return to repository</a>
-			{=$file->getkind()|ucfirst}: <a class="{=$file->getkind()}" href="{=$file,url}">', $smarty);
+			{=$file->getkind2()|ucfirst}: <a class="{=$file->getkind2()}" href="{=$file,url}">', $smarty);
 		$this->assertEqual(
 			'<a id="repository" href="{=$file,folderUrl|asLink}">return to repository</a>
-			{=$file->getkind()|ucfirst}: <a class="{=$file->getkind()}" href="{=$file,url|asLink}">', $result);
+			{=$file->getkind2()|ucfirst}: <a class="{=$file->getkind2()}" href="{=$file,url|asLink}">', $result);
 	}
 
 	function testPrefilter_removeIndentation() {

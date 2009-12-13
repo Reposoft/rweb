@@ -16,7 +16,7 @@
 <div class="intro">
 <h1>Rename</h1>
 
-{=if not $file,isWritable} <p>You have read access only. You can not rename this {=$file,kind}.</p>
+{=if not $file,isWritable} <p>You have read access only. You can not rename this {=$file,kind2}.</p>
 {=elseif $file,isLockedByThisUser} <p>This file is currently <strong>locked</strong> by you, so other users can not edit it.</p>
 {=elseif $file,isLockedBySomeoneElse} <p>This file is currently <strong>locked</strong> by 
 <span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}. 
@@ -27,7 +27,7 @@ You can not rename this file.</p>
 <div class="column" style="width: 70%">
 <form id="rename" name="rename" method="post" action="#">
   <fieldset>
-	<legend>Rename <a class="{=$file,kind}" href="{=$file,url}" title="open {=$file,kind}: {=$file,filename}">{=$file,kind}</a></legend>
+	<legend>Rename <a class="{=$file,kind2}" href="{=$file,url}" title="open {=$file,kind2}: {=$file,filename}">{=$file,kind}</a></legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
     <input name="folder" type="hidden" id="target" value="{=$folder}" />
   <p>

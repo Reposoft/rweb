@@ -147,6 +147,15 @@ class SvnOpenFile {
 		if (is_null($this->file)) trigger_error("Could not read file information for '$path' revision $revision in repository ".getRepository(), E_USER_ERROR);
 	}
 	
+	function _readFile() {
+		$this->_read();
+		$info = $this->file;
+		if ($info['kind'] != 'file') trigger_error("Operation only allowed for files", E_USER_ERROR);
+		if (isset($info['size'])) return; // list already read
+		$listinfo = $this->_readListSvn();
+		$this->file = array_merge($listinfo, $info); // the revision number from svn info is the correct one (not last-changed-revision)
+	}
+	
 	/**
 	 * Called first in every method that needs the current HTTP headers of the file's URL
 	 */
@@ -168,26 +177,8 @@ class SvnOpenFile {
 	 * It only does HTTP operations, not svn (the _read() method is not allowed for folders).
 	 */
 	function isFolder() {
-		// TODO cache results
 		if (strEnds($this->path,'/')) return true;
-		if (isset($this->file['kind']) && $this->file['kind'] == 'dir') return true;
-		$this->_head();
-		if ($this->headStatus == 301) {
-			return ($this->head['Location'] == $this->url.'/');
-		}
-		// now for HEAD we know it is not a folder
-		if ($this->headStatus == 200 && $this->isLatestRevision()) return false;
-		// when viewing a folder from history, if if does not exist we need to check svn
-		// but it could be expensive doing that for every page,
-		// so we only do it for names that do not look like files
-		if (!preg_match('/\.\w+$/', $this->path)) {
-			// note that $this->_read is not allowed fo folders.
-			// We'd like to do svn info here, but that would be a duplication of the _read call
-			// TODO use 'svn' to see, for a path without extension that no longer exists, if it was a file or a folder
-			// Guess folder, assuming that files without extension are rare
-			return true;
-		}
-		return false;
+		return $this->getKind() == 'dir';
 	}
 	
 	/**
@@ -217,12 +208,21 @@ class SvnOpenFile {
 	}
 	
 	/**
-	 * Return the type of entry, "file" or "folder", for use in texts.
+	 * Return user friendly type of entry, "file" or "folder", for use in texts.
 	 * @return lowercase text that can be used instead of if-else in messages.
 	 */
+	function getKind2() {
+		$k = $this->getKind();
+		if ($k == 'dir') return 'folder';
+		return $k;
+	}
+	
+	/**
+	 * @return the value of subversion's "node kind"
+	 */
 	function getKind() {
-		if ($this->isFolder()) return "folder";
-		return "file";
+		$this->_read();
+		return $this->file['kind'];
 	}
 	
 	function getPath() {
@@ -317,6 +317,8 @@ class SvnOpenFile {
 	
 	/**
 	 * Subversion usually puts the revision number in the ETag header.
+	 * WARNING: This is the "Last modified revision" and does not change
+	 * at for example copy.
 	 * @return the revision number if found, boolean false if not
 	 *  (if revision number can be 0, use ===)
 	 */
@@ -396,7 +398,8 @@ class SvnOpenFile {
 	 * @return the size of the file in bytes
 	 */
 	function getSize() {
-		$this->_read();
+		if ($this->isFolder()) return false;
+		$this->_readFile();
 		return $this->file['size'];
 	}
 	
@@ -432,7 +435,7 @@ class SvnOpenFile {
 
 	function isLocked() {
 		if ($this->isFolder()) return false;
-		$this->_read();
+		$this->_readFile();
 		return array_key_exists('lockowner', $this->file);
 	}
 	
@@ -609,17 +612,20 @@ class SvnOpenFile {
 		$result = $info->getOutput();
 		$parsed = $this->_parseInfoXml($result);
 		if (preg_match('/non-existent/', $result[0].$result[4])) return array(); // does not exist in svn
-		// get file size
-		if ($parsed['kind'] == 'file') {
-			$info = new SvnOpen('list', true);
-			$info->addArgUrlPeg($this->url, $this->_revision);
-			if ($info->exec()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
-			$result = $info->getOutput();
-			$listinfo = $this->_parseListXml($result);
-			return array_merge($listinfo, $parsed); // the revision number from svn info is the correct one (not last-changed-revision)
-		}
-		$parsed['size'] = null;
 		return $parsed;
+	}
+	
+	/**
+	 * For files: Reads size and lock info from svn list. 
+	 * @return array[String]
+	 */
+	function _readListSvn() {
+		$info = new SvnOpen('list', true);
+		$info->addArgUrlPeg($this->url, $this->_revision);
+		if ($info->exec()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
+		$result = $info->getOutput();
+		$listinfo = $this->_parseListXml($result);
+		return $listinfo;
 	}
 	
 	/**

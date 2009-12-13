@@ -187,7 +187,8 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertTrue($file->isWritable());
 		$this->assertEqual('public', $file->getFilename());
 		$this->assertEqual('/demoproject/trunk/', $file->getFolderPath());
-		$this->assertEqual('folder', $file->getKind(), "Repos says 'folder', not 'dir'. %s");
+		$this->assertEqual('dir', $file->getKind(), "%s");
+		$this->assertEqual('folder', $file->getKind2(), "getKind2 is for user friendly name. %s");
 		// not allowed //$this->assertNotEqual(HEAD, $file->getRevision(), "Should get the real revision number. %s");
 	}
 	
@@ -285,7 +286,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		// test
 		$file = new SvnOpenFile($target, $revWhenAdded);
 		$this->assertEqual(200, $file->getStatus());
-		$this->assertEqual('folder', $file->getKind());
+		$this->assertEqual('dir', $file->getKind());
 		// cleanp
 		System::deleteFolder($tmp);
 	}

@@ -42,7 +42,7 @@ function setMove(move) {
 </div>
 <div id="intro">
 <h1>Copy or Move</h1>
-<p>Make a copy of the {=$file,kind} at a new location in the repository. Select "delete the original" to make this a move operation.</p>
+<p>Make a copy of the {=$file,kind2} at a new location in the repository. Select "delete the original" to make this a move operation.</p>
 {=if not $file,isWritable} <p>You have read access only. You can only copy the file.</p>
 {=elseif $file,isLockedByThisUser} <p>The file is currently <strong>locked</strong> by you, so other users can not edit it.
 Select "delete the original" to make this a move operation.</p>
@@ -55,7 +55,7 @@ Select "delete the original" to make this a move operation.</p>
 <div class="column" style="width: 70%">
 <form id="copy" name="copy" method="post" action="#">
 	<fieldset>
-	<legend>Copy or Move <a class="{=$file,kind}" href="{=$file,url}" title="open {=$file,kind}: {=$file,filename}">{=$file,kind}</a></legend>
+	<legend>Copy or Move <a class="{=$file,kind2}" href="{=$file,url}" title="open {=$file,kind}: {=$file,filename}">{=$file,kind}</a></legend>
 		<input name="target" type="hidden" id="target" value="{=$target}" />
 	<p>
 		<label for="name">copy the current</label>
