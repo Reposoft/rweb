@@ -149,7 +149,11 @@ setup_svn('commit -m "Added integration testing folders for other repos projects
 setup_svn("copy {$wc}demoproject/trunk/readonly/index.html {$wc}test/trunk/copy-from-readonly.html");
 // And make a copy of a folder to see the difference
 setup_svn("copy {$wc}demoproject/trunk/readonly {$wc}test/trunk/copy-from-readonly");
-setup_svn('commit -m "Made copy of a file and a tree.\nNo changes to contents.\nFor testing peg revision et.al." '.$wc);
+// We have no log comments with newline so I took the opportunity here
+System::createFileWithContents("$wc.tmpmessage",
+	"Made copy of a file and a tree.\nNo changes to contents.\nFor testing peg revision et.al.");
+setup_svn("commit -F $wc.tmpmessage $wc");
+System::deleteFile("$wc.tmpmessage");
 
 // Clean up
 System::deleteFolder($wc);

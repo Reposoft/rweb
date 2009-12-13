@@ -54,7 +54,9 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertFalse($file->isWritable(), "The file is in a readonly folder. %2");
 		//old definition//$this->assertEqual(1, $file->getRevision(), "Shouldn't have been changed since first commit. %s");
 		$this->assertEqual(1, $file->getRevisionLastChanged(), "Shouldn't have been changed since first commit. %s");
-		$this->assertEqual('text/plain', $file->getType(), "mime-type property not set so content type should be deteced by apache. %s"); 
+		// mime type detection should be rewarded separate tests, but it's here
+		$this->assertTrue($file->getType(), "mime-type property not set so content type should be deteced by apache. %s");
+		$this->assertEqual('text/plain', $file->getType(), "Tests Apache configuration. %s"); // or should it be text/html? 
 		$contents = $file->getContents();
 		$this->assertEqual("</html>\n", substr($contents, strlen($contents)-8), "File ends with newline. %s");
 		$contentsArray = $file->getContentsText();
