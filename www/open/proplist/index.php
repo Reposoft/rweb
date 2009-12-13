@@ -5,13 +5,17 @@ require("../SvnOpen.class.php" );
 require_once("../../lib/json/json.php" );
 
 $url = getTargetUrl();
+$revisionRule = new RevisionRule();
 Validation::expect('target');
 
 $cmd = new SvnOpen('proplist');
 $cmd->addArgOption('-v');
 $cmd->addArgOption('--xml');
-if (isset($_REQUEST['rev'])) $cmd->addArgOption('-r', $_REQUEST['rev']);
-$cmd->addArgUrl($url);
+if ($revisionRule->getValue()) {
+	$cmd->addArgUrlPeg($url, $revisionRule->getValue());
+} else {
+	$cmd->addArgUrl($url);
+}
 
 // This is for evaluation of Accept header usage. Should be aligned with WEBSERVICE_KEY concept in repos.properties.php
 if (strBegins($_SERVER['HTTP_ACCEPT'], 'text/xml')) {
