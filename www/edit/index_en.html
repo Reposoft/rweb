@@ -117,7 +117,8 @@ You need to use a version control client like Repos.
 <div class="column" style="width: 40%">
 <div id="filedetails" class="section">
 <h2>File details</h2>
-<p>Version number: <span class="revision">{=$file,revision}</span></p>
+<!-- in headline: <p>Version number: <span class="revision">{=$file,revision}</span></p> -->
+<p>Last changed revision: <span class="revision">{=$file,revisionLastChanged}</span></p>
 <p>Last edited by: <span class="username">{=$file,author}</span></p>
 <p>Last edited at: <span class="datetime">{=$file,date}</span></p>
 <p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>

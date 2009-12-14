@@ -39,7 +39,8 @@ You may <a href="../edit/?target={=$target}&rev={=$rev}">edit</a> the file.
 <!-- many plugins use the name #filedetails so the id is kept even though it is used for folders too -->
 <div id="filedetails" class="section">
 <h2>{=$file,kind2|ucfirst} details</h2>
-<p>Version number: <span class="revision">{=$file,revision}</span></p>
+<!-- in headline: <p>Version number: <span class="revision">{=$file,revision}</span></p> -->
+<p>Last changed revision: <span class="revision">{=$file,revisionLastChanged}</span></p>
 <p>Last edited by: <span class="username">{=$file,author}</span></p>
 <p>Last edited at: <span class="datetime">{=$file,date}</span></p>
 <!--{if $file,isFile}-->
