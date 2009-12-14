@@ -275,18 +275,19 @@ class SvnOpenFile {
 			trigger_error('Access denied for resource '. $this->getPath(), E_USER_ERROR);
 		}
 		// special handling for folders
-		if ($this->file['kind'] == "dir") {
-			return false; // TODO implement
+		if ($this->isFolder()) {
+			return false;// after repos 1.3.1 //trigger_error('Operation not supported for folders', E_USER_ERROR);
 		}
 		// otherwise we assume that the ETag contains the revision number
 		$r = $this->_getHeadRevisionFromETag();
 		if ($r !== false) {
-			if ($r < $this->_revision) trigger_error("Invalid revision number $this->_revision, higher than last commit but not HEAD");
+			// this is a bit mean but it forces code to not specify revision unless nessecary
+			if ($r < $this->_revision) trigger_error('The specified revision '.$this->_revision.
+				' is newer than the last changed revision of this file');
 			return $r == $this->_revision;
 		}
 		// it is unlikely that we come this far
 		trigger_error("Could not read revision number of the latest version from repository.", E_USER_ERROR);
-		// TODO try other methods? call _file then return false if sizes don't match
 		// TODO final: either parse dates and compare or do an svn list call on HEAD and compare revisions
 	}
 	
@@ -420,12 +421,13 @@ class SvnOpenFile {
 	
 	/**
 	 * This is _not_ a getter for the '_revision' field, which may have value HEAD.
+	 * Returns "entry" revision, not "commit" revision, meaning that it is the
+	 * same as the given revision number for peg/rev operations
+	 * and head rev when revision is unspecified.
 	 * @return int Integer revision number, even for HEAD.
 	 */
 	function getRevision() {
 		$this->_read();
-		// if (!isset($this->file['revision'])) return $this->_revision;
-		if (!isset($this->file['revision'])) trigger_error('Revision not found. Does the file exist?');
 		return $this->file['revision'];
 	}
 	

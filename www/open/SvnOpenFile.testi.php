@@ -88,8 +88,28 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertFalse($file->isLatestRevision());
 		$this->assertFalse($file->isWritable());
 		$this->assertEqual(1, $file->getRevision());
+		$this->assertEqual(1, $file->getRevisionLastChanged());
 		$this->assertTrue(strlen($file->getContents()) > 1, substr($file->getContents(), 0, 20).'...');
 		$this->assertEqual('text/html', $file->getType());
+	}
+
+	function testFileLastModifiedRevisionNotHead() {
+		setTestUser();
+		// this is when the file was last modified
+		$file = new SvnOpenFile("/demoproject/trunk/Policy document.html", 2);
+		$this->assertTrue($file->isLatestRevision());
+	}
+	
+	function testFileRevisionSpecifiedBetweenLastModifiedAndHead() {
+		setTestUser();
+		// should this produce error or should it be valid?
+		// Error for example: "The entry has no revision X"
+		$file = new SvnOpenFile("/demoproject/trunk/Policy document.html", 4);
+		// the current implementation expects an error if reading with an explicit rev that is not an actual change
+		return;
+		// this would be nicer behavior, but also tolerate sloppy code
+		$this->assertTrue($file->isLatestRevision());
+		$this->assertEqual(2, $file->getRevisionLastChanged(), "Last commit before rev 4. %s");
 	}
 	
 	function testNonexistingFileHead() {
@@ -265,7 +285,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$this->assertTrue($file->isFolder());
 		$this->assertTrue($file->isReadableInHead());
 		$this->expectError(new PatternExpectation('/could not read.* revision/i',
-			"isLatedRevision is not supported for folders, unless answer is obvious. %s"));
+			"isLatestRevision is not supported for folders, unless answer is obvious. %s"));
 		$this->assertFalse($file->isLatestRevision());
 		// not allowed //$this->assertEqual(1, $file->getRevision());
 	}	
