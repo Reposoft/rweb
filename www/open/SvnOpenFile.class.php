@@ -147,6 +147,7 @@ class SvnOpenFile {
 	 */
 	function _read() {
 		$this->_readNoErr();
+		// see _nonexisting(), this is how "not found" was reported when it never triggered error
 		if (count($this->file)<2) trigger_error('No info found for "'.$this->url.'"'.
 			' at revision '.$this->_revision, E_USER_ERROR);
 	}
