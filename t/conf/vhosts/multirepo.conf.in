@@ -22,15 +22,6 @@
 	Alias /repos-plugins @ServerRoot@/../repos-plugins
 	Alias /repos-test @ServerRoot@/../repos-test
 	
-	# Evaulating a fulltext search feature
-	# This alias requires repos-serach root in workspace, outside the Directory in extra.conf.in
-	Alias /repos-search @ServerRoot@/../../repos-search/trunk
-	<Directory @ServerRoot@/../../repos-search/>
-		DirectoryIndex index.html index.php index.py
-    	AddHandler mod_python .py
-    	PythonHandler mod_python.publisher
-	</Directory>
-	
 	SetEnv REPOS_TEST_ALLOW_RESET on
 
 	# needed because currently access file path is used for test setup to get host structure folder

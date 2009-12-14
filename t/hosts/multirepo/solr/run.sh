@@ -11,10 +11,18 @@ then
 wget http://dist.codehaus.org/jetty/jetty-6.1.21/jetty-6.1.21.zip
 unzip jetty-6.1.21.zip
 mv jetty-6.1.21 jetty
-# until there is a 1.4 distribution war
-cp ../../../../../solr/dist/apache-solr-2009-10-15_08-05-43.war jetty/webapps/solr.war
-
 rm jetty-*
+
+fi
+
+if [ ! -e jetty/webapps/solr.war ]
+then
+
+# install solr
+wget http://apache.dataphone.se/lucene/solr/1.4.0/apache-solr-1.4.0.tgz
+tar xvzf apache-solr-1.4.0.tgz
+mv apache-solr-1.4.0/dist/apache-solr-1.4.0.war jetty/webapps/solr.war
+rm -Rf apache-solr-*
 
 fi
 
