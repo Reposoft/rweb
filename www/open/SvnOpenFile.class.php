@@ -146,10 +146,19 @@ class SvnOpenFile {
 	 * Called first in every method that requires metadata
 	 */
 	function _read() {
+		$this->_readNoErr();
+		if (count($this->file)<2) trigger_error('No info found for "'.$this->url.'"'.
+			' at revision '.$this->_revision, E_USER_ERROR);
+	}
+	/**
+	 * Does not trigger error if the entry does not exist,
+	 * instead sets file to array with only one element, 'path'.
+	 */
+	function _readNoErr() {
 		//if ($this->isFolder()) trigger_error("File operation attempted on a folder.", E_USER_ERROR);
 		if (!is_null($this->file)) return;
 		$this->file = $this->_readInfoSvn();
-		if (is_null($this->file)) trigger_error("Could not read file information for '$path' revision $revision in repository ".getRepository(), E_USER_ERROR);
+		if (is_null($this->file)) trigger_error("Failed to read info for '$path' revision $revision in repository ".getRepository(), E_USER_ERROR);
 	}
 	
 	function _readFile() {
@@ -608,7 +617,7 @@ class SvnOpenFile {
 			$this->_head();
 			return $this->headStatus;
 		}
-		$this->_read();
+		$this->_readNoErr();
 		if (count($this->file)<2) return 404;
 		// no error, assume ok
 		return 200;
@@ -627,7 +636,6 @@ class SvnOpenFile {
 		$info = new SvnOpen('info', true);
 		$info->addArgUrlPeg($this->url, $this->_revision);
 		if ($info->exec()) {
-			//need to be able to catch this, see getStatus//trigger_error("Could not read info $this->url from svn.", E_USER_ERROR);
 			return $this->_nonexisting();
 		}
 		$result = $info->getOutput();
