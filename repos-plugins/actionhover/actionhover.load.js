@@ -2,6 +2,7 @@
 // Adds class background to file container that is not in focus
 // Adds class focus to file container on mouse over
 // not yet: Adds class focus to actions box inside file container on mouse over
+if (!$.browser.msie) { // does not work in i IE, which doesn't support opacity css anyway
 Repos.service('index/', function actionhover() {
 	var cf = 'focus';
 	var cb = 'background';
@@ -30,3 +31,4 @@ Repos.service('index/', function actionhover() {
 	// show first file to hint there are hidden actions (actions on folders are used rarely)
 	fo.call($('.file:first').parent());
 });
+}

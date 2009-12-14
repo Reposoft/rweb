@@ -364,7 +364,6 @@ div.versiondisplay {
 /* in cooperation with the actionhover plugin */
 .background .actions {
 	opacity: 0.0;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
 }
 .nfocus .actions {
 	opacity: 0.4;
