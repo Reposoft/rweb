@@ -8,6 +8,11 @@ var Repos = {};
 jQuery.browser.sucks = jQuery.browser.msie && jQuery.browser.version == '6.0';
 jQuery.browser.sucksless = jQuery.browser.msie && !jQuery.browser.sucks;
 
+// simple non-standard indexOf fallback
+if (!Array.prototype.indexOf) { Array.prototype.indexOf = function (obj, start) {
+	for (var i = (start || 0); i < this.length; i++) if (this[i] == obj) return i; return -1;
+}};
+
 /**
  * Repos selectors (c) 2007 Staffan Olsson www.repos.se
  * These selectors are the possible pointcuts for dynamically added plugins.
