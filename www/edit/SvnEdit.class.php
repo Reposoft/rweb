@@ -393,8 +393,11 @@ class SvnEdit {
 	 */
 	function getCommittedRevision() {
 		if ($this->isSuccessful()) {
-			$match = preg_match('/^[a-zA-Z ]+([0-9]+)/', $this->getResult(), $rev);
-			return $rev[1];
+			if (preg_match('/^[a-zA-Z ]+([0-9]+)/', $this->getResult(), $rev)) {
+				return $rev[1];
+			} else {
+				trigger_error('Revision number not found in commit output. "'.$this->getResult().'"', E_USER_ERROR);
+			}
 		}
 		return null;
 	}
