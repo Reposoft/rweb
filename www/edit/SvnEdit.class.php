@@ -393,7 +393,7 @@ class SvnEdit {
 	 */
 	function getCommittedRevision() {
 		if ($this->isSuccessful()) {
-			$match = ereg('^[a-zA-Z ]+([0-9]+)', $this->getResult(), $rev);
+			$match = preg_match('/^[a-zA-Z ]+([0-9]+)/', $this->getResult(), $rev);
 			return $rev[1];
 		}
 		return null;

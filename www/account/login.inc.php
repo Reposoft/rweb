@@ -218,8 +218,8 @@ function login_getAuthNameFromRepository($targetUrl) {
 	}
 	$headers = $s->getResponseHeaders();
 	$auth = $headers['WWW-Authenticate'];
-	if(ereg('realm="([^"]*)"', $auth, $regs)) {
-		return $regs[1];
+	if (preg_match('/realm="([^"]*)"/', $auth, $m)) {
+		return $m[1];
 	}
 	trigger_error("Repos error: realm not found in authentication string: $auth", E_USER_ERROR);
 }

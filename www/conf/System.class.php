@@ -63,7 +63,7 @@ function toPath($path) {
 function isAbsolute($path) {
 	if (!isPath($path)) trigger_error("'$path' is not a valid path", E_USER_ERROR);
 	if (strBegins($path, '/')) return true;
-	if (System::isWindows() && ereg('^[a-zA-Z]:/', $path)) return true;
+	if (System::isWindows() && preg_match('/^[a-zA-Z]:\//', $path)) return true;
 	return ereg('^[a-z]+://', $path)!=false;
 }
 
