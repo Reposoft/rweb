@@ -33,7 +33,7 @@ class TestSvnOpenFile extends UnitTestCase {
 			</entry>
 			</list>
 			</lists>');
-		$file = new SvnOpenFile('/test/a.txt');
+		$file = new SvnOpenFile('/test/a.txt', HEAD, false);
 		$a = $file->_parseListXml($list);
 		$this->assertEqual('file', $a['kind']);
 		$this->assertEqual('a.txt', $a['name']);
@@ -67,7 +67,7 @@ class TestSvnOpenFile extends UnitTestCase {
 			</entry>
 			</list>
 			</lists>');
-		$file = new SvnOpenFile('/demoproject/trunk/public/locked-file.txt');
+		$file = new SvnOpenFile('/demoproject/trunk/public/locked-file.txt', HEAD, false);
 		$a = $file->_parseListXml($list);
 		$this->assertEqual('file', $a['kind']);
 		$this->assertEqual('locked-file.txt', $a['name']);
@@ -104,7 +104,7 @@ class TestSvnOpenFile extends UnitTestCase {
 			</entry>
 			</list>
 			</lists>');
-		$file = new SvnOpenFile('/demoproject/trunk/public/locked-file.txt');
+		$file = new SvnOpenFile('/demoproject/trunk/public/locked-file.txt', HEAD, false);
 		$a = $file->_parseListXml($list);
 		$this->assertEqual('opaquelocktoken:93061e3e-98df-404d-9380-2f821a73bfc9', $a['locktoken']);
 		$this->assertEqual('test', $a['lockowner']);
@@ -136,7 +136,7 @@ class TestSvnOpenFile extends UnitTestCase {
 			
 			</entry>
 			</info>');
-		$file = new SvnOpenFile('/a');
+		$file = new SvnOpenFile('/a', HEAD, false);
 		$a = $file->_parseInfoXml($list);
 		$this->assertEqual('dir', $a['kind']);
 		$this->assertEqual('a', $a['name']); //strangely this attribute is called path
@@ -165,7 +165,7 @@ class TestSvnOpenFile extends UnitTestCase {
 			
 			</entry>
 			</info>');
-		$file = new SvnOpenFile('/a');
+		$file = new SvnOpenFile('/a', HEAD, false);
 		$a = $file->_parseInfoXml($list);
 		$this->assertEqual('dir', $a['kind']);
 		$this->assertEqual('a', $a['name']); //strangely this attribute is called path
@@ -185,35 +185,37 @@ class TestSvnOpenFile extends UnitTestCase {
 		'Content-Length' => '18',
 		'Content-Type' => 'text/xml'
 		);
-		$file = new SvnOpenFile('/test/a.txt');
+		$file = new SvnOpenFile('/test/a.txt', HEAD, false);
 		$file->head = $headers;
 		$file->headStatus = 200;
 		$this->assertEqual(54321, $file->_getHeadRevisionFromETag());
 	}
 	
 	function testIsLatestRevision_HEAD() {
-		$file = new SvnOpenFile('/test/a.txt');
+		$file = new SvnOpenFile('/test/a.txt', HEAD, false);
 		$this->assertTrue($file->isLatestRevision());
 	}
 	
 	function testIsLatestRevision_etag() {
-		$file = new SvnOpenFile('/test/a.txt', 54321);
+		$file = new SvnOpenFile('/test/a.txt', 54321, false);
 		$file->head = array(0 => 'HTTP/1.1 200 OK',
 			'ETag' => '"54321//demoproject/trunk/public/xmlfile.xml"');
 		$file->headStatus = 200;
+		$file->file = array('kind' => 'file', 'size' => '1');
 		$this->assertTrue($file->isLatestRevision());
 	}
 	
 	function testIsLatestRevision_newetag() {
-		$file = new SvnOpenFile('/test/a.txt', 54321);
+		$file = new SvnOpenFile('/test/a.txt', 54321, false);
 		$file->head = array(0 => 'HTTP/1.1 200 OK',
 			'ETag' => '"54322//demoproject/trunk/public/xmlfile.xml"');
 		$file->headStatus = 200;
+		$file->file = array('kind' => 'file', 'size' => '1');
 		$this->assertFalse($file->isLatestRevision());
 	}
 
 	function testGetTypeFromHeader() {
-		$file = new SvnOpenFile('/test/a.eps');
+		$file = new SvnOpenFile('/test/a.eps', HEAD, false);
 		$file->head = array(0 => 'HTTP/1.1 200 OK',
 			'Content-Type' => 'application/octet-stream');
 		$file->headStatus = 200;
@@ -222,7 +224,7 @@ class TestSvnOpenFile extends UnitTestCase {
 	}	
 	
 	function testGetTypeFromHeaderWithEncoding() {
-		$file = new SvnOpenFile('/test/a.txt');
+		$file = new SvnOpenFile('/test/a.txt', HEAD, false);
 		$file->head = array(0 => 'HTTP/1.1 200 OK',
 			'Content-Type' => 'text/html; charset=iso-8859-1');
 		$file->headStatus = 200;
@@ -231,16 +233,16 @@ class TestSvnOpenFile extends UnitTestCase {
 	}
 	
 	function testInstantiateTwice() {
-		$file = new SvnOpenFile('/test/a.txt');
+		$file = new SvnOpenFile('/test/a.txt', HEAD, false);
 		$this->expectError(new PatternExpectation('/already .* open/'));
-		$file2 = new SvnOpenFile('/test/b.txt');
+		$file2 = new SvnOpenFile('/test/b.txt', HEAD, false);
 	}
 	
 	// We currently use a handy approximation in how SvnOpenFile detects folders
 	function testIsFolderNameLooksLikeFile() {
 		//$file = new SvnOpenFile('/test/a.folder/');
 		// The below will give isFolder = false, but how to test?
-		$file = new SvnOpenFile('/test/a.folder');
+		$file = new SvnOpenFile('/test/a.folder', HEAD, false);
 	}
 
 }

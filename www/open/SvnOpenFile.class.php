@@ -131,15 +131,32 @@ class SvnOpenFile {
 	 *
 	 * @param String $path file path, absolute from repository root
 	 * @param String $revision interger revision number or string revision range, svn syntax
+	 * @param boolean $validate false to not validate authentication/authorization immediately
 	 * @return SvnOpenFile
 	 */
-	function SvnOpenFile($path, $revision=HEAD) {
+	function SvnOpenFile($path, $revision=HEAD, $validate=true) {
 		if ($revision == null) $revision = HEAD; // allow value directly from RevisionRule->getValue
 		$this->path = $path;
 		// TODO split between internal and external use and call getRespositoryInternal where possible
 		$this->url = SvnOpenFile::getRepository().$path;
 		$this->_revision = $revision;
 		_svnOpenFile_setInstance($this);
+		if ($validate) $this->validateReadAccess();
+	}
+	
+	/**
+	 * Validates authentication and authorization to url.
+	 * Because Subversion authorization is not versioned, HEAD can be used
+	 * to validate access to old revisions too.
+	 * Note that this does NOT validate existence (even if revision is HEAD).
+	 * @return SvnOpenFile the instance
+	 */
+	function validateReadAccess() {
+		// HTTP is better than svn for this because it is faster and
+		// gives us the auth header immediately for authentication passthru
+		// See ServiceRequest _forwardAuthentication
+		$this->_head();
+		return $this;
 	}
 	
 	/**
@@ -176,7 +193,7 @@ class SvnOpenFile {
 	 */
 	function _head() {
 		if ($this->headStatus > 0) return;
-		$s = new ServiceRequest($this->url, array(), isLoggedIn()); // allow public access
+		$s = new ServiceRequest($this->url);
 		$s->setSkipBody();
 		$s->exec();
 		$this->headStatus = $s->getStatus();
