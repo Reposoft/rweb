@@ -30,10 +30,16 @@ if (!isTargetSet()) {
 	// TODO: is this extra protection needed? Code should not contain exits, as they are not testable.
 	exit;
 } else {
+
+	// Safari 4 does not resend credentials for upload even if prompted at form GET
+	if (strContains($_SERVER['HTTP_USER_AGENT'], 'AppleWebKit') && $_SERVER['REQUEST_METHOD'] == 'POST') {
+		targetLogin();
+	}	
+	
 	$folderRule = new ResourceExistsRule('target');
 	new NewFilenameRule("name", $folderRule->getValue());
 	
-	if ($_SERVER['REQUEST_METHOD']=='GET') {
+	if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 		// Need to make sure client is authenticated before upload,
 		// because a retry after file upload would be irritating if the file is big
 		targetLogin();
