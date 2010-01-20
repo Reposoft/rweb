@@ -14,6 +14,12 @@ if (!class_exists('ServiceRequest')) require(dirname(__FILE__).'/ServiceRequest.
 
 define('MIMETYPE_UNKNOWN', 'application/x-unknown');
 
+// Limit size for open/file/ to not cause problems in:
+// - file passthru (does not support filtering so SvnOpenFile does html escape in memory)
+// - browser performance
+define('REPOS_TEXT_MAXSIZE', 1050000);
+define('REPOS_TEXT_MAXSIZE_STR', '1 MB');
+
 /**
  * Convert filesize from bytes to B, kB or MB.
  *
@@ -612,9 +618,10 @@ class SvnOpenFile {
 	 * Escaping method is based on the format. If there is no known escape method for the content type, sendInline is used.
 	 */
 	function sendInlineHtml() {
-		// TODO there is currently no efficient passthru with filter,
-		// so the show page must limit size so that we don't use up all memory
-		if ($this->getSize()>102400) trigger_error("Can not convert file bigger than 100 kb to HTML.", E_USER_ERROR);
+		if ($this->getSize() > REPOS_TEXT_MAXSIZE) {
+			trigger_error("Can not convert file bigger than " . REPOS_TEXT_MAXSIZE_STR
+				. " to HTML.", E_USER_ERROR);
+		}
 		$text = $this->getContents();
 		if (!isUTF8($text)){
 			$text = mb_convert_encoding($text, "UTF-8", "ASCII");

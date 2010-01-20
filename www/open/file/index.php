@@ -1,13 +1,10 @@
 <?php
 /**
- * 
+ * Uses SvnOpenFile->sendInlineHtml() to display file contents in textarea.
  * @package open
  */
 require("../../conf/Presentation.class.php" );
 require("../SvnOpenFile.class.php" );
-addPlugin('syntax');
-addPlugin('calendar');
-addPlugin('password');
 
 $revisionRule = new RevisionRule();
 $rev = $revisionRule->getValue();
@@ -19,9 +16,10 @@ $file = new SvnOpenFile(getTarget(), $rev);
 $p = Presentation::getInstance();
 $p->assign('target', getTarget());
 $p->assign('rev', $rev);
-if ($file->getSize() > 102400) {
-	$p->showError('The file is bigger than 100kb. Please open the file directly instead of viewing it in a page.',
-		'File is too big for this page.');	
+if ($file->getSize() > REPOS_TEXT_MAXSIZE) {
+	$p->showError('The file is bigger than '.REPOS_TEXT_MAXSIZE_STR.
+		'. Please open the file directly instead of viewing it in a page.',
+		'File is too big for this page.');
 }
 $p->assign_by_ref('file', $file);
 $p->display();
