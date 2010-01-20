@@ -14,8 +14,7 @@ $().bind('repos-proplist-loaded', function(event, proplistParent){});
 Repos.proplist.init = function() {
 	$('.proplist').each( function() {
 		var target = Repos.getTarget(this);
-		//var rev = Repos.getRevision(this); // method does not exist yet
-		var rev = $('.revision:first').text();
+		var rev = Repos.getRevision();
 		if (target) Repos.proplist.addClick(this, target, rev);
 	} );
 };

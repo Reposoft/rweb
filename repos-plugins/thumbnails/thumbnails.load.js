@@ -49,12 +49,11 @@ Repos.thumbnails.getTarget = function(href) {
 };
 
 Repos.thumbnails.getRev = function(href) {
-	// get from query string
+	var r = Repos.getRevision();
+	if (!isNaN(r)) return r;
+	// get from query string, note that this is often not the commit revision (thus not good for caching)
 	var m = /[\?&]rev=([^&]+)/.exec(href);
 	if (m && m.length > 1) return m[1];
-	// get from details box
-	var r = parseInt($('#filedetails .revision').text());
-	if(!isNaN(r)) return r;
 	// use HEAD, still a valid query parameter, DISABLES CACHING
 	return ''; 
 };

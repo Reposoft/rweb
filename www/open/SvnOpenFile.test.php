@@ -190,9 +190,17 @@ class TestSvnOpenFile extends UnitTestCase {
 		$file->headStatus = 200;
 		$this->assertEqual(54321, $file->_getHeadRevisionFromETag());
 	}
+
+	function testIsLatestRevision_NotRequested() {
+		$file = new SvnOpenFile('/test/a.txt', null, false);
+		$this->assertFalse($file->isRevisionRequested());
+		$this->assertTrue($file->isLatestRevision());
+		$this->assertEqual(HEAD, $file->getRevisionRequestedString());
+	}
 	
 	function testIsLatestRevision_HEAD() {
 		$file = new SvnOpenFile('/test/a.txt', HEAD, false);
+		$this->assertTrue($file->isRevisionRequested());
 		$this->assertTrue($file->isLatestRevision());
 	}
 	
@@ -203,6 +211,8 @@ class TestSvnOpenFile extends UnitTestCase {
 		$file->headStatus = 200;
 		$file->file = array('kind' => 'file', 'size' => '1');
 		$this->assertTrue($file->isLatestRevision());
+		$this->assertEqual('54321', $file->getRevisionRequestedString());
+		$this->assertTrue(is_string($file->getRevisionRequestedString()));
 	}
 	
 	function testIsLatestRevision_newetag() {

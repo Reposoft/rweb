@@ -3,7 +3,7 @@
 Repos.service('open/file/', function() {
 	var target = Repos.getTarget();
 	// must use explicit revision number to get matching blame
-	var rev = $('.revision:first').text(); // Repos API method needed
+	var rev = Repos.getRevision();
 	var command = $('<a id="linehistory" href="#">show line history</a>').appendTo('#commandbar');
 	command.toggle(function() {
 			var element = $('.syntaxhighlighter:first .lines');

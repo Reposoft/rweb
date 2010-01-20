@@ -11,7 +11,11 @@
 <a id="view" href="../open/?target={=$target}&rev={=$rev}">details</a>
 </div>
 <div id="intro">
-<h1><a class="file" href="{=$file,url}">{=$file,filename}</a> <span class="revision">{=$file,revision}</span></h1>
+<h1><a class="file" href="{=$file,url}">{=$file,filename}</a>
+<!--{if $file,isRevisionRequested}-->
+ <span class="revision">{=$file,revisionRequested}</span>
+<!--{/if}-->
+</h1>
 <p>If you only need to read the file, not edit it, go to <a href="../open/?target={=$target}&rev={=$rev}">details</a>.</p> 
 <!--{if not $file,isLatestRevision}-->
 <p>This is an old version of the file. It can not be edited.

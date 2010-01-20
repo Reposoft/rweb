@@ -17,7 +17,11 @@
 <!--{/if}-->
 </div>
 <div id="intro">
-<h1><a class="{=$file,kind2}" href="{=$file,url}">{=$file,filename}</a> <span class="revision">{=$file,revision}</span></h1>
+<h1><a class="{=$file,kind2}" href="{=$file,url}">{=$file,filename}</a>
+<!--{if $file,isRevisionRequested}-->
+ <span class="revision">{=$file,revisionRequested}</span>
+<!--{/if}-->
+</h1>
 <!--{if $file,isFolder}-->
 <!--{elseif $file,isLatestRevision}-->
 <p>

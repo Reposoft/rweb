@@ -136,12 +136,11 @@ class SvnOpenFile {
 	 * Actual calls for data are being made (and cached) when requested with get* and is* methods.
 	 *
 	 * @param String $path file path, absolute from repository root
-	 * @param String $revision interger revision number or string revision range, svn syntax
+	 * @param String $revision requested revision, integer/date/string (svn syntax), null for latest
 	 * @param boolean $validate false to not validate authentication/authorization immediately
 	 * @return SvnOpenFile
 	 */
-	function SvnOpenFile($path, $revision=HEAD, $validate=true) {
-		if ($revision == null) $revision = HEAD; // allow value directly from RevisionRule->getValue
+	function SvnOpenFile($path, $revision=null, $validate=true) {
 		$this->path = $path;
 		// TODO split between internal and external use and call getRespositoryInternal where possible
 		$this->url = SvnOpenFile::getRepository().$path;
@@ -172,7 +171,7 @@ class SvnOpenFile {
 		$this->_readNoErr();
 		// see _nonexisting(), this is how "not found" was reported when it never triggered error
 		if (count($this->file)<2) trigger_error('No info found for "'.$this->url.'"'.
-			' at revision '.$this->_revision, E_USER_ERROR);
+			' at revision '.$this->getRevisionRequestedString(), E_USER_ERROR);
 	}
 	/**
 	 * Does not trigger error if the entry does not exist,
@@ -278,7 +277,7 @@ class SvnOpenFile {
 	function getFolderUrl() {
 		return $this->getRepository().$this->getFolderPath();
 	}
-
+	
 	/**
 	 * Try to figure out if the revision is the latest,
 	 * which is only trivial if revision was given as HEAD.
@@ -289,7 +288,8 @@ class SvnOpenFile {
 	 * @see isReadableInHead() to check if the file exists and user has read access.
 	 */
 	function isLatestRevision() {
-		if ($this->_revision==HEAD) return true;
+		if (!$this->isRevisionRequested()) return true;
+		if ($this->getRevisionRequested() == HEAD) return true;
 		// need to check the current response code
 		$this->_head();
 		// if it does not exist in head it has been deleted
@@ -304,10 +304,13 @@ class SvnOpenFile {
 		// otherwise we assume that the ETag contains the revision number
 		$r = $this->_getHeadRevisionFromETag();
 		if ($r !== false) {
-			// this is a bit mean but it forces code to not specify revision unless nessecary
-			if ($r < $this->_revision) trigger_error('The specified revision '.$this->_revision.
-				' is newer than the last changed revision of this file');
-			return $r == $this->_revision;
+			$rr = intval($this->getRevisionRequested()); // 0 if string
+			if ($rr) { // only interested in revisions that are integer and > 0
+				// this is a bit mean but it forces code to not specify revision unless nessecary
+				if ($r < $rr) trigger_error('The specified revision '.$rr.
+					' is newer than the last changed revision of this file');
+				return $r == $rr;
+			}
 		}
 		// it is unlikely that we come this far
 		trigger_error("Could not read revision number of the latest version from repository.", E_USER_ERROR);
@@ -443,15 +446,40 @@ class SvnOpenFile {
 	}
 	
 	/**
-	 * This is _not_ a getter for the '_revision' field, which may have value HEAD.
-	 * Returns "entry" revision, not "commit" revision, meaning that it is the
-	 * same as the given revision number for peg/rev operations
+	 * @return boolean true if an explicit revision (number/string) was set when creating this instance
+	 */
+	function isRevisionRequested() {
+		return $this->_revision !== null;
+	}
+	
+	/**
+	 * Returns not-null revision regardless of input.
+	 * @return String requested revision or HEAD (constant) if unspecified
+	 */
+	function getRevisionRequestedString() {
+		if (!$this->isRevisionRequested()) {
+			return HEAD;
+		}
+		return "{$this->getRevisionRequested()}";
+	}
+	
+	/**
+	 * Returns "entry" revision,
+	 * also called "path revision" as opposed to "commit revision",
+	 * meaning that it is the same as the given revision number for peg/rev operations
 	 * and head rev when revision is unspecified.
 	 * @return int Integer revision number, even for HEAD.
 	 */
 	function getRevision() {
 		$this->_read();
 		return $this->file['revision'];
+	}
+	
+	/**
+	 * @return String|int the given revision when initialing this instance
+	 */
+	function getRevisionRequested() {
+		return $this->_revision;
 	}
 	
 	/**
@@ -575,7 +603,7 @@ class SvnOpenFile {
 	 */
 	function getContents() {
 		$open = new SvnOpen('cat');
-		if ($this->_revision==HEAD) {
+		if (!$this->isRevisionRequested()) {
 			// file's revision may be older than the folder, so peg can not be used here
 			$open->addArgUrl($this->getUrl());
 		} else {
@@ -661,7 +689,7 @@ class SvnOpenFile {
 	function _readInfoSvn() {
 		// the reason we do 'list' and not 'info' is that 'info' does not contain file size
 		$info = new SvnOpen('info', true);
-		$info->addArgUrlPeg($this->url, $this->_revision);
+		$info->addArgUrlPeg($this->url, $this->getRevisionRequestedString());
 		if ($info->exec()) {
 			return $this->_nonexisting();
 		}
@@ -677,7 +705,7 @@ class SvnOpenFile {
 	 */
 	function _readListSvn() {
 		$info = new SvnOpen('list', true);
-		$info->addArgUrlPeg($this->url, $this->_revision);
+		$info->addArgUrlPeg($this->url, $this->getRevisionRequestedString());
 		if ($info->exec()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
 		$result = $info->getOutput();
 		$listinfo = $this->_parseListXml($result);

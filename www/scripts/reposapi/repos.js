@@ -129,6 +129,22 @@ Repos.getBase = function() {
 };
 
 /**
+ * Return last changed revision of an item.
+ * TODO should it be called getRevisionLastChanged like in backend code?
+ * TODO make this work globally, currently it is from the proplist plugin and works on the details page
+ * TODO context argument to specify the item if there are many on the same page
+ * @return {int} the revision number when the item was last committed
+ */
+Repos.getRevision = function() {
+	return parseInt($('.revision:first').text());
+};
+
+Repos.isRevisionRequested = function() {
+	// should be generalized along with getRevision
+	return /[?&]rev=/.test(window.location.search);
+};
+
+/**
  * Compares current Repos target with a pattern
  * @param {String} selector The pattern to compare with
  * @param {Object} context Optional context to get current target for
