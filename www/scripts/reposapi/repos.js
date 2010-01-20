@@ -141,7 +141,7 @@ Repos.getRevision = function() {
 
 Repos.isRevisionRequested = function() {
 	// should be generalized along with getRevision
-	return /[?&]rev=/.test(window.location.search);
+	return /[?&]rev[=]/.test(window.location.search);
 };
 
 /**
