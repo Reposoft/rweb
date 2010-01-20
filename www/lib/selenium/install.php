@@ -8,7 +8,7 @@ $home = "selenium.openqa.org";
 $report = new Report("Install $repos_package");
 $report->info("$repos_package is installing...");
 
-$version = "1.0-beta-2";
+$version = "1.0.1";
 $archive = "http://release.seleniumhq.org/selenium-core/$version/selenium-core-$version.zip";
 
 $basedir = dirname(__FILE__);
