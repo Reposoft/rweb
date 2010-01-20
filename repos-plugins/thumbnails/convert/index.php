@@ -116,6 +116,18 @@ $o->addArgOption('|', $convert, false);
 if($o->exec()) {
 	handleError($o->getExitcode(), implode('"\n"', $o->getOutput()));
 }
+// it might happen that convert exits with code 0 but the thumbnail is not created
+if (!file_exists($tempfile) || !filesize($tempfile)) {
+	// then it might be because the source has multiple pages
+	// in which case we create each page as a separate thumb
+	// (this is quite inefficient but I found no way to restrict to first page when using stdin as source)
+	if (file_exists("$tempfile.0")) {
+		$tempfile = "$tempfile.0";
+	} else {
+		// otherwise show output from command (which is probably empty)
+		handleError(0, implode('"\n"', $o->getOutput()));
+	}
+}
 
 // thumbnails can be cached permanently if target and revsion number is in the url
 if ($rev) {
