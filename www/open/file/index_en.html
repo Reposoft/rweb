@@ -15,7 +15,10 @@
 </div>
 
 {=if $file,status eq 200}
-<h3><a class="file" title="{=$file,filename}, version {=$file,revision}" href="{=$file,url}">{=$target}</a>&nbsp; <span class="revision">{=$file,revision}</span></h3>
+<h3><a class="file" title="{=$file,path}, revision {=$file,revision}" href="{=$file,url}">{=$file,filename}</a>
+	&nbsp; <span class="revision">{=$file,revision}</span>
+	&nbsp; <span class="filesize">{=$file,size|formatSize}</span>
+	</h3>
 <!-- on javascript browsers the box will be resized by the syntax plugin -->
 <textarea id="file" cols="82" rows="20" name="file" class="{=$file,extension}" readonly="readonly" >{=$file->sendInlineHtml()}</textarea>
 {=else}
