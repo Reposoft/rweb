@@ -81,6 +81,9 @@ if (isset($_REQUEST['repo'])) {
 	trigger_error('Request parameter "repo" is no longer allowed');
 }
 
+// Internally dates should always be UTC. They may be localized in the UI.
+date_default_timezone_set('UTC');
+
 // ------ local configuration ------
 
 /**
