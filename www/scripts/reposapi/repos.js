@@ -136,7 +136,7 @@ Repos.getBase = function() {
  * @return {int} the revision number when the item was last committed
  */
 Repos.getRevision = function() {
-	return parseInt($('.revision:first').text());
+	return parseInt($('#filedetails .revision:first').text());
 };
 
 Repos.isRevisionRequested = function() {
