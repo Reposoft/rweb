@@ -51,6 +51,9 @@ if ($list->exec()) {
 	// TODO flag recursive or not in result, add button to switch (greyed out if not allowed?)
 }
 
+// to simplify link logic we must assume that this is a folder, but when coming from log we get no trailing slash
+if (!strEnds($target, '/')) $target = $target.'/';
+
 // some custom parameters needed in the XML. Url needed for navigation http/https.
 $head = '<?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="'.asLink(getWebapp()).'view/list.xsl"?>
