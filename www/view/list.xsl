@@ -65,16 +65,23 @@
 		<xsl:param name="url" select="concat(../@repo,$target)"/>
 		<div id="commandbar">
 			<a id="repository" href="{$url}">return to repository</a>
-			<xsl:if test="../@parent">
-				<a id="parent" class="command translate" href="?target={../@parent}{$baseparam}&amp;rev={/lists/@rev}{$recursiveparam}">up</a>
-			</xsl:if>
-			<xsl:if test="../@rev">
-				<a id="list" href="?target={$target}{$baseparam}{$recursiveparam}">current version</a>
-			</xsl:if>
-			<!-- Note that this does not forward the 'recursive' parameter.
-					Log is always recursive, and it should be ok to list old revisions non-recursively
-					(rev is applied to subfolder links so it can still be navigated) -->
-			<a id="history" href="../log/?target={$target}&amp;rev={../@rev}{$baseparam}">show history<xsl:if test="../@rev"> for version <xsl:value-of select="../@rev"/></xsl:if></a>
+			<xsl:choose>
+				<xsl:when test="/lists/@rev">
+					<xsl:if test="../@parent">
+						<a id="parent" class="command translate" href="?target={../@parent}{$baseparam}&amp;rev={/lists/@rev}{$recursiveparam}">up</a>
+					</xsl:if>
+					<a id="list" href="?target={$target}{$baseparam}{$recursiveparam}">current version</a>
+					<a id="history" href="../log/?target={$target}&amp;rev={../@rev}{$baseparam}">show history up to version <xsl:value-of select="../@rev"/></a>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:if test="../@parent">
+						<a id="parent" class="command translate" href="?target={../@parent}{$baseparam}{$recursiveparam}">up</a>
+					</xsl:if>
+					<!-- Note that this does not forward the 'recursive' parameter.
+						Log is always recursive, but its links to folders are for non-recursive navigation -->
+					<a id="history" href="../log/?target={$target}{$baseparam}">show history</a>
+				</xsl:otherwise>
+			</xsl:choose>
 		</div>
 		<h2>
 			<a class="folder" href="{@path}">
@@ -125,12 +132,17 @@
 			</xsl:call-template>
 			<xsl:value-of select="'/'"/>
 		</xsl:param>
+		<xsl:param name="revparam">
+			<xsl:if test="/lists/@rev">
+				<xsl:value-of select="'&amp;rev='"/>
+				<!-- preserve requested revision so that old revision tree can be navigated -->
+				<xsl:value-of select="/lists/@rev"></xsl:value-of>
+			</xsl:if>
+		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<tr id="row:{$id}" class="row n{$n mod 4}">
 			<td>
-				<!-- <a id="open:{$id}" class="folder" href="../?target={$target}&amp;rev={commit/@revision}{$baseparam}"> -->
-				<!-- unlike files, folders are used for navigating the tree so we should preserve the explicit rev -->
-				<a id="open:{$id}" class="folder" href="?target={$target}{$baseparam}&amp;rev={/lists/@rev}{$recursiveparam}">
+				<a id="open:{$id}" class="folder" href="?target={$target}{$baseparam}{$revparam}{$recursiveparam}">
 					<xsl:value-of select="name"/>
 				</a>
 			</td>
@@ -166,10 +178,17 @@
 				<xsl:with-param name="href" select="name"/>
 			</xsl:call-template>
 		</xsl:param>
+		<xsl:param name="revparam">
+			<xsl:if test="/lists/@rev">
+				<xsl:value-of select="'&amp;rev='"/>
+				<!-- for files we expect navigation to end at the details page, so we don't preserve requested revision -->
+				<xsl:value-of select="commit/@revision"></xsl:value-of>
+			</xsl:if>
+		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<tr id="row:{$id}" class="n{$n mod 4}">
 			<td>
-				<a id="open:{$id}" class="file-{$filetype} file" href="../?target={$target}&amp;rev={commit/@revision}{$baseparam}">
+				<a id="open:{$id}" class="file-{$filetype} file" href="../?target={$target}{$baseparam}{$revparam}">
 					<xsl:value-of select="name"/>
 				</a>
 			</td>
