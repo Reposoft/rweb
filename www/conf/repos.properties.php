@@ -84,9 +84,6 @@ if (isset($_REQUEST['repo'])) {
 // Internally dates should always be UTC. They may be localized in the UI.
 date_default_timezone_set('UTC');
 
-// compatibility with the new preserve revision concept, until complete
-if (isset($_REQUEST['rev']) && $_REQUEST['rev'] === '') unset($_REQUEST['rev']);
-
 // ------ local configuration ------
 
 /**
