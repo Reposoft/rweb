@@ -102,8 +102,11 @@ function showUploadForm() {
 	$template->assign('isfile',$file->isFile());
 	$template->assign('target',$target);
 	if (isset($_GET['download'])) {
-		// needs an absolute url for meta refresh
-		$template->assign('download', getWebapp().'open/download/?target='.urlencode(getTarget()));
+		$revParam = isset($_REQUEST['rev']) ? '&rev='.$_REQUEST['rev'] : '';
+		// does not use getRepository so "base" must be added manually
+		$baseParam = isset($_REQUEST['base']) ? '&base='.$_REQUEST['base'] : '';
+		// absolute url that works in meta refresh
+		$template->assign('download', getWebapp().'open/download/?target='.urlencode(getTarget()).$revParam.$baseParam);
 	} else {
 		$template->assign('download', false);
 	}

@@ -13,8 +13,7 @@ if(isset($_GET['action'])) {
 
 // new behaviour, list the user's options
 $revisionRule = new RevisionRule();
-$rev = $revisionRule->getValue();
-$file = new SvnOpenFile(getTarget(), $rev);
+$file = new SvnOpenFile(getTarget(), $revisionRule->getValue());
 // read something from the file so we check authentication befor presentation starts
 $file->isWritable(); // looks like this isn't enough with the current implementation of SvnOpenFile
 $file->isLocked();
@@ -22,7 +21,6 @@ $file->isLocked();
 $p = Presentation::getInstance();
 $p->assign_by_ref('file', $file);
 // for links to other operations we use the original parameters
-$p->assign('rev', $rev);
 $p->assign('target', getTarget());
 // all set
 $p->display();

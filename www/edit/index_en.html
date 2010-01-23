@@ -8,7 +8,7 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$file,folderUrl}">return to repository</a>
-<a id="view" href="../open/?target={=$target}&rev={=$rev}">details</a>
+<a id="view" href="../open/?target={=$target}{=$file,revParam}">details</a>
 </div>
 <div id="intro">
 <h1><a class="file" href="{=$file,url}">{=$file,filename}</a>
@@ -16,7 +16,7 @@
  <span class="revision">{=$file,revisionRequested}</span>
 <!--{/if}-->
 </h1>
-<p>If you only need to read the file, not edit it, go to <a href="../open/?target={=$target}&rev={=$rev}">details</a>.</p> 
+<p>If you only need to read the file, not edit it, go to <a href="../open/?target={=$target}{=$file,revParam}">details</a>.</p> 
 <!--{if not $file,isLatestRevision}-->
 <p>This is an old version of the file. It can not be edited.
 You may <a href="../edit/?target={=$target}">edit current version of {=$file,filename}</a>.</p>
@@ -42,14 +42,14 @@ you can always refer to the file as it is now.</p>
 <a href="text/?target={=$target}">Edit in Repos</a>.</p>
 {=elseif $file,isPlaintext}
 <p>This is a text file. There is no need to lock it.
-<a href="../open/download/?target={=$target}&rev={=$rev}">Download</a>,
+<a href="../open/download/?target={=$target}{=$file,revParam}">Download</a>,
 edit on your computer, then <a href="upload/?target={=$target}">upload new version</a>.</p>
 {=else}
 <p>This is a binary or unknown fileformat. We recommend you Download with lock.</p>
 {=/if}
 
 {=if not $file,isLockedByThisUser}
-<h3><a id="download_upload" href="upload/?target={=$target}&rev={=$rev}&download">Download, modify, upload</a></h3>
+<h3><a id="download_upload" href="upload/?target={=$target}{=$file,revParam}&download">Download, modify, upload</a></h3>
 <p>
 <span class="explain" title="files stored as lines of text that are human-readable in any text editor, like Notepad">Text files</span> 
 can be edited by many users at the same time, and when you upload the new version

@@ -8,14 +8,14 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$file,folderUrl}">return to repository</a>
-<a id="view" href="../?target={=$target}&rev={=$file,revision}">details</a>
+<a id="view" href="../?target={=$target}{=$file,revParam}">details</a>
 <!--{if $file,isLatestRevision}-->
 <a id="edit" href="../../edit/?target={=$target}">edit</a>
 <!--{/if}-->
 </div>
 
 {=if $file,status eq 200}
-<h3><a class="file" title="{=$file,path}, revision {=$file,revision}" href="{=$file,url}">{=$file,filename}</a>
+<h3><a class="file" title="{=$file,path}, revision {=$file,revisionLastChanged}" href="{=$file,url}">{=$file,filename}</a>
 	&nbsp; <span class="revision">{=$file,revisionLastChanged}</span>
 	&nbsp; <span class="filesize">{=$file,size|formatSize}</span>
 </h3>
@@ -24,7 +24,7 @@
 {=else}
 {=* mimic the error page *}
 <h1>An error occurred</h1>
-<p class="error">Could not read file {=$file,path} (status {=$file,status}). The file might exist with a version other than {=$rev}.</p>
+<p class="error">Could not read file {=$file,path} (status {=$file,status}).</p>
 {=/if}
 <div id="footer"></div>
 </body>

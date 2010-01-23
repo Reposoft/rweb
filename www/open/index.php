@@ -53,7 +53,6 @@ if (isset($_GET['redirect']) && $_GET['redirect']) {
 $p = Presentation::getInstance();
 $p->assign_by_ref('file', $file);
 // for links to other operations we use the original parameters
-$p->assign('rev', $rev);
 $p->assign('target', getTarget());
 if ($fromrev) $p->assign('fromrev', $fromrev);
 // before entering smarty template code, read some file info so that in the event of access error

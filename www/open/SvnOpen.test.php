@@ -59,6 +59,17 @@ class TestSvnOpen extends UnitTestCase {
 		
 		unset($_REQUEST['rev']);
 	}
+
+	function testRevisionRulePropertySetButEmpty() {
+		$r = new RevisionRule();
+		$this->assertEqual(null, $r->getValue(), "Should return null when no revision is given. %s");
+		
+		$_REQUEST['rev'] = '';
+		$this->expectError();
+		$r = new RevisionRule();
+		
+		unset($_REQUEST['rev']);
+	}	
 	
 	function testRevisionRuleCustomField() {
 		$_REQUEST['fromrev'] = "12";

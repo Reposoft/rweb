@@ -453,6 +453,15 @@ class SvnOpenFile {
 	}
 	
 	/**
+	 * Helper method to append revision to query string only if it was speficied for this page.
+	 * @return String &rev=requested-revision or empty string if no explicit revision
+	 */
+	function getRevParam() {
+		if (!$this->isRevisionRequested()) return '';
+		return '&rev='.$this->getRevisionRequested();
+	}
+	
+	/**
 	 * Returns not-null revision regardless of input.
 	 * @return String requested revision or HEAD (constant) if unspecified
 	 */

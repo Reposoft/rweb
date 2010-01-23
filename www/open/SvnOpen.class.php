@@ -101,7 +101,7 @@ class RevisionRule extends Rule {
 	}
 	
 	function valid($value) {
-		if (!$value) return true; // Use Validation::expect to require a valud
+		if ($value === '') return false; // validation is only invoked if the field is set, so it should fail if value is empty
 		if (is_numeric($value) && $value >=0 ) return true;
 		if ($value == HEAD) return true;
 		if (strpos($value,'{')==0 && strrpos($value, '}')==strlen($value)-1) return true;

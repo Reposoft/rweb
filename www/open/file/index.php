@@ -7,15 +7,13 @@ require("../../conf/Presentation.class.php" );
 require("../SvnOpenFile.class.php" );
 
 $revisionRule = new RevisionRule();
-$rev = $revisionRule->getValue();
-$file = new SvnOpenFile(getTarget(), $rev);
+$file = new SvnOpenFile(getTarget(), $revisionRule->getValue());
 // Error handling for non existing file is in the template
 // If that's a good idea, then probably error handling for big file should be there too
 
 // show
 $p = Presentation::getInstance();
 $p->assign('target', getTarget());
-$p->assign('rev', $rev);
 if ($file->getSize() > REPOS_TEXT_MAXSIZE) {
 	$p->showError('The file is bigger than '.REPOS_TEXT_MAXSIZE_STR.
 		'. Please open the file directly instead of viewing it in a page.',
