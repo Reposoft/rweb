@@ -87,6 +87,10 @@ function testGetFileIdSemicolon() {
 	assert('a_3bb', new ReposFileId('a;b').get());
 }
 
+function testGetFileIdMoreUnderscore() {
+	assert('a_______b', new ReposFileId('a,!&+~$=b').get());
+}
+
 function testGetFileIdParenthesis() {
 	assert('%5b%5d', new ReposFileId()._urlescape('[]'));
 	assert('a_5bb_5d', new ReposFileId('a[b]').get());

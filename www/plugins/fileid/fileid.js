@@ -35,7 +35,7 @@ function ReposFileId(name) {
 	 */
 	this._idescape = function(text) {
 		// same characters as in the xsl:translate in repos.xsl getFileId template
-		return text.replace(/[%\/\(\)@&]/g,'_');
+		return text.replace(/[%\/\(\)@&,!+~$=]/g,'_');
 	};
 
 	/**

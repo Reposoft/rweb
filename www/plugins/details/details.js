@@ -92,9 +92,14 @@ function details_repository(path, url) {
 			$('lists>list>entry', xml).each(function() {
 				var name = $('name', this).text();
 				if (this.getAttribute('kind')=='dir') name = name + '/';
+				// note that there might be id conflicts in repos.xsl pages due to limitations in name escape
 				var row = new ReposFileId(name).find('row');
-				if (row == null) return; // silently skip items that can't be found
+				if (row == null) {
+					if (console && console.log) console.log('No row found for', name, new ReposFileId(name).get());
+					return; // silently skip items that can't be found
+				}
 				row = $(row);
+				console.log(new ReposFileId(name).get(), row);
 				details_addtags(row);
 				//$('.details',row).hide();
 				details_write(row, $(this));
