@@ -30,22 +30,11 @@
 <!-- use #commandbar to work for plugins regardless of position in page -->
 <div id="commandbar">
 <a id="parent" href="/"> up</a>
+<a id="repository" href="{=$repository|asLink}/"> browse subversion</a>
 
 <!--{if $auth.repos}-->
-<a id="start" href="open/start/">startpage</a>
-<a id="logout" href="/?logout">logout</a>
-<script type="text/javascript">
-//<![CDATA[
-document.getElementById('start').focus();
-//]]>
-</script>
 <!--{else}-->
-<a id="login" href="/?login">login</a>
-<script type="text/javascript">
-//<![CDATA[
-document.getElementById('login').focus();
-//]]>
-</script>
+<!-- login moved to loginconventional plugin -->
 <!--{/if}-->
 
 </div>
