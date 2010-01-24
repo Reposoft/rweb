@@ -62,8 +62,10 @@ Date.prototype.toISO8601String = function (format, offset) {
        fraction of a second
        YYYY-MM-DDThh:mm:ss.sTZD (eg 1997-07-16T19:20:30.45+01:00)
     */
-    if (!format) { var format = 6; }
-    if (!offset) {
+    if (typeof format == 'undefined') {
+    	var format = 6;
+    }
+    if (typeof offset == 'undefined') {
         var offset = 'Z';
         var date = this;
     } else {

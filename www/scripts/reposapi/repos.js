@@ -11,7 +11,7 @@ jQuery.browser.sucksless = jQuery.browser.msie && !jQuery.browser.sucks;
 // simple non-standard indexOf fallback
 if (!Array.prototype.indexOf) { Array.prototype.indexOf = function (obj, start) {
 	for (var i = (start || 0); i < this.length; i++) if (this[i] == obj) return i; return -1;
-}};
+};}
 
 /**
  * Repos selectors (c) 2007 Staffan Olsson www.repos.se
@@ -136,12 +136,12 @@ Repos.getBase = function() {
  * @return {int} the revision number when the item was last committed
  */
 Repos.getRevision = function() {
-	return parseInt($('#filedetails .revision:first').text());
+	return parseInt($('#filedetails .revision:first').text(), 10);
 };
 
 Repos.isRevisionRequested = function() {
 	// should be generalized along with getRevision
-	return /[?&]rev[=]/.test(window.location.search);
+	return (/[?&]rev=/).test(window.location.search);
 };
 
 /**
@@ -156,7 +156,7 @@ Repos.isTarget = function(selector,context) {
 	// not regexp, handle as Ant pattern
 	var s = selector;
 	// escape valid path characters
-	s = s.replace(/([.+^${}()\[\]\/])/g, '\\$1');
+	s = s.replace(/([.+\^${}()\[\]\/])/g, '\\$1');
 	// allow *a.txt notation for matching any path ending with a.txt
 	s = s.replace(/^\*/,'**');
 	// strict ant pattern rules
