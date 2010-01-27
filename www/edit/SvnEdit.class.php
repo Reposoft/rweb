@@ -396,7 +396,8 @@ class SvnEdit {
 			if (preg_match('/^[a-zA-Z ]+([0-9]+)/', $this->getResult(), $rev)) {
 				return $rev[1];
 			} else {
-				trigger_error('Revision number not found in commit output. "'.$this->getResult().'"', E_USER_ERROR);
+				// not ok to throw error because some SvnEdit operations like propset are only local
+				//trigger_error('Revision number not found in commit output. "'.$this->getResult().'"', E_USER_ERROR);
 			}
 		}
 		return null;
