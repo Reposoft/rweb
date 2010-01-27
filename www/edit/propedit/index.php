@@ -109,7 +109,7 @@ function svnPropset($target, $keys, $values, $message=null) {
 	$filename = getPathName(getTargetUrl());
 	// propset can only be done in working copy
 	$checkout = new SvnEdit('checkout');
-	$checkout->addArgOption('--non-recursive'); // Todo use sparse checkouts
+	$checkout->addArgOption('--non-recursive'); // TODO use sparse checkouts
 	$checkout->addArgUrl($targetFolder);
 	$checkout->addArgPath($workingCopy);
 	$checkout->exec('Check out latest version');
