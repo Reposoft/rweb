@@ -39,5 +39,6 @@ if ($_SERVER['REQUEST_METHOD']=='GET' || $_SERVER['REQUEST_METHOD']=='HEAD') {
 	$template->display();
 } else {
 	trigger_error('This form should be posted to ../upload/.', E_USER_ERROR);
+	// note that this means that targetLogin() heer would fail to authenticate before POST 
 }
 ?>

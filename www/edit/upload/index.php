@@ -34,7 +34,13 @@ if (!isTargetSet()) {
 	// Safari 4 does not resend credentials for upload even if prompted at form GET
 	if (strContains($_SERVER['HTTP_USER_AGENT'], 'AppleWebKit') && $_SERVER['REQUEST_METHOD'] == 'POST') {
 		targetLogin();
-	}	
+	}
+	
+	if (isset($_POST['usertext'])) { // A plain POST, not multipart upload.
+		// - browser might come from edit/text/ and thus
+		// it might not automatically send credentials for this path
+		targetLogin();	
+	}
 	
 	$folderRule = new ResourceExistsRule('target');
 	new NewFilenameRule("name", $folderRule->getValue());
