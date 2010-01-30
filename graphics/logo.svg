@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.44.1"
+   sodipodi:docbase="C:\"
+   sodipodi:docname="logo.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="570.86337"
+     inkscape:cy="877.91519"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1440"
+     inkscape:window-height="844"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g6505"
+       transform="translate(25,-407)">
+      <path
+         id="path4685"
+         d="M 198.15625,611.03125 L 191.96875,604.8125 L 191.96875,617.25 L 195.0625,617.25 L 198.15625,617.25 L 198.15625,611.03125 z "
+         style="opacity:1;fill:#9c0;fill-opacity:1;stroke:none;stroke-width:6.20000029;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         id="path4681"
+         d="M 173.28125,592.21875 L 173.28125,595.3125 L 173.28125,598.4375 L 185.65625,598.4375 L 179.46875,592.21875 L 173.28125,592.21875 z "
+         style="opacity:1;fill:#9c0;fill-opacity:1;stroke:none;stroke-width:6.20000029;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         id="rect1969"
+         d="M 129.5625,592.21875 L 129.5625,595.34375 L 129.5625,664.03125 L 129.5625,667.15625 L 132.65625,667.15625 L 195.0625,667.15625 L 198.15625,667.15625 L 198.15625,664.03125 L 198.15625,617.25 L 198.15625,611.03125 L 179.46875,592.21875 L 173.28125,592.21875 L 132.65625,592.21875 L 129.5625,592.21875 z M 135.78125,598.4375 L 173.28125,598.4375 L 173.28125,614.15625 L 173.28125,617.25 L 176.375,617.25 L 191.96875,617.25 L 191.96875,660.9375 L 135.78125,660.9375 L 135.78125,598.4375 z M 179.4375,601 L 189.375,611 L 179.46875,611.0625 L 179.4375,601 z "
+         style="opacity:1;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:6.20000029;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         id="rect5609"
+         d="M 160.65625,617.1875 L 160.65625,629.59375 L 147.75,629.59375 L 147.75,636 L 160.65625,636 L 160.65625,648.40625 L 167.0625,648.40625 L 167.0625,636 L 178.9375,636 L 178.9375,629.59375 L 167.0625,629.59375 L 167.0625,617.1875 L 160.65625,617.1875 z "
+         style="opacity:1;fill:#9c0;fill-opacity:1;stroke:#2b2200;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:93.95314789px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#9c0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Times New Roman"
+       x="247.83594"
+       y="246.32965"
+       id="text6511"
+       sodipodi:linespacing="125%"
+       transform="scale(1.00131,0.998692)"><tspan
+         sodipodi:role="line"
+         id="tspan6513"
+         x="247.83594"
+         y="246.32965">repos.se</tspan></text>
+  </g>
+</svg>
