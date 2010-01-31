@@ -29,7 +29,7 @@
 	};
 	
 	// autoformat filesize elements (will affect those that contain a number only)
-	$().ready(function() {
+	$(document).ready(function() {
 		$('.filesize').byteformat();
 	});
 	

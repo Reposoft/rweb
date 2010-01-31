@@ -1,5 +1,5 @@
 // automatically adjust input field width for long paths and filenames
-$().ready(function() {
+$(document).ready(function() {
 	// no pattern matching in services
 	if (!/^edit\//.test(Repos.getService())) return;
 	// arbitrary safety margin

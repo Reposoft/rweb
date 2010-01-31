@@ -13,7 +13,7 @@ $().bind('repos-propedit-init', function(ev, reposPropeditRules) {
 	rules.add(/^repostest2:/, false); // noedit for all properties in this namespace
 });
 
-$().ready(function() {
+$(document).ready(function() {
 	
 // test form should display what has been posted
 $('form').submit(function(ev) {

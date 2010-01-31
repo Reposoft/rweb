@@ -14,4 +14,4 @@ function load() {
 	document.getElementsByTagName('body')[0].appendChild(e);
 }
 
-$ && $().ready(load) || window.onload(load);
+$ && $(document).ready(load) || window.onload(load);

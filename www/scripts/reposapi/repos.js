@@ -38,7 +38,7 @@ jQuery.extend(jQuery.expr[':'], {
  * @param {Function} fn for jQuery().ready
  */
 Repos.ready = function(selector, fn) {
-	return $('html'+selector).size() && $().ready(fn);
+	return $('html'+selector).size() && $(document).ready(fn);
 };
 /**
  * Shorthand for Repos.ready(':repos-target(t)',fn)
@@ -46,7 +46,7 @@ Repos.ready = function(selector, fn) {
  * @param {Function} fn
  */
 Repos.target = function(t, fn) {
-	return Repos.isTarget(t) && $().ready(fn);
+	return Repos.isTarget(t) && $(document).ready(fn);
 };
 /**
  * Shorthand for Repos.ready(':repos-service(s)',fn)
@@ -54,7 +54,7 @@ Repos.target = function(t, fn) {
  * @param {Function} fn
  */
 Repos.service = function(s, fn) {
-	return Repos.isService(s) && $().ready(fn);
+	return Repos.isService(s) && $(document).ready(fn);
 };
 
 /**

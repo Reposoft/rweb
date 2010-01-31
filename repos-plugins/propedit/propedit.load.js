@@ -154,7 +154,7 @@ Repos.propedit = {
 };
 
 // launch load event so other plugins can customize
-$().ready(function() {
+$(document).ready(function() {
 	// Currently we support only one target per page, so only one instance of Rules is needed
 	$().trigger('repos-propedit-init', [Repos.propedit.Rules]);
 });

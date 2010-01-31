@@ -17,7 +17,7 @@
 		});
 	};
 	
-	$().ready(function() {
+	$(document).ready(function() {
 		$('.lock').lockAge();
 	}); */
 	
