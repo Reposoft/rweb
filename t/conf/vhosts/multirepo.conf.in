@@ -51,7 +51,7 @@
 	RedirectMatch ^(/svn)$ $1/
 	<Location /svn/>
 		# enable servicelayer
-		PythonFixupHandler repos.servicelayer.apache
+		#PythonFixupHandler repos.servicelayer.apache
 	
 		DAV svn
 		SVNAutoversioning on
