@@ -1,7 +1,7 @@
-<?PHP
+<?php
 
-require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
-require '../uncompress.php';
+require dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php';
+require dirname(dirname(__FILE__)).'/uncompress.php';
 
 $report = new Report('Install Smarty');
 $report->info("Smarty is installing...");

@@ -1,6 +1,8 @@
 <?php
 
-require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
+require dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php';
+require dirname(dirname(__FILE__)).'/uncompress.php';
+
 $report = new Report('install 3rd party tool: PHPiCalendar');
 
 if (file_exists('phpicalendar/')) {
@@ -8,8 +10,6 @@ if (file_exists('phpicalendar/')) {
 	$report->display();
 	exit;
 }
-
-require('../../lib/uncompress.php');
 
 $repos_package = "phpicalendar";
 $home = "phpicalendar.sourceforge.net";

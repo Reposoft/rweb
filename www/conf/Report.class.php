@@ -31,6 +31,9 @@ if (!function_exists('setupResponse')) {
 // reports may be long running
 set_time_limit(60*5);
 
+// time zone as in repos.properties.php
+date_default_timezone_set('UTC');
+
 $reportDate = date("Y-m-d\TH:i:sP");
 
 $reportStartTime = time();

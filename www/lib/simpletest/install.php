@@ -1,6 +1,7 @@
-﻿<?PHP
-require(dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php');
-require '../uncompress.php';
+<?php
+
+require dirname(dirname(dirname(__FILE__))).'/conf/Report.class.php';
+require dirname(dirname(__FILE__)).'/uncompress.php';
 
 $report = new Report('Install Simpletest');
 $report->info("Simpletest is installing...");
