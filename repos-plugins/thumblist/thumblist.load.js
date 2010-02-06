@@ -50,6 +50,7 @@ var reposThumbFormatAsList = function(item, a, name, thumb) {
 	a.css({
 		display: 'block',
 		paddingLeft: 160,
+		/* this crops some height */
 		paddingTop: 50,
 		paddingBottom: 50,
 		backgroundPosition: 'left center',
