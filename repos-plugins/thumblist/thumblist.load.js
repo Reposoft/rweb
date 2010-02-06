@@ -31,9 +31,10 @@ var reposThumbFromListItem = function(item) {
 	
 	//reposThumbFormatGallerificStyle(item, a, name, thumb);
 	reposThumbFormatAsList(item, a, name, thumb);
+	item.addClass('thumbnail');
 };
 
-var reposThumblistAll = function() {
+var reposThumblistOnLoad = function() {
 	$('.index > li').each(function() {
 		reposThumbFromListItem.apply(this);
 	});
@@ -41,7 +42,6 @@ var reposThumblistAll = function() {
 
 var reposThumblistOnDetails = function() {
 	$('.index > li').bind('repos-details-displayed', function(ev) {
-		console.log('details', this);
 		reposThumbFromListItem.apply(this);
 	});
 };
