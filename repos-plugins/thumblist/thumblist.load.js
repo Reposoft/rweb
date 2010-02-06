@@ -5,10 +5,16 @@ var reposThumbGetUrl = function(target, rev) {
 		encodeURIComponent(target) + '&base=' + Repos.getBase();
 };
 
+var reposThumbSupported = function(link) {
+	// definition from the thumbnails plugin
+	return Repos.thumbnails.match.test(link.attr('href'));
+};
+
 var reposThumbFromListItem = function(item) {
 	item = $(item || this);
 	
 	var a = $('> a', item);
+	if (!reposThumbSupported(a)) return;
 	var text = a.text();
 	var target = Repos.getTarget() + text;
 	console.log(a, text, target);
@@ -18,6 +24,7 @@ var reposThumbFromListItem = function(item) {
 	a.empty().append(img);
 	
 	var div = $('<div/>').text(text).appendTo(item);
+	$('.actions', item).appendTo(div);
 	
 };
 
@@ -29,4 +36,4 @@ var reposThumblist = function() {
 	
 };
 
-//Repos.service('index/', reposThumblist);
+Repos.service('index/', reposThumblist);
