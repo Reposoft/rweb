@@ -99,13 +99,13 @@ function details_repository(path, url) {
 					return; // silently skip items that can't be found
 				}
 				row = $(row);
-				console.log(new ReposFileId(name).get(), row);
 				details_addtags(row);
 				//$('.details',row).hide();
 				details_write(row, $(this));
 			});
 			$('.details').show();
 			$('#showdetails').removeClass('loading').text('refresh details');
+			$('').trigger('')
 		}
 	});
 }
