@@ -15,25 +15,37 @@ var reposThumbFromListItem = function(item) {
 	
 	var a = $('> a', item);
 	if (!reposThumbSupported(a)) return;
-	var text = a.text();
-	var target = Repos.getTarget() + text;
-	console.log(a, text, target);
+	var name = a.text();
+	var target = Repos.getTarget() + name;
+	var thumb = reposThumbGetUrl(target);
 	
-	// Gallerific style
-	var img = $('<img/>').attr('src', reposThumbGetUrl(target)).attr('alt', text);
-	a.empty().append(img);
-	
-	var div = $('<div/>').text(text).appendTo(item);
-	$('.actions', item).appendTo(div);
-	
+	//reposThumbFormatGallerificStyle(item, a, name, thumb);
+	reposThumbFormatAsList(item, a, name, thumb);
 };
 
 var reposThumblist = function() {
-
 	$('.index > li').each(function() {
 		reposThumbFromListItem.apply(this);
 	});
+};
+
+var reposThumbFormatAsList = function(item, a, name, thumb) {
+	a.css({
+		display: 'block',
+		paddingLeft: 160,
+		paddingTop: 50,
+		paddingBottom: 50,
+		backgroundPosition: 'left center',
+		backgroundImage: 'url("' + thumb + '")'
+	});
+};
+
+var reposThumbFormatGallerificStyle = function(item, a, name, thumb) {
+	var img = $('<img/>').attr('src', thumb).attr('alt', name);
+	a.empty().append(img);
 	
+	var div = $('<div/>').text(name).appendTo(item);
+	$('.actions', item).appendTo(div);	
 };
 
 Repos.service('index/', reposThumblist);
