@@ -102,10 +102,10 @@ function details_repository(path, url) {
 				details_addtags(row);
 				//$('.details',row).hide();
 				details_write(row, $(this));
+				row.trigger('repos-details-displayed');
 			});
 			$('.details').show();
 			$('#showdetails').removeClass('loading').text('refresh details');
-			$('').trigger('')
 		}
 	});
 }

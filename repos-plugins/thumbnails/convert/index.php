@@ -130,7 +130,7 @@ if (!file_exists($tempfile) || !filesize($tempfile)) {
 }
 
 // thumbnails can be cached permanently if target and revsion number is in the url
-if ($rev) {
+if ($r->getValue()) {
 	header('Cache-Control: max-age=8640000');
 }
 

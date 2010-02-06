@@ -68,11 +68,12 @@ a.tool-tags, span.tool-tags {
 	cursor: pointer;
 }
 div.details, div.lock {
-	margin-left: 3.0em;
+	margin-left: 25em;
 	margin-bottom: .2em;
 }
 div.details span, div.lock span {
-	margin-left: 0.4em;
+	margin-left: 0.2em;
+	margin-right: 0.8em;
 }
 /* directory listing */
 .file {
