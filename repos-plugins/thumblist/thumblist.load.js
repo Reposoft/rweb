@@ -1,14 +1,4 @@
 
-var reposThumbGetUrl = function(target, rev) {
-	var url = '/repos-plugins/thumbnails/convert/?target=';
-	url = url + encodeURIComponent(target);
-	url = url + '&base=' + Repos.getBase();
-	if (typeof rev != 'undefined' && rev) {
-		url = url + '&rev=' + rev;
-	}
-	return url;
-};
-
 var reposThumbSupported = function(link) {
 	// definition from the thumbnails plugin
 	return Repos.thumbnails.match.test(link.attr('href'));
@@ -27,7 +17,7 @@ var reposThumbFromListItem = function(item) {
 	if (!reposThumbSupported(a)) return;
 	var name = a.text();
 	var target = Repos.getTarget() + name;
-	var thumb = reposThumbGetUrl(target, rev);
+	var thumb = Repos.thumbnails.getSrc(target, rev);
 	
 	//reposThumbFormatGallerificStyle(item, a, name, thumb);
 	reposThumbFormatAsList(item, a, name, thumb);

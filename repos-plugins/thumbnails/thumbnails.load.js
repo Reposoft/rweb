@@ -14,46 +14,23 @@ Repos.target(Repos.thumbnails.match, function() {
 	// Repos.getTarget et.al. does not provide a getRevision
 	if (window.location.search.length==0) return;
 	var href = window.location.search;
-	var target = Repos.thumbnails.getTarget(href);
-	var rev = Repos.thumbnails.getRev(href);
+	var target = Repos.getTarget();
+	var rev = Repos.getRevision();
 	var src = Repos.thumbnails.getSrc(target, rev);
 	if (!src) return;
 	$('#intro').prepend('<img class="thumbnail" src="'+src+'" alt="Creating thumbnail..." border="0"/>');
 	$('#intro').append('<div style="clear: both;"></div>'); 
 });
 
-// under development
-Repos.thumbnails.initRepository = function() {
-	$('a.file').each(function() {
-		var href = aTag.getAttribute('href');
-		var target = Repos.thumbnails.getTarget(href);
-		var rev = Repos.thumbnails.getRev(href);
-		var src = Repos.thumbnails.getSrc(target, rev);
-		if (!src) return;
-		$(aTag).append('<img src="'+src+'" border="0" />');
-	} );
-};
-Repos.thumbnails.initLog = function() {
-};
-
 Repos.thumbnails.getSrc = function(target, rev) {
 	if (!target) return false;
-	return '/repos-plugins/thumbnails/convert/?target='+target+'&rev='+rev+'&base='+Repos.getBase();
-};
-
-Repos.thumbnails.getTarget = function(href) {
-	var m = /[\?&]target=([^&]+)/.exec(href);
-	if (m && m.length > 1) return m[1];
-	
-	return false; // no good target found
-};
-
-Repos.thumbnails.getRev = function(href) {
-	var r = Repos.getRevision();
-	if (!isNaN(r)) return r;
-	// get from query string, note that this is often not the commit revision (thus not good for caching)
-	var m = /[\?&]rev=([^&]+)/.exec(href);
-	if (m && m.length > 1) return m[1];
-	// use HEAD, still a valid query parameter, DISABLES CACHING
-	return ''; 
+	var url = '/repos-plugins/thumbnails/convert/?target=';
+	url = url + encodeURIComponent(target);
+	url = url + '&base=' + Repos.getBase();
+	if (typeof rev != 'undefined' && rev) {
+		url = url + '&rev=' + rev;
+	} else {
+		console && console.warn('Revision not set for thumbnail. Caching will be disabled.');
+	}
+	return url;
 };
