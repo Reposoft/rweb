@@ -83,9 +83,17 @@ class RepositoryTree {
 		if (!file_exists($aclFile)) {
 			trigger_error("the ACL file does not exist", E_USER_ERROR);
 		}
-		$acl = parse_ini_file($aclFile, true);
+		if (defined('INI_SCANNER_RAW')) {
+			// PHP 5.3, avoid deprecation warnings for #
+			$acl = @parse_ini_file($aclFile, true, INI_SCANNER_RAW);	
+		} else {
+			$acl = parse_ini_file($aclFile, true);
+		}
+		if (!$acl) {
+			trigger_error("failed to parse ACL file", E_USER_ERROR);
+		}
 		if (count($acl) < 2) {
-			trigger_error("the ACL file must contain at least two sections, groups and a root path");
+			trigger_error("the ACL file must contain at least two sections, groups and a root path", E_USER_ERROR);
 		}
 		return $acl;
 	}
