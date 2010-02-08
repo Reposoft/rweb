@@ -138,9 +138,10 @@ class SvnOpenFile {
 	 * @param String $path file path, absolute from repository root
 	 * @param String $revision requested revision, integer/date/string (svn syntax), null for latest
 	 * @param boolean $validate false to not validate authentication/authorization immediately
+	 * @param boolean $revisionIsPeg ... url-is-head? url-is-from-log? TODO implement and remove the fallback in SvnOpen exec
 	 * @return SvnOpenFile
 	 */
-	function SvnOpenFile($path, $revision=null, $validate=true) {
+	function SvnOpenFile($path, $revision=null, $validate=true, $revisionIsPeg=true) {
 		$this->path = $path;
 		// TODO split between internal and external use and call getRespositoryInternal where possible
 		$this->url = SvnOpenFile::getRepository().$path;
@@ -700,7 +701,14 @@ class SvnOpenFile {
 		$info = new SvnOpen('info', true);
 		$info->addArgUrlPeg($this->url, $this->getRevisionRequestedString());
 		if ($info->exec()) {
-			return $this->_nonexisting();
+			// test with the assumption that the url is HEAD but the revision is last-changed (might return a completely different item)
+			$info = new SvnOpen('info', true);
+			$info->addArgUrl($this->url);
+			$info->addArgRevision($this->getRevisionRequestedString());
+			if ($info->exec()) {
+				// give up
+				return $this->_nonexisting();
+			}
 		}
 		$result = $info->getOutput();
 		$parsed = $this->_parseInfoXml($result);

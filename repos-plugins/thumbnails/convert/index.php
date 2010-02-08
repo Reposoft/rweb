@@ -110,8 +110,12 @@ $convert = $convert . ' ' . getThumbnailCommand($extension, $tempfile);
 $rev = $file->getRevision();
 
 $o = new SvnOpen('cat');
-$o->addArgOption('-r', $rev);
-$o->addArgUrl(getTargetUrl());
+//$o->addArgOption('-r', $rev);
+//$o->addArgUrl(getTargetUrl());
+// stricter, based on results from svn info, produces unique key with url@last-changed-rev
+$rev = $file->getRevisionLastChanged();
+$urlForPeg = rawurldecode($file->file['url']); // getUrl is urlRequested
+$o->addArgUrlPeg($urlForPeg, $rev); // $rev is a peg revision
 $o->addArgOption('|', $convert, false);
 if($o->exec()) {
 	handleError($o->getExitcode(), implode('"\n"', $o->getOutput()));

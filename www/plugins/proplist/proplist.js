@@ -14,7 +14,9 @@ $().bind('repos-proplist-loaded', function(event, proplistParent){});
 Repos.proplist.init = function() {
 	$('.proplist').each( function() {
 		var target = Repos.getTarget(this);
-		var rev = Repos.getRevision();
+		// This assumes that no changes to target are committed between page view and proplist request
+		// and avoids a problem with getRevision returning last-changed when url is HEAD
+		var rev = Repos.isRevisionRequested() && Repos.getRevision();
 		if (target) Repos.proplist.addClick(this, target, rev);
 	} );
 };

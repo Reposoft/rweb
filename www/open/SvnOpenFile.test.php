@@ -173,6 +173,14 @@ class TestSvnOpenFile extends UnitTestCase {
 		$this->assertFalse(false, $a['author']);
 		$this->assertEqual('2009-10-13T17:47:35.110024Z', $a['date']);
 	}
+	
+	function testParseInfoXmlNoHit() {
+		$list = explode("\n",'
+			http://localhost:8530/svn/one/a:  (Not a valid URL)
+			svn: A problem occurred; see other errors for details
+			';
+		
+	}
 		
 	function testGetRevisionNumberFromETag() {
 		$headers = array(
