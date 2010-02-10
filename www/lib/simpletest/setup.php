@@ -31,7 +31,11 @@ require_once(dirname(__FILE__).'/reporter.php');
 // don't force test cases to cooperate with repos.properties.php
 if (!function_exists('reportErrorText')) {
 	function reportErrorText($n, $message, $trace) {
-		if ($n!=2048) { // E_STRICT not defined in php 4
+		if ($n == 2048) { // E_STRICT not defined in php 4
+			// ignore
+		} else if ($n == 8192) { // E_DEPRECATED
+			// ignore
+		} else {
 			echo("Unexpected error (type $n): $message\n<pre>\n$trace</pre>");
 			exit;
 		}
