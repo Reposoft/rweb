@@ -175,11 +175,15 @@ class TestSvnOpenFile extends UnitTestCase {
 	}
 	
 	function testParseInfoXmlNoHit() {
-		$list = explode("\n",'
-			http://localhost:8530/svn/one/a:  (Not a valid URL)
-			svn: A problem occurred; see other errors for details
-			';
-		
+		$list = array(
+		    '<?xml version="1.0"?>',
+		    '<info>',
+		    'http://example.net/svn/not-existing:  (Not a valid URL)',
+		    '',
+		   	'</info>');
+		$file = new SvnOpenFile('/not-existing', HEAD, false);
+		$a = $file->_parseInfoXml($list);
+		$this->assertEqual($file->_nonexisting(), $a);
 	}
 		
 	function testGetRevisionNumberFromETag() {

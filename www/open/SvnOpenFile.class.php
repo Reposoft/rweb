@@ -790,6 +790,9 @@ class SvnOpenFile {
 				$i--;
 			}
 		}
+		// quite terrible error handling
+		if (!isset($parsed['path'])) return $this->_nonexisting();
+		// for consistency in field getters
 		$parsed['name'] = $parsed['path']; // looks like this is only the name
 		if (!isset($parsed['author'])) $parsed['author'] = null;
 		return $parsed;
