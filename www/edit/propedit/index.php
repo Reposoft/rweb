@@ -1,6 +1,8 @@
 <?php
 /**
  * Edit or delete subversion properties.
+ * 
+ * TODO support folders
  *
  * Due to limitations in how html forms handle spaces,
  * 2+ spaces in a row are posted as 1 space,
