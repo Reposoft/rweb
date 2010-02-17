@@ -158,8 +158,9 @@ function svnPropset($target, $keys, $values, $message=null) {
 	// commit
 	$commit = new SvnEdit('commit');
 	$commit->addArgPath($workingCopy);
-	if ($message==null) $message = '';
-	$commit->addArgOption('-m',$message);
+	if ($message) {
+		$commit->setMessage($message);
+	}
 	$commit->exec();
 	// clean up
 	System::deleteFolder($workingCopy);
