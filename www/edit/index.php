@@ -22,6 +22,9 @@ $p = Presentation::getInstance();
 $p->assign_by_ref('file', $file);
 // for links to other operations we use the original parameters
 $p->assign('target', getTarget());
+// display a short log for the file on the edit page
+require(dirname(__FILE__).'/getlog.php');
+$p->assign('log', getLog(getTargetUrl()));
 // all set
 $p->display();
 

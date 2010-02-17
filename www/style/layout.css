@@ -23,12 +23,41 @@ div.section h2 {
 	margin: 0px;
 	padding-left: 1em;
 	background-color: #E9F4C9;
-	background: url(headlinebg.png) bottom repeat-x;
+	background-image: url(headlinebg.png);
+	background-position: bottom;
+	background-repeat: repeat-x;
 	color: #666633;
+}
+
+#activities {
+	border-color: #FFF;
+}
+
+#activities h2 {
+	padding-left: 0;
+	background-color: transparent; /*#F0F0EE;*/
+	background-image: none;
 }
 
 div p {
 	color: #333333;
+}
+
+/* log in page section */
+
+#editlog ul {
+	list-style: none;
+	padding-left: 1em;
+}
+
+#editlog span {
+	margin: .3em 1em .3em 0;
+}
+
+#editlog .message {
+	display: block;
+	margin-left: 2em;
+	margin-bottom: 1.2em;
 }
 
 /* thumbnail plugin, see THUMB_SIZE in open/thumb/ */

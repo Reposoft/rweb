@@ -64,7 +64,7 @@ You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 </div>
 <div class="column" style="width: 40%">
 <div id="activities" class="section">
-<h2>View {=$file,kind2}</h2>
+<h2>{=$file,kind2|ucfirst} read actions</h2>
 <!--{if $file,isFile}-->
 <p class="recommendation">
 {=if $file,size gt 102400}
