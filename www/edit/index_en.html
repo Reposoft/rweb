@@ -73,7 +73,7 @@ you can always refer to the file as it is now.</p>
 
 <div class="column" style="width: 40%">
 <div id="activities" class="section">
-<h2>{=$file,kind2|ucfirst} read actions</h2>
+<h2>Actions to edit {=$file,kind2}</h2>
 {=if $file,isLockedByThisUser}
 <p>The file is <strong>locked</strong> by you. We recommend you <a href="upload/?target={=$target}">Upload new version</a>.</p>
 {=elseif $file,isPlaintext and $file,size lt 102400}
