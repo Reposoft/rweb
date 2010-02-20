@@ -121,6 +121,9 @@ div#activities p {
 #activities #viewfile {
 	background-image: url(commands/32x32/view.png);
 }
+#activities #propedit {
+	background-image: url(commands/32x32/propedit.png);
+}
 /* -------- forms ---------
 <form>
 <fieldset>
