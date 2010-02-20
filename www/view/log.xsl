@@ -170,7 +170,7 @@
 			<xsl:if test="@kind='file'">open/</xsl:if>
 		</xsl:param>
 		<div class="row log-{@action}">
-			<xsl:if test="@action='A'">
+			<xsl:if test="@action='A' or @action='R'">
 				<a id="open:{$pathid}" class="folder" title="Added {.}" href="{$web}{$defaultaction}?target={$target}{$basep}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
