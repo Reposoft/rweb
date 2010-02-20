@@ -91,19 +91,16 @@ edit on your computer, then <a href="upload/?target={=$target}">upload new versi
 <h3><a id="download_upload" href="upload/?target={=$target}{=$file,revParam}&download">Download, modify, upload</a></h3>
 <p>
 <span class="explain" title="files stored as lines of text that are human-readable in any text editor, like Notepad">Text files</span> 
-can be edited by many users at the same time, and when you upload the new version
-the system will identify which lines you changed, 
-and <span class="explain" title="combine two different changes of the same file into a new version of the file">merge</span>
-those changes with the existing contents to create a new version.
+can be edited by different users at the same time.
+The system will <span class="explain" title="combine two different changes of the same file into a new version of the file">merge</span>
+changes based on the lines that changed.
 </p>
 <h3><a id="download_lock" href="lock/?target={=$target}&download">Download with lock</a></h3>
 <p>
 For <span class="explain" title="files stored in a non-text format created and read by a specific application">binary</span>
-files, version control is not as efficient as with text files.
-The difference between two versions can not be expressed as a
-<span class="explain" title="the difference between two versions, expressed as only the lines that have changed">diff</span>,
-so each change must be based on the previous version.
-This means that only one user at a time can work with the file.
+files, changes can not be expressed as a line
+<span class="explain" title="the difference between two versions, expressed as only the lines that have changed">diff</span>.
+Binary files should be edited by one user at a time.
 </p>
 {=/if}
 <h3><a id="upload" href="upload/?target={=$target}">Upload new version</a></h3>
@@ -113,7 +110,7 @@ If you have already downloaded and edited the file, upload your changes to creat
 <h3><a id="editfile" href="text/?target={=$target}">Edit in Repos</a></h3>
 <p>
 Plaintext file formats can be conveniently edited in your browser.
-No locking is needed, and when you save it creates a new version of the file.
+No locking is needed.
 </p>
 <h3><a id="propedit" href="propedit/?target={=$target}">Edit properties</a></h3>
 <p>
