@@ -131,21 +131,8 @@ function svnPropset($target, $keys, $values, $message=null) {
 		$propset = new SvnEdit('propset');
 		// multiline values must be set from file
 		// a bug in svn's argument parsing makes "-x-value" cause "illegal option -x"
-		if (strContains($values[$i], "\n") || strpos($values[$i], '-') === 0) {
-			// normalize newlines TODO check if windows clients use CRLF
-			$values[$i] = str_replace("\r\n", "\n", $values[$i]);
-			// can not preserve newlinees on command line, must use file
-			$proptemp = $workingCopy.$filename.'.proptemp';
-			$fp = fopen($workingCopy.$filename.'.proptemp', 'w');
-			fwrite($fp, $values[$i]);
-			fclose($fp);
-			$propset->addArgOption($name);
-			$propset->addArgOption('--file', $proptemp);
-			// temp file will be cleaned up since it is in the wc
-		} else {
-			// set value as quoted command line argument   
-			$propset->addArgOption($name, $values[$i]);
-		}
+		$propset->addArgOption($name);
+		$propset->addArgMightBeMultiline($values[$i]);
 		$propset->addArgPath($workingCopy.$filename);
 		if ($propset->exec("Set property '$name' to '$values[$i]'")) {
 			// don't commit, clean up

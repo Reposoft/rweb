@@ -90,6 +90,30 @@ class SvnEditTest extends UnitTestCase
 		$this->assertTrue(strpos(_getLastCommand(), '"http://www.where-we-work.com/%25procent%25"'));
 	}
 	
+	function testAddArgmentMultiline() {
+		$edit = new SvnEdit('propset');
+		$edit->addArgOption("a:b");
+		$edit->addArgMightBeMultiline("X\nY");
+		$edit->addArgPath('.');
+		$edit->exec();
+		$cmd = _getLastCommand();
+		$argf = strpos($cmd, ' -F ');
+		$this->assertTrue($argf > 0, 'Expected file argument in: '.$cmd);
+		$file = substr($cmd, $argf + 5);
+		$file = substr($file, 0, strpos($file, '"')); // until end quoute
+		$this->assertTrue(file_exists($file), 'Should have created temp file for argument value. Expected '.$file);
+		$contents = file_get_contents($file);
+		$this->assertEqual($contents, "X\nY");
+	}
+	
+	function testAddArgumentMultilineNot() {
+		$in = new SvnEdit('import');
+		$in->addArgMightBeMultiline("X", '-m');
+		$in->exec();
+		$cmd = _getLastCommand();
+		$this->assertTrue(strpos($cmd, '-m "X"') > 0, 'Should add normal arg. Got: '.$cmd);
+	}
+	
 	function testCommand() {
 		// actually we shouldnt care much about what the command looks like, but here's one test to help
 		$edit = new SvnEdit('info');
@@ -237,6 +261,7 @@ This is the post-commit hook talking
 		$this->assertNotNull($r->validate('a\\/'));
 	}
 	
+	/* TODO this is an integration test, create a class for that
 	function testParentFolderExists() {
 		$_SERVER['SERVER_NAME'] = 'example.com';
 		$_SERVER['REQUEST_URI'] = rawurlencode('/test/');
@@ -244,6 +269,7 @@ This is the post-commit hook talking
 		$this->expectError(new PatternExpectation('/does not exist/'));
 		$r = new ResourceExistsRule('folder');
 	}
+	*/
 	
 	function testFilterOutput() {
 		$this->assertEqual(_edit_svnOutput('svn: hello svn'), ' hello svn');

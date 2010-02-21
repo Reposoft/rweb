@@ -345,9 +345,37 @@ class SvnEdit {
 	 */
 	function execNoDisplay() {
 		if ($this->commitWithMessage) { // commands expecting a message need this even if it is empty
-			$this->command->addArgOption('-m', $this->message);
+			$this->addArgMightBeMultiline($this->message, '-m');
 		}
 		return $this->command->exec();
+	}
+	
+	/**
+	 * Typically used for commit message and propset value.
+	 * @param $value the argument value
+	 * @param $argIfSingleLine null if a position argument, for example "-m" if named
+	 * @param $argIfMultiline arg before filename for multiline contents
+	 */
+	function addArgMightBeMultiline($value, $argIfSingleLine=null, $argIfMultiline='-F') {
+		// same functionality as in propedit
+		if (strContains($value, "\n") || strpos($value, '-') === 0) {
+			// normalize newlines TODO check if windows clients use CRLF
+			$value = str_replace("\r\n", "\n", $value);
+			// can not preserve newlinees on command line, must use file			
+			$argtemp = System::getTempFile();
+			$fp = fopen($argtemp, 'w');
+			fwrite($fp, $value);
+			fclose($fp);
+			$this->addArgOption($argIfMultiline, $argtemp);
+			// temp file will not be cleaned up automatically because it is not in the wc
+			// TODO could be cleaned up after commit using the value of the -F argument
+		} else {
+			if ($argIfSingleLine) {
+				$this->command->addArgOption($argIfSingleLine, $value);	
+			} else {
+				$this->command->addArg($value);
+			}
+		}
 	}
 	
 	/**
