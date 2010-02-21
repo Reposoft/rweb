@@ -168,6 +168,21 @@ class SvnOpen {
 	}
 	
 	/**
+	 * Specifies url and revision for command line.
+	 * @param $url {String} full http or https URL, not urlencoded
+	 * @param $revision revision number, or if not peg possibly string revision
+	 * @param $revisionIsPeg false if URL is at HEAD, true if URL is at revision
+	 */
+	function addArgUrlRev($url, $revision, $revisionIsPeg) {
+		if ($revisionIsPeg) {
+			$this->addArgUrlPeg($url, $revision);
+		} else {
+			$this->addArgRevision($revision);
+			$this->addArgUrl($url);
+		}
+	}
+	
+	/**
 	 * Uniquely identifies an object in subversion, for a url (history) that may have contained different objects.
 	 * See http://svnbook.red-bean.com/nightly/en/svn-book.html#svn.advanced.pegrevs
 	 * @param String $url the URL, just like addArgUrl

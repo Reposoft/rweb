@@ -59,8 +59,21 @@ if (strBegins(getSelfUrl(), $cacheRepo) && !isset($_REQUEST['target'])) {
 // TODO make sure login is not required for public readable images
 targetLogin();
 
-// first get the data about the repository image
-$r = new RevisionRule();
+// revision number logic, rev is the old "implicit peg"
+$revIsPeg = true;
+$revField = 'rev';
+// simplified logic that supports only p OR r
+if (isset($_REQUEST['p'])) {
+	if (isset($_REQUEST['rev']) || isset($_REQUEST['r'])) trigger_error('only one revision type accepted', E_USER_ERROR);
+	$revField = 'p';
+}
+if (isset($_REQUEST['r'])) {
+	if (isset($_REQUEST['rev']) || isset($_REQUEST['p'])) trigger_error('only one revision type accepted', E_USER_ERROR);
+	$revIsPeg = false;
+	$revField = 'r';
+}
+
+$r = new RevisionRule($revField);
 // Validation::expect('rev'); // explicit revision number required for caching
 if (!$r->getValue()) {
 	//handleError(412, "Revision number required ".$r->getValue());
@@ -68,7 +81,8 @@ if (!$r->getValue()) {
 	// enable caching, see below
 }
 
-$file = new SvnOpenFile(getTarget(), $r->getValue());
+// first get the data about the repository image
+$file = new SvnOpenFile(getTarget(), $r->getValue(), true, $revIsPeg);
 $extension = $file->getExtension();
 
 // verify that the source can be accessed

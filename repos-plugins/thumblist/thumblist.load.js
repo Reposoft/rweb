@@ -8,16 +8,19 @@ var reposThumbFromListItem = function(item) {
 	item = $(item || this);
 	
 	// assuming tags from details plugin
-	var rev = $('.revision', this).text();
-	if (!rev) {
-		window.console && console.log('revision not found for row', this);
+	// Repository browsing is HEAD but revisions from details are last-changed
+	// and changes might have occured at old urls so we must use peg revision
+	var peg = $('.revision', this).text();
+	if (!peg) {
+		window.console && console.error('revision not found for row', this);
+		peg = 'HEAD';
 	}
 	
 	var a = $('> a', item);
 	if (!reposThumbSupported(a)) return;
 	var name = a.text();
 	var target = Repos.getTarget() + name;
-	var thumb = Repos.thumbnails.getSrc(target, rev);
+	var thumb = Repos.thumbnails.getSrc(target, peg, false); // paths are at HEAD when in index
 	
 	//reposThumbFormatGallerificStyle(item, a, name, thumb);
 	reposThumbFormatAsList(item, a, name, thumb);

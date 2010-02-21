@@ -116,6 +116,10 @@ class SvnOpenFile {
 	 */
 	var $_revision;
 	/**
+	 * @var boolean true if url is at HEAD, false if url is at revision
+	 */
+	var $_revisionIsPeg;
+	/**
 	 * The array of metadata, if read.
 	 * @var array[String]
 	 */
@@ -138,14 +142,19 @@ class SvnOpenFile {
 	 * @param String $path file path, absolute from repository root
 	 * @param String $revision requested revision, integer/date/string (svn syntax), null for latest
 	 * @param boolean $validate false to not validate authentication/authorization immediately
-	 * @param boolean $revisionIsPeg ... url-is-head? url-is-from-log? TODO implement and remove the fallback in SvnOpen exec
+	 * @param boolean $revisionIsPeg set to false if the path is from HEAD but the revision migt be older
 	 * @return SvnOpenFile
 	 */
-	function SvnOpenFile($path, $revision=null, $validate=true, $revisionIsPeg=true) {
+	function SvnOpenFile($path, $revision=null, $validate=true, $revisionIsPeg=null) {
 		$this->path = $path;
 		// TODO split between internal and external use and call getRespositoryInternal where possible
 		$this->url = SvnOpenFile::getRepository().$path;
 		$this->_revision = $revision;
+		// default to peg if explicit revision is set (isRevisionRequested()==true)
+		if ($revisionIsPeg === null) {
+			$revisionIsPeg = $revision !== null;
+		}
+		$this->_revisionIsPeg = $revisionIsPeg; 
 		_svnOpenFile_setInstance($this);
 		if ($validate) $this->validateReadAccess();
 	}
@@ -478,6 +487,8 @@ class SvnOpenFile {
 	 * also called "path revision" as opposed to "commit revision",
 	 * meaning that it is the same as the given revision number for peg/rev operations
 	 * and head rev when revision is unspecified.
+	 * Note that to retrieve info or contents, this revision number
+	 * must be combined with the url at the given revision (or HEAD if not isRevisionRequested).
 	 * @return int Integer revision number, even for HEAD.
 	 */
 	function getRevision() {
@@ -486,14 +497,15 @@ class SvnOpenFile {
 	}
 	
 	/**
-	 * @return String|int the given revision when initialing this instance
+	 * @return String|int the given revision when initializing this instance
 	 */
 	function getRevisionRequested() {
 		return $this->_revision;
 	}
 	
 	/**
-	 * 
+	 * The revision for last change of this item.
+	 * Note that this change might have occurred at a different URL than getUrl().
 	 * @return int Subversion concept, != revision for example if file is unchanged inside copy of tree
 	 */
 	function getRevisionLastChanged() {
@@ -592,13 +604,23 @@ class SvnOpenFile {
 	}
 	
 	/**
+	 * Sets URL and Revision for SvnOpen object based on the constructor arguments for this instance.
+	 * @param $svnOpen SvnOpen instance
+	 */
+	function _specifyUrlAndRev($svnOpen) {
+		$svnOpen->addArgUrlRev($this->url, 
+				$this->getRevisionRequestedString(),
+				$this->_revisionIsPeg);	
+	}
+	
+	/**
 	 * Returns the value of the svn:mime-type property of a file with revision number.
 	 * @return String mime type, or false if property not set.
 	 */
 	function getMimeTypePropertyValue() {
 		$cmd = new SvnOpen('propget');
 		$cmd->addArgOption('svn:mime-type');
-		$cmd->addArgUrlPeg($this->getUrl(), $this->getRevision());
+		$this->_specifyUrlAndRev($cmd);
 		$cmd->exec();
 		if ($cmd->getExitcode()) trigger_error("Could not find the file '$targetUrl' revision $revision in the repository.", E_USER_ERROR );
 		$result = $cmd->getOutput();
@@ -613,13 +635,7 @@ class SvnOpenFile {
 	 */
 	function getContents() {
 		$open = new SvnOpen('cat');
-		if (!$this->isRevisionRequested()) {
-			// file's revision may be older than the folder, so peg can not be used here
-			$open->addArgUrl($this->getUrl());
-		} else {
-			// use peg revision only for explicit revision numbers
-			$open->addArgUrlPeg($this->getUrl(), $this->getRevision());
-		}
+		$this->_specifyUrlAndRev($open);
 		// exec can not be used for reading contents, see REPOS-58
 		ob_start();
 		// can not do flush because then no headers can be sent, ob_flush();
@@ -645,7 +661,7 @@ class SvnOpenFile {
 	 */
 	function sendInline() {
 		$open = new SvnOpen('cat');
-		$open->addArgUrlPeg($this->getUrl(), $this->getRevision());
+		$this->_specifyUrlAndRev($open);
 		if ($open->passthru()) {
 			// failed, but there is nothing we can do about that now
 		}
@@ -699,17 +715,10 @@ class SvnOpenFile {
 	function _readInfoSvn() {
 		// the reason we do 'list' and not 'info' is that 'info' does not contain file size
 		$info = new SvnOpen('info', true);
-		$info->addArgUrlPeg($this->url, $this->getRevisionRequestedString());
+		$this->_specifyUrlAndRev($info);
 		if ($info->exec()) {
-			// test with the assumption that the url is HEAD but the revision is last-changed (might return a completely different item)
-			$info = new SvnOpen('info', true);
-			$info->addArgUrl($this->url);
-			$info->addArgRevision($this->getRevisionRequestedString());
-			if ($info->exec()) {
-				// give up
-				return $this->_nonexisting();
-			}
-		}
+			return $this->_nonexisting();
+		}		
 		$result = $info->getOutput();
 		$parsed = $this->_parseInfoXml($result);
 		if (preg_match('/non-existent/', $result[0].$result[4])) return $this->_nonexisting(); // does not exist in svn
@@ -722,7 +731,7 @@ class SvnOpenFile {
 	 */
 	function _readListSvn() {
 		$info = new SvnOpen('list', true);
-		$info->addArgUrlPeg($this->url, $this->getRevisionRequestedString());
+		$this->_specifyUrlAndRev($info);
 		if ($info->exec()) trigger_error("Could not read file $this->url from svn.", E_USER_ERROR);
 		$result = $info->getOutput();
 		$listinfo = $this->_parseListXml($result);
