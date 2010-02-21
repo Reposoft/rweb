@@ -38,13 +38,16 @@ function reposExportZip(/*SvnOpenFile*/ $folder) {
 	$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tmpe));
 	
 	// add to archive using relative path, starting with folder name so that file is extracted to single folder
+	$entries = 0;
 	foreach ($iterator as $key=>$value) {
 		$path = $folder->getFilename() . substr($key, strlen($tmpe));
 		$zip->addFile($key, $path) or trigger_error('Zip error when adding $key', E_USER_ERROR);
+		$entries++;
 	}
 	
 	// close and save archive
 	$zip->close();
+	if (!$entries) return false;
 	return $zipfile;
 }
 

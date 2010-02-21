@@ -30,6 +30,16 @@ if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 if ($file->isFolder()) {
 	require dirname(__FILE__).'/zipfolder.php';
 	$zip = reposExportZip($file);
+	if ($zip === false) {
+		require_once('../../conf/Presentation.class.php');
+		$p = Presentation::getInstance();
+		$p->showErrorNoRedirect('Folder '.$file->getFilename().' is empty', 'Failed to create zip');
+		exit;
+	}
+	if (!file_exists($zip)) {
+		trigger_error('Zip error.', E_USER_ERROR);
+		exit;
+	}
 	header('Content-Type: application/zip');
 	header('Content-Length: '.filesize($zip));
 	header('Content-Disposition: attachment; filename="'.$name.'.zip"');
