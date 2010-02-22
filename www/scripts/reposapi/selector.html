@@ -23,80 +23,86 @@
 
 <script type="text/javascript">
 
-var currentReposTarget = $('meta[name=repos-target]').attr('content');
-$('body').append('<p>This page has hard coded repos-target: <code>'+currentReposTarget+'</code></p>');
+test('isService', function() {
+	var currentReposTarget = $('meta[name=repos-target]').attr('content');
+	$('body').append('<p>This page has hard coded repos-target: <code>'+currentReposTarget+'</code></p>');
+	
+	// test Repos getters that we depend on
+	equals(Repos.getService(),'open/testservice/','Should read service id from meta tag for default context');
+	ok(Repos.getTarget(),'/a+b/folder(1)/file-x.txt','Should read service id from meta tag for default context');
+	
+	// service matching
+	ok(Repos.isService('open/testservice/'), 'Identical service strings should match');
+	ok(Repos.isService('open/anotherservice/')===false, 'No service match');
+	ok(Repos.isService('open/testservice')===false, 'Service selector must have trailing slash');
+	// unless service is cached we can mock it
+	var S = 'index/';
+	var _s = Repos.getService;
+	Repos.getService = function() { return S; };
+	ok(Repos.isService('index/'), 'Service "index/" is repository browsing');
+	Repos.getService = _s;
+});
 
-// test Repos getters that we depend on
-assert(Repos.getService(),'open/testservice/','Should read service id from meta tag for default context');
-assert(Repos.getTarget(),'/a+b/folder(1)/file-x.txt','Should read service id from meta tag for default context');
+test('isTarget', function() {
+	// test comparisons
+	ok(Repos.isTarget('/a+b/folder(1)/file-x.txt'), 'Target selector starting with /, identical with target');
+	
+	ok(Repos.isTarget('*.txt'), 'Using asterisk to match filetype');
+	ok(!Repos.isTarget('/*.txt'), '/*.txt should match text file only in root');
+	ok(Repos.isTarget('**/*.txt'), 'Using ant style path pattern to match filetype');
+	ok(Repos.isTarget('/**/*.txt'), 'Double wildcards matches any number of path separators');
+	ok(Repos.isTarget('/**.txt'), '/**.txt, like **.txt, matches txt anywhere (all paths start with slash)');
+	
+	// consequences of the relaxed pattern rules
+	ok(Repos.isTarget('*-x.txt'), 'Pattern that starts with single asterisk matches any folder');
+	ok(Repos.isTarget('*/file-x.txt'), 'Folders too are matched by leading asterisk');
+	ok(!Repos.isTarget('/*/file-x.txt'), 'As soon as the single asterisk is not at position 0, it does not match separators');
+	ok(!Repos.isTarget('file*.txt'), 'This means that filename with embedded wildcard need full Ant style pattern');
+	ok(Repos.isTarget('**/file*.txt'), 'Full Ant style pattern');
+	ok(Repos.isTarget('/a+b/**/*.txt'), 'Double asterisks match ');
+	
+	// repetitions
+	ok(!Repos.isTarget('/*/*.txt'), 'Wrong depth');
+	ok(Repos.isTarget('/*/*/*.txt'), 'Sincle wildcards can be used to match exact path depth');
+	ok(Repos.isTarget('/*/*/*'), 'All files at depth 3');
+	
+	ok(Repos.isTarget('/**/**/*.txt'), 'Useless repetition of double wildcards');
+	ok(!Repos.isTarget('/**/**/**/*.txt'), 'The separators still need to exist');
+	
+	// wildcard replacing zero characters
+	ok(Repos.isTarget('/a+b/folder(1)**file-x.txt'),'Double wildcard should match any path character');
+	ok(!Repos.isTarget('/a+b/folder(1)*file-x.txt'),'Single wildcard should not match folder separator');
+	
+	ok(Repos.isTarget('/a+b/folder(1)*/file-x.txt'),'Single wildcard does match 0 characters (!?)');
+	ok(Repos.isTarget('/a+b/folder(1)**/file-x.txt'),'Double wildcard does match 0 characters (!?)');
+});
 
-// service matching
-assert(Repos.isService('open/testservice/'), 'Identical service strings should match');
-assert(Repos.isService('open/anotherservice/')===false, 'No service match');
-assert(Repos.isService('open/testservice')===false, 'Service selector must have trailing slash');
-// unless service is cached we can mock it
-var S = 'index/';
-var _s = Repos.getService;
-Repos.getService = function() { return S; };
-assert(Repos.isService('index/'), 'Service "index/" is repository browsing');
-Repos.getService = _s;
-
-// test comparisons
-assert(Repos.isTarget('/a+b/folder(1)/file-x.txt'), 'Target selector starting with /, identical with target');
-
-assert(Repos.isTarget('*.txt'), 'Using asterisk to match filetype');
-assert(!Repos.isTarget('/*.txt'), '/*.txt should match text file only in root');
-assert(Repos.isTarget('**/*.txt'), 'Using ant style path pattern to match filetype');
-assert(Repos.isTarget('/**/*.txt'), 'Double wildcards matches any number of path separators');
-assert(Repos.isTarget('/**.txt'), '/**.txt, like **.txt, matches txt anywhere (all paths start with slash)');
-
-// consequences of the relaxed pattern rules
-assert(Repos.isTarget('*-x.txt'), 'Pattern that starts with single asterisk matches any folder');
-assert(Repos.isTarget('*/file-x.txt'), 'Folders too are matched by leading asterisk');
-assert(!Repos.isTarget('/*/file-x.txt'), 'As soon as the single asterisk is not at position 0, it does not match separators');
-assert(!Repos.isTarget('file*.txt'), 'This means that filename with embedded wildcard need full Ant style pattern');
-assert(Repos.isTarget('**/file*.txt'), 'Full Ant style pattern');
-assert(Repos.isTarget('/a+b/**/*.txt'), 'Double asterisks match ');
-
-// repetitions
-assert(!Repos.isTarget('/*/*.txt'), 'Wrong depth');
-assert(Repos.isTarget('/*/*/*.txt'), 'Sincle wildcards can be used to match exact path depth');
-assert(Repos.isTarget('/*/*/*'), 'All files at depth 3');
-
-assert(Repos.isTarget('/**/**/*.txt'), 'Useless repetition of double wildcards');
-assert(!Repos.isTarget('/**/**/**/*.txt'), 'The separators still need to exist');
-
-// wildcard replacing zero characters
-assert(Repos.isTarget('/a+b/folder(1)**file-x.txt'),'Double wildcard should match any path character');
-assert(!Repos.isTarget('/a+b/folder(1)*file-x.txt'),'Single wildcard should not match folder separator');
-
-assert(Repos.isTarget('/a+b/folder(1)*/file-x.txt'),'Single wildcard does match 0 characters (!?)');
-assert(Repos.isTarget('/a+b/folder(1)**/file-x.txt'),'Double wildcard does match 0 characters (!?)');
-
-// the goal of all this - the selectors
-assert($(':repos-service(open/noservice/)'), 'All selectors return a jquery bucket');
-assert($(':repos-service(open/testservice/)'));
-assert($(':repos-service(open/testservice/)').size()>0, "$(':repos-service(open/testservice/') currently matches all elements");
-assert($().filter(':repos-service(open/testservice/)').size(), 1, "$().filter(':repos-service(open/testservice/)')");
-assert($().filter(':repos-service(open/testservice/)').get(0), document, 'Only repos selector -> return document');
-
-assert($(':repos-service(open/noservice/)').size()==0, "$(':repos-service(open/noservice/') shoud get empty bucket");
-
-assert($().filter(':repos-target(/a+b/folder(1)/file-x.txt)'));
-assert($().filter(':repos-target(/a+b/folder(1)/file-x.txt)').size(), 1);
-assert($().filter(':repos-target(/a+b/folder(1)/file-x.txt)').get(0), document);
-
-assert($().filter(':repos-target(*.txt)').get(0), document);
-assert($().filter(':repos-target(/a+*/folder(*)/file-x.txt)').get(0), document, 'should support multiple wildcards');
-assert($().filter(':repos-target(/a+b/folder(1)**file-x.txt)').get(0), document, 'Only doulbe wildcard matches "/"');
-
-assert($().filter(':repos-target(/a+*/folder(*)/file-x.tx)').size(), 0);
-
-var T = '/administration/repos.accs';
-var _t = Repos.getTarget;
-Repos.getTarget = function() { return T; };
-assert($().filter(':repos-target(/administration/repos.accs)'),'match');
-Repos.getTarget = _t;
+test('cunstom selectors', function() {	
+	// the goal of all this - the selectors
+	ok($(':repos-service(open/noservice/)'), 'All selectors return a jquery bucket');
+	ok($(':repos-service(open/testservice/)'));
+	ok($(':repos-service(open/testservice/)').size()>0, "$(':repos-service(open/testservice/') currently matches all elements");
+	equals($(document).filter(':repos-service(open/testservice/)').size(), 1, "$(document).filter(':repos-service(open/testservice/)')");
+	equals($(document).filter(':repos-service(open/testservice/)').get(0), document, 'Only repos selector -> return document');
+	
+	ok($(':repos-service(open/noservice/)').size()==0, "$(':repos-service(open/noservice/') shoud get empty bucket");
+	
+	ok($(document).filter(':repos-target(/a+b/folder(1)/file-x.txt)'));
+	equals($(document).filter(':repos-target(/a+b/folder(1)/file-x.txt)').size(), 1);
+	equals($(document).filter(':repos-target(/a+b/folder(1)/file-x.txt)').get(0), document);
+	
+	ok($(document).filter(':repos-target(*.txt)').get(0), document);
+	equals($(document).filter(':repos-target(/a+*/folder(*)/file-x.txt)').get(0), document, 'should support multiple wildcards');
+	equals($(document).filter(':repos-target(/a+b/folder(1)**file-x.txt)').get(0), document, 'Only doulbe wildcard matches "/"');
+	
+	equals($(document).filter(':repos-target(/a+*/folder(*)/file-x.tx)').size(), 0);
+	
+	var T = '/administration/repos.accs';
+	var _t = Repos.getTarget;
+	Repos.getTarget = function() { return T; };
+	ok($(document).filter(':repos-target(/administration/repos.accs)'),'match');
+	Repos.getTarget = _t;
+});
 
 </script>
 

@@ -38,86 +38,86 @@ Simply call <code>var id = new ReposFileID('New folder/').get()</code>.</p>
 <p id="amp" title="used in unit test case" style="display:none">a&amp;b</p>
 <script type="text/javascript">
  
-function testIdEscape() {
+test('IdEscape', function() {
 	assert('fi_64.txt', new ReposFileId()._idescape('fi%64.txt'));
 	assert('fi_64_bc_bc.txt', new ReposFileId()._idescape('fi%64%bc%bc.txt'));
 	assert('a:b.txt', new ReposFileId()._idescape('a:b.txt'));
 	assert('a_1_.txt', new ReposFileId()._idescape('a(1).txt'));
-	assert('~a-b.txt', new ReposFileId()._idescape('~a-b.txt'));
-};
+	assert('_a-b.txt', new ReposFileId()._idescape('~a-b.txt'));
+});
 
-function testUrlEscapeUtf8() {
+test('UrlEscapeUtf8', function() {
 	assert('%c3%a5', new ReposFileId()._urlescape('å'));
 	assert('%c3%a4', new ReposFileId()._urlescape('ä'));
 	assert('%c3%b6', new ReposFileId()._urlescape('ö'));
 	assert('%c3%bc', new ReposFileId()._urlescape('ü'));
 	assert('%c3%a5%c3%bc', new ReposFileId()._urlescape('åü'));
-}
+});
 
-function testUrlEscapeCase() {
+test('UrlEscapeCase', function() {
 	// Subversion does lowercase encode of UTF-8 in the 'href' attribute in the browser xml
 	assert('Aa%c3%a5', new ReposFileId()._urlescape('Aaå'));
-}
+});
 
-function testGetFileId() {
+test('GetFileId', function() {
 	assert('file.txt', new ReposFileId('file.txt').get());
 	assert('folder_', new ReposFileId('folder/').get());
 	assert('fi.txt', new ReposFileId('fi.txt').get());
 	assert('f_c3_a5r.txt', new ReposFileId('får.txt').get());
 	assert('f_c3_a5r_', new ReposFileId('får/').get());
-}
+});
 
 // ---- generally, the 'name' attribute is the same in svn list and mod_dav_svn ----
 
-function testGetFileIdAmp() {
+test('GetFileIdAmp', function() {
 	// both 'svn list' (name) and mod_dav_svn (href) attributes are escaped "&amp"; which is not a valid html id
 	// but unlike other escape sequences it is displayed as "&" in the URL
 	assert('a_b', new ReposFileId($('#amp').text()).get());
-}
+});
 
-function testGetFileIdSpace() {
+test('GetFileIdSpace', function() {
 	// for ";" in filename, mod_dav_svn returns "%3b" but svn list returns ";"
 	assert('%20', new ReposFileId()._urlescape(' '));
 	assert('a_20b', new ReposFileId('a b').get());
-}
+});
 
-function testGetFileIdSemicolon() {
+test('GetFileIdSemicolon', function() {
 	// for ";" in filename, mod_dav_svn returns "%3b" but svn list returns ";"
 	assert('%3b', new ReposFileId()._urlescape(';'));
 	assert('a_3bb', new ReposFileId('a;b').get());
-}
+});
 
-function testGetFileIdMoreUnderscore() {
+test('GetFileIdMoreUnderscore', function() {
 	assert('a_______b', new ReposFileId('a,!&+~$=b').get());
-}
+});
 
-function testGetFileIdParenthesis() {
+test('GetFileIdParenthesis', function() {
 	assert('%5b%5d', new ReposFileId()._urlescape('[]'));
 	assert('a_5bb_5d', new ReposFileId('a[b]').get());
-}	
+});	
 
-function testGetFileIdBrackets() {
+test('GetFileIdBrackets', function() {
 	assert('fi(1).txt', new ReposFileId()._urlescape('fi(1).txt'));
 	assert('fi_1_.txt', new ReposFileId('fi(1).txt').get());
-}
+});
 
-function testGetFileId() {
+test('GetFileId', function() {
 	assert('%23', new ReposFileId()._urlescape('#'));
 	assert('a_23b', new ReposFileId('a#b').get());
-}
+});
 
-function testFind() {
+test('Find', function() {
 	assert('file.txt', new ReposFileId('file.txt').find('open').innerHTML);
-}
+});
 
-function testFindNull() {
+test('FindNull', function() {
 	assert(null, new ReposFileId('file.txt').find('hmm'));
-}
+});
 
 // for a bugfix
-function testTrickyFolder() {
+test('TrickyFolder', function() {
 	assert('a_23aa_a_25a__', new ReposFileId('a#aa@a%a&/').get());
-}
+});
 
 // demo page
 $(document).ready( function() {

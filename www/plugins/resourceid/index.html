@@ -42,92 +42,92 @@ releaseversion: $URL: https://www.repos.se/data/branches/repos/my-branch-1.2-RC1
 // avoid strings that version control will replace
 var X='$';
 
-function testResourceId() {
+test('ResourceId', function() {
 	var testid = 'version '+X+'URL: https://svn.optime.se/optime/repos/trunk/www/index.html '+X+' '+X+'Rev: 1602 '+X+'';
 	var rid = new ReposResourceId(testid);
 	assert('dev', rid.getRelease(), "It is trunk so release should be 'dev'");
 	assert('1602', rid.getRevision(), "Should return the revision from Rev");
-}
+});
 
-function testResourceIdBranch() {
+test('ResourceIdBranch', function() {
 	var testid = 'version '+X+'URL: https://svn.optime.se/optime/repos/branches/www-1.2/index.html '+X+' '+X+'Rev: 100 '+X+'';
 	var rid = new ReposResourceId(testid);
 	assert('1.2 dev', rid.getRelease(), "Should find the release version in the URL");
 	assert('100', rid.getRevision(), "Should return the revision from Rev");
-} 
+});
 
-function testResourceIdTag() {
+test('ResourceIdTag', function() {
 	var testid = 'version '+X+'URL: https://svn.optime.se/optime/repos/tags/www-1.2.1/index.html '+X+' '+X+'Rev: 1602 '+X+'';
 	var rid = new ReposResourceId(testid);
 	assert('1.2.1', rid.getRelease(), "URL is a tag so version number should be final");
-}
+});
 
-function testResourceIdOnlyURL() {
+test('ResourceIdOnlyURL', function() {
 	var testid = ''+X+'URL: https://svn.optime.se/optime/repos/branches/www-1.2/index.html '+X+'';
 	var rid = new ReposResourceId(testid);
 	assert('1.2 dev', rid.getRelease(), "URL is a branch so should be version + dev");
 	assert('', rid.getRevision(), "There is no Rev");
-}
+});
 
-function testResourceIdOnlyURL() {
+test('ResourceIdOnlyURL', function() {
 	// note the extra subfolder inside branches
 	var testid = ''+X+'URL: https://svn.optime.se/optime/repos/branches/web/repos-1.2/index.html '+X+'';
 	var rid = new ReposResourceId(testid);
 	assert('1.2 dev', rid.getRelease(), "URL is a branch so should be version + dev");
 	assert('', rid.getRevision(), "There is no Rev");
-}
+});
 
-function testResourceIdOnlyRev() {
+test('ResourceIdOnlyRev', function() {
 	var testid = ''+X+'Rev: 1602 '+X+' only';
 	var rid = new ReposResourceId(testid);
 	assert('', rid.getRelease(), "No URL so release should be empty");
 	assert('1602', rid.getRevision(), "Should return the revision from Rev");
-}
+});
 
-function testResourceIdId() {
+test('ResourceIdId', function() {
 	var testid = 'repos.se stylesheet version '+X+'Id: repos.xsl 1601 2006-09-14 09:09:50Z solsson '+X+'';
 	var rid = new ReposResourceId(testid);
 	assert('1601', rid.getRevision(),'"Should be able to get revision number from '+X+'Id'+X+' keyword too');
 	assert('', rid.getRelease(), 'There is no branch info in '+X+'Id'+X+'');
-}
+});
 
-function testGetResourceversion() {
+test('GetResourceversion', function() {
 	var testid = 'version '+X+'URL: https://svn.optime.se/optime/repos/tags/www-1.2.1/index.html '+X+' '+X+'Rev: 1602 '+X+'';
 	var v = _getResourceVersion(testid);
-	assert('1.2.1', v, "Should not give revision number because this is a tag");
-}
+	assert('version 1.2.1', v, "Should not give revision number because this is a tag");
+});
 
-function testGetReleaseversionNoNumber() {
+test('GetReleaseversionNoNumber', function() {
 	var testid = 'repos.se '+X+'URL: https://svn.optime.se/optime/repos/branches/trunk/index.html '+X+' '+X+'Rev: 1602 '+X+'';
 	var v = _getReleaseVersion(testid);
 	assert('repos.se dev', v, "Should not show revision in 'releaseversion'");
-}
+});
 
-function testGetReleaseversionBeta() {
+test('GetReleaseversionBeta', function() {
 	var testid = 'repos.se '+X+'URL: https://optime.repos.se/data/repos/branches/reposweb-1.1-B2/index.html '+X+' '+X+'Rev: 1602 '+X+'';
 	var v = _getReleaseVersion(testid);
 	assert('repos.se 1.1-B2 dev', v, "Should not show revision in 'releaseversion'");
-}
+});
 
-function testGetReleaseversionBetaTag() {
+test('GetReleaseversionBetaTag', function() {
 	var testid = 'version '+X+'URL: https://optime.repos.se/data/repos/tags/repos-web-3.2.1-RC1/index.html '+X+' '+X+'Rev: 1602 '+X+'';
 	var v = _getReleaseVersion(testid);
 	assert('version 3.2.1-RC1', v, "Should not show revision in 'releaseversion'");
-}
+});
 
-function testGetResourceversion() {
+test('GetResourceversion', function() {
 	var testid = ''+X+'URL: https://svn.optime.se/optime/repos/branches/www-1.2/index.html '+X+' '+X+'Rev: 1602 '+X+' now'
 	var v = _getResourceVersion(testid);
 	assert('1.2 dev 1602 now', v, "Should return both release and revision for branch");
-}
+});
 
-function testGetReleaseversionURLRev() {
+test('GetReleaseversionURLRev', function() {
 	var testid = 'repos.se '
 	+X+'URL: https://optime.repos.se/data/repos/branches/www/reposweb-1.1-B2/open/start/index_en.html $' +
 	+X+'Rev: 2405 $';
 	var v = _getReleaseVersion(testid);
 	assert('repos.se 1.1-B2 dev', v, "Should return both release and revision for branch");		
-}
+});
 	
 </script>
 

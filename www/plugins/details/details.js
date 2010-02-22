@@ -34,8 +34,11 @@ $.fn.reposDetails = function(s) {
 	
 };
 
+// scope for unit tests, internally we still use the function var name in current scope
+var that = $.fn.reposDetails;
+
 // show details for an existing element (page designer sets target with the 'title' attribute)
-function details_read() {
+var details_read = that.details_read = function() {
 	var e = $('body').find('div.details');
 	if (e.size() > 0) {
 		$.get(Repos.getWebapp() + 'open/list/?target='+encodeURIComponent(e.attr("title")), function(xml) {
@@ -48,7 +51,7 @@ function details_read() {
  * @param e jQuery element to write details to
  * @param entry the entry node from svn list --xml 
  */
-function details_write(e, entry) {
+var details_write = that.details_write = function(e, entry) {
 	entry.each(function(){
 		$('.filename', e).append($('name', this).text());
 		var noaccess = details_isNoaccess(this);
@@ -71,7 +74,7 @@ function details_write(e, entry) {
 	e.show();
 }
 
-function details_writeLock(e, entry) {
+var details_writeLock = that.details_writeLock = function(e, entry) {
 	var lock = $('lock', entry);
 	e.addClass('locked');
 	// addtags does not create lock spans
@@ -82,7 +85,7 @@ function details_writeLock(e, entry) {
 	s.append(' <span class="message">'+ $('comment', lock).text() +'</span>');
 }
 
-function details_repository(path, url) {
+var details_repository = that.details_repository = function(path, url) {
 	$.ajax({
 		type: 'GET',
 		url: url,
@@ -110,15 +113,15 @@ function details_repository(path, url) {
 	});
 }
 
-function details_isFolder(entry) {
+var details_isFolder = that.details_isFolder = function(entry) {
 	return $('size', entry).size() == 0;
 }
 
-function details_isLocked(entry) {
+var details_isLocked = that.details_isLocked = function(entry) {
 	return $('lock', entry).size() > 0;
 }
 
-function details_isNoaccess(entry) {
+var details_isNoaccess = that.details_isNoaccess = function(entry) {
 	// commit>author may be empty for anonymous commit, but date seems to be empty only on no read access
 	return $('commit>date', entry).size() == 0;
 }
@@ -127,12 +130,12 @@ function details_isNoaccess(entry) {
  * Adds empty placeholders for common detail entries (except name, which is probably displayed already)
  * @param e jQuery element to add to
  */
-function details_addtags(e) {
+var details_addtags = that.details_addtags = function(e) {
  	$(e).find('div.details, span.lock').remove(); // allow refresh
 	e.append('<div class="details"><span class="revision"></span><span class="datetime"></span><span class="username"></span><span class="filesize"></span></div>');
 }
 
-function detailsToggle() {
+var detailsToggle = that.detailsToggle = function() {
 	$('#commandbar #showdetails').addClass('loading');
 	details_repository();
 }
