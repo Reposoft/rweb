@@ -15,13 +15,14 @@
 
 <body>
 <table id="suiteTable" class="rows" width="100%" border="0">
-	<tbody>
+	<thead>
 <?php
 define('ReposWebapp','/repos-web/');
 
 $testfiles = array(
 'scripts/reposapi/',
 //'scripts/reposapi/index.xml',
+'scripts/reposapi/selector.html',
 'plugins/resourceid/',
 'plugins/fileid/',
 'plugins/dateformat/',
@@ -49,9 +50,14 @@ function printTestCase($file) {
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>id=qunit-testresult</td>
+	<td></td>
+</tr>
+<tr>
 	<td>assertText</td>
-	<td>css=.testsummary</td>
-	<td>* 0 fails*</td>
+	<td>css=.failed</td>
+	<td>0</td>
 </tr>
 </tbody>
 </table>
