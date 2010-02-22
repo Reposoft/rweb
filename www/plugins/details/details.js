@@ -44,7 +44,7 @@ var details_read = that.details_read = function() {
 		$.get(Repos.getWebapp() + 'open/list/?target='+encodeURIComponent(e.attr("title")), function(xml) {
 				details_write(e, $('/lists/list/entry', xml)); });
 	}
-}
+};
 
 /**
  *
@@ -72,7 +72,7 @@ var details_write = that.details_write = function(e, entry) {
 		if (details_isLocked(this)) details_writeLock(e, this);
 	});
 	e.show();
-}
+};
 
 var details_writeLock = that.details_writeLock = function(e, entry) {
 	var lock = $('lock', entry);
@@ -83,7 +83,7 @@ var details_writeLock = that.details_writeLock = function(e, entry) {
 	s.append('<span class="username">'+ $('owner', lock).text() +'</span>&nbsp;');
 	$('<span class="datetime">'+ $('created', lock).text() +'</span>&nbsp;').appendTo(s).dateformat();
 	s.append(' <span class="message">'+ $('comment', lock).text() +'</span>');
-}
+};
 
 var details_repository = that.details_repository = function(path, url) {
 	$.ajax({
@@ -111,20 +111,20 @@ var details_repository = that.details_repository = function(path, url) {
 			$('#showdetails').removeClass('loading').text('refresh details');
 		}
 	});
-}
+};
 
 var details_isFolder = that.details_isFolder = function(entry) {
 	return $('size', entry).size() == 0;
-}
+};
 
 var details_isLocked = that.details_isLocked = function(entry) {
 	return $('lock', entry).size() > 0;
-}
+};
 
 var details_isNoaccess = that.details_isNoaccess = function(entry) {
 	// commit>author may be empty for anonymous commit, but date seems to be empty only on no read access
 	return $('commit>date', entry).size() == 0;
-}
+};
 
 /**
  * Adds empty placeholders for common detail entries (except name, which is probably displayed already)
@@ -133,11 +133,11 @@ var details_isNoaccess = that.details_isNoaccess = function(entry) {
 var details_addtags = that.details_addtags = function(e) {
  	$(e).find('div.details, span.lock').remove(); // allow refresh
 	e.append('<div class="details"><span class="revision"></span><span class="datetime"></span><span class="username"></span><span class="filesize"></span></div>');
-}
+};
 
 var detailsToggle = that.detailsToggle = function() {
 	$('#commandbar #showdetails').addClass('loading');
 	details_repository();
-}
+};
 
 })(jQuery);
