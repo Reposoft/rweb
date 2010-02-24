@@ -236,6 +236,27 @@ class TestSvnOpenFile extends UnitTestCase {
 		$this->assertFalse($file->isLatestRevision());
 	}
 
+	function testIsLatestRevision_NewerThanLastChanged() {
+		$file = new SvnOpenFile('/test/a.txt', 54322, false);
+		$file->head = array(0 => 'HTTP/1.1 200 OK',
+			'ETag' => '"54321//demoproject/trunk/public/xmlfile.xml"');
+		$file->headStatus = 200;
+		$file->file = array('kind' => 'file', 'size' => '1');
+		$this->assertTrue($file->isLatestRevision(), 'Should allow integer rev higher than last changed rev. %s');
+	}
+	
+	function testStrictrevs_IsLatestRevision() {
+		// not sure we'll ever use this feature but now that it is there it should be tested
+		$file = new SvnOpenFile('/test/a.txt', 54322, false);
+		$file->allowOnlyChangedRevisions = true;
+		$file->head = array(0 => 'HTTP/1.1 200 OK',
+			'ETag' => '"54321//demoproject/trunk/public/xmlfile.xml"');
+		$file->headStatus = 200;
+		$file->file = array('kind' => 'file', 'size' => '1');
+		$this->expectError(new PatternExpectation('/newer than the last changed revision/'));
+		$file->isLatestRevision();
+	}
+
 	function testGetTypeFromHeader() {
 		$file = new SvnOpenFile('/test/a.eps', HEAD, false);
 		$file->head = array(0 => 'HTTP/1.1 200 OK',

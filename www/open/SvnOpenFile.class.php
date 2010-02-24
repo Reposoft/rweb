@@ -134,6 +134,12 @@ class SvnOpenFile {
 	 * @var int Status code, or 0 if no call has been made.
 	 */
 	var $headStatus = 0;
+	/**
+	 * Setting: be very strict about requested revisions.
+	 * These checks are not implemented consistently, but might stop some sloppy browsing/plugins.
+	 * @var boolean true to enable checks that specified revisions do exist as commit revisions.
+	 */
+	var $allowOnlyChangedRevisions = false;
 	
 	/**
 	 * Sets the vital information: path, url and revision string.
@@ -313,14 +319,13 @@ class SvnOpenFile {
 		}
 		// otherwise we assume that the ETag contains the revision number
 		$r = $this->_getHeadRevisionFromETag();
-		if ($r !== false) {
-			$rr = intval($this->getRevisionRequested()); // 0 if string
-			if ($rr) { // only interested in revisions that are integer and > 0
-				// this is a bit mean but it forces code to not specify revision unless nessecary
-				if ($r < $rr) trigger_error('The specified revision '.$rr.
+		$rr = intval($this->getRevisionRequested()); // 0 if string
+		if ($rr && $r !== false) {
+			if ($r < $rr && $this->allowOnlyChangedRevisions) {
+				trigger_error('The specified revision '.$rr.
 					' is newer than the last changed revision of this file');
-				return $r == $rr;
 			}
+			return $r <= $rr;
 		}
 		// it is unlikely that we come this far
 		trigger_error("Could not read revision number of the latest version from repository.", E_USER_ERROR);
