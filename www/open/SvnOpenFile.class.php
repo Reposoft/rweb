@@ -323,7 +323,7 @@ class SvnOpenFile {
 		if ($rr && $r !== false) {
 			if ($r < $rr && $this->allowOnlyChangedRevisions) {
 				trigger_error('The specified revision '.$rr.
-					' is newer than the last changed revision of this file');
+					' is newer than the last changed revision of this file', E_USER_WARNING);
 			}
 			return $r <= $rr;
 		}
