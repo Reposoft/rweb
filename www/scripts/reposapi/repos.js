@@ -140,8 +140,19 @@ Repos.getRevision = function() {
 };
 
 Repos.isRevisionRequested = function() {
-	// should be generalized along with getRevision
-	return (/[?&]rev=/).test(window.location.search);
+	return Repos.getRevisionRequested() !== null;
+};
+
+/**
+ * Returns the revision requested by the client.
+ * Can be any revision, always >=getRevision().
+ * Boolean null if no revision requested.
+ * This implementation does not support revisions such as HEAD or {date}.
+ * TODO is this same as working/entry revision in svn info?
+ */
+Repos.getRevisionRequested = function() {
+	var m = (/[?&]rev=(\d+)/).exec(window.location.search);
+	return m && m[1];
 };
 
 /**
