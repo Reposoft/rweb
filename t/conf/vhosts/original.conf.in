@@ -3,13 +3,17 @@
 	# the server name added by Apache::Test sets correct SelfRoot in repos.properties.php
 
 	Alias /repos-web @ServerRoot@/../www
-	Alias /repos-admin @ServerRoot@/../repos-admin
 	Alias /repos-plugins @ServerRoot@/../repos-plugins
+	Alias /repos-admin @ServerRoot@/../repos-admin
+	Alias /repos-backup @ServerRoot@/../repos-backup
 	Alias /repos-test @ServerRoot@/../repos-test
 	
 	SetEnv REPOS_TEST_ALLOW_RESET on
 	
 	SetEnv REPOS_REPO /data
+	# for backup only, should never be used from repos web
+	SetEnv REPOS_REPO_FOLDER @ServerRoot@/hosts/original/repo/
+	SetEnv REPOS_BACKUP_FOLDER @ServerRoot@/hosts/original/backup/
 	# currently access file path is used for test setup to get host structure folder
 	SetEnv REPOS_ACCESS_FILE @ServerRoot@/hosts/original/admin/repos-access
 

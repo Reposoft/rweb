@@ -5,8 +5,7 @@
  * @package admin
  */
 
-require( '../../reposweb.inc.php' );
-require( ReposWeb.'conf/Command.class.php' );
+require( '../../admin.inc.php' );
 require( ReposWeb.'conf/Report.class.php' );
 
 $r = new Report('Storage space used for this repos host');
