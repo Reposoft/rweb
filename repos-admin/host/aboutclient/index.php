@@ -25,8 +25,8 @@ function getClientAddress() {
 
 $p = new Presentation();
 $p->assign('address', getClientAddress()); 
-$p->assign('local', $_SERVER['IS_LOCAL_CLIENT'] ? true : false);
-$p->assign('admin', $_SERVER['IS_ADMIN_CLIENT'] ? true : false);
+$p->assign('local', isset($_SERVER['IS_LOCAL_CLIENT']) && $_SERVER['IS_LOCAL_CLIENT'] ? true : false);
+$p->assign('admin', isset($_SERVER['IS_ADMIN_CLIENT']) && $_SERVER['IS_ADMIN_CLIENT'] ? true : false);
 $p->display();
 
 ?>

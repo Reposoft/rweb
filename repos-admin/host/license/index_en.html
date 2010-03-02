@@ -12,6 +12,12 @@
 </div>
 
 <h1>Repos license</h1>
+{=if $licenseManager}
+<p>License manager: {=$licenseManager}</p>
+{=else}
+<p>License library not found.</p>
+{=/if}
+
 {=if $license}
 <!--{* bug with generated 'foreach a as b => c' in zendguard4+php5.2, derive key *}-->
 <!--{assign var='licensekeys' value=$license|@array_keys}-->	
