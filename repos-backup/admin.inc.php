@@ -238,7 +238,7 @@ function getBackupInfo($files, $startsWith='') {
  */
 function getRevisionInfo($filename, $startsWith) {
 	$rev = array();
-	if ( 0==ereg( '[0]*([0-9][0-9]*)-to-[0]*([0-9][0-9]*).*', substr($filename,strlen($startsWith)), $rev) )
+	if ( 0==preg_match('/[0]*([0-9][0-9]*)-to-[0]*([0-9][0-9]*).*/', substr($filename,strlen($startsWith)), $rev) )
 		fatal("Could not extract revision numbers from filename $filename assuming the given prefix $startsWith");
 	$rev[0] = $startsWith . $rev[0];
 	$rev[1] = (int) $rev[1];
