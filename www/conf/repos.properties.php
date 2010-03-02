@@ -30,6 +30,8 @@ define('REPOS_VERSION','@Dev@');
 function reportError($n, $message, $file, $line) {
 	// Allow use of @ error-control operator to suppress errors
 	if (error_reporting() == 0) return;
+	// We need to support PHP4 so we'll have to accept some PHP5 E_STRICT warnings, like lack of 'static' 
+	if (defined('E_STRICT') && $n == E_STRICT) return;	
 	// This function does not respect error_reportings settings but now we do for deprecation warnings
 	if (defined('E_DEPRECATED') && $n == E_DEPRECATED && !(error_reporting() & E_DEPRECATED)) return;
 	// from now on handle all errors
