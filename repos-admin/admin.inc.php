@@ -15,8 +15,18 @@ define('TEMP_FILE_EXTENSION', '.temporary');
 
 // --- configuration ---
 
-// the old properties file concept
+
 function _getConfig($key) {
+	// map old config keys to new server env variables
+	$map = array(
+		'local_path' => 'REPOS_REPO_FOLDER'
+	);
+	if (isset($map[$key])) {
+		$env = $map[$key];
+		if (isset($_SERVER[$env])) return $_SERVER[$env];
+	}
+	//uncomment to disallow config file//trigger_error('Config $key not recognized, E_USER_ERROR');
+	// the old properties file concept
 	static $_repos_config = null;
 	if ($_repos_config == null) {
 		$_repos_config = parse_ini_file( _getPropertiesFile(), false );
@@ -51,6 +61,8 @@ function getAdminLocalRepo() {
 function getAdminUserFile() {
 	// TODO
 	// sadly we can't read the apache configuration entries set for mod_dav_svn in the repository
+	$guess = preg_replace('/-access$/', '-users', getAccessFile());
+	if (file_exists($guess)) return $guess;
 	// old config structure
 	return _getConfig('admin_folder')._getConfig('users_file');
 }
