@@ -9,6 +9,8 @@ require(ReposWeb.'conf/Presentation.class.php');
 require(ReposWeb.'edit/SvnEdit.class.php');
 require(ReposWeb.'edit/ServiceRequestEdit.class.php');
 
+require('../../admin-authorize.inc.php'); // to create user structure in repo
+
 if ($_SERVER['REQUEST_METHOD']=='POST') {
 	accountGetUsernameRequiredRule();
 	accountGetUsernameNotReservedRule();

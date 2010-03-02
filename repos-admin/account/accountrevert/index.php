@@ -14,6 +14,9 @@ require( '../../account/account.inc.php' );
 require('../../admin-authorize.inc.php'); // uses svnlook locally and updates local user file
 require( ReposWeb.'conf/Report.class.php' );
 
+// Operation not authenticated, nothing can be accessed this way,
+// it just restores the user login from in-repository access file
+
 $r = new Report('Update user login');
  
 if (!isset($_GET['username'])) trigger_error("Parameter 'username' required", E_USER_ERROR);

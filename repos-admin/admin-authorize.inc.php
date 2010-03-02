@@ -37,13 +37,22 @@ if (array_key_exists(REPOS_ADMIN_PARAMETER, $_SERVER)) {
 	$administrationUrl = getRepository().'/administration/';
 	
 	// Use repos-web login logic
-	if(verifyLogin($administrationUrl)) {
+	if (isLoggedIn() && verifyLogin($administrationUrl)) {
 		// Authorized, resume execution in caller script
 	} else {
 		header('HTTP/1.0 401 Unauthorized');
+		// TODO prompt for authentication?
 		trigger_error("This resource is for administators only. "
 			."Requests must be authorized by server configuration or the authenticated user must have access to $administrationUrl",
 			E_USER_WARNING); // expecting exit
+	}
+}
+
+// account administration should be allowed to ask if request is authenticated
+// even if repos web authentication is not included above 
+if (!function_exists('isLoggedIn')) {
+	function isLoggedIn() {
+		return false;
 	}
 }
 

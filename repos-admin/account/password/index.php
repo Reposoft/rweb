@@ -29,6 +29,8 @@ class PasswordRule extends Rule {
 	}
 }
 
+targetLogin();
+
 $username = getReposUser();
 
 $passwordfile = new SvnOpenFile(getTarget());
