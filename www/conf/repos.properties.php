@@ -30,8 +30,6 @@ define('REPOS_VERSION','@Dev@');
 function reportError($n, $message, $file, $line) {
 	// Allow use of @ error-control operator to suppress errors
 	if (error_reporting() == 0) return;
-	// We need to support PHP4 so we'll have to accept some PHP5 E_STRICT warnings, like lack of 'static' 
-	if (defined('E_STRICT') && $n == E_STRICT) return;
 	// This function does not respect error_reportings settings but now we do for deprecation warnings
 	if (defined('E_DEPRECATED') && $n == E_DEPRECATED && !(error_reporting() & E_DEPRECATED)) return;
 	// from now on handle all errors
@@ -60,6 +58,14 @@ function reportErrorText($n, $message, $trace) {
 	//  that causes PHP to output headers of vies/index.php as cleartext here
 }
 set_error_handler('reportError');
+// Note from set_error_handler() docs:
+//  The following error types cannot be handled with a user defined function:
+//  E_ERROR, E_PARSE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING, 
+//  and most of E_STRICT raised in the file where set_error_handler() is called. 
+// So we have to disable E_STRICT if we want php4 compatibility
+if (defined('E_STRICT')) {
+	error_reporting(error_reporting() ^ E_STRICT);
+}
 
 // check essential configuration entries
 if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable magic_quotes"); }

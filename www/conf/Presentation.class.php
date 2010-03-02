@@ -157,6 +157,7 @@ class Presentation {
 	 * @static
 	 */
 	function getInstance() {
+	//not php4://static function getInstance() {
 		static $instance = null;
 		if ($instance == null) {
 			$c = __CLASS__;
