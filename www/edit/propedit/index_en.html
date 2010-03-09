@@ -3,6 +3,9 @@
 <head>
 <title>repos: Edit properties</title>
 <!--{$head}-->
+<style type="text/css">
+label.newproperty { color: gray; }
+</style>
 </head>
 
 <body>
@@ -29,10 +32,10 @@
     <input name="keys[{=$i}]" type="hidden" id="key{=$i}" value="{=$p}" />
     <label for="value{=$i}">{=$p}</label>
     <!--{else}-->
-    <label for="key{=$i}">add new property</label>
+    <label class="newproperty" for="key{=$i}">add new property</label>
     <input type="text" name="keys[{=$i}]" id="key{=$i}" value="{=$p}" size="30" />
     <br />
-    <label for="value{=$i}">value</label>
+    <label class="newproperty" for="value{=$i}">value</label>
     <!--{/if}-->
     <textarea name="values[{=$i}]" id="value{=$i}" cols="60" rows="{=$values[$i]|count_paragraphs}" >{=$values[$i]}</textarea>
   </p>
