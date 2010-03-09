@@ -176,7 +176,7 @@
 				</a>
 				<xsl:value-of select="$spacer"/>
 				<xsl:if test="not(@copyfrom-path)">
-					<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={../../@revision}&amp;action={@action}">view</a>
+					<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={../../@revision}&amp;action={@action}">details</a>
 				</xsl:if>
 				<xsl:if test="@copyfrom-path">
 					<span class="copied" title="Copied from {@copyfrom-path} version {@copyfrom-rev}">
@@ -187,7 +187,7 @@
 						</span>
 					</span>
 					<xsl:value-of select="$spacer"/>
-					<a id="view:{$pathid}" class="action" href="{$web}open/?target={@copyfrom-path}{$basep}&amp;rev={@copyfrom-rev}&amp;action={@action}">view</a>
+					<a id="view:{$pathid}" class="action" href="{$web}open/?target={@copyfrom-path}{$basep}&amp;rev={@copyfrom-rev}&amp;action={@action}">details</a>
 				</xsl:if>
 			</xsl:if>
 			<xsl:if test="@action='D'">
@@ -195,14 +195,14 @@
 					<xsl:value-of select="."/>
 				</span>
 				<xsl:value-of select="$spacer"/>
-				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={$fromrev}&amp;action={@action}">view</a>
+				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={$fromrev}&amp;action={@action}">details</a>
 			</xsl:if>
 			<xsl:if test="@action='M'">
 				<a id="open:{$pathid}" class="file" title="Modified {.}" href="{$web}{$defaultaction}?target={.}{$basep}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
 				<xsl:value-of select="$spacer"/>
-				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={../../@revision}&amp;fromrev={$fromrev}&amp;action={@action}">view</a>
+				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={../../@revision}&amp;fromrev={$fromrev}&amp;action={@action}">details</a>
 				<a id="diff:{$pathid}" class="action" href="{$web}open/diff/?target={$target}{$basep}&amp;rev={../../@revision}&amp;fromrev={$fromrev}">diff</a>
 			</xsl:if>
 		</div>
