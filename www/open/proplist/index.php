@@ -55,7 +55,7 @@ function propEnd($parser, $name) {
 
 function propData($parser, $data) {
 	global $isProperty;
-	if ($isProperty) echo str_replace("\n", '\n', $data);
+	if ($isProperty) echo str_replace('"', '\"', str_replace("\n", '\n', $data));
 }
 
 $xml_parser = xml_parser_create();
