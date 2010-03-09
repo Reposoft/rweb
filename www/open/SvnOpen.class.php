@@ -160,6 +160,15 @@ class SvnOpen {
 	}
 	
 	/**
+	 * Like addArgOption but without an option prefix,
+	 * for example to set property value.
+	 * @param String $argument to be escaped, quoted and added to command
+	 */
+	function addArg($argument) {
+		$this->command->addArg($argument);
+	}
+	
+	/**
 	 * @param String $url full http or https URL, not urlencoded
 	 */
 	function addArgUrl($url) {

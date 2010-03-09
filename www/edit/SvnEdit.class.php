@@ -245,6 +245,15 @@ class SvnEdit {
 	// different addArgument functions to be able to adapt encoding
 
 	/**
+	 * Like addArgOption but without an option prefix,
+	 * for example to set property value.
+	 * @param String $argument to be escaped, quoted and added to command
+	 */
+	function addArg($argument) {
+		$this->command->addArg($argument);
+	}	
+	
+	/**
 	 * @param pathElement filename or directory name
 	 *  Filenames and paths are expected to be properly command-line or URL encoded (this function does not know which)
 	 */

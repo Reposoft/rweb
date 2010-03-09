@@ -123,7 +123,7 @@ function svnPropset($target, $keys, $values, $message=null) {
 		// TODO validate name according to rule in svn book
 		if (!isset($values[$i])) {
 			$propdel = new SvnEdit('propdel');
-			$propset->addArgOption($name);
+			$propset->addArg($name);
 			$propset->addArgPath($workingCopy.$filename);
 			$propset->exec("Delete property '$name'");
 			continue;
@@ -131,7 +131,7 @@ function svnPropset($target, $keys, $values, $message=null) {
 		$propset = new SvnEdit('propset');
 		// multiline values must be set from file
 		// a bug in svn's argument parsing makes "-x-value" cause "illegal option -x"
-		$propset->addArgOption($name);
+		$propset->addArg($name);
 		$propset->addArgMightBeMultiline($values[$i]);
 		$propset->addArgPath($workingCopy.$filename);
 		if ($propset->exec("Set property '$name' to '$values[$i]'")) {
