@@ -121,11 +121,11 @@ function svnPropset($target, $keys, $values, $message=null) {
 		if (!$name) continue;
 		if (!preg_match(VALID_PROPERTY_NAME, $name)) Validation::error("keys[$i] property name is invalid: $name");
 		// TODO validate name according to rule in svn book
-		if (!isset($values[$i])) {
+		if (!isset($values[$i]) || strlen($values[$i]) == 0) {
 			$propdel = new SvnEdit('propdel');
-			$propset->addArg($name);
-			$propset->addArgPath($workingCopy.$filename);
-			$propset->exec("Delete property '$name'");
+			$propdel->addArg($name);
+			$propdel->addArgPath($workingCopy.$filename);
+			$propdel->exec("Delete property '$name'");
 			continue;
 		}
 		$propset = new SvnEdit('propset');
