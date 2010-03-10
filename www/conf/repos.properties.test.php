@@ -240,7 +240,15 @@ class TestReposProperties extends UnitTestCase {
 			urlSpecialChars('http://my.host/&'));
 		// browser can't know if bracket is for a section name, causes 404 page not found
 		$this->assertEqual('http://my.host/%23',
-			urlSpecialChars('http://my.host/#'));		
+			urlSpecialChars('http://my.host/#'));
+		// mod_dav_svn itself encodes spaces with %20 so it is not done in xsl getHref
+		$this->assertEqual('http://my.host/a%20b.txt',
+			urlSpecialChars('http://my.host/a b.txt'),
+			'Spaces must be encoded so that URLs can be interpreted from plaintext. %s');
+		// mod_dav_svn does not encode + so xsl getHref has to do that
+		$this->assertEqual('http://my.host/a%2Bb.txt',
+			urlSpecialChars('http://my.host/a+b.txt'),
+			'+ may be interpreted as space with old urlencoding so it must be encoded. %s');	
 	}
 	
 	function testUrlSpecialCharsQueryString() {

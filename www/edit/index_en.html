@@ -156,7 +156,7 @@ You need to use a version control client like Repos.
 </div>
 
 <div id="footer">
-<input id="urlcopy" title="Ctrl+C to copy the URL to clipboard" name="url" type="text" readonly="readonly" value="{=$file,url}" onclick="this.select();"/>
+<input id="urlcopy" title="Ctrl+C to copy the URL to clipboard" name="url" type="text" readonly="readonly" value="{=$file,url|urlSpecialChars}" onclick="this.select();"/>
 </div>
 </body>
 </html>
