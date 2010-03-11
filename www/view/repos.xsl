@@ -8,7 +8,7 @@
 	<!-- start transform -->
 	<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="no" indent="no"
 		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"/>
-	<xsl:param name="title">repos: </xsl:param>
+	<xsl:param name="title">repos: <xsl:value-of select="/svn/index/@base"/></xsl:param>
 	<!-- wrapping the config parameter with a different name, to be able to set it in a transformet -->
 	<xsl:param name="web">/repos-web/</xsl:param>
 	<xsl:param name="static"><xsl:value-of select="$web"/></xsl:param>
@@ -43,10 +43,7 @@
 				<!-- repos metadata -->
 				<meta name="repos-service" content="index/" />
 				<meta name="repos-target" content="{/svn/index/@path}/" />
-				<!-- unlike svn, repos sets base only if this is an SVNParentPath setup
-				but it is impossible to know if svn xml is from a parent path setup or not 
 				<meta name="repos-base" content="{/svn/index/@base}" />
-				 -->
 				<!-- default stylesheets -->
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}global.css"/>
 				<link title="repos" rel="stylesheet" type="text/css" href="{$cssUrl}repository/repository.css"/>
@@ -80,7 +77,11 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:call-template name="commandbar">
-			<xsl:with-param name="target" select="$folder"/>
+			<xsl:with-param name="target">
+				<xsl:value-of select="$folder"/>
+				<xsl:text>&#38;base=</xsl:text>
+				<xsl:value-of select="@base"/>
+			</xsl:with-param>
 		</xsl:call-template>
 		<xsl:call-template name="contents">
 			<xsl:with-param name="folder" select="$folder"/>
@@ -146,6 +147,8 @@
 					<xsl:value-of select="@href"/>
 				</xsl:with-param>
 			</xsl:call-template>
+			<xsl:text>&#38;base=</xsl:text>
+			<xsl:value-of select="../@base"/>
 		</xsl:param>
 		<xsl:param name="toolcheck"/>
 		<xsl:param name="classadd">
@@ -187,12 +190,14 @@
 					<xsl:value-of select="@href"/>
 				</xsl:with-param>
 			</xsl:call-template>
+			<xsl:text>&#38;base=</xsl:text>
+			<xsl:value-of select="../@base"/>
 		</xsl:param>
 		<xsl:param name="n" select="count(/svn/index/dir) + position() - 1"/>
 		<li id="row:{$id}" class="n{$n mod 4}">
 			<ul class="actions">
 				<li><a id="view:{$id}" class="action" href="{$web}open/?target={$target}">details</a></li>
-				<li><a id="view:{$id}" class="action" href="{$web}open/download/?target={$target}">download</a></li>
+				<li><a id="download:{$id}" class="action" href="{$web}open/download/?target={$target}">download</a></li>
 				<xsl:if test="$editUrl">
 					<li><a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={$target}">upload&#xA0;changes</a></li>
 					<li><a id="edit:{$id}" class="action" href="{$editUrl}?target={$target}">edit</a></li>
@@ -263,7 +268,6 @@
 					<xsl:text>/</xsl:text>
 				</xsl:if>
 			</span>
-			<!--<span class="separator"><xsl:value-of select="'/'"/></span>-->
 		</xsl:if>
 		<xsl:if test="boolean($rest)">
 			<xsl:if test="boolean($f)">

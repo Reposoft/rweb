@@ -91,6 +91,21 @@ if (isset($_REQUEST['repo'])) {
 	trigger_error('Request parameter "repo" is no longer allowed');
 }
 
+// From now on REPOS_REPO_PARENT should be used for parent path setups and REPOS_REPO for single repo
+// mod_dav_svn index sets @base regardless so we have to ignore it for single repo setups
+// which is fine in code but not easy to detect from plugins.
+// Probably all plugins can just assume multirepo and the backend can handle it, but we have not tested for that in 1.3
+// In Repos Web 1.4 remove this
+if (isset($_SERVER['REPOS_REPO']) && isset($_REQUEST['base'])
+		&& !strEnds($_SERVER['REPOS_REPO'], '/svn')) { // this is for backwards compatibility with multirepo convention
+	header('Location: '.preg_replace('/([?&])base=\w*/', '$1', $_SERVER['REQUEST_URI'], 1));
+	exit;
+}
+
+if (isset($_SERVER['REPOS_REPO_PARENT']) && !isset($_REQUEST['base'])) {
+	trigger_error("base parameter is required for parent path server setup", E_USER_ERROR);
+}
+
 // Internally dates should always be UTC. They may be localized in the UI.
 date_default_timezone_set('UTC');
 
@@ -143,6 +158,11 @@ function getRepositoryRoot() {
 	// requet parameter
 	// TODO remove (deprecated because it is a security risk) //if (isset($_REQUEST[REPO_KEY])) return $_REQUEST[REPO_KEY];
 	// server configuration
+	if (isset($_SERVER['REPOS_REPO_PARENT'])) {
+		$repo = $_SERVER['REPOS_REPO_PARENT'];
+		if (strBegins($repo, '/')) $repo = getHost().$repo;
+		return $repo;
+	}
 	if (isset($_SERVER['REPOS_REPO'])) {
 		$repo = $_SERVER['REPOS_REPO'];
 		if (strBegins($repo, '/')) $repo = getHost().$repo;
