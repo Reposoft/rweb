@@ -197,7 +197,7 @@
 		<li id="row:{$id}" class="n{$n mod 4}">
 			<ul class="actions">
 				<li><a id="view:{$id}" class="action" href="{$web}open/?target={$target}">details</a></li>
-				<li><a id="view:{$id}" class="action" href="{$web}open/download/?target={$target}">download</a></li>
+				<li><a id="download:{$id}" class="action" href="{$web}open/download/?target={$target}">download</a></li>
 				<xsl:if test="$editUrl">
 					<li><a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={$target}">upload&#xA0;changes</a></li>
 					<li><a id="edit:{$id}" class="action" href="{$editUrl}?target={$target}">edit</a></li>
