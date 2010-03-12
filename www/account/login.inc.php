@@ -56,13 +56,11 @@ define('LOGIN_VOID_USER', '0');
 // transparent workaround for the svn index anomaly that root path is "/" but no other paths have trailing slash
 {
 	$uri = $_SERVER['REQUEST_URI'];
-	if (false !== $p = strpos($uri, 'target=//')) {
-		header('Location: '.substr($uri, 0, $p+7).'/'.substr($uri, $p+9));
-		exit;
+	if (false !== $i = strpos($uri, 'target=//')) {
+		header('Location: '.substr($uri, 0, $i+7).'/'.substr($uri, $i+9)); exit;
 	}
-	if (false !== $p = stripos($uri, 'target=%2F%2F')) {
-		header('Location: '.substr($uri, 0, $p+7).'/'.substr($uri, $p+13));
-		exit;
+	if (false !== $i = stripos($uri, 'target=%2F%2F')) {
+		header('Location: '.substr($uri, 0, $i+7).'/'.substr($uri, $i+13)); exit;
 	}
 }
 
