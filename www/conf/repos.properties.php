@@ -98,8 +98,8 @@ if (isset($_REQUEST['repo'])) {
 // In Repos Web 1.4 remove this
 if (isset($_SERVER['REPOS_REPO']) && isset($_REQUEST['base'])
 		&& !preg_match('/\/svn$/', $_SERVER['REPOS_REPO'])) { // this is for backwards compatibility with multirepo convention
-	header('Location: '.preg_replace('/([?&])base=\w*/', '$1', $_SERVER['REQUEST_URI'], 1));
-	exit;
+	//header('Location: '.preg_replace('/([?&])base=\w*/', '$1', $_SERVER['REQUEST_URI'], 1)); exit;
+	unset($_REQUEST['base']); // should be a lot faster, and works as long as code does not read the query string directly
 }
 
 if (isset($_SERVER['REPOS_REPO_PARENT']) && !isset($_REQUEST['base'])) {
