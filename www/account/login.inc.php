@@ -53,15 +53,17 @@ if (!class_exists('ServiceRequest')) require(dirname(dirname(__FILE__)).'/open/S
 // reserved username value for not-logged-in
 define('LOGIN_VOID_USER', '0');
 
-// automatically check target when this script is included
-if (isTargetSet()) {
-	// special case for the svn index anomaly that root path is "/" but no other paths have trailing slash
-	if (strpos(getTarget(), '//') === 0) {
-		header('Location: '.str_replace('target=//', 'target=/', $_SERVER['REQUEST_URI']));
+// transparent workaround for the svn index anomaly that root path is "/" but no other paths have trailing slash
+{
+	$uri = $_SERVER['REQUEST_URI'];
+	if (false !== $p = strpos($uri, 'target=//')) {
+		header('Location: '.substr($uri, 0, $p+7).'/'.substr($uri, $p+9));
 		exit;
 	}
-	// do automatic login if a target is specified the standard way
-	//DISABLED - trying new strategy login-if-needed in ServiceRequest and SvnOpen//targetLogin();
+	if (false !== $p = stripos($uri, 'target=%2F%2F')) {
+		header('Location: '.substr($uri, 0, $p+7).'/'.substr($uri, $p+13));
+		exit;
+	}
 }
 
 /**
