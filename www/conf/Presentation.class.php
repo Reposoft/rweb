@@ -612,7 +612,9 @@ if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $mes
 	if ($n==E_USER_ERROR) $label = "Server error:";
 	if ($n==E_USER_WARNING) $label = "Validation error:";
 	if ($n==E_USER_NOTICE) $label = "Notice:";
-	$p = Presentation::getInstance();
+	// need to supporess errors for this until we use "static" because PHP would print the E_STRICT warning
+	$p = @Presentation::getInstance();
+	// display user friendly error page
 	if ($p->isRedirectBeforeDisplay()) {
 		// Show error in redirect page. Result page currently has no support for sending status header.
 		$p->showError("$label ".nl2br($message)." \n\n\n<!-- Error level $n. Stack trace:\n$trace -->");

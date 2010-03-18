@@ -27,6 +27,7 @@ define('REPOS_VERSION','@Dev@');
 //   * E_USER_ERROR for server errors
 //   * E_USER_WARNING for user errors, like invalid parameters
 //   * E_USER_NOTICE for information, like message to send with authentication headers
+// - note that errors occuring inside the error handlers are displayed with PHP's default error handler
 function reportError($n, $message, $file, $line) {
 	// Allow use of @ error-control operator to suppress errors
 	if (error_reporting() == 0) return;
