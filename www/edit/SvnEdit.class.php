@@ -94,6 +94,17 @@ class ResourceExistsRule extends Rule {
 		$s = new ServiceRequest(getRepository().$fieldvalue);
 		$s->setSkipBody();
 		$s->exec();
+		if ($s->getStatus() == 403) {
+			trigger_error('Access denied to '.$s->uri, E_USER_NOTICE);
+		}
+		if ($s->getStatus() == 401) {
+			if (isLoggedIn()) {
+				// TODO prompt for authenticatin again?
+				trigger_error('Authentication failed', E_USER_NOTICE);
+			} else {
+				trigger_error('Authentication not performed', E_USER_ERROR);
+			}
+		}
 		if($s->getStatus() == 301){
 			$headers = $s->getResponseHeaders();
 			return $headers['Location'] == getRepository().$fieldvalue.'/';
