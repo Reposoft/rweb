@@ -22,7 +22,7 @@ svn update --depth empty tempwc/1.3-latest
 svn rm tempwc/1.3-latest/
 rm -Rf tempwc/1.3-latest/
 svn cp tempwc/$LATEST tempwc/1.3-latest
-#svn commit -m "$LATEST" tempwc/
+svn commit -m "$LATEST" tempwc/
 rm -Rf tempwc/
 
 svn log -v --limit 1 https://optime.repos.se/data/repos/tags/1.3-latest
