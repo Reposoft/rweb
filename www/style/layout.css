@@ -43,6 +43,11 @@ div p {
 	color: #333333;
 }
 
+/* Repos Login status hidden by default and displayed by login plugin */
+#loginstatus {
+	display: none;
+}
+
 /* log in page section */
 
 #editlog ul {

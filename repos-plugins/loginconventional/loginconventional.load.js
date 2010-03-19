@@ -37,12 +37,11 @@
 	};
 	
 	Repos.service('home/', function() {
+		$('#loginstatus').css('display', 'block');
 		if (Repos.getUser()) {
-			$('#commandbar').prepend('<a id="start" href="' + startpageUrl + '">startpage</a>');	
 			addLogout();		
 		} else {
 			addLogin();
-			$('#commandbar #repository').hide();
 		}
 	});
 	

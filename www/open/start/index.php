@@ -1,6 +1,8 @@
 <?php
 /**
- * Personalized repository entry (c) 2006-2007 Staffan Olsson www.repos.se 
+ * Repos start of navigation (c) 2006-2007 Staffan Olsson www.repos.se 
+ * Should provide a starting point for all users regardless of access level.
+ * Used as link into Repos Web and as exit were the user might be lost, such as error pages.
  */
 require(dirname(dirname(dirname(__FILE__))).'/account/login.inc.php');
 require(dirname(dirname(dirname(__FILE__))).'/account/RepositoryTree.class.php');
@@ -18,6 +20,19 @@ addPlugin('dateformat');
  */
 function shouldShow($entrypoint) {
 	return count($entrypoint->getTools()) > 0;
+}
+
+/**
+ * Redirects to repository root if the user has read access there
+ * and exits.
+ */
+function repos_start_tryRepoRoot() {
+	$repo = getRepository();
+	$s = new ServiceRequest($repo.'/');
+	if ($s->exec()==200) {
+		header("Location: ".asLink($repo).'/');
+		exit;
+	}
 }
 
 // if the user logged in directly to the repository, we need the cookie to be set
@@ -49,18 +64,13 @@ if (!isLoggedIn()) {
 
 // read the ACL and create a tree for the user
 $user = getReposUser();
-$repo = getRepository();
 $acl = getAccessFile();
 if (!$acl || !is_file($acl)) {
 	// TODO add another method to list start page entries that is based on current access rights from a readable root folder
 	// maybe simplified by using the new svn list --depth in subverison 1.5
 	// Might have different subclasses of the RepositoryTree interface
 	// Until that's implemented, use subversion index as startpage instead, if access is allowed
-	$s = new ServiceRequest($repo.'/');
-	if ($s->exec()==200) {
-		header("Location: ".asLink($repo).'/');
-		exit;
-	}
+	repos_start_tryRepoRoot();
 	// no acl, no read access to repo root -> give up
 	trigger_error("Can not show start page because it requires an Access Control List or read access to repository root", E_USER_ERROR);
 }
@@ -68,8 +78,9 @@ $tree = new RepositoryTree($acl, $user);
 
 $entrypoints = array_filter($tree->getEntryPoints(), 'shouldShow');
 if (count($entrypoints)==0) {
+	repos_start_tryRepoRoot();
 	trigger_error('The access control file does not list any projects for this login. '. // no folders that match Subverson or Repos project conventions
-		'Try <a href="'.$repo.'/">repository root</a>.', E_USER_ERROR);
+		'Links directly to allowed folders are required for access.', E_USER_ERROR);
 	// TODO make a template instead of an error message, like this...
 	$p = Presentation::getInstance();
 	$p->assign('entrypoints',$entrypoints); // and use the paths directly
@@ -78,7 +89,7 @@ if (count($entrypoints)==0) {
 
 $p = Presentation::getInstance();
 $p->addStylesheet('repository/repository.css');
-$p->assign('repository', $repo);
+$p->assign('repository', getRepository());
 $p->assign('denied', isset($_GET['denied']) ? $_GET['denied'] : false);
 $p->assign('userfullname',$user);
 $p->assign('entrypoints',$entrypoints);

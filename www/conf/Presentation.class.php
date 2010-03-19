@@ -118,7 +118,6 @@ require(dirname(dirname(__FILE__)).'/lib/smarty/smarty.inc.php' );
  * Does the following assigns for every page:
  * head = all shared head tags, place a <!--{head}--> in the <head> of the template
  * referer = the HTTP referer url, if there is one
- * userhome = a place where the current user always can go, if there is no other way out
  *
  * Allows two different markup delimiters:
  * <!--{ ... }-->
@@ -133,7 +132,6 @@ require(dirname(dirname(__FILE__)).'/lib/smarty/smarty.inc.php' );
  * All templates have the following variables, assigned in display():
  * 'head' - the common head tags.
  * 'referer' - the http referer, if there is one.
- * 'userhome' - the place which users can always return to if everything else goes wrong.
  * 'webapp' - the root URL to Repos, with trainling slash.
  *
  * Cache settings are defined in te include file.
@@ -297,11 +295,7 @@ class Presentation {
 		// set common head tags
 		$webapp = $this->_getStaticWebappUrl();
 		$this->assign('referer', $this->getReferer());
-		$this->assign('userhome', $this->getUserhome());
 		$this->assign('webapp', $webapp);
-		if ($this->isUserLoggedIn()) {
-			$this->assign('logout', '/?logout');
-		}
 		// support mod_dav_svn's @base attrubute for multirepo
 		$this->assign('base', isset($_REQUEST['base']) ? $_REQUEST['base'] : '');
 		// the dynamic part of the html header
@@ -523,16 +517,6 @@ class Presentation {
 		return "javascript:history.go(-1)";
 	}
 
-	/**
-	 * @return repos home page on this server
-	 */
-	function getUserhome() {
-		if ($this->isUserLoggedIn()) {
-			return getWebapp().'account/login/';
-		} else {
-			return '/'; // server root is startpage for everyone else
-		}
-	}
 }
 
 function Presentation_noExtraContentType($tpl_source, &$smarty)

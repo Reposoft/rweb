@@ -29,8 +29,8 @@
 <div id="startbuttons" class="column" style="width: 50%">
 <!-- use #commandbar to work for plugins regardless of position in page -->
 <div id="commandbar">
+<a id="start" href="{=$webapp}/open/start/"> start</a>
 <a id="parent" href="/"> up</a>
-<a id="repository" href="{=$repository|asLink}/"> browse subversion</a>
 
 <!--{if $auth.repos}-->
 <!--{else}-->
@@ -41,7 +41,8 @@
 </div>
 
 <div id="startconfig" class="column" style="width: 49%">
-<div class="section">
+
+<div id="loginstatus" class="section">
 <h2>Login status</h2>
 <!--{if $auth.repos}-->
 <p>Logged in through Repos as user <span class="username">{=$auth.repos}</span>.</p>

@@ -7,10 +7,7 @@
 <body>
 <div id="commandbar">
 <a id="back" href="{=$referer}">back</a>
-<a id="parent" href="{=$userhome}">startpage</a>
-{=if isset($logout)}
-<a id="logout" href="{=$logout}">logout</a>
-{=/if}
+<a id="start" href="{=$webapp}/open/start/">start</a>
 </div>
 <h1>{=$headline}</h1>
 <p><em>{=$error}</em></p>
