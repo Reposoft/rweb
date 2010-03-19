@@ -10,6 +10,10 @@ function cmd() {
 
 Repos.service('account/login/', function() {
 
+	if ($('h2').text() == 'Login cancelled') {
+		cmd().appendTo('#commandbar');
+	}
+	
 	if ($('h2').text() != 'Login failed') return;
 	
 	var msg = $('<p>Forgot your password? If you have an e-mail address stored in your Repos preferences, '+

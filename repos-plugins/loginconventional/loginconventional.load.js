@@ -13,7 +13,7 @@
 	
 	var addLogin = function() {
 		var a = $('<a id="login"/>').attr('href', loginUrl).text('login');
-		$('#commandbar').append(a);
+		$('#commandbar').prepend(a);
 		a.focus();
 	};
 	
@@ -42,6 +42,7 @@
 			addLogout();		
 		} else {
 			addLogin();
+			$('#start').hide();
 		}
 	});
 	

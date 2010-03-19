@@ -40,7 +40,7 @@ function repos_start_tryRepoRoot() {
 // - not if we want authentication to be server wide
 // This page is special because it has no "target" that we can use to check is login is needed
 // - this means we can't use targetLogin()
-if (!isLoggedIn()) {
+function repos_start_authenticate() { if (!isLoggedIn()) {
 	if (isset($_COOKIE[USERNAME_KEY])) {
 		// for browsers that don't automatically send credentials to pages below login url
 		// Required in Safari
@@ -60,7 +60,7 @@ if (!isLoggedIn()) {
 		header("Location: /?login");	
 	}
 	exit;
-}
+}}
 
 // read the ACL and create a tree for the user
 $user = getReposUser();
@@ -73,6 +73,9 @@ if (!$acl || !is_file($acl)) {
 	repos_start_tryRepoRoot();
 	// no acl, no read access to repo root -> give up
 	trigger_error("Can not show start page because it requires an Access Control List or read access to repository root", E_USER_ERROR);
+} else {
+	// we do have an ACL, use the old login verification code
+	repos_start_authenticate();
 }
 $tree = new RepositoryTree($acl, $user);
 
