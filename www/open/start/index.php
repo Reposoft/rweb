@@ -29,7 +29,16 @@ function shouldShow($entrypoint) {
 function repos_start_tryRepoRoot() {
 	$repo = getRepository();
 	$s = new ServiceRequest($repo.'/');
-	if ($s->exec()==200) {
+	$status = $s->exec();
+	// Invalid credentials may have been entered
+	// This method should not enforce use of /?login because it is not wanted on all servers
+	// so instead it uses the plain BASIC auth
+	// TODO in 1.4 remove the _username===false check from ServiceRequest and don't use internal method here.
+	if ($status == 401) {
+		$s->_forwardAuthentication($s->getResponseHeaders());
+	}
+	// Repository access ok for user or unauthenticated; redirect.
+	if ($status == 200) {
 		header("Location: ".asLink($repo).'/');
 		exit;
 	}

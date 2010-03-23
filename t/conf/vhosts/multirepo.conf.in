@@ -25,7 +25,8 @@
 	SetEnv REPOS_TEST_ALLOW_RESET on
 
 	# needed because currently access file path is used for test setup to get host structure folder
-	SetEnv REPOS_ACCESS_FILE @ServerRoot@/hosts/original/admin/repos-access
+	# But commented out to test direct authentication with repository root in open/start/
+	#SetEnv REPOS_ACCESS_FILE @ServerRoot@/hosts/original/admin/repos-access
 
 	# during xsl development
 	Header add Cache-Control "max-age=0, must-revalidate"

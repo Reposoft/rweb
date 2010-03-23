@@ -219,6 +219,7 @@ class ServiceRequest {
 		$this->info = curl_getinfo($ch);
 		curl_close($ch);
 		// proxy basic authentication unless authentication was explicitly disabled in constructor
+		// TODO in 1.4 align with the behavior of repos_start_tryRepoRoot which uses _forwardAuthentication
 		if ($this->_username===false && $this->getStatus()==401) {
 			$this->_forwardAuthentication($this->getResponseHeaders());
 		}
