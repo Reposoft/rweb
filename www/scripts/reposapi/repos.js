@@ -121,7 +121,10 @@ Repos.getService = function() {
  * @return {String} root url, no trailing slash
  */
 Repos.getRepository = function() {
-	return $('#urlcopy').val().replace(Repos.getTarget(), '');
+    // assuming that #urlcopy exists and that slashes are not urlencoded
+    var targetUrl = $('#urlcopy').val().split('/');
+    var targetPath = Repos.getTarget().split('/');
+    return targetUrl.slice(0, targetUrl.length - targetPath.length + 1).join('/');
 };
 
 Repos.getBase = function() {
