@@ -40,14 +40,23 @@ var reposThumblistOnDetails = function() {
 };
 
 var reposThumbFormatAsList = function(item, a, name, thumb) {
+	var h = 120;
 	a.css({
 		display: 'block',
 		paddingLeft: 160,
-		/* this crops some height */
-		paddingTop: 50,
-		paddingBottom: 50,
+		height: h,
 		backgroundPosition: 'left center',
 		backgroundImage: 'url("' + thumb + '")'
+	});
+	var li = a.parent();
+	li.css({
+		height: h + 2
+	});
+	$('> .actions', li).css({
+		marginTop: 18
+	});
+	$('> .details', li).css({
+		marginTop: 36 - h
 	});
 };
 

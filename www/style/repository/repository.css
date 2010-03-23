@@ -75,9 +75,6 @@ div.details span, div.lock span {
 	margin-left: 0.2em;
 	margin-right: 0.8em;
 }
-.thumbnail div.details {
-	margin-top: -1.5em;
-}
 /* directory listing */
 .file {
 	background-image: url('16x16/file.png');
