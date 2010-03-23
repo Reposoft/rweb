@@ -1,7 +1,7 @@
 #!/bin/sh
 # Helper script to make a release the new 1.3-latest in a single commit
 
-set LATEST=$1
+LATEST=$1
 
 if [ -z $LATEST ]
 then
