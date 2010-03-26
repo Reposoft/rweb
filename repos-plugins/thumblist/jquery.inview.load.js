@@ -3,6 +3,7 @@
  * author Remy Sharp
  * url http://remysharp.com/2009/01/26/element-in-view-event-plugin/
  */
+// Customized by Staffan Olsson for the use case .one('inview', callback-on-true).trigger(scroll)
 (function ($) {
     function getViewportHeight() {
         var height = window.innerHeight; // Safari, Opera
@@ -32,6 +33,8 @@
     	if (scrolltop === false) scrolltop = getScrolltop();
     }
     
+    // TODO for our simple use case with event handling only on first inview=true
+    // there is no need to keep track of state
     function checkInview() {
         var $el = $(this),
             top = $el.offset().top,
@@ -58,6 +61,8 @@
     	checkInview.apply(this);
     };
     
+    // TODO use elements from inviewOne instead of $.cache for efficiency
+    // and remove element from the list upon first inview
     $(window).scroll(function () {
     	// overwrite current values in checkInview's closure scope
         vpH = getViewportHeight();
