@@ -25,7 +25,11 @@
 <!--{if $file,isFolder}-->
 <!--{elseif $file,isLatestRevision}-->
 <p>
+{=if $file,isRevisionRequested}
+This is the latest commit of the file (the current <a href="?target={=$target}">HEAD</a>). 
+{=else}
 This is the current version of the file.
+{=/if}
 {=if not $file,isWritable} You have read access only.
 {=elseif $file,isLockedByThisUser} The file is currently <strong>locked</strong> by you, so other users can not edit it.
 You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
