@@ -57,23 +57,9 @@ var reposThumbFormatAsListOnView = function(item, a, name, thumb) {
  * @param thumb URL to thumbnail
  */
 var reposThumbFormatAsList = function(item, a, name, thumb) {
-	var h = 120;
+	// uses CSS
 	a.css({
-		display: 'block',
-		paddingLeft: 160,
-		height: h,
-		backgroundPosition: 'left center',
 		backgroundImage: 'url("' + thumb + '")'
-	});
-	var li = a.parent();
-	li.css({
-		height: h + 2
-	});
-	$('> .actions', li).css({
-		marginTop: 18
-	});
-	$('> .details', li).css({
-		marginTop: 36 - h
 	});
 };
 
