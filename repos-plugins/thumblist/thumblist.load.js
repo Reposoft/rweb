@@ -44,10 +44,8 @@ var reposThumblistOnDetails = function() {
  * Delays thumbnail loading until the item is inside the viewport.
  */
 var reposThumbFormatAsListOnView = function(item, a, name, thumb) {
-	a.one('inview', function (event, visible) {
-		if (visible == true) {
-			reposThumbFormatAsList(item, a, name, thumb);
-		}
+	a.inviewOne(function() {
+		reposThumbFormatAsList(item, a, name, thumb);
 	});
 };
 

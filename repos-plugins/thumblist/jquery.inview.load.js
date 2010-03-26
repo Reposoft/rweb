@@ -17,13 +17,52 @@
         return height;
     }
 
-    $(window).scroll(function () {
-    	console.log('got scroll', $.cache);
-        var vpH = getViewportHeight(),
-            scrolltop = (document.documentElement.scrollTop ?
+    function getScrolltop() {
+    	return document.documentElement.scrollTop ?
                 document.documentElement.scrollTop :
-                document.body.scrollTop),
-            elems = [];
+                document.body.scrollTop;
+    }
+    
+    // values during bind phase. will be overwritten at scroll.
+    var vpH = false, scrolltop = false;
+    
+    // to be done at first bind
+    function init() {
+    	if (vpH === false) vpH = getViewportHeight();
+    	if (scrolltop === false) scrolltop = getScrolltop();
+    }
+    
+    function checkInview() {
+        var $el = $(this),
+            top = $el.offset().top,
+            height = $el.height(),
+            inview = $el.data('inview') || false;
+
+        if (scrolltop > (top + height) || scrolltop + vpH < top) {
+            if (inview) {
+                $el.data('inview', false);
+                $el.trigger('inview', [ false ]);                        
+            }
+        } else if (scrolltop < (top + height)) {
+            if (!inview) {
+                $el.data('inview', true);
+                $el.trigger('inview', [ true ]);
+            }
+        }
+    }
+    
+    // bind one, check immediately
+    $.fn.inviewOne = function(callback) {
+    	init();
+    	this.one('inview', callback);
+    	checkInview.apply(this);
+    };
+    
+    $(window).scroll(function () {
+    	// overwrite current values in checkInview's closure scope
+        vpH = getViewportHeight();
+        scrolltop = getScrolltop();
+        var elems = [];
         
         // naughty, but this is how it knows which elements to check for
         $.each($.cache, function () {
@@ -33,31 +72,9 @@
         });
 
         if (elems.length) {
-            $(elems).each(function () {
-                var $el = $(this),
-                    top = $el.offset().top,
-                    height = $el.height(),
-                    inview = $el.data('inview') || false;
-
-                if (scrolltop > (top + height) || scrolltop + vpH < top) {
-                    if (inview) {
-                        $el.data('inview', false);
-                        $el.trigger('inview', [ false ]);                        
-                    }
-                } else if (scrolltop < (top + height)) {
-                    if (!inview) {
-                        $el.data('inview', true);
-                        $el.trigger('inview', [ true ]);
-                    }
-                }
-            });
+            $(elems).each(checkInview);
         }
     });
     
-    // kick the event to pick up any elements already in view.
-    // note however, this only works if the plugin is included after the elements are bound to 'inview'
-    $(function () {
-        $(window).scroll();
-    });
 })(jQuery);
 
