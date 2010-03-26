@@ -23,7 +23,8 @@ var reposThumbFromListItem = function(item) {
 	var thumb = Repos.thumbnails.getSrc(target, peg, false); // paths are at HEAD when in index
 	
 	//reposThumbFormatGallerificStyle(item, a, name, thumb);
-	reposThumbFormatAsList(item, a, name, thumb);
+	//reposThumbFormatAsList(item, a, name, thumb);
+	reposThumbFormatAsListOnView(item, a, name, thumb);
 	item.addClass('thumbnail');
 };
 
@@ -39,6 +40,24 @@ var reposThumblistOnDetails = function() {
 	});
 };
 
+/**
+ * Delays thumbnail loading until the item is inside the viewport.
+ */
+var reposThumbFormatAsListOnView = function(item, a, name, thumb) {
+	a.one('inview', function (event, visible) {
+		if (visible == true) {
+			reposThumbFormatAsList(item, a, name, thumb);
+		}
+	});
+};
+
+/**
+ * Simple layout in list, using padding + background image.
+ * @param item list item
+ * @param a the link to the image
+ * @param name image label
+ * @param thumb URL to thumbnail
+ */
 var reposThumbFormatAsList = function(item, a, name, thumb) {
 	var h = 120;
 	a.css({
