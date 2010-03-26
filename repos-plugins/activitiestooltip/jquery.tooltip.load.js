@@ -251,7 +251,8 @@
 		}
 		// check vertical position
 		if (v.y + v.cy < h.offsetTop + h.offsetHeight) {
-			top -= h.offsetHeight + 20 + settings(current).top;
+			top = Math.max(top - h.offsetHeight + 20 + settings(current).top,
+					v.y + v.cy - h.offsetHeight - 5); // if viewport is not high enogh prefer placement below
 			helper.parent.css({top: top + 'px'}).addClass("viewport-bottom");
 		}
 	}
