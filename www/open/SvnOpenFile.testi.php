@@ -284,9 +284,13 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$file = new SvnOpenFile("/demoproject/trunk/", 1);
 		$this->assertTrue($file->isFolder());
 		$this->assertTrue($file->isReadableInHead());
-		$this->expectError(new PatternExpectation('/could not read.* revision/i',
-			"isLatestRevision is not supported for folders, unless answer is obvious. %s"));
-		$this->assertFalse($file->isLatestRevision());
+		// Repos Web 1.3:
+		//$this->assertFalse($file->isLatestRevision());
+		// Repos Web 1.4:
+		$this->expectError(new PatternExpectation('/not supported .* folder/i',
+			"isLatestRevision should not be supported for folders, unless answer is obvious. %s"));
+		$this->expectError('Could not read revision number of the latest version from repository.'); // need to expect a subsequent failure because simpletest trigger_error does not abort execution
+		$file->isLatestRevision();
 		// not allowed //$this->assertEqual(1, $file->getRevision());
 	}	
 	
