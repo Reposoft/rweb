@@ -30,6 +30,7 @@ This is the latest commit of the file (the current <a href="?target={=$target}">
 {=else}
 This is the current version of the file.
 {=/if}
+<!--{if $file,authenticatedUser}-->
 {=if not $file,isWritable}{=if $file,authenticatedUser}You have read access only.{=/if}
 {=elseif $file,isLockedByThisUser} The file is currently <strong>locked</strong> by you, so other users can not edit it.
 You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
@@ -38,6 +39,7 @@ You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 {=else}
 You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 {=/if}
+<!--{/if}-->
 </p>
 <!--{else}-->
 <p>This is an old version of the file. You can also <a href="?target={=$target}">view latest version</a>.</p>

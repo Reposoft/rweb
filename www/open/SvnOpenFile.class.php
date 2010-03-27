@@ -250,7 +250,7 @@ class SvnOpenFile {
 	}
 	
 	/**
-	 * @return String the username of the account used to access the file
+	 * @return String the username of the account used to access the file, false if not authenticated
 	 */
 	function getAuthenticatedUser() {
 		return SvnOpen::getAuthenticatedUser();
@@ -344,15 +344,38 @@ class SvnOpenFile {
 	}
 	
 	/**
+	 * Checks for write access.
+	 * Authenticates if prompted by server upon DAV request.
+	 * 
 	 * Note that read-only is not a versioned property (it is caused by apache configuration).
 	 * For all revisions that are _not_ HEAD, this method has to return 'false'.
 	 * To detect read-only for files or folders, it is also possible to 
 	 *  inspect "svn info --xml [parent folder]" and check if commit autor and date are missing.
+	 * 
+	 * This method prompts for authentication if it gets 401 from
+	 * the server, which means that for publicly readable files it
+	 * will result in a login box (no resource should be publicly writable).
+	 * 
+	 * Results are cached throughout the request because this is an expensive operation.
+	 * 
 	 * @see _svnFileIsWritable
-	 * @return boolean true if resource is writable in DAV.
+	 * @see isWriteAllow
+	 * @return boolean true if resource is writable in DAV, 
+	 *  false for status 404 and 403 and old revisions. 
 	 *  Locked files may still be writable, see integration tests and isWriteAllow().
 	 */	
 	function isWritable() {
+		static $_writable = null;
+		if (is_null($_writable)) {
+			$_writable = $this->_isWritable();
+		}
+		return $_writable;
+	}
+	
+	/**
+	 * Results not cached.
+	 */
+	function _isWritable() {
 		if (!$this->isLatestRevision()) return false;
 		if ($this->getStatus() == 404) return false;
 		if ($this->isFolder()) return _svnFolderIsWritable($this->getUrl());

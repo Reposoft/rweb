@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET' || $_SERVER['REQUEST_METHOD']=='HEAD') {
 		header("Cache-Control: no-cache, must-revalidate"); // the hidden field fromrev MUST be updated after successful POST to avoid strange conflicts - disable caching until we have a better solution
 		$template->assign('isfile', true);
 		$file = new SvnOpenFile($target);
+		$file->isWritable(); // check before page is displayed because it might require authentication		
 		$template->assign_by_ref('file', $file);
 		$template->assign('repository', getParent($targeturl));
 		// old file has type=extension

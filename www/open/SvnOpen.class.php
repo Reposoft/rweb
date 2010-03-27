@@ -50,7 +50,6 @@ function _svnopen_getSvnSwitches() {
  * @package open
  */
 function _svnFileIsWritable($url) {
-	if (!isLoggedIn()) return false; // can not attempt to lock without a username
 	$r = new ServiceRequest($url);
 	$r->setCustomHttpMethod('LOCK');
 	// Use If-Match to make dummy request that does not cause an entry in the error log
@@ -148,7 +147,7 @@ class SvnOpen {
 	
 	/**
 	 * All svn requests are made as the current authenticated user.
-	 * @return String username
+	 * @return String username, false if not authenticated
 	 * @static 
 	 */
 	function getAuthenticatedUser() {
