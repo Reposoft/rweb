@@ -231,6 +231,7 @@ class ServiceRequest {
 	 */
 	function _forwardAuthentication($headers) {
 		// don't want post request to be resent. Authentication should really have been taken care of when form was shown.
+		// Same principle as in SvnOpen->handleAuthenticationError
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') trigger_error('Client should have been authenticated before submit.');
 		// show a page in case the user cancels login
 		if (!headers_sent()) {

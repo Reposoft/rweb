@@ -204,7 +204,7 @@ class TestServiceRequest extends UnitTestCase {
 	
 	function testAuthenticationStatus403WithAuthHeader() {
 		$service = new ServiceRequest(getSelfUrl(), array('lockno'=>''), true);
-		// can't set alternate HTTP method like _svnFileIsWritable does in tests
+		// The test can't set alternate HTTP method like _svnFileIsWritable does.
 		// The test won't get a redirect unless output_buffering is on.
 		$this->expectError('Could not request authentication because output had already started.');
 		$service->exec();
