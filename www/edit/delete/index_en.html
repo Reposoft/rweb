@@ -24,6 +24,7 @@ from the the history for the <a class="folder" href="{=$file,folderUrl}">parent 
 {=elseif $file,isLockedBySomeoneElse} <p>This file is currently <strong>locked</strong> by 
 <span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}. You can not delete this file.</p>
 {=else}
+{=/if}
 
 </div>
 {=if $file,isWritable and not $file,isLockedBySomeoneElse}
@@ -55,7 +56,7 @@ from the the history for the <a class="folder" href="{=$file,folderUrl}">parent 
 File history and all previous versions can still be accessed from the <a class="folder" href="{=$file,folderUrl}">parent folder</a>'s history.
 </p>
 {=if not $file,isFolder}
-<p>The last version of this file would be <span class="revision">{=$file,revision}</span>.{=/if}</p>
+<p>The last version of this file would be <span class="revision">{=$file,revision}</span>.</p>
 {=/if}
 
 </div>
