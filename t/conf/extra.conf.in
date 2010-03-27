@@ -3,6 +3,9 @@
 AddType  application/x-httpd-php         .php
 AddType  application/x-httpd-php-source  .phps
 
+# Default log level in Apache::Test seems to be debug which is very verbose
+LogLevel warn
+
 # Global Python settings
 PythonDebug On
 
