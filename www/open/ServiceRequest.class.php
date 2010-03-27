@@ -194,7 +194,7 @@ class ServiceRequest {
 	}
 	
 	function isAuthenticationDisabled() {
-		return $this->_username === null;
+		return is_null($this->_username);
 	}
 	
 	/**
@@ -212,12 +212,6 @@ class ServiceRequest {
 		curl_setopt($ch, CURLOPT_HEADERFUNCTION, array(&$this, '_processHeader'));
 		// custom options
 		$this->_customize($ch);
-		// DEBUG OUTPUT
-		$debugfile = false; // To enable set to path, example: dirname(dirname(__FILE__)).'/_repos_diag_curl.txt';
-		if ($debugfile && $debugfh = @fopen($debugfile,'a+')) {
-			curl_setopt($ch, CURLOPT_STDERR, $debugfh);
-			curl_setopt($ch, CURLOPT_VERBOSE, true);
-		}
 		// run the request
 		$this->response = curl_exec($ch);
 		$this->info = curl_getinfo($ch);
@@ -227,8 +221,6 @@ class ServiceRequest {
 			$this->_forwardAuthentication($this->getResponseHeaders());
 		}
 		return $this->getStatus();
-		// DEBUG OUTPUT
-		if ($debugfh) fclose($debugfile);
 	}
 	
 	/**
@@ -250,15 +242,14 @@ class ServiceRequest {
 				// this call can may not send a new status header, because we need the 401
 				$p->showErrorNoRedirect('This service requires authentication', 'Authentication Required');
 			} else {
+				// handle missing authentication when service is called in a non-GUI context
 				// this call can may not send a new status header, because we need the 401
 				echo "This service requires authentication";
 			}
 			// browser will retry the same request with authentication
 			exit;
 		} else {
-			// handle missing authentication when service is called in a non-GUI context
-			// TODO include authentication HTTP headers here too?
-			trigger_error("This service requires authentication", E_USER_NOTICE);
+			trigger_error("Could not request authentication because output had already started.", E_USER_ERROR);
 		}
 	}
 	
@@ -282,7 +273,7 @@ class ServiceRequest {
 			curl_setopt($ch, CURLOPT_NOBODY, true);
 		}
 		// authentication, null means do not authenticate, false means user not authenticated yet
-		if (!is_null($this->_username) && $this->_username!==false) {
+		if (!$this->isAuthenticationDisabled() && $this->_username!==false) {
 			if ($this->_username === '') trigger_error('Unexpected login status, username is empty.', E_USER_ERROR);
 			curl_setopt($ch, CURLOPT_USERPWD, 
 				$this->_username.':'.$this->_password);

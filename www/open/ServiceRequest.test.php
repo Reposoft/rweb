@@ -31,6 +31,12 @@ if (isset($_GET['userno'])) {
 	echo "user checked";
 	exit;
 }
+if (isset($_GET['lockno'])) {
+	// curl -I http://localhost:8530/svn/repo1/demo/repos.html -X LOCK -H "If-Match: shouldnevermatch"
+	header('WWW-Authenticate: Basic realm="repos test multirepo"');
+	header('HTTP/1.1 401 Authorization Required'); // must be set after WWW-Authenticate because PHP sets 401 by default
+	exit;
+}
 // used for testExec, watch out so we don't 
 if (isset($_GET[WEBSERVICE_KEY])) {
 	header('HTTP/1.1 200 OK');
@@ -193,6 +199,16 @@ class TestServiceRequest extends UnitTestCase {
 		$service = new ServiceRequest(getSelfUrl(), array('useryes'=>''));
 		$this->expectError('Unexpected login status, username is empty.');
 		$service->exec();
+		$test_user = 'Test User';
+	}
+	
+	function testAuthenticationStatus403WithAuthHeader() {
+		$service = new ServiceRequest(getSelfUrl(), array('lockno'=>''), true);
+		// can't set alternate HTTP method like _svnFileIsWritable does in tests
+		// The test won't get a redirect unless output_buffering is on.
+		$this->expectError('Could not request authentication because output had already started.');
+		$service->exec();
+		print_r($service); exit;
 	}
 	
 }
