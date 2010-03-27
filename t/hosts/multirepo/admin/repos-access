@@ -8,5 +8,9 @@ guests = @trickynames
 * = 
 @employees = rw
 
+[repo1:/arbortext]
+* = r
+@employees = rw
+
 [repo1:/demo]
 @guests = r
