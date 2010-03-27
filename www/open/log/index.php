@@ -46,7 +46,7 @@ if ($rev) {
 } else if ($torev) {
 	// reverse order, always return revisions in descending order
 	$command->addArgRevisionRange($torev.':'.$fromrev);
-	$command->addArgUrl($url);
+	$command->addArgUrlPeg($url, $torev);
 } else {
 	$command->addArgUrl($url);
 }
