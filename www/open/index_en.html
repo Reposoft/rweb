@@ -106,7 +106,7 @@ will be appended to the filename, so you will know which version it is.</p>
 This works for text files. If the file is a binary file, like a word document,
 you will see only a long line of characters.</p>
 {=/if}
-<h3><a id="history" href="log/?target={=$target}{=$file,revParam}">View history</a></h3>
+<h3><a id="history" href="log/?target={=$target}{=if $file,isRevisionRequested}&torev={=$file,revision}{=/if}">View history</a></h3>
 <p>View the commits that
 {=if $file,isFile} have changed this file or its properties
 {=else} have affected contents in this folder{=/if}.</p>

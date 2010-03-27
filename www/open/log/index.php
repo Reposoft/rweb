@@ -37,11 +37,18 @@ $fromdate = getParameter('fromdate');
 $rev = getParameter('rev'); 
 
 $command = new SvnOpen('log', true);
-$command->addArgOption('-v');
+$command->addArgOption('--xml');
+// TODO in 1.4 make non-verbose default and add toggle button to command bar
+// The logcollapse plugin should expand individual entries from non-verbose using single entry log xml (rev param)
+// Also for non-verbose log on a file the details button must be shown with the headline
+if (!isset($_REQUEST['verbose']) || $_REQUEST['verbose']) {
+	$command->addArgOption('-v');
+}
 $command->addArgOption('--incremental');
 // set limit +1 to be able to see if there are more entries
 $command->addArgOption('--limit', $limit+1, false); // limit is a number, if not this will be an empty string (so it's safe)
 if ($rev) {
+	$command->addArgOption('-c', $rev);
 	$command->addArgUrlPeg($url, $rev);
 } else if ($torev) {
 	// reverse order, always return revisions in descending order
