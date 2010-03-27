@@ -1,4 +1,7 @@
 <?php
+/**
+ * This test must run in a web server because it makes requests to itself.
+ */
 
 // -- mock account ---
 function targetLogin() {};
@@ -54,6 +57,7 @@ class TestServiceRequest extends UnitTestCase {
 		$url = $service->_buildUrl();
 		$this->assertEqual('http://example.com/repos-web/test/?a=b&'.WEBSERVICE_KEY.'='.$service->responseType,
 			$url, "Should have built a GET url with an extra 'serv' parameter. %s");
+		unset($_SERVER['REPOS_HOST']);
 	}
 	
 	function testProcessHeaders() {
@@ -175,9 +179,10 @@ class TestServiceRequest extends UnitTestCase {
 		$this->assertEqual(200, $service->getStatus());
 	}
 
-	function testAuthenticationFalse() {
+	function testAuthenticationExplicitlyDisabled() {
 		$service = new ServiceRequest(getSelfUrl(), array('userno'=>''), false);
 		$this->assertEqual(null, $service->_username, 'Explicitly disable authentication -> username should be null');
+		$this->assertTrue($service->isAuthenticationDisabled());
 		$service->exec();
 		$this->assertEqual(200, $service->getStatus());
 	}

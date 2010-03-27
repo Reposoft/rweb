@@ -193,6 +193,10 @@ class ServiceRequest {
 		return $this;
 	}
 	
+	function isAuthenticationDisabled() {
+		return $this->_username === null;
+	}
+	
 	/**
 	 * Launches the request, synchronously, and returns this instance when done.
 	 * The get* and is* functions of the instance can be used only after exec().
@@ -219,7 +223,7 @@ class ServiceRequest {
 		$this->info = curl_getinfo($ch);
 		curl_close($ch);
 		// proxy basic authentication unless authentication was explicitly disabled in constructor
-		if ($this->_username!==null && $this->getStatus()==401) {
+		if (!$this->isAuthenticationDisabled() && $this->getStatus()==401) {
 			$this->_forwardAuthentication($this->getResponseHeaders());
 		}
 		return $this->getStatus();
@@ -237,14 +241,19 @@ class ServiceRequest {
 		// don't want post request to be resent. Authentication should really have been taken care of when form was shown.
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') trigger_error('Client should have been authenticated before submit.');
 		// show a page in case the user cancels login
-		if (!headers_sent() && class_exists('Presentation')) {
+		if (!headers_sent()) {
 			header($headers[0]);
 			header('WWW-Authenticate: '.$headers['WWW-Authenticate']);
 			// this is a bit different from SvnOpen which uses trigger_error, here we require html page
-			$p = new Presentation();
-			// this call can may not send a new status header, because we need the 401
-			$p->showErrorNoRedirect('This service requires authentication', 'Authentication Required');
-			 // browser will retry the same request with authentication
+			if (class_exists('Presentation')) {
+				$p = new Presentation();
+				// this call can may not send a new status header, because we need the 401
+				$p->showErrorNoRedirect('This service requires authentication', 'Authentication Required');
+			} else {
+				// this call can may not send a new status header, because we need the 401
+				echo "This service requires authentication";
+			}
+			// browser will retry the same request with authentication
 			exit;
 		} else {
 			// handle missing authentication when service is called in a non-GUI context
