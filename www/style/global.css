@@ -334,8 +334,14 @@ dl.collapsed dt, dl.collapsed dd,
 #commandbar #accountedit, #commandbar #lostpassword {
 	background-image: url('commands/24x24/accountedit.png');
 }
-#commandbar #list, #commandbar #listrecursive {
+#commandbar #list {
 	background-image: url('commands/24x24/list.png');
+}
+#commandbar #listshort {
+	background-image: url('commands/24x24/listshort.png');
+}
+#commandbar #listrecursive {
+	background-image: url('commands/24x24/listrecursive.png');
 }
 #commandbar #repostree {
 	background-image: url('commands/24x24/tree.png');

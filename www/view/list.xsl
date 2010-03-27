@@ -71,7 +71,13 @@
 						<a id="parent" class="command translate" href="?target={../@parent}{$baseparam}&amp;rev={/lists/@rev}{$recursiveparam}">up</a>
 					</xsl:if>
 					<a id="list" href="?target={$target}{$baseparam}{$recursiveparam}">current version</a>
-					<a id="history" href="../log/?target={$target}&amp;rev={../@rev}{$baseparam}">show history up to version <xsl:value-of select="../@rev"/></a>
+					<a id="history" href="../log/?target={$target}&amp;rev={../@rev}{$baseparam}">history up to version <xsl:value-of select="../@rev"/></a>
+					<xsl:if test="/lists/@recursive">
+						<a id="listshort" class="command translate" href="{$web}open/list/?target={$target}&amp;rev={../@rev}{$baseparam}">flat</a>
+					</xsl:if>
+					<xsl:if test="not(/lists/@recursive)">
+						<a id="listrecursive" class="command translate" href="{$web}open/list/?target={$target}&amp;rev={../@rev}{$baseparam}&amp;recursive=1">recursive</a>
+					</xsl:if>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:if test="../@parent">
@@ -79,8 +85,14 @@
 					</xsl:if>
 					<!-- Note that this does not forward the 'recursive' parameter.
 						Log is always recursive, but its links to folders are for non-recursive navigation -->
-					<a id="history" href="../log/?target={$target}{$baseparam}">show history</a>
-				</xsl:otherwise>
+					<a id="history" href="../log/?target={$target}{$baseparam}">history</a>
+					<xsl:if test="/lists/@recursive">
+						<a id="listshort" class="command translate" href="{$web}open/list/?target={$target}{$baseparam}">flat</a>
+					</xsl:if>
+					<xsl:if test="not(/lists/@recursive)">
+						<a id="listrecursive" class="command translate" href="{$web}open/list/?target={$target}{$baseparam}&amp;recursive=1">recursive</a>
+					</xsl:if>
+				</xsl:otherwise>				
 			</xsl:choose>
 		</div>
 		<h2>
