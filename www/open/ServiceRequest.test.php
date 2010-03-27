@@ -208,7 +208,6 @@ class TestServiceRequest extends UnitTestCase {
 		// The test won't get a redirect unless output_buffering is on.
 		$this->expectError('Could not request authentication because output had already started.');
 		$service->exec();
-		print_r($service); exit;
 	}
 	
 }
