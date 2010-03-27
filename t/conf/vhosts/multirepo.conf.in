@@ -68,8 +68,7 @@
 		Require valid-user
 
 		AuthzSVNAccessFile @ServerRoot@/hosts/multirepo/admin/repos-access
-		# no public access
-		Satisfy All
+		Satisfy Any
 		
 		# Svn module does not set caching behavior as expected for dynamic contents
 		Header add Cache-Control "max-age=0, must-revalidate"
