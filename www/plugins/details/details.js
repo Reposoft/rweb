@@ -15,7 +15,7 @@ function button() {
 			index.reposDetails();
 		} );
 	}
-	c.html('show&nbsp;details').appendTo('#commandbar');
+	c.html('details').appendTo('#commandbar');
 }
 
 Repos.service('index/', button);
@@ -108,7 +108,7 @@ var details_repository = that.details_repository = function(path, url) {
 				row.trigger('repos-details-displayed');
 			});
 			$('.details').show();
-			$('#showdetails').removeClass('loading').text('refresh details');
+			$('#showdetails').removeClass('loading');//.text('refresh&nbsp;details');
 		}
 	});
 };

@@ -32,7 +32,7 @@ Repos.service('index/', function() {
 	// tree button only shown at root and project roots
 	if (!/^(\/*|.*\/trunk\/)$/.test(Repos.getTarget())) return;
 	var tree = false;
-	var a = $('<a href="javascript:void(0)">show&nbsp;tree</a>').attr('id','repostree').appendTo('#commandbar');
+	var a = $('<a href="javascript:void(0)">tree</a>').attr('id','repostree').appendTo('#commandbar');
 	// for browser that supports sidebar show the bookmark box directly, no iframe and no toggle
 	if ($.browser.mozilla || $.browser.opera) {
 		a.attr('href', reposTreeGetUrl() + '&sidebar=true');
@@ -43,9 +43,9 @@ Repos.service('index/', function() {
 	a.toggle(function() {
 		if (!tree) tree = reposTreeIframe();
 		tree.show();
-		$(this).html('hide&nbsp;tree');
+		$(this).html('hide');
 	},function() {
 		tree.hide();
-		$(this).html('show&nbsp;tree');
+		$(this).html('tree');
 	});
 });
