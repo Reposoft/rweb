@@ -21,7 +21,7 @@
 <p>This is an old version of the file. It can not be edited.
 You may <a href="../edit/?target={=$target}">edit current version of {=$file,filename}</a>.</p>
 <!--{elseif not $file,isWritable}-->
-<p>You have only read access to this file. Contact the user administrator to get write access.</p>
+<p>You have only read access to this file.</p>
 <!--{elseif $file,isLockedBySomeoneElse}-->
 <p>You can not edit the file, because it is currently <strong>locked</strong> by 
 <span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}.
