@@ -42,7 +42,9 @@ function setMove(move) {
 </div>
 <div id="intro">
 <h1>Copy or Move</h1>
-<p>Make a copy of the {=$file,kind2} at a new location in the repository. Select "delete the original" to make this a move operation.</p>
+<p>Make a copy of the {=$file,kind2} at a new location in the repository. 
+{=if not $file,isRevisionRequested}Select "delete the original" to make this a move operation.{=/if}
+</p>
 {=if not $file,isWritable} <p>You have read access only. You can only copy the file.</p>
 {=elseif $file,isLockedByThisUser} <p>The file is currently <strong>locked</strong> by you, so other users can not edit it.
 Select "delete the original" to make this a move operation.</p>
@@ -58,10 +60,16 @@ Select "delete the original" to make this a move operation.</p>
 	<legend>Copy or Move <a class="{=$file,kind2}" href="{=$file,url}" title="open {=$file,kind}: {=$file,filename}">{=$file,kind}</a></legend>
 		<input name="target" type="hidden" id="target" value="{=$target}" />
 	<p>
-		<label for="name">copy the current</label>
+		<label for="name">copy</label>
 		<input id="name" name="name" type="text" class="current-name" size="40" disabled="disabled" value="{=$oldname}" />
 		<input id="oldname" name="oldname" type="hidden" value="{=$oldname}" />
 	</p>
+	<!--{if $file,isRevisionRequested}-->
+	<p>
+		<label for="rev">revision</label>
+		<input name="rev" type="text" id="rev" value="{=$file,revisionRequested}" class="revision"/>
+	</p>
+	<!--{/if}-->
 	<p>
 		<label for="folder">from folder</label>
 		<input id="folder" name="folder" type="text" size="40" disabled="disabled" value="{=$folder}" />	
@@ -79,7 +87,11 @@ Select "delete the original" to make this a move operation.</p>
 	</p>
 	<p>
 		<label for="moveyes">delete the original</label>
-		<!--{if $file,isWriteAllow}-->
+		<!--{if $file,isRevisionRequested}-->
+			<input id="moveyes" name="move" type="radio" value="1" disabled="disabled"/> Yes 
+			<input id="moveno" name="move" type="radio" value="0" checked="checked"/> No (historical&nbsp;revision&nbsp;can&nbsp;not&nbsp;be&nbsp;deleted)
+			<input id="movehidden" name="move" type="hidden" value="0" />			
+		<!--{elseif $file,isWriteAllow}-->
 			<input id="moveyes" name="move" type="radio" value="1" onchange="setMove(this.checked)"/> Yes 
 			<input id="moveno" name="move" type="radio" value="0" checked="checked" onchange="setMove(!this.checked)" /> No
 		<!--{else}-->

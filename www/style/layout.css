@@ -129,6 +129,9 @@ div#activities p {
 #activities #propedit {
 	background-image: url(commands/32x32/propedit.png);
 }
+#activities #copyhistorical {
+	background-image: url(commands/32x32/copy.png);
+}
 /* -------- forms ---------
 <form>
 <fieldset>

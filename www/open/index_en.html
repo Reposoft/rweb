@@ -110,6 +110,12 @@ you will see only a long line of characters.</p>
 <p>View the commits that
 {=if $file,isFile} have changed this file or its properties
 {=else} have affected contents in this folder{=/if}.</p>
+<!--{if $file,isRevisionRequested}-->
+<h3><a id="copyhistorical" href="../edit/copy/?target={=$target}&rev={=$file,revision}">Copy historical</a></h3>
+<p>Any historical file or folder can be copied to the current tree.
+This makes it possible to start editing removed files with preserved history.
+For files or folders that still exist it creates a new branch.</p>
+<!--{/if}-->
 <h3><a id="useurl" href="#urlcopy" onblur="document.getElementById('urlcopy').select();">Use the URL</a></h3>
 <!--{if $file,isLatestRevision}-->
 <p>The URL is a global ID for the file.

@@ -11,6 +11,7 @@ $parent = new ResourceExistsRule('tofolder');
 // explicit validation of the destination
 $tofolder = rtrim($parent->getValue(), '/').'/';// don't require tailing slash from user;
 new NewFilenameRule('newname', $tofolder);
+$revisionRule = new RevisionRule();
 
 // dispatch
 if ($_SERVER['REQUEST_METHOD']=='POST') {
@@ -18,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 } else {
 	$target = getTarget();
 	$template = Presentation::getInstance();
-	$file = new SvnOpenFile($target);
+	$file = new SvnOpenFile($target, $revisionRule->getValue());
 	$file->isWritable(); // check before page is displayed because it might require authentication
 	$template->assign_by_ref('file', $file);
 	$template->assign('repository', getRepository());
@@ -42,7 +43,11 @@ function svnCopy($tofolder) {
 	if (isset($_POST['message'])) {
 		$edit->setMessage($_POST['message']);
 	}
-	$edit->addArgUrl($oldUrl);
+	if (isset($_POST['rev'])) {
+		$edit->addArgUrlPeg($oldUrl, $_POST['rev']);	
+	} else {
+		$edit->addArgUrl($oldUrl);
+	}
 	$edit->addArgUrl($newUrl);
 	$edit->exec();
 	displayEdit($template);
