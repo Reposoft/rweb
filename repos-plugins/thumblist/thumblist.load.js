@@ -23,8 +23,7 @@ var reposThumbFromListItem = function(item) {
 	var thumb = Repos.thumbnails.getSrc(target, peg, false); // paths are at HEAD when in index
 	
 	//reposThumbFormatGallerificStyle(item, a, name, thumb);
-	//reposThumbFormatAsList(item, a, name, thumb);
-	reposThumbFormatAsListOnView(item, a, name, thumb);
+	reposThumbFormatAsList(item, a, name, thumb);
 	item.addClass('thumbnail');
 };
 
@@ -36,16 +35,11 @@ var reposThumblistOnLoad = function() {
 
 var reposThumblistOnDetails = function() {
 	$('.index > li').bind('repos-details-displayed', function(ev) {
-		reposThumbFromListItem.apply(this);
-	});
-};
-
-/**
- * Delays thumbnail loading until the item is inside the viewport.
- */
-var reposThumbFormatAsListOnView = function(item, a, name, thumb) {
-	a.inviewOne(function() {
-		reposThumbFormatAsList(item, a, name, thumb);
+		//reposThumbFromListItem.apply(this);
+		// Using the inview plugin to load when in viewport
+		$(this).inviewOne(function() {
+			reposThumbFromListItem.apply(this);
+		});
 	});
 };
 
