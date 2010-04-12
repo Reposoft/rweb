@@ -1,2 +1,2 @@
-echo "Excluding plugins not used in Arbortext customization"
-ant -Dplugins.excludes="refresh/**,jquery.jqUploader/**,admin*/**,linehistory/**,templates/**,tinymce/**,searchintegration/**,loginconventional/**,sla/**"
+echo "Excluding plugins that are not in the standard package"
+ant -Dplugins.excludes="refresh/**,jquery.jqUploader/**,admin*/**,linehistory/**,templates/**,tinymce/**,searchintegration/**,loginconventional/**,sla/**,thumblist/**"
