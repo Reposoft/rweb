@@ -37,7 +37,7 @@ var reposThumblistOnDetails = function() {
 	$('.index > li').bind('repos-details-displayed', function(ev) {
 		//reposThumbFromListItem.apply(this);
 		// Using the inview plugin to load when in viewport
-		$(this).inviewOne(function() {
+		$(this).one('inview', function() {
 			reposThumbFromListItem.apply(this);
 		});
 	});
