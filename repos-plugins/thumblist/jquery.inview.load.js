@@ -58,7 +58,7 @@
     $.fn.inviewOne = function(callback) {
     	init();
     	this.one('inview', callback);
-    	checkInview.apply(this);
+    	// doing this for each bind is too slow (requires "continue" in firefox for 1000 images) //checkInview.apply(this);
     };
     
     // TODO use elements from inviewOne instead of $.cache for efficiency

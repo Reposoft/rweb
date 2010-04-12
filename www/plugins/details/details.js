@@ -109,6 +109,7 @@ var details_repository = that.details_repository = function(path, url) {
 			});
 			$('.details').show();
 			$('#showdetails').removeClass('loading');//.text('refresh&nbsp;details');
+			$('.index').trigger('repos-details-completed');
 		}
 	});
 };

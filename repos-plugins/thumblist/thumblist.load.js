@@ -41,6 +41,10 @@ var reposThumblistOnDetails = function() {
 			reposThumbFromListItem.apply(this);
 		});
 	});
+	// trigger first inview check
+	$('.index').bind('repos-details-completed', function() {
+		$(window).trigger('scroll'); // TODO better isolation, trigger only inview check
+	});
 };
 
 /**
