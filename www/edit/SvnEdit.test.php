@@ -198,27 +198,47 @@ What does it say here when commit fails?');
 		$c = $e->command->command; // command instance for mocking
 		$c->output = $o;
 		$c->exitcode = 0;
-		$this->assertEqual($e->getResult(), 'Commit failed.');
+		$this->assertEqual($e->getResult(), 'What does it say here when commit fails?');
+		$this->assertTrue($e->isSuccessful(), 'Still successful because exit code is 0');
+	}
+	
+	function testGetResultCommitFailedErrorMessage()  {
+		// output when web server user does not have write access to repo
+		$o = explode("\n", "Server error: svn: Commit failed (details follow):\n".
+				"svn: Can't open file \"/repo1/db/txn-current-lock\": Permission denied ");
+		$e = new SvnEdit('commit');
+		$e->command->command->output = $o;
+		$e->command->command->exitcode = 1;	
+		$result = $e->getResult();
+		$this->sendMessage("Result: $result");
+		$this->assertPattern('/Commit failed/', $result);
+		$this->assertPattern('/Can\'t open file .*repo1.db.txn-current-lock.* Permission denied/', $result);
+		$this->assertFalse($e->isSuccessful());
 	}
 
 	function testGetResultWithPostCommitHookOutput()  {
+		// To get output from post-commit the hook must have exit code !=0, which always renders a warning
 		$o = explode("\n",
 'Sending        lllk.txt
 Transmitting file data .
 Committed revision 28.
 
-This is the post-commit hook talking
+Warning: post-commit hook failed (exit code 1) with output:
+This is the post-commit hook printing a number 10.
 ');
 		$e = new SvnEdit('commit');
 		$c = $e->command->command; // command instance for mocking
 		$c->output = $o;
-		$c->exitcode = 0;
-		$this->assertEqual($e->getResult(), 'Committed revision 28.');
-	}
-	
-	function testNewFilenameRule() {
-		$r = new NewFilenameRule('test', '/test/trunk/');
-		$this->assertEqual('/test/trunk/a.txt', $r->_getPath('a.txt'));
+		$c->exitcode = 0; // is 0 even if post-commit returns >0
+		$this->assertEqual(28, $e->getCommittedRevision(), 'Should get the revision number along with post-commit output. %s');
+		$result = $e->getResult();
+		$this->sendMessage("Result: $result");
+		$this->assertNoPattern('/Sending/', $result, 'Should not return the svn file transfer output. %s');
+		$this->assertNoPattern('/Transmitting file data/', $result, '%s');
+		$this->assertPattern('/Warning: post-commit hook failed \(exit code 1\) with output:/', $result);
+		$this->assertPattern('/This is the post-commit hook printing a number 10./', $result);
+		$this->assertPattern('/Committed revision 28./', $result, 'Must always contain the revision message. %s');
+		$this->assertEqual(4, substr_count(nl2br($result), "<br />"), 'Should have the line breaks from the command output. %s');
 	}
 
 	function testFilenameRule() {

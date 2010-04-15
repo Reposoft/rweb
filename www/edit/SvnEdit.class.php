@@ -414,19 +414,34 @@ class SvnEdit {
 	
 	/**
 	 * Returns the last line of the command output, which usually contains
-	 * the conclusion, like "Committed revision 123"
+	 * the conclusion, like "Committed revision 123".
+	 * This hides output like each downloaded file form a checkout.
+	 * It should not hide interesting info, i.e. anything that is not normally printed from the command.
 	 * @return result of the subversion operation, empty string if it gave no output
 	 */
 	function getResult() {
 		$op = $this->getOperation();
 		$o = $this->getOutput();
 		if (!count($o)) return 'No output from operation '.$op;
-		if ('commit' != $op && 'ci' != $op) return $o[count($o)-1];
-		// for commit operation we should return the revision row even if there is output below
-		foreach ($o as $r) {
-			if (strBegins($r, 'Committed revision')) return $r;
-		}
-		return 'Commit failed.';
+		// The presentation can always getResults but for commit operations we want hook info in the results
+		if ('commit' != $op && 'ci' != $op && 'import' != $op) return $o[count($o)-1];
+		// In earlier Repos releases we've removed as much output as possible
+		// but we should probably change that so we don't hide errors and hook output.
+		// Starting with commit for which we have unit tests.
+		$f = array_filter($o, array($this, "_resultFilter"));
+		if (!count($o)) trigger_error('Unrecognized output: '.implode("\n", $o), E_USER_ERROR);
+		return implode("\n", $f);
+	}
+	
+	/**
+	 * @param $line Line from command output
+	 * @return true if the line should be displayed
+	 */
+	function _resultFilter($line) {
+		$op = $this->getOperation();
+		if (strBegins($line, 'Sending ')) return false;
+		if (strBegins($line, 'Transmitting file data ')) return false;
+		return true;
 	}
 	
 	/**
@@ -437,7 +452,8 @@ class SvnEdit {
 	}
 	
 	/**
-	 * @return the revision number that this operation created upon success
+	 * @return the revision number that this operation created upon success,
+	 *  if operation failed or output does not contain the revision number return null
 	 */
 	function getCommittedRevision() {
 		if ($this->isSuccessful()) {
@@ -490,7 +506,7 @@ class SvnEdit {
  * @param String $str
  */
 function _edit_svnOutput($s) {
-	// usability
+	// usability, do-gooding?
 	$s = str_replace('Committed revision','Committed version',$s);
 	$s = preg_replace('/^svn:/','',$s);
 	// system integrity
