@@ -43,8 +43,17 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 	function testHeadVersionAnonymousUser() {
 		setTestUserNotLoggedIn();
 		$file = new SvnOpenFile("/demoproject/trunk/public/xmlfile.xml");
-		$this->assertFalse($file->_isWritable(),
-			"File may be writable in SVN, but if the user is logged in we don't know, and we'd rather say no. %s");
+		// The problem here is that the server might return 401 when write access is attempted
+		// even if it returns 200 for no username when not.
+		// The new behavior (r4869) is that Repos Web prompts for authentication, and that pages
+		// that should be available anonymously ONLY check isWritable if a user is logged in.
+		//$this->assertFalse($file->_isWritable(),
+		//	"File may be writable in SVN, but if the user is logged in we don't know, and we'd rather say no. %s");
+		$this->expectError('Could not request authentication because output had already started.',
+			'Should get 401 and forward that. %s');
+		// follow-up error that would not be reached in a normal request
+		$this->expectError('Server configuration error. Could not check if resource is read-only. Status 401');
+		$file->_isWritable();
 	}
 
 	function testHeadVersionReadonly() {
