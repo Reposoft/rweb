@@ -430,7 +430,7 @@ class SvnEdit {
 		// Starting with commit for which we have unit tests.
 		$f = array_filter($o, array($this, "_resultFilter"));
 		if (!count($o)) trigger_error('Unrecognized output: '.implode("\n", $o), E_USER_ERROR);
-		return implode("\n", $f);
+		return trim(implode("\n", $f));
 	}
 	
 	/**
@@ -457,7 +457,8 @@ class SvnEdit {
 	 */
 	function getCommittedRevision() {
 		if ($this->isSuccessful()) {
-			if (preg_match('/^[a-zA-Z ]+([0-9]+)/', $this->getResult(), $rev)) {
+			// TODO check after newlines too?
+			if (preg_match('/^[a-zA-Z ]+([0-9]+)\./m', $this->getResult(), $rev)) {
 				return $rev[1];
 			} else {
 				// not ok to throw error because some SvnEdit operations like propset are only local

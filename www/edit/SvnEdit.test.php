@@ -53,6 +53,17 @@ class SvnEditTest extends UnitTestCase
 		$this->assertEqual('107', $edit->getCommittedRevision());
 	}
 	
+	function testExtractRevisionFromMultilineResult() {
+		_setNextExitcode(0);
+		// This might happen if getResult returns more than one row
+		// deeming some information prior to the commit comment as important
+		// Not sure if this will ever happen for successful operations.
+		_setNextOutput(array("\nCommitted revision 107."));
+		$edit = new SvnEdit('info');
+		$edit->exec();
+		$this->assertEqual('107', $edit->getCommittedRevision());
+	}
+	
 	/**
 	 * Only some of the command arguments should be escaped, so escaping must be done per argument type.
 	 */
@@ -238,7 +249,24 @@ This is the post-commit hook printing a number 10.
 		$this->assertPattern('/Warning: post-commit hook failed \(exit code 1\) with output:/', $result);
 		$this->assertPattern('/This is the post-commit hook printing a number 10./', $result);
 		$this->assertPattern('/Committed revision 28./', $result, 'Must always contain the revision message. %s');
-		$this->assertEqual(4, substr_count(nl2br($result), "<br />"), 'Should have the line breaks from the command output. %s');
+		$this->assertEqual(3, substr_count(nl2br($result), "<br />"), 'Should have the line breaks from the command output. %s');
+	}
+
+	function testGetResultImport() {
+		$e = new SvnEdit('import');
+		// don't think this is any different from commit
+		$e->command->command->output = array('Sending   build.xml', '', 'Committed revision 92.');
+		$e->command->command->exitcode = 0;
+		$this->assertEqual('Committed revision 92.', $e->getResult(), 'Should strip Sending... and newlines. %s');	
+	}
+	
+	function testGetResultPreCommit() {
+		$e = new SvnEdit('import');
+		$e->command->command->output = explode("\n",
+			"Sending         testconfig.sh\nsvn: Commit blocked by pre-commit hook (exit code 255) with no output.");;
+		$e->command->command->exitcode = 1;
+		$this->assertPattern('/Commit blocked by pre-commit/', $e->getResult());
+		// Don't think it is possible to get pre-commit output without failing the commit so I'm not testing getCommittedRevision
 	}
 
 	function testFilenameRule() {

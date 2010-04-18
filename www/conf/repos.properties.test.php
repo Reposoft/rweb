@@ -38,6 +38,10 @@ class TestReposProperties extends UnitTestCase {
 		$_SERVER['SERVER_PORT'] = 443;
 		$_SERVER['SERVER_NAME'] = 'where-we-work.com';
 		// test
+		// TODO This is still not implemented. Before getRepository() starts to return https
+		// we must make sure all internal calls use getRepositoryDefault() 
+		// (and do we also make internal service calls based on getHost?).
+		// In the meantime we rely on asLink to correct urls when used in UI
 		$this->assertEqual(getHost(), 'https://where-we-work.com');
 		$this->assertEqual(getRepositoryDefault(), 'https://where-we-work.com/svn');
 		// with a repos ssl proxy setup contents are served in http with HTTPS = on

@@ -326,14 +326,16 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 			$this->fail('Failed to import test folder');
 			$this->sendMessage($import->getOutput());
 		}
+		$this->sendMessage($import->getResult());
 		$revWhenAdded = $import->getCommittedRevision();
+		$this->assertNotNull($revWhenAdded, 'The test needs a revision number');
 		$delete = new SvnEdit('rm');
 		$delete->setMessage('testFolderDeletedDotInName');
 		$delete->addArgUrl($url);
 		$this->assertFalse($delete->exec(),'delete folder file');
 		// test
 		$file = new SvnOpenFile($target, $revWhenAdded);
-		$this->assertEqual(200, $file->getStatus());
+		$this->assertEqual(200, $file->getStatus(), 'Should still exist in the revision where it was added. %s');
 		$this->assertEqual('dir', $file->getKind());
 		// cleanp
 		System::deleteFolder($tmp);
