@@ -13,42 +13,42 @@
  */
 
 if (array_key_exists('repos', $_GET)) {
-	header("Location: /repos/");
+	header("Location: /repos-web/");
 	exit;
 }
 
 if (array_key_exists('admin', $_GET)) {
-	header("Location: /repos/admin/");
+	header("Location: /repos-admin/");
 	exit;
 }
 
 if (array_key_exists('start', $_GET)) {
-	header("Location: /repos/open/start/");
+	header("Location: /repos-web/open/start/");
 	exit;
 }
 
 if (array_key_exists('demoproject', $_GET)) {
-	header("Location: /testrepo/demoproject/trunk/");
+	header("Location: /data/demoproject/trunk/");
 	exit;
 }
 
 if (array_key_exists('public', $_GET)) {
-	header("Location: /testrepo/demoproject/trunk/public/");
+	header("Location: /data/demoproject/trunk/public/");
 	exit;
 }
 
 if (array_key_exists('reset', $_GET)) {
-	header("Location: /repos/test/reset/");
+	header("Location: /repos-test/reset/");
 	exit;
 }
 
 if (array_key_exists('resetminimal', $_GET)) {
-	header("Location: /repos/test/reset/minimal/");
+	header("Location: /repos-test/reset/minimal/");
 	exit;
 }
 
 if (array_key_exists('root', $_GET)) {
-	header("Location: /testrepo/");
+	header("Location: /data/");
 	exit;
 }
 

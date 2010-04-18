@@ -4,9 +4,10 @@
  *
  * @package
  */
-require('../../../conf/repos.properties.php');
-require('../../../conf/Report.class.php');
-require('../../../open/ServiceRequest.class.php');
+require('../../reposweb.inc.php');
+require(ReposWeb.'conf/repos.properties.php');
+require(ReposWeb.'conf/Report.class.php');
+require(ReposWeb.'open/ServiceRequest.class.php');
 
 if (isset($_GET['threads']) && $_GET['threads'] > 1) {
 	testMultiple($_GET['threads'], $_GET['url'], $_GET['count']);
