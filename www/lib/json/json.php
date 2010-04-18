@@ -53,6 +53,9 @@
  * @version     CVS: $Id: JSON.php 292911 2010-01-02 04:04:10Z alan_k $
  * @license     http://www.opensource.org/licenses/bsd-license.php
  * @link        http://pear.php.net/pepr/pepr-proposal-show.php?id=198
+ * 
+ * This version was modified by Staffan Olsson to bypass the
+ * setting of content-type header and the strange setlocale trick.
  */
 
 /**
@@ -233,10 +236,25 @@ class Services_JSON
     * @return   mixed   JSON string representation of input var or an error if a problem occurs
     * @access   public
     */
-    function encode($var)
+    function encodeWithHeader($var)
     {
         header('Content-type: application/json');
         return $this->encodeUnsafe($var);
+    }
+   /**
+    * encodes an arbitrary variable into JSON format (does NOT send JSON Header, does NOT do setlocale)
+    *
+    * @param    mixed   $var    any number, boolean, string, array, or object to be encoded.
+    *                           see argument 1 to Services_JSON() above for array-parsing behavior.
+    *                           if var is a strng, note that encode() always expects it
+    *                           to be in ASCII or UTF-8 format!
+    *
+    * @return   mixed   JSON string representation of input var or an error if a problem occurs
+    * @access   public
+    */    
+	function encode($var)
+    {
+        return $this->_encode($var);
     }
     /**
     * encodes an arbitrary variable into JSON format without JSON Header - warning - may allow CSS!!!!)
