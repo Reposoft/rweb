@@ -50,7 +50,7 @@
  * @author      Matt Knapp <mdknapp[at]gmail[dot]com>
  * @author      Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
  * @copyright   2005 Michal Migurski
- * @version     CVS: $Id: JSON.php,v 1.3 2009/05/22 23:51:00 alan_k Exp $
+ * @version     CVS: $Id: JSON.php 292911 2010-01-02 04:04:10Z alan_k $
  * @license     http://www.opensource.org/licenses/bsd-license.php
  * @link        http://pear.php.net/pepr/pepr-proposal-show.php?id=198
  */
@@ -235,8 +235,8 @@ class Services_JSON
     */
     function encode($var)
     {
-        header('Content-type: application/x-javascript');
-        return $this->_encode($var);
+        header('Content-type: application/json');
+        return $this->encodeUnsafe($var);
     }
     /**
     * encodes an arbitrary variable into JSON format without JSON Header - warning - may allow CSS!!!!)
@@ -251,7 +251,13 @@ class Services_JSON
     */
     function encodeUnsafe($var)
     {
-        return $this->_encode($var);
+        // see bug #16908 - regarding numeric locale printing
+        $lc = setlocale(LC_NUMERIC, 0);
+        setlocale(LC_NUMERIC, 'C');
+        $ret = $this->_encode($var);
+        setlocale(LC_NUMERIC, $lc);
+        return $ret;
+        
     }
     /**
     * PRIVATE CODE that does the work of encodes an arbitrary variable into JSON format 
@@ -279,7 +285,7 @@ class Services_JSON
 
             case 'double':
             case 'float':
-                return (float) $var;
+                return  (float) $var;
 
             case 'string':
                 // STRINGS ARE EXPECTED TO BE IN ASCII OR UTF-8 FORMAT
