@@ -255,7 +255,7 @@ This is the post-commit hook printing a number 10.
 	function testGetResultImport() {
 		$e = new SvnEdit('import');
 		// don't think this is any different from commit
-		$e->command->command->output = array('Sending   build.xml', '', 'Committed revision 92.');
+		$e->command->command->output = array('Adding   build.xml', '', 'Committed revision 92.');
 		$e->command->command->exitcode = 0;
 		$this->assertEqual('Committed revision 92.', $e->getResult(), 'Should strip Sending... and newlines. %s');	
 	}

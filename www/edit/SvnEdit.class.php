@@ -439,7 +439,10 @@ class SvnEdit {
 	 */
 	function _resultFilter($line) {
 		$op = $this->getOperation();
-		if (strBegins($line, 'Sending ')) return false;
+		// Subversion transaction output can be identified on multiple spaces between verb and path
+		if (strBegins($line, 'Adding  ')) return false;
+		if (strBegins($line, 'Sending  ')) return false;
+		// This is not a likely output from hooks
 		if (strBegins($line, 'Transmitting file data ')) return false;
 		return true;
 	}
