@@ -8,9 +8,9 @@ then
 #tar xvzf jetty-distribution-7.0.0.v20091005.tar.gz
 #mv jetty-distribution-7.0.0.v20091005 jetty
 
-wget http://dist.codehaus.org/jetty/jetty-6.1.21/jetty-6.1.21.zip
-unzip jetty-6.1.21.zip
-mv jetty-6.1.21 jetty
+wget http://dist.codehaus.org/jetty/jetty-6.1.23/jetty-6.1.23.zip
+unzip jetty-6.1.23.zip
+mv jetty-6.1.23 jetty
 rm jetty-*
 
 fi
@@ -32,3 +32,4 @@ cd jetty
 #java -jar start.jar OPTIONS=default,jsp -Djetty.port=8080 -Dsolr.solr.home=/Volumes/Encrypted/workspace/cms/solr/home/
 
 java -Djetty.port=8080 -Dsolr.solr.home=/Volumes/Encrypted/workspace/cms/solr/home/ -jar start.jar
+
