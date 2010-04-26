@@ -94,7 +94,9 @@ a.folder {
 	border: 1px dotted #cccc99;
 	font-size: 82.5%;
 	font-family: Arial, Helvetica, sans-serif;
-	text-align: right; /* revision might be fixed width or table cell */
+}
+td.revision {
+	text-align: right;
 }
 .username {
 	color: #663300;
