@@ -140,6 +140,11 @@ if (!file_exists($tempfile) || !filesize($tempfile)) {
 	// in which case we create each page as a separate thumb
 	// (this is quite inefficient but I found no way to restrict to first page when using stdin as source)
 	if (file_exists("$tempfile.0")) {
+		// delete the others
+		System::deleteFile("$tempfile");
+		for ($p = 1; file_exists("$tempfile.$p"); $p++) {
+			System::deleteFile("$tempfile.$p");
+		}
 		$tempfile = "$tempfile.0";
 	} else {
 		// otherwise show output from command (which is probably empty)
@@ -156,13 +161,12 @@ if ($r->getValue()) {
 showImage($tempfile, $thumbtype);
 
 // done displaying thumbnail, store in cache if enabled
-$cacheRepo or exit;
-
-// store in cache
-$import = new SvnEdit('import');
-$import->addArgPath($tempfile);
-$import->addArgUrl($cacheUrl);
-$import->execNoDisplay();
+if ($cacheRepo) {
+	$import = new SvnEdit('import');
+	$import->addArgPath($tempfile);
+	$import->addArgUrl($cacheUrl);
+	$import->execNoDisplay();
+}
 
 System::deleteFile($tempfile);
 
