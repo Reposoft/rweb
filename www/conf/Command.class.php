@@ -68,13 +68,12 @@ class Command {
 	
 	/**
 	 * @param String $commandName the command without arguments, for example "grep" or "ls"
+	 * @param boolean $validate set to false to bypass command name resolution and validation (requires careful security considerations)
 	 * @return Command
 	 */
 	function Command($commandName, $validate=true) {
 		if (!$validate) {
-			if (!preg_match('/\/test\/|\/conf\/index.php/', $_SERVER['SCRIPT_FILENAME'])) {
-				trigger_error("Only test scripts can run commands that are not validated", E_USER_ERROR);
-			}
+			// command executed as given
 		} else if (System::getCommand($commandName) === false) { 
 			trigger_error("Security error: command '$commandName' is not valid on this patform.", E_USER_ERROR);
 		}
