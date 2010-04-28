@@ -75,7 +75,7 @@ class Command {
 		if (!$validate) {
 			// command executed as given
 		} else if (System::getCommand($commandName) === false) { 
-			trigger_error("Security error: command '$commandName' is not valid on this patform.", E_USER_ERROR);
+			trigger_error("Repos Web does not recognize the command '$commandName' on this patform.", E_USER_ERROR);
 		}
 		// currently only the name is stored, and the command is retreived again at exec
 		$this->operation = $commandName;
