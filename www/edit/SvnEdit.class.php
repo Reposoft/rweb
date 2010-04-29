@@ -55,18 +55,7 @@ class NewFilenameRule extends Rule {
 	var $_pathPrefix;
 	function NewFilenameRule($fieldname, $pathPrefix='') {
 		$this->_pathPrefix = $pathPrefix; // fields first, then parent constructor
-		$this->_trim($fieldname);
 		$this->Rule($fieldname, '');
-	}
-	/**
-	 * Leading and trailing whitespaces should be trimmed because they are difficult
-	 * for the user to see and might cause problems on windows.
-	 * @param $fieldname The request parameter name
-	 */
-	function _trim($fieldname) {
-		if (array_key_exists($fieldname, $_REQUEST)) $_REQUEST[$fieldname] = trim($_REQUEST[$fieldname]);
-		if (array_key_exists($fieldname, $_POST)) $_POST[$fieldname] = trim($_POST[$fieldname]);
-		if (array_key_exists($fieldname, $_GET)) $_GET[$fieldname] = trim($_GET[$fieldname]);		
 	}
 	function validate($fieldvalue) {
 		$target = $this->_getPath($fieldvalue);
