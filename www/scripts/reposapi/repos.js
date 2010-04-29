@@ -224,10 +224,16 @@ jQuery.fn.say = function(message) {
 	if (m.title) e.attr('title',m.title);
 	if (m.id) e.attr('id',m.id);
 	
-	// append after first headline
-	$('h1,h2,h3',this).eq(0).after(e);
-	// move to after input if that's whats in the bucket
+	// placement, highest priority last
+	e.hide();
+	// after first headline
+	$('h1,h2,h3', this).eq(0).after(e);
+	// inside form
+	this.filter('form').find('fieldset').prepend(e.wrap('<p/>'));
+	// after input
 	this.filter('input').parent().append(e);
+	// done
+	e.show('slow');
 };
 
 /**

@@ -54,8 +54,8 @@
 			for (var i = 0; i < trimmed.length; i++) {
 				labels.push(fieldGetLabel(trimmed[i]));
 			}
-			$().say('Removed leading and trailing whitespaces from fields: "' + 
-					labels.join('", "') + '". Submit again to accept. Change back to keep.');
+			$(form).say('Removed leading and trailing spaces from fields: "' + 
+					labels.join('", "') + '". Submit again to accept. Change back to keep spaces.');
 			return true;
 		}
 		return false;
@@ -76,7 +76,7 @@
 		});
 	};
 	
-	Repos.service('edit/upload/', enable);
+	//Repos.service('edit/upload/', enable); // TODO disable the overlay in addition to the submit
 	Repos.service('edit/text/', enable);
 	Repos.service('edit/mkdir/', enable);
 	Repos.service('edit/rename/', enable);
