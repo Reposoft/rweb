@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Test formtrim plugin</title>
+<meta name="repos-service" content="edit/rename/"></meta>
+<link rel="stylesheet" type="text/css" href="../../repos-web/style/global.css"></link>
+<script type="text/javascript" src="../../repos-web/scripts/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../repos-web/scripts/reposapi/repos.js"></script>
+<script type="text/javascript" src="formtrim.load.js"></script>
+</head>
+<body>
+
+<h1>formtrim plugin</h1>
+
+<p>Needed because some platforms do not accept leading and trailing whitespaces on file/folder names</p>
+
+<form action="#submitted" method="get" id="rename">
+<fieldset><legend>Sample form</legend>
+<p>
+<label for="name">disabled</label>
+<input type="text"
+	disabled="disabled" size="40"
+	name="name" id="name"/>
+</p>
+<p>
+<label for="newname">new name</label>
+<input type="text" tabindex="1" size="40"
+	id="newname" name="newname"/>
+</p>
+<p>
+<label for="message">history text</label>
+<textarea tabindex="2"
+	rows="2" cols="30" id="message" name="message"></textarea>
+</p>
+<p>
+<label for="submit"></label>
+<input type="submit" tabindex="3"
+	value="Rename" name="submit" id="submit"/>
+</p>
+</fieldset>
+</form>
+
+</body>
+</html>
