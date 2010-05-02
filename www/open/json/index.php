@@ -86,8 +86,8 @@ $script = '
 			}
 			if (d.kind=="file") {
 				e.append(o("filesize",d.size));
-				var t = /\.(\w+)$/.exec(f)[1];
-				if (t) e.addClass("file-"+t.toLowerCase());
+				var t = /\.(\w+)$/.exec(f);
+				if (t) e.addClass("file-"+t[1].toLowerCase());
 				// insertion sort with respect to folders
 				e.appendTo(p);
 			} else {
