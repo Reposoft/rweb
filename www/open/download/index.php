@@ -16,11 +16,11 @@ if ($file->getStatus() != 200) {
 	'). Maybe it exists in a version other than '.$revisionRule->getValue().'.', E_USER_ERROR);
 }
 
-$name = $file->getFilename();
-$dot = strrpos($name, '.');
-if (!$dot) $dot = strlen($name);
-// Last changed revision can not be used because subitems might have changed
-$name = substr($name, 0, $dot).'(r'.$file->getRevision().')'.substr($name,$dot);
+// Revision number should be "last changed" so we don't get different downloads for identical file
+// This is also the revision number expected by the "based on version" feature in upload changes
+// For folders: last changed revision can not be used because subitems might have changed
+$namerev = $file->isFolder() ? $file->getRevision() : $file->getRevisionLastChanged();
+$name = $file->getFilenameWithoutExtension() . '(r'.$namerev.')' . '.' . $file->getExtension();
 
 // IE6 needs encoded name, other browsers don't like that.
 if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {

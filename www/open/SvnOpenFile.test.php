@@ -275,6 +275,32 @@ class TestSvnOpenFile extends UnitTestCase {
 		$this->assertEqual('text', $file->getTypeDiscrete());
 	}
 	
+	function testGetExtension() {
+		$f = new SvnOpenFile('/', HEAD, false);
+		$f->path = '/test/b.ai';
+		$this->assertEqual('ai', $f->getExtension());
+		$f->path = '/README';
+		$this->assertEqual('', $f->getExtension());
+		$f->path = '/a.tar.gz';
+		$this->assertEqual('tar.gz', $f->getExtension(), 'tar.gz is an extension. %s');
+		$f->path = '/avatar.gz';
+		$this->assertEqual('gz', $f->getExtension());
+		$f->path = '/foo.bar.zip';
+		$this->assertEqual('zip', $f->getExtension());
+		$f->path = '/test/.project';
+		$this->assertEqual('', $f->getExtension(), 'name starting with dot is not extension. %s');
+		$f->path = '/test/.project.txt';
+		$this->assertEqual('txt', $f->getExtension());
+	}
+	
+	function testGetFilenameWithoutExtension() {
+		$f = new SvnOpenFile('/', HEAD, false);
+		$f->path = '/test/b.ai';
+		$this->assertEqual('b', $f->getFilenameWithoutExtension());
+		$f->path = '/test/README';
+		$this->assertEqual('README', $f->getFilenameWithoutExtension());
+	}
+	
 	function testInstantiateTwice() {
 		$file = new SvnOpenFile('/test/a.txt', HEAD, false);
 		$this->expectError(new PatternExpectation('/already .* open/'));

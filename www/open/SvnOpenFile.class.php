@@ -260,6 +260,16 @@ class SvnOpenFile {
 		return getPathName($this->path);
 	}
 	
+	function getFilenameWithoutExtension() {
+		$name = $this->getFilename();
+		$ext = $this->getExtension();
+		if ($ext) {
+			return substr($name, 0, strlen($name) - strlen($ext) - 1);
+		} else {
+			return $name;
+		}
+	}
+	
 	/**
 	 * Return user friendly type of entry, "file" or "folder", for use in texts.
 	 * @return lowercase text that can be used instead of if-else in messages.
@@ -418,9 +428,11 @@ class SvnOpenFile {
 	 *  empty string if no "." in name, or the only "." is first
 	 */
 	function getExtension() {
-		$pos = strrpos($this->getFilename(), '.');
+		$name = $this->getFilename();
+		if (strlen($name) > 7 && strEnds($name, '.tar.gz')) return 'tar.gz';
+		$pos = strrpos($name, '.');
 		if (!$pos) return '';
-		return substr($this->getFilename(), $pos+1);
+		return substr($name, $pos+1);
 	}
 	
 	/**
