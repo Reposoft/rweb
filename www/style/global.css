@@ -350,13 +350,16 @@ dl.collapsed dt, dl.collapsed dd,
 }
 /* general class for loading animation */
 .loading {
-	background-image: url('loading.gif') ! important;
-	background-repeat: no-repeat ! important;
+	background-image: url('loading.gif') !important;
+	background-repeat: no-repeat !important;
 }
 #submit.loading {
 	background-color: #D5D5D5;
 	color: #666666;
-	background-position: center ! important;
+	background-position: center !important;
+}
+#commandbar .loading {
+	cursor: wait !important;
 }
 /* visible version numbers, #releaseversion or #resourceversion */
 .versiondisplay {

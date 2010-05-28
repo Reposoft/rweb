@@ -86,6 +86,7 @@ var details_writeLock = that.details_writeLock = function(e, entry) {
 };
 
 var details_repository = that.details_repository = function(path, url) {
+	$('#commandbar #showdetails').addClass('loading');
 	$.ajax({
 		type: 'GET',
 		url: url,
@@ -134,11 +135,6 @@ var details_isNoaccess = that.details_isNoaccess = function(entry) {
 var details_addtags = that.details_addtags = function(e) {
  	$(e).find('div.details, span.lock').remove(); // allow refresh
 	e.append('<div class="details"><span class="revision"></span><span class="datetime"></span><span class="username"></span><span class="filesize"></span></div>');
-};
-
-var detailsToggle = that.detailsToggle = function() {
-	$('#commandbar #showdetails').addClass('loading');
-	details_repository();
 };
 
 })(jQuery);
