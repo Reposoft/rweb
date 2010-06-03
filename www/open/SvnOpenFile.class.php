@@ -614,8 +614,7 @@ class SvnOpenFile {
 	 * @return boolean true if svn:needs-lock is set (to any value) on this file
 	 */
 	function isNeedsLock() {
-		// TODO implement
-		return false;
+		trigger_error('isNeedsLock not implemented', E_USER_ERROR);
 	}
 	
 	/**
