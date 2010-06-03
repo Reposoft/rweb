@@ -31,5 +31,5 @@ cd jetty
 #jetty7
 #java -jar start.jar OPTIONS=default,jsp -Djetty.port=8080 -Dsolr.solr.home=/Volumes/Encrypted/workspace/cms/solr/home/
 
-java -Djetty.port=8080 -Dsolr.solr.home=/Volumes/Encrypted/workspace/cms/solr/home/ -jar start.jar
+java -Djetty.port=8080 -Dsolr.solr.home=/Volumes/Encrypted/workspace/cms/solr/home/ -jar start.jar etc/jetty.xml etc/jetty-ajp.xml
 

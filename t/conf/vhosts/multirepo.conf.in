@@ -39,8 +39,10 @@
 	ErrorDocument 500 /repos-web/errors/500/
 
 	# Direct proxy for indexing engine, not needed if using repos indexing proxy
-	#ProxyPass /solr ajp://127.0.0.1:8009/solr
-	#ProxyPreserveHost On
+	ProxyPass /solr ajp://127.0.0.1:8009/solr
+	ProxyPreserveHost On
+	# Access control can be added in a Location /solr block
+	# Also requires that port 8009 is protected in firewall
 
     # Test that servicelayer module is in python path and that the handler concept works
 	<Location /servicelayer>
