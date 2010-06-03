@@ -796,12 +796,13 @@ class SvnOpenFile {
 			'date' => '/<date>([^<]+)</',
 			'locktoken' => '/<token>([^<]+)</',
 			'lockowner' => '/<owner>([^<]+)</',
-			'lockcomment' => '/<comment>([^<]+)</',
+			'lockcomment' => '/<comment>([^<]+)</m',
 			'lockcreated' => '/<created>([^<]+)</'
 		);
 		list($n, $p) = each($patternsInOrder);
 		for ($i=0; $i<count($xmlArray); $i++) {
-			if (preg_match($p, $xmlArray[$i], $matches)) {
+			if (preg_match($p, $xmlArray[$i], $matches) || 
+					(strEnds($p, '/m') && preg_match($p, implode("\n", array_slice($xmlArray, $i)), $matches))) {
 				$parsed[$n] = $matches[1];
 				if(!(list($n, $p) = each($patternsInOrder))) break;
 			} else if ($n == 'author' || $n == 'lockcomment') { // optional entry (works only right after mandatory entry)

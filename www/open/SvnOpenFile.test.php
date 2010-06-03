@@ -114,6 +114,36 @@ class TestSvnOpenFile extends UnitTestCase {
 		$file->file = $a;
 		$this->assertEqual('', $file->getLockComment());
 	}
+
+	function testParseListXmlLockMessageMultiline() {
+		$list = explode("\n",
+			'<?xml version="1.0"?>
+			<lists>
+			<list
+			   path="http://localhost/testrepo/demoproject/trunk/public/locked-file.txt">
+			<entry
+			   kind="file">
+			<name>locked-file.txt</name>
+			<size>56</size>
+			<commit
+			   revision="2">
+			<author>SYSTEM</author>
+			<date>2007-01-10T18:38:13.679203Z</date>
+			</commit>
+			<lock>
+			<token>opaquelocktoken:93061e3e-98df-404d-9380-2f821a73bfc9</token>
+			<owner>test</owner>
+			<comment>Me work
+			Multiline</comment>
+			<created>2007-01-11T07:33:55.350755Z</created>
+			</lock>
+			</entry>
+			</list>
+			</lists>');
+		$file = new SvnOpenFile('/demoproject/trunk/public/locked-file.txt', HEAD, false);
+		$a = $file->_parseListXml($list);
+		$this->assertEqual("Me work\nMultiline", str_replace("\r", '', str_replace("\t", '', $a['lockcomment'])));
+	}
 	
 	function testParseInfoXmlForFolder() {
 		$list = explode("\n",
