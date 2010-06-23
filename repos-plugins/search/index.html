@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>repos: Search</title>
+<link href="/repos-web/style/global.css" rel="stylesheet" type="text/css"></link>
+<link href="/repos-web/style/layout.css" rel="stylesheet" type="text/css"></link>
+<script type="text/javascript" src="/repos-web/scripts/head.js"></script>
+<script type="text/javascript" src="propsearchgen.js"></script>
+<script type="text/javascript" src="submit-svnhead.js"></script>
+</head>
+<body>
+<h1>Search</h1>
+
+<form id="propedit" action="./" method="get" class="repos-propsearch-gen">
+<fieldset>
+<input class="gen-override" type="hidden" name="svn:keywords" value=""/>
+<legend>
+metadata
+</legend>
+<p>
+<label for="op">match</label>
+<select id="op" name="op">
+<option value="AND">all</option>
+<option value="OR">any</option>
+</select>
+</p>
+<p>
+<label for="submit"></label>
+<input id="submit" type="submit" value="Search" name="submit"/>
+</p>
+</fieldset>
+</form>
+
+</body>
+</html>
