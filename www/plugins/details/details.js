@@ -54,12 +54,15 @@ var details_read = that.details_read = function() {
 var details_write = that.details_write = function(e, entry) {
 	entry.each(function(){
 		$('.filename', e).append($('name', this).text());
-		var noaccess = details_isNoaccess(this);
-		if (noaccess) {
+		if (details_isNoaccess(this)) {
 			e.addClass('noaccess');
-			$('.username', e).addClass('unknown').append('(unknown)'); // temporary solution
+			$('.username', e).append('(no access)');
 		} else {
-			$('.username', e).append($('commit>author', this).text());
+			if ($('commit>author', entry).size() == 0) {
+				$('.username', e).append('(anonymous)');
+			} else {
+				$('.username', e).append($('commit>author', this).text());
+			}
 			$('.datetime', e).append($('commit>date', this).text()).dateformat();
 		}
 		$('.revision', e).append($('commit', this).attr('revision'));
