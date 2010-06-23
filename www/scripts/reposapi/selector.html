@@ -78,6 +78,8 @@ test('isTarget', function() {
 });
 
 test('cunstom selectors', function() {	
+	console.log('custom selector syntax has been disabled until 1.4');
+	return;
 	// the goal of all this - the selectors
 	ok($(':repos-service(open/noservice/)'), 'All selectors return a jquery bucket');
 	ok($(':repos-service(open/testservice/)'));

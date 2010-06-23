@@ -14,6 +14,7 @@ if (!Array.prototype.indexOf) { Array.prototype.indexOf = function (obj, start) 
 };}
 
 /**
+ * DISABLED
  * Repos selectors (c) 2007 Staffan Olsson www.repos.se
  * These selectors are the possible pointcuts for dynamically added plugins.
  * <code>
@@ -23,10 +24,10 @@ if (!Array.prototype.indexOf) { Array.prototype.indexOf = function (obj, start) 
  * </code>
  * Note that this can not be used with $().ready, use Repos.ready instead
  */
-jQuery.extend(jQuery.expr[':'], {
-	'repos-target'		: 'Repos.isTarget(m[3],a)',
-	'repos-service'	: 'Repos.isService(m[3],a)'
-});
+//jQuery.extend(jQuery.expr[':'], {
+//	'repos-target'		: 'Repos.isTarget(m[3],a)',
+//	'repos-service'	: 'Repos.isService(m[3],a)'
+//});
 // Note that this can not be used with $().ready,
 // because jQuery runs ready for empty selections too,
 // use Repos.ready instead
