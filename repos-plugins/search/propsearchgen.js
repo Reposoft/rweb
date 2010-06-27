@@ -29,9 +29,14 @@
 	 */
 	var append = function(fieldset, propertyName, field) {
 		var p = $('<p/>');
-		var label = $('<label/>').attr('for', propertyName).text(propertyName).appendTo(p);
+		field.attr('id', propertyName);
+		var label = $('<label/>').attr('for', field.attr('id')).text(propertyName).appendTo(p);
 		p.append(field);
 		fieldset.append(p);
+	};
+	
+	var getFieldName = function(propertyName) {
+		return 'svnprop_' + propertyName.replace(/[:-]/g, '_');
 	};
 	
 	var formGen = function(fieldset, rules) {
@@ -41,12 +46,13 @@
 		var r = rules._r;
 		for (prop in r) {
 			if (r.hasOwnProperty(prop)) {
-				if ($('[name=' + prop + ']', fieldset).size() > 0) {
-					console.log('rule overridden by static field:', prop);
+				var fieldName = getFieldName(prop);
+				if ($('[name=' + fieldName + ']', fieldset).size() > 0) {
+					console.log('rule overridden by static field:', fieldName);
 					continue;
 				}
 				var field = fieldGen(prop, r[prop]);
-				field.attr('name', prop);
+				field.attr('name', fieldName);
 				append(fieldset, prop, field);
 		    }
 		}
