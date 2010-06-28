@@ -58,7 +58,7 @@
 		// TODO set op
 		var cust = ui.queryCreate(ui.settings.id + 'standard', 'Custom');
 		ui.startQueries(q, cust);
-		
+		cust.trigger('enable');
 	};
 	
 	$().ready(function() {
