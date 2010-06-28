@@ -392,9 +392,14 @@ class Presentation {
 		}
 		$pageid = uniqid();
 		$file = System::getApplicationTemp('pages').$pageid;
-		$this->enableRedirectWithOutputFile($file);
+		header("X-REPOS-PAGEID: $pageid");
 		// create the file so the view page knows the process is running
-		touch($file);
+		if (!touch($file)) {
+			trigger_error('Could not create buffer for POST message', E_USER_WARNING);
+			return; // disable redirect
+		}
+		// store path		
+		$this->enableRedirectWithOutputFile($file);
 		// the view url
 		$nexturl = $this->_getStaticWebappUrl() . 'view/?result=' . rawurlencode($pageid);
 		// let this page continue
