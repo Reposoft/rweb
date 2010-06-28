@@ -8,15 +8,15 @@
 	var coreUrl = '/solr/svnhead/';
 	var queryUrl = coreUrl + 'select';
 	
-	var solrResponseHandler = function(json) {
-		console.log(json);
-		//alert(json);
-	};
+	ReposSearch_onready = false;
+	// There's no better api to configure the request instances
+	//ReposSearchRequest.prototype.url = '/repos-plugins/arbortext/index/svnhead/';
+	ReposSearchRequest.prototype.url = '/solr/svnhead/select';
 	
-	var queryRunner = function(form, responseHandler) {
+	var run = function(form) {
 
 		var query = [];
-		var fq = [];
+		var base = false;
 		var op = 'AND';
 		var push = function(col, field, value) {
 			col.push(field + ':' + value); // TODO encoding;
@@ -29,7 +29,7 @@
 			if (f.attr('type') == 'submit') {
 				// ignore
 			} else if (v && n == 'base') {
-				push(fq, 'id_repo', v);
+				base = v;
 			} else if (v) {
 				push(query, n, v);
 			}
@@ -50,18 +50,14 @@
 			return;
 		}
 		
-		var solrQuery = {
-			wt: 'json',
-			q: query.join(' '),
-			fq: fq.join(' AND ')
-		};
-		console.log('solr query', solrQuery);
-		
-		$.ajax({
-			url: $.param.querystring(queryUrl, solrQuery),
-			dataType: 'json',
-			success: responseHandler
+		var q = query.join(' ');
+		var ui = new ReposSearch.LightUI({
+			parent: false,
+			css: ReposSearch.cssDefault
 		});
+		// TODO set op
+		var cust = ui.queryCreate(ui.settings.id + 'standard', 'Custom');
+		ui.startQueries(q, cust);
 		
 	};
 	
@@ -71,8 +67,8 @@
 		
 		form.submit(function() {
 			try {
-				queryRunner(form, solrResponseHandler);
-			} catch (e) {
+				run(form);
+			} catch (e) {
 				console.error(e);
 			}
 			return false;

@@ -63,12 +63,18 @@
 	var setBase = function(fieldset, repositoryName) {
 		console.log('base', repositoryName);
 		$('<input type="hidden"/>').attr('name', 'base').attr('value', repositoryName).prependTo(fieldset);
+		$('<span/>').text('(repository: ' + repositoryName + ')').appendTo($('legend', fieldset));
 	};
+	
+	var qs = jQuery.deparam.querystring();
+	if (qs.base) {
+		// allow Repos.getBase in rules definitions
+		$('<meta name="repos-base" content="' + qs.base + '" />').appendTo('head');
+	}	
 	
 	$().ready(function() {
 		var form = $('form.repos-propsearch-gen').addClass('loading');
 		var fieldset = $('fieldset:first-child', form);
-		var qs = jQuery.deparam.querystring();
 		if (qs.base) {
 			setBase(fieldset, qs.base);
 		}

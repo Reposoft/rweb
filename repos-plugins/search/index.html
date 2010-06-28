@@ -6,9 +6,20 @@
 <title>repos: Search</title>
 <link href="/repos-web/style/global.css" rel="stylesheet" type="text/css"></link>
 <link href="/repos-web/style/layout.css" rel="stylesheet" type="text/css"></link>
+<link href="/repos-web/style/repository/repository.css" rel="stylesheet" type="text/css"></link>
 <script type="text/javascript" src="/repos-web/scripts/head.js"></script>
+<!-- dev
+<script type="text/javascript" src="/repos-plugins/arbortext/index/svnhead/repos-search.load.js"></script>
+ -->
+<!-- this app -->
 <script type="text/javascript" src="propsearchgen.js"></script>
 <script type="text/javascript" src="submit-svnhead.js"></script>
+<script type="text/javascript" src="rules-sample.js"></script>
+<style type="text/css">
+p.searchspec label {
+	color: #666;
+}
+</style>
 </head>
 <body>
 <h1>Search</h1>
@@ -16,10 +27,11 @@
 <form id="propedit" action="./" method="get" class="repos-propsearch-gen">
 <fieldset>
 <input class="gen-override" type="hidden" name="svnprop_svn_keywords" value=""/>
+<input class="gen-override" type="hidden" name="svnprop_svn_ignore" value=""/>
 <legend>
 metadata
 </legend>
-<p>
+<p class="searchspec">
 <label for="op">match</label>
 <select id="op" name="op">
 <option value="AND">all</option>
