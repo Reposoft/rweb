@@ -7,7 +7,7 @@ $().bind('repos-propedit-init', function(ev, reposPropeditRules) {
 	rules.add('repostest:noedit', false);
 	rules.add('repostest:noshow', 0);
 	rules.add('repostest:oneliner', /n.*/);
-	rules.add('repostest:multiline', /^p.*/m);
+	rules.add('repostest:multiline', /^n.*/m);
 	rules.add('repostest:enum', ['', 'v1', 'v9', 'V8', 'w3']);
 	rules.add('repostest:enumMulti', [['', 'v1', 'v9', 'V8', 'w3']]);
 	rules.add(/^repostest2:/, false); // noedit for all properties in this namespace
@@ -23,73 +23,74 @@ $('form').submit(function(ev) {
 	return false;
 });
 
+
 // unit tests
+test("all", function() {
 	
-assert(Repos.propedit.Rules,'Rules object should be defined');
-assert(rules.add, 'Start event handler should get a rules reference');
-
-assert(rules.suggest('rep'), 'Should get a lot of property names that start with sv');
-assert(rules.suggest('repostest'), 'Should get a lot of property names that start with sv');
-assert(6, rules.suggest('repostest:').length, 'The number of test rules above');
-
-var keywordsRule = rules.get('svn:keywords');
-assert(keywordsRule, 'Should get built in Rule instance for svn:keywords');
-
-//assert(!rules.get('svn:externals'), 'target is a file so svn:externals should not have a rule');
-// ... or a forbid rule?
-assert(!rules.suggest('svn:externals').length, 'target is a file so svn:externals should not be suggested');
-
-// enum rule
-var enumRule = rules.get('repostest:enum');
-assert(enumRule.append && !enumRule.exec, 'get should return Rule instances, not the argument to add');
-assert(enumRule.test(''), 'ok because this enum supports empty value');
-assert(enumRule.test('v1'), 'ok because value is in the enum');
-assert(!enumRule.test('v1x'), 'not ok because value is not in the enum');
-assert(!enumRule.test('v8'), 'not ok because enum values are case sensitive');
-
-// read-only rule
-assert(!rules.get('repostest:noedit').test('a'), 'boolean false as rules means editing is not allowed');
-assert(!rules.get('repostest:noshow').test('a'), '0 is same as false');
-
-// rule matching different properties
-assert(rules.get('repostest2:anything'), 'regexp property match');
-
-// text rules
-// i'm nut sure this modification of RegExp meaning is such a good idea
-assert(!rules.get('repostest:oneliner').test('one'), 'not ok because it does not start with n');
-assert(rules.get('repostest:oneliner').test('ne'), 'starts with n in our homemade syntax');
-
-assert(!rules.get('repostest:oneliner').test('foo\nbar'), 'we use the multiline regexp flag to note where multiline property values are allowed');
-assert(!rules.get('repostest:multiline').test('poo\nbar'), 'multiline flag present, each line must start with p according to rule');
-assert(rules.get('repostest:multiline').test('poo\npar'), 'multiline flag present, each line must start with p according to rule');
-
-// form fields
-var enumField = rules.get('repostest:enum').getFormField('v9');
-assert(enumField && enumField[0] && enumField.size() == 1, 'should return a field element in a jQuery instance');
-console.log(enumField[0].name);
-assert('select', enumField[0].node,  'enum rule should have a drop down');
-assert(5, $('option', enumField).size(), 'should be one option per enum value');
-assert(!$('option[value=""]',enumField).attr('selected'), 'default value should not be selected because a current value was given');
-assert($('option[value="v9"]',enumField).attr('selected'), 'current value should be selected');
-
-// text, multiline or not
-var mField = rules.get('repostest:multiline').getFormField('my\nvalue');
-assert('textarea', mField[0].node);
-
-var oField = rules.get('repostest:oneliner').getFormField();
-assert('input', oField[0].node);
-assert('text', mField.attr('type'));
-
-var rField = rules.get('repostest:noedit').getFormField('read\nonly\nfrom web interface');
-assert('textarea', rField[0].node);
-assert(rField.attr('readonly'), 'form field should be read only for this property');
-assert(rField.is('.readonly'), 'readonly class should be set to allow custom css');
-
-var noField = rules.get('repostest:noshow').getFormField('x');
-console.log(noField);
-assert(0, noField.length, '0 is the same rule as false, but property should not be displayed in form');
-
-// there is an assert library bug for this type of test
-assert('expected', {}.nonExistingProperty,  'Should fail with: expected "expected" but got undefined');
+	ok(Repos.propedit.Rules,'Rules object should be defined');
+	ok(rules.add, 'Start event handler should get a rules reference');
+	
+	ok(rules.suggest('rep'), 'Should get a lot of property names that start with sv');
+	ok(rules.suggest('repostest'), 'Should get a lot of property names that start with sv');
+	equals(6, rules.suggest('repostest:').length, 'The number of test rules above');
+	
+	var keywordsRule = rules.get('svn:keywords');
+	ok(keywordsRule, 'Should get built in Rule instance for svn:keywords');
+	
+	//assert(!rules.get('svn:externals'), 'target is a file so svn:externals should not have a rule');
+	// ... or a forbid rule?
+	ok(!rules.suggest('svn:externals').length, 'target is a file so svn:externals should not be suggested');
+	
+	// enum rule
+	var enumRule = rules.get('repostest:enum');
+	ok(enumRule.append && !enumRule.exec, 'get should return Rule instances, not the argument to add');
+	ok(enumRule.test(''), 'ok because this enum supports empty value');
+	ok(enumRule.test('v1'), 'ok because value is in the enum');
+	ok(!enumRule.test('v1x'), 'not ok because value is not in the enum');
+	ok(!enumRule.test('v8'), 'not ok because enum values are case sensitive');
+	
+	// read-only rule
+	ok(!rules.get('repostest:noedit').test('a'), 'boolean false as rules means editing is not allowed');
+	ok(!rules.get('repostest:noshow').test('a'), '0 is same as false');
+	
+	// rule matching different properties
+	ok(rules.get('repostest2:anything'), 'regexp property match');
+	
+	// text rules
+	// i'm nut sure this modification of RegExp meaning is such a good idea
+	ok(!rules.get('repostest:oneliner').test('one'), 'not ok because it does not start with n');
+	ok(rules.get('repostest:oneliner').test('ne'), 'starts with n in our homemade syntax');
+	
+	ok(!rules.get('repostest:oneliner').test('n\ne'), 'we use the multiline regexp flag to note where multiline property values are allowed');
+	ok(!rules.get('repostest:multiline').test('e\ne'), 'multiline but rule should invalidate it because it does not start with n');
+	ok(rules.get('repostest:multiline').test('n\ne'), 'multiline flag present, first line starts with n, should pass');
+	
+	// form fields
+	var enumField = rules.get('repostest:enum').getFormField('v9');
+	ok(enumField && enumField[0] && enumField.size() == 1, 'should return a field element in a jQuery instance');
+	//console.log(enumField[0].name);
+	equals(enumField[0].node, 'select', 'enum rule should have a drop down');
+	equals($('option', enumField).size(), 5, 'should be one option per enum value');
+	ok(!$('option[value=""]',enumField).attr('selected'), 'default value should not be selected because a current value was given');
+	ok($('option[value="v9"]',enumField).attr('selected'), 'current value should be selected');
+	
+	// text, multiline or not
+	var mField = rules.get('repostest:multiline').getFormField('my\nvalue');
+	equals(mField[0].node, 'textarea');
+	
+	var oField = rules.get('repostest:oneliner').getFormField();
+	equals(oField[0].node, 'input');
+	equals(mField.attr('type'), 'text');
+	
+	var rField = rules.get('repostest:noedit').getFormField('read\nonly\nfrom web interface');
+	equals(rField[0].node, 'textarea');
+	ok(rField.attr('readonly'), 'form field should be read only for this property');
+	ok(rField.is('.readonly'), 'readonly class should be set to allow custom css');
+	
+	var noField = rules.get('repostest:noshow').getFormField('x');
+	//console.log(noField);
+	equals(noField.length, 0, '0 is the same rule as false, but property should not be displayed in form');
+	
+});
 
 });
