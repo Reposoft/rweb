@@ -4,9 +4,8 @@
 
 	DocumentRoot @ServerRoot@/hosts/style/html
 	
-	# Evaulating a fulltext search feature
-	# This alias requires repos-serach root in workspace, outside the Directory in extra.conf.in
-	Alias /repos-search @ServerRoot@/../../repos-search/trunk
+	# Repos Search development in the same workspace, instead of extenals on host folder
+	Alias /repos-search @ServerRoot@/../../repos-search/repos-search
 	<Directory @ServerRoot@/../../repos-search/>
 		DirectoryIndex index.html index.php index.py
 	</Directory>
