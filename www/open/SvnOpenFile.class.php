@@ -903,6 +903,16 @@ class SvnOpenFileMulti extends SvnOpenFile {
 		}		
 		return $this;
 	}
+
+	/**
+	 * Convenient method to be called after constructor on every page that supports both files, folders and multi.
+	 */
+	function enableMultiIfFolder() {
+		if ($this->isFolder()) {
+			$this->enableMulti();
+		}
+		return $this;
+	}	
 	
 	/**
 	 * Paths should exist at the peg revision given by the revision argument to the constructor.

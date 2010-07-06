@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 	$target = getTarget();
 	$template = Presentation::getInstance();
 	$file = new SvnOpenFileMulti($target, $revisionRule->getValue());
-	$file->enableMulti();
+	$file->enableMultiIfFolder();
 	$file->isWritable(); // check before page is displayed because it might require authentication
 	$template->assign_by_ref('file', $file);
 	$template->assign('repository', getRepository());
