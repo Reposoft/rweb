@@ -26,7 +26,8 @@ Repos.propedit = {
 		 */
 		target: Repos.getTarget(),
 		/**
-		 * Add a rule to property editing
+		 * Add a rule to property editing.
+		 * Overwrites existing rule with that name.
 		 * @param property property name
 		 * @param rule regex for text value rule, array for enum rule, boolean false to forbid edit
 		 */
@@ -37,6 +38,16 @@ Repos.propedit = {
 				return;
 			}
 			this._r[property] = this._r[property] || new Repos.propedit.Rule(rule);
+		},
+		/**
+		 * Like add but adds a rule only if it does not exist already.
+		 * This is needed because we have unpredictable load order.
+		 * Matching regexp rules do not count, so a default
+		 * will have precedense over a matching regexp rule.
+		 */
+		addDefault: function(property, rule) {
+			if (this._r[property]) return;
+			this.add(property, rule);
 		},
 		// the saved rules, propname->Repos.propedit.Rule, not to be edited directly
 		_r: {
@@ -59,6 +70,7 @@ Repos.propedit = {
 			for (n in this._rr) {
 				if (this._rr[n].x.test(propertyName)) return this._rr[n].r;
 			}
+			return false;
 		}
 	},
 	Rule: function(rule) {
@@ -156,6 +168,7 @@ Repos.propedit = {
 // launch load event so other plugins can customize
 $(document).ready(function() {
 	// Currently we support only one target per page, so only one instance of Rules is needed
+	// TODO initialize only when needed
 	$().trigger('repos-propedit-init', [Repos.propedit.Rules]);
 });
 
@@ -190,8 +203,8 @@ Repos.service('edit/propedit/', function() {
 
 // immediate plugin customization, the same thing can be done from other plugins
 $().bind('repos-propedit-init', function(ev, rules) {
-	rules.add('svn:keywords', [['Date', 'Revision', 'Author', 'HeadURL', 'Id']]);
-	rules.add('svn:mime-type', /\w+\/\w+/);
-	rules.add('svn:ignore', /.*/m);
+	rules.addDefault('svn:keywords', [['Date', 'Revision', 'Author', 'HeadURL', 'Id']]);
+	rules.addDefault('svn:mime-type', /\w+\/\w+/);
+	rules.addDefault('svn:ignore', /.*/m);
 });
 
