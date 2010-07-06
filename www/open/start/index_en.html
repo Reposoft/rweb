@@ -33,9 +33,10 @@ and the tools in each project.</p>
 <div class="column" style="width: 50%">
 <!--{foreach from=$entrypoints item=entry name=project}-->
 <!--{assign var='projectname' value=$entry->getDisplayname()}-->
+<!--{assign var='path' value=$entry->getPath()}-->
 <!--{* tools array should be read only once because it is a service call *}-->
 <!--{assign var='projecttools' value=$entry->getTools()}-->
-<div class="section" id="p:{=$projectname|getFileId}">
+<div class="section" id="p:{=$path|getFileId}">
 <h2>
 <!--{* todo: make a smarter link, trunk/ if existing, project root if no trunk *}-->
 <span class="{=if $projectname eq $userfullname}username{=else}projectname{=/if}">{=$projectname}</span>
@@ -46,15 +47,21 @@ and the tools in each project.</p>
 </h2>
 <ul class="index">
 	<!--{* bug with generated 'foreach a as b => c' in zendguard4+php5.2, derive key *}-->
-	<!--{assign var='projecttoolids' value=$projecttools|@array_keys}-->	
-	<!--{foreach from=$projecttoolids item=toolid}-->
+	<!--{assign var='projecttoolids' value=$projecttools|@array_keys}-->
+	<!--{foreach from=$projecttoolids item=toolid name=tools}-->
 	<!--{assign var='toolpath' value=$projecttools.$toolid}-->
 	<li class="n{=cycle values=0,1,2,3}">
 	<!--{* entry path will be encoded by the urlEncodeQueryString filter, toolpath wo'nt, and here's also an unecoded slash *}-->
-	<a id="{=$toolid}:{=$projectname}" class="tool {=$toolid}" href="{=$repository}{=$entry,path}/{=$toolpath}">
+	<a id="{=$toolid}:{=$path|getFileId}" class="tool {=$toolid}" href="{=$repository}{=$path}/{=$toolpath}">
 	<img border="0" src="{=$webapp}style/tools/{=$toolid}.png" hspace="10"/>{=$toolid}</a>
 	</li>
 	<!--{/foreach}-->
+	<!--{if $smarty.foreach.tools.total eq 0}-->
+	<li class="n0">
+	<a id="files:{=$path|getFileId}" class="tool path {=$toolid}" href="{=$repository}{=$path}/">
+	<img border="0" src="{=$webapp}style/tools/files.png" hspace="10"/>{=$path}</a>
+	</li>
+	<!--{/if}-->
 </ul>
 </div>
 {=if $smarty.foreach.project.iteration + $smarty.foreach.project.iteration eq $smarty.foreach.project.total

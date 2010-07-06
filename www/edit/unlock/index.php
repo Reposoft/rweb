@@ -7,6 +7,8 @@
 require('../../conf/Presentation.class.php');
 require('../SvnEdit.class.php');
 
+if (isset($_REQUEST['s'])) trigger_error("Multiple items not supported yet. Got: \n".join(", \n", $_REQUEST['s']));
+
 if ($_SERVER['REQUEST_METHOD']=='POST') {
 	$template = Presentation::getInstance();
 	$targeturl = getTargetUrl();

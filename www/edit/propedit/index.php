@@ -11,6 +11,8 @@
 require('../../conf/Presentation.class.php');
 require('../SvnEdit.class.php');
 
+if (isset($_REQUEST['s'])) trigger_error("Multiple items not supported yet. Got: \n".join(", \n", $_REQUEST['s']));
+
 // From svnbook 1.6
 
 // A property name must start with a letter, a colon (:), or an underscore (_); after that, you can also use digits, hyphens (-), and periods (.).

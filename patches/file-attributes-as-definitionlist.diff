@@ -1,0 +1,94 @@
+### Eclipse Workspace Patch 1.0
+#P repos-trunk
+Index: www/style/global.css
+===================================================================
+--- www/style/global.css	(revision 5338)
++++ www/style/global.css	(working copy)
+@@ -256,12 +256,34 @@
+ 	display: none;
+ }
+ /* dl is for name-value lists */
++dl {
++	margin: 0;
++	padding: 0;
++}
+ dt {
+-	font-style: italic;
+-	padding-top: .3em;
++	color: #555;
+ }
+ dd {
+ }
++dl#targetdetails {
++	margin-top: .5em;
++}
++#targetdetails dt {
++	clear: left;
++	float: left;
++	padding-right: .5em;
++	margin-right: .5em;
++	border-right: 1px solid #ccc;
++}
++#targetdetails dd {
++	float: left;
++	margin-left: 0;
++}
++dd + dd {
++	clear: left;
++	float: left;
++	padding-left: 5em;
++}
+ /* quite generic collapse/expand */
+ div.collapsed > h3, div.expanded > h3, dl.collapsed lh, dl.expanded lh {
+ 	background-position: left;
+Index: www/open/index_en.html
+===================================================================
+--- www/open/index_en.html	(revision 5336)
++++ www/open/index_en.html	(working copy)
+@@ -46,24 +46,34 @@
+ <!--{/if}-->
+ </div>
+ <div class="column" style="width: 60%">
+-<!-- many plugins use the name #filedetails so the id is kept even though it is used for folders too -->
+-<div id="filedetails" class="section">
++<div id="targetinfo" class="section">
+ <h2>{=$file,kind2|ucfirst} details</h2>
+ <!-- in headline: <p>Version number: <span class="revision">{=$file,revision}</span></p> -->
+-<p>Path: <span class="path">{=$file,path}</span></p>
+-<p>Last changed revision: <span class="revision">{=$file,revisionLastChanged}</span></p>
+-<p>Last edited by: <span class="username">{=$file,author}</span></p>
+-<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
++<dl id="targetdetails">
++<dt>Path</dt>
++<dd class="path">{=$file,path}</dd>
++<dt>Last changed revision</dt>
++<dd class="revision">{=$file,revisionLastChanged}</dd>
++<dt>Last edited by</dt>
++<dd class="username">{=$file,author}</dd>
++<dt>Last edited at</dt>
++<dd class="datetime commitdate">{=$file,date}</dd>
+ <!--{if $file,isFile}-->
+-<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
++<dt>File size</dt>
++<dd class="filesize">{=$file,size|formatSize}</dd>
+ <!--{/if}-->
+-<p>Content type: <span>{=$file,type}</span></p>
++<dt>Content type</dt>
++<dd>{=$file,type}</dd>
+ <!--{if $file,isLocked}-->
+-<p class="lock">Locked by 
+-<span class="username">{=$file,lockOwner}</span> <span class="datetime">{=$file,lockCreated}</span>
+-{=if $file,lockComment}<br /> <span class="message">{=$file,lockComment}</span>{=/if}
+-</p>
++<dt class="lock">Locked by</dt> 
++<dd class="username">{=$file,lockOwner}</dd>
++<dd class="datetime">{=$file,lockCreated}</dd>
++<!--{if $file,lockComment}-->
++<dd class="message">{=$file,lockComment|nl2br}</dd>
+ <!--{/if}-->
++<!--{/if}-->
++</dl>
++<div class="clearer"></div>
+ <div class="proplist" title="{=$file,path}">
+ </div>
+ </div>

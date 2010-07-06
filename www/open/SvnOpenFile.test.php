@@ -343,7 +343,68 @@ class TestSvnOpenFile extends UnitTestCase {
 		// The below will give isFolder = false, but how to test?
 		$file = new SvnOpenFile('/test/a.folder', HEAD, false);
 	}
+	
+	
+	function testMultiGetCommonFolder() {
+		$m = new SvnOpenFileMulti('/');
+		$m->_paths = array();
+		$m->_paths[] = '/a/b c/d.txt';
+		$this->assertEqual('/a/b c/', $m->getCommonFolder());
+		$m->_paths[] = '/a/b c/e.txt';
+		$this->assertEqual('/a/b c/', $m->getCommonFolder());
+		$m->_paths[] = '/a/b c d/';
+		$this->assertEqual('/a/', $m->getCommonFolder());
+		$m->_paths[] = '/a';
+		$this->assertEqual('/', $m->getCommonFolder());
+	}
+	
+	function testMultiGetCommonFolderInvalid() {
+		$m = new SvnOpenFileMulti('/');
+		// the error detections seems to work only in some special cases
+		$m->_paths = array('qwerty');
+		$this->expectError(new PatternExpectation('/.*start with \/.*/'));
+		$m->getCommonFolder();
+	}
+	
+	function testMultiValidateInsideTarget() {
+		$m = new SvnOpenFileMulti('/');
+		$m->_paths = array('/f/a.txt', '/f/b/');
+		$m->validateMultiInsideFolder('/f/');
+		$m->_paths[] = '/f.txt';
+		$this->expectError('Not all paths are inside target /f/');
+		$m->validateMultiInsideFolder('/f/');
+	}
+	
+	function testMultiOverlapping() {
+		$m = new SvnOpenFileMulti('/');
+		$m->_paths = array('/f/a/', '/f/a.txt', '/a/');
+		$this->assertFalse($m->isMultiOverlapping());
+		$m->_paths[] = '/f/a/b/c.txt';
+		$this->assertTrue($m->isMultiOverlapping(), 'Is overlapping bevause /f/a/b/c.txt is a subitem of /f/a/');
+		$this->assertEqual('/a/', $m->_paths[2], 'should not change order of original array');
+	}
+	
+	function testMultiOverlappingDuplicates() {
+		$m = new SvnOpenFileMulti('/');
+		$m->_paths = array('/f/a/', '/f/a.txt', '/f/a.txt');
+		$this->assertTrue($m->isMultiOverlapping(), 'While checking overlapping we should also check that there are no duplicates');
+	}
 
+	function testMultiOverlappingFolders() {
+		$m = new SvnOpenFileMulti('/');
+		$m->_paths = array('/demo/I/', '/demo/lang/de/', '/demo/lang/de/Documents/');
+		$this->assertTrue($m->isMultiOverlapping(), 'Folders that overlap');
+	}
+	
+	function testMultiFilterRecursiveSelect() {
+		$m = new SvnOpenFileMulti('/');
+		$p = array('/f/a/', '/f/a/b.txt', '/f/a.txt', '/a/b/', '/a/');
+		$f = $m->filterRecursiveSelect($p);
+		$this->assertEqual('/f/a/', $f[0]);
+		$this->assertEqual('/f/a.txt', $f[1], 'File /f/a/b.txt inside /f/a/ should have been filtered out');
+		$this->assertEqual('/a/', $f[2], 'File /a/b/ inside /a/ should have been filtered out');
+	}
+	
 }
 
 testrun(new TestSvnOpenFile());

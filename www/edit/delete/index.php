@@ -2,6 +2,8 @@
 require( dirname(dirname(dirname(__FILE__)))."/conf/Presentation.class.php" );
 require( dirname(dirname(__FILE__))."/SvnEdit.class.php" );
 
+if (isset($_REQUEST['s'])) trigger_error("Multiple items not supported yet. Got: \n".join(", \n", $_REQUEST['s']));
+
 if ($_SERVER['REQUEST_METHOD']=='POST') {
 	delete($_REQUEST['message']); 
 } else {

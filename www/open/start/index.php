@@ -12,14 +12,27 @@ require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
 addPlugin('dateformat');
 
 /**
- * Hide "projects" that have no tools,
- * because they are probably only extra entries in the ACL
+ * Hide paths that are inside shown paths.
+ * Note that this makes ordering of acl entries important,
+ * the reason mainly being the original design of this function.
+ * 
+ * A subentry will be shown only if declared before the parent in the ACL
+ * - a feature only if the ACL authors know about it.
  *
  * @param RepositoryEntryPoint $entrypoint the ACL entry model
  * @todo Should we hide everything that is already inside a tool?
  */
 function shouldShow($entrypoint) {
-	return count($entrypoint->getTools()) > 0;
+	static $shown = array();
+	$path = $entrypoint->getPath();
+	foreach ($shown as $s) {
+		if (strBegins($path, $s)) return false;
+	}
+	//root should not affect the decision because it is parent to everything
+	if ($path != '' && $path != '/') {
+		$shown[] = $path;
+	}
+	return true;
 }
 
 /**

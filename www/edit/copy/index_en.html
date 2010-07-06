@@ -57,12 +57,20 @@ Select "delete the original" to make this a move operation.</p>
 <div class="column" style="width: 70%">
 <form id="copy" name="copy" method="post" action="#">
 	<fieldset>
-	<legend>Copy or Move <a class="{=$file,kind2}" href="{=$file,url}" title="open {=$file,kind}: {=$file,filename}">{=$file,kind}</a></legend>
+	<legend>Copy or Move <a class="{=$file,kind2}" href="{=$file,url}" title="open {=$file,kind}: {=$file,filename}">{=$file,kind2}</a></legend>
 		<input name="target" type="hidden" id="target" value="{=$target}" />
 	<p>
+		<!--{if not $file,isMulti}-->
 		<label for="name">copy</label>
 		<input id="name" name="name" type="text" class="current-name" size="40" disabled="disabled" value="{=$oldname}" />
 		<input id="oldname" name="oldname" type="hidden" value="{=$oldname}" />
+		<!--{/if}-->
+		<!--{foreach from=$file,multiPathsFromRoot item=s}-->
+		<label></label>
+		<a target="_blank" href="../../open/?target={=$s}{=if $file,isRevisionRequested}&rev={=$file,revisionRequested}{=/if}">{=$s}</a>
+		<input type="hidden" name="{=$file,multiFormParam}" value="{=$s}" />
+		<br />
+		<!--{/foreach}-->
 	</p>
 	<!--{if $file,isRevisionRequested}-->
 	<p>
@@ -70,10 +78,12 @@ Select "delete the original" to make this a move operation.</p>
 		<input name="rev" type="text" id="rev" value="{=$file,revisionRequested}" class="revision"/>
 	</p>
 	<!--{/if}-->
+	<!--{if not $file,isMulti}-->
 	<p>
 		<label for="folder">from folder</label>
 		<input id="folder" name="folder" type="text" size="40" disabled="disabled" value="{=$folder}" />	
 	</p>
+	<!--{/if}-->
 	<p>
 		<label for="tofolder">to folder</label>
 		<input id="tofolder" name="tofolder" type="text" size="40" value="{=$folder}" class="required" />
@@ -81,20 +91,20 @@ Select "delete the original" to make this a move operation.</p>
 		<label>&nbsp;</label>
 		<a class="action" href="#" onclick="pasteUrl()">paste&nbsp;the&nbsp;full&nbsp;URL</a>	
 	</p>
+	<!--{if not $file,isMulti}-->
 	<p>
 		<label for="newname">new name</label>
 		<input name="newname" type="text" id="newname" class="required remember-extension" size="40" value="{=$oldname}"/>
 	</p>
+	<!--{/if}-->
 	<p>
-		<label for="moveyes">delete the original</label>
-		<!--{if $file,isRevisionRequested}-->
-			<input id="moveyes" name="move" type="radio" value="1" disabled="disabled"/> Yes 
-			<input id="moveno" name="move" type="radio" value="0" checked="checked"/> No (historical&nbsp;revision&nbsp;can&nbsp;not&nbsp;be&nbsp;deleted)
-			<input id="movehidden" name="move" type="hidden" value="0" />			
+		<!--{if $file,isRevisionRequested or $file,isMulti}-->			
 		<!--{elseif $file,isWriteAllow}-->
+			<label for="moveyes">delete the original</label>
 			<input id="moveyes" name="move" type="radio" value="1" onchange="setMove(this.checked)"/> Yes 
 			<input id="moveno" name="move" type="radio" value="0" checked="checked" onchange="setMove(!this.checked)" /> No
 		<!--{else}-->
+			<label for="moveyes">delete the original</label>
 			<input id="moveyes" name="move" type="radio" value="1" disabled="disabled"/> Yes 
 			<input id="moveno" name="move" type="radio" value="0" checked="checked"/> No (original&nbsp;is&nbsp;locked)
 			<input id="movehidden" name="move" type="hidden" value="0" />

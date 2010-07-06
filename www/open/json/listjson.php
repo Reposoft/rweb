@@ -46,7 +46,7 @@ function getListJsonFromXml($xml) {
 // define the svn variable that wraps it up
 $xml = preg_replace('/.*<list\s+path="([^"]+)">/s','{"path":"\1", "list":{',$xml);
 // entries must have unique names in json
-$xml = preg_replace('/<entry\s+kind="(file|dir)">\s+<name>(.*)<\/name>(.*)<\/entry>/sU','"\2":{\3"kind":"\1"},',$xml);
+$xml = preg_replace('/<entry\s+kind="(file|dir)">\s+<name>(.*)<\/name>(.*)<\/entry>/sU','  "\2":{\3"kind":"\1"},',$xml);
 // elements with no attributes
 $xml = preg_replace('/<(\w+)>(.*)<\/\1>\s*/','"\1":"\2",',$xml);
 // elements with one attribute

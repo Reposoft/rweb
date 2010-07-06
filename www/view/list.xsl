@@ -20,8 +20,8 @@
 	</xsl:param>
 	
 	<xsl:param name="recursiveparam">
-		<xsl:if test="/lists/@recursive">
-			<xsl:text>&#38;recursive=1</xsl:text>
+		<xsl:if test="/lists/@depth">
+			<xsl:text>&#38;depth=infinity</xsl:text>
 		</xsl:if>
 	</xsl:param>
 	
@@ -72,11 +72,11 @@
 					</xsl:if>
 					<a id="list" href="?target={$target}{$baseparam}{$recursiveparam}">current version</a>
 					<a id="history" href="../log/?target={$target}&amp;rev={../@rev}{$baseparam}">history up to version <xsl:value-of select="../@rev"/></a>
-					<xsl:if test="/lists/@recursive">
+					<xsl:if test="/lists/@depth">
 						<a id="listshort" class="command translate" href="{$web}open/list/?target={$target}&amp;rev={../@rev}{$baseparam}">flat</a>
 					</xsl:if>
-					<xsl:if test="not(/lists/@recursive)">
-						<a id="listrecursive" class="command translate" href="{$web}open/list/?target={$target}&amp;rev={../@rev}{$baseparam}&amp;recursive=1">recursive</a>
+					<xsl:if test="not(/lists/@depth)">
+						<a id="listrecursive" class="command translate" href="{$web}open/list/?target={$target}&amp;rev={../@rev}{$baseparam}&amp;depth=infinity">recursive</a>
 					</xsl:if>
 				</xsl:when>
 				<xsl:otherwise>
@@ -86,11 +86,11 @@
 					<!-- Note that this does not forward the 'recursive' parameter.
 						Log is always recursive, but its links to folders are for non-recursive navigation -->
 					<a id="history" href="../log/?target={$target}{$baseparam}">history</a>
-					<xsl:if test="/lists/@recursive">
+					<xsl:if test="/lists/@depth">
 						<a id="listshort" class="command translate" href="{$web}open/list/?target={$target}{$baseparam}">flat</a>
 					</xsl:if>
-					<xsl:if test="not(/lists/@recursive)">
-						<a id="listrecursive" class="command translate" href="{$web}open/list/?target={$target}{$baseparam}&amp;recursive=1">recursive</a>
+					<xsl:if test="not(/lists/@depth)">
+						<a id="listrecursive" class="command translate" href="{$web}open/list/?target={$target}{$baseparam}&amp;depth=infinity">recursive</a>
 					</xsl:if>
 				</xsl:otherwise>				
 			</xsl:choose>
@@ -109,9 +109,15 @@
 				</span>
 			</xsl:if>
 		</h2>
+		<form method="GET" action="../../">
+			<input type="hidden" name="target" value="{$target}"/>
+			<xsl:if test="../@base">
+				<input type="hidden" name="base" value="{../@base}"/>
+			</xsl:if>
 		<table class="index list">
 			<thead>
 				<tr>
+					<td>&#160;</td>
 					<td>path</td>
 					<td>revision</td>
 					<td>author</td>
@@ -120,12 +126,23 @@
 					<td>lock</td>
 				</tr>
 			</thead>
-			<xsl:apply-templates select="*">
+			<xsl:apply-templates select="entry">
 				<xsl:with-param name="parent" select="$target"/>
-				<xsl:sort select="not(/lists/@recursive) and @kind = 'file'"/>
+				<xsl:sort select="not(/lists/@depth='infinity') and @kind = 'file'"/>
 				<xsl:sort select="name"/>
 			</xsl:apply-templates>
 		</table>
+			<input type="reset" value="deselect all"/>
+			<xsl:value-of select="$spacer"/>
+			<div id="serviceselect">
+				<button class="action" type="submit" name="service" value="open/download/">Download</button>
+				<button class="action" type="submit" name="service" value="edit/copy/">Copy</button>
+				<button class="action" type="submit" name="service" value="edit/delete/">Delete</button>
+				<button class="action" type="submit" name="service" value="edit/propedit/">Edit properties</button>
+				<button class="action" type="submit" name="service" value="edit/lock/">Lock</button>
+				<button class="action" type="submit" name="service" value="edit/unlock/">Unlock</button>
+			</div>
+		</form>
 		<div id="footer">
 		</div>
 	</xsl:template>
@@ -152,7 +169,10 @@
 			</xsl:if>
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
-		<tr id="row:{$id}" class="row n{$n mod 4}">
+		<tr id="row:{$id}" class="row row-folder n{$n mod 4}">
+			<td>
+				<input id="select:{$id}" type="checkbox" name="s[]" value="{$target}" />
+			</td>
 			<td>
 				<a id="open:{$id}" class="folder" href="?target={$target}{$baseparam}{$revparam}{$recursiveparam}">
 					<xsl:value-of select="name"/>
@@ -199,6 +219,9 @@
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<tr id="row:{$id}" class="n{$n mod 4}">
+			<td>
+				<input id="select:{$id}" type="checkbox" name="s[]" value="{$target}" />
+			</td>		
 			<td>
 				<a id="open:{$id}" class="file-{$filetype} file" href="../?target={$target}{$baseparam}{$revparam}">
 					<xsl:value-of select="name"/>

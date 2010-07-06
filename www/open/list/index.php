@@ -20,9 +20,10 @@ $list->addArgOption('--xml');
 $list->addArgOption('--incremental');
 
 // TODO subversion 1.5 comes with a "depth" argument instead
-// maybe that one is better at handling authirization denied in recursive list
-$recursive = isset($_GET['recursive']) && $_GET['recursive'];
-if ($recursive) $list->addArgOption('-R');
+// maybe that one is better at handling authorization denied in recursive list
+if (isset($_REQUEST['depth'])) {
+	$list->addArgOption('--depth', $_REQUEST['depth']);
+}
 
 if ($rev) {
 	$list->addArgUrlPeg($url, $rev);
@@ -63,7 +64,7 @@ $head = '<?xml version="1.0"?>
 	.(strlen($target)>2 ? ' parent="'.getParent($target).'"' : '') // easier than to get parent using xslt functions
 	.($rev ? ' rev="'.$rev.'"' : '')
 	.(isset($_REQUEST['base']) ? ' base="'.$_REQUEST['base'].'"' : '')
-	.($recursive ? ' recursive="yes"' : '')
+	.(isset($_REQUEST['depth']) ? ' depth="'.$_REQUEST['depth'].'"' : '')
 	.'>
 ';
 // Note that SVN returns the non-ssl url, which might break IE transformation. Could have a path here (targetUrl) too.

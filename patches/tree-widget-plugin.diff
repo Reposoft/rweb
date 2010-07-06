@@ -1,0 +1,126 @@
+### Eclipse Workspace Patch 1.0
+#P repos
+Index: www/plugins/tree/repos-tree.js
+===================================================================
+--- www/plugins/tree/repos-tree.js	(revision 0)
++++ www/plugins/tree/repos-tree.js	(revision 0)
+@@ -0,0 +1,19 @@
++/**
++ * Dynamically builds a tree from svn list json structures.
++ * 
++ * There are a few good reason not to use depth=infinity in svn list:
++ *  - Recursive list fail silently to recurse if any item is 403 forbidden in the ACL,
++ *    so the list looks exactly like depth=immediates
++ *  - It can not filter on folders, which is the most common use case for client side tree.
++ * 
++ * There is one quite sufficient reason to use svn list instead of the faster mod_dav_svn xml:
++ *  - svn list hints when folders are not accessible in the ACL by omitting some fields, like author.
++ * 
++ * The reason to use json instead of svn list xml is not clear,
++ * but with proper HTTP caching of responses we could offload the client a bit without
++ * imposing too much load on the server.
++ * 
++ * Every expansion of a node can get folders only or folders and files
++ * ...
++ * 
++ */
+\ No newline at end of file
+
+Property changes on: www/plugins/tree/repos-tree.js
+___________________________________________________________________
+Added: svn:mime-type
+   + text/javascript
+Added: svn:eol-style
+   + native
+
+Index: www/plugins/tree/repos-tree.test.js
+===================================================================
+--- www/plugins/tree/repos-tree.test.js	(revision 0)
++++ www/plugins/tree/repos-tree.test.js	(revision 0)
+@@ -0,0 +1,77 @@
++var f1 = {"path":"http://localhost:8532/data/demoproject/trunk", "list":{
++  "2010-03-01_080440.jpg":{
++"size":"704810","commit":{
++"author":"svensson","date":"2010-04-04T15:18:03.551131Z","revision":"136"},
++"kind":"file"},
++  "20100117-kilsbergen.gpx":{
++"size":"175473","commit":{
++"author":"test","date":"2010-01-27T15:15:50.862730Z","revision":"55"},
++"kind":"file"},
++  "Doc2.doc":{
++"size":"19968","commit":{
++"author":"svensson","date":"2010-02-25T10:12:28.133897Z","revision":"75"},
++"kind":"file"},
++  "Policy document.html":{
++"size":"1923","commit":{
++"author":"test","date":"2009-12-13T08:36:53.167839Z","revision":"2"},
++"kind":"file"},
++  "bilder":{
++"commit":{
++"author":"svensson","date":"2010-04-04T15:38:10.531371Z","revision":"138"},
++"kind":"dir"},
++  "csvn-segfault.diff":{
++"size":"1780","commit":{
++"author":"test","date":"2010-03-12T05:42:31.712062Z","revision":"95"},
++"kind":"file"},
++  "empty":{
++"commit":{
++"author":"admin","date":"2009-12-13T08:36:52.231337Z","revision":"1"},
++"kind":"dir"},
++  "hupp":{
++"commit":{
++"author":"test","date":"2010-01-19T12:54:04.534586Z","revision":"52"},
++"kind":"dir"},
++  "noaccess":{
++"commit":{
++"revision":"1"},
++"kind":"dir"}}
++
++
++{"repository":"http:\/\/localhost:8532\/data",
++"denied":false,
++"userfullname":"svensson",
++"entrypoints":{"\/svensson":{"path":"\/svensson",
++"readonly":false,
++"bygroup":false},
++"\/test\/trunk\/repos-svn-access":{"path":"\/test\/trunk\/repos-svn-access",
++"readonly":false,
++"bygroup":false},
++"\/demoproject":{"path":"\/demoproject",
++"readonly":false,
++"bygroup":true}}}
++
++
++
++{"repository":"http:\/\/olsson.repos.se\/data",
++"denied":false,
++"userfullname":"solsson",
++"entrypoints":{"\/":{"path":"\/",
++"readonly":false,
++"bygroup":true},
++"\/www":{"path":"\/www",
++"readonly":false,
++"bygroup":true},
++"\/hannastaffan":{"path":"\/hannastaffan",
++"readonly":false,
++"bygroup":false},
++"\/olsson":{"path":"\/olsson",
++"readonly":false,
++"bygroup":true},
++"\/solsson":{"path":"\/solsson",
++"readonly":false,
++"bygroup":false},
++"\/delat":{"path":"\/delat",
++"readonly":false,
++"bygroup":true}}}
++
++{"repository":"http:\/\/olsson.repos.se\/data","denied":false,"userfullname":"roger","entrypoints":{"\/":{"path":"\/","readonly":true,"bygroup":true},"\/www":{"path":"\/www","readonly":false,"bygroup":true},"\/olsson":{"path":"\/olsson","readonly":false,"bygroup":true},"\/roger":{"path":"\/roger","readonly":false,"bygroup":false},"\/delat":{"path":"\/delat","readonly":true,"bygroup":true}}}
+\ No newline at end of file
+
+Property changes on: www/plugins/tree/repos-tree.test.js
+___________________________________________________________________
+Added: svn:mime-type
+   + text/javascript
+Added: svn:eol-style
+   + native
+

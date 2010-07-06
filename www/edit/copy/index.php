@@ -15,18 +15,22 @@ $revisionRule = new RevisionRule();
 
 // dispatch
 if ($_SERVER['REQUEST_METHOD']=='POST') {
-	svnCopy($tofolder); 
+	if (isset($_POST['s'])) {
+		svnCopyMulti($tofolder, $_POST['s'], $revisionRule->getValue());
+	} else {
+		svnCopy($tofolder);
+	}
 } else {
 	$target = getTarget();
 	$template = Presentation::getInstance();
-	$file = new SvnOpenFile($target, $revisionRule->getValue());
+	$file = new SvnOpenFileMulti($target, $revisionRule->getValue());
+	$file->enableMulti();
 	$file->isWritable(); // check before page is displayed because it might require authentication
 	$template->assign_by_ref('file', $file);
 	$template->assign('repository', getRepository());
 	$template->assign('target', $target);
 	$template->assign('oldname', getPathName($target));
 	$template->assign('folder', getParent($target));
-	
 	$template->display();
 }
 
@@ -49,6 +53,28 @@ function svnCopy($tofolder) {
 		$edit->addArgUrl($oldUrl);
 	}
 	$edit->addArgUrl($newUrl);
+	$edit->exec();
+	displayEdit($template);
+}
+
+function svnCopyMulti($tofolder, $sourcePaths, $revision=false) {
+	Validation::expect('message');
+	$template = Presentation::background();
+	$edit = new SvnEdit('copy');
+	if (isset($_POST['message'])) {
+		$edit->setMessage($_POST['message']);
+	}
+	// TODO verify encoding
+	foreach ($sourcePaths as $s) {
+		$surl = getTargetUrl($s);
+		if (isset($_POST['rev'])) {
+			$edit->addArgUrlPeg($surl, $_POST['rev']);	
+		} else {
+			$edit->addArgUrl($surl);
+		}
+	}
+	$toUrl = getTargetUrl($tofolder);
+	$edit->addArgUrl($toUrl);
 	$edit->exec();
 	displayEdit($template);
 }

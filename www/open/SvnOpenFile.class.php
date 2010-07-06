@@ -101,7 +101,7 @@ function _svnOpenFile_setInstance($fromConstructor) {
 class SvnOpenFile {
 	
 	/**
-	 * The absolute path from repository root.
+	 * The absolute path from repository root. Ending with slash for folders.
 	 * @var String
 	 */
 	var $path;
@@ -288,6 +288,9 @@ class SvnOpenFile {
 		return $this->file['kind'];
 	}
 	
+	/**
+	 * @return path from repository root, starting with slash, ending with slash for folders
+	 */
 	function getPath() {
 		return $this->path;
 	}
@@ -855,6 +858,157 @@ class SvnOpenFile {
 	function _readInfoHttp() {
 		// http can not read the actual revision number for HEAD
 		return true;
+	}
+	
+}
+
+/**
+ * Like SvnOpenFile but supports multiselect.
+ * This functionality is added as an aspect so SvnOpenFile is not messed up even more.
+ */
+class SvnOpenFileMulti extends SvnOpenFile {
+	
+	var $_paths = array();
+	
+	/**
+	 * Overrides parent function to add new type that is inserted into page text without if statements.
+	 * @return unknown_type
+	 */
+	function getKind2() {
+		if ($this->isMulti()) {
+			return 'items';
+		}
+		return parent::getKind2();
+	}	
+	
+	/**
+	 * @return String form field name that works with multiple fields and PHP
+	 */
+	function getMultiFormParam() {
+		return 's[]';
+	}
+	
+	/**
+	 * The SvnOpenFile constructor is complicated to override with all the optional arguments
+	 * so this method should be called instead after construction.
+	 * This should not be needed as soon as we find a way to hook into the constructor nicely.
+	 * @return the instance
+	 */
+	function enableMulti() {
+		if (!$this->isFolder()) {
+			trigger_error('Multiple selections only allowed if target is a folder.', E_USER_ERROR);
+		}
+		if (isset($_REQUEST['s'])) {
+			$this->setMultipath($_REQUEST['s']);
+		}		
+		return $this;
+	}
+	
+	/**
+	 * Paths should exist at the peg revision given by the revision argument to the constructor.
+	 * If no revision argument to constructor paths should exist in HEAD.
+	 * Runs {@see #filterRecursiveSelect}.
+	 * Validates that all entries are inside the target folder.
+	 * @param unknown_type $pathArrayFromRoot Paths starting with slash, folders MUST end with slash.
+	 * @return unknown_type
+	 */
+	function setMultipath($pathArrayFromRoot) {
+		$this->_paths = $this->filterRecursiveSelect($pathArrayFromRoot);
+		if ($this->isMultiOverlapping()) {
+			trigger_error('The selection may not include a file or folder together with a parent folder', E_USER_ERROR);
+		}		
+		$this->validateMultiInsideFolder($this->getPath());
+	}
+	
+	/**
+	 * 
+	 * @return true if the page has a multiselect parameter (even if it is empty)
+	 */
+	function isMulti() {
+		return isset($_REQUEST['s']);
+	}
+	
+	/**
+	 * 
+	 * @return array(String) selections, urlencoded (names), paths starting with slash, folders ending with slash
+	 */
+	function getMultiPathsFromRoot() {
+		return $this->_paths;
+	}
+	
+	/**
+	 * If selection is made in recursive list it must be filtered:
+	 *  - Subitems are excluded if a parent folder is selected.
+	 * This is so that the selection UI is intuitive but the svn
+	 * operations don't operate on duplicates.
+	 * @param $multipath Original list of paths
+	 * @return filtered list, same order
+	 */
+	function filterRecursiveSelect($multipath) {
+		$p = array_merge(array(), $multipath); // clone so we can preserve order
+		asort($p, SORT_STRING);
+		//array_shift destroys order//$prev = array_shift($p);
+		$prev = false;		
+		foreach ($p as $i => $item) {
+			if ($prev === false) {
+				$prev = $item;
+				continue;
+			}
+			if (strBegins($item, $prev)) {
+				unset($multipath[$i]);
+			} else {
+				$prev = $item;
+			}
+		}
+		return array_values($multipath); // renumber but preserver order
+	}
+	
+	/**
+	 * @return boolean true if any of the paths overlap,
+	 *  i.e. a file of folder is a duplicate or subitem of some item
+	 */
+	function isMultiOverlapping() {
+		$p = $this->getMultiPathsFromRoot();
+		sort($p, SORT_STRING);
+		$i = 0;
+		while ($i < count($p) - 1) {
+			if ($p[$i] == $p[$i + 1]) {
+				return true;
+			}
+			if (strEnds($p[$i], '/') && strBegins($p[$i + 1], $p[$i])) {
+				return true;
+			}
+			$i++;
+		}
+		return false;
+	}
+	
+	/**
+	 * Tritter error if any of the paths is not a subitem to the given folder
+	 * @param String $targetPath starting and ending with slash 
+	 */
+	function validateMultiInsideFolder($targetPath) {
+		if (!strBegins($this->getCommonFolder(), $targetPath)) {
+			trigger_error('Not all paths are inside target '.$targetPath, E_USER_ERROR);
+		}
+	}
+	
+	/**
+	 * @return String Deepest path that contains all of the items, ending with slash. From "/" to any depth.
+	 */
+	function getCommonFolder() {
+		$paths = $this->_paths;
+		$prefix = array_shift($paths);  // take the first item as initial prefix
+		$pos = strrpos($prefix, '/');
+		$prefix = substr($prefix, 0, $pos + 1);
+		foreach ($paths as $item) {
+		    while ($pos && substr($item, 0, $pos + 1) !== $prefix) {
+		        $pos = strrpos($prefix, '/', -2);
+		        $prefix = substr($prefix, 0, $pos + 1);
+		    }
+		}
+		if ($pos === false) trigger_error("Item list contains invalid path. Must start with /", E_USER_ERROR);
+		return $prefix;	
 	}
 	
 }

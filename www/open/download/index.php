@@ -8,7 +8,8 @@ require("../SvnOpenFile.class.php" );
 
 $revisionRule = new RevisionRule();
 
-$file = new SvnOpenFile(getTarget(), $revisionRule->getValue());
+$file = new SvnOpenFileMulti(getTarget(), $revisionRule->getValue());
+$file->enableMulti();
 if ($file->getStatus() != 200) {
 	// TODO have some kind of forwarding to the error pages for matching status code
 	require("../../conf/Presentation.class.php");

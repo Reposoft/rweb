@@ -6,6 +6,12 @@
 require( 'conf/repos.properties.php' );
 require( 'conf/Presentation.class.php' );
 
+// redirect to service based on "service name", allows plain HTML form in list to select service
+// POST not supported because
+if (isset($_GET['service'])) {
+	header('Location: '.getWebapp().$_GET['service'].'?'.$_SERVER['QUERY_STRING']);
+}
+
 $p = Presentation::getInstance();
 
 // check authentication status

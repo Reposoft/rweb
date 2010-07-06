@@ -134,6 +134,9 @@ h1 .folder, h2 .folder {
 .file-sxw { background-image: url('filetypes/16x16/sxw.png');}
 
 /* thumblist plugin, must be done in CSS to support refresh details */
+#commandbar #listthumbs {
+	background-image: url('../commands/24x24/listthumbs.png');
+}
 li.thumbnail {
 	height: 121px;
 }
@@ -148,4 +151,10 @@ li.thumbnail > .actions {
 }
 li.thumbnail > .details {
 	margin-top: -32px;
+}
+thead td.thumbnail {
+	background-color: #999;
+}
+tbody td.thumbnail {
+	text-align: center;
 }
