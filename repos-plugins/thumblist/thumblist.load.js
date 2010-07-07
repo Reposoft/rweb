@@ -21,9 +21,10 @@ var reposThumbFromListItem = function(item) {
 	if (!reposThumbSupported(name)) return;
 	var target = Repos.getTarget() + name;
 	var thumb = Repos.thumbnails.getSrc(target, peg, false); // paths are at HEAD when in index
+	var viewUrl = $('a[id^=view:]', item).attr('href').replace('/?', '/file/?');
 	
 	//reposThumbFormatGallerificStyle(item, a, name, thumb);
-	reposThumbFormatAsList(item, a, name, thumb);
+	reposThumbFormatAsList(item, a, name, thumb, viewUrl);
 	item.addClass('thumbnail');
 };
 
@@ -54,10 +55,20 @@ var reposThumblistOnDetails = function() {
  * @param name image label
  * @param thumb URL to thumbnail
  */
-var reposThumbFormatAsList = function(item, a, name, thumb) {
+var reposThumbFormatAsList = function(item, a, name, thumb, viewUrl) {
 	// uses CSS
 	a.css({
 		backgroundImage: 'url("' + thumb + '")'
+	});
+	// same image click behavior as InList below
+	a.click(function(ev) {
+		var imgw = 150; // clickable area's width in pixels, hardcoded to match transform settings in thumbnail and CSS
+		var clickx = ev.pageX;
+		var imgx = $(this).offset().left; // x coordinate where the image starts
+		if (clickx < imgx + imgw) {
+			ev.preventDefault();
+			location.href = viewUrl;
+		}
 	});
 };
 
@@ -86,8 +97,11 @@ var reposThumbFromTableRow = function(row) {
 	if (reposThumbSupported(name)) {
 		// not tested with funny characters
 		var target = Repos.getTarget() + name;
-		var thumb = Repos.thumbnails.getSrc(target, peg, false); // paths are at HEAD when in index
-		newcell.append('<img src="' + thumb + '"/>');
+		var thumbUrl = Repos.thumbnails.getSrc(target, peg, false); // paths are at HEAD when in index
+		var thumb = $('<img/>').attr('src', thumbUrl).css('border', '0');
+		var viewUrl = a.attr('href').replace('/?', '/file/?');
+		var view = $('<a/>').attr('href', viewUrl);
+		view.append(thumb).appendTo(newcell);
 	}
 };
 
