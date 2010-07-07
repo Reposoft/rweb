@@ -7,10 +7,13 @@
 h3, p {
 	text-align: center;
 }
+img {
+	border: 0;
+}
 </style>
 </head>
 
-<body>
+<body class="image">
 <div id="commandbar">
 <a id="repository" href="{=$file,folderUrl}">return to repository</a>
 <a id="view" href="../?target={=$target}{=$file,revParam}">details</a>
@@ -25,7 +28,9 @@ h3, p {
 	&nbsp; <span class="filesize">{=$file,size|formatSize}</span>
 </h3>
 <p>
+<a class="file" href="{=$file,url}">
 <img alt="Screen sized image" src="{=$file|reposViewGetImageUrl}"/>
+</a>
 </p>
 {=else}
 {=* mimic the error page *}
