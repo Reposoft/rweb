@@ -100,7 +100,10 @@ Depending on your browser, it may also work for file types like pdf, documents a
 {=if $file,isFile} file {=else} folder as zip archive {=/if}
 to your hard drive. The revision number {=$file,revision}
 will be appended to the filename, so you will know which version it is.</p>
-{=if $file,isFile and $file,size lte REPOS_TEXT_MAXSIZE}
+{=if $file|reposViewGetImageUrl}
+<h3><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in repos</a></h3>
+<p>View image in screen size</p>
+{=elseif $file,isFile and $file,size lte REPOS_TEXT_MAXSIZE}
 <h3><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in repos</a></h3>
 <p>Read the file's contents in a web page. This is like View in browser, but with menus.
 This works for text files. If the file is a binary file, like a word document,

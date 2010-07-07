@@ -9,12 +9,8 @@
  */
 require(dirname(dirname(__FILE__)).'/conf/Presentation.class.php');
 require(dirname(__FILE__)."/SvnOpenFile.class.php" );
-
-/* deprecated
-addPlugin('dateformat');
-addPlugin('thumbnails');
-addPlugin('proplist');
-*/
+// for deciding if View in Repos link should be displayed
+require(dirname(__FILE__).'/file/images.inc.php');
 
 // get file to open
 $target = getTarget();
