@@ -28,6 +28,11 @@ if ($rev) {
 	$list->addArgUrl($url);
 }
 
+// svn 1.5+
+if (isset($_REQUEST['depth'])) {
+	$list->addArgOption('--depth', $_REQUEST['depth']);
+}
+
 if ($list->exec()) trigger_error('Could not read entry for URL '.$url, E_USER_ERROR);
 // TODO detect access denied
 

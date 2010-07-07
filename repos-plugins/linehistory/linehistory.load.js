@@ -1,6 +1,7 @@
 
 // Depends on syntaxhighlighter plugin
 Repos.service('open/file/', function() {
+	if (!$('body').is('.text')) return;
 	var target = Repos.getTarget();
 	// must use explicit revision number to get matching blame
 	var rev = Repos.getRevision();
