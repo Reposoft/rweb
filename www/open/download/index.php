@@ -21,7 +21,13 @@ if ($file->getStatus() != 200) {
 // This is also the revision number expected by the "based on version" feature in upload changes
 // For folders: last changed revision can not be used because subitems might have changed
 $namerev = $file->isFolder() ? $file->getRevision() : $file->getRevisionLastChanged();
-$name = $file->getFilenameWithoutExtension() . '(r'.$namerev.')' . '.' . $file->getExtension();
+$name = $file->getFilenameWithoutExtension() . '(r'.$namerev.')';
+if ($file->isMulti()) {
+	$name .= '-' . count($file->getMultiPathsFromRoot());
+}
+if ($file->getExtension()) {
+	$name .= '.' . $file->getExtension();
+}
 
 // IE6 needs encoded name, other browsers don't like that.
 if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
