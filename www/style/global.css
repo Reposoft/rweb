@@ -336,6 +336,12 @@ dl.collapsed dt, dl.collapsed dd,
 #commandbar #accountedit, #commandbar #lostpassword {
 	background-image: url('commands/24x24/accountedit.png');
 }
+#commandbar #viewnext {
+	background-image: url('commands/24x24/viewnext.png');
+}
+#commandbar #viewprev {
+	background-image: url('commands/24x24/viewprev.png');
+}
 #commandbar #list {
 	background-image: url('commands/24x24/list.png');
 }

@@ -3,18 +3,11 @@
 <head>
 <title>repos: Image {=$file,filename}</title>
 <!--{$head}-->
-<style type="text/css">
-h3, p {
-	text-align: center;
-}
-img {
-	border: 0;
-}
-</style>
 </head>
 
 <body class="image">
 <div id="commandbar">
+<a id="current" class="file" title="{=$file,path}, revision {=$file,revisionLastChanged}, size {=$file,size|formatSize}" href="{=$file,url}">{=$file,filename}</a>
 <a id="repository" href="{=$file,folderUrl}">return to repository</a>
 <a id="view" href="../?target={=$target}{=$file,revParam}">details</a>
 <!--{if $file,isLatestRevision}-->
@@ -23,13 +16,9 @@ img {
 </div>
 
 {=if $file,status eq 200}
-<h3><a class="file" title="{=$file,path}, revision {=$file,revisionLastChanged}" href="{=$file,url}">{=$file,filename}</a>
-	&nbsp; <span class="revision">{=$file,revisionLastChanged}</span>
-	&nbsp; <span class="filesize">{=$file,size|formatSize}</span>
-</h3>
 <p>
 <a class="file" href="{=$file,url}">
-<img alt="Screen sized image" src="{=$file|reposViewGetImageUrl}"/>
+<img alt="loading image..." src="{=$file|reposViewGetImageUrl}"/>
 </a>
 </p>
 {=else}

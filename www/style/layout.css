@@ -65,6 +65,22 @@ div p {
 	margin-bottom: 1.2em;
 }
 
+/* View in Repos for images */
+body.image {
+	background-color: #888;
+}
+body.image #footer {
+	display: none;
+}
+body.image p {
+	text-align: center;
+}
+body.image img {
+	border: 3px solid #777;
+	border-bottom-color: #666;
+	border-right-color: #666;
+}
+
 /* thumbnail plugin, see THUMB_SIZE in open/thumb/ */
 #intro img.thumbnail {
 	display: inline;

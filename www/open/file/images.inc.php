@@ -1,4 +1,11 @@
 <?php
+// TODO instead of identifying images I think View in Repos should try to handle any file
+// A pluggable concept would be great.
+// Until we have that, image transform is a better fallback than text
+// - thus open/ should be changed to always link to View in Repos
+// and View in Repos should display text if the content type says so,
+// image otherwise
+
 /**
  * Decides if a files is a a viewable image
  * and what the URL would be.
