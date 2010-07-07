@@ -1,7 +1,7 @@
 
-var reposThumbSupported = function(link) {
+var reposThumbSupported = function(name) {
 	// definition from the thumbnails plugin
-	return Repos.thumbnails.match.test(link.attr('href'));
+	return Repos.thumbnails.match.test(name);
 };
 
 var reposThumbFromListItem = function(item) {
@@ -17,8 +17,8 @@ var reposThumbFromListItem = function(item) {
 	}
 	
 	var a = $('> a', item);
-	if (!reposThumbSupported(a)) return;
-	var name = a.text();
+	var name = a.text();	
+	if (!reposThumbSupported(name)) return;
 	var target = Repos.getTarget() + name;
 	var thumb = Repos.thumbnails.getSrc(target, peg, false); // paths are at HEAD when in index
 	
@@ -70,3 +70,50 @@ var reposThumbFormatGallerificStyle = function(item, a, name, thumb) {
 };
 
 Repos.service('index/', reposThumblistOnDetails);
+
+var reposThumbFromTableRow = function(row) {
+	
+	var acell = $('td:first', row).next();
+	var newcell = $('<td/>').addClass('thumbnail').insertBefore(acell);
+	
+	// assuming tags from details plugin
+	// Repository browsing is HEAD but revisions from details are last-changed
+	// and changes might have occured at old urls so we must use peg revision
+	var peg = $('.revision', row).text();
+	
+	var a = $('> a', acell);
+	var name = a.text();
+	if (reposThumbSupported(name)) {
+		// not tested with funny characters
+		var target = Repos.getTarget() + name;
+		var thumb = Repos.thumbnails.getSrc(target, peg, false); // paths are at HEAD when in index
+		newcell.append('<img src="' + thumb + '"/>');
+	}
+};
+
+var reposThumblistInListHide = function() {
+	$('td.thumbnail').hide();
+	$(this).html('show&nbsp;thumbnails').one('click', reposThumblistInListShow);
+};
+
+var reposThumblistInListShow = function() {
+	$('td.thumbnail').show();
+	$(this).html('hide&nbsp;thumbnails').one('click', reposThumblistInListHide);
+};
+
+var reposThumblistInList = function() {
+	$('<td>&nbsp;</td>').addClass('thumbnail').insertAfter('thead td:first');
+	$('.index tbody tr')
+		//.inviewOne(
+		.each(
+				function() {
+					reposThumbFromTableRow(this);
+				});
+	$(this).html('hide&nbsp;thumbnails').one('click', reposThumblistInListHide);
+};
+
+var reposThumblistInListButton = function() {
+	$('<a id="listthumbs" href="javascript:void(0)">load&nbsp;thumbnails</a>').appendTo('#commandbar').one('click', reposThumblistInList);
+};
+
+Repos.service('open/list/', reposThumblistInListButton);
