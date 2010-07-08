@@ -80,7 +80,15 @@ body.image img {
 	border-bottom-color: #666;
 	border-right-color: #666;
 }
-
+body.image #commandbar #repository {
+	background-image: url('commands/24x24/repository_gray.png');
+}
+body.image #commandbar #view {
+	background-image: url('commands/24x24/view_gray.png');
+}
+body.image #commandbar #edit {
+	background-image: url('commands/24x24/edit_gray.png');
+}
 /* thumbnail plugin, see THUMB_SIZE in open/thumb/ */
 #intro img.thumbnail {
 	display: inline;

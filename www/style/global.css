@@ -337,10 +337,10 @@ dl.collapsed dt, dl.collapsed dd,
 	background-image: url('commands/24x24/accountedit.png');
 }
 #commandbar #viewnext {
-	background-image: url('commands/24x24/viewnext.png');
+	background-image: url('commands/24x24/viewnext_gray.png');
 }
 #commandbar #viewprev {
-	background-image: url('commands/24x24/viewprev.png');
+	background-image: url('commands/24x24/viewprev_gray.png');
 }
 #commandbar #list {
 	background-image: url('commands/24x24/list.png');
