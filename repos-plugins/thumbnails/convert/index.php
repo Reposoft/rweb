@@ -30,7 +30,7 @@ function getThumbnailCacheRepoDefault() {
 require(ReposWeb.'edit/SvnEdit.class.php');
 
 // create the option string to use with convert command
-function getThumbnailCommand($transform, $format='', $target='-') {
+function getThumbnailCommand($transform, $target='-') {
 	$maxWidth = $transform['width'];
 	$maxHeight =  $transform['height'];
 	// todo select -filter?
@@ -78,6 +78,7 @@ $revIsPeg = true;
 $revField = 'rev';
 // simplified logic that supports only p OR r
 if (isset($_REQUEST['p'])) {
+	// TODO shouldn't p be allowed with r? see http://subversion.apache.org/docs/release-notes/1.6.html#historical-uris
 	if (isset($_REQUEST['rev']) || isset($_REQUEST['r'])) trigger_error('only one revision type accepted', E_USER_ERROR);
 	$revField = 'p';
 }
@@ -95,23 +96,15 @@ if (!$r->getValue()) {
 	// enable caching, see below
 }
 
-// first get the data about the repository image
-$file = new SvnOpenFile(getTarget(), $r->getValue(), true, $revIsPeg);
-$extension = $file->getExtension();
-
-// verify that the source can be accessed
-// note that this requires host-wide login, not only /repos-web/, now that this runs in /repos-plugins
-if ($file->getStatus() != 200) {
-	handleError($file->getStatus(), "Could not read ".$file->getPath()." ".$r->getValue());
-}
-
 // Look for a cached file using a naming rule
 if ($cacheRepo) {
+	if (!$revIsPeg) trigger_error('Caching not supported for non-pegs'); // Until we know if there can be collisions
+	// first get the data about the repository image, but is this needed?
 	$transformId = $gt; // this assumes that the cache repo is cleared if transform definitions change
-	$revision = $file->getRevision();
-	$name = $file->getFilename();
+	$revision = $r->getValue();
+	$name = basename(getTarget());
 	$dot = strrpos($name, '.');
-	$name = substr($name, 0, $dot).'(r'.$file->getRevision().')'.".$transformId".substr($name,$dot).'.jpg';
+	$name = substr($name, 0, $dot).'(r'.$revision.')'.".$transformId".substr($name,$dot).'.jpg';
 	$cacheTarget = getTarget().'/'.$revision.'/'.$name;
 	$cacheSave = getTarget().'/repos.lock';
 	$cacheUrl = $cacheRepo.$cacheTarget;
@@ -126,7 +119,7 @@ if ($cacheRepo) {
 $thumbtype = 'png';
 if (isset($transform['type'])) { // output type can be set explicitly in transform definition
 	$thumbtype = 'type';
-} else if (preg_match('/^jpe?g|raw/i', $file->getExtension())) {
+} else if (preg_match('/\.jpe?g|raw$/i', getTarget())) {
 	$thumbtype = 'jpeg';
 }
 
@@ -134,22 +127,20 @@ if (isset($transform['type'])) { // output type can be set explicitly in transfo
 $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 
 // create the ImageMagick command
-$convert = $convert . ' ' . getThumbnailCommand($transform, $extension, $tempfile);
-
-// integer revision number, can be cached
-$rev = $file->getRevision();
+$convert = $convert . ' ' . getThumbnailCommand($transform, $tempfile);
 
 $o = new SvnOpen('cat');
-//$o->addArgOption('-r', $rev);
-//$o->addArgUrl(getTargetUrl());
-// stricter, based on results from svn info, produces unique key with url@last-changed-rev
-$rev = $file->getRevisionLastChanged();
-$urlForPeg = rawurldecode($file->file['url']); // getUrl is urlRequested
-$o->addArgUrlPeg($urlForPeg, $rev); // $rev is a peg revision
+if ($revIsPeg) {
+	$o->addArgUrlPeg(getTargetUrl(), $r->getValue()); // $rev is a peg revision
+} else {
+	$o->addArgOption('-r', $r->getValue());
+	$o->addArgUrl(getTargetUrl());
+}
 $o->addArgOption('|', $convert, false);
 if($o->exec()) {
 	handleError($o->getExitcode(), implode('"\n"', $o->getOutput()));
 }
+
 // it might happen that convert exits with code 0 but the thumbnail is not created
 if (!file_exists($tempfile) || !filesize($tempfile)) {
 	// then it might be because the source has multiple pages
