@@ -69,10 +69,6 @@ if (strBegins(getSelfUrl(), $cacheRepo) && !isset($_REQUEST['target'])) {
 	trigger_error('On-demand thumbnail generation not implemented yet');
 }
 
-// can't be sure that the browser automatically forwards credentials to this plugin folder
-// TODO make sure login is not required for public readable images
-targetLogin();
-
 // revision number logic, rev is the old "implicit peg"
 $revIsPeg = true;
 $revField = 'rev';
