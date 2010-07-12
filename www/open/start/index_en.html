@@ -58,7 +58,7 @@ and the tools in each project.</p>
 	<!--{/foreach}-->
 	<!--{if $smarty.foreach.tools.total eq 0}-->
 	<li class="n0">
-	<a id="files:{=$path|getFileId}" class="tool path {=$toolid}" href="{=$repository}{=$path}/">
+	<a id="files:{=$path|getFileId}" class="tool path notoolid" href="{=$repository}{=$path}/">
 	<img border="0" src="{=$webapp}style/tools/files.png" hspace="10"/>{=$path}</a>
 	</li>
 	<!--{/if}-->
