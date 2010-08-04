@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>repos: image archive</title>
+
+<script type="text/javascript" src="/repos-web/scripts/libs.js"></script>
+
+<link rel="stylesheet" href="galleriffic/css/basic.css" type="text/css" />
+<link rel="stylesheet" href="galleriffic/css/galleriffic-2.css" type="text/css" />
+<script type="text/javascript" src="galleriffic/js/jquery.galleriffic.js"></script>
+<script type="text/javascript" src="galleriffic/js/jquery.opacityrollover.js"></script>
+
+<script type="text/javascript" src="../imagemeta/imagemeta.plugin.js"></script>
+<script type="text/javascript" src="gallery.js"></script>
+
+</head>
+<body>
+<div id="page">
+	<div id="container">
+		<h1><a href="index.html">Galleriffic</a></h1>
+
+		<h2>Thumbnail rollover effects and slideshow crossfades</h2>
+
+		<!-- Start Advanced Gallery Html Containers -->
+		<div id="gallery" class="content">
+			<div id="controls" class="controls"></div>
+			<div class="slideshow-container">
+				<div id="loading" class="loader"></div>
+				<div id="slideshow" class="slideshow"></div>
+			</div>
+
+			<div id="caption" class="caption-container"></div>
+		</div>
+		<script id="thumbsTemplate" type="text/html">
+			<li>
+				<a class="thumb" href="${srcScreen}" title="${title}">
+					<img src="${srcThumb}" alt="${title}" />
+
+				</a>
+				<div class="caption">
+					<div class="download">
+						<a href="${srcOriginal}">Download Original</a>
+					</div>
+					<!--<div class="image-title">${title}</div>-->
+					<div class="image-desc">${description}</div>
+
+				</div>
+			</li>
+		</script>
+		<div id="thumbs" class="navigation">
+			<ul class="thumbs noscript">
+			</ul>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
+</div>
+<div id="footer">&copy; 2010 repos.se</div>
+
+</body>
+</html>
