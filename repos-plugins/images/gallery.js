@@ -5,6 +5,10 @@ $(document).ready(function() {
 	var folder = qs.target;
 	var repo = qs.base;
 	
+	// headline
+	// TODO go to folder, not details page
+	$('h2 > a').text(repo + ': ' + folder).attr('href', '/repos-web/open/?base=' + repo + '&target=' + folder);
+	
 	// depends on imagemeta plugin
 	var show = function(docs) {
 		var list = $('#thumbs ul');
@@ -12,23 +16,31 @@ $(document).ready(function() {
 		var data = [];
 		for (var i = 0; i < docs.length; i++) {
 			var d = docs[i];
-			var path = folder + Repos.imagemeta.getFilename(d.id);
+			var filename = Repos.imagemeta.getFilename(d.id);
+			var path = folder + filename;
+			var src = function(transformId) {
+				// gt must be first because &gt is an escape character
+				return '/repos-plugins/thumbnails/convert/?gt=' + transformId + '&target=' + encodeURIComponent(path) + '&base=' + repo; //'&r=79';
+			};
 			var image = {
-					srcThumb: '/repos-plugins/thumbnails/convert/?target=' + encodeURIComponent(path) + '&base=' + repo, //'&r=79',
-					srcOriginal: '/svn/',
-					title: d.title,
+					srcThumb: src('75'),
+					srcOriginal: src('original'),
+					title: d.title || filename,
 					description: d.description
 			};
-			image.srcScreen = image.srcThumb.replace('?', '?gt=screen&');
+			image.srcScreen = src('500');
 			data.push(image);
 		}
+		// show using microtemplate in page
 		template.render(data).appendTo(list);
+		// run galleriffic to transform page
 		Repos.image.galleriffic();
 	};
 	
 	Repos.imagemeta.search({
 		target: folder,
 		repo: repo,
+		contentType: '(image/* OR application/postscript OR application/pdf)',
 		success: function(solr) {
 			show(solr.response.docs);
 		}
@@ -52,11 +64,14 @@ Repos.image = {
 			exemptionSelector: '.selected'
 		});
 		
+		// TODO Galleriffic must handle HTTP 500 errors, currently it shows the loading animation for ever
+		// TODO Handle when zero images, Galleriffic produces script error
+		
 		// Initialize Advanced Galleriffic Gallery
 		var gallery = $('#thumbs').galleriffic({
 			delay:                     2500,
 			numThumbs:                 15,
-			preloadAhead:              10,
+			preloadAhead:              2,
 			enableTopPager:            true,
 			enableBottomPager:         true,
 			maxPagesToShow:            7,

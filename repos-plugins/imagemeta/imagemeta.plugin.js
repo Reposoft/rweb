@@ -8,6 +8,9 @@ Repos.imagemeta.search = function(options) {
 	var repo = options.repo || Repos.getBase();
 	var queryUrl = '/solr/svnhead/select/?wt=json&indent=on';
 	queryUrl += '&fl=id,geo_lat,geo_long,description';
+	if (options.contentType) {
+		queryUrl += '&content_type:' + options.contentType;
+	}
 	if (/\/$/.test(options.target)) {  // is folder
 		queryUrl += '&id_repo:' + repo;
 		queryUrl += '&q=folder:' + encodeURIComponent(options.target);
