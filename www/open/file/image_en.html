@@ -7,9 +7,8 @@
 
 <body class="image">
 <div id="commandbar">
-<a id="current" class="file" title="{=$file,path}, revision {=$file,revisionLastChanged}, size {=$file,size|formatSize}" href="{=$file,url}">{=$file,filename}</a>
 <a id="repository" href="{=$file,folderUrl}">return to repository</a>
-<a id="view" href="../?target={=$target}{=$file,revParam}">details</a>
+<a id="view" href="../?target={=$target}{=$file,revParam}" title="{=$file,path}, revision {=$file,revisionLastChanged}, size {=$file,size|formatSize}">details</a>
 <!--{if $file,isLatestRevision}-->
 <a id="edit" href="../../edit/?target={=$target}">edit</a>
 <!--{/if}-->
