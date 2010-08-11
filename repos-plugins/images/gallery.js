@@ -7,7 +7,8 @@ $(document).ready(function() {
 	
 	// headline
 	// TODO go to folder, not details page
-	$('h2 > a').text(repo + ': ' + folder).attr('href', '/repos-web/open/?base=' + repo + '&target=' + folder);
+	$('h2 > a').text(folder).attr('href', '/repos-web/open/?base=' + repo + '&target=' + folder);
+	if (qs.base) $('h2 > a').prepend('<span>' + repo + ': </span>'); 
 	
 	// depends on imagemeta plugin
 	var show = function(docs) {
@@ -20,7 +21,7 @@ $(document).ready(function() {
 			var path = folder + filename;
 			var src = function(transformId) {
 				// gt must be first because &gt is an escape character
-				return '/repos-plugins/thumbnails/convert/?gt=' + transformId + '&target=' + encodeURIComponent(path) + '&base=' + repo; //'&r=79';
+				return '/repos-plugins/thumbnails/convert/?gt=' + transformId + '&target=' + encodeURIComponent(path) + '&base=' + repo + '&r=' + d.svnrevision;
 			};
 			var image = {
 					srcThumb: src('75'),
@@ -39,7 +40,7 @@ $(document).ready(function() {
 	
 	Repos.imagemeta.search({
 		target: folder,
-		repo: repo,
+		base: repo,
 		contentType: '(image/* OR application/postscript OR application/pdf)',
 		success: function(solr) {
 			show(solr.response.docs);
@@ -83,8 +84,8 @@ Repos.image = {
 			renderNavControls:         true,
 			playLinkText:              'Play Slideshow',
 			pauseLinkText:             'Pause Slideshow',
-			prevLinkText:              '&lsaquo; Previous Photo',
-			nextLinkText:              'Next Photo &rsaquo;',
+			prevLinkText:              '&lsaquo; Previous',
+			nextLinkText:              'Next &rsaquo;',
 			nextPageLinkText:          'Next &rsaquo;',
 			prevPageLinkText:          '&lsaquo; Prev',
 			enableHistory:             false,

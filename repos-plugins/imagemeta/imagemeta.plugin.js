@@ -5,17 +5,16 @@ Repos.imagemeta = {};
 
 Repos.imagemeta.search = function(options) {
 
-	var repo = options.repo || Repos.getBase();
 	var queryUrl = '/solr/svnhead/select/?wt=json&indent=on';
-	queryUrl += '&fl=id,geo_lat,geo_long,description';
+	queryUrl += '&fl=id,geo_lat,geo_long,description,svnrevision';
 	if (options.contentType) {
 		queryUrl += '&content_type:' + options.contentType;
 	}
 	if (/\/$/.test(options.target)) {  // is folder
-		queryUrl += '&id_repo:' + repo;
-		queryUrl += '&q=folder:' + encodeURIComponent(options.target);
+		queryUrl += '&id_repo:' + (options.base || '');
+		queryUrl += '&q=folder:' + encodeURIComponent('"' + options.target + '"');
 	} else {
-		queryUrl += '&q=id:' + repo + '\\^' + encodeURIComponent(options.target);
+		queryUrl += '&q=id:' + (options.base || '') + '\\^' + encodeURIComponent('"' + options.target + '"');
 	}
 	
 	$.ajax({
@@ -66,6 +65,7 @@ Repos.service('open/list/', function() {
 	};
 	
 	Repos.imagemeta.search({
+		base: Repos.getRepo(),
 		target: Repos.getTarget(),
 		success: function(solr) {
 			show(solr.response.docs);
@@ -87,6 +87,7 @@ Repos.service('open/file/', function() {
 	};
 	
 	Repos.imagemeta.search({
+		base: Repos.getBase(),
 		target: Repos.getTarget(),
 		success: function(solr) {
 			show(solr.response.docs);
