@@ -196,6 +196,7 @@ function handleError($code, $message, $image='error.jpg') {
 		exit;
 	}
 	// error image to user
+	// TODO scale error image according to transform spec?
 	$tempfile = dirname(__FILE__).'/'.$image;
 	showImage($tempfile);
 	exit;

@@ -10,6 +10,10 @@ $(document).ready(function() {
 	$('h2 > a').text(folder).attr('href', '/repos-web/open/?base=' + repo + '&target=' + folder);
 	if (qs.base) $('h2 > a').prepend('<span>' + repo + ': </span>'); 
 	
+	var html = function(text) {
+		return text.replace('<', '&gt;').replace('>', '&lt').replace(/\n/,'<br />');
+	};
+	
 	// depends on imagemeta plugin
 	var show = function(docs) {
 		var list = $('#thumbs ul');
@@ -26,8 +30,8 @@ $(document).ready(function() {
 			var image = {
 					srcThumb: src('75'),
 					srcOriginal: src('original'),
-					title: d.title || filename,
-					description: d.description
+					title: html(d.title || filename),
+					description: html(d.description || "")
 			};
 			image.srcScreen = src('500');
 			data.push(image);
