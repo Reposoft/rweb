@@ -38,6 +38,9 @@ function getThumbnailCommand($transform, $target='-') {
 	//if ($format) $format.=':'; // odd but this is how it was in r3111
 	//return "$format- -thumbnail {$maxWidth}x{$maxHeight}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
 	// GraphicsMagick
+	if (isset($transform['mode']) && $transform['mode'] == 'crop') {
+		return "-geometry {$maxWidth}x{$maxHeight}^ -gravity center -crop {$maxWidth}x{$maxHeight} -quality 75 - \"$target\"";
+	}
 	return "-size {$maxWidth}x{$maxHeight} -geometry {$maxWidth}x{$maxHeight} -quality 75 - \"$target\"";
 }
 

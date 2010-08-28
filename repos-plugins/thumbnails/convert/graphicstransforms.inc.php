@@ -19,7 +19,8 @@ $reposGraphicsTransforms = array(
 	// TODO maybe integer identifiers should be accepted as max dimensions without definition?
 	'75' => array(
 		'width' => 75,
-		'height' => 75
+		'height' => 75,
+		'mode' => 'crop'
 	),
 	'500' => array(
 		'width' => 500,
