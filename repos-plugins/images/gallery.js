@@ -41,6 +41,7 @@ $(document).ready(function() {
 	Repos.imagemeta.search({
 		target: folder,
 		base: repo,
+		rows: 1000,
 		contentType: '(image/* OR application/postscript OR application/pdf)',
 		success: function(solr) {
 			show(solr.response.docs);

@@ -6,6 +6,7 @@ Repos.imagemeta = {};
 Repos.imagemeta.search = function(options) {
 
 	var queryUrl = '/solr/svnhead/select/?wt=json&indent=on';
+	queryUrl += '&rows=' + options.rows || 10;
 	queryUrl += '&fl=id,geo_lat,geo_long,description,svnrevision';
 	if (options.contentType) {
 		queryUrl += '&content_type:' + options.contentType;
