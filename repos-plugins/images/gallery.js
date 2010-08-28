@@ -42,13 +42,21 @@ $(document).ready(function() {
 		Repos.image.galleriffic();
 	};
 	
+	var noimages = function() {
+		alert('There are no indexed images in folder ' + folder);
+	};
+	
 	Repos.imagemeta.search({
 		target: folder,
 		base: repo,
 		rows: 1000,
 		contentType: '(image/* OR application/postscript OR application/pdf)',
 		success: function(solr) {
-			show(solr.response.docs);
+			if (solr.response.numFound) {
+				show(solr.response.docs);
+			} else {
+				noimages();
+			}
 		}
 	});
 	
