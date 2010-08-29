@@ -34,10 +34,10 @@ function getThumbnailCommand($transform, $target='-') {
 	$maxWidth = $transform['width'];
 	$maxHeight =  $transform['height'];
 	// todo select -filter?
-	// ImageMagick
+	// old command:
 	//if ($format) $format.=':'; // odd but this is how it was in r3111
 	//return "$format- -thumbnail {$maxWidth}x{$maxHeight}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
-	// GraphicsMagick
+	// new command, should work for both ImageMagick and GraphicsMagick
 	if (isset($transform['mode']) && $transform['mode'] == 'crop') {
 		return "-geometry {$maxWidth}x{$maxHeight}^ -gravity center -crop {$maxWidth}x{$maxHeight}+0+0 -quality 75 - \"$target\"";
 	}

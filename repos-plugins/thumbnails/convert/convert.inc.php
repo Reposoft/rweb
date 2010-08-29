@@ -5,6 +5,7 @@
 function convertGetCommand() {
 	// ImageMagick in path
 	//return 'convert';
+	//return 'convert -auto-orient';
 	// GraphicsMagick in path: 
 	return 'gm convert';
 }
