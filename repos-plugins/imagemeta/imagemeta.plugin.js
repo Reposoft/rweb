@@ -66,7 +66,7 @@ Repos.service('open/list/', function() {
 	};
 	
 	Repos.imagemeta.search({
-		base: Repos.getRepo(),
+		base: Repos.getRepository(),
 		target: Repos.getTarget(),
 		success: function(solr) {
 			show(solr.response.docs);
