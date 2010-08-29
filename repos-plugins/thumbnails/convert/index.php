@@ -39,7 +39,7 @@ function getThumbnailCommand($transform, $target='-') {
 	//return "$format- -thumbnail {$maxWidth}x{$maxHeight}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
 	// GraphicsMagick
 	if (isset($transform['mode']) && $transform['mode'] == 'crop') {
-		return "-geometry {$maxWidth}x{$maxHeight}^ -gravity center -crop {$maxWidth}x{$maxHeight} -quality 75 - \"$target\"";
+		return "-geometry {$maxWidth}x{$maxHeight}^ -gravity center -crop {$maxWidth}x{$maxHeight}+0+0 -quality 75 - \"$target\"";
 	}
 	return "-size {$maxWidth}x{$maxHeight} -geometry {$maxWidth}x{$maxHeight} -quality 75 - \"$target\"";
 }
