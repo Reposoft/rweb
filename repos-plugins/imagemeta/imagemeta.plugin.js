@@ -6,7 +6,9 @@ Repos.imagemeta = {};
 Repos.imagemeta.search = function(options) {
 
 	var queryUrl = '/solr/svnhead/select/?wt=json&indent=on';
-	queryUrl += '&rows=' + options.rows || 10;
+	if (options.contentType) {
+		queryUrl += '&rows=' + options.rows;
+	}
 	queryUrl += '&fl=id,geo_lat,geo_long,description,svnrevision';
 	if (options.contentType) {
 		queryUrl += '&content_type:' + options.contentType;
@@ -39,7 +41,7 @@ Repos.service('open/list/', function() {
 	 * @return jQuery row for the given id
 	 */
 	var getRow = function(solrDocId) {
-		var id = 'row:' + getFilename(solrDocId);
+		var id = 'row:' + Repos.imagemeta.getFilename(solrDocId);
 		var r = document.getElementById(id);
 		if (!r) alert('error: ' + id + ' not found'); // todo support non-ascii chars
 		return $(r);
