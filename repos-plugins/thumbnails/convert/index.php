@@ -72,6 +72,9 @@ if (strBegins(getSelfUrl(), $cacheRepo) && !isset($_REQUEST['target'])) {
 	trigger_error('On-demand thumbnail generation not implemented yet');
 }
 
+// Transparent login in SvnOpen will not work in this service because the result is piped to thumbnail command
+targetLogin();
+
 // revision number logic, rev is the old "implicit peg"
 $revIsPeg = true;
 $revField = 'rev';
