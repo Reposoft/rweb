@@ -50,6 +50,7 @@ $(document).ready(function() {
 		target: folder,
 		base: repo,
 		rows: 1000,
+		sort: 'id asc',
 		contentType: '(image/* OR application/postscript OR application/pdf)',
 		success: function(solr) {
 			if (solr.response.numFound) {

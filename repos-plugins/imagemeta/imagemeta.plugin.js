@@ -10,6 +10,9 @@ Repos.imagemeta.search = function(options) {
 		queryUrl += '&rows=' + options.rows;
 	}
 	queryUrl += '&fl=id,geo_lat,geo_long,description,svnrevision';
+	if (options.sort) {
+		queryUrl += '&sort=' + encodeURIComponent(options.sort);
+	}
 	if (options.contentType) {
 		queryUrl += '&content_type:' + options.contentType;
 	}
