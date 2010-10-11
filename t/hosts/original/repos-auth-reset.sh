@@ -6,15 +6,21 @@
 # currently repos lacks ability to run hooks for loaded backup revs
 
 HOST=$1
-REPO=$HOST/repo/
-USERFILE=$HOST/admin/repos-users
-ACCSFILE=$HOST/admin/repos-access
 
 if [ -z "$HOST" ]
 then
     echo "First argument must be a host path"
         exit 1
 fi
+
+# make host absolute
+pushd $HOST
+HOST=$(pwd)
+popd
+
+REPO=$HOST/repo/
+USERFILE=$HOST/admin/repos-users
+ACCSFILE=$HOST/admin/repos-access
 
 if [ ! -d "$REPO" ]
 then
@@ -38,9 +44,8 @@ rm $ACCSFILE.tmp
 
 # at the same time homepage should be exported, if we can get a url for svn client
 echo "Getting the file URL to use the testrepo from local svn client"
-URL="file://$(realpath $HOST/repo)" # found no better way than using the realpath command
+URL="file://$HOST/repo"
 rm -Rf $HOST/html/home
 svn export $URL/administration/homepage/ $HOST/html/home
 chmod -R g+w $HOST/html/home
 echo "Exported $(ls $HOST/html/home | wc -l) homepage files to $HOST/html/home"
-

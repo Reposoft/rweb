@@ -2,7 +2,7 @@
 
 # derive $h so setup can be called from project root, test root and same folder 
 my ($host) = __FILE__ =~ /(.*)setup.pl/;
-my $h = $host.'../../hosts/original'; #no trainling slash
+my $h = $host.'../../hosts/original'; #no trailing slash
 $h =~ s|hosts/original/../../||g; #to make output easier to read
 
 print "Creating host structure in $h\n";
