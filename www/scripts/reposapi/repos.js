@@ -22,19 +22,19 @@ if (!Array.prototype.indexOf) { Array.prototype.indexOf = function (obj, start) 
  * $(':repos-target(*.user').ready( ... only if target matches ... );
  * $(':repos-service(open/log/).ready( ... only for log service ... );
  * </code>
- * Note that this can not be used with $().ready, use Repos.ready instead
+ * Note that this can not be used with $(document).ready, use Repos.ready instead
  */
 //jQuery.extend(jQuery.expr[':'], {
 //	'repos-target'		: 'Repos.isTarget(m[3],a)',
 //	'repos-service'	: 'Repos.isService(m[3],a)'
 //});
-// Note that this can not be used with $().ready,
+// Note that this can not be used with $(document).ready,
 // because jQuery runs ready for empty selections too,
 // use Repos.ready instead
 //$('body.nonexisting').ready(function() { console.warn('ready executed for empty bucket'); });
 
 /**
- * Replaces $().ready since jQuery ready runs even if selector is empty.
+ * Replaces $(document).ready since jQuery ready runs even if selector is empty.
  * @param {String} repos selector starting with :
  * @param {Function} fn for jQuery().ready
  */
@@ -206,7 +206,7 @@ Repos.getUser = function() {
 // jQuery plugin to show messages
 jQuery.fn.say = function(message) {
 	$('.temporarymessage').remove();
-	if (!message) return; // allow $().say(); to clear message
+	if (!message) return; // allow $(document).say(); to clear message
 	
 	if (typeof message == 'string') message = {text:message};
 	var m = jQuery.extend({
@@ -261,7 +261,7 @@ jQuery.fn.say = function(message) {
 	 if they are loaded dynamically. So the only limitation is that
 	 3rd party libs must be loaded in page head.
 
-	 And how about $().load()?
+	 And how about $(document).load()?
 	 */
 
 	// -------------- plugin setup --------------
