@@ -18,8 +18,8 @@ if (file_exists('sh/')) {
 $repos_package = "SyntaxHighlighter";
 $home = "http://code.google.com/p/syntaxhighlighter/";
 
-$version = "sh";
-$archive = "http://alexgorbatchev.com/downloads/grab.php?name=$version";
+$version = "2.1.382";
+$archive = "http://alexgorbatchev.com/SyntaxHighlighter/download/download.php?sh_$version";
 $license = "http://www.gnu.org/licenses/lgpl-3.0.txt";
 
 $basedir = dirname(__FILE__);
