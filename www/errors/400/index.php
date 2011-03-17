@@ -2,6 +2,7 @@
 /**
  * 400 Bad Request
  */
+define('REPOS_SERVICE_NAME', 'errors/400/');
 require('../../conf/Presentation.class.php');
 
 $p = Presentation::getInstance();

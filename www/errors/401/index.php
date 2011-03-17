@@ -2,6 +2,7 @@
 /**
  * 401 Unauthorized
  */
+define('REPOS_SERVICE_NAME', 'errors/401/');
 require('../../conf/Presentation.class.php');
 
 $p = Presentation::getInstance();

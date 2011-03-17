@@ -4,6 +4,7 @@
 /**
  * 404 Page Not Found
  */
+define('REPOS_SERVICE_NAME', 'errors/404/');
 require('../../conf/Presentation.class.php');
 
 $p = Presentation::getInstance();

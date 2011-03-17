@@ -390,8 +390,12 @@ function getSelfQuery() {
 /**
  * The service is the path to the current repos tool.
  * This implementation assumes that webapp is a top level folder in docroot.
+ * Pages may define a service name by setting a REPOS_SERVICE_NAME constant.
  */
 function getService() {
+	if (defined('REPOS_SERVICE_NAME')) {
+		return REPOS_SERVICE_NAME;
+	}
 	$p = getSelfPath();
 	// extract from path
 	if ($p == '/') {

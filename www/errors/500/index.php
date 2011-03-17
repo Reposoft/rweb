@@ -2,6 +2,7 @@
 /**
  * 500 Internal Server Error
  */
+define('REPOS_SERVICE_NAME', 'errors/500/');
 require('../../conf/Presentation.class.php');
 
 $p = Presentation::getInstance();

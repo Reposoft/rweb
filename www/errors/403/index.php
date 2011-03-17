@@ -2,6 +2,7 @@
 /**
  * 403 Forbidden
  */
+define('REPOS_SERVICE_NAME', 'errors/403/');
 require('../../conf/Presentation.class.php');
 
 $p = Presentation::getInstance();
