@@ -23,6 +23,12 @@ define('SERVICEREQUEST_AGENT', 'Repos service request');
 define('SERVICEREQUEST_MAX_REDIRECTS', 10);
 
 /**
+ * Identify Repos as proxy.
+ * Note that this applies to HTTP requests only, not proxied svn client operations.
+ */
+define('SERVICEREQUEST_CLIENT_IP_HEADER', 'X-Forwarded-For');
+
+/**
  * responseType values
  */
 define('SERVICE_TYPE_HTML', 'html');
@@ -98,6 +104,9 @@ class ServiceRequest {
 	function ServiceRequest($service, $parameters=array(), $authenticate=true) {
 		$this->uri = $service;
 		$this->parameters = $parameters;
+		// get client ip and set header according to constant
+		$this->setRequestHeader(SERVICEREQUEST_CLIENT_IP_HEADER, $_SERVER['REMOTE_ADDR']);
+		// auth proxy
 		if ($authenticate) $this->_enableAuthentication();
 	}
 	
