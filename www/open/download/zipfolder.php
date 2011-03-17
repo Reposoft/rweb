@@ -103,7 +103,9 @@ function reposExportZipAddFolder($zip, $tmp, $folderUrl, $folderRev, $basePath) 
 	$entries = 0;
 	foreach ($iterator as $fpath=>$value) {
 		// trimming trailing slash is new in 1.4
-		$path = $basePath . rtrim(substr($fpath, strlen($tmpe)), '/');
+		$subpath = rtrim(substr($fpath, strlen($tmpe)), '/');
+		if (strEnds($subpath, '/.') || strEnds($subpath, '/..')) continue;		
+		$path = $basePath . $subpath;
 		$zip->addFile($fpath, $path) or trigger_error('Zip error when adding $path', E_USER_ERROR);
 		$entries++;
 	}
