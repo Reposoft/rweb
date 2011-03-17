@@ -102,6 +102,7 @@ function reposExportZipAddFolder($zip, $tmp, $folderUrl, $folderRev, $basePath) 
 	// add to archive using relative path, starting with folder name so that file is extracted to single folder
 	$entries = 0;
 	foreach ($iterator as $fpath=>$value) {
+		// trimming trailing slash is new in 1.4
 		$path = $basePath . rtrim(substr($fpath, strlen($tmpe)), '/');
 		$zip->addFile($fpath, $path) or trigger_error('Zip error when adding $path', E_USER_ERROR);
 		$entries++;
