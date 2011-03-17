@@ -60,5 +60,5 @@ then
 fi
 
 echo "Automatic host setup is not implemented, so after server start"
-echo "you need to manually cd hosts/original/ and execute setup.pl"
+echo "you need to manually run hosts/original/setup.pl"
 
