@@ -30,7 +30,9 @@ if (!empty($referer) && strContains($referer, '/open/log/')) {
 	$p->assign('logurl', $referer);
 } else {
 	// best effort if user came through a bookmark
-	$p->assign('logurl', '../log/?target='.strAfter($existingFolder, getRepository()));
+	$p->assign('logurl', '../log/?'.
+		(isset($_REQUEST['base']) ? 'base='.$_REQUEST['base'].'&' : '').
+		'target='.strAfter($existingFolder, getRepository()));
 }
 
 $diffarray = $command->exec();
