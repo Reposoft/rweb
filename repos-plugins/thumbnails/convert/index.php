@@ -30,18 +30,18 @@ function getThumbnailCacheRepoDefault() {
 require(ReposWeb.'edit/SvnEdit.class.php');
 
 // create the option string to use with convert command
-function getThumbnailCommand($transform, $target='-') {
+function getThumbnailCommand($transform, $format='', $target='-') {
 	$maxWidth = $transform['width'];
 	$maxHeight =  $transform['height'];
+	if ($format) $format.=':'; // override auto detection by setting extension for stdin
 	// todo select -filter?
 	// old command:
-	//if ($format) $format.=':'; // odd but this is how it was in r3111
 	//return "$format- -thumbnail {$maxWidth}x{$maxHeight}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
 	// new command, should work for both ImageMagick and GraphicsMagick
 	if (isset($transform['mode']) && $transform['mode'] == 'crop') {
-		return "-geometry {$maxWidth}x{$maxHeight}^ -gravity center -crop {$maxWidth}x{$maxHeight}+0+0 -quality 75 - \"$target\"";
+		return "-geometry {$maxWidth}x{$maxHeight}^ -gravity center -crop {$maxWidth}x{$maxHeight}+0+0 -quality 75 $format- \"$target\"";
 	}
-	return "-size {$maxWidth}x{$maxHeight} -geometry {$maxWidth}x{$maxHeight} -quality 75 - \"$target\"";
+	return "-size {$maxWidth}x{$maxHeight} -geometry {$maxWidth}x{$maxHeight} -quality 75 $format- \"$target\"";
 }
 
 // start processing by getting the selected transform
@@ -118,9 +118,10 @@ if ($cacheRepo) {
 }
 
 // jpeg is generally smaller than png but graphicsmagick produced some invalid images for line art in jpg
+$originaltype = ''; // TODO needed for getThumbnailCommand
 $thumbtype = 'png';
 if (isset($transform['type'])) { // output type can be set explicitly in transform definition
-	$thumbtype = 'type';
+	$thumbtype = $transform['type'];
 } else if (preg_match('/\.jpe?g|raw$/i', getTarget())) {
 	$thumbtype = 'jpeg';
 }
@@ -129,7 +130,7 @@ if (isset($transform['type'])) { // output type can be set explicitly in transfo
 $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 
 // create the ImageMagick command
-$convert = $convert . ' ' . getThumbnailCommand($transform, $tempfile);
+$convert = $convert . ' ' . getThumbnailCommand($transform, $originaltype, $tempfile);
 
 $o = new SvnOpen('cat');
 if ($revIsPeg) {
