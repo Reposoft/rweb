@@ -126,6 +126,8 @@ if (isset($transform['type'])) { // output type can be set explicitly in transfo
 	$thumbtype = 'jpeg';
 }
 
+// TODO add flow for conversions that can not be done with stdin, see "temporg" in 1.3 branch
+
 // thumbnails are small, so we can store them on disc
 $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 
