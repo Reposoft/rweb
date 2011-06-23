@@ -76,6 +76,12 @@
 		Header add Cache-Control "max-age=0, must-revalidate"
 	</Location>
 	
+	# WebDAV area
+	Alias /dav @ServerRoot@/hosts/multirepo/dav/
+	RewriteLog "@ServerRoot@/logs/multirepo-rewrite.log" 
+	RewriteLogLevel 4
+	Include @ServerRoot@/conf/vhosts/dav.conf.include
+
 	# Image transforms repository
 	<Location /repos-thumbs>
 		DAV svn
