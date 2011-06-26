@@ -21,7 +21,7 @@
 	# rule has to be here, not in host, for REMOTE_USER to be known without LA-U
 	RewriteEngine on
 	RewriteCond %{REQUEST_URI} ^/dav/user/([^/]+)/.*$
-	RewriteCond %{REMOTE_USER}#%1 !([^#]+)#(?=\1)
+	RewriteCond %{REMOTE_USER}#%1 !^([^#]+)#(\1)$
 	RewriteRule .* - [F]
 
 	# all sections
