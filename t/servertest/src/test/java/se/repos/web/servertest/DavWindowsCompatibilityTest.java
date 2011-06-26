@@ -49,6 +49,9 @@ public class DavWindowsCompatibilityTest {
 		davClient.delete(newfolder);
 		List<DavResource> r3 = davClient.getResources(userFolder);
 		assertEquals("Should have deleted the folder without using trailing slash", sizeBefore, r3.size());
+		
+		// The client does some more funky stuff when trying to create a network folder, but I'm not sure exactly what requests
+		// At one attempt I managed to get an error that indicates that it tries to lock something.
 	}
 	
 
