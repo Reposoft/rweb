@@ -30,13 +30,13 @@
 
     # public+share, don't require authentication for read access
 
-	# Fix Windows WebDAV behavior for folder operations
-	RewriteEngine on
-	# WinXP client: Microsoft Data Access Internet Publishing Provider DAV
-	RewriteCond %{HTTP_USER_AGENT} ^Microsoft.*
-	RewriteCond %{REQUEST_URI} ^/dav/(.*[^/])$
-	# REQUEST_URI is urldecoded; can be used to check local path
-	# Must know what the alias maps to here, for performance I guess
-	RewriteCond @ServerRoot@/hosts/multirepo/dav/%1 -d
-	RewriteRule ^(.*)$ $1/ [PT]
+#	# Fix Windows WebDAV behavior for folder operations
+#	RewriteEngine on
+#	# WinXP client: Microsoft Data Access Internet Publishing Provider DAV
+#	RewriteCond %{HTTP_USER_AGENT} ^Microsoft.*
+#	RewriteCond %{REQUEST_URI} ^/dav/(.*[^/])$
+#	# REQUEST_URI is urldecoded; can be used to check local path
+#	# Must know what the alias maps to here, for performance I guess
+#	RewriteCond @ServerRoot@/hosts/multirepo/dav/%1 -d
+#	RewriteRule ^(.*)$ $1/ [PT]
 

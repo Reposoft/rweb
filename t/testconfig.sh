@@ -41,7 +41,7 @@ cat /etc/apache2/mods-enabled/*.conf \
 MAXCLIENTS=10
 
 perl ./TEST.PL -httpd_conf_extra $(pwd)/mods-enabled.httpd_conf_extra -configure -maxclients $MAXCLIENTS $@
-
+ipse 
 echo "Now run './TEST -start' to start server and './TEST -run' to test"
 
 # clean up
