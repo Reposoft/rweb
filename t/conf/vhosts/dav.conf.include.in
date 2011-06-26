@@ -17,9 +17,11 @@
 	AuthUserFile @ServerRoot@/hosts/multirepo/admin/repos-users
 	Require valid-user
 
+	# WebDAV access control and compatibility fixes relies on mod_rewrite
+	RewriteEngine on
+
 	# 'user' section, access only folder==username
 	# rule has to be here, not in host, for REMOTE_USER to be known without LA-U
-	RewriteEngine on
 	RewriteCond %{REQUEST_URI} ^/dav/user/([^/]+)/.*$
 	RewriteCond %{REMOTE_USER}#%1 !^([^#]+)#(\1)$
 	RewriteRule .* - [F]
@@ -30,13 +32,13 @@
 
     # public+share, don't require authentication for read access
 
-#	# Fix Windows WebDAV behavior for folder operations
-#	RewriteEngine on
-#	# WinXP client: Microsoft Data Access Internet Publishing Provider DAV
-#	RewriteCond %{HTTP_USER_AGENT} ^Microsoft.*
-#	RewriteCond %{REQUEST_URI} ^/dav/(.*[^/])$
-#	# REQUEST_URI is urldecoded; can be used to check local path
-#	# Must know what the alias maps to here, for performance I guess
-#	RewriteCond @ServerRoot@/hosts/multirepo/dav/%1 -d
-#	RewriteRule ^(.*)$ $1/ [PT]
+	# Fix Windows WebDAV behavior for folder operations
+	RewriteEngine on
+	# WinXP client: Microsoft Data Access Internet Publishing Provider DAV
+	RewriteCond %{HTTP_USER_AGENT} ^Microsoft.*
+	RewriteCond %{REQUEST_URI} ^/dav/(.*[^/])$
+	# REQUEST_URI is urldecoded; can be used to check local path
+	# Must know what the alias maps to here, for performance I guess
+	RewriteCond @ServerRoot@/hosts/multirepo/dav/%1 -d
+	RewriteRule ^(.*)$ $1/ [PT]
 

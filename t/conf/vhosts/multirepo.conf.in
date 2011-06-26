@@ -76,6 +76,9 @@
 		Header add Cache-Control "max-age=0, must-revalidate"
 	</Location>
 	
+	# WebDAV module config, normally predefined on production servers
+	DAVLockDB @ServerRoot@/hosts/multirepo/DAVLockDB.bin
+
 	# WebDAV area
 	Alias /dav @ServerRoot@/hosts/multirepo/dav/
 	RewriteLog "@ServerRoot@/logs/multirepo-rewrite.log" 

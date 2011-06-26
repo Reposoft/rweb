@@ -29,6 +29,11 @@
 			<artifactId>restclient-hc</artifactId>
 			<version>1.2-SNAPSHOT</version>
 		</dependency>	
+		<dependency>
+		    <groupId>com.googlecode.sardine</groupId>
+		    <artifactId>sardine</artifactId>
+		    <version>146</version>
+		</dependency>
 	</dependencies>
 	
 </project>
