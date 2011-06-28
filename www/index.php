@@ -23,7 +23,6 @@ if (isset($_COOKIE[USERNAME_KEY])) $auth['repos'] = $_COOKIE[USERNAME_KEY];
 $p->assign('auth',$auth);
 
 // display public configuration values
-$p->assign('repository', getRepository());
 $p->assign('host', getHost());
 
 $p->display();

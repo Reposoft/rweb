@@ -296,6 +296,8 @@ class Presentation {
 		$webapp = $this->_getStaticWebappUrl();
 		$this->assign('referer', $this->getReferer());
 		$this->assign('webapp', $webapp);
+		// repository root URL
+		$this->assign('repository', getRepository());
 		// support mod_dav_svn's @base attrubute for multirepo
 		$this->assign('base', isset($_REQUEST['base']) ? $_REQUEST['base'] : '');
 		// the dynamic part of the html header
@@ -462,6 +464,7 @@ class Presentation {
 	function _getHeadTags($webapp, $stylePath='style/') {
 		$head = '';
 		// metadata
+		$head = $head . '<meta name="repos-repository" content="'.$this->smarty->get_template_vars('repository').'" />';
 		if (function_exists('isTargetSet') && isTargetSet()) {
 			$head = $head . '<meta name="repos-target" content="'.getTarget().'" />';
 		}

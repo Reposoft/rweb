@@ -18,7 +18,7 @@ if (isset($_REQUEST[SUBMIT])) {
 	}
 	$template = Presentation::getInstance();
 	$template->assign('target', $target);
-	$template->assign('repository', getRepository().$target);
+	$template->assign('folderurl', getRepository().$target);
 	$template->display();
 }
 

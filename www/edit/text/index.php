@@ -25,12 +25,12 @@ if ($_SERVER['REQUEST_METHOD']=='GET' || $_SERVER['REQUEST_METHOD']=='HEAD') {
 		$file = new SvnOpenFile($target);
 		$file->isWritable(); // check before page is displayed because it might require authentication		
 		$template->assign_by_ref('file', $file);
-		$template->assign('repository', getParent($targeturl));
+		$template->assign('folderurl', getParent($targeturl));
 		// old file has type=extension
 		$template->assign('type', $file->getExtension());
 	} else {
 		$template->assign('isfile', false);
-		$template->assign('repository', $targeturl);
+		$template->assign('folderurl', $targeturl);
 		// new file has a default type wich can be changed with query param
 		$template->assign('type', isset($_GET['type']) ? $_GET['type'] : 'txt');
 		$template->assign('suggestname', isset($_GET['suggestname']) ? $_GET['suggestname'] : '');

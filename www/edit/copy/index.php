@@ -27,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 	$file->enableMultiIfFolder();
 	$file->isWritable(); // check before page is displayed because it might require authentication
 	$template->assign_by_ref('file', $file);
-	$template->assign('repository', getRepository());
 	$template->assign('target', $target);
 	$template->assign('oldname', getPathName($target));
 	$template->assign('folder', getParent($target));

@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 } else {
 	$target = getTarget();
 	$template = Presentation::getInstance();
-	$template->assign('repository', getRepository());
 	$template->assign('target', $target);
 	$template->assign('oldname', getPathName($target));
 	$template->assign('folder', getParent($target));
