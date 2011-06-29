@@ -28,7 +28,7 @@ public class DavAccessControlTest {
 	}
 	
 	@Test
-	public void test() throws IOException {
+	public void testAreaUser() throws IOException {
 		RestClient c = getClient(null);
 		assertEquals("Should be prompted for authentication in user area",
 				401, c.head("/dav/user/").getStatus());
@@ -59,5 +59,50 @@ public class DavAccessControlTest {
 		assertEquals("Should be forbidden", 403, ctest2.head("/dav/user/test/").getStatus());
 		
 	}
-
+	
+	@Test
+	public void testAreaWork() {
+		// Work area must use either private url concept or user specific folder
+		// Private URLs solves directory listing and works well with sharing a work unit
+		// User specific work folders are easier to manage without any kind of database
+		// User specific folders also map to locks in svn because they are also user specific
+		
+	}
+	
+	@Test
+	public void testAreaPublic() {
+		// Should we even have a public area, that lists all content to anyone?
+		// Share area might be sufficient?
+		// A use case might be transfer of files from public to users, 
+		// but in that case we need public writable paths that are only listable to users
+		// as well as drag-and-drop from public to user
+		// A better implementation of this would be a separate form with upload
+		// (and/or HTML5 drag-and-drop) that puts the files somewere in the dav area.
+	}
+	
+	@Test
+	public void testAreaShare() {
+		// Share area should contain generated folder names.
+		// Share should not be listable at the top level,
+		// but possible to browse for anyone at the private URL level
+		// (only those who know the URL will find the folder anyway)
+		// Authenticated users should be allowed to edit or delete shares
+		// We might not want to differ between edit and delete on the webdav level yet, due to rule complexity
+	}
+	
+	@Test
+	public void testAreaAllUsers() {
+		// Don't know what to call this folder yet.
+		// It should be a general drop-anything-here folder,
+		// readwritable to any authenticated user.
+		// Will probably be a mess.
+		
+	}
+	
+	public void testAreaUpload() {
+		// Requires authentication
+		// Initially a simple setup where all users can access everything
+		
+	}
+	
 }
