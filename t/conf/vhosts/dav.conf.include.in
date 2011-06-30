@@ -5,7 +5,6 @@
 
 # Using location to avoid host specific directive, might have drawbacks
     <Location /dav>
-    #<Directory @ServerRoot@/hosts/multirepo/dav/>
 		Dav on
 		# get rid of lots of subrequests that pollute the rewrite log (not sure if it works in Location)
 		DirectoryIndex index.html
@@ -16,11 +15,7 @@
 		AuthType Basic
 		AuthName "repos test multirepo"
 		AuthUserFile @ServerRoot@/hosts/multirepo/admin/repos-users
-		Require valid-user
-
-		# WebDAV access control and compatibility fixes relies on mod_rewrite
-		RewriteEngine on
-
+		
 		# Microsoft webdav client folder support fix; it strips trailing slashes
 #		RewriteCond %{HTTP_USER_AGENT} ^Microsoft.*
 		# not needed inside location #RewriteCond %{REQUEST_URI} ^/dav/(.*[^/])$
@@ -31,17 +26,35 @@
 		# Change URI internally, redirect would not be followed
 #		RewriteRule ^(.*)$ $1/
 		# Makes an internal redirect to the local path, but the request still results in redirect
+	</Location>
 
-		# 'user' section, access only folder==username
-		# rule has to be here, not in host, for REMOTE_USER to be known without LA-U
+	# 'user' section, access only folder==username	
+	<Location /dav/user>
+		Require valid-user
+		
+		RewriteEngine on
 		RewriteCond %{REQUEST_URI} ^/dav/user/([^/]+)/.*$
+		# REMOTE_USER would require LA-U to be non-empty if outside Location/Directory
 		RewriteCond %{REMOTE_USER}#%1 !^([^#]+)#(\1)$
 		RewriteRule .* - [F]
-
-		# all sections
-		
-    #</Directory>
     </Location>
+    
+    # 'share' section, accesss only to subfolders with exact URL given
+    <Location /dav/share>
+    	RewriteEngine on
+		RewriteCond %{REQUEST_URI} ^/dav/share/([^/]*)/?$
+		RewriteCond %1 !^$
+		RewriteCond %{REQUEST_FILENAME} !-d
+		RewriteRule .* - [F]
+		
+		<LimitExcept GET OPTIONS>
+			Require valid-user
+		</LimitExcept>
+    </Location>
+
+    <Location /dav/public/>
+
+	</Location>
 
     # public+share, don't require authentication for read access
 
