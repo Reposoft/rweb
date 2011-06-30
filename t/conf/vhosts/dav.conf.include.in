@@ -52,6 +52,6 @@
 	RewriteCond %{REQUEST_URI} ^/dav/(.*[^/])$
 	# REQUEST_URI is urldecoded; can be used to check local path
 	# Must know what the alias maps to here, for performance I guess
-	RewriteCond @ServerRoot@/hosts/multirepo/dav/%1 -d
+	RewriteCond @ServerRoot@/hosts/multirepo/dav/files/%1 -d
 	RewriteRule ^(.*)$ $1/ [PT]
 

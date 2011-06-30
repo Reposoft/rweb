@@ -21,6 +21,7 @@
 	Alias /repos-admin @ServerRoot@/../repos-admin
 	Alias /repos-plugins @ServerRoot@/../repos-plugins
 	Alias /repos-test @ServerRoot@/../repos-test
+	Alias /repos-tree @ServerRoot@/../repos-tree
 	
 	SetEnv REPOS_TEST_ALLOW_RESET on
 
@@ -77,10 +78,10 @@
 	</Location>
 	
 	# WebDAV module config, normally predefined on production servers
-	DAVLockDB @ServerRoot@/hosts/multirepo/DAVLockDB.bin
+	DAVLockDB @ServerRoot@/hosts/multirepo/dav/DAVLockDB.bin
 
 	# WebDAV area
-	Alias /dav @ServerRoot@/hosts/multirepo/dav/
+	Alias /dav @ServerRoot@/hosts/multirepo/dav/files/
 	RewriteLog "@ServerRoot@/logs/multirepo-rewrite.log" 
 	RewriteLogLevel 4
 	Include @ServerRoot@/conf/vhosts/dav.conf.include
