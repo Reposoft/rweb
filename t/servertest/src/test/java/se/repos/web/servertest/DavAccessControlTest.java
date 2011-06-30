@@ -114,8 +114,9 @@ public class DavAccessControlTest {
 		// We might not want to differ between edit and delete on the webdav level yet, due to rule complexity
 
 		String existingShare = "/dav/share/20200101-m8yAL7Dr6C/";
-		String newShare = "/dav/share/" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + "_" + 
+		String newShare = "/dav/share/" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + "-" + 
 					Long.toString(System.currentTimeMillis()).substring(3, 13);
+		newShare = newShare + "/"; // dav client gets redirect for delete without trailing slash
 		
 		RestClient c = getClient(null);
 		assertEquals("No one should be allowed to list shares",
@@ -156,7 +157,23 @@ public class DavAccessControlTest {
 		try {
 			dtest.createDirectory(getServer() + newShare);
 		} catch (Exception e) {
+			e.printStackTrace();
 			fail("Authenticated user should be allowed to create new share");
+		}
+		assertEquals("Created share should be publicly readable", 
+				200, c.head(newShare).getStatus());
+		try {
+			dtest.delete(getServer() + newShare);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Authenticated user should be allowed to delete share");
+		}
+		
+		try {
+			dtest.createDirectory(getServer() + "/dav/share/somedir" + System.currentTimeMillis());
+			fail("Should only be allowed to create folders that match the share name rule");
+		} catch (Exception e) {
+			// expected
 		}
 	}
 	
