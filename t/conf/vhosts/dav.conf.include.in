@@ -28,6 +28,10 @@
 		# Makes an internal redirect to the local path, but the request still results in redirect
 	</Location>
 
+	<Location /dav/allusers>
+		Require valid-user
+	</Location>
+
 	# 'user' section, access only folder==username	
 	<Location /dav/user>
 		Require valid-user
@@ -44,8 +48,9 @@
     	RewriteEngine on
 		RewriteCond %{REQUEST_URI} ^/dav/share/([^/]*)/?$
 		RewriteCond %1 !^$
-		RewriteCond %{REQUEST_METHOD}#%1 !^MKCOL#.*$
 		RewriteCond %{REQUEST_FILENAME} !-d
+		# Shares should be created with name that is last day it should exist + 10 chars random string
+		RewriteCond %{REQUEST_METHOD}#%1 !^MKCOL#\d{8}-\w{10}$
 		RewriteRule .* - [F]
 		
 		<LimitExcept GET OPTIONS>
@@ -55,6 +60,10 @@
 
     <Location /dav/public/>
 
+		# Public writable and readable would be dangerous
+		<LimitExcept GET OPTIONS>
+			Require valid-user
+		</LimitExcept>
 	</Location>
 
     # public+share, don't require authentication for read access

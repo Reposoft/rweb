@@ -12,6 +12,7 @@ import org.junit.Test;
 import com.googlecode.sardine.DavResource;
 import com.googlecode.sardine.Sardine;
 import com.googlecode.sardine.SardineFactory;
+import com.googlecode.sardine.util.SardineException;
 
 import se.repos.restclient.ResponseHeaders;
 import se.repos.restclient.RestAuthentication;
@@ -71,7 +72,7 @@ public class DavAccessControlTest {
 	
 	@Test
 	public void testAreaWork() {
-		// Work area must use either private url concept or user specific folder
+		// Work area must use either private url concept or user specific folders
 		// Private URLs solves directory listing and works well with sharing a work unit
 		// User specific work folders are easier to manage without any kind of database
 		// User specific folders also map to locks in svn because they are also user specific
@@ -87,8 +88,8 @@ public class DavAccessControlTest {
 		// as well as drag-and-drop from public to user
 		// A better implementation of this would be a separate form with upload
 		// (and/or HTML5 drag-and-drop) that puts the files somewere in the dav area.
+		// See also 'upload' area concept.
 		
-		// Anyway we need the public concept for share area
 		RestClient c = getClient(null);
 		int publicStatus = c.head("/dav/public/").getStatus();
 		//assertEquals(200, publicStatus);
@@ -105,11 +106,19 @@ public class DavAccessControlTest {
 	}
 	
 	@Test
+	public void testAreaUpload() {
+		// Requires authentication
+		// Should be writable by anyone but readable only to authenticated users
+		// Webdav might not be the best solution for this use case
+		
+	}
+	
+	@Test
 	public void testAreaShare() throws IOException {
 		// Share area should contain generated folder names.
 		// Share should not be listable at the top level,
 		// but possible to browse for anyone at the private URL level
-		// (only those who know the URL will find the folder anyway)
+		// (only those who know the URL will find the folder anyway so we don't need to care about ownership)
 		// Authenticated users should be allowed to edit or delete shares
 		// We might not want to differ between edit and delete on the webdav level yet, due to rule complexity
 
@@ -147,8 +156,8 @@ public class DavAccessControlTest {
 		try {
 			d.delete(getServer() + existingShare + testid);
 			fail("Only authenticated users should be allowed to edit/delete share contents");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SardineException e) {
+			assertTrue("Got: " + e, e.getMessage().contains("Authorization Required"));
 		}
 		dtest.delete(getServer() + existingShare + testid);
 		assertEquals("Authenticated user should be allowed to delete the file",
@@ -156,7 +165,7 @@ public class DavAccessControlTest {
 		
 		try {
 			dtest.createDirectory(getServer() + newShare);
-		} catch (Exception e) {
+		} catch (SardineException e) {
 			e.printStackTrace();
 			fail("Authenticated user should be allowed to create new share");
 		}
@@ -164,7 +173,7 @@ public class DavAccessControlTest {
 				200, c.head(newShare).getStatus());
 		try {
 			dtest.delete(getServer() + newShare);
-		} catch (Exception e) {
+		} catch (SardineException e) {
 			e.printStackTrace();
 			fail("Authenticated user should be allowed to delete share");
 		}
@@ -172,24 +181,28 @@ public class DavAccessControlTest {
 		try {
 			dtest.createDirectory(getServer() + "/dav/share/somedir" + System.currentTimeMillis());
 			fail("Should only be allowed to create folders that match the share name rule");
-		} catch (Exception e) {
+		} catch (SardineException e) {
 			// expected
 		}
 	}
 	
 	@Test
-	public void testAreaAllUsers() {
+	public void testAreaAllUsers() throws IOException {
 		// Don't know what to call this folder yet.
 		// It should be a general drop-anything-here folder,
 		// readwritable to any authenticated user.
-		// Will probably be a mess.
+		// Will probably be very unstructured -- the 'share' concept is preferred
+		// because shares have a limited life time and scope
 		
-	}
-	
-	public void testAreaUpload() {
-		// Requires authentication
-		// Initially a simple setup where all users can access everything
+		RestClient c = getClient(null);
+		assertEquals("Users area should always require login",
+				401, c.head("/dav/allusers/").getStatus());
 		
+		RestClient ctest = getClient("test", "test");
+		assertEquals(200, ctest.head("/dav/allusers/").getStatus());
+		
+		RestClient ctest2 = getClient("test2", "test2");
+		assertEquals(200, ctest2.head("/dav/allusers/").getStatus());
 	}
 	
 }
