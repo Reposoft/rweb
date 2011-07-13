@@ -21,7 +21,7 @@ import se.repos.restclient.auth.RestAuthenticationSimple;
 import se.repos.restclient.hc.RestClientHc;
 
 public class DavAccessControlTest {
-
+	
 	private String getServer() {
 		return Fixture.Server.Multirepo.getRoot();
 	}
@@ -33,6 +33,12 @@ public class DavAccessControlTest {
 
 	private RestClient getClient(RestAuthentication auth) {
 		return new RestClientHc(getServer(), auth);
+	}
+	
+	@Test
+	public void destDavRoot() {
+		// Nice if it is browsable but on the other hand a lot of subfolders should probably be hidden
+		// No write access needed assuming that structure is configured by server admin using filesystem
 	}
 	
 	@Test
