@@ -51,8 +51,12 @@ $p->assign_by_ref('file', $file);
 // for links to other operations we use the original parameters
 $p->assign('target', getTarget());
 if ($fromrev) $p->assign('fromrev', $fromrev);
+// display a short log for the file on the edit page
+require(dirname(__FILE__).'/getlog.php');
+$p->assign('log', getLog(getTargetUrl()));
 // before entering smarty template code, read some file info so that in the event of access error
 // a formatted error page is presented (errors in template can ony be presented in plaintext)
+// When we had a dedicated "edit" page the same was done with $file->isWritable();$file->isLocked();
 $file->getRevision(); // maybe file->isFolder above will be sufficient if SvnOpenFile is simplified.
 // all set
 $p->display();
