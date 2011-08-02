@@ -5,7 +5,7 @@
  */
 require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
 require(dirname(dirname(__FILE__)).'/SvnEdit.class.php');
-require(dirname(dirname(__FILE__)).'/getlog.php');
+require(dirname(dirname(dirname(__FILE__))).'/open/getlog.php');
 //not 1.1//require("mimetype.inc.php");
 require(dirname(__FILE__).'/filewrite.inc.php');
 
