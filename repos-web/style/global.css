@@ -1,0 +1,405 @@
+@CHARSET "UTF-8";
+/* shared layout between themse instead of plugin solution */
+@import "layout.css";
+/* repos.se common styles */
+html {
+	/* Fix IE background image flicker */
+	filter: expression(document.execCommand("BackgroundImageCache", false, true));
+}
+body {
+	margin-top: 0px;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	font-size: 82.5%;
+}
+/* resume with em font sizes relative to the above */
+a {
+	color: #003399;
+	text-decoration: none;
+}
+table p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+a:hover {
+	text-decoration: underline;
+}
+h1 {
+	font-weight: normal;
+	font-size: 1.8em;
+	color: #444444;
+}
+h2 {
+	font-weight: normal;
+	font-size: 1.4em;
+	color: #444444;
+}
+h3, thead td, lh {
+	font-weight: normal;
+	margin-bottom: 3px;
+	font-size: 1.1em;
+	letter-spacing: 0.1em;
+}
+thead td {
+	text-align: center;
+}
+h1 em, h2 em, h3 em {
+	font-style: normal;
+	color: #99CC00;
+}
+thead {
+	background-color: #f0f0ee;
+}
+td {
+	padding: .1em .2em .1em .2em;
+}
+pre {
+	font-size: 1.2em;
+	border-top: 1px dashed #CCCC99;
+	border-bottom: 1px dashed #CCCC99;
+}
+code {
+	font-size: 1.1em;
+}
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+.clearer {
+	clear: both;
+	font-size: 0;
+}
+/* <abbr> not supported by IE6 */
+acronym, span.explain {
+	cursor: help;
+	border-bottom: 1px dotted #000066;
+}
+/* layout of version control concepts, these are usually span tags */
+.file {
+
+}
+a.file {
+	color: #001155;
+}
+.folder {
+
+}
+a.folder {
+	color: #001133;
+}
+.revision {
+	color: #336622;
+	padding: 1px;
+	border: 1px dotted #cccc99;
+	font-size: 82.5%;
+	font-family: Arial, Helvetica, sans-serif;
+}
+td.revision {
+	text-align: right;
+}
+.username {
+	color: #663300;
+	padding-left: 16px;
+	background: url(user.png) left no-repeat;
+}
+.filesize {
+	text-align: right;
+}
+.message {
+	font-style: italic;
+}
+.datetime {
+	color: #666666;
+}
+.lock {
+	margin-left: 16px;
+	padding-left: 16px;
+	background: url(lock.png) left no-repeat;
+}
+.projectname {
+	color: #663300;
+}
+#base {
+	color: gray;
+	margin-right: .2em;
+}
+/* elements to get user's attention  */
+.error, .warning, .note {
+	padding-left: 26px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	background-repeat: no-repeat;
+	width: 80%;
+	margin-left: 8%;
+}
+.error {
+	border: 1px dotted #cc9999;
+	color: #CC3300;
+	font-weight: bold;
+	background-image: url(error.png);
+}
+.warning {
+	border: 1px dotted #cc9999;
+	background-image: url(warning.png);
+}
+.note {
+	background-image: url(note.png);
+	background-position: 0px 6px;
+}
+.wait {
+	color: #666;
+}
+div.editlog {
+	border-bottom: 1px dashed #CCCC99;
+}
+/* common page elements, may also be layouted for each tool */
+#commandbar {
+	min-width: 980px;
+	background: url(commandbarbg.png) top repeat-x;
+	background-color: #ECF1EF;
+	padding: 3px;
+	border-bottom: 1px solid #CCCCCC;
+}
+ul.index {
+	padding: 0;
+	margin: 0;
+}
+.index li {
+	list-style: none;
+	padding: 1px;
+	margin: 0px;
+}
+.n0, .n1, .n2, .n3 {
+	background: url(rowbackground.png) bottom repeat-x;
+}
+.logentry .actions {
+	margin-left: 1.2em;
+}
+/* li.hover is for the actionhover plugin, :hover is no-javascript solution */
+li.hover, .n0:hover, .n1:hover, .n2:hover, .n3:hover {
+	background: url(rowbackground-hover.png) bottom repeat-x;
+}
+li img {
+	vertical-align: middle;
+}
+li ul.actions {
+	position: absolute;
+	margin-left: 25em;
+	padding: 0px;
+	background-color: white;
+}
+li ul.actions li {
+	list-style: none;
+	display: inline;
+}
+#footer {
+	margin-top: 1.5em;
+	width: 100%;
+	bottom: 10px;
+	height: 20px;
+	float: left;
+	border-top: 1px solid #CCCCCC;
+	background: url(footerbg.png) top repeat-x;
+	color: #999999;
+	font-size: 85.5%;
+}
+#footer .legal {
+	position: absolute;
+	right: 10px;
+	text-align: right;
+}
+#footer .legal a {
+	color: #667799;
+}
+/* command = commandbar button, <a> is  active, <span> is greyed out */
+#commandbar a, #commandbar span {
+	display:inline;
+	background-position: left center;
+	background-repeat: no-repeat;
+	font-size: 82.5%;
+	margin-left: 0.4em;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-left: 30px;
+	padding-right: 0.4em;
+	padding-top: 0.6em;
+	padding-bottom: 0.6em;
+	line-height: 2.4em;
+}
+#commandbar a {
+	color: #555555;
+	border-right: 2px dotted #D5E0E0;
+}
+#commandbar span {
+	color: #BBBBBB;
+}
+#commandbar img {
+	margin: 0.2em;
+	vertical-align: middle;
+}
+/* action is for buttons inside listings, <a> is  active, <span> is greyed out */
+a.action {
+	color: #555555;
+	background-color: #F0F0EE;
+	font-size: 82.5%;
+	margin: 0.2em;
+	padding-left: 0.2em;
+	padding-right: 0.2em;
+	border-top: 1px solid #E7E7E6;
+	border-right: 1px solid #DDDDDD;
+	border-bottom: 1px solid #E7E7E6;
+	border-left: 1px solid #DDDDDD;
+}
+span.action {
+	display: none;
+}
+/* dl is for name-value lists */
+dt {
+	font-style: italic;
+	padding-top: .3em;
+}
+dd {
+}
+/* quite generic collapse/expand */
+div.collapsed > h3, div.expanded > h3, dl.collapsed lh, dl.expanded lh {
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+div.collapsed > h3, dl.collapsed lh {
+	background-image: url('commands/16x16/collapsed.png');
+}
+div.expanded > h3, dl.expanded lh {
+	background-image: url('commands/16x16/expanded.png');
+}
+dl.collapsed dt, dl.collapsed dd,
+		div.collapsed .row {
+	display: none;
+}
+#commandbar #collapseall {
+	background-image: url('commands/24x24/collapseall.png');
+}
+#commandbar #expandall {
+	background-image: url('commands/24x24/expandall.png');
+}
+/* common commands */
+#commandbar #back {
+	background-image: url('commands/24x24/back.png');
+}
+#commandbar #repository {
+	background-image: url('commands/24x24/repository.png');
+}
+#commandbar #start {
+	background-image: url('commands/24x24/start.png');
+}
+#commandbar #parent {
+	background-image: url('commands/24x24/parent.png');
+}
+#commandbar #history {
+	background-image: url('commands/24x24/history.png');
+}
+#commandbar #download {
+	background-image: url('commands/16x16/download.png');
+}
+#commandbar #refresh {
+	background-image: url('commands/24x24/refresh.png');
+}
+#commandbar #view {
+	background-image: url('commands/24x24/view.png');
+}
+#commandbar #edit {
+	background-image: url('commands/24x24/edit.png');
+}
+#commandbar #reposconf {
+	background-image: url('commands/24x24/reposconf.png');
+}
+#commandbar #reposadmin {
+	background-image: url('commands/24x24/reposadmin.png');
+}
+#commandbar #repostest {
+	background-image: url('commands/24x24/repostest.png');
+}
+#commandbar #reposroot {
+	background-image: url('commands/24x24/repository.png');
+}
+#commandbar #serverroot {
+	background-image: url('commands/24x24/serverroot.png');
+}
+#commandbar #logout {
+	background-image: url('commands/24x24/logout.png');
+}
+#commandbar #login {
+	background-image: url('commands/24x24/login.png');
+}
+#commandbar #accountedit, #commandbar #lostpassword {
+	background-image: url('commands/24x24/accountedit.png');
+}
+#commandbar #list {
+	background-image: url('commands/24x24/list.png');
+}
+#commandbar #listshort {
+	background-image: url('commands/24x24/listshort.png');
+}
+#commandbar #listrecursive {
+	background-image: url('commands/24x24/listrecursive.png');
+}
+#commandbar #repostree {
+	background-image: url('commands/24x24/tree.png');
+}
+/* general class for loading animation */
+.loading {
+	background-image: url('loading.gif') !important;
+	background-repeat: no-repeat !important;
+}
+#submit.loading {
+	background-color: #D5D5D5;
+	color: #666666;
+	background-position: center !important;
+}
+#commandbar .loading {
+	cursor: wait !important;
+}
+/* visible version numbers, #releaseversion or #resourceversion */
+.versiondisplay {
+	font-size:9px;
+	color:#cccccc;
+	display: none;
+}
+div.versiondisplay {
+	position:absolute;
+	bottom:1px;
+	right:1px;
+}
+/* in cooperation with the actionhover plugin */
+.background .actions {
+	opacity: 0.0;
+}
+.nfocus .actions {
+	opacity: 0.4;
+}
+.nnfocus .actions {
+	opacity: 0.2;
+}
+.nnnfocus .actions {
+	opacity: 0.1;
+}
+.pfocus .actions {
+	opacity: 0.3;
+}
+.ppfocus .actions {
+	opacity: 0.1;}
+/* lock age plugin, TODO icons images with different colors */
+.lock-o {
+	background-image: url('lock-o.png');
+}
+.lock-oo {
+	background-image: url('lock-oo.png');
+}
+.lock-ooo {
+	background-image: url('lock-ooo.png');
+}
+.lock-oooo {
+	background-image: url('lock-oooo.png');
+}

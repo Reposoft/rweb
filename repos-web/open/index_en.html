@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>repos: {=$file,filename} {=$file,revision}</title>
+<!--{$head}-->
+</head>
+<body>
+<div id="commandbar">
+<a id="repository" href="{=$file,folderUrl}">return to repository</a>
+<!--{if $file,isLatestRevision}-->
+<!--{if $file,isFile}-->
+<a id="edit" href="../edit/?target={=$target}{=$file,revParam}">edit</a>
+<!--{/if}-->
+<!--{else}-->
+<a id="view" href="?target={=$target}">view latest version</a>
+<!--{/if}-->
+</div>
+<div id="intro">
+<h1><a class="{=$file,kind2}" href="{=$file,url}">{=$file,filename}</a>
+<!--{if $file,isRevisionRequested}-->
+ <span class="revision">{=$file,revisionRequested}</span>
+<!--{/if}-->
+</h1>
+<!--{if $file,isFolder}-->
+<!--{elseif $file,isLatestRevision}-->
+<p>
+{=if $file,isRevisionRequested}
+This is the latest commit of the file (the current <a href="?target={=$target}">HEAD</a>). 
+{=else}
+This is the current version of the file.
+{=/if}
+<!--{if $file,authenticatedUser}-->
+{=if not $file,isWritable}{=if $file,authenticatedUser}You have read access only.{=/if}
+{=elseif $file,isLockedByThisUser} The file is currently <strong>locked</strong> by you, so other users can not edit it.
+You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
+{=elseif $file,isLockedBySomeoneElse} The file is currently <strong>locked</strong> by 
+<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}.
+{=else}
+You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
+{=/if}
+<!--{/if}-->
+</p>
+<!--{else}-->
+<p>This is an old version of the file. You can also <a href="?target={=$target}">view latest version</a>.</p>
+<!--{/if}-->
+</div>
+<div class="column" style="width: 60%">
+<!-- many plugins use the name #filedetails so the id is kept even though it is used for folders too -->
+<div id="filedetails" class="section">
+<h2>{=$file,kind2|ucfirst} details</h2>
+<!-- in headline: <p>Version number: <span class="revision">{=$file,revision}</span></p> -->
+<p>Path: <span class="path">{=$file,path}</span></p>
+<p>Last changed revision: <span class="revision">{=$file,revisionLastChanged}</span></p>
+<p>Last edited by: <span class="username">{=$file,author}</span></p>
+<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
+<!--{if $file,isFile}-->
+<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
+<!--{/if}-->
+<p>Content type: <span>{=$file,type}</span></p>
+<!--{if $file,isLocked}-->
+<p class="lock">Locked by 
+<span class="username">{=$file,lockOwner}</span> <span class="datetime">{=$file,lockCreated}</span>
+{=if $file,lockComment}<br /> <span class="message">{=$file,lockComment}</span>{=/if}
+</p>
+<!--{/if}-->
+<div class="proplist" title="{=$file,path}">
+</div>
+</div>
+</div>
+<div class="column" style="width: 40%">
+<div id="activities" class="section">
+<h2>Actions to view {=$file,kind2}</h2>
+<!--{if $file,isFile}-->
+<p class="recommendation">
+{=if $file,size gt 102400}
+This file is bigger than 100 kb, so we recommend <a href="download/?target={=$target}{=$file,revParam}">download</a>.
+{=elseif $file,type eq 'text/html'}
+This is an HTML file, so we recommend <a href="open/?target={=$target}{=$file,revParam}">open</a>.
+{=elseif $file,isPlaintext}
+This is file is plain text, so we recommend <a href="file/?target={=$target}{=$file,revParam}">View in Repos</a>.
+{=/if}
+</p>
+<!--{/if}-->
+<!--{if isset($fromrev)}-->
+<p>
+View the <a href="diff/?target={=$target}{=$file,revParam}&fromrev={=$fromrev}">difference from version {=$fromrev}</a>.
+</p>
+<!--{/if}-->
+{=if $file,isFile}
+<h3><a id="open" href="open/?target={=$target}{=$file,revParam}">Open</a></h3>
+<p>This shows the file in the current window. It is good for text files, HTML and images.
+Depending on your browser, it may also work for file types like pdf, documents and spreadsheets.</p>
+{=else}
+<h3><a id="open" href="list/?target={=$target}{=$file,revParam}">List contents</a></h3>
+<p>Shows a defailed view of the folder's contents at the current revision.</p>
+{=/if}
+<h3><a id="download" href="download/?target={=$target}{=$file,revParam}">Download</a></h3>
+<p>Download this 
+{=if $file,isFile} file {=else} folder as zip archive {=/if}
+to your hard drive. The revision number {=$file,revision}
+will be appended to the filename, so you will know which version it is.</p>
+{=if $file,isFile and $file,size lte REPOS_TEXT_MAXSIZE}
+<h3><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in repos</a></h3>
+<p>Read the file's contents in a web page. This is like View in browser, but with menus.
+This works for text files. If the file is a binary file, like a word document,
+you will see only a long line of characters.</p>
+{=/if}
+<h3><a id="history" href="log/?target={=$target}{=if $file,isRevisionRequested}&torev={=$file,revision}{=/if}">View history</a></h3>
+<p>View the commits that
+{=if $file,isFile} have changed this file or its properties
+{=else} have affected contents in this folder{=/if}.</p>
+<!--{if $file,isRevisionRequested}-->
+<h3><a id="copyhistorical" href="../edit/copy/?target={=$target}&rev={=$file,revision}">Copy historical</a></h3>
+<p>Any historical file or folder can be copied to the current tree.
+This makes it possible to start editing removed files with preserved history.
+For files or folders that still exist it creates a new branch.</p>
+<!--{/if}-->
+<h3><a id="useurl" href="#urlcopy" onblur="document.getElementById('urlcopy').select();">Use the URL</a></h3>
+<!--{if $file,isLatestRevision}-->
+<p>The URL is a global ID for the file.
+In e-mails it can be used instead of attachments.
+If the recipient also has a login, simply copy the URL below into the mail.
+In many programs you can open the URL directly, without downloading the file first.</p>
+<!--{else}-->
+<p>This is not the latest version of the file, so you can not use the URL to access it.
+You need to use a version control (Subversion) client like Repos.</p>
+<!--{/if}-->
+</div>
+</div>
+<div id="footer">
+<input id="urlcopy" title="Ctrl+C to copy the URL to clipboard" name="url" type="text" readonly="readonly" value="{=$file,url|asLink}" onclick="this.select();"/>
+</div>
+</body>
+</html>

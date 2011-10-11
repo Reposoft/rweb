@@ -1,9 +1,0 @@
-Package: repos-mirror
-Version: @REPOSVERSION@-@REPOSBUILD@
-Section: web 
-Priority: optional
-Architecture: any
-Essential: no
-Depends: cron, wget, repos
-Maintainer: Staffan Olsson <solsson@gmail.com>
-Description: Repos read-only mirror host

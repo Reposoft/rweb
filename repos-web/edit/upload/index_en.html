@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>repos: Upload file</title>
+<!--{$head}-->
+<!--{if $download}-->
+<meta http-equiv="refresh" content="1;url={=$download}" />
+<!--{/if}-->
+</head>
+
+<body>
+<div id="commandbar">
+<a id="repository" href="{=$repository}">return to repository</a>
+<!--{if $isfile}-->
+<a id="edit" href="../?target={=$target}">edit</a>
+<!--{/if}-->
+</div>
+<h1>Upload file</h1>
+<!--{if $download}-->
+<p>You should automatically get a <a href="{=$download}">download box</a>.
+Save the file on your hard drive, edit, then upload the new version in the form below.</p>
+<!--{/if}-->
+<!--{if $isfile}-->
+{=if not $file,isWritable} <p>You have read access only. You can <a href="../../open/?target={=$target}">view</a> the file but not upload new versions.</p>
+{=elseif $file,isLockedByThisUser} <p>This file is currently <strong>locked</strong> by you, so other users can not edit it.</p>
+{=elseif $file,isLockedBySomeoneElse} <p>This file is currently <strong>locked</strong> by 
+<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}. 
+You can not rename this file.</p>
+{=else} <p>As a new version of file: <a class="file" href="{=$file,url}">{=$file,filename}</a>, current size <span class="filesize">{=$file,size|formatSize}</span>.</p>
+{=/if}
+<!--{else}-->
+<p>As a new file in folder: {=$target}</p>
+<!--{/if}-->
+{=if not $isfile or $file,isWritable and not $file,isLockedBySomeoneElse}
+<form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
+<fieldset>
+  <legend>Upload to repos</legend>
+  <input type="hidden" name="target" value="{=$target}"/>
+  <input type="hidden" name="type" value="upload"/>
+  <p>
+    <label for="userfile">local file</label>
+	 <input type="hidden" name="MAX_FILE_SIZE" value="{=$maxfilesize}" />
+    <input type="file" id="userfile" name="userfile" class="required current-name" size="40" tabindex="1" />
+    <span class="note">Maximum file size {=$maxfilesize|formatSize}</span>
+  </p>
+  <p>
+    <label for="name">name in repository</label>
+	 <!--{if $isfile}-->
+    <input type="text" id="name" name="name" value="{=$target|getPathName}" disabled="disabled" size="40" />
+    <!--{else}-->
+	 <input type="text" id="name" name="name" size="40" class="required remember-extension" tabindex="2" />
+	 <input type="hidden" id="create" name="create" value="yes"/>   
+    <!--{/if}-->
+  </p>
+  <!--{if $isfile}-->
+  <div id="based-on-revision">
+  	 {=assign var='logrev' value=$log|@array_keys}	
+    {=foreach from=$logrev item=r name=log}
+    {=assign var='e' value=$log.$r}
+    <p style="border:1px solid white;margin-bottom:0;margin-top:0;">
+      {=if $smarty.foreach.log.first}
+      <label for="fromrev{=$r}">based on version <span class="revision">{=$r}</span></label>
+      <input id="fromrev{=$r}" type="radio" name="fromrev" value="{=$r}" />
+      <span class="username">{=$e.user}</span> <span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span>
+      <!-- <span> (this is the current version)</span> --><br />
+      {=else}
+      <label for="fromrev{=$r}">&nbsp;<span class="revision">{=$r}</span></label>
+      <input id="fromrev{=$r}" type="radio" name="fromrev" value="{=$r}" />
+      <span class="username">{=$e.user}</span> <span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span><br />
+      {=/if}
+    </p>
+    {=/foreach}
+    <!-- server logic displays only the last 10 revisions -->
+    <p style="border:1px solid white;margin-top:0;">
+      <label for="fromrevHEAD">&nbsp;</label>
+      <input id="fromrevHEAD" type="radio" name="fromrev" value="HEAD" checked="checked" />
+      <span>Don't care. Overwrite the current version.</span>
+	</p>
+  </div>
+  {=if $file,isLockedByThisUser}
+  <p>
+  	 <label for="unlock">unlock at commit</label>
+  	 <input type="checkbox" id="unlock" name="unlock" checked="checked"/>
+  	 <!-- if lock should be kept, file must be relocked with this comment -->
+  	 <input type="hidden" id="lockcomment" name="lockcomment" value="{=$file,lockComment}"/>
+  </p>
+  {=/if}
+  <!--{else}-->
+  <!-- not implemented
+  <p>
+  	 <label for="needslock">should be locked before edit</label>
+  	 <input type="checkbox" id="needslock" name="needslock"/>
+  </p>
+   -->
+  <!--{/if}-->
+  <p>
+    <label for="message">history text</label>
+    <textarea id="message" name="message" cols="40" rows="2" tabindex="3">{=if $isfile}{=$file,lockComment}{=/if}</textarea>
+  </p>
+  <p>
+    <label for="submit">&nbsp;</label>
+    <input id="submit" type="submit" name="submit" value="Upload" tabindex="4" />
+  </p>
+</fieldset>
+</form>
+{=/if}
+<div id="footer">
+</div>
+</body>
+</html>

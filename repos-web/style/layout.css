@@ -1,0 +1,183 @@
+@CHARSET "UTF-8";
+/* CSS for Repos pages with forms or columns or both */
+div#intro {
+	margin: 5px;
+	padding: 5px;
+}
+
+div.column {
+	display: inline;
+	float: left;
+}
+
+div.section {
+	height: auto;
+	margin: 5px;
+	padding: 5px;
+	background-color: #FFFFFF;
+	border: 2px solid #F4F4F4;
+	display: block;	
+}
+
+div.section h2 {
+	margin: 0px;
+	padding-left: 1em;
+	background-color: #E9F4C9;
+	background-image: url(headlinebg.png);
+	background-position: bottom;
+	background-repeat: repeat-x;
+	color: #666633;
+}
+
+#activities {
+	border-color: #FFF;
+}
+
+#activities h2 {
+	padding-left: 0;
+	background-color: transparent; /*#F0F0EE;*/
+	background-image: none;
+}
+
+div p {
+	color: #333333;
+}
+
+/* Repos Login status hidden by default and displayed by login plugin */
+#loginstatus {
+	display: none;
+}
+
+/* log in page section */
+
+#editlog ul {
+	list-style: none;
+	padding-left: 1em;
+}
+
+#editlog span {
+	margin: .3em 1em .3em 0;
+}
+
+#editlog .message {
+	display: block;
+	margin-left: 2em;
+	margin-bottom: 1.2em;
+}
+
+/* thumbnail plugin, see THUMB_SIZE in open/thumb/ */
+#intro img.thumbnail {
+	display: inline;
+	float: left;
+	margin-right: 1em;
+}
+
+/* input box in footer with the full url */
+#footer #urlcopy {
+	width: 98%;
+	text-align: center;
+	border: 0px;
+	margin: 0px;
+	color: #808080;
+	background: none;
+}
+#footer > #urlcopy {
+	font-size: 95%;
+}
+/* common activities, same id as commands */
+div#activities p {
+	padding-left: 40px;
+}
+#activities h3 a {
+	padding: 10px 0px 10px 40px;
+	background-position: left;
+	background-repeat: no-repeat;
+}
+#activities #open {
+	background-image: url(commands/32x32/open.png);
+}
+#activities #download {
+	background-image: url(commands/32x32/download.png);
+}
+#activities #download_upload {
+	background-image: url(commands/32x32/download_upload.png);
+}
+#activities #download_lock {
+	background-image: url(commands/32x32/download_lock.png);
+}
+#activities #editfile {
+	background-image: url(commands/32x32/edit.png);
+}
+#activities #upload {
+	background-image: url(commands/32x32/upload.png);
+}
+#activities #lock {
+	background-image: url(commands/32x32/lock.png);
+}
+#activities #unlock {
+	background-image: url(commands/32x32/unlock.png);
+}
+#activities #useurl {
+	background-image: url(commands/32x32/url.png);
+}
+#activities #history {
+	background-image: url(commands/32x32/history.png);
+}
+#activities #viewfile {
+	background-image: url(commands/32x32/view.png);
+}
+#activities #propedit {
+	background-image: url(commands/32x32/propedit.png);
+}
+#activities #copyhistorical {
+	background-image: url(commands/32x32/copy.png);
+}
+/* -------- forms ---------
+<form>
+<fieldset>
+  <legend>template form</legend>
+  <p>
+    <label for="name">file name</label>
+    <input id="name" type="text" name="name" />
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" type="submit" name="submit" value="Send" />
+  </p>
+</fieldset>
+</form>
+*/
+fieldset {
+	border: 2px solid #E9F4C9;
+	border-collapse:collapse;
+	margin: 0 1em 1em 1em;
+	padding: 1em;
+}
+fieldset p {
+	clear: left;
+}
+input {
+	margin-top: 0.5em;
+}
+legend {
+	color: #666633;
+	font-size: 1.1em;
+	letter-spacing: 0.1em;
+	padding: 0 1em 0 1em;
+}
+label {
+	float:left;
+	width:12em;
+	margin-right:0.5em;
+	padding-top:0.5em;
+	text-align:right;
+	font-weight:normal;
+}
+input.required {
+	background: url(required.png) top right no-repeat;	
+}
+fieldset span.note, fieldset span.warning, fieldset span.error {
+	display: block;
+	margin-left: 12.6em;
+	width: auto;
+}

@@ -4,7 +4,7 @@ $().bind('repos-readme-loaded', function(ev, container) {});
 
 Repos.service('index/', function() {
 	// check file list for one named acconrding to convetion
-	var readme = $('a.file[href="repos.txt"]')[0];
+	var readme = $('a.file[href=repos.txt]')[0];
 	// display contents if it exists
 	if (typeof readme != 'undefined') {
 		$.get(readme.href, function(data) {
@@ -17,7 +17,7 @@ Repos.service('index/', function() {
 		return;
 	}
 	// OR readme as XHTML
-	readme = $('a.file[href="repos.html"]')[0];
+	readme = $('a.file[href=repos.html]')[0];
 	if (typeof readme != 'undefined') {
 		$('body').say({id:'repos-readme'});
 		$('#repos-readme').load(readme.href, function() {

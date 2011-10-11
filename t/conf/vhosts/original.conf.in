@@ -27,12 +27,6 @@
 	ErrorDocument 404 /repos-web/errors/404/
 	ErrorDocument 500 /repos-web/errors/500/
 
-	# Direct proxy for Repos Search, not needed if using proxy
-	ProxyPass /solr ajp://127.0.0.1:8009/solr
-	ProxyPreserveHost On
-	# Access control can be added in a Location /solr block
-	# Also requires that port 8009 is protected in firewall
-
 	# Use rewrite based service layer
 	Include @ServerRoot@/../documentation/servicelayer/repos-services.conf
 

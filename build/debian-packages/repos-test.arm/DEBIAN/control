@@ -1,9 +1,0 @@
-Package: repos-test
-Version: @REPOSVERSION@-@REPOSBUILD@
-Section: web 
-Priority: optional
-Architecture: arm
-Essential: no
-Depends: repos
-Maintainer: Staffan Olsson <solsson@gmail.com>
-Description: Repos web application test suite

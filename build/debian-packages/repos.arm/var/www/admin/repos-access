@@ -1,9 +1,0 @@
-# This svn access file is _not_ active as ACL, but it defines the projects on the Repos startpage
-[groups]
-
-[/]
-* = rw
-
-[/demoproject]
-* = rw
-

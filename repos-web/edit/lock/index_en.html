@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>repos: Lock file</title>
+<!--{$head}-->
+</head>
+
+<body>
+<div id="commandbar">
+<a id="repository" href="{=$repository}">return to repository</a>
+<a id="view" href="../../open/?target={=$target}">details</a>
+<a id="edit" href="../?target={=$target}">edit</a>
+</div>
+<h1>Lock</h1>
+<form id="lock" name="lock" method="post" action="#">
+	<fieldset>
+	<legend>Lock <a class="filename" href="{=$repository}/{=$target|getPathName}" title="open file: {=$target|getPathName}">file</a></legend>
+    <input name="target" type="hidden" id="target" value="{=$target}" />
+  <p>
+    <label for="name">filename</label>
+    <input id="name" name="name" type="text" value="{=$target}" disabled="disabled" size="40"/>
+  </p>  
+  <p>
+    <label for="message">message to other users</label>
+    <textarea id="message" name="message" cols="30" rows="2" tabindex="1"></textarea>
+  </p>
+  <p>
+    <label for="download">download file when locked</label>
+    <input id="download" name="download" type="checkbox" {=if isset($download) and $download}checked="checked"{=/if}/>
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" type="submit" name="submit" value="Lock" tabindex="2" />
+  </p>
+  </fieldset>
+</form>
+<div id="footer">
+</div>
+</body>
+</html>

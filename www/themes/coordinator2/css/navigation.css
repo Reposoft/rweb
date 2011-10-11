@@ -1,6 +1,0 @@
-/* navigation tree table cells */
-td.treeHeader { height:2px; width:180px; }
-td.treeIcon { height:16px; width:18px; vertical-align:top; margin-bottom:1px; margin-top:1px; }
-td.treeSpace { height:16px; width:18px; vertical-align:top; margin-bottom:1px; margin-top:1px; background:background-image; background-image:url(../buttons/tree/dashbg.gif); }
-td.treeText { font-size:10px; vertical-align:baseline; text-decoration:none; }
-tr.treeSelected { background-color:#555555; color:#FFFFFF; }

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>repos: edit content</title>
+<!--{$head}-->
+</head>
+
+<body>
+<div id="commandbar">
+<a id="repository" href="{=$repository}">return to repository</a>
+<a id="view" href="../../open/?target={=$target}">details</a>
+<!--{if $isfile}-->
+<a id="edit" href="../?target={=$target}">edit</a>
+<!--{/if}-->
+</div>
+
+<a name="textform"></a>
+<form id="formEdit" action="../upload/" method="post" name="formUpload">
+<fieldset>
+	<!--{if $isfile}-->
+	<legend>Edit <a class="file" href="{=$file,url}" title="open file: {=$file,filename}">text file</a> with type {=$file,type}</legend>
+	<!--{else}-->
+	<legend>New text file</legend>
+	<!--{/if}-->
+  <input type="hidden" name="target" value="{=$target}"/>
+  <input type="hidden" name="extension" class="current-name" value=".{=$type}"/>
+  <input type="text" name="type" value="{=$type}" style="display:none"/>
+	<!--{if $isfile}-->
+	<input type="hidden" name="fromrev" value="{=$file,revision}"/>
+	 {=*
+	 	Textarea must be on one line so it does not insert spaces.
+	 	The 'type' field is the type of contents (which decides how the text should be formatted).
+	 	The class of the text area is the filename extension.
+	 	Recommended filename extension for new files is =type. class="{=$file,extension}"
+	 	*}
+<textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1">{=$file->sendInlineHtml()}</textarea>
+<!--{else}-->
+<textarea name="usertext" id="usertext" cols="82" rows="20" tabindex="1"></textarea>
+<!--{/if}-->
+  <p>
+    <label for="name">name in repository</label>
+	<!--{if $isfile}-->
+    <input type="text" id="currentname" name="currentname" value="{=$target|getPathName}" disabled="disabled" size="40" />
+	<!--{else}-->
+	<input type="text" id="name" name="name" value="{=$suggestname}" size="40" class="required remember-extension" tabindex="2"/>
+	<input type="hidden" id="create" name="create" value="yes"/>
+	<!--{/if}-->
+  </p>
+  <p>
+    <label for="message">log message</label>
+    <textarea id="message" name="message" cols="40" rows="2" tabindex="3"></textarea>
+  </p>
+  <p>
+    <label for="submit"></label>
+    <input id="submit" type="submit" name="submit" value="Save" tabindex="4" />
+    <span> &nbsp; </span>
+    <input id="reset" type="reset" value="Reset to original contents"/>
+  </p>
+</fieldset>
+</form>
+
+<div id="footer">
+</div>
+</body>
+</html>

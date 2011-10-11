@@ -8,7 +8,7 @@
 require('../../reposweb.inc.php');
 require(ReposWeb.'open/SvnOpenFile.class.php');
 require('./convert.inc.php');
-require('./graphicstransforms.inc.php');
+define('THUMB_SIZE', 150);
 
 /**
  * @return the root url to the cache repo, should be the external url
@@ -30,31 +30,14 @@ function getThumbnailCacheRepoDefault() {
 require(ReposWeb.'edit/SvnEdit.class.php');
 
 // create the option string to use with convert command
-function getThumbnailCommand($transform, $format='', $target='-') {
-	$maxWidth = $transform['width'];
-	$maxHeight =  $transform['height'];
-	if ($format) $format.=':'; // override auto detection by setting extension for stdin
+function getThumbnailCommand($format='', $target='-') {
+	$z = THUMB_SIZE;
+	if ($format) $format.=':';
 	// todo select -filter?
-	// old command:
-	//return "$format- -thumbnail {$maxWidth}x{$maxHeight}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
-	// new command, should work for both ImageMagick and GraphicsMagick
-	if (isset($transform['mode']) && $transform['mode'] == 'crop') {
-		return "-geometry {$maxWidth}x{$maxHeight}^ -gravity center -crop {$maxWidth}x{$maxHeight}+0+0 -quality 75 $format- \"$target\"";
-	}
-	return "-size {$maxWidth}x{$maxHeight} -geometry {$maxWidth}x{$maxHeight} -quality 75 $format- \"$target\"";
-}
-
-// start processing by getting the selected transform
-$gt = isset($_REQUEST['gt']) ? $_REQUEST['gt'] : 'thumb';
-if (!isset($reposGraphicsTransforms[$gt])) {
-	trigger_error("Unknown graphics transform: $gt", E_USER_ERROR);
-}
-$transform = $reposGraphicsTransforms[$gt];
-if (!isset($transform['width'])) {
-	trigger_error("Graphics transform $gt is invalid, width not set", E_USER_ERROR);
-}
-if (!isset($transform['height'])) {
-	trigger_error("Graphics transform $gt is invalid, height not set", E_USER_ERROR);
+	// ImageMagick
+	//return "$format- -thumbnail {$z}x{$z}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
+	// GraphicsMagick
+	return "-size {$z}x{$z} -geometry {$z}x{$z} -quality 75 $format- \"$target\"";
 }
 
 // verify that the graphics tool exists
@@ -72,7 +55,8 @@ if (strBegins(getSelfUrl(), $cacheRepo) && !isset($_REQUEST['target'])) {
 	trigger_error('On-demand thumbnail generation not implemented yet');
 }
 
-// Transparent login in SvnOpen will not work in this service because the result is piped to thumbnail command
+// can't be sure that the browser automatically forwards credentials to this plugin folder
+// TODO make sure login is not required for public readable images
 targetLogin();
 
 // revision number logic, rev is the old "implicit peg"
@@ -80,7 +64,6 @@ $revIsPeg = true;
 $revField = 'rev';
 // simplified logic that supports only p OR r
 if (isset($_REQUEST['p'])) {
-	// TODO shouldn't p be allowed with r? see http://subversion.apache.org/docs/release-notes/1.6.html#historical-uris
 	if (isset($_REQUEST['rev']) || isset($_REQUEST['r'])) trigger_error('only one revision type accepted', E_USER_ERROR);
 	$revField = 'p';
 }
@@ -98,15 +81,23 @@ if (!$r->getValue()) {
 	// enable caching, see below
 }
 
+// first get the data about the repository image
+$file = new SvnOpenFile(getTarget(), $r->getValue(), true, $revIsPeg);
+$extension = $file->getExtension();
+
+// verify that the source can be accessed
+// note that this requires host-wide login, not only /repos-web/, now that this runs in /repos-plugins
+if ($file->getStatus() != 200) {
+	handleError($file->getStatus(), "Could not read ".$file->getPath()." ".$r->getValue());
+}
+
 // Look for a cached file using a naming rule
 if ($cacheRepo) {
-	if (!$revIsPeg) trigger_error('Caching not supported for non-pegs'); // Until we know if there can be collisions
-	// first get the data about the repository image, but is this needed?
-	$transformId = $gt; // this assumes that the cache repo is cleared if transform definitions change
-	$revision = $r->getValue();
-	$name = basename(getTarget());
+	$transformId = THUMB_SIZE.'x'.THUMB_SIZE;
+	$revision = $file->getRevision();
+	$name = $file->getFilename();
 	$dot = strrpos($name, '.');
-	$name = substr($name, 0, $dot).'(r'.$revision.')'.".$transformId".substr($name,$dot).'.jpg';
+	$name = substr($name, 0, $dot).'(r'.$file->getRevision().')'.".$transformId".substr($name,$dot).'.jpg';
 	$cacheTarget = getTarget().'/'.$revision.'/'.$name;
 	$cacheSave = getTarget().'/repos.lock';
 	$cacheUrl = $cacheRepo.$cacheTarget;
@@ -118,32 +109,48 @@ if ($cacheRepo) {
 }
 
 // jpeg is generally smaller than png but graphicsmagick produced some invalid images for line art in jpg
-$originaltype = ''; // TODO needed for getThumbnailCommand
 $thumbtype = 'png';
-if (isset($transform['type'])) { // output type can be set explicitly in transform definition
-	$thumbtype = $transform['type'];
-} else if (preg_match('/\.jpe?g|raw$/i', getTarget())) {
+if (preg_match('/^jpe?g|raw/i', $extension)) {
 	$thumbtype = 'jpeg';
 }
 
-// TODO add flow for conversions that can not be done with stdin, see "temporg" in 1.3 branch
+// Originals could be large so we should avoid local storage if possible, but need
+// alternative flow for convert that fails with stdin, such as when ralcgm is used 
+$temporg = ($extension != 'cgm') ? false : System::getTempFile('thumb', '.'.$extension);
 
 // thumbnails are small, so we can store them on disc
 $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 
 // create the ImageMagick command
-$convert = $convert . ' ' . getThumbnailCommand($transform, $originaltype, $tempfile);
+$convert = $convert . ' ' . getThumbnailCommand($extension, $tempfile);
 
-$o = new SvnOpen('cat');
-if ($revIsPeg) {
-	$o->addArgUrlPeg(getTargetUrl(), $r->getValue()); // $rev is a peg revision
+// integer revision number, can be cached
+$rev = $file->getRevision();
+
+$o = new SvnOpen($temporg ? 'export' : 'cat');
+//$o->addArgOption('-r', $rev);
+//$o->addArgUrl(getTargetUrl());
+// stricter, based on results from svn info, produces unique key with url@last-changed-rev
+$rev = $file->getRevisionLastChanged();
+$urlForPeg = rawurldecode($file->file['url']); // getUrl is urlRequested
+$o->addArgUrlPeg($urlForPeg, $rev); // $rev is a peg revision
+if ($temporg) {
+	$o->addArgPath($temporg);
 } else {
-	$o->addArgOption('-r', $r->getValue());
-	$o->addArgUrl(getTargetUrl());
+	$o->addArgOption('|', $convert, false);
 }
-$o->addArgOption('|', $convert, false);
+
 if($o->exec()) {
 	handleError($o->getExitcode(), implode('"\n"', $o->getOutput()));
+}
+
+if ($temporg) {
+	$offlineconvert = preg_replace('/([ :])- /', '$1"'.$temporg.'" ', $convert);
+	$c = new Command($offlineconvert, false);
+	if ($c->exec()) {
+		handleError($c->getExitcode(), implode('"\n"', $c->getOutput()), 1);
+	}
+	unlink($temporg);
 }
 
 // it might happen that convert exits with code 0 but the thumbnail is not created
@@ -166,9 +173,7 @@ if (!file_exists($tempfile) || !filesize($tempfile)) {
 
 // thumbnails can be cached permanently if target and revsion number is in the url
 if ($r->getValue()) {
-	header('Cache-Control: private, max-age=8640000');
-} else {
-	header('Cache-Control: private');
+	header('Cache-Control: max-age=8640000');
 }
 
 // send from the tempfile
@@ -194,7 +199,7 @@ function showImage($file, $type='jpeg') {
 }
 
 function handleError($code, $message, $image='error.jpg') {
-	// for viewing the error in new tab
+	// for viewing the error using copy image location + curl or paste in new tab
 	if (!getHttpReferer()) {
 		header('Content-Type: text/plain');
 		echo "\n=== Convert error, code $code ===\n";
@@ -202,7 +207,6 @@ function handleError($code, $message, $image='error.jpg') {
 		exit;
 	}
 	// error image to user
-	// TODO scale error image according to transform spec?
 	$tempfile = dirname(__FILE__).'/'.$image;
 	showImage($tempfile);
 	exit;

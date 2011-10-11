@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>repos: Copy or move</title>
+<!--{$head}-->
+<script type="text/javascript">
+//<![CDATA[
+function pasteUrl() {
+	reposUrl='{=$repository}'; // http, not https
+	url=prompt('Please enter the full URL of the destination folder','');
+	if (url==null) {
+		return;
+	}
+	if (window.unescape) {
+		url = window.unescape(url);
+	}
+	if (url.indexOf('https')==0 && reposUrl.indexOf('http:')==0) {
+		r = reposUrl.replace(/http:/,"https:");
+	} else {
+		r = reposUrl;
+	}
+	if (url.indexOf(r)!=0) {
+		alert('The folder URL must begin with the repository URL '+reposUrl+' or '+r);
+		return;
+	}
+	document.getElementsByName('tofolder')[0].value = url.substring(r.length);
+}
+function setMove(move) {
+	button = document.getElementsByName('submit')[0].value = move ? "Move" : "Copy";
+}
+//]]>
+</script>
+</head>
+
+<body>
+<div id="commandbar">
+<a id="repository" href="{=$file,folderUrl}">return to repository</a>
+<a id="view" href="../../open/?target={=$target}{=if $file,isRevisionRequested}&rev={=$file,revisionRequested}{=/if}">details</a>
+<!--{if $file,isFile and not $file,isRevisionRequested}-->
+<a id="edit" href="../?target={=$target}">edit</a>
+<!--{/if}-->
+</div>
+<div id="intro">
+<h1>Copy or Move</h1>
+<p>Make a copy of the {=$file,kind2} at a new location in the repository. 
+{=if not $file,isRevisionRequested}Select "delete the original" to make this a move operation.{=/if}
+</p>
+{=if not $file,isWritable} <p>You have read access only. You can only copy the file.</p>
+{=elseif $file,isLockedByThisUser} <p>The file is currently <strong>locked</strong> by you, so other users can not edit it.
+Select "delete the original" to make this a move operation.</p>
+{=elseif $file,isLockedBySomeoneElse} <p>The file is currently <strong>locked</strong> by 
+<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}. You can only copy the file.</p>
+{=else}
+{=/if}
+</div>
+
+<div class="column" style="width: 70%">
+<form id="copy" name="copy" method="post" action="#">
+	<fieldset>
+	<legend>Copy or Move <a class="{=$file,kind2}" href="{=$file,url}" title="open {=$file,kind}: {=$file,filename}">{=$file,kind}</a></legend>
+		<input name="target" type="hidden" id="target" value="{=$target}" />
+	<p>
+		<label for="name">copy</label>
+		<input id="name" name="name" type="text" class="current-name" size="40" disabled="disabled" value="{=$oldname}" />
+		<input id="oldname" name="oldname" type="hidden" value="{=$oldname}" />
+	</p>
+	<!--{if $file,isRevisionRequested}-->
+	<p>
+		<label for="rev">revision</label>
+		<input name="rev" type="text" id="rev" value="{=$file,revisionRequested}" class="revision"/>
+	</p>
+	<!--{/if}-->
+	<p>
+		<label for="folder">from folder</label>
+		<input id="folder" name="folder" type="text" size="40" disabled="disabled" value="{=$folder}" />	
+	</p>
+	<p>
+		<label for="tofolder">to folder</label>
+		<input id="tofolder" name="tofolder" type="text" size="40" value="{=$folder}" class="required" />
+		<br />
+		<label>&nbsp;</label>
+		<a class="action" href="#" onclick="pasteUrl()">paste&nbsp;the&nbsp;full&nbsp;URL</a>	
+	</p>
+	<p>
+		<label for="newname">new name</label>
+		<input name="newname" type="text" id="newname" class="required remember-extension" size="40" value="{=$oldname}"/>
+	</p>
+	<p>
+		<label for="moveyes">delete the original</label>
+		<!--{if $file,isRevisionRequested}-->
+			<input id="moveyes" name="move" type="radio" value="1" disabled="disabled"/> Yes 
+			<input id="moveno" name="move" type="radio" value="0" checked="checked"/> No (historical&nbsp;revision&nbsp;can&nbsp;not&nbsp;be&nbsp;deleted)
+			<input id="movehidden" name="move" type="hidden" value="0" />			
+		<!--{elseif $file,isWriteAllow}-->
+			<input id="moveyes" name="move" type="radio" value="1" onchange="setMove(this.checked)"/> Yes 
+			<input id="moveno" name="move" type="radio" value="0" checked="checked" onchange="setMove(!this.checked)" /> No
+		<!--{else}-->
+			<input id="moveyes" name="move" type="radio" value="1" disabled="disabled"/> Yes 
+			<input id="moveno" name="move" type="radio" value="0" checked="checked"/> No (original&nbsp;is&nbsp;locked)
+			<input id="movehidden" name="move" type="hidden" value="0" />
+		<!--{/if}-->
+	</p>
+	<p>
+		<label for="message">history text</label>
+		<textarea name="message" id="message" cols="30" rows="2" tabindex="2" ></textarea>
+	</p>
+	<p>
+		<label for="submit"></label>
+		<input id="submit" type="submit" name="submit" value="Copy" tabindex="3" />
+	</p>
+	</fieldset>
+</form>
+</div>
+<div class="column" style="width: 29%">
+<div class="section">
+<h2>Cheap copies</h2>
+<p>The copy would work like a duplicate, but in fact be a reference to version 
+{=if not $file,isFolder}<span class="revision">{=$file,revision}</span>{=/if}
+ at the old location, called a &quot;cheap copy&quot; because it takes no extra storage space.
+</p>
+<p>That is why copy and move are the same operations.</p>
+</div>
+</div>
+<div id="footer">
+</div>
+</body>
+</html>

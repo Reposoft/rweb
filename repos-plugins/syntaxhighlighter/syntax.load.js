@@ -30,8 +30,7 @@ Repos.syntax.brushes = 0;
 Repos.syntax.loaded = 0;
 
 Repos.service('open/file/', function() {
-	var textareaContent = $('textarea[readonly]').val();
-	if (textareaContent && textareaContent.length > 1024 * 100) return; 
+	if ($('textarea[readonly]').val().length > 1024 * 100) return; 
 	// load css
 	$('<link type="text/css" rel="stylesheet" href="'+Repos.syntax.path+'styles/shCore.css"></link>').appendTo('head');
 	$('<link type="text/css" rel="stylesheet" href="'+Repos.syntax.path+'styles/shThemeDefault.css"></link>').appendTo('head');

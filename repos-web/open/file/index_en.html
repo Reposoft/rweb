@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>repos: Contents of {=$file,filename}</title>
+<!--{$head}-->
+</head>
+
+<body>
+<div id="commandbar">
+<a id="repository" href="{=$file,folderUrl}">return to repository</a>
+<a id="view" href="../?target={=$target}{=$file,revParam}">details</a>
+<!--{if $file,isLatestRevision}-->
+<a id="edit" href="../../edit/?target={=$target}">edit</a>
+<!--{/if}-->
+</div>
+
+{=if $file,status eq 200}
+<h3><a class="file" title="{=$file,path}, revision {=$file,revisionLastChanged}" href="{=$file,url}">{=$file,filename}</a>
+	&nbsp; <span class="revision">{=$file,revisionLastChanged}</span>
+	&nbsp; <span class="filesize">{=$file,size|formatSize}</span>
+</h3>
+<!-- on javascript browsers the box will be resized by the syntax plugin -->
+<textarea id="file" cols="82" rows="20" name="file" class="{=$file,extension}" readonly="readonly" >{=$file->sendInlineHtml()}</textarea>
+{=else}
+{=* mimic the error page *}
+<h1>An error occurred</h1>
+<p class="error">Could not read file {=$file,path} (status {=$file,status}).</p>
+{=/if}
+<div id="footer"></div>
+</body>
+</html>
