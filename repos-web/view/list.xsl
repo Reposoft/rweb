@@ -38,6 +38,7 @@
 			<link rel="shortcut icon" href="/favicon.ico"/>
 			<!-- repos metadata -->
 			<meta name="repos-service" content="open/list/" />
+			<meta name="repos-repository" content="{/lists/@repo}" />
 			<meta name="repos-target" content="{/lists/@target}" />
 			<meta name="repos-base" content="{/lists/@base}" />
 			<!-- default stylesheets -->

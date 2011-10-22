@@ -43,7 +43,6 @@ $template = Presentation::getInstance();
 $file = new SvnOpenFile($target);
 $file->isWritable(); // check before page is displayed because it might require authentication
 $template->assign_by_ref('file', $file);
-$template->assign('repository', getRepository());
 $template->assign('target', $target);
 $template->assign('oldname', getPathName($target));
 $template->assign('folder', getParent($target));

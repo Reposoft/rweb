@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 	$file->isWritable(); // check before page is displayed because it might require authentication
 	$template->assign_by_ref('file', $file);
 	$template->assign('target', $target);
-	$template->assign('repository', getRepository().getParent($target));
+	$template->assign('folderurl', getRepository().getParent($target));
 	$template->display();
 }
 

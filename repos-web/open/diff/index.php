@@ -24,7 +24,7 @@ $p->assign('target', getTarget());
 $p->assign('revfrom', $revfrom);
 $p->assign('revto', $revto);
 $existingFolder = login_getFirstNon404Parent(getParent($url), $s);
-$p->assign('repository', $existingFolder);
+$p->assign('folderurl', $existingFolder);
 $referer = getHttpReferer();
 if (!empty($referer) && strContains($referer, '/open/log/')) {
 	$p->assign('logurl', $referer);

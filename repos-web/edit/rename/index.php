@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 	if (!$folder) $folder = '/'; // getParent resturns empty string for file in root
 	$template->assign('folder', $folder);
 	$template->assign('oldname', getPathName($target));
-	$template->assign('repository', getRepository());
 	$template->display();
 }
 

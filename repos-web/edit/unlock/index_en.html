@@ -7,13 +7,13 @@
 
 <body>
 <div id="commandbar">
-<a id="repository" href="{=$repository}">return to repository</a>
+<a id="repository" href="{=$folderurl}">return to repository</a>
 <a id="view" href="../../open/?target={=$target}">details</a>
 </div>
 <h1>Unlock</h1>
 <form id="unlock" name="unlock" method="post" action="#">
   <fieldset>
-  <legend>Unlock <a class="filename" href="{=$repository}/{=$target|getPathName}" title="open file: {=$target|getPathName}">file</a></legend>
+  <legend>Unlock <a class="filename" href="{=$folderurl}/{=$target|getPathName}" title="open file: {=$target|getPathName}">file</a></legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
   <p>
     <label for="name">unlock</label>

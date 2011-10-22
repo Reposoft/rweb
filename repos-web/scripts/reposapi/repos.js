@@ -118,14 +118,17 @@ Repos.getService = function() {
 };
 
 /**
- * TODO make this a permanent API function that works from all pages in Repos Web
  * @return {String} root url, no trailing slash
  */
 Repos.getRepository = function() {
-    // assuming that #urlcopy exists and that slashes are not urlencoded
-    var targetUrl = $('#urlcopy').val().split('/');
-    var targetPath = Repos.getTarget().split('/');
-    return targetUrl.slice(0, targetUrl.length - targetPath.length + 1).join('/');
+	// no meta tag in index yet, xslt should and repository name in path made clickable
+	if (Repos.isService('index/')) {
+		var u = decodeURI(window.location.href);
+		var t = Repos.getTarget();
+		return u.substr(0, u.length - t.length);
+	}
+	// pages known to still lack repository meta: edit result page
+	return Repos.getMeta('repository');
 };
 
 Repos.getBase = function() {

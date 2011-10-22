@@ -74,9 +74,9 @@ function showUploadForm() {
 		$template->assign_by_ref('file', $file);
 		$log = getLog($file->getUrl());
 		$template->assign_by_ref('log', $log);
-		$template->assign('repository', getParent($file->getUrl()));
+		$template->assign('folderurl', getParent($file->getUrl()));
 	} else {
-		$template->assign('repository', $file->getUrl());
+		$template->assign('folderurl', $file->getUrl());
 	}
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
 	$template->assign('isfile',$file->isFile());

@@ -34,6 +34,7 @@
 				<link rel="shortcut icon" href="/favicon.ico"/>
 				<!-- repos metadata -->
 				<meta name="repos-service" content="open/log/" />
+				<meta name="repos-repository" content="{/log/@repo}" />
 				<meta name="repos-target" content="{/log/@target}" />
 				<xsl:if test="/log/@base">
 					<meta name="repos-base" content="{/log/@base}"/>
