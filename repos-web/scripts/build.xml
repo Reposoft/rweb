@@ -31,6 +31,43 @@
 	
 	<!-- === End configuration, start build === -->
 
+	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
+		classpath="${build.folder}/compiler.jar"/>
+
+	<!-- transitional task for compiling with closure compiler, will be default -->
+	<target name="compress.closure" description="Compress using closure compiler">
+		<fileset id="pluginset" dir="${plugins.external.folder}"
+			includes="**/*.load.js,**/*.plugin.js"
+			excludes="${plugins.excludes}" />
+		<!-- compiler task does not support fileset -->
+		<!-- https://groups.google.com/group/closure-compiler-discuss/browse_thread/thread/25b55f9cb5e88248?pli=1 -->
+		<concat destfile="${head.js.file}.big" append="no">
+			<fileset dir="${intro.folder}" includes="**/*.js" excludes="${excludes.default}" />
+			<fileset dir="${lib.folder}" includes="jquery/*.js"/>
+			<fileset dir="${lib.folder}" includes="**/*.js" excludes="jquery/**,${excludes.default}"/>
+			<fileset dir="${api.folder}" includes="**/*.js" excludes="${excludes.default}" />
+			<fileset dir="${plugins.folder}" includes="**/*.js" excludes="${excludes.default}" />
+			<fileset refid="pluginset"/>
+			<fileset dir="${outro.folder}" includes="**/*.js" excludes="${excludes.default}" />
+		</concat>
+				
+		<jscomp output="${head.js.file}"
+				compilationLevel="simple"
+				warning="verbose"
+				debug="yes"
+				printinputdelimiter="yes"
+				managedependencies="yes">
+
+			<!--<externs dir="${basedir}/src"/>-->
+
+			<sources dir="${basedir}">
+				<file name="${head.js.file}.big" />
+			</sources>
+			
+		</jscomp>
+
+	</target>	
+	
 	<target name="compile" depends="head.js.concat">
 	</target>
 	
