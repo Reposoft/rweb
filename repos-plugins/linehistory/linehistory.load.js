@@ -41,7 +41,7 @@ Repos.linehistory = {
 			var tag = '<var class="linehistory"/>';
 			// insert into SyntaxHighlighter output
 			var after = $('.number', line);
-			var css = {float: null};
+			var css = {'float': null};
 			$(tag).addClass('username').css(css).text(author).insertAfter(after);
 			$(tag).addClass('revision').css(css).text(rev).insertAfter(after);
 		});
