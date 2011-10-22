@@ -72,7 +72,7 @@
 		$('<meta name="repos-base" content="' + qs.base + '" />').appendTo('head');
 	}	
 	
-	$().ready(function() {
+	$(document).ready(function() {
 		var form = $('form.repos-propsearch-gen').addClass('loading');
 		var fieldset = $('fieldset:first-child', form);
 		if (qs.base) {

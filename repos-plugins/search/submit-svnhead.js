@@ -61,7 +61,7 @@
 		cust.trigger('enable');
 	};
 	
-	$().ready(function() {
+	$(document).ready(function() {
 		
 		var form = $('form');
 		
