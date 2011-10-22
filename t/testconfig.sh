@@ -56,7 +56,7 @@ rm -Rf ./t/
 rm htdocs/index.html
 if [ ! -L htdocs/index.php ]
 then
-	ln -s $(pwd)/../www/_host/html/* htdocs/
+	ln -s $(pwd)/../repos-web/_host/html/* htdocs/
 fi
 
 echo "Automatic host setup is not implemented, so after server start"

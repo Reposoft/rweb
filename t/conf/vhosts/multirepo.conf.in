@@ -17,8 +17,8 @@
 	SetEnvIf X-Forwarded-Server "^@ServerName@$" HTTPS=on 
 
 	# Install repos components
-	Alias /repos-web @ServerRoot@/../www
-	Alias /repos-admin @ServerRoot@/../repos-admin
+	Alias /repos-web @ServerRoot@/../repos-web
+	#Alias /repos-admin @ServerRoot@/../repos-admin
 	Alias /repos-plugins @ServerRoot@/../repos-plugins
 	Alias /repos-test @ServerRoot@/../repos-test
 	

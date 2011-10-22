@@ -2,11 +2,11 @@
 <VirtualHost original>
 	# the server name added by Apache::Test sets correct SelfRoot in repos.properties.php
 
-	Alias /repos-web @ServerRoot@/../www
+	Alias /repos-web @ServerRoot@/../repos-web
 	Alias /repos-plugins @ServerRoot@/../repos-plugins
-	Alias /repos-admin @ServerRoot@/../repos-admin
-	Alias /repos-backup @ServerRoot@/../repos-backup
-	Alias /repos-test @ServerRoot@/../repos-test
+	#Alias /repos-admin @ServerRoot@/../repos-admin
+	#Alias /repos-backup @ServerRoot@/../repos-backup
+	#Alias /repos-test @ServerRoot@/../repos-test
 	
 	SetEnv REPOS_TEST_ALLOW_RESET on
 	
@@ -27,8 +27,8 @@
 	ErrorDocument 404 /repos-web/errors/404/
 	ErrorDocument 500 /repos-web/errors/500/
 
-	# Use rewrite based service layer
-	Include @ServerRoot@/../documentation/servicelayer/repos-services.conf
+	# Use rewrite based service layer, not introduced for 1.4 yet
+	#Include @ServerRoot@/../documentation/servicelayer/repos-services.conf
 
 	<Location /data>
 		DAV svn
