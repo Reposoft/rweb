@@ -53,7 +53,7 @@ Repos.proplist.present = function(jqElem, json) {
 	} else if (!json.proplist) {
 		jqElem.append('<p>No properties set</p>');
 	} else {
-		list = $('<dl class="properties"><lh>Versioned properties</lh></dl>');
+		var list = $('<dl class="properties"><lh>Versioned properties</lh></dl>');
 		var keys = [];
 		for (var prop in json.proplist) {
 			keys.push(prop);

@@ -249,7 +249,7 @@ jQuery.fn.say = function(message) {
 (function supportMultiRepo() {
 	var base = Repos.getBase();
 
-	_jQ_ajax = jQuery.ajax;
+	var _jQ_ajax = jQuery.ajax;
 	jQuery.ajax = function(options) {
 		if (base && options.url.match(/[?&]target=/) && !options.url.match(/[?&]base=/)) options.url += '&base=' + base;
 		_jQ_ajax(options);

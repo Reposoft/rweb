@@ -36,7 +36,7 @@
 	});
 
 	Repos.target('/'+u+'/administration/repos.user', function() {
-		if (location.href.indexOf(a)>=0) return; // already in admin
+		if (window.location.href.indexOf(a)>=0) return; // already in admin
 		user();
 		Repos.service('edit/', edit);
 	});

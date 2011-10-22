@@ -17,14 +17,14 @@ Repos.edit = {
 // function to initialize editor on demand
 Repos.edit.loadTinyMce = function() {
 	// from Load on demand example at http://tinymce.moxiecode.com/examples/example_13.php
-	tinyMCE_GZ.init({
+	window.tinyMCE_GZ.init({
 		plugins : "autosave,inlinepopups,fullscreen,save",
 		themes : "advanced",
 		languages : "en",
 		disk_cache : true,
 		debug : false
 	}, function() {
-		tinyMCE.init({
+		window.tinyMCE.init({
 			mode: "exact",
 			elements: 'usertext',
 			plugins: "autosave,inlinepopups,fullscreen,save",

@@ -57,7 +57,7 @@ Repos.propedit = {
 		// suggest property names based on input string, returns array
 		suggest: function(input) {
 			var s = [];
-			for (n in this._r) {
+			for (var n in this._r) {
 				if (n.indexOf(input) == 0) s.push(n); 
 			}
 			return s;
@@ -67,7 +67,7 @@ Repos.propedit = {
 			var p = this._r[propertyName];
 			if (p) return p;
 			// if no exact match see if a regexp matches
-			for (n in this._rr) {
+			for (var n in this._rr) {
 				if (this._rr[n].x.test(propertyName)) return this._rr[n].r;
 			}
 			return false;

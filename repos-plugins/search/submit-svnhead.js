@@ -8,10 +8,10 @@
 	var coreUrl = '/solr/svnhead/';
 	var queryUrl = coreUrl + 'select';
 	
-	ReposSearch_onready = false;
+	window.ReposSearch_onready = false;
 	// There's no better api to configure the request instances
 	//ReposSearchRequest.prototype.url = '/repos-plugins/arbortext/index/svnhead/';
-	ReposSearchRequest.prototype.url = '/solr/svnhead/select';
+	window.ReposSearchRequest.prototype.url = '/solr/svnhead/select';
 	
 	var run = function(form) {
 

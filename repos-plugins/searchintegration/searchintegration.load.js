@@ -1,6 +1,6 @@
 
 // disable default initialization because it adds search box to every page
-ReposSearch_onready = false;
+window.ReposSearch_onready = false;
 
 // integrate search box on start page and in repository index
 Repos.service('index/', ReposSearch.init);

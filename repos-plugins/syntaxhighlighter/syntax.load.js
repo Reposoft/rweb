@@ -46,13 +46,13 @@ Repos.service('open/file/', function() {
 // sets classes on all elements that  sho
 Repos.syntax.setup = function() {
 	// configure
-	SyntaxHighlighter.config.tagName = 'textarea';
+	window.SyntaxHighlighter.config.tagName = 'textarea';
 	// modify page so SyntaxHighlighter will detect the boxes
 	// and load the required brushes
 	$('textarea[readonly]').each( function() {
 		var textarea = this;
 		//console.log('Found readonly textarea class="'+textarea.getAttribute('class')+'" name="'+textarea.name+'"');
-		for(type in Repos.syntax.map) {
+		for(var type in Repos.syntax.map) {
 			if ($(textarea).is('.'+type)) {
 				var brush = Repos.syntax.map[type];
 				Repos.syntax.load(brush);
@@ -94,5 +94,5 @@ Repos.syntax.load = function(brush) {
 
 Repos.syntax.enable = function() {
 	//SyntaxHighlighter.all(); // must be called before window.onload triggers
-	SyntaxHighlighter.highlight(); // see source code for all() method
+	window.SyntaxHighlighter.highlight(); // see source code for all() method
 };

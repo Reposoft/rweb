@@ -41,8 +41,5 @@ Repos.thumbnails.getSrc = function(target, rev, revIsPeg) {
 	} else {
 		console && console.warn('Revision not set for thumbnail. Caching will be disabled.');
 	}
-	if (typeof peg != 'undefined' && peg) {
-		url = url + '&peg=' + peg;
-	}
 	return url;
 };

@@ -35,26 +35,26 @@ function ReposResourceId(text) {
 }
 
 // ----- marking screens -----
-_getReleaseVersion = function(versionText) {
+window._getReleaseVersion = function(versionText) {
 	var rid = new ReposResourceId(versionText);
 	return rid.getTextBefore() + rid.getRelease() + rid.getTextAfter();
 };
 
-_getResourceVersion = function(versionText) {
+window._getResourceVersion = function(versionText) {
 	var rid = new ReposResourceId(versionText);
 	var release = rid.getRelease();
 	if (rid.isTag) return rid.getTextBefore() + release + rid.getTextAfter();
 	return rid.getTextBefore() + release + ' ' + rid.getRevision() + rid.getTextAfter();
 };
 
-_showVersion = function() {
+window._showVersion = function() {
 	try {
 		$('#releaseversion').each( function() {
-			this.innerHTML = _getReleaseVersion(this.innerHTML);
+			this.innerHTML = window._getReleaseVersion(this.innerHTML);
 			this.style.display = 'inline';
 		} );
 		$('#resourceversion').each( function() {
-			this.innerHTML = _getResourceVersion(this.innerHTML);
+			this.innerHTML = window._getResourceVersion(this.innerHTML);
 			this.style.display = 'inline'; // can't set to empty because it might be display:none in css
 		} );
 	} catch (err) {
@@ -62,4 +62,4 @@ _showVersion = function() {
 	}
 };
 
-$(document).ready( function() { _showVersion(); } );
+$(document).ready( function() { window._showVersion(); } );
