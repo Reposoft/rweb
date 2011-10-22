@@ -156,16 +156,16 @@ fieldset {
 fieldset p {
 	clear: left;
 }
-input {
+fieldset input {
 	margin-top: 0.5em;
 }
-legend {
+fieldset legend {
 	color: #666633;
 	font-size: 1.1em;
 	letter-spacing: 0.1em;
 	padding: 0 1em 0 1em;
 }
-label {
+fieldset label {
 	float:left;
 	width:12em;
 	margin-right:0.5em;
@@ -173,7 +173,7 @@ label {
 	text-align:right;
 	font-weight:normal;
 }
-input.required {
+fieldset input.required {
 	background: url(required.png) top right no-repeat;	
 }
 fieldset span.note, fieldset span.warning, fieldset span.error {
