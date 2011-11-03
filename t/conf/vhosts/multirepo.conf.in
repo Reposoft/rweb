@@ -38,11 +38,13 @@
 	ErrorDocument 404 /repos-web/errors/404/
 	ErrorDocument 500 /repos-web/errors/500/
 
-	# Direct proxy for indexing engine, not needed if using repos indexing proxy
+	# CMS webapp proxy, has its own access control
+	ProxyPass /cms ajp://127.0.0.1:8009/cms
+	ProxyPreserveHost On
+
+	# Solr proxy, access control can be a Location block, be sure to protect 8009 in firewall
 	ProxyPass /solr ajp://127.0.0.1:8009/solr
 	ProxyPreserveHost On
-	# Access control can be added in a Location /solr block
-	# Also requires that port 8009 is protected in firewall
 
     # Test that servicelayer module is in python path and that the handler concept works
 	<Location /servicelayer>

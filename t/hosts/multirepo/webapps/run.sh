@@ -16,10 +16,16 @@ rm jetty/webapps/cometd.war
 
 fi
 
+# install dev webapp
+if [ ! -e jetty/webapps/cms.war ]
+then
+ln -sv ~/workspace/cms-webapp/target/cms-webapp.war jetty/webapps/cms.war
+fi
+
+# install solr
 if [ ! -e jetty/webapps/solr.war ]
 then
 
-# install solr
 wget http://apache.dataphone.se/lucene/solr/3.4.0/apache-solr-3.4.0.tgz
 tar xvzf apache-solr-3.4.0.tgz
 mv apache-solr-3.4.0/dist/apache-solr-3.4.0.war jetty/webapps/solr.war
@@ -32,5 +38,8 @@ cd jetty
 #jetty7
 #java -jar start.jar OPTIONS=default,jsp -Djetty.port=8080 -Dsolr.solr.home=/Volumes/Encrypted/workspace/cms/solr/home/
 
-java -Djetty.port=8080 -Dsolr.solr.home=$HOME/workspace/cms/solr/home/ -jar start.jar etc/jetty.xml etc/jetty-ajp.xml
+java -Djetty.port=8080 \
+ -Dsolr.solr.home=$HOME/workspace/cms/solr/home/ \
+ -Dcms.se.simonsoft.cms.hostname=localhost:8531 \
+ -jar start.jar etc/jetty.xml etc/jetty-ajp.xml
 
