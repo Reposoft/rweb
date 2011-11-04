@@ -37,7 +37,9 @@ function getThumbnailCommand($format='', $target='-') {
 	// ImageMagick
 	//return "$format- -thumbnail {$z}x{$z}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
 	// GraphicsMagick
-	return "-size {$z}x{$z} -geometry {$z}x{$z} -quality 75 $format- \"$target\"";
+	//return "-size {$z}x{$z} -geometry {$z}x{$z} -quality 75 $format- \"$target\"";
+	// GraphicsMagick, don't specify format because it won't work with EPS
+	return "-size {$z}x{$z} -geometry {$z}x{$z} -quality 75 - \"$target\"";
 }
 
 // verify that the graphics tool exists
@@ -123,6 +125,8 @@ $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 
 // create the ImageMagick command
 $convert = $convert . ' ' . getThumbnailCommand($extension, $tempfile);
+
+echo "CMS: $convert"; exit;
 
 // integer revision number, can be cached
 $rev = $file->getRevision();
