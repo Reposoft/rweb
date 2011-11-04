@@ -126,8 +126,6 @@ $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 // create the ImageMagick command
 $convert = $convert . ' ' . getThumbnailCommand($extension, $tempfile);
 
-echo "CMS: $convert"; exit;
-
 // integer revision number, can be cached
 $rev = $file->getRevision();
 
