@@ -285,31 +285,31 @@ dl.collapsed dt, dl.collapsed dd,
 	background-image: url('commands/24x24/expandall.png');
 }
 /* common commands */
-#commandbar #back {
+#commandbar #back, #commandbar .back {
 	background-image: url('commands/24x24/back.png');
 }
-#commandbar #repository {
+#commandbar #repository, #commandbar .repository {
 	background-image: url('commands/24x24/repository.png');
 }
-#commandbar #start {
+#commandbar #start, #commandbar .start {
 	background-image: url('commands/24x24/start.png');
 }
-#commandbar #parent {
+#commandbar #parent, #commandbar .parent {
 	background-image: url('commands/24x24/parent.png');
 }
-#commandbar #history {
+#commandbar #history, #commandbar .history {
 	background-image: url('commands/24x24/history.png');
 }
-#commandbar #download {
+#commandbar #download, #commandbar .download {
 	background-image: url('commands/16x16/download.png');
 }
-#commandbar #refresh {
+#commandbar #refresh, #commandbar .refresh {
 	background-image: url('commands/24x24/refresh.png');
 }
-#commandbar #view {
+#commandbar #view, #commandbar .details {
 	background-image: url('commands/24x24/view.png');
 }
-#commandbar #edit {
+#commandbar #edit, #commandbar .edit {
 	background-image: url('commands/24x24/edit.png');
 }
 #commandbar #reposconf {
