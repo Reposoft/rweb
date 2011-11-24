@@ -27,8 +27,8 @@
 	ErrorDocument 404 /repos-web/errors/404/
 	ErrorDocument 500 /repos-web/errors/500/
 
-	# Use rewrite based service layer, not introduced for 1.4 yet
-	#Include @ServerRoot@/../documentation/servicelayer/repos-services.conf
+	# Service URL rewrites
+	Include @ServerRoot@/conf/vhosts/repos-services-singlerepo.conf.include
 
 	<Location /data>
 		DAV svn

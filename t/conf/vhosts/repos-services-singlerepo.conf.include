@@ -31,16 +31,16 @@ RewriteRule 	^/repos-web/(.*)$	%{ENV:REPOS_WEBAPP}$1?rev=%1%2 [PT,QSA]
 
 # Details
 RewriteCond		%{QUERY_STRING}		^rweb=details|.*&rweb=details$
-RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/?base=$1&target=$2 [R,QSA,L]
+RewriteRule		^/data(/.*)$		%{ENV:REPOS_WEBAPP}open/?target=$1 [R,QSA,L]
 
 # History (log), uses absolute URLs in links so PT is already supported
 RewriteCond		%{QUERY_STRING}		^rweb=history|.*&rweb=history$
-RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/log/?base=$1&target=$2 [PT,QSA,L]
+RewriteRule		^/data(/.*)$		%{ENV:REPOS_WEBAPP}open/log/?target=$1 [PT,QSA,L]
 
 # List
 RewriteCond		%{QUERY_STRING}		^rweb=list|.*&rweb=list$
-RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/list/?base=$1&target=$2 [R,QSA,L]
+RewriteRule		^/data(/.*)$		%{ENV:REPOS_WEBAPP}open/list/?target=$1 [R,QSA,L]
 
 # Json, list for folders, details for files, PT supported because there are no links
 RewriteCond		%{QUERY_STRING}		^rweb=json|.*&rweb=json$
-RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/json/?base=$1&target=$2 [PT,QSA,L]
+RewriteRule		^/data(/.*)$		%{ENV:REPOS_WEBAPP}open/json/?target=$1 [PT,QSA,L]
