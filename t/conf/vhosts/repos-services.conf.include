@@ -1,10 +1,10 @@
 # Apache2 configuration for Subversion Service Layer (C) 2007 www.repos.se
+# Included in config per host, not per repository (because rewrite behaves differently in Location)
 
 # Parameters hard coded in the examples below:
-# Repository "/data" = http(s)://HOST/data/
-# Base not supported, but could easily be added with one more capturing group in regex
-
-# The repository must allow non-SSL access from localhost
+# Repository = "/svn"
+# Using parent path, not single repo
+# Many Repos services accept a target that includes /[base], but support is untested
 
 RewriteEngine	on
 
@@ -16,48 +16,31 @@ RewriteRule .* - [E=REPOS_WEBAPP:/repos-web/]
 # Prevent multiple layers of redirects
 RewriteCond %{IS_SUBREQ} !=true
 
+# Until Repos Web pages support links between services, rules do R instead of PT
+# Note that redirect happens before authentication
+# For PT the repository might need to allow non-SSL access from localhost (?)
+
+# Until Repos Web supports ?p instead of ?r, duplicate p= to rev=
+RewriteCond		%{QUERY_STRING}		\?p=(\d+)|&p=(\d+)
+RewriteCond 	%{QUERY_STRING}		!^rev=|.*&rev=
+RewriteRule 	^/repos-web/(.*)$	%{ENV:REPOS_WEBAPP}$1?rev=%1%2 [PT,QSA]
+
 # --- Subversion service layer ---
-
-# Specific revision (not needed in subversion 1.6+ where there is ?p and r)
-#RewriteCond		%{QUERY_STRING}	^rev=\d+$
-#RewriteCond		%{IS_SUBREQ}	!=true
-#RewriteRule		^/data(/.*)$	/repos/open/open/target=$1 [PT,QSA,L]
-
 # Services using ?rweb=[service]
-# because the default output format would probably not match anyway
+# Note that service identifiers must not be substrings of each other
 
 # Details
-#RewriteCond %{QUERY_STRING} ^rweb=details$
-RewriteCond %{QUERY_STRING} ^(p=.*&)?rweb=details$
-RewriteRule ^/svn(/.*)$ %{ENV:REPOS_WEBAPP}open/?%1target=$1 [R,L]
+RewriteCond		%{QUERY_STRING}		^rweb=details|.*&rweb=details$
+RewriteRule		^/svn(/.*)$			%{ENV:REPOS_WEBAPP}open/?target=$1 [R,QSA,L]
 
-# Log
-RewriteCond		%{QUERY_STRING}	^svn=log$
-RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/log/?target=$1 [PT,L]
+# History (log), uses absolute URLs in links so PT is already supported
+RewriteCond		%{QUERY_STRING}		^rweb=history|.*&rweb=history$
+RewriteRule		^/svn(/.*)$			%{ENV:REPOS_WEBAPP}open/log/?target=$1 [PT,QSA,L]
 
-# List xml detailed, currently revision number is not supported
-RewriteCond		%{QUERY_STRING}	^svn=list$
-RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/list/?target=$1 [PT,L]
+# List
+RewriteCond		%{QUERY_STRING}		^rweb=list|.*&rweb=list$
+RewriteRule		^/svn(/.*)$			%{ENV:REPOS_WEBAPP}open/list/?target=$1 [R,QSA,L]
 
-# List JS, current regex would match svn=listjsx too but thats not a big problem
-RewriteCond		%{QUERY_STRING}	^svn=json.*$
-RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/json/?target=$1 [PT,QSA,L]
-
-# --- Repos addons ---
-
-# Startpage
-RewriteCond		%{QUERY_STRING}	^repos$
-RewriteRule		^-disabled-/data/$	%{ENV:REPOS_WEBAPP}open/start/ [PT,L]
-
-# Automatic startpage
-RewriteCond		%{QUERY_STRING}	^$
-RewriteCond		%{REQUEST_URI}	!-U
-RewriteRule		^-disabled-/data/$	/data/?repos&denied=%{REQUEST_URI} [R,L]
-# hmmm... doesn't work... hack: override existing errordocument instad
-# Not needed, as this is done by new logic in the 403 error page
-#<LocationMatch "^/data/$">
-#	ErrorDocument 403 /repos/open/start/
-#</LocationMatch>
-# This logic does not support SVNParentPath
-
-# Projectpage TODO
+# Json, list for folders, details for files, PT supported because there are no links
+RewriteCond		%{QUERY_STRING}		^rweb=json|.*&rweb=json$
+RewriteRule		^/svn(/.*)$			%{ENV:REPOS_WEBAPP}open/json/?target=$1 [PT,QSA,L]
