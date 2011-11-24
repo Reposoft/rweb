@@ -33,6 +33,9 @@ var reposThumblistOnLoad = function() {
 	});
 };
 
+/**
+ * Show thumbnails when repos details plugin is activated to shoẃ list info
+ */
 var reposThumblistOnDetails = function() {
 	$('.index > li').bind('repos-details-displayed', function(ev) {
 		//reposThumbFromListItem.apply(this);
@@ -45,6 +48,17 @@ var reposThumblistOnDetails = function() {
 	$('.index').bind('repos-details-completed', function() {
 		$(window).trigger('scroll'); // TODO better isolation, trigger only inview check
 	});
+};
+
+/**
+ * Show thumbnails immediately.
+ */
+var reposThumblistOnInview = function() {
+	$('.index > li').one('inview', function() {
+		reposThumbFromListItem.apply(this);
+	});
+	// trigger first inview check
+	$(window).trigger('scroll'); // TODO better isolation, trigger only inview check	
 };
 
 /**
@@ -69,4 +83,11 @@ var reposThumbFormatGallerificStyle = function(item, a, name, thumb) {
 	$('.actions', item).appendTo(div);	
 };
 
-Repos.service('index/', reposThumblistOnDetails);
+Repos.service('index/', function() {
+	var base = Repos.getBase();
+	if (base == 'clipart' || base == 'images' || base == 'gallery') {
+		reposThumblistOnInview();
+	} else {
+		reposThumblistOnDetails();
+	}
+});
