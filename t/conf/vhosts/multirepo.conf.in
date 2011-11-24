@@ -78,6 +78,9 @@
 		Header add Cache-Control "max-age=0, must-revalidate"
 	</Location>
 	
+	# Service URL rewrites
+	Include @ServerRoot@/conf/vhosts/repos-services.conf.include
+	
 	# Image transforms repository
 	<Location /repos-thumbs>
 		DAV svn
