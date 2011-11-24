@@ -13,15 +13,23 @@ RewriteEngine	on
 RewriteCond	%{REPOS_WEBAPP}   ^$
 RewriteRule .* - [E=REPOS_WEBAPP:/repos-web/]
 
+# Prevent multiple layers of redirects
+RewriteCond %{IS_SUBREQ} !=true
+
 # --- Subversion service layer ---
 
 # Specific revision (not needed in subversion 1.6+ where there is ?p and r)
-RewriteCond		%{QUERY_STRING}	^rev=\d+$
-RewriteCond		%{IS_SUBREQ}	!=true
-RewriteRule		^/data(/.*)$	/repos/open/open/target=$1 [PT,QSA,L]
+#RewriteCond		%{QUERY_STRING}	^rev=\d+$
+#RewriteCond		%{IS_SUBREQ}	!=true
+#RewriteRule		^/data(/.*)$	/repos/open/open/target=$1 [PT,QSA,L]
 
-# Services using ?svn=[service], not same as modpython sevices (?s=[service])
+# Services using ?rweb=[service]
 # because the default output format would probably not match anyway
+
+# Details
+#RewriteCond %{QUERY_STRING} ^rweb=details$
+RewriteCond %{QUERY_STRING} ^(p=.*&)?rweb=details$
+RewriteRule ^/svn(/.*)$ %{ENV:REPOS_WEBAPP}open/?%1target=$1 [R,L]
 
 # Log
 RewriteCond		%{QUERY_STRING}	^svn=log$
