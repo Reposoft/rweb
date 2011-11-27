@@ -9,6 +9,7 @@ require('../../reposweb.inc.php');
 require(ReposWeb.'open/SvnOpenFile.class.php');
 require('./convert.inc.php');
 require('./graphicstransforms.inc.php');
+reposCustomizationInclude('transforms/graphics.php');
 
 /**
  * @return the root url to the cache repo, should be the external url
@@ -31,27 +32,14 @@ require(ReposWeb.'edit/SvnEdit.class.php');
 
 // create the option string to use with convert command
 function getThumbnailCommand($transform, $format='', $target='-') {
-	$maxWidth = $transform['width'];
-	$maxHeight =  $transform['height'];
+	$maxWidth = $transform->getWidth();
+	$maxHeight =  $transform->getHeight();
 	// todo select -filter?
 	// ImageMagick
 	//if ($format) $format.=':'; // odd but this is how it was in r3111
 	//return "$format- -thumbnail {$maxWidth}x{$maxHeight}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
 	// GraphicsMagick, don't specify format because it won't work with EPS
 	return "-size {$maxWidth}x{$maxHeight} -geometry {$maxWidth}x{$maxHeight} -quality 75 - \"$target\"";
-}
-
-// start processing by getting the selected transform
-$gt = isset($_REQUEST['gt']) ? $_REQUEST['gt'] : 'thumb';
-if (!isset($reposGraphicsTransforms[$gt])) {
-	trigger_error("Unknown graphics transform: $gt", E_USER_ERROR);
-}
-$transform = $reposGraphicsTransforms[$gt];
-if (!isset($transform['width'])) {
-	trigger_error("Graphics transform $gt is invalid, width not set", E_USER_ERROR);
-}
-if (!isset($transform['height'])) {
-	trigger_error("Graphics transform $gt is invalid, height not set", E_USER_ERROR);
 }
 
 // verify that the graphics tool exists
@@ -97,13 +85,30 @@ if (!$r->getValue()) {
 
 // first get the data about the repository image
 $file = new SvnOpenFile(getTarget(), $r->getValue(), true, $revIsPeg);
-$extension = $file->getExtension();
 
 // verify that the source can be accessed
 // note that this requires host-wide login, not only /repos-web/, now that this runs in /repos-plugins
 if ($file->getStatus() != 200) {
 	handleError($file->getStatus(), "Could not read ".$file->getPath()." ".$r->getValue());
 }
+
+// start processing by getting the selected transform
+$tf = isset($_REQUEST['tf']) ? $_REQUEST['tf'] : 'default';
+if (!isset($reposGraphicsTransforms[$tf])) {
+	trigger_error("Unknown graphics transform: $tf", E_USER_ERROR);
+}
+$transformClass = $reposGraphicsTransforms[$tf];
+$transform = new $transformClass($file);
+if (!$transform->getWidth()) {
+	trigger_error("Graphics transform $gt is invalid, width not set", E_USER_ERROR);
+}
+if (!$transform->getHeight()) {
+	trigger_error("Graphics transform $gt is invalid, height not set", E_USER_ERROR);
+}
+$thumbtype = $transform->getOutputFormat();
+
+// needed for some old code
+$extension = $file->getExtension();
 
 // Look for a cached file using a naming rule
 if ($cacheRepo) {
@@ -122,17 +127,12 @@ if ($cacheRepo) {
 	}
 }
 
-// jpeg is generally smaller than png but graphicsmagick produced some invalid images for line art in jpg
-$thumbtype = 'png';
-if (isset($transform['type'])) { // output type can be set explicitly in transform definition
-	$thumbtype = 'type';
-} else if (preg_match('/^jpe?g|raw/i', $file->getExtension())) {
-	$thumbtype = 'jpeg';
-}
-
 // Originals could be large so we should avoid local storage if possible, but need
 // alternative flow for convert that fails with stdin, such as when ralcgm is used 
-$temporg = ($extension != 'cgm') ? false : System::getTempFile('thumb', '.'.$extension);
+$temporg = false;
+if ($extension == 'cgm') {
+	false : System::getTempFile('thumb', '.'.$extension);
+}
 
 // thumbnails are small, so we can store them on disc
 $tempfile = System::getTempFile('thumb', '.'.$thumbtype);

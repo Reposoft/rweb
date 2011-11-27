@@ -17,9 +17,24 @@
  * @see Presentation
  * @package conf
  */
-define('REPOS_VERSION','1.3');
+define('REPOS_VERSION','1.4');
 
 // ----- global settings -----
+
+// Folder where conditionally included customizations can be located
+define('ReposCust', isset($_SERVER['REPOS_LOCAL_CUST']) ?
+$_SERVER['REPOS_LOCAL_CUST']
+: dirname(dirname(dirname(__FILE__))).'/repos-cust/');
+
+/**
+ * Load a customization, given id=path, if it exists.
+ */
+function reposCustomizationInclude($path) {
+	$custFile = ReposCust.$path;
+	if (file_exists($custFile)) {
+		require_once $custFile;
+	}
+}
 
 // PHP4 does not have exceptions, so we use 'trigger_error' as throw Exception.
 // - code should not do 'exit' after trigger_error, because that does not allow unit testing.
