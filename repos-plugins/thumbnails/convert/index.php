@@ -8,7 +8,7 @@
 require('../../reposweb.inc.php');
 require(ReposWeb.'open/SvnOpenFile.class.php');
 require('./convert.inc.php');
-define('THUMB_SIZE', 150);
+require('./graphicstransforms.inc.php');
 
 /**
  * @return the root url to the cache repo, should be the external url
@@ -30,16 +30,28 @@ function getThumbnailCacheRepoDefault() {
 require(ReposWeb.'edit/SvnEdit.class.php');
 
 // create the option string to use with convert command
-function getThumbnailCommand($format='', $target='-') {
-	$z = THUMB_SIZE;
-	if ($format) $format.=':';
+function getThumbnailCommand($transform, $format='', $target='-') {
+	$maxWidth = $transform['width'];
+	$maxHeight =  $transform['height'];
 	// todo select -filter?
 	// ImageMagick
-	//return "$format- -thumbnail {$z}x{$z}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
-	// GraphicsMagick
-	//return "-size {$z}x{$z} -geometry {$z}x{$z} -quality 75 $format- \"$target\"";
+	//if ($format) $format.=':'; // odd but this is how it was in r3111
+	//return "$format- -thumbnail {$maxWidth}x{$maxHeight}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
 	// GraphicsMagick, don't specify format because it won't work with EPS
-	return "-size {$z}x{$z} -geometry {$z}x{$z} -quality 75 - \"$target\"";
+	return "-size {$maxWidth}x{$maxHeight} -geometry {$maxWidth}x{$maxHeight} -quality 75 - \"$target\"";
+}
+
+// start processing by getting the selected transform
+$gt = isset($_REQUEST['gt']) ? $_REQUEST['gt'] : 'thumb';
+if (!isset($reposGraphicsTransforms[$gt])) {
+	trigger_error("Unknown graphics transform: $gt", E_USER_ERROR);
+}
+$transform = $reposGraphicsTransforms[$gt];
+if (!isset($transform['width'])) {
+	trigger_error("Graphics transform $gt is invalid, width not set", E_USER_ERROR);
+}
+if (!isset($transform['height'])) {
+	trigger_error("Graphics transform $gt is invalid, height not set", E_USER_ERROR);
 }
 
 // verify that the graphics tool exists
@@ -95,7 +107,7 @@ if ($file->getStatus() != 200) {
 
 // Look for a cached file using a naming rule
 if ($cacheRepo) {
-	$transformId = THUMB_SIZE.'x'.THUMB_SIZE;
+	$transformId = $gt; // this assumes that the cache repo is cleared if transform definitions change
 	$revision = $file->getRevision();
 	$name = $file->getFilename();
 	$dot = strrpos($name, '.');
@@ -112,7 +124,9 @@ if ($cacheRepo) {
 
 // jpeg is generally smaller than png but graphicsmagick produced some invalid images for line art in jpg
 $thumbtype = 'png';
-if (preg_match('/^jpe?g|raw/i', $extension)) {
+if (isset($transform['type'])) { // output type can be set explicitly in transform definition
+	$thumbtype = 'type';
+} else if (preg_match('/^jpe?g|raw/i', $file->getExtension())) {
 	$thumbtype = 'jpeg';
 }
 
@@ -123,8 +137,8 @@ $temporg = ($extension != 'cgm') ? false : System::getTempFile('thumb', '.'.$ext
 // thumbnails are small, so we can store them on disc
 $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 
-// create the ImageMagick command
-$convert = $convert . ' ' . getThumbnailCommand($extension, $tempfile);
+// create the ImageMagick/GraphicsMagick command
+$convert = $convert . ' ' . getThumbnailCommand($transform, $extension, $tempfile);
 
 // integer revision number, can be cached
 $rev = $file->getRevision();
@@ -173,9 +187,11 @@ if (!file_exists($tempfile) || !filesize($tempfile)) {
 	}
 }
 
-// thumbnails can be cached permanently if target and revsion number is in the url
+// thumbnails can be cached permanently if target and revsion number is in the url, caches should be user-private
 if ($r->getValue()) {
-	header('Cache-Control: max-age=8640000');
+	header('Cache-Control: private, max-age=8640000');
+} else {
+	header('Cache-Control: private');
 }
 
 // send from the tempfile
