@@ -133,21 +133,33 @@ if ($temporg) {
 	unlink($temporg);
 }
 
+// Page param, if >0 the file must be multi-page
+$page = isset($_REQUEST['page']) ? $_REQUEST['page'] - 1 : '0';
+
 // it might happen that convert exits with code 0 but the thumbnail is not created
 if (!file_exists($tempfile) || !filesize($tempfile)) {
 	// then it might be because the source has multiple pages
 	// in which case we create each page as a separate thumb
 	// (this is quite inefficient but I found no way to restrict to first page when using stdin as source)
 	if (file_exists("$tempfile.0")) {
+		// Select page based on query param
+		// Optimization idea: use the temporg concept for PDFs and when page param isset 
+		if ($page && !file_exists("$tempfile.$page")) {
+			handleError(404, "Page ".($page + 1)." not found");
+		}
 		// delete the others
 		System::deleteFile("$tempfile");
-		for ($p = 1; file_exists("$tempfile.$p"); $p++) {
-			System::deleteFile("$tempfile.$p");
+		for ($p = 0; file_exists("$tempfile.$p"); $p++) {
+			if ($p != $page) System::deleteFile("$tempfile.$p");
 		}
-		$tempfile = "$tempfile.0";
+		$tempfile = "$tempfile.$page";
 	} else {
 		// otherwise show output from command (which is probably empty)
 		handleError(0, implode('"\n"', $o->getOutput()));
+	}
+} else {
+	if ($page > 0) {
+		handleError(0, "Page ".($page + 1)." was requested but transform output is single page");
 	}
 }
 
