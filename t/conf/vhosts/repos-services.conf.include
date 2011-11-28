@@ -1,10 +1,8 @@
 # Apache2 configuration for Subversion Service Layer (C) 2007 www.repos.se
 # Included in config per host, not per repository (because rewrite behaves differently in Location)
 
-# Parameters hard coded in the examples below:
-# Repository = "/svn"
-# Using parent path, not single repo
-# Many Repos services accept a target that includes /[base], but support is untested
+# Hard coded settings:
+# Parent path = /svn
 
 RewriteEngine	on
 
@@ -44,3 +42,33 @@ RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/list/?base=$1&target=$2
 # Json, list for folders, details for files, PT supported because there are no links
 RewriteCond		%{QUERY_STRING}		^rweb=json|.*&rweb=json$
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/json/?base=$1&target=$2 [PT,QSA,L]
+
+# Proplist Json, PT supported because there are no links
+RewriteCond		%{QUERY_STRING}		^rweb=proplist|.*&rweb=proplist$
+RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/proplist/?base=$1&target=$2 [PT,QSA,L]
+
+# View in Repos
+RewriteCond		%{QUERY_STRING}		^rweb=view|.*&rweb=view$
+RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/view/?base=$1&target=$2 [PT,QSA,L]
+
+# --- Edit operations, convenient access from index ---
+
+# New folder
+RewriteCond		%{QUERY_STRING}		^rweb=mkdir|.*&rweb=mkdir$
+RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/mkdir/?base=$1&target=$2 [R,QSA,L]
+
+# Upload, new file when on folder, new version when on file
+RewriteCond		%{QUERY_STRING}		^rweb=upload|.*&rweb=upload$
+RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/upload/?base=$1&target=$2 [R,QSA,L]
+
+# Edit text, note that upload POST should go to 'upload'
+# TODO should there be a generic 'edit' service with support for different formats, plaintext, svg-edit, html...?
+RewriteCond		%{QUERY_STRING}		^rweb=text|.*&rweb=text$
+RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/text/?base=$1&target=$2 [R,QSA,L]
+
+# --- Transforms ---
+# All these services must start with t, names must be word characters a-z0-9_
+
+# Repos thumbnails plugin, "tothumb" etc, p and r are supported
+RewriteCond		%{QUERY_STRING}		^rweb=to(\w+)|.*&rweb=to(\w+)$
+RewriteRule		^/svn/([^/]+)(/.*)$	/repos-plugins/thumbnails/convert/?base=$1&target=$2&tf=%1%2 [PT,QSA,L]
