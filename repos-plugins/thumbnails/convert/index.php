@@ -26,10 +26,13 @@ function getThumbnailCommand($transform, $format='', $target='-') {
 // verify that the graphics tool exists
 $convert = convertGetCommand();
 
-exec("$convert -version", $output, $result);
-if ($result > 1) {
-	//echo($result);print_r($output);
-	handleError('[convert not installed]','','empty.jpg');
+// handleError can print text output when an image url is read using copy-paste in browser or curl
+if (!getHttpReferer()) {
+	exec("$convert -version", $output, $result);
+	if ($result > 1) {
+		//echo($result);print_r($output);
+		handleError('[convert not installed]','','empty.jpg');
+	}
 }
 
 // can't be sure that the browser automatically forwards credentials to this plugin folder
