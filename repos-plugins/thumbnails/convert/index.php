@@ -101,12 +101,14 @@ $convert = $convert . ' ' . getThumbnailCommand($transform, $file->getExtension(
 $o = new SvnOpen($temporg ? 'export' : 'cat');
 
 // Set revision, three cases
-// 1. Revision not given, we still want revision in order to make result cacheable
 if (!$r->getValue()) {
+	// 1. Revision not given, we still want revision in order to make result cacheable
 	$o->addArgUrlPeg(getTargetUrl(), $file->getRevision()); // RevisionLastChanged could be before a folder copy
 } else if ($revIsPeg) {
+	// 2. Revision given as target and its peg rev, typically when coming from history etc
 	$o->addArgUrlPeg(getTargetUrl(), $r->getValue()); // trust the caller to match target and peg rev
 } else {
+	// 3. Revision given as some revision of the item at a HEAD url
 	$o->addArgUrl(getTargetUrl()); // Should be HEAD url
 	$o->addArgOption('-r', $r->getValue());
 }
