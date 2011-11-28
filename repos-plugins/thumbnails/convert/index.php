@@ -11,25 +11,6 @@ require('./convert.inc.php');
 require('./graphicstransforms.inc.php');
 reposCustomizationInclude('transforms/graphics.php');
 
-/**
- * @return the root url to the cache repo, should be the external url
- * so that cients can read resources directly from cache.
- * The cache repository can use caching because all URLs
- * sent to client will include the revsion number.
- */
-function getThumbnailCacheRepo() {
-	// TODO server setting like those read in repos.properties.php
-	// return getThumbnailCacheRepoDefault();
-	return false; // caching disabled
-}
-
-function getThumbnailCacheRepoDefault() {
-	preg_replace('/\b\/[^\/]+/', '/repos-thumbs', getRepository(), 1);
-}
-
-// for caching
-require(ReposWeb.'edit/SvnEdit.class.php');
-
 // create the option string to use with convert command
 function getThumbnailCommand($transform, $format='', $target='-') {
 	$maxWidth = $transform->getWidth();
@@ -49,12 +30,6 @@ exec("$convert -version", $output, $result);
 if ($result > 1) {
 	//echo($result);print_r($output);
 	handleError('[convert not installed]','','empty.jpg');
-}
-
-// Enable caching in parallell repository, set $cacheRepo = false to disable
-$cacheRepo = getThumbnailCacheRepo();
-if (strBegins(getSelfUrl(), $cacheRepo) && !isset($_REQUEST['target'])) {
-	trigger_error('On-demand thumbnail generation not implemented yet');
 }
 
 // can't be sure that the browser automatically forwards credentials to this plugin folder
@@ -110,23 +85,6 @@ $thumbtype = $transform->getOutputFormat();
 // needed for some old code
 $extension = $file->getExtension();
 
-// Look for a cached file using a naming rule
-if ($cacheRepo) {
-	$transformId = $gt; // this assumes that the cache repo is cleared if transform definitions change
-	$revision = $file->getRevision();
-	$name = $file->getFilename();
-	$dot = strrpos($name, '.');
-	$name = substr($name, 0, $dot).'(r'.$file->getRevision().')'.".$transformId".substr($name,$dot).'.jpg';
-	$cacheTarget = getTarget().'/'.$revision.'/'.$name;
-	$cacheSave = getTarget().'/repos.lock';
-	$cacheUrl = $cacheRepo.$cacheTarget;
-	$existing = new ServiceRequest($cacheUrl);
-	if ($existing->exec() == 200) {
-		header("Location: $cacheUrl");
-		exit;
-	}
-}
-
 // Originals could be large so we should avoid local storage if possible, but need
 // alternative flow for convert that fails with stdin, such as when ralcgm is used 
 $temporg = false;
@@ -139,9 +97,6 @@ $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 
 // create the ImageMagick/GraphicsMagick command
 $convert = $convert . ' ' . getThumbnailCommand($transform, $extension, $tempfile);
-
-// integer revision number, can be cached
-$rev = $file->getRevision();
 
 $o = new SvnOpen($temporg ? 'export' : 'cat');
 //$o->addArgOption('-r', $rev);
@@ -196,14 +151,6 @@ if ($r->getValue()) {
 
 // send from the tempfile
 showImage($tempfile, $thumbtype);
-
-// done displaying thumbnail, store in cache if enabled
-if ($cacheRepo) {
-	$import = new SvnEdit('import');
-	$import->addArgPath($tempfile);
-	$import->addArgUrl($cacheUrl);
-	$import->execNoDisplay();
-}
 
 System::deleteFile($tempfile);
 
