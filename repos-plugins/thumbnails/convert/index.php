@@ -54,12 +54,10 @@ if (isset($_REQUEST['r'])) {
 }
 
 $r = new RevisionRule($revField);
-// Validation::expect('rev'); // explicit revision number required for caching
-if (!$r->getValue()) {
-	//handleError(412, "Revision number required ".$r->getValue());
-} else {
-	// enable caching, see below
-}
+// Existence of revision argument enables caching but is not required
+//if (!$r->getValue()) {
+//	handleError(412, "Revision number required ".$r->getValue());
+//}
 
 // first get the data about the repository image
 $file = new SvnOpenFile(getTarget(), $r->getValue(), true, $revIsPeg);
@@ -85,21 +83,18 @@ if (!$transform->getHeight()) {
 }
 $thumbtype = $transform->getOutputFormat();
 
-// needed for some old code
-$extension = $file->getExtension();
-
 // Originals could be large so we should avoid local storage if possible, but need
 // alternative flow for convert that fails with stdin, such as when ralcgm is used 
 $temporg = false;
-if ($extension == 'cgm') {
-	false : System::getTempFile('thumb', '.'.$extension);
+if ($file->getExtension() == 'cgm') {
+	false : System::getTempFile('thumb', '.'.$file->getExtension());
 }
 
 // thumbnails are small, so we can store them on disc
 $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 
 // create the ImageMagick/GraphicsMagick command
-$convert = $convert . ' ' . getThumbnailCommand($transform, $extension, $tempfile);
+$convert = $convert . ' ' . getThumbnailCommand($transform, $file->getExtension(), $tempfile);
 
 $o = new SvnOpen($temporg ? 'export' : 'cat');
 //$o->addArgOption('-r', $rev);
