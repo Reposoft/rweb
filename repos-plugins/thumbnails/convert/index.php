@@ -59,7 +59,9 @@ $r = new RevisionRule($revField);
 //	handleError(412, "Revision number required ".$r->getValue());
 //}
 
-// first get the data about the repository image
+// First get the data about the repository image
+// Consider this an implementation of ReposGraphicsTransformSource
+// We only use SvnOpenFile to check existence, and the operation could maybe be made faster as we don't need the info
 $file = new SvnOpenFile(getTarget(), $r->getValue(), true, $revIsPeg);
 
 // verify that the source can be accessed
@@ -97,12 +99,19 @@ $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 $convert = $convert . ' ' . getThumbnailCommand($transform, $file->getExtension(), $tempfile);
 
 $o = new SvnOpen($temporg ? 'export' : 'cat');
-//$o->addArgOption('-r', $rev);
-//$o->addArgUrl(getTargetUrl());
-// stricter, based on results from svn info, produces unique key with url@last-changed-rev
-$rev = $file->getRevisionLastChanged();
-$urlForPeg = rawurldecode($file->file['url']); // getUrl is urlRequested
-$o->addArgUrlPeg($urlForPeg, $rev); // $rev is a peg revision
+
+// Set revision, three cases
+// 1. Revision not given, we still want revision in order to make result cacheable
+if (!$r->getValue()) {
+	$o->addArgUrlPeg(getTargetUrl(), $file->getRevision()); // RevisionLastChanged could be before a folder copy
+} else if ($revIsPeg) {
+	$o->addArgUrlPeg(getTargetUrl(), $r->getValue()); // trust the caller to match target and peg rev
+} else {
+	$o->addArgUrl(getTargetUrl()); // Should be HEAD url
+	$o->addArgOption('-r', $r->getValue());
+}
+
+// command output
 if ($temporg) {
 	$o->addArgPath($temporg);
 } else {
