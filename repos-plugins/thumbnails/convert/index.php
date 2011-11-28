@@ -1,8 +1,8 @@
 <?php
 /**
- *
- *
- * @package
+ * Produces graphics transforms on the fly.
+ * 
+ * Uses temp files for output. Might leave temp files in case of errors.
  */
 
 require('../../reposweb.inc.php');
@@ -89,7 +89,7 @@ $thumbtype = $transform->getOutputFormat();
 // alternative flow for convert that fails with stdin, such as when ralcgm is used 
 $temporg = false;
 if ($file->getExtension() == 'cgm') {
-	false : System::getTempFile('thumb', '.'.$file->getExtension());
+	$temporg = System::getTempFile('thumb', '.'.$file->getExtension());
 }
 
 // thumbnails are small, so we can store them on disc
