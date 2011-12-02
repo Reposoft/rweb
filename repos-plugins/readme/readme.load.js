@@ -4,10 +4,10 @@ $(document).bind('repos-readme-loaded', function(ev, container) {});
 
 Repos.service('index/', function() {
 	// check file list for one named acconrding to convetion
-	var readme = $('a.file[href="repos.txt"]')[0];
+	var readme = $('#open\\:repos\\.txt')[0];
 	// display contents if it exists
 	if (typeof readme != 'undefined') {
-		$.get(readme.href, function(data) {
+		$.get(readme.href.replace(/(\?|&)rweb=\w+/, ''), function(data) {
 			$('body').say({tag:'p',id:"repos-readme",
 				text:data.replace(/\r?\n/g,'<br />'),
 				title:'Contents of repos.txt'
@@ -17,10 +17,10 @@ Repos.service('index/', function() {
 		return;
 	}
 	// OR readme as XHTML
-	readme = $('a.file[href="repos.html"]')[0];
+	readme = $('#open\\:repos\\.html')[0];
 	if (typeof readme != 'undefined') {
 		$('body').say({id:'repos-readme'});
-		$('#repos-readme').load(readme.href, function() {
+		$('#repos-readme').load(readme.href.replace(/(\?|&)rweb=\w+/, '$1'), function() {
 			$(document).trigger('repos-readme-loaded', [this]);
 		});
 		return;

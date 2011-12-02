@@ -246,6 +246,7 @@ jQuery.fn.say = function(message) {
  * (otherwise every plugin would need if-else for SVNPath/SVNParentPath)
  * It is still undecided how the GUI knows if server user SVNParentPath.
  */
+/* Disabled to see how compatible we are, now there's ?rweb= so base should be implicit
 (function supportMultiRepo() {
 	var base = Repos.getBase();
 
@@ -255,6 +256,7 @@ jQuery.fn.say = function(message) {
 		_jQ_ajax(options);
 	};
 })();
+ */
 
 	/*
 	 Dynamic loading of scripts and css has been disabled,
