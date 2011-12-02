@@ -2,7 +2,7 @@
 <!--
   ==== Repos Subversion directory listing layout ====
   Used as SVNIndexXSLT in repository configuration.
-  (c) 2005-2007 Staffan Olsson www.repos.se
+  (c) 2005-2011 Staffan Olsson www.repos.se
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
 	<!-- start transform -->
@@ -16,10 +16,8 @@
 	<xsl:param name="cssUrl"><xsl:value-of select="$static"/>style/</xsl:param>
 	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
 	<xsl:param name="editUrl"><xsl:value-of select="$web"/>edit/</xsl:param>
-	<!-- we don't want to force the CSS to set margins everywhere -->
-	<xsl:param name="spacer" select="' &#160; '"/>
 	<!-- optional startpage to enable home button and special link for project, empty to disable -->
-	<xsl:param name="startpage"><xsl:value-of select="$web"/>open/start/</xsl:param>
+	<xsl:param name="startpage">/?rweb=start</xsl:param>
 	<!-- link up, empty to hide up button -->
 	<xsl:param name="parentlink">../</xsl:param>
 	<!-- the recognized top level folders for project tools separated by slash -->
@@ -72,6 +70,7 @@
 		</xsl:param>
 		<xsl:param name="pathlinks">
 			<xsl:call-template name="getFolderPathLinks">
+				<xsl:with-param name="base" select="/svn/index/@base"/>
 				<xsl:with-param name="folders" select="$folder"/>
 				<xsl:with-param name="toolcheck" select="string-length($tool)>1 or $tool='.'"/>
 			</xsl:call-template>
@@ -117,7 +116,6 @@
 		<xsl:param name="pathlinks"/>
 		<xsl:param name="toolcheck"/>
 		<h2 id="path">
-			<span id="base"><xsl:value-of select="/svn/index/@base"/></span>
 			<xsl:copy-of select="$pathlinks"/>
 		</h2>
 		<ul class="index">
@@ -233,6 +231,7 @@
 	</xsl:template>
 	<!-- divide a path into its elements and make one link for each, expects folders to end with '/' -->
 	<xsl:template name="getFolderPathLinks">
+		<xsl:param name="base"/>
 		<xsl:param name="folders"/>
 		<xsl:param name="toolcheck"/>
 		<xsl:param name="f" select="substring-before($folders, '/')"/>
@@ -260,6 +259,9 @@
 				<xsl:with-param name="filename" select="$return"/>
 			</xsl:call-template>
 		</xsl:param>
+		<xsl:if test="$base">
+			<a id="base" href="{$return}"><xsl:value-of select="$base"/></a>
+		</xsl:if>
 		<xsl:if test="not($rest)">
 			<span id="folder" class="path{$classadd}">
 				<xsl:value-of select="$f"/>
