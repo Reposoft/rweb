@@ -44,7 +44,7 @@ RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/proplist/?base=$1&targe
 
 # View in Repos
 RewriteCond		%{QUERY_STRING}		^rweb=view|.*&rweb=view$
-RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/view/?base=$1&target=$2 [PT,QSA,L]
+RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/file/?base=$1&target=$2 [R,QSA,L]
 
 # --- Edit operations, convenient access from index ---
 
