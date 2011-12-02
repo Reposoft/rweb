@@ -39,7 +39,7 @@ if (isset($_GET['redirect']) && $_GET['redirect']) {
 			// asLink/urlSpecialChars and urlEncodeNames cannot be combined
 			header('Location: '.asLink(getRepository()).urlEncodeNames($target));
 		} else {
-			header('Location: '.asLink($file->getUrl()));
+			header('Location: '.asLink($file->getUrlNoquery())); // TODO should we support rev in redirect?
 		}
 	}
 	exit;

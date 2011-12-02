@@ -16,6 +16,8 @@ function reposExportZip(/*SvnOpenFile*/ $folder) {
 	
 	// export target to temp folder
 	$export = new SvnOpen('export');
+	// TODO make use of peg revision, this logic fails for folder with revision specified that is no longer in HEAD
+	// TODO consider using the same as SvnOpenFile->_specifyUrlAndRev
 	$export->addArgRevision($folder->getRevision());
 	$export->addArgUrl($folder->getUrl());
 	$export->addArgPath($tmpe);

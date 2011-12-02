@@ -118,6 +118,13 @@
 		<h2 id="path">
 			<xsl:copy-of select="$pathlinks"/>
 		</h2>
+		<!-- TODO add support or make this test more robust, for example work when there's no updir -->
+		<xsl:if test="/svn/index/updir/@href = concat('../?p=', /svn/index/@rev)">
+			<p class="warning">
+				Browsing a specific revision. This is not fully supported so some links to Repos Web will fail.
+				You may <a href="./">return to browsing latest</a> if this folder still exists.
+			</p>
+		</xsl:if>
 		<ul class="index">
 			<xsl:apply-templates select="dir">
 				<xsl:sort select="@name"/>

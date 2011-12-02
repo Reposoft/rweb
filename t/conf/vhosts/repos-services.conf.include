@@ -18,11 +18,6 @@ RewriteCond %{IS_SUBREQ} !=true
 # Note that redirect happens before authentication
 # For PT the repository might need to allow non-SSL access from localhost (?)
 
-# Until Repos Web supports ?p instead of ?r, duplicate p= to rev=
-RewriteCond		%{QUERY_STRING}		\?p=(\d+)|&p=(\d+)
-RewriteCond 	%{QUERY_STRING}		!^rev=|.*&rev=
-RewriteRule 	^/repos-web/(.*)$	%{ENV:REPOS_WEBAPP}$1?rev=%1%2 [PT,QSA]
-
 # --- Subversion service layer ---
 # Services using ?rweb=[service]
 # Note that service identifiers must not be substrings of each other
@@ -66,9 +61,20 @@ RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/upload/?base=$1&target=
 RewriteCond		%{QUERY_STRING}		^rweb=text|.*&rweb=text$
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/text/?base=$1&target=$2 [R,QSA,L]
 
+# Propedit, currently not supported for folders
+RewriteCond		%{QUERY_STRING}		^rweb=propedit|.*&rweb=propedit$
+RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/propedit/?base=$1&target=$2 [R,QSA,L]
+
 # --- Transforms ---
 # All these services must start with t, names must be word characters a-z0-9_
 
 # Repos thumbnails plugin, "tothumb" etc, p and r are supported
 RewriteCond		%{QUERY_STRING}		^rweb=to(\w+)|.*&rweb=to(\w+)$
 RewriteRule		^/svn/([^/]+)(/.*)$	/repos-plugins/thumbnails/convert/?base=$1&target=$2&tf=%1%2 [PT,QSA,L]
+
+# --- Post processing, should apply to both R and PT ---
+
+# Until Repos Web supports ?p instead of ?r, duplicate p= to rev=
+RewriteCond		%{QUERY_STRING}		\?p=(\d+)|&p=(\d+)
+RewriteCond 	%{QUERY_STRING}		!^rev=|.*&rev=
+RewriteRule 	^/repos-web/(.*)$	%{ENV:REPOS_WEBAPP}$1?rev=%1%2 [PT,QSA]

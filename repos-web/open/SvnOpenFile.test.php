@@ -15,6 +15,51 @@ class TestSvnOpenFile extends UnitTestCase {
 		$_SERVER['SERVER_NAME'] = 'localhost';
 	}
 	
+	function testGetUrl() {
+		$repo = SvnOpenFile::getRepository();
+		$f = new SvnOpenFile('/a/b.txt');
+		$this->assertEqual("$repo/a/b.txt", $f->getUrl());
+		$this->assertEqual("$repo/a/b.txt", $f->getUrlNoquery());
+		$this->assertEqual("$repo/a/", $f->getFolderUrl());
+		$this->assertEqual(true, $f->isRevisionPeg());
+		// TODO could test here that even if we read file info
+		// that revision number is NOT appended
+	}
+	
+	/* If we support folders for this class maybe the definition of getFolderUrl should change
+	function testGetFolderUrl() {
+		$repo = SvnOpenFile::getRepository();
+		$f2 = new SvnOpenFile('/a/');
+		$this->assertEqual("$repo/a/", $f2->getFolderUrl());
+		// obviously
+		$f3 = new SvnOpenFile('/a');
+		$this->assertEqual("$repo/", $f3->getFolderUrl());
+	}*/
+	
+	function testGetUrlRevisionPeg() {
+		$repo = SvnOpenFile::getRepository();
+		$f = new SvnOpenFile('/a/b.txt', 3, false);
+		$this->assertEqual(true, $f->isRevisionPeg());
+		$this->assertEqual("$repo/a/b.txt?p=3", $f->getUrl());
+		$this->assertEqual("$repo/a/b.txt", $f->getUrlNoquery());
+		// TODO $this->assertEqual("$repo/a/?p=3", $f->getFolderUrl());		
+	}
+	
+	function testGetUrlRevisionNotpeg() {
+		$repo = SvnOpenFile::getRepository();
+		$f = new SvnOpenFile('/a/b.txt', 7, false, false);
+		$this->assertEqual(false, $f->isRevisionPeg());
+		$this->assertEqual("$repo/a/b.txt?r=7", $f->getUrl());
+		$this->assertEqual("$repo/a/b.txt", $f->getUrlNoquery());
+		// TODO $this->assertEqual("$repo/a/?r=7", $f->getFolderUrl());
+	}
+	
+	function testGetUrlEncoding() {
+		$repo = SvnOpenFile::getRepository();
+		$file = new SvnOpenFile('/å/ä.txt');
+		$this->assertEqual($repo.'/å/ä.txt', $file->getUrl(), 'We never bothered to encode URLs. Maybe we should?');
+	}
+	
 	function testParseListXml() {
 		$list = explode("\n",
 			'<?xml version="1.0"?>

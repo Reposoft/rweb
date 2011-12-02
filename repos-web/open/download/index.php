@@ -7,7 +7,7 @@
 require("../SvnOpenFile.class.php" );
 
 $revisionRule = new RevisionRule();
-
+// if revision is set it is peg
 $file = new SvnOpenFile(getTarget(), $revisionRule->getValue());
 if ($file->getStatus() != 200) {
 	// TODO have some kind of forwarding to the error pages for matching status code
@@ -19,6 +19,8 @@ if ($file->getStatus() != 200) {
 // Revision number should be "last changed" so we don't get different downloads for identical file
 // This is also the revision number expected by the "based on version" feature in upload changes
 // For folders: last changed revision can not be used because subitems might have changed
+// TODO this is false, commit revision changes when folder contents change,
+//  consider using the same for folders as for files, see also zipfolder export args
 $namerev = $file->isFolder() ? $file->getRevision() : $file->getRevisionLastChanged();
 $name = $file->getFilenameWithoutExtension() . '(r'.$namerev.')';
 if ($file->getExtension()) {

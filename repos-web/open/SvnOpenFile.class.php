@@ -151,7 +151,7 @@ class SvnOpenFile {
 	 * @param boolean $revisionIsPeg set to false if the path is from HEAD but the revision migt be older
 	 * @return SvnOpenFile
 	 */
-	function SvnOpenFile($path, $revision=null, $validate=true, $revisionIsPeg=null) {
+	function SvnOpenFile($path, $revision=null, $validate=true, $revisionIsPeg=true) {
 		$this->path = $path;
 		// TODO split between internal and external use and call getRespositoryInternal where possible
 		$this->url = SvnOpenFile::getRepository().$path;
@@ -297,12 +297,32 @@ class SvnOpenFile {
 	}
 	
 	/**
-	 * @return string The URL for this item, TODO with ?p=[peg rev] if a revision is requested.
+	 * @return string The URL for this item, with ?p= or ?r= if a revision is requested.
 	 */
 	function getUrl() {
+		$u = $this->getUrlNoquery();
+		if ($this->isRevisionRequested()) {
+			if ($this->isRevisionPeg()) {
+				$u .= '?p=';
+			} else {
+				$u .= '?r=';
+			}
+			$u .= $this->getRevisionRequested();
+		}
+		return $u;
+	}
+	
+	/**
+	 * No-query version of URL.
+	 * @return string The URL without query parameters like revision
+	 */
+	function getUrlNoquery() {
 		return $this->url;
 	}
 	
+	/**
+	 * @return string Parent URL, even for folders. Legacy behavior.
+	 */
 	function getFolderUrl() {
 		return $this->getRepository().$this->getFolderPath();
 	}
@@ -391,8 +411,9 @@ class SvnOpenFile {
 	function _isWritable() {
 		if (!$this->isLatestRevision()) return false;
 		if ($this->getStatus() == 404) return false;
-		if ($this->isFolder()) return _svnFolderIsWritable($this->getUrl());
-		return _svnFileIsWritable($this->getUrl());
+		// TODO using noquery here but shouldn't we say no immediately if rev is requested and not HEAD? See isLatestRevision issues though.
+		if ($this->isFolder()) return _svnFolderIsWritable($this->getUrlNoquery());
+		return _svnFileIsWritable($this->getUrlNoquery());
 	}
 	
 	/**
@@ -503,6 +524,14 @@ class SvnOpenFile {
 	 */
 	function isRevisionRequested() {
 		return $this->_revision !== null;
+	}
+	
+	/**
+	 * @return boolean true if revision was requested as peg, 
+	 *  or not requested and getRevision returns a proper peg which we assume it does
+	 */
+	function isRevisionPeg() {
+		return $this->_revisionIsPeg;
 	}
 	
 	/**
@@ -650,9 +679,9 @@ class SvnOpenFile {
 	 * @param $svnOpen SvnOpen instance
 	 */
 	function _specifyUrlAndRev($svnOpen) {
-		$svnOpen->addArgUrlRev($this->url, 
+		$svnOpen->addArgUrlRev($this->getUrlNoquery(), 
 				$this->getRevisionRequestedString(),
-				$this->_revisionIsPeg);	
+				$this->isRevisionPeg());	
 	}
 	
 	/**
