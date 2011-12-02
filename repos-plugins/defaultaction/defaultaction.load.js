@@ -2,6 +2,7 @@
  * Open details page by default when clicking a file,
  * but preserve the real URL for right clicking.
  */
+/* Disabled now that index URLs append ?rweb=details by default
 Repos.service('index/', function() {
 	$('a.file').click(function(ev) {
 		ev.stopPropagation();
@@ -13,3 +14,4 @@ Repos.service('index/', function() {
 		return false;
 	});
 });
+*/

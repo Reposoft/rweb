@@ -178,6 +178,7 @@
 		</xsl:param>
 		<xsl:param name="href">
 			<xsl:call-template name="getHref"/>
+			<xsl:text>?rweb=details</xsl:text>
 		</xsl:param>
 		<xsl:param name="target">
 			<xsl:call-template name="getHref">
