@@ -1,6 +1,6 @@
 
 var rules = false;
-$().bind('repos-propedit-init', function(ev, reposPropeditRules) {
+$(document).bind('repos-propedit-init', function(ev, reposPropeditRules) {
 	rules = reposPropeditRules;
 	
 	// define some test rules

@@ -1,6 +1,6 @@
 
 // event declarations
-$().bind('repos-readme-loaded', function(ev, container) {});
+$(document).bind('repos-readme-loaded', function(ev, container) {});
 
 Repos.service('index/', function() {
 	// check file list for one named acconrding to convetion
@@ -12,7 +12,7 @@ Repos.service('index/', function() {
 				text:data.replace(/\r?\n/g,'<br />'),
 				title:'Contents of repos.txt'
 				});
-			$().trigger('repos-readme-loaded', [this]);
+			$(document).trigger('repos-readme-loaded', [this]);
 		});
 		return;
 	}
@@ -21,7 +21,7 @@ Repos.service('index/', function() {
 	if (typeof readme != 'undefined') {
 		$('body').say({id:'repos-readme'});
 		$('#repos-readme').load(readme.href, function() {
-			$().trigger('repos-readme-loaded', [this]);
+			$(document).trigger('repos-readme-loaded', [this]);
 		});
 		return;
 	}

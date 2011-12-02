@@ -1,5 +1,5 @@
 // TODO change to 'repos-propsearch-init'
-$().bind('repos-propedit-init', function(ev, rules) {
+$(document).bind('repos-propedit-init', function(ev, rules) {
 
 	rules.add('abx:TagName', ['', 'document', 'section']);
 

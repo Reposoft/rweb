@@ -23,7 +23,7 @@
 	
 	//$('.lock').live('repos-dateformat-done', function(ev, date) {
 	// Until jQuery 1.3.3 live events do not include data
-	$().bind('repos-dateformat-done', function(ev, date) {
+	$(document).bind('repos-dateformat-done', function(ev, date) {
 		// these two lines would not be needed for the live event bind above
 		var lock = $(ev.target).parent();
 		if (!lock.is('.lock')) return;

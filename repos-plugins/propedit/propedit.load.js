@@ -16,7 +16,7 @@
  * Initialize propedit for a specific target
  * @param (Repos.propedit.Rules) rules instance with api seen below
  */
-$().bind('repos-propedit-init', function(ev, reposPropeditRules) {});
+$(document).bind('repos-propedit-init', function(ev, reposPropeditRules) {});
 
 Repos.propedit = {
 	Rules: {
@@ -169,7 +169,7 @@ Repos.propedit = {
 $(document).ready(function() {
 	// Currently we support only one target per page, so only one instance of Rules is needed
 	// TODO initialize only when needed
-	$().trigger('repos-propedit-init', [Repos.propedit.Rules]);
+	$(document).trigger('repos-propedit-init', [Repos.propedit.Rules]);
 });
 
 // page update, executed after trigger above
@@ -202,7 +202,7 @@ Repos.service('edit/propedit/', function() {
 });
 
 // immediate plugin customization, the same thing can be done from other plugins
-$().bind('repos-propedit-init', function(ev, rules) {
+$(document).bind('repos-propedit-init', function(ev, rules) {
 	rules.addDefault('svn:keywords', [['Date', 'Revision', 'Author', 'HeadURL', 'Id']]);
 	rules.addDefault('svn:mime-type', /\w+\/\w+/);
 	rules.addDefault('svn:ignore', /.*/m);

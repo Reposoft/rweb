@@ -8,7 +8,7 @@ $(document).ready( function() {
 } );
 
 // --- Event definitions ---
-$().bind('repos-proplist-loaded', function(event, proplistParent){});
+$(document).bind('repos-proplist-loaded', function(event, proplistParent){});
 // ---
 
 Repos.proplist.init = function() {
@@ -34,7 +34,7 @@ Repos.proplist.addClick = function(container, target, rev) {
 				dataType: 'json',
 				success: function(json) {
 					Repos.proplist.present(e.parent(), json);
-					$().trigger('repos-proplist-loaded', [e.parent()]);
+					$(document).trigger('repos-proplist-loaded', [e.parent()]);
 					e.remove();
 				},
 				error: function() {
