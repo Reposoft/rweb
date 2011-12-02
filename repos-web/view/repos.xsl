@@ -264,12 +264,12 @@
 			<a id="base" href="{$return}"><xsl:value-of select="$base"/></a>
 		</xsl:if>
 		<xsl:if test="not($rest)">
-			<span id="folder" class="path{$classadd}">
+			<a id="realurl" href="./" class="path{$classadd}">
 				<xsl:value-of select="$f"/>
 				<xsl:if test="not($f)">
 					<xsl:text>/</xsl:text>
 				</xsl:if>
-			</span>
+			</a>
 		</xsl:if>
 		<xsl:if test="boolean($rest)">
 			<xsl:if test="boolean($f)">

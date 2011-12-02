@@ -55,6 +55,8 @@ Repos.target = function(t, fn) {
  * @param {Function} fn
  */
 Repos.service = function(s, fn) {
+	// aliases
+	if (s == 'details/') s = 'open/';
 	return Repos.isService(s) && $(document).ready(fn);
 };
 

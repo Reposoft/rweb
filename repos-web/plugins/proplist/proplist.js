@@ -3,7 +3,7 @@ if (typeof(Repos) == 'undefined') Repos = {};
 
 Repos.proplist = {};
 
-$(document).ready( function() {
+Repos.service('details/', function() {
 	Repos.proplist.init();
 } );
 
@@ -22,8 +22,7 @@ Repos.proplist.init = function() {
 };
 
 Repos.proplist.addClick = function(container, target, rev) {
-	var call = Repos.url+'open/proplist/?target=' + 
-			encodeURIComponent(target) + (rev ? '&rev=' + rev : '');
+	var call = $('#realurl').attr('href') + '?rweb=proplist';
 	var link = $('<a class="action-load" href="'+call+'">Versioned properties</a>')
 		.click( function() {
 			var e = $(this);

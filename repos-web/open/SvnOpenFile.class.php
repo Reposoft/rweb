@@ -296,6 +296,9 @@ class SvnOpenFile {
 		return getParent($this->path);
 	}
 	
+	/**
+	 * @return string The URL for this item, TODO with ?p=[peg rev] if a revision is requested.
+	 */
 	function getUrl() {
 		return $this->url;
 	}
