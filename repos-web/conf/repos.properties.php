@@ -112,8 +112,7 @@ if (isset($_REQUEST['repo'])) {
 // which is fine in code but not easy to detect from plugins.
 // Probably all plugins can just assume multirepo and the backend can handle it, but we have not tested for that in 1.3
 // In Repos Web 1.4 remove this
-if (isset($_SERVER['REPOS_REPO']) && isset($_REQUEST['base'])
-		&& !preg_match('/\/svn$/', $_SERVER['REPOS_REPO'])) { // this is for backwards compatibility with multirepo convention
+if (isset($_SERVER['REPOS_REPO']) && isset($_REQUEST['base'])) {
 	//header('Location: '.preg_replace('/([?&])base=\w*/', '$1', $_SERVER['REQUEST_URI'], 1)); exit;
 	unset($_REQUEST['base']); // should be a lot faster, and works as long as code does not read the query string directly
 }
