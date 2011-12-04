@@ -57,6 +57,8 @@ Repos.target = function(t, fn) {
 Repos.service = function(s, fn) {
 	// aliases
 	if (s == 'details/') s = 'open/';
+	if (s == 'view/') s = 'open/file/';
+	if (s == 'open/view/') s = 'open/file';
 	return Repos.isService(s) && $(document).ready(fn);
 };
 
