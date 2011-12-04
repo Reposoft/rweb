@@ -87,9 +87,9 @@ You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 </div>
 <div class="column" style="width: 40%">
 <div id="activities" class="section">
-<h2>Actions to view {=$file,kind2}</h2>
+<!-- <h2>Actions to view {=$file,kind2}</h2> -->
 <!--{if $file,isFile}-->
-<p class="recommendation">
+<p class="view recommendation">
 {=if $file,size gt 102400}
 This file is bigger than 100 kb, so we recommend <a href="download/?target={=$target}{=$file,revParam}">download</a>.
 {=elseif $file,type eq 'text/html'}
@@ -105,38 +105,94 @@ View the <a href="diff/?target={=$target}{=$file,revParam}&fromrev={=$fromrev}">
 </p>
 <!--{/if}-->
 {=if $file,isFile}
-<h3><a id="open" href="open/?target={=$target}{=$file,revParam}">Open</a></h3>
+<h3 class="view"><a id="open" href="open/?target={=$target}{=$file,revParam}">Open</a></h3>
 <p>This shows the file in the current window. It is good for text files, HTML and images.
 Depending on your browser, it may also work for file types like pdf, documents and spreadsheets.</p>
 {=else}
-<h3><a id="open" href="list/?target={=$target}{=$file,revParam}">List contents</a></h3>
+<h3 class="view"><a id="open" href="list/?target={=$target}{=$file,revParam}">List contents</a></h3>
 <p>Shows a defailed view of the folder's contents at the current revision.</p>
 {=/if}
-<h3><a id="download" href="download/?target={=$target}{=$file,revParam}">Download</a></h3>
+<h3 class="view"><a id="download" href="download/?target={=$target}{=$file,revParam}">Download</a></h3>
 <p>Download this 
 {=if $file,isFile} file {=else} folder as zip archive {=/if}
 to your hard drive. The revision number {=$file,revision}
 will be appended to the filename, so you will know which version it is.</p>
 {=if $file|reposViewGetImageUrl}
-<h3><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in repos</a></h3>
+<h3 class="view"><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in repos</a></h3>
 <p>View image in screen size</p>
 {=elseif $file,isFile and $file,size lte REPOS_TEXT_MAXSIZE}
-<h3><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in repos</a></h3>
+<h3 class="view"><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in repos</a></h3>
 <p>Read the file's contents in a web page. This is like View in browser, but with menus.
 This works for text files. If the file is a binary file, like a word document,
 you will see only a long line of characters.</p>
 {=/if}
-<h3><a id="history" href="log/?target={=$target}{=if $file,isRevisionRequested}&torev={=$file,revision}{=/if}">View history</a></h3>
+<h3 class="view"><a id="history" href="log/?target={=$target}{=if $file,isRevisionRequested}&torev={=$file,revision}{=/if}">View history</a></h3>
 <p>View the commits that
 {=if $file,isFile} have changed this file or its properties
 {=else} have affected contents in this folder{=/if}.</p>
-<!--{if $file,isRevisionRequested}-->
-<h3><a id="copyhistorical" href="../edit/copy/?target={=$target}&rev={=$file,revision}">Copy historical</a></h3>
+
+<hr class="edit"/>
+<!--{if $file,isLatestRevision}-->
+<p class="edit recommendation">
+{=if $file,isLockedByThisUser}
+The file is <strong>locked</strong> by you. We recommend you <a href="../edit/upload/?target={=$target}">Upload new version</a>.
+{=elseif $file,isPlaintext and $file,size lt 102400}
+This is a text file that's not too big. We recommend you 
+<a href="../edit/text/?target={=$target}">Edit in Repos</a>.
+{=elseif $file,isPlaintext}
+This is a text file. There is no need to lock it.
+<a href="../open/download/?target={=$target}{=$file,revParam}">Download</a>,
+edit on your computer, then <a href="../edit/upload/?target={=$target}">upload new version</a>.
+{=else}
+This is a binary or unknown fileformat. We recommend you Download with lock.
+{=/if}
+</p>
+
+{=if not $file,isLockedByThisUser}
+<h3 class="edit"><a id="download_upload" href="../edit/upload/?target={=$target}{=$file,revParam}&download">Download, modify, upload</a></h3>
+<p>
+<span class="explain" title="files stored as lines of text that are human-readable in any text editor, like Notepad">Text files</span> 
+can be edited by different users at the same time.
+The system will <span class="explain" title="combine two different changes of the same file into a new version of the file">merge</span>
+changes based on the lines that changed.
+</p>
+<h3 class="edit"><a id="download_lock" href="../edit/lock/?target={=$target}&download">Download with lock</a></h3>
+<p>
+For <span class="explain" title="files stored in a non-text format created and read by a specific application">binary</span>
+files, changes can not be expressed as a line
+<span class="explain" title="the difference between two versions, expressed as only the lines that have changed">diff</span>.
+Binary files should be edited by one user at a time.
+</p>
+{=/if}
+<h3 class="edit"><a id="upload" href="../edit/upload/?target={=$target}">Upload new version</a></h3>
+<p>
+If you have already downloaded and edited the file, upload your changes to create a new verison.
+</p>
+<h3 class="edit"><a id="editfile" href="../edit/text/?target={=$target}">Edit in Repos</a></h3>
+<p>
+Plaintext file formats can be conveniently edited in your browser.
+No locking is needed.
+</p>
+<h3 class="edit"><a id="propedit" href="../edit/propedit/?target={=$target}">Edit properties</a></h3>
+<p>
+Edit versioned metadata on this item.
+</p>
+{=if not $file,isLocked}
+<h3 class="edit"><a id="lock" href="../edit/lock/?target={=$target}">Lock file</a></h3>
+<p>You can always lock a file to make it read-only for everyone else.</p>
+{=elseif $file,isLockedByThisUser}
+<h3 class="edit"><a id="unlock" href="../edit/unlock/?target={=$target}">Unlock file</a></h3>
+<p>This file is locked by you. If you are not working with it,
+you can unlock it so that others are able to edit it.</p>
+{=/if}
+
+<!--{elseif $file,isRevisionRequested}-->
+<h3 class="edit"><a class="edit" id="copyhistorical" href="../edit/copy/?target={=$target}&rev={=$file,revision}">Copy historical</a></h3>
 <p>Any historical file or folder can be copied to the current tree.
 This makes it possible to start editing removed files with preserved history.
 For files or folders that still exist it creates a new branch.</p>
 <!--{/if}-->
-<h3><a id="useurl" href="#urlcopy" onblur="document.getElementById('urlcopy').select();">Use the URL</a></h3>
+<h3 class="edit"><a class="realurl" id="useurl" href="#urlcopy" onblur="document.getElementById('urlcopy').select();">Use the URL</a></h3>
 <!--{if $file,isLatestRevision}-->
 <p>The URL is a global ID for the file.
 In e-mails it can be used instead of attachments.
@@ -146,86 +202,7 @@ In many programs you can open the URL directly, without downloading the file fir
 <p>This is not the latest version of the file, so you can not use the URL to access it.
 You need to use a version control (Subversion) client like Repos.</p>
 <!--{/if}-->
-</div>
-
-<div id="activities" class="section">
-<h2>Actions to edit {=$file,kind2}</h2>
-{=if $file,isLockedByThisUser}
-<p>The file is <strong>locked</strong> by you. We recommend you <a href="../edit/upload/?target={=$target}">Upload new version</a>.</p>
-{=elseif $file,isPlaintext and $file,size lt 102400}
-<p>This is a text file that's not too big. We recommend you 
-<a href="../edit/text/?target={=$target}">Edit in Repos</a>.</p>
-{=elseif $file,isPlaintext}
-<p>This is a text file. There is no need to lock it.
-<a href="../open/download/?target={=$target}{=$file,revParam}">Download</a>,
-edit on your computer, then <a href="../edit/upload/?target={=$target}">upload new version</a>.</p>
-{=else}
-<p>This is a binary or unknown fileformat. We recommend you Download with lock.</p>
-{=/if}
-
-{=if not $file,isLockedByThisUser}
-<h3><a id="download_upload" href="../edit/upload/?target={=$target}{=$file,revParam}&download">Download, modify, upload</a></h3>
-<p>
-<span class="explain" title="files stored as lines of text that are human-readable in any text editor, like Notepad">Text files</span> 
-can be edited by different users at the same time.
-The system will <span class="explain" title="combine two different changes of the same file into a new version of the file">merge</span>
-changes based on the lines that changed.
-</p>
-<h3><a id="download_lock" href="../edit/lock/?target={=$target}&download">Download with lock</a></h3>
-<p>
-For <span class="explain" title="files stored in a non-text format created and read by a specific application">binary</span>
-files, changes can not be expressed as a line
-<span class="explain" title="the difference between two versions, expressed as only the lines that have changed">diff</span>.
-Binary files should be edited by one user at a time.
-</p>
-{=/if}
-<h3><a id="upload" href="../edit/upload/?target={=$target}">Upload new version</a></h3>
-<p>
-If you have already downloaded and edited the file, upload your changes to create a new verison.
-</p>
-<h3><a id="editfile" href="../edit/text/?target={=$target}">Edit in Repos</a></h3>
-<p>
-Plaintext file formats can be conveniently edited in your browser.
-No locking is needed.
-</p>
-<h3><a id="propedit" href="../edit/propedit/?target={=$target}">Edit properties</a></h3>
-<p>
-Edit versioned metadata on this item.
-</p>
-
-<!--{if not $file,isBranch}-->
-{=* personal branches not in 1.1
-<h3>
-<!-- temporary solution, requires /branches folder in root, which is not fair to the other repository layouts -->
-<a id="branch" href="../edit/copy/?target={=$target}&oldname={=$oldname}&tofolder=%2Fbranches%2F&newname={=$file,revision}-{=$file,authenticatedUser}-{=$file,filename}&move=0&message={=$message}&submit=Copy">
-Create personal branch</a></h3>
-<p>A personal branch is a copy of this file, where you can do major modifications
-without disturbing anyone else. If is useful if you need several days for your changes.
-Your personal, temporary, copy would be: 
-<span class="path">/branches/{=$file,revision}-{=$file,authenticatedUser}-{=$file,filename}</span>
-You will get a link to the branch, and from there you can access the "merge" functionality.</p>
-*}
-<!--{/if}-->
-
-{=if not $file,isLocked}
-<h3><a id="lock" href="../edit/lock/?target={=$target}">Lock file</a></h3>
-<p>You can always lock a file to make it read-only for everyone else.</p>
-{=elseif $file,isLockedByThisUser}
-<h3><a id="unlock" href="../edit/unlock/?target={=$target}">Unlock file</a></h3>
-<p>This file is locked by you. If you are not working with it,
-you can unlock it so that others are able to edit it.</p>
-{=/if}
-
-<h3><a id="useurl" href="#urlcopy" onblur="document.getElementById('urlcopy').select();">Use the URL</a></h3>
-<!--{if $file,isLatestRevision}-->
-<p>Many modern programs can use URLs to open files directly from the server.</p>
-<p>Office documents can usually be edited directly.
-Paste the URL into the "open" dialog in word or excel, 
-and when you save it will automatically be committed to repository.</p>
-<!--{else}-->
-This is not the latest version of the file, so you can not use the URL to access it.
-You need to use a version control client like Repos.
-<!--{/if}-->
+<hr class="custom"/>
 
 </div>
 
