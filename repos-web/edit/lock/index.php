@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 	$target = getTarget();
 	$template = Presentation::getInstance();
 	$template->assign('target', $target);
-	$template->assign('repository', getRepository().getParent($target));
+	$template->assign('folderurl', getRepository().getParent($target)); 
 	if (isset($_GET['download'])) {
 		$template->assign('download', 1);
 	}
