@@ -1,9 +1,10 @@
 <?php
 // get the properties of a file or folder as JSON 
 
+$tStart = microtime(true);
 require("../SvnOpen.class.php" );
 require_once("../../lib/json/json.php" );
-
+$tInit = microtime(true);
 $url = getTargetUrl();
 $revisionRule = new RevisionRule();
 Validation::expect('target');
@@ -28,10 +29,13 @@ if (strBegins($_SERVER['HTTP_ACCEPT'], 'text/xml')) {
 if ($cmd->exec()) {
 	trigger_error(implode("\n",$cmd->getOutput()), E_USER_ERROR);	
 }
+$tExec = microtime(true);
 
 $output = $cmd->getOutput(); // Currently not possible to stream command output directly to SAX parser
 header('Content-type: text/plain');
 echo '{';
+echo '"tInit": '.($tInit - $tStart).",\n";
+echo '"tExec": '.($tExec - $tInit).",\n";
 $isProperty = false;
 $count = 0;
 
@@ -70,6 +74,7 @@ for ($i = 0; $i < count($output);) {
 }
 
 xml_parser_free($xml_parser);
+echo ",\n".'"tParse": '.(microtime(true) - $tExec)."\n";
 echo "}\n";
 
 // to get all the properties of a specific type for a tree,
