@@ -315,6 +315,7 @@ class SvnOpen {
 	/**
 	 * Passes the command output directly to browser without buffering,
 	 * and also without error handling.
+	 * Does not work with authentication error forwarding.
 	 * This method should only be used for administration tasks. Useful when output is large.
 	 * @return int the exit code, generally 0 if successful
 	 */

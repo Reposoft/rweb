@@ -20,7 +20,7 @@ if ($revisionRule->getValue()) {
 
 // This is for evaluation of Accept header usage. Should be aligned with WEBSERVICE_KEY concept in repos.properties.php
 if (strBegins($_SERVER['HTTP_ACCEPT'], 'text/xml')) {
-	header('Content-type: text/xml');
+	header('Content-Type: text/xml');
 	$cmd->passthru();
 	exit;
 }
@@ -32,7 +32,7 @@ if ($cmd->exec()) {
 $tExec = microtime(true);
 
 $output = $cmd->getOutput(); // Currently not possible to stream command output directly to SAX parser
-header('Content-type: text/plain');
+header('Content-Type: text/plain');
 echo '{';
 echo '"tInit": '.($tInit - $tStart).",\n";
 echo '"tExec": '.($tExec - $tInit).",\n";

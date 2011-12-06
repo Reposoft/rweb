@@ -18,7 +18,7 @@
 	SetEnv REPOS_ACCESS_FILE @ServerRoot@/hosts/original/admin/repos-access
 
 	# during development browsers should revalidate on each request for static resources too
-	Header add Cache-Control "max-age=0, must-revalidate"
+	#Header add Cache-Control "max-age=0, must-revalidate"
 
 	# Repos error pages
 	ErrorDocument 400 /repos-web/errors/400/

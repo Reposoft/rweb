@@ -42,6 +42,10 @@ RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/json/?base=$1&target=$2
 RewriteCond		%{QUERY_STRING}		^rweb=proplist|.*&rweb=proplist$
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/proplist/?base=$1&target=$2 [PT,QSA,L]
 
+# Propget, suffixed with property name (or just add a propname param), returns text/plain only
+RewriteCond		%{QUERY_STRING}		^rweb=propget([\w:-]*)|.*&rweb=propget([\w:-]*)$
+RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/propget/?base=$1&target=$2&propname=%1%2 [PT,QSA,L]
+
 # View in Repos
 RewriteCond		%{QUERY_STRING}		^rweb=view|.*&rweb=view$
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/file/?base=$1&target=$2 [R,QSA,L]
