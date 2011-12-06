@@ -18,8 +18,8 @@ $val = $cmd->getOutput();
 if (is_array($val)) {
 	$val = count($val) ? $val[0] : '';
 }
-if (!$val) {
-	header('HTTP/1.0 404 Not Found');
+if (!$val) { // svn treats empty and non-existent property the same way
+	header('HTTP/1.1 204 No Content');
 }
 if ($revisionRule->getValue()) {
 	header('Cache-Control: max-age=8640000');

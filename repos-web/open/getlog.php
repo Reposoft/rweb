@@ -9,8 +9,9 @@ function getLog($targetUrl, $limit = 10) {
 	$svnlog->addArgOption('--stop-on-copy'); // based-on-revision can't handle renamed files
 	$svnlog->addArgOption('--limit', $limit, false);
 	$svnlog->addArgUrl($targetUrl);
-	$svnlog->exec();
-	if ($svnlog->getExitcode()) trigger_error("Could not read history for $targetUrl", E_USER_ERROR);
+	if ($svnlog->exec()) {
+		trigger_error(implode("\n", $svnlog->getOutput()), E_USER_ERROR);
+	}
 	$log = $svnlog->getOutput();
 	$pattern = '/^r(\d+)\s+\|\s+(.*)\s+\|\s+(\d{4}-\d{2}-\d{2}).(\d{2}:\d{2}:\d{2})\s([+-]?\d{2})(\d{2})/';
 	$result = array();

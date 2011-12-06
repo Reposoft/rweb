@@ -620,9 +620,8 @@ if (!function_exists('reportErrorToUser')) { function reportErrorToUser($n, $mes
 			if (ob_get_contents()) {
 				ob_clean();
 			}
-			// be friendly to http services, notices are still status 200
-			if ($n==E_USER_WARNING) header('HTTP/1.1 412 Precondition Failed');
-			if ($n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error');
+			// Same status code as text-only response
+			reportErrorStatus($n, $message, $trace);
 			// to make the status headers work we can't do redirect
 			$p->showErrorNoRedirect("$label ".nl2br($message)."\n\n\n<!-- Error level $n. Stack trace:\n$trace -->\n\n");
 		}

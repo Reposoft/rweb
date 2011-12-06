@@ -61,15 +61,35 @@ function reportError($n, $message, $file, $line) {
 	// always stop after errors
 	exit(1);
 }
+
+// Sets http header status line based on error characteristics
+function reportErrorStatus($n, $message, $trace) {
+	if (headers_sent()) {
+		return false;
+	}
+	if (preg_match("/^svn: '(.*)' does not exist in revision (\d+)$/", $message)
+		|| preg_match("/^svn: '.*' path not found$/", $message)) {
+		header('HTTP/1.1 404 Not Found');
+		return 404;
+	}
+	if ($n==E_USER_WARNING) {
+		header('HTTP/1.1 412 Precondition Failed');
+		return 412;
+	} 
+	if ($n==E_USER_ERROR) {
+		header('HTTP/1.1 500 Internal Server Error');
+		return 500;
+	}	
+}
+
 // default error reporting, for errors that occur before presentation is initialized
 function reportErrorText($n, $message, $trace) {
+	reportErrorStatus($n, $message, $trace);
 	// validation error
 	if ($n==E_USER_WARNING) {
-		if (!headers_sent()) header('HTTP/1.1 412 Precondition Failed');
 		echo("Validation error: $message\n<pre>\n$trace</pre>\n\n");
 	} else {
 		// other errors
-		if (!headers_sent() && $n==E_USER_ERROR) header('HTTP/1.1 500 Internal Server Error');
 		echo("Runtime error (type $n): $message\n<pre>\n$trace</pre>\n\n");
 	}
 	// TODO there is some weirdness with notices and Presentation->enableRedirectWaiting
