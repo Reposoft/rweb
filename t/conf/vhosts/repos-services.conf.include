@@ -23,57 +23,57 @@ RewriteCond %{IS_SUBREQ} !=true
 # Note that service identifiers must not be substrings of each other
 
 # Details
-RewriteCond		%{QUERY_STRING}		^rweb=details|.*&rweb=details$
+RewriteCond		%{QUERY_STRING}		^rweb=details|.*&rweb=details
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/?base=$1&target=$2 [R,QSA,L]
 
 # History (log), uses absolute URLs in links so PT is already supported
-RewriteCond		%{QUERY_STRING}		^rweb=history|.*&rweb=history$
+RewriteCond		%{QUERY_STRING}		^rweb=history|.*&rweb=history
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/log/?base=$1&target=$2 [PT,QSA,L]
 
 # List
-RewriteCond		%{QUERY_STRING}		^rweb=list|.*&rweb=list$
+RewriteCond		%{QUERY_STRING}		^rweb=list|.*&rweb=list
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/list/?base=$1&target=$2 [R,QSA,L]
 
 # Json, list for folders, details for files, PT supported because there are no links
-RewriteCond		%{QUERY_STRING}		^rweb=json|.*&rweb=json$
+RewriteCond		%{QUERY_STRING}		^rweb=json|.*&rweb=json
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/json/?base=$1&target=$2 [PT,QSA,L]
 
 # Proplist Json, PT supported because there are no links
-RewriteCond		%{QUERY_STRING}		^rweb=proplist|.*&rweb=proplist$
+RewriteCond		%{QUERY_STRING}		^rweb=proplist|.*&rweb=proplist
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/proplist/?base=$1&target=$2 [PT,QSA,L]
 
 # Propget, suffixed with property name (or just add a propname param), returns text/plain only
-RewriteCond		%{QUERY_STRING}		^rweb=propget([\w:-]*)|.*&rweb=propget([\w:-]*)$
+RewriteCond		%{QUERY_STRING}		^rweb=propget([\w:-]*)|.*&rweb=propget([\w:-]*)
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/propget/?base=$1&target=$2&propname=%1%2 [PT,QSA,L]
 
 # View in Repos
-RewriteCond		%{QUERY_STRING}		^rweb=view|.*&rweb=view$
+RewriteCond		%{QUERY_STRING}		^rweb=view|.*&rweb=view
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/file/?base=$1&target=$2 [R,QSA,L]
 
 # --- Edit operations, convenient access from index ---
 
 # New folder
-RewriteCond		%{QUERY_STRING}		^rweb=mkdir|.*&rweb=mkdir$
+RewriteCond		%{QUERY_STRING}		^rweb=mkdir|.*&rweb=mkdir
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/mkdir/?base=$1&target=$2 [R,QSA,L]
 
 # Upload, new file when on folder, new version when on file
-RewriteCond		%{QUERY_STRING}		^rweb=upload|.*&rweb=upload$
+RewriteCond		%{QUERY_STRING}		^rweb=upload|.*&rweb=upload
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/upload/?base=$1&target=$2 [R,QSA,L]
 
 # Edit text, note that upload POST should go to 'upload'
 # TODO should there be a generic 'edit' service with support for different formats, plaintext, svg-edit, html...?
-RewriteCond		%{QUERY_STRING}		^rweb=text|.*&rweb=text$
+RewriteCond		%{QUERY_STRING}		^rweb=text|.*&rweb=text
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/text/?base=$1&target=$2 [R,QSA,L]
 
 # Propedit, currently not supported for folders
-RewriteCond		%{QUERY_STRING}		^rweb=propedit|.*&rweb=propedit$
+RewriteCond		%{QUERY_STRING}		^rweb=propedit|.*&rweb=propedit
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/propedit/?base=$1&target=$2 [R,QSA,L]
 
 # --- Transforms ---
 # All these services must start with t, names must be word characters a-z0-9_
 
 # Repos thumbnails plugin, "tothumb" etc, p and r are supported
-RewriteCond		%{QUERY_STRING}		^rweb=to(\w+)|.*&rweb=to(\w+)$
+RewriteCond		%{QUERY_STRING}		^rweb=to(\w+)|.*&rweb=to(\w+)
 RewriteRule		^/svn/([^/]+)(/.*)$	/repos-plugins/thumbnails/convert/?base=$1&target=$2&tf=%1%2 [PT,QSA,L]
 
 # --- Post processing, should apply to both R and PT ---
