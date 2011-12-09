@@ -39,11 +39,11 @@ var reposThumblistOnLoad = function() {
  */
 var reposThumblistOnDetails = function() {
 	$('.index > li').bind('repos-details-displayed', function(ev) {
-		reposThumbFromListItem.apply(this);
+		//reposThumbFromListItem.apply(this);
 		// Using the inview plugin to load when in viewport
-		//$(this).one('inview', function() {
-		//	reposThumbFromListItem.apply(this);
-		//});
+		$(this).one('inview', function() {
+			reposThumbFromListItem.apply(this);
+		});
 	});
 	// trigger first inview check
 	$('.index').bind('repos-details-completed', function() {
