@@ -21,6 +21,7 @@ var reposThumbFromListItem = function(item) {
 	var name = a.text();
 	var target = Repos.getTarget() + name;
 	var thumb = Repos.thumbnails.getSrc(target, peg, false); // paths are at HEAD when in index
+	//var viewUrl = $('a[id^="view\\:"]', item).attr('href').replace('/?', '/file/?');
 	
 	//reposThumbFormatGallerificStyle(item, a, name, thumb);
 	reposThumbFormatAsList(item, a, name, thumb);
@@ -38,15 +39,15 @@ var reposThumblistOnLoad = function() {
  */
 var reposThumblistOnDetails = function() {
 	$('.index > li').bind('repos-details-displayed', function(ev) {
-		//reposThumbFromListItem.apply(this);
+		reposThumbFromListItem.apply(this);
 		// Using the inview plugin to load when in viewport
-		$(this).one('inview', function() {
-			reposThumbFromListItem.apply(this);
-		});
+		//$(this).one('inview', function() {
+		//	reposThumbFromListItem.apply(this);
+		//});
 	});
 	// trigger first inview check
 	$('.index').bind('repos-details-completed', function() {
-		$(window).trigger('scroll'); // TODO better isolation, trigger only inview check
+		$(window).scroll(); // TODO better isolation, trigger only inview check
 	});
 };
 
