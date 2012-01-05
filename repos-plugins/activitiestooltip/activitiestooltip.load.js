@@ -2,8 +2,9 @@
 Repos.service('open/', function() {
  	// hide verbose info	
 	$('#activities h3').next().hide();
- 	// show recommendation below and show help as tooltip
- 	$('#activities .recommendation').appendTo($('#activities')).show();
+ 	// show recommendation below
+ 	//$('#activities .recommendation').appendTo($('#activities')).show();
+	// show help as tooltip
  	$('#activities h3').tooltip({
  		delay: 500,
  		bodyHandler: function() {
