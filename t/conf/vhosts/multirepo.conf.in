@@ -81,31 +81,14 @@
 	# Service URL rewrites
 	Include @ServerRoot@/conf/vhosts/repos-services.conf.include
 	
-	# DAV area
-	Alias /dav /tmp/testdav
-	<Directory /tmp/testdav>
-		Dav on
-		Options Indexes
-		
-		Require valid-user
-		
-		AuthType Basic
-		AuthName "repos test multirepo"
-		AuthUserFile @ServerRoot@/hosts/multirepo/admin/repos-users
-		Require valid-user
-		
-		Order allow,deny
-		Allow from all
-	</Directory>
+	# WebDAV module config, normally predefined on production servers
+	DAVLockDB @ServerRoot@/hosts/multirepo/dav/DAVLockDB.bin
 
-	# Fix Windows WebDAV behavior for folder operations
-	RewriteEngine on
-	# WinXP client: Microsoft Data Access Internet Publishing Provider DAV
-	RewriteCond %{HTTP_USER_AGENT} ^Microsoft.*
-	RewriteCond %{REQUEST_URI} ^/dav/(.*[^/])$
-	# REQUEST_URI is urldecoded; can be used to check local path
-	RewriteCond /home/cmsadmin/dav/files/%1 -d
-	RewriteRule ^(.*)$ $1/ [PT]
+	# WebDAV area
+	Alias /dav @ServerRoot@/hosts/multirepo/dav/files/
+	RewriteLog "@ServerRoot@/logs/multirepo-rewrite.log" 
+	RewriteLogLevel 4
+	Include @ServerRoot@/conf/vhosts/dav.conf.include
 	
 	# Image transforms repository
 	<Location /repos-thumbs>
