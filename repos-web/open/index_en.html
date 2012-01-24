@@ -133,6 +133,7 @@ you will see only a long line of characters.</p>
 
 <hr class="edit"/>
 <!--{if $file,isLatestRevision}-->
+<!--{if $file,isFile}-->
 <p class="edit recommendation">
 {=if $file,isLockedByThisUser}
 The file is <strong>locked</strong> by you. We recommend you <a href="../edit/upload/?target={=$target}">Upload new version</a>.
@@ -185,7 +186,12 @@ Edit versioned metadata on this item.
 <p>This file is locked by you. If you are not working with it,
 you can unlock it so that others are able to edit it.</p>
 {=/if}
-
+<!--{else}--><!-- folder -->
+<h3 class="edit"><a id="upload" href="../edit/upload/?target={=$target}">Add file</a></h3>
+<p>
+Upload a new file to this folder. For uploading new versions go instead to the details page of the file.
+</p>
+<!--{/if}-->
 <!--{elseif $file,isRevisionRequested}-->
 <h3 class="edit"><a class="edit" id="copyhistorical" href="../edit/copy/?target={=$target}&rev={=$file,revision}">Copy historical</a></h3>
 <p>Any historical file or folder can be copied to the current tree.
