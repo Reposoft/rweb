@@ -109,11 +109,18 @@ $template->display();
 function svnPropset($target, $keys, $values, $message=null) {
 	$presentation = Presentation::getInstance();
 	$workingCopy = System::getTempFolder('propedit');
-	$targetFolder = getParent(getTargetUrl());
-	$filename = getPathName(getTargetUrl());
+	$isFolder = isFolder($target);
+	$targetFolder = getTargetUrl();
+	$filename = '.';
+	$depth = 'empty';
+	if (!$isFolder) {
+		$filename = getPathName($targetFolder);
+		$targetFolder = getParent($targetFolder);
+		$depth = 'files'; // avoids an extra update, might tage time when there are many files
+	}
 	// propset can only be done in working copy
 	$checkout = new SvnEdit('checkout');
-	$checkout->addArgOption('--non-recursive'); // TODO use sparse checkouts
+	$checkout->addArgOption('--depth='.$depth);
 	$checkout->addArgUrl($targetFolder);
 	$checkout->addArgPath($workingCopy);
 	$checkout->exec('Check out latest version');

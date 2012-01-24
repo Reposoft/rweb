@@ -74,7 +74,8 @@ for ($i = 0; $i < count($output);) {
 }
 
 xml_parser_free($xml_parser);
-echo ",\n".'"tParse": '.(microtime(true) - $tExec)."\n";
+if ($count) echo ",\n";
+echo '"tParse": '.(microtime(true) - $tExec)."\n";
 echo "}\n";
 
 // to get all the properties of a specific type for a tree,

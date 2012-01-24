@@ -148,7 +148,10 @@ function displayEdit(&$presentation, $nextUrl=null, $headline=null, $summary=nul
 	}
 	if (!$nextUrl) {
 		if (!isTargetSet()) trigger_error("Server error. No target given, nextUrl required.", E_USER_ERROR);
-		$nextUrl = dirname(getTargetUrl()).'/'; // get the parent folder for a file, and the folder itself for a folder
+		$nextUrl = getTargetUrl();
+		if (!isFolder($nextUrl)) {
+			$nextUrl = getParent($nextUrl); // get the parent folder for a file, and the folder itself for a folder
+		}
 	}
 	$presentation->assign('nexturl',$nextUrl);
 	$presentation->assign('headline',$headline);
