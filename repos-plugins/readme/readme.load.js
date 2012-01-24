@@ -32,5 +32,5 @@ Repos.service('index/', function() {
 		.attr('href', w+'edit/text/?target='+t+'&base='+Repos.getBase()+'&suggestname=repos.txt').html('add&nbsp;text');
 	// currently no other plugin uses contentcommands
 	// TODO move to real HTML output, place actions that operate on selection here, plase above and below, float?
-	var e = $('<div/>').addClass('contentcommands').append(a).insertBefore('.index');
+	var e = $('.contentcommands').append(a);
 } );

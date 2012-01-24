@@ -126,6 +126,7 @@
 				You may <a href="./">return to browsing latest</a> if this folder still exists.
 			</p>
 		</xsl:if>
+		<div class="contentcommands"/>
 		<ul class="index">
 			<xsl:apply-templates select="dir">
 				<xsl:sort select="@name"/>
@@ -163,14 +164,6 @@
 		</xsl:param>
 		<xsl:param name="n" select="position() - 1"/>
 		<li id="row:{$id}" class="n{$n mod 4}{$classadd}">
-			<ul class="actions">
-				<li><a id="view:{$id}" class="action action-view" href="{$web}open/?target={$target}">details</a></li>
-				<xsl:if test="$editUrl">
-					<li><a id="copy:{$id}" class="action action-copy"  href="{$editUrl}copy/?target={$target}">copy</a></li>
-					<li><a id="rename:{$id}" class="action action-rename" href="{$editUrl}rename/?target={$target}">rename</a></li>
-					<li><a id="delete:{$id}" class="action action-delete" href="{$editUrl}delete/?target={$target}">delete</a></li>
-				</xsl:if>
-			</ul>
 			<a id="open:{$id}" class="folder{$classadd}" href="{$href}">
 				<xsl:value-of select="@name"/>
 			</a>
@@ -201,18 +194,6 @@
 		</xsl:param>
 		<xsl:param name="n" select="count(/svn/index/dir) + position() - 1"/>
 		<li id="row:{$id}" class="n{$n mod 4}">
-			<ul class="actions">
-				<li><a id="view:{$id}" class="action" href="{$web}open/?target={$target}">details</a></li>
-				<li><a id="download:{$id}" class="action" href="{$web}open/download/?target={$target}">download</a></li>
-				<xsl:if test="$editUrl">
-					<li><a id="upload:{$id}" class="action" href="{$editUrl}upload/?target={$target}">upload&#xA0;changes</a></li>
-					<li><a id="edit:{$id}" class="action" href="{$editUrl}?target={$target}">edit</a></li>
-					<li><a id="copy:{$id}" class="action" href="{$editUrl}copy/?target={$target}">copy</a></li>
-					<li><a id="rename:{$id}" class="action" href="{$editUrl}rename/?target={$target}">rename</a></li>
-					<li><a id="delete:{$id}" class="action" href="{$editUrl}delete/?target={$target}">delete</a></li>
-				</xsl:if>
-				<li><a id="history:{$id}" class="action" href="{$web}open/log/?target={$target}">view&#xA0;history</a></li>
-			</ul>
 			<a id="open:{$id}" class="file-{$filetype} file" href="{$href}">
 				<xsl:value-of select="@name"/>
 			</a>
