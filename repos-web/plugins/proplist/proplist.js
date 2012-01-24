@@ -24,7 +24,6 @@ Repos.proplist.init = function() {
 Repos.proplist.addClick = function(container, target, rev) {
 	var call = $('#realurl').attr('href');
 	call += (call.indexOf('?') > 0 ? '&' : '?') + 'rweb=proplist';
-	console.log(call);
 	var link = $('<a class="action-load" href="'+call+'">Versioned properties</a>')
 		.click( function() {
 			var e = $(this);
