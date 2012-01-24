@@ -138,8 +138,11 @@ div#activities p {
 #activities #propedit {
 	background-image: url(commands/32x32/propedit.png);
 }
-#activities #copyhistorical {
+#activities #copy, #activities #copyhistorical {
 	background-image: url(commands/32x32/copy.png);
+}
+#activities #delete {
+	background-image: url(commands/32x32/delete.png);
 }
 /* -------- forms ---------
 <form>

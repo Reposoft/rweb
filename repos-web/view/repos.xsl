@@ -102,6 +102,7 @@
 		<xsl:if test="boolean($parentlink)">
 			<a id="parent" class="command translate" href="{$parentlink}">up</a>
 		</xsl:if>
+		<a id="view" class="command translate" href="?rweb=details">details</a>
 		<xsl:if test="$editUrl">
 			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={$target}">new&#xA0;folder</a>
 			<a id="addfile" class="command translate" href="{$editUrl}upload/?target={$target}">add&#xA0;file</a>

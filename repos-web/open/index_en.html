@@ -169,6 +169,15 @@ Binary files should be edited by one user at a time.
 <p>
 If you have already downloaded and edited the file, upload your changes to create a new verison.
 </p>
+<h3 class="edit"><a id="copy" href="../edit/copy/?target={=$target}">Copy, move or rename</a></h3>
+<p>
+Make a versioned copy of the file. Remove the file at its original location to make this a move or rename.
+</p>
+<h3 class="edit"><a id="delete" href="../edit/delete/?target={=$target}">Delete</a></h3>
+<p>
+Mark the file as deleted from now on. It will exist in History but won't be editable, and no longer visible when browsing.
+To later recover the file, navigate to it in History and do a Copy Historical.
+</p>
 <h3 class="edit"><a id="editfile" href="../edit/text/?target={=$target}">Edit in Repos</a></h3>
 <p>
 Plaintext file formats can be conveniently edited in your browser.
@@ -186,12 +195,23 @@ Edit versioned metadata on this item.
 <p>This file is locked by you. If you are not working with it,
 you can unlock it so that others are able to edit it.</p>
 {=/if}
+
 <!--{else}--><!-- folder -->
 <h3 class="edit"><a id="upload" href="../edit/upload/?target={=$target}">Add file</a></h3>
 <p>
 Upload a new file to this folder. For uploading new versions go instead to the details page of the file.
 </p>
+<h3 class="edit"><a id="copy" href="../edit/copy/?target={=$target}">Copy, move or rename</a></h3>
+<p>
+Make a versioned copy of the folder and all its contents. Remove the original folder to make this a move or rename.
+</p>
+<h3 class="edit"><a id="delete" href="../edit/delete/?target={=$target}">Delete</a></h3>
+<p>
+Mark the folder and its contents as deleted from now on. It will exist in History but won't be editable, and no longer visible when browsing.
+To later recover the folder, navigate to it in History and do a Copy Historical.
+</p>
 <!--{/if}-->
+
 <!--{elseif $file,isRevisionRequested}-->
 <h3 class="edit"><a class="edit" id="copyhistorical" href="../edit/copy/?target={=$target}&rev={=$file,revision}">Copy historical</a></h3>
 <p>Any historical file or folder can be copied to the current tree.
