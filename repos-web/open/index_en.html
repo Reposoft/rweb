@@ -17,7 +17,9 @@
 <!--{/if}-->
 </div>
 <div id="intro">
-<h1><a id="realurl" class="{=$file,kind2}" href="{=$file,url}">{=$file,filename}</a>
+<h1>
+<a id="realurl" class="{=$file,kind2}" href="{=$file,url}">{=$file,filename}</a>
+{=if $file,isFolder}/{=/if}
 <!--{if $file,isRevisionRequested}-->
  <span class="revision">{=$file,revisionRequested}</span>
 <!--{/if}-->
