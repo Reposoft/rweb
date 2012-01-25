@@ -10,6 +10,13 @@ div.column {
 	float: left;
 }
 
+div.column-activities {
+}
+div.column-info {
+}
+div.column-links {
+}
+
 div.section {
 	height: auto;
 	margin: 5px;
@@ -17,6 +24,10 @@ div.section {
 	background-color: #FFFFFF;
 	border: 2px solid #F4F4F4;
 	display: block;	
+}
+
+div.section ul {
+	padding-right: 1em;
 }
 
 div.section h2 {

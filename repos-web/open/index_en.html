@@ -47,47 +47,8 @@ You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 <p>This is an old version of the file. You can also <a href="?target={=$target}">view latest version</a>.</p>
 <!--{/if}-->
 </div>
-<div class="column" style="width: 60%">
-<!-- many plugins use the name #filedetails so the id is kept even though it is used for folders too -->
-<div id="filedetails" class="section">
-<h2>{=$file,kind2|ucfirst} details</h2>
-<!-- in headline: <p>Version number: <span class="revision">{=$file,revision}</span></p> -->
-<p>Path: <span class="path">{=$file,path}</span></p>
-<p>Last changed revision: <span class="revision">{=$file,revisionLastChanged}</span></p>
-<p>Last edited by: <span class="username">{=$file,author}</span></p>
-<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
-<!--{if $file,isFile}-->
-<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
-<!--{/if}-->
-<p>Content type: <span>{=$file,type}</span></p>
-<!--{if $file,isLocked}-->
-<p class="lock">Locked by 
-<span class="username">{=$file,lockOwner}</span> <span class="datetime">{=$file,lockCreated}</span>
-{=if $file,lockComment}<br /> <span class="message">{=$file,lockComment}</span>{=/if}
-</p>
-<!--{/if}-->
-<div class="proplist" title="{=$file,path}">
-</div>
-</div>
-<!--{if $log}-->
-<div id="editlog" class="section">
-<h2>Most recent changes</h2>
-<!--{assign var='logrev' value=$log|@array_keys}-->
-<ul>
-<!--{foreach from=$logrev item=r name=log}-->
-	<!--{assign var='e' value=$log.$r}-->
-	<li>
-		<span class="revision">{=$r}</span>
-		<span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span>
-		<span class="username">{=$e.user}</span>
-		<span class="message">{=$e.message|nl2br}</span>
-	</li>
-<!--{/foreach}-->
-</ul>
-</div>
-<!--{/if}-->
-</div>
-<div class="column" style="width: 40%">
+
+<div class="column column-activities">
 <div id="activities" class="section">
 <!-- <h2>Actions to view {=$file,kind2}</h2> -->
 <!--{if $file,isFile}-->
@@ -237,8 +198,53 @@ You need to use a version control (Subversion) client like Repos.</p>
 <hr class="custom"/>
 
 </div>
-
+<!--{* end column *}-->
 </div>
+
+<div class="column column-info">
+<!-- many plugins use the name #filedetails so the id is kept even though it is used for folders too -->
+<div id="filedetails" class="section">
+<h2>{=$file,kind2|ucfirst} details</h2>
+<!-- in headline: <p>Version number: <span class="revision">{=$file,revision}</span></p> -->
+<p>Path: <span class="path">{=$file,path}</span></p>
+<p>Last changed revision: <span class="revision">{=$file,revisionLastChanged}</span></p>
+<p>Last edited by: <span class="username">{=$file,author}</span></p>
+<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
+<!--{if $file,isFile}-->
+<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
+<!--{/if}-->
+<p>Content type: <span>{=$file,type}</span></p>
+<!--{if $file,isLocked}-->
+<p class="lock">Locked by 
+<span class="username">{=$file,lockOwner}</span> <span class="datetime">{=$file,lockCreated}</span>
+{=if $file,lockComment}<br /> <span class="message">{=$file,lockComment}</span>{=/if}
+</p>
+<!--{/if}-->
+<div class="proplist" title="{=$file,path}">
+</div>
+</div>
+<!--{if $log}-->
+<div id="editlog" class="section">
+<h2>Most recent changes</h2>
+<!--{assign var='logrev' value=$log|@array_keys}-->
+<ul>
+<!--{foreach from=$logrev item=r name=log}-->
+	<!--{assign var='e' value=$log.$r}-->
+	<li>
+		<span class="revision">{=$r}</span>
+		<span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span>
+		<span class="username">{=$e.user}</span>
+		<span class="message">{=$e.message|nl2br}</span>
+	</li>
+<!--{/foreach}-->
+</ul>
+</div>
+<!--{/if}-->
+</div>
+
+<div class="column column-links">
+</div>
+
 <div id="footer">
 <input id="urlcopy" title="Ctrl+C to copy the URL to clipboard" name="url" type="text" readonly="readonly" value="{=$file,url|asLink}" onclick="this.select();"/>
 </div>
