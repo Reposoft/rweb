@@ -26,15 +26,27 @@ class TestSvnOpenFile extends UnitTestCase {
 		// that revision number is NOT appended
 	}
 	
-	/* If we support folders for this class maybe the definition of getFolderUrl should change
 	function testGetFolderUrl() {
 		$repo = SvnOpenFile::getRepository();
 		$f2 = new SvnOpenFile('/a/');
 		$this->assertEqual("$repo/a/", $f2->getFolderUrl());
-		// obviously
-		$f3 = new SvnOpenFile('/a');
+	}
+	
+	function testGetFolderUrlGuess() {
+		$repo = SvnOpenFile::getRepository();
+		// unless we do an info request
+		$f3 = new SvnOpenFile('/a/b');
+		$this->assertEqual('/a/', $f3->getFolderPath());
+		$this->assertEqual("$repo/a/", $f3->getFolderUrl());
+	}
+	
+	function testGetFolderUrlRoot() {
+		$repo = SvnOpenFile::getRepository();
+		// unless we do an info request
+		$f3 = new SvnOpenFile('/a.x');
+		$this->assertEqual('/', $f3->getFolderPath());
 		$this->assertEqual("$repo/", $f3->getFolderUrl());
-	}*/
+	}
 	
 	function testGetUrlRevisionPeg() {
 		$repo = SvnOpenFile::getRepository();

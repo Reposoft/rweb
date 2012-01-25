@@ -161,6 +161,7 @@ class TestSystem extends UnitTestCase {
 		$this->assertEqual('/', getParent('/my/'));
 		$this->assertEqual('my/', getParent('my/folder/'));
 		$this->assertEqual('', getParent('my/'));
+		$this->assertEqual('/', getParent('/my'));
 		$this->assertEqual('http://my/', getParent('http://my/file.txt'));
 		if (System::isWindows()) {
 			$this->assertEqual('C:/', getParent('C:/my/'));

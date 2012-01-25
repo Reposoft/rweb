@@ -109,7 +109,9 @@ function isFolder($path) {
 function getParent($path) {
 	if (strlen($path)<1) return false;
 	$c = substr_count($path, '/');
-	if ($c < 2 || ($c < 4 && strContains($path, '://') && !($c==3 && !strEnds($path, '/')))) return false;
+	if ($c < 1) return false;
+	if ($c == 1 && strBegins($path, '/')) return '/';
+	if ($c < 4 && strContains($path, '://') && !($c==3 && !strEnds($path, '/'))) return false;
 	$f = substr($path, 0, strrpos(rtrim($path,'/'), '/'));
 	if (strlen($f)==0 && isRelative($path)) return $f;
 	return $f.'/';

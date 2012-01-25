@@ -230,8 +230,16 @@ class SvnOpenFile {
 	 * It only does HTTP operations, not svn (the _read() method is not allowed for folders).
 	 */
 	function isFolder() {
-		if (strEnds($this->path,'/')) return true;
+		if ($this->isFolderGuess()) return true;
 		return $this->getKind() == 'dir';
+	}
+	
+	/**
+	 * Needed to check for folder without accessing svn.
+	 * @return true if it is likely that the given path is a folder, i.e. if it ends with slash
+	 */
+	function isFolderGuess() {
+		return strEnds($this->path,'/');
 	}
 	
 	/**
@@ -292,8 +300,20 @@ class SvnOpenFile {
 		return $this->path;
 	}
 	
-	function getFolderPath() {
+	function getParentPath() {
 		return getParent($this->path);
+	}
+	
+	/**
+	 * @return same path if path ends with slash, parent if not
+	 */
+	function getFolderPath() {
+		// For risk of changing auth behavior in pages we don't dare to introduce an info check for this method,
+		// although it is quite possible that it would only affect unit tests
+		if ($this->isFolderGuess()) {
+			return $this->getPath();
+		}
+		return $this->getParentPath();
 	}
 	
 	/**
@@ -321,8 +341,15 @@ class SvnOpenFile {
 	}
 	
 	/**
-	 * @return string Parent URL, even for folders. Legacy behavior.
+	 * @return string Parent URL, even for folders
 	 */
+	function getParentUrl() {
+		return $this->getRepository().$this->getParentPath();
+	}
+	
+	/**
+	* @return string Parent URL for files, this URL for folders
+	*/
 	function getFolderUrl() {
 		return $this->getRepository().$this->getFolderPath();
 	}
