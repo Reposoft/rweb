@@ -206,20 +206,22 @@ You need to use a version control (Subversion) client like Repos.</p>
 <div id="filedetails" class="section">
 <h2>{=$file,kind2|ucfirst} details</h2>
 <!-- in headline: <p>Version number: <span class="revision">{=$file,revision}</span></p> -->
-<p>Path: <span class="path">{=$file,path}</span></p>
-<p>Last changed revision: <span class="revision">{=$file,revisionLastChanged}</span></p>
-<p>Last edited by: <span class="username">{=$file,author}</span></p>
-<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
+<dl class="filedetails">
+<dt>Path</dt><dd class="path">{=$file,path}</dd>
+<dt>Last changed revision</dt><dd class="revision">{=$file,revisionLastChanged}</dd>
+<dt>Last edited by</dt><dd class="username">{=$file,author}</dd>
+<dt>Last edited at</dt><dd class="datetime">{=$file,date}</dd>
 <!--{if $file,isFile}-->
-<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
+<dt>File size</dt><dd class="filesize">{=$file,size|formatSize}</dd>
 <!--{/if}-->
-<p>Content type: <span>{=$file,type}</span></p>
+<dt>Content type</dt><dd>{=$file,type}</dd>
 <!--{if $file,isLocked}-->
-<p class="lock">Locked by 
-<span class="username">{=$file,lockOwner}</span> <span class="datetime">{=$file,lockCreated}</span>
-{=if $file,lockComment}<br /> <span class="message">{=$file,lockComment}</span>{=/if}
-</p>
+<dt class="lock">Locked by</dt> 
+<dd class="username">{=$file,lockOwner}</dd> <dd class="datetime">{=$file,lockCreated}</dd>
+<!--{if $file,lockComment}--><dd class="message">{=$file,lockComment}</dd><!--{/if}-->
 <!--{/if}-->
+</dl>
+
 <div class="proplist" title="{=$file,path}">
 </div>
 </div>
