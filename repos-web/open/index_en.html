@@ -180,6 +180,14 @@ Make a versioned copy of the file. Remove the file at its original location to m
 Mark the file as deleted from now on. It will exist in History but won't be editable, and no longer visible when browsing.
 To later recover the file, navigate to it in History and do a Copy Historical.
 </p>
+{=if not $file,isLocked}
+<h3 class="edit"><a id="lock" href="../edit/lock/?target={=$target}">Lock file</a></h3>
+<p>You can always lock a file to make it read-only for everyone else.</p>
+{=elseif $file,isLockedByThisUser}
+<h3 class="edit"><a id="unlock" href="../edit/unlock/?target={=$target}">Unlock file</a></h3>
+<p>This file is locked by you. If you are not working with it,
+you can unlock it so that others are able to edit it.</p>
+{=/if}
 <h3 class="edit"><a id="editfile" href="../edit/text/?target={=$target}">Edit in Repos</a></h3>
 <p>
 Plaintext file formats can be conveniently edited in your browser.
@@ -189,14 +197,6 @@ No locking is needed.
 <p>
 Edit versioned metadata on this item.
 </p>
-{=if not $file,isLocked}
-<h3 class="edit"><a id="lock" href="../edit/lock/?target={=$target}">Lock file</a></h3>
-<p>You can always lock a file to make it read-only for everyone else.</p>
-{=elseif $file,isLockedByThisUser}
-<h3 class="edit"><a id="unlock" href="../edit/unlock/?target={=$target}">Unlock file</a></h3>
-<p>This file is locked by you. If you are not working with it,
-you can unlock it so that others are able to edit it.</p>
-{=/if}
 
 <!--{else}--><!-- folder -->
 <h3 class="edit"><a id="upload" href="../edit/upload/?target={=$target}">Add file</a></h3>
