@@ -162,8 +162,8 @@ Repos.isRevisionRequested = function() {
  * TODO is this same as working/entry revision in svn info?
  */
 Repos.getRevisionRequested = function() {
-	var m = (/[?&]rev=(\d+)/).exec(window.location.search);
-	return m && m[1];
+	var m = (/[?&](rev|p)=(\d+)/).exec(window.location.search);
+	return m && m[2];
 };
 
 /**
