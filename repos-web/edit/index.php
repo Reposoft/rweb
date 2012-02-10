@@ -14,9 +14,11 @@ if(isset($_GET['action'])) {
 // new behaviour, list the user's options
 $revisionRule = new RevisionRule();
 $file = new SvnOpenFile(getTarget(), $revisionRule->getValue());
-// read something from the file so we check authentication befor presentation starts
-$file->isWritable(); // looks like this isn't enough with the current implementation of SvnOpenFile
-$file->isLocked();
+// use svn on the file so we check authentication befor presentation starts
+$file->_read();
+if ($file->isFolder()) {
+	trigger_error('This service is available for files only, got target ' + getTarget(), E_USER_ERROR);
+}
 
 $p = Presentation::getInstance();
 $p->assign_by_ref('file', $file);

@@ -33,58 +33,20 @@ Using the current version number <span class="revision">{=$file,revision}</span>
 you can always refer to the file as it is now.</p>
 </div>
 
-<div class="column" style="width: 60%">
-
-<div id="filedetails" class="section">
-<h2>File details</h2>
-<!-- in headline: <p>Version number: <span class="revision">{=$file,revision}</span></p> -->
-<p>Path: <span class="path">{=$file,path}</span></p>
-<p>Last changed revision: <span class="revision">{=$file,revisionLastChanged}</span></p>
-<p>Last edited by: <span class="username">{=$file,author}</span></p>
-<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
-<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
-<p>Content type: <span>{=$file,type}</span></p>
-<!--{if $file,isLocked}-->
-<p class="lock">Locked by 
-<span class="username">{=$file,lockOwner}</span> <span class="datetime">{=$file,lockCreated}</span>
-{=if $file,lockComment}<br /> <span class="message">{=$file,lockComment}</span>{=/if}
-</p>
-<!--{/if}-->
-</div>
-
-<!--{if $log}-->
-<div id="editlog" class="section">
-<h2>Most recent changes</h2>
-{=assign var='logrev' value=$log|@array_keys}
-<ul/>
-{=foreach from=$logrev item=r name=log}
-	{=assign var='e' value=$log.$r}
-	<li>
-		<span class="revision">{=$r}</span>
-		<span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span>
-		<span class="username">{=$e.user}</span>
-		<span class="message">{=$e.message|nl2br}</span>
-	</li>
-{=/foreach}
-</ul>
-</div>
-<!--{/if}-->
-</div>
-
 <div class="column" style="width: 40%">
 <div id="activities" class="section">
 <h2>Actions to edit {=$file,kind2}</h2>
 {=if $file,isLockedByThisUser}
-<p>The file is <strong>locked</strong> by you. We recommend you <a href="upload/?target={=$target}">Upload new version</a>.</p>
+<p>The file is <strong>locked</strong> by you. Repos Web suggests you <a href="upload/?target={=$target}">Upload new version</a>.</p>
 {=elseif $file,isPlaintext and $file,size lt 102400}
-<p>This is a text file that's not too big. We recommend you 
+<p>This is a text file that's not too big. Repos Web suggests you 
 <a href="text/?target={=$target}">Edit in Repos</a>.</p>
 {=elseif $file,isPlaintext}
 <p>This is a text file. There is no need to lock it.
 <a href="../open/download/?target={=$target}{=$file,revParam}">Download</a>,
 edit on your computer, then <a href="upload/?target={=$target}">upload new version</a>.</p>
 {=else}
-<p>This is a binary or unknown fileformat. We recommend you Download with lock.</p>
+<p>This is a binary or unknown fileformat. Repos Web suggests you <a href="lock/?target={=$target}&download">Download with lock</a> and edit the file locally.</p>
 {=/if}
 
 {=if not $file,isLockedByThisUser}
@@ -153,6 +115,44 @@ You need to use a version control client like Repos.
 
 <!--{/if}-->
 </div>
+</div>
+
+<div class="column" style="width: 60%">
+
+<div id="filedetails" class="section">
+<h2>File details</h2>
+<!-- in headline: <p>Version number: <span class="revision">{=$file,revision}</span></p> -->
+<p>Path: <span class="path">{=$file,path}</span></p>
+<p>Last changed revision: <span class="revision">{=$file,revisionLastChanged}</span></p>
+<p>Last edited by: <span class="username">{=$file,author}</span></p>
+<p>Last edited at: <span class="datetime">{=$file,date}</span></p>
+<p>File size: <span class="filesize">{=$file,size|formatSize}</span></p>
+<p>Content type: <span>{=$file,type}</span></p>
+<!--{if $file,isLocked}-->
+<p class="lock">Locked by 
+<span class="username">{=$file,lockOwner}</span> <span class="datetime">{=$file,lockCreated}</span>
+{=if $file,lockComment}<br /> <span class="message">{=$file,lockComment}</span>{=/if}
+</p>
+<!--{/if}-->
+</div>
+
+<!--{if $log}-->
+<div id="editlog" class="section">
+<h2>Most recent changes</h2>
+{=assign var='logrev' value=$log|@array_keys}
+<ul/>
+{=foreach from=$logrev item=r name=log}
+	{=assign var='e' value=$log.$r}
+	<li>
+		<span class="revision">{=$r}</span>
+		<span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span>
+		<span class="username">{=$e.user}</span>
+		<span class="message">{=$e.message|nl2br}</span>
+	</li>
+{=/foreach}
+</ul>
+</div>
+<!--{/if}-->
 </div>
 
 <div id="footer">
