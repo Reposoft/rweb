@@ -53,7 +53,9 @@ $p->assign('target', getTarget());
 if ($fromrev) $p->assign('fromrev', $fromrev);
 // display a short log for the file on the edit page
 require(dirname(__FILE__).'/getlog.php');
-$p->assign('log', getLog(getTargetUrl()));
+$p->assign('log', getLog(getTargetUrl())); // TODO to $rev?
+require(dirname(__FILE__).'/getproplist.php');
+$p->assign('proplist', getProplistGrouped(getTargetUrl(), $rev));
 // before entering smarty template code, read some file info so that in the event of access error
 // a formatted error page is presented (errors in template can ony be presented in plaintext)
 // When we had a dedicated "edit" page the same was done with $file->isWritable();$file->isLocked();

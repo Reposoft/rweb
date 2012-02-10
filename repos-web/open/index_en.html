@@ -176,7 +176,7 @@ You need to use a version control (Subversion) client like Repos.</p>
 <div class="column column-info">
 <!-- many plugins use the name #filedetails so the id is kept even though it is used for folders too -->
 <div id="filedetails" class="section">
-<h2>{=$file,kind2|ucfirst} details</h2>
+<h2>About this {=$file,kind2}</h2>
 <!-- in headline: <p>Version number: <span class="revision">{=$file,revision}</span></p> -->
 <dl class="filedetails">
 <dt>Path</dt><dd class="path">{=$file,path}</dd>
@@ -195,11 +195,22 @@ You need to use a version control (Subversion) client like Repos.</p>
 </dl>
 
 <div class="proplist" title="{=$file,path}">
+<!--{foreach from=$proplist key=propns item=props}-->
+<dl class="properties">
+	<lh>Properties {=$propns}</lh>
+	<!--{foreach from=$props key=propname item=propvals}-->
+		<dt class="prop-{=$propname|getFileId}">{=$propname}</dt>
+		<!--{foreach from=$propvals item=propval}-->
+		<dd class="prop-{=$propname|getFileId}">{=$propval}</dd>
+		<!--{/foreach}-->
+	<!--{/foreach}-->
+</dl>
+<!--{/foreach}-->
 </div>
 </div>
 <!--{if $log}-->
 <div id="editlog" class="section">
-<h2>Most recent changes</h2>
+<h2>Recent changes</h2>
 <!--{assign var='logrev' value=$log|@array_keys}-->
 <ul>
 <!--{foreach from=$logrev item=r name=log}-->
