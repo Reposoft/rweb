@@ -50,11 +50,6 @@ You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 
 <div class="column column-activities">
 <div id="activities" class="section">
-<!--{if isset($fromrev)}-->
-<p>
-View the <a href="diff/?target={=$target}{=$file,revParam}&fromrev={=$fromrev}">difference from version {=$fromrev}</a>.
-</p>
-<!--{/if}-->
 {=if $file,isFile}
 <h3 class="view"><a id="open" href="open/?target={=$target}{=$file,revParam}">Open</a></h3>
 <p>This shows the file in the current window. It is good for text files, HTML and images.
@@ -81,6 +76,12 @@ you will see only a long line of characters.</p>
 <p>View the commits that
 {=if $file,isFile} have changed this file or its properties
 {=else} have affected contents in this folder{=/if}.</p>
+<!--{if $file,isRevisionRequested and isset($fromrev)}-->
+<h3 class="view"><a id="changeset" href="diff/?target={=$target}{=$file,revParam}&fromrev={=$fromrev}">Diff from {=$fromrev}</a></h3>
+<p>
+View the line-based differences from revision {=$fromrev}</a>.
+</p>
+<!--{/if}-->
 
 <hr class="edit"/>
 <!--{if $file,isLatestRevision}-->
