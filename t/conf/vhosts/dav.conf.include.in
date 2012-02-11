@@ -21,7 +21,7 @@
 		# not needed inside location #RewriteCond %{REQUEST_URI} ^/dav/(.*[^/])$
 		# The current fix relies on knowing the local path, to identify directory without subrequests
 		# REQUEST_URI is urldecoded; can be used to check local path
-		#RewriteCond @ServerRoot@/hosts/multirepo/dav/%1 -d
+		#RewriteCond @ServerRoot@/hosts/multirepo/dav/files/%1 -d
 #		RewriteCond %{REQUEST_FILENAME} -d
 		# Change URI internally, redirect would not be followed
 #		RewriteRule ^(.*)$ $1/
