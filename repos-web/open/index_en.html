@@ -220,7 +220,7 @@ You need to use a version control (Subversion) client like Repos.</p>
 <!--{foreach from=$logrev item=r name=log}-->
 	<!--{assign var='e' value=$log.$r}-->
 	<li>
-		<span class="revision">{=$r}</span>
+		<a class="revision" href="?target={=$target}&rev={=$r}">{=$r}</a>
 		<span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span>
 		<span class="username">{=$e.user}</span>
 		<span class="message">{=$e.message|nl2br}</span>

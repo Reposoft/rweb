@@ -68,6 +68,10 @@ div p {
 	clear: both;
 }
 
+#filedetails lh {
+	color: #666633;
+}
+
 dd.aboutitem-rev {
 	display: inline;
 }
@@ -90,7 +94,7 @@ dt.aboutitem-lockcomment {
 	padding-left: 1em;
 }
 
-#editlog span {
+#editlog span, #editlog li > a {
 	margin: .3em 1em .3em 0;
 }
 
