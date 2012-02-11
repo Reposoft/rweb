@@ -13,6 +13,7 @@ div.column {
 div.column-activities {
 }
 div.column-info {
+	min-width: 40em;
 }
 div.column-links {
 }
@@ -63,25 +64,18 @@ div p {
 	color: #333333;
 }
 
-dl.filedetails {
-	clear: both;
-}
-dl.filedetails :last-child {
-	padding-bottom: 1em;
-}
-.filedetails dt {
-	clear: left;
-	float: left;
-}
-.filedetails dt:after {
-	content: ":";
-}
-.filedetails dd {
-	float: left;
-	margin-left: .5em;
-}
 .section div {
 	clear: both;
+}
+
+dd.aboutitem-rev {
+	display: inline;
+}
+dd.aboutitem-rev + dd.aboutitem-rev {
+	margin-left: .5em;
+}	
+dt.aboutitem-lockcomment {
+	display: none;
 }
 
 /* Repos Login status hidden by default and displayed by login plugin */

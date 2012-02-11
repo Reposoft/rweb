@@ -178,25 +178,29 @@ You need to use a version control (Subversion) client like Repos.</p>
 <div id="filedetails" class="section">
 <h2>About this {=$file,kind2}</h2>
 <!-- in headline: <p>Version number: <span class="revision">{=$file,revision}</span></p> -->
-<dl class="filedetails">
-<dt>Path</dt><dd class="path">{=$file,path}</dd>
-<dt>Last changed revision</dt><dd class="revision">{=$file,revisionLastChanged}</dd>
-<dt>Last edited by</dt><dd class="username">{=$file,author}</dd>
-<dt>Last edited at</dt><dd class="datetime">{=$file,date}</dd>
-<!--{if $file,isFile}-->
-<dt>File size</dt><dd class="filesize">{=$file,size|formatSize}</dd>
-<!--{/if}-->
-<dt>Content type</dt><dd>{=$file,type}</dd>
-<!--{if $file,isLocked}-->
-<dt class="lock">Locked by</dt> 
-<dd class="username">{=$file,lockOwner}</dd> <dd class="datetime">{=$file,lockCreated}</dd>
-<!--{if $file,lockComment}--><dd class="message">{=$file,lockComment}</dd><!--{/if}-->
+<dl class="aboutitem">
+<dt class="aboutitem-path">Path</dt><dd class="aboutitem-path path">{=$file,path}</dd>
+<dt class="aboutitem-rev">Revision</dt><dd class="aboutitem-rev revision">{=$file,revisionLastChanged}</dd> <dd class="aboutitem-rev datetime">{=$file,date}</dd> <dd class="aboutitem-rev username">{=$file,author}</dd>
+<!--{if $file,isFile and $file,isLocked}-->
+<dt class="aboutitem-lock lock">Locked</dt>
+<dd class="aboutitem-lock username">{=$file,lockOwner}</dd> <dd class="aboutitem-lock datetime">{=$file,lockCreated}</dd>
+	<!--{if $file,lockComment}-->
+	<dt class="aboutitem-lock aboutitem-lockcomment">Lock comment</dt>
+	<dd class="aboutitem-lock aboutitem-lockcomment comment">{=$file,lockComment}</dd>
+	<!--{/if}-->
 <!--{/if}-->
 </dl>
+<!--{if $file,isFile}-->
+<dl class="aboutfile">
+<lh>File details</lh>
+<dt class="aboutfile-size">Size</dt><dd class="aboutfile-size filesize">{=$file,size|formatSize}</dd>
+<dt class="aboutfile-content-type">Content type</dt><dd class="aboutfile-content-type">{=$file,type}</dd>
+</dl>
+<!--{/if}-->
 
 <div class="proplist" title="{=$file,path}">
 <!--{foreach from=$proplist key=propns item=props}-->
-<dl class="properties">
+<dl class="properties properties-{=$propns}">
 	<lh>Properties {=$propns}</lh>
 	<!--{foreach from=$props key=propname item=propvals}-->
 		<dt class="prop-{=$propname|getFileId}">{=$propname}</dt>
