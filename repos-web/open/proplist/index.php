@@ -1,5 +1,6 @@
 <?php
-// get the properties of a file or folder as JSON 
+// get the properties of a file or folder as JSON
+// Before exiting this code more, consider reuse of ../getproplist.php be
 
 $tStart = microtime(true);
 require("../SvnOpen.class.php" );
