@@ -237,6 +237,11 @@ li ul.actions li {
 	margin: 0.2em;
 	vertical-align: middle;
 }
+#commandbar input {
+	margin: 0.1em;
+	border: 1px solid #CCC;
+	vertical-align: middle;
+}
 /* action is for buttons inside listings, <a> is  active, <span> is greyed out */
 a.action {
 	color: #555555;
