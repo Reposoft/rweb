@@ -50,6 +50,8 @@ You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 
 <div class="column column-activities">
 <div id="activities" class="section">
+
+<div id="activities-view" class="activities">
 {=if $file,isFile}
 <h3 class="view"><a id="open" href="open/?target={=$target}{=$file,revParam}">Open</a></h3>
 <p>This shows the file in the current window. It is good for text files, HTML and images.
@@ -82,8 +84,9 @@ you will see only a long line of characters.</p>
 View the line-based differences from revision {=$fromrev}</a>.
 </p>
 <!--{/if}-->
+</div>
 
-<hr class="edit"/>
+<div id="activities-edit" class="activities">
 <!--{if $file,isLatestRevision}-->
 <!--{if $file,isFile}-->
 <p class="edit recommendation">
@@ -167,7 +170,10 @@ In many programs you can open the URL directly, without downloading the file fir
 <p>This is not the latest version of the file, so you can not use the URL to access it.
 You need to use a version control (Subversion) client like Repos.</p>
 <!--{/if}-->
-<hr class="custom"/>
+</div>
+
+<div id="activities-custom" class="activities">
+</div>
 
 </div>
 <!--{* end column *}-->
