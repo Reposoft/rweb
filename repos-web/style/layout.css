@@ -51,9 +51,8 @@ div.section h2 {
 	background-image: none;
 }
 
-#activities hr { /* menu separator */
-	border: 0;
-	padding-top: .5em;
+#activities div {
+	margin-bottom: 2em;
 }
 
 #activities .recommendation {
