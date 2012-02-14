@@ -23,7 +23,7 @@ Repos.service('index/', button);
 $.fn.reposDetails = function(s) {
 	
 	s = $.extend({
-		url: Repos.getWebapp() + 'open/list/?target=',
+		url: Repos.getWebapp() + 'open/list/?base=' + Repos.getBase() + '&target=',
 		target: Repos.getTarget(),
 		encode: true
 	}, s);
