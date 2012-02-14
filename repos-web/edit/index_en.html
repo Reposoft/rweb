@@ -35,6 +35,8 @@ you can always refer to the file as it is now.</p>
 
 <div class="column" style="width: 40%">
 <div id="activities" class="section">
+
+<div id="activities-edit" class="activities">
 <h2>Actions to edit {=$file,kind2}</h2>
 {=if $file,isLockedByThisUser}
 <p>The file is <strong>locked</strong> by you. Repos Web suggests you <a href="upload/?target={=$target}">Upload new version</a>.</p>
@@ -101,17 +103,15 @@ You will get a link to the branch, and from there you can access the "merge" fun
 <p>This file is locked by you. If you are not working with it,
 you can unlock it so that others are able to edit it.</p>
 {=/if}
+</div>
 
+<div id="activities-custom" class="activities">
 <h3><a id="useurl" href="#urlcopy" onblur="document.getElementById('urlcopy').select();">Use the URL</a></h3>
-<!--{if $file,isLatestRevision}-->
 <p>Many modern programs can use URLs to open files directly from the server.</p>
-<p>Office documents can usually be edited directly.
-Paste the URL into the "open" dialog in word or excel, 
-and when you save it will automatically be committed to repository.</p>
-<!--{else}-->
-This is not the latest version of the file, so you can not use the URL to access it.
-You need to use a version control client like Repos.
-<!--{/if}-->
+<p>Depending on the server configuration, it might be possible to save files 
+directly to the URL in for example Microsoft Office. Applications that have
+an integrated Subversion client will definitely be able to use the URL.</p>
+</div>
 
 <!--{/if}-->
 </div>
