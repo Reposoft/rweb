@@ -37,6 +37,9 @@ You can not rename this file.</p>
   <legend>Upload to repos</legend>
   <input type="hidden" name="target" value="{=$target}"/>
   <input type="hidden" name="type" value="upload"/>
+  <!--{foreach from=$customfields key=fname item=fval}-->
+  	<input type="hidden" name="{=$fname}" value="{=$fval}"/>
+  <!--{/foreach}-->
   <p>
     <label for="userfile">local file</label>
 	 <input type="hidden" name="MAX_FILE_SIZE" value="{=$maxfilesize}" />

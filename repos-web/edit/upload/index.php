@@ -21,6 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	set_time_limit(UPLOAD_MAX_TIME);
 }
 
+// prefix for query params and form fields to be treated as svn properties
+define('UPLOAD_PROP_PREFIX', 'prop_');
+
 // name only exists for new files, not for new version requests
 new FilenameRule("name");
 // disabled as plain uploads don't care about type //new EditTypeRule('type');
@@ -81,6 +84,14 @@ function showUploadForm() {
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
 	$template->assign('isfile',$file->isFile());
 	$template->assign('target',$target);
+	foreach ($_GET as $param => $value) {
+		$custom = array();
+		if (strBegins($param, UPLOAD_PROP_PREFIX)) {
+			$custom[$param] = $value;
+		}
+		// custom should be selected so they can not overwrite other fields
+		$template->assign('customfields', $custom);
+	}
 	if (isset($_GET['download'])) {
 		$revParam = isset($_REQUEST['rev']) ? '&rev='.$_REQUEST['rev'] : '';
 		// does not use getRepository so "base" must be added manually
@@ -123,7 +134,8 @@ function processNewFile($upload) {
  */
 function processNewVersion($upload) {
 	Validation::expect('fromrev', 'type');
-	$presentation = Presentation::background();
+	//$presentation = Presentation::background();
+	$presentation = Presentation::getInstance();
 	$dir = System::getTempFolder('upload');
 	$repoFolder = getParent($upload->getTargetUrl());
 	// check out existing files of the given revision
@@ -185,6 +197,8 @@ function processNewVersion($upload) {
 	if ($diff->exec()) trigger_error('Could not read difference between current and uploaded file.', E_USER_ERROR);
 	// can not do a validation rule on multipart POST
 	if (count($diff->getOutput())==0) Validation::error('The uploaded file is identical to the latest version in repository.', E_USER_WARNING);
+	// allow custom forms to set properties at file creation and modification
+	setArbitraryProperties($dir . $filename, $upload);
 	// always do update before commit
 	updateAndHandleConflicts($dir, $presentation);
 	// create the commit command
@@ -227,6 +241,16 @@ function processNewVersion($upload) {
 
 function _canEditAsTextarea($mimetype) {
 	return $mimetype=='text/plain';
+}
+
+function setArbitraryProperties($workingCopyFilePath, $upload) {
+	$props = $upload->getCustomProperties();
+	foreach ($props as $name => $value) {
+		$propset = new SvnEdit('propset');
+		$propset->addArgOption($name, $value);
+		$propset->addArgPath($workingCopyFilePath);
+		$propset->exec("Set property '$name' to '$value'");
+	}
 }
 
 /**
@@ -402,6 +426,19 @@ class Upload {
 		} else {
 			return $_POST['lockcomment'];
 		}
+	}
+	
+	/**
+	 * @return {array(String)} arbitrary propery name to values 
+	 */
+	function getCustomProperties() {
+		$props = array();
+		foreach ($_POST as $name => $value) {
+			if (strBegins($name, UPLOAD_PROP_PREFIX)) {
+				$props[substr($name, 5)] = $value;
+			}
+		}
+		return $props;
 	}
 }
 ?>

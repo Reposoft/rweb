@@ -9,6 +9,9 @@ require("../../conf/Presentation.class.php" );
 require("../SvnEdit.class.php" );
 require('EditTypeRule.class.php');//addPlugin('edit');
 
+// prefix for query params and form fields to be treated as svn properties
+define('UPLOAD_PROP_PREFIX', 'prop_');
+
 targetLogin(); // edit operation can not be public
 
 // name only exists for new files, not for new version requests
@@ -39,6 +42,14 @@ if ($_SERVER['REQUEST_METHOD']=='GET' || $_SERVER['REQUEST_METHOD']=='HEAD') {
 	}
 	$template->assign('target',$target);
 	$template->assign('targeturl', getTargetUrl());
+	foreach ($_GET as $param => $value) {
+		$custom = array();
+		if (strBegins($param, UPLOAD_PROP_PREFIX)) {
+			$custom[$param] = $value;
+		}
+		// custom should be selected so they can not overwrite other fields
+		$template->assign('customfields', $custom);
+	}	
 	$template->display();
 } else {
 	trigger_error('This form should be posted to ../upload/.', E_USER_ERROR);
