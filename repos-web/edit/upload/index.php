@@ -6,7 +6,6 @@
 require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
 require(dirname(dirname(__FILE__)).'/SvnEdit.class.php');
 require(dirname(dirname(dirname(__FILE__))).'/open/getlog.php');
-//not 1.1//require("mimetype.inc.php");
 require(dirname(__FILE__).'/filewrite.inc.php');
 
 // the only use for the numeric value is the MAX_FILE_SIZE parameter in the form, which is good for what?
@@ -56,11 +55,7 @@ if (!isTargetSet()) {
 		showUploadForm();
 	} else {
 		$upload = new Upload('userfile');
-		if ($upload->isCreate()) {
-			processNewFile($upload);
-		} else {
-			processNewVersion($upload);
-		}
+		processFile($upload);
 	}
 }
 	
@@ -105,37 +100,11 @@ function showUploadForm() {
 }
 
 /**
- * @param Upload $upload
+ * 
+ * @param {Upload} $upload The file upload handler
  */
-function processNewFile($upload) {
-	Validation::expect('name', 'type');
+function processFile($upload) {
 	$presentation = Presentation::background();
-	$newfile = System::getTempFile('upload', $upload->getName());
-	$upload->processSubmit($newfile);
-	$edit = new SvnEdit('import');
-	$edit->addArgPath($newfile);
-	$edit->addArgUrl($upload->getTargeturl());
-	$edit->setMessage($upload->getMessage());
-	$edit->exec();
-	// In 1.1 we don't customize mime types, but here's how to get the type from the browser
-	// If the customer wants mime types to be set, it can be configured with svn autoprops
-	// Currently we rely on autoprops to set text/html for html pages edited online
-	//$clientMime = $upload->getType();
-	// clean up
-	System::deleteFile($newfile);
-	$upload->cleanUp();
-	// show results
-	displayEdit($presentation, dirname($upload->getTargetUrl()));
-}
-
-/**
- * Commits a new version of an existing file.
- * @param Upload $upload the file upload handler
- */
-function processNewVersion($upload) {
-	Validation::expect('fromrev', 'type');
-	//$presentation = Presentation::background();
-	$presentation = Presentation::getInstance();
 	$dir = System::getTempFolder('upload');
 	$repoFolder = getParent($upload->getTargetUrl());
 	// check out existing files of the given revision
@@ -173,7 +142,7 @@ function processNewVersion($upload) {
 	// while the subversion commands use $dir.$filename and the setlocale in Command class
 	$updatefile = toPath($dir . $filename);
 	// upload file to working copy
-	if(!file_exists($dir.'/.svn') || !file_exists($updatefile)) {
+	if(!file_exists($dir.'/.svn') || !$upload->isCreate() && !file_exists($updatefile)) {
 		$presentation->showError('Can not read current version of the file named "'
 			.$filename.'" from repository path "'.$repoFolder.'"');
 	}
@@ -184,11 +153,18 @@ function processNewVersion($upload) {
 			.' It can not be overwritten with uploaded contents.');
 	}
 	// delete current working copy file and get the uploaded file instead
-	System::deleteFile($updatefile);
+	if (!$upload->isCreate()) {
+		System::deleteFile($updatefile);
+	}
 	$upload->processSubmit($updatefile);
 	if(!file_exists($updatefile)) {
 		$presentation->showError('Could not read uploaded file "'
 			.$filename.'" for operation "'.getPathName($dir).'"');
+	}
+	if ($upload->isCreate()) {
+		$add = new SvnOpen('add');
+		$add->addArgPath($dir . $filename);
+		$add->exec();
 	}
 	// check that there is a diff compared to fromrev, should not be displayed to user: use SvnOpen
 	$diff = new SvnOpen('diff');
@@ -281,6 +257,7 @@ class Upload {
 	}
 
 	function processSubmit($destinationFile) {
+		Validation::expect('type'); // there's custom writing to file from form input
 		if (isset($_POST['usertext'])) {
 			$type = isset($_POST['type']) ? $_POST['type'] : '';
 			editWriteNewVersion($_POST['usertext'], $destinationFile, $type);
@@ -320,6 +297,7 @@ class Upload {
 	 */
 	function getName() {
 		if ($this->isCreate()) {
+			Validation::expect('name');
 			return $_POST['name'];
 		}
 		return getPathName(getTarget());
@@ -387,8 +365,9 @@ class Upload {
 	 */
 	function getFromrev() {
 		if ($this->isCreate()) {
-			trigger_error('This is a new file and can not be based on a revsion', E_USER_ERROR);
+			return 'HEAD';
 		} else {
+			Validation::expect('fromrev'); // old behavior, we could probably have a default
 			$r = new RevisionRule('fromrev');
 			return $r->getValue();
 		}

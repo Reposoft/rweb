@@ -52,9 +52,13 @@ function enableSubmitOverlay() {
 		$('body > *').hide();
 		var o = $('<div id="overlay"/>').appendTo('body');
 		var w = $('<span class="wait">Uploading file...</span>').appendTo(o);
-		window.setInterval(function() {
+		var p = window.setInterval(function() {
 			w.append('.');
 		}, 1000);
+		$(window).unload(function() {
+			window.clearInterval(p);
+			w.remove();
+		});
 		return true;
 	});
 }
