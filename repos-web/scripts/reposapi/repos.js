@@ -245,6 +245,44 @@ jQuery.fn.say = function(message) {
 };
 
 /**
+ * jQuery plugin to make element expandable/collapsable.
+ * Elements start collapsed.
+ * Only some element structures are supported.
+ * To toggle, toggle class collapsed/expanded.
+ * @param {String} [state] State to switch to, "collapsed" or "expanded"
+ */
+jQuery.fn.reposCollapsable = function(state) {
+	var support = { // matches css
+			'dl': '> lh',
+			'div': '> h2:first-child, h3:first-child',
+		};
+	if (typeof state == 'undefined') state = 'collapsed';
+	var enabler = function(container, clickElem) {
+		return function() {
+			container.addClass('collapsable').addClass(state);
+			clickElem.css('cursor', 'pointer').click(function() {
+				container.toggleClass('collapsed').toggleClass('expanded');
+			});
+		}
+	};
+	return this.each(function() {
+		var $this = $(this);
+		for (var t in support) {
+			if ($this.is(t)) {
+				var c = $(support[t], $this);
+				if ($this.is('.collapsable')) {
+					if (!$this.is(state)) {
+						c.trigger('click');
+					}
+				} else {
+					enabler($this, c)();
+				}
+			}
+		}
+	});
+};
+
+/**
  * Multi-repo support.
  * Customize jQuery.ajax to transparently support 'base' parameter
  * (otherwise every plugin would need if-else for SVNPath/SVNParentPath)
