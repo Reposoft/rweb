@@ -137,10 +137,6 @@ if (isset($_SERVER['REPOS_REPO']) && isset($_REQUEST['base'])) {
 	unset($_REQUEST['base']); // should be a lot faster, and works as long as code does not read the query string directly
 }
 
-if (isset($_SERVER['REPOS_REPO_PARENT']) && !isset($_REQUEST['base'])) {
-	trigger_error("base parameter is required for parent path server setup", E_USER_ERROR);
-}
-
 // Internally dates should always be UTC. They may be localized in the UI.
 date_default_timezone_set('UTC');
 
