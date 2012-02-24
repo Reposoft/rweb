@@ -1,5 +1,7 @@
 @CHARSET "UTF-8";
-/* shared layout between themse instead of plugin solution */
+/* dependencies */
+@import "jquery-ui/jquery-ui.custom.css";
+/* shared layout between themes instead of plugin solution */
 @import "layout.css";
 /* repos.se common styles */
 html {
@@ -390,4 +392,28 @@ div.versiondisplay {
 }
 .lock-oooo {
 	background-image: url('lock-oooo.png');
+}
+/* browsedetails */
+.serv-embed .noview-embed, .serv-embed #commandbar, .serv-embed #footer, .serv-embed #activities #useurl {
+	display: none;
+}
+.itemextend {
+	margin-left: 1em;
+	padding: 0 .3em 0 .2em;
+	background-color: #DDD;
+	font-weight: normal;
+	color: #666;
+	cursor: pointer;
+	display: none;
+}
+li:hover .itemextend {
+	display: inline;
+}
+.ui-dialog .ui-dialog-content.extendbox {
+	overflow: hidden; /* for iframe size 100% */
+	padding: 0 .2em .2em 0;
+}
+.extendbox iframe {
+	background-color: white;
+	border: 0;
 }

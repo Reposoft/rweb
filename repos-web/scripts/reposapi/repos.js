@@ -55,10 +55,6 @@ Repos.target = function(t, fn) {
  * @param {Function} fn
  */
 Repos.service = function(s, fn) {
-	// aliases
-	if (s == 'details/') s = 'open/';
-	if (s == 'view/') s = 'open/file/';
-	if (s == 'open/view/') s = 'open/file';
 	return Repos.isService(s) && $(document).ready(fn);
 };
 
@@ -197,6 +193,14 @@ Repos.isTarget = function(selector,context) {
  * @param {Object} context
  */
 Repos.isService = function(selector,target) {
+	// a bit more flexibility
+	if (Repos.getMeta('serv') !== 'embed') {
+		// use "details/" for the full details page, "open/" for all view modes
+		if (selector == 'details/') selector = 'open/'
+	}
+	if (selector == 'view/') selector = 'open/file/';
+	if (selector == 'open/view/') selector = 'open/file';
+	// check with page meta
 	return (Repos.getService() == selector);
 };
 

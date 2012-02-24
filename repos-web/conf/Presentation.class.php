@@ -291,6 +291,8 @@ class Presentation {
 	function display($resource_name = null, $cache_id = null, $compile_id = null) {
 		if (isRequestService()) {
 			return $this->displayInternal();
+		} elseif (isset($_REQUEST[WEBSERVICE_KEY])) {
+			$this->smarty->register_outputfilter('Repos_cust_output_'.$_REQUEST[WEBSERVICE_KEY]);
 		}
 		// set common head tags
 		$webapp = $this->_getStaticWebappUrl();
@@ -471,6 +473,9 @@ class Presentation {
 		if (function_exists('getService')) {
 			$head = $head . '<meta name="repos-service" content="'.getService().'" />';
 		}
+		if (isset($_REQUEST[WEBSERVICE_KEY])) {
+			$head = $head . '<meta name="repos-serv" content="'.$_REQUEST[WEBSERVICE_KEY].'" />';
+		}
 		// metadata for multi-repo
 		// unlike svn's index xml, Repos should set repos-base only if there is an SVNParentPath
 		// (or, if the xslt always writes repos-base, we should do so here too)
@@ -596,6 +601,18 @@ function Presentation_removeIndentation($tpl_source, &$smarty) {
 	$pattern = '/>\r?\n\s*([<{])/';
 	$replacement = '>$1';
 	return preg_replace($pattern, $replacement, $tpl_source);
+}
+
+/**
+ * Modify html for embedded viewing, like an iframe.
+ * Will of course not affect links generated in javascript.
+ */
+function Repos_cust_output_embed($tpl_output, &$smarty) {
+	$patterns[] = '/<body>/';
+	$replacements[] = '<body class="serv-embed">';
+	$patterns[] = '/(<a [^>]*)href=/';
+	$replacements[] = '$1target="_top" href=';
+	return preg_replace($patterns, $replacements, $tpl_output);
 }
 
 // plug in to repos.properties.php's error handling solution
