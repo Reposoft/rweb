@@ -71,12 +71,13 @@ div p {
 	color: #666633;
 }
 
-dd.aboutitem-rev {
+dd.aboutitem-rev, dd.aboutitem-lock.datetime, dd.aboutitem-lock.username {
 	display: inline;
 }
-dd.aboutitem-rev + dd.aboutitem-rev {
+dd.aboutitem-rev + dd.aboutitem-rev, dd.aboutitem-lock.username {
 	margin-left: .5em;
-}	
+}
+
 dt.aboutitem-lockcomment {
 	display: none;
 }
