@@ -5,17 +5,20 @@ div#intro {
 	padding: 5px;
 }
 
-div.column {
-	display: inline;
+div.column, div.colgroup {
 	float: left;
 }
-
 div.column-activities {
 }
+div.colgroup-targetdetails {
+	min-width: 60em;
+	max-width: 140em;
+}
 div.column-info {
-	min-width: 40em;
+	width: 60%;
 }
 div.column-links {
+	width: 40%;
 }
 
 div.section {
