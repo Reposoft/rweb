@@ -183,8 +183,8 @@ In many programs you can open the URL directly, without downloading the file fir
 <dt class="aboutitem-path">Path</dt><dd class="aboutitem-path path">{=$file,path}</dd>
 <dt class="aboutitem-rev">Revision</dt><dd class="aboutitem-rev revision">{=$file,revisionLastChanged}</dd> <dd class="aboutitem-rev datetime">{=$file,date}</dd> <dd class="aboutitem-rev username">{=$file,author}</dd>
 <!--{if $file,isFile and $file,isLocked}-->
-<dt class="aboutitem-lock">Locked</dt>
-<dd class="aboutitem-lock lock datetime">{=$file,lockCreated}</dd> <dd class="aboutitem-lock username">{=$file,lockOwner}</dd>
+<dt class="aboutitem-lock">Lock</dt>
+<dd class="aboutitem-lock datetime">{=$file,lockCreated}</dd> <dd class="aboutitem-lock username">{=$file,lockOwner}</dd>
 	<!--{if $file,lockComment}-->
 	<dt class="aboutitem-lock aboutitem-lockcomment">Lock comment</dt>
 	<dd class="aboutitem-lock aboutitem-lockcomment comment">{=$file,lockComment}</dd>

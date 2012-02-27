@@ -77,7 +77,10 @@ dd.aboutitem-rev, dd.aboutitem-lock.datetime, dd.aboutitem-lock.username {
 dd.aboutitem-rev + dd.aboutitem-rev, dd.aboutitem-lock.username {
 	margin-left: .5em;
 }
-
+dd.aboutitem-lock.datetime {
+	background: url(lock.png) left no-repeat;
+	padding-left: 2em;
+}
 dt.aboutitem-lockcomment {
 	display: none;
 }
