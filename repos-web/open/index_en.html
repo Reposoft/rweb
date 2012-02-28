@@ -48,8 +48,9 @@ You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 <!--{/if}-->
 </div>
 
-<div class="column column-activities">
-<div id="activities" class="section">
+<div class="main columns">
+
+<div id="activities" class="column column-activities">
 
 <div id="activities-view" class="activities">
 {=if $file,isFile}
@@ -171,9 +172,7 @@ In many programs you can open the URL directly, without downloading the file fir
 </div>
 
 </div>
-</div><!--{* end column *}-->
 
-<div class="colgroup colgroup-targetdetails">
 <div class="column column-info">
 <!-- many plugins use the name #filedetails so the id is kept even though it is used for folders too -->
 <div id="filedetails" class="section">
@@ -234,7 +233,8 @@ In many programs you can open the URL directly, without downloading the file fir
 
 <div class="column column-links">
 </div>
-</div><!--{* end colgroup *}-->
+
+</div>
 
 <div id="footer">
 <input id="urlcopy" title="Ctrl+C to copy the URL to clipboard" name="url" type="text" readonly="readonly" value="{=$file,url|asLink}" onclick="this.select();"/>

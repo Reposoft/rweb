@@ -5,20 +5,17 @@ div#intro {
 	padding: 5px;
 }
 
-div.column, div.colgroup {
-	float: left;
+div.columns {
+	display: table-row;
+}
+div.column {
+	display: table-cell;
 }
 div.column-activities {
 }
-div.colgroup-targetdetails {
-	min-width: 60em;
-	max-width: 140em;
-}
 div.column-info {
-	width: 60%;
 }
 div.column-links {
-	width: 40%;
 }
 
 div.section {
@@ -42,16 +39,6 @@ div.section h2 {
 	background-position: bottom;
 	background-repeat: repeat-x;
 	color: #666633;
-}
-
-#activities {
-	border-color: #FFF;
-}
-
-#activities h2 {
-	padding-left: 40px;
-	background-color: transparent; /*#F0F0EE;*/
-	background-image: none;
 }
 
 #activities div {
@@ -139,6 +126,7 @@ div#activities p {
 	padding: 10px 0px 10px 40px;
 	background-position: left;
 	background-repeat: no-repeat;
+	white-space: nowrap;
 }
 #activities #open {
 	background-image: url(commands/32x32/open.png);

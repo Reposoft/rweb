@@ -160,11 +160,13 @@ div.editlog {
 }
 /* common page elements, may also be layouted for each tool */
 #commandbar {
-	min-width: 980px;
 	background: url(commandbarbg.png) top repeat-x;
 	background-color: #ECF1EF;
 	padding: 3px;
 	border-bottom: 1px solid #CCCCCC;
+}
+.repository #commandbar {
+	min-width: 980px;
 }
 ul.index {
 	padding: 0;
