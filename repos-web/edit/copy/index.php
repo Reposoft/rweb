@@ -27,7 +27,11 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 	$folder = getParent($target);
 	if (!$folder) $folder = '/'; // getParent resturns empty string for file in root	
 	$template->assign('folder', getParent($folder));
-	
+	if (isset($_REQUEST['tofolder'])) {
+		$template->assign('tofolder', $_REQUEST['tofolder']);
+	} else {
+		$template->assign('tofolder', getParent($folder));
+	}
 	$template->display();
 }
 
