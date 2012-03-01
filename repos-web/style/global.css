@@ -284,15 +284,39 @@ div.collapsed > h3, dl.collapsed lh {
 div.expanded > h3, dl.expanded lh {
 	background-image: url('commands/16x16/expanded.png');
 }
+div.expandedempty > h3, dl.expandedempty lh {
+	background-image: url('commands/16x16/empty.png');
+}
 dl.collapsed dt, dl.collapsed dd,
 		div.collapsed .row {
 	display: none;
+}
+li.collapsed, li.expanded {
+	list-style-position: outside;
+}
+li.collapsed {
+	list-style-image: url('commands/16x16/collapsedlow.png');
+}
+li.folder.expanded {
+	list-style-image: url('commands/16x16/expandedlow.png');
+}
+li.expandedempty {
+	list-style-image: url('commands/16x16/empty.png');
 }
 #commandbar #collapseall {
 	background-image: url('commands/24x24/collapseall.png');
 }
 #commandbar #expandall {
 	background-image: url('commands/24x24/expandall.png');
+}
+ul.repostree ul {
+	padding-left: 1.2em;
+}
+ul.repostree {
+	padding-left: 20px;
+}
+.hidefiles li.file, .hidedetails .details {
+	display: none;
 }
 /* common commands */
 #commandbar #back, #commandbar .back {

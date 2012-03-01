@@ -12,43 +12,23 @@
 body {
 	background-color: white;
 }
-.details {
-	display: none;
-}
-span.details { /* tag layout is slightly different from details plugin */
-	margin: 0 0 0 1em;
-}
-ul, ol {
-	padding: 0px;
-}
-#root {
-	margin-left: 20px;
-}
-.hidefiles .file {
-	display: none;
-}
-li {
-	list-style: none;
-}
-li.folder, li.file {
-	padding-left: 20px;
-	margin-left: 0px;
-}
-li.folder {
-	list-style-image: url(/repos-plugins/tree/collapsed.png);
-	list-style-position: outside;
-}
-li.folder-open {
-	list-style-image: url(/repos-plugins/tree/expanded.png);	
-}
-li.folder-empty, .hidefiles .folder-nosubfolders {
-	list-style-image: url(/repos-plugins/tree/empty.png);
-}
 h1 {
 	font-size: 1em;
 }
 h1 span {
 	margin-right: .5em;
+}
+/* override default styles for use in sidebar */
+li.folder, li.file {
+	background-position: left 2px;
+	padding-left: 20px;
+	margin-left: 5px;
+}
+ul.repostree ul {
+	padding-left: 0;
+}
+span.details { /* tag layout is slightly different from details plugin */
+	margin: 0 0 0 1em;
 }
 /* currently global.css contains no extra styling of printouts */
 @media print {
@@ -75,6 +55,7 @@ h1 span {
 
 // plugin to read query string parameters
 // from stilbuero.de, can be simplified if only the jQuery.extend api is used
+// TODO could use jQuery BBQ now that it is default
 (function(jQuery) {
 	jQuery.querystring = function(s) {
 		var r = {};
@@ -102,18 +83,18 @@ h1 span {
 	};
 })($);
 
-// configuration, defaults overridden by query string
+// configuration, defaults overridden by query string, $.reposTree also has defaults
 var settings = {
-	web: '/repos-web/',
 	menu: true,
-	frame: false,
+	frame: '_blank',
 	sidebar: false, // autodetect and enable if browser supports it?
 	autoexpand: false,
 	showfiles: false,
+	showdetails: false,
 	hostname: window.location.hostname,
 	https: window.location.href.substr(0,6)=='https:',
 	base: false,
-	target: '/demoproject/trunk/' // or... http://localhost/repos-web/open/start/?serv=json
+	target: '/' // TODO support http://localhost/repos-web/open/start/?serv=json
 };
 $.queryextend(settings, window.location.search);
 
@@ -123,53 +104,18 @@ if (settings.sidebar) {
 		$.browser.msie ? '_main' : '_content';
 }
 
-var json = settings.web+'open/json/'; // not using servicelayer
-function expand(id,target) {
-  var list = $('#'+id);
-  var here = target;
-  $.ajax({
-    dataType: 'script',
-    url: json+'?selector='+id+'&target='+encodeURI(here)+(settings.base ? '&base='+settings.base : ''),
-    success: function() {
-		// list item has the expand/collapse logic
-		$('li.folder', list).each(function() {
-			var a = $('a',this); // created by list script
-			var target = here + a.text()+'/'; // update in closure for recursion
-			var id = Math.random().toString().substr(2);
-			$('<ul/>').attr('id',id).appendTo(this);
-			$(this).toggle(function() {
-					if ($(this).is('.loading')) return;
-					$(this).addClass('loading');
-					expand(id,target);
-				}, function() {
-					collapse(id,target);
-				});
-			if (settings.autoexpand) $(this).trigger('click');
-		});
-		// link clicks should be treated with default action, not bubbled to list item
-		$('li a', list).click(function(ev) { ev.stopPropagation(); })
-			.each(function() { // customize depending on page setup
-			var a = $(this);
-			if (settings.frame) a.attr('target',settings.frame);
-			if ($.browser.msie && settings.sidebar) a.attr('target','_main');
-			if (settings.https)	a.attr('href', a.attr('href').replace('http:','https:'));
-		});
-		// file click events should not be bubbled
-		var addedfiles = $('li.file', list).click(function(ev) { ev.stopPropagation(); });
-		// done, update classes for css
-		list.parent().filter('li').addClass('folder-open').removeClass('loading');
-		// TODO mark empty folders?
-    },
-    error: function(req, textStatus, errorThrown) {
-    	// assume it is because we got access denied
-		list.parent().filter('li').addClass('folder-noaccess').removeClass('loading');
-	}
-  });
+settings.callbackLoad = function(link, name, target, base, isFile) {
+	var a = $(link);
+	// link clicks should be treated with default action, not bubbled to list item
+	//a.click(function(ev) { ev.stopPropagation(); });
+	console.log('mod', a);
+	if (settings.frame) a.attr('target',settings.frame);
+	if (settings.https)	a.attr('href', a.attr('href').replace('http:','https:'));
+	if (isFile) a.attr('href', a.attr('href') + '?rweb=details');
 };
 
-function collapse(id, target) {
-	// no use in preserving content as user expects refresh at collapse+expand
-	$('#'+id).empty().parent().removeClass('folder-open');	
+settings.callbackSelect = function(link, name, target, base, isFile) {
+	return true;
 };
 
 $().ready(function() {
@@ -186,7 +132,9 @@ $().ready(function() {
 		$('body').css('margin-top','8px'); // http://www.w3.org/TR/CSS21/sample.html
 		$('#commandbar, #footer').hide();
 	}
-	expand('root',settings.target);
+	
+	$('#root').reposTree(settings);
+	
 	var c = $('<div/>').addClass('actions').insertBefore('#footer');
 	c.wrapAll($('<div/>').css({margin:10})); // workaround: can't get css margin to work
 	reposTreeBrowse().appendTo('#commandbar');
@@ -261,9 +209,20 @@ function reposTreeHideFiles() {
 	button.toggle(function() {
 		$('#root').removeClass('hidefiles');
 		$(this).html('hide&nbsp;files');
+		$('#root li.folder.expandedempty').each(function() {
+			if ($('> ul > li:visible', this).size() > 0) {
+				$(this).removeClass('expandedempty').addClass('expanded');
+			}
+		});
 	}, function() {
 		$('#root').addClass('hidefiles');
 		$(this).html('show&nbsp;files');
+		$('#root li.folder.expanded').each(function() {
+			console.log('here', this, $('> :visible', this));
+			if ($('> ul > li:visible', this).size() == 0) {
+				$(this).removeClass('expanded').removeClass('collapsed').addClass('expandedempty');
+			}
+		});
 	});
 	button.trigger('click');
 	if (!settings.showfiles) button.trigger('click');
