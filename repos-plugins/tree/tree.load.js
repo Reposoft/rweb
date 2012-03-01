@@ -18,8 +18,48 @@ $.fn.reposTree = function( options ) {
 		showfiles: false,
 		showdetails: false,
 		base: Repos.getBase(),
-		target: '/' // TODO support http://localhost/repos-web/open/start/?serv=json
+		target: '/', // TODO support http://localhost/repos-web/open/start/?serv=json
+		startpath: false
 	}, options);
+	
+	var decorateJsonListItem = function(here) {
+		return function() {
+			var li = $(this);
+			var a = $('> a', li); // created by list script
+			var name = a.text(); // URLdecoded
+			var target = here + name + '/'; // update in closure for recursion
+			var isFile = li.is('.file');
+			
+			// link clicks should be treated with default action, not bubbled to list item
+			a.click(function(ev) {
+				ev.stopPropagation();
+				return settings.callbackSelect(a[0], name, target, settings.base, isFile);
+			}).each(function() {
+				settings.callbackLoad(a[0], name, target, settings.base, isFile);
+			});
+			
+			if (isFile) {
+				$(this)
+					.addClass('expandedempty') // needed because list-style css is inherited
+					.click(function(ev) { // file click events should not be bubbled
+						ev.stopPropagation();
+					});
+			} else {
+				li.addClass('collapsed');
+				// enable expansion
+				var id = Math.random().toString().substr(2);
+				$('<ul/>').attr('id', id).appendTo(this);
+				$(this).toggle(function() {
+					if (li.is('.loading')) return;
+					li.addClass('loading');
+					expand(id, target);
+				}, function() {
+					collapse(id, target);
+				});
+				if (settings.autoexpand) a.trigger('click');
+			}
+		};
+	};
 	
 	var json = settings.web+'open/json/'; // not using servicelayer
 	
@@ -32,41 +72,19 @@ $.fn.reposTree = function( options ) {
 					+ (settings.base ? '&base=' + settings.base : ''),
 			success : function() {
 				// list item has the expand/collapse logic
-				var added = $('li', list).each(function() {
-					var a = $('a', this); // created by list script
-					var name = a.text(); // URLdecoded
-					var target = here + name + '/'; // update in closure for recursion
-					var isFile = $(this).is('.file');
-					
-					// link clicks should be treated with default action, not bubbled to list item
-					a.click(function(ev) {
-						ev.stopPropagation();
-						return settings.callbackSelect(a[0], name, target, settings.base, isFile);
-					}).each(function() {
-						settings.callbackLoad(a[0], name, target, settings.base, isFile);
+				var added = $('> li', list);
+				var preexisting = added.filter('.repostree-startpath');
+				preexisting.each(function() {
+					added = added.not(this);
+					var existingname = $('> a', this).text();
+					var dup = added.filter(function() {
+						return $('> a', this).text() == existingname;
 					});
-					
-					if (isFile) {
-						$(this)
-							.addClass('expandedempty') // needed because list-style css is inherited
-							.click(function(ev) { // file click events should not be bubbled
-								ev.stopPropagation();
-							});
-					} else {
-						$(this).addClass('collapsed');
-						// enable expansion
-						var id = Math.random().toString().substr(2);
-						$('<ul/>').attr('id', id).appendTo(this);
-						$(this).toggle(function() {
-							if ($(this).is('.loading')) return;
-							$(this).addClass('loading');
-							expand(id, target);
-						}, function() {
-							collapse(id, target);
-						});
-						if (settings.autoexpand) $(this).trigger('click');
-					}
+					added = added.not(dup);
+					$(this).insertAfter(dup);
+					dup.remove();
 				});
+				added.each(decorateJsonListItem(here));
 				// done, set class to override inherited expand/collapse status
 				var cl = 'expanded';
 				if (added.filter(':visible').size() == 0) cl += 'empty';
@@ -101,7 +119,25 @@ $.fn.reposTree = function( options ) {
 		}
 		if (!settings.showfiles) root.addClass('hidefiles');
 		if (!settings.showdetails) root.addClass('hidedetails');
-		expand(id, settings.target);
+		if (settings.startpath && !settings.autoexpand) {
+			var path = settings.startpath.split('/'); // should be a folder
+			var currentpath = '/';
+			var currentlist = root;
+			for (var i = 0; i < path.length; i++) {
+				if (path[i]) {
+					// mimic json list's format
+					var li = $('<li class="folder repostree-startpath"><a href="' + path[i] + '">' + path[i] + '</a></li>').appendTo(currentlist);
+					decorateJsonListItem(currentpath).apply(li);
+					currentpath += path[i] + '/';
+					currentlist = $('ul', li);
+				}
+			}
+			if (currentpath == '/') {
+				expand(id, settings.target);
+			}
+		} else {
+			expand(id, settings.target);
+		}
 	});
 
 };
@@ -167,9 +203,13 @@ Repos.service('index/', function() {
  */
 var reposTreeToFormInput = function(treeContainer, input) {
 	treeContainer.reposTree({
+		startpath: $(input).val(),
 		callbackSelect: function(link, name, target, base, isFile) {
 			input.val(target);
 			return false;
+		},
+		callbackLoad: function(link, name, target, base, isFile) {
+			$(link).attr('title', 'Click to set destination folder, click arrow to collapse/expand');
 		}
 	});
 };

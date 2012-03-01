@@ -106,20 +106,18 @@ if (settings.sidebar) {
 
 settings.callbackLoad = function(link, name, target, base, isFile) {
 	var a = $(link);
-	// link clicks should be treated with default action, not bubbled to list item
-	//a.click(function(ev) { ev.stopPropagation(); });
-	console.log('mod', a);
 	if (settings.frame) a.attr('target',settings.frame);
 	if (settings.https)	a.attr('href', a.attr('href').replace('http:','https:'));
 	if (isFile) a.attr('href', a.attr('href') + '?rweb=details');
 };
 
 settings.callbackSelect = function(link, name, target, base, isFile) {
-	return true;
+	return true; // follow link
 };
 
 $().ready(function() {
-	if (settings.sidebar || settings.menu) {
+	// Firefox has introduced a default headline with roughly the same contents
+	if (/* settings.sidebar ||*/ settings.menu) {
 		var headline = $('#target').html('<span class="path">'+settings.target+'</span>');
 		if (settings.base) $('<span id="base"/>').text(settings.base).prependTo(headline);
 		if (settings.hostname) $('<span/>').addClass('hostname').text(settings.hostname).prependTo(headline);

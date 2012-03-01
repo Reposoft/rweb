@@ -295,10 +295,16 @@ li.collapsed, li.expanded {
 	list-style-position: outside;
 }
 li.collapsed {
-	list-style-image: url('commands/16x16/collapsedlow.png');
+	list-style-image: url('commands/16x16/collapsedb.png');
+}
+li.collapsed:hover {
+	list-style-image: url('commands/16x16/collapsedbr.png');
 }
 li.folder.expanded {
-	list-style-image: url('commands/16x16/expandedlow.png');
+	list-style-image: url('commands/16x16/expandedb.png');
+}
+li.folder.expanded:hover {
+	list-style-image: url('commands/16x16/expandedbr.png');
 }
 li.expandedempty {
 	list-style-image: url('commands/16x16/empty.png');
