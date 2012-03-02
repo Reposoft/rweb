@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 // it is also allowed in templates for presentation, but not in field values
 
 function createNewFolder($name, $message) {
-	$template = Presentation::background();
 	// automatic validation
 	new FilenameRule('name');
 	// svn import: parent folder must exists, to avoid implicit create
@@ -34,6 +33,7 @@ function createNewFolder($name, $message) {
 	new NewFilenameRule('name', $parent->getValue());
 	// check required fields and process
 	Validation::expect('target', 'name', 'message');
+	$template = Presentation::background();
 	$newurl = getTargetUrl().$name;
 	$tmp = System::getTempFolder('emptyfolders');
 	$edit = new SvnEdit('import');

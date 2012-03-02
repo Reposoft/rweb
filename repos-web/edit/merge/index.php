@@ -1,4 +1,7 @@
 <?php
+/**
+ * This service has been unmaintained since Repos 1.2 and is not supported.
+ */
 
 require "../../conf/Presentation.class.php";
 require "../SvnEdit.class.php";

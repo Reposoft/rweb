@@ -10,7 +10,7 @@ require('../SvnEdit.class.php');
 targetLogin(); // edit operation can not be public
 
 if ($_SERVER['REQUEST_METHOD']=='POST') {
-	$template = Presentation::getInstance();
+	$template = Presentation::background();
 	$targeturl = getTargetUrl();
 	$unlock = new SvnEdit('unlock');
 	$unlock->addArgUrl($targeturl);

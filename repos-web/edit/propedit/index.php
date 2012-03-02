@@ -107,7 +107,7 @@ $template->display();
  *  Both key and value: propset, if identical to previous value svn will detect as no change.
  */
 function svnPropset($target, $keys, $values, $message=null) {
-	$presentation = Presentation::getInstance();
+	$presentation = Presentation::background();
 	$workingCopy = System::getTempFolder('propedit');
 	$isFolder = isFolder($target);
 	$targetFolder = getTargetUrl();
