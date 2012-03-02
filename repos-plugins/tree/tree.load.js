@@ -57,6 +57,21 @@ $.fn.reposTree = function( options ) {
 					collapse(id, target);
 				});
 				if (settings.autoexpand) a.trigger('click');
+				// Indicate which element would expand if a click is done, tricky because of nested structure
+				li.mouseover(function(ev) {
+					ev.stopPropagation();
+					$(this).parents('.folder.hovr').removeClass('hovr');
+					$(this).addClass('hovr');
+				});
+				li.mouseout(function(ev) {
+					$(this).removeClass('hovr');
+				});
+				a.mouseover(function(ev) {
+					li.addClass('hovrselect');
+				});
+				a.mouseout(function(ev) {
+					li.removeClass('hovrselect');
+				});
 			}
 		};
 	};
@@ -125,19 +140,16 @@ $.fn.reposTree = function( options ) {
 			var currentlist = root;
 			for (var i = 0; i < path.length; i++) {
 				if (path[i]) {
-					// mimic json list's format
+					// mimic json list's format, note that these will be switched for real nodes after collapse/expand
 					var li = $('<li class="folder repostree-startpath"><a href="' + path[i] + '">' + path[i] + '</a></li>').appendTo(currentlist);
 					decorateJsonListItem(currentpath).apply(li);
 					currentpath += path[i] + '/';
 					currentlist = $('ul', li);
 				}
 			}
-			if (currentpath == '/') {
-				expand(id, settings.target);
-			}
-		} else {
-			expand(id, settings.target);
+			// TODO we could skip expand here but then we need a way to expand root
 		}
+		expand(id, settings.target);
 	});
 
 };
@@ -195,28 +207,4 @@ Repos.service('index/', function() {
 		tree.hide();
 		$(this).html('tree');
 	});
-});
-
-/**
- * Form integration.
- * @param {jQuery} input The form field to write selected path to
- */
-var reposTreeToFormInput = function(treeContainer, input) {
-	treeContainer.reposTree({
-		startpath: $(input).val(),
-		callbackSelect: function(link, name, target, base, isFile) {
-			input.val(target);
-			return false;
-		},
-		callbackLoad: function(link, name, target, base, isFile) {
-			$(link).attr('title', 'Click to set destination folder, click arrow to collapse/expand');
-		}
-	});
-};
-
-Repos.service('edit/copy/', function() {
-	var section = $('<div id="tofolder-select"/>').addClass('section').appendTo('.column:last');
-	section.append('<h2>Change destination folder</h2>');
-	var tree = $('<ul id="tofolder-tree"/>').appendTo(section);
-	reposTreeToFormInput(tree, $('#tofolder'));
 });

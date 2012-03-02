@@ -297,17 +297,23 @@ li.collapsed, li.expanded {
 li.collapsed {
 	list-style-image: url('commands/16x16/collapsedb.png');
 }
-li.collapsed:hover {
+li.collapsed.hovr {
 	list-style-image: url('commands/16x16/collapsedbr.png');
+}
+li.collapsed.hovrselect {
+	list-style-image: url('commands/16x16/collapsedbs.png');
 }
 li.folder.expanded {
 	list-style-image: url('commands/16x16/expandedb.png');
 }
-li.folder.expanded:hover {
+li.folder.expanded.hovr {
 	list-style-image: url('commands/16x16/expandedbr.png');
 }
+li.folder.expanded.hovrselect {
+	list-style-image: url('commands/16x16/expandedbs.png');
+}
 li.expandedempty {
-	list-style-image: url('commands/16x16/empty.png');
+	list-style-image: url('commands/16x16/empty.png') !important;
 }
 #commandbar #collapseall {
 	background-image: url('commands/24x24/collapseall.png');
