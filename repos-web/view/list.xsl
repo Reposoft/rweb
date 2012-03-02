@@ -99,7 +99,7 @@
 		<h2>
 			<a class="folder" href="{@path}">
 				<xsl:if test="string-length(../@name) = 0 and ../@base">
-					<span id="base"><xsl:value-of select="../@base"/></span>
+					<span id="base" class="repo"><xsl:value-of select="../@base"/></span>
 				</xsl:if>
 				<xsl:value-of select="../@name"/>
 			</a>

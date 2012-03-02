@@ -88,17 +88,20 @@ $.fn.reposTree = function( options ) {
 			success : function() {
 				// list item has the expand/collapse logic
 				var added = $('> li', list);
-				var preexisting = added.filter('.repostree-startpath');
-				preexisting.each(function() {
-					added = added.not(this);
-					var existingname = $('> a', this).text();
-					var dup = added.filter(function() {
-						return $('> a', this).text() == existingname;
+				if (settings.startpath) {
+					added.filter('.repo').remove(); // root expansion
+					var preexisting = added.filter('.repostree-startpath');
+					preexisting.each(function() {
+						added = added.not(this);
+						var existingname = $('> a', this).text();
+						var dup = added.filter(function() {
+							return $('> a', this).text() == existingname;
+						});
+						added = added.not(dup);
+						$(this).insertAfter(dup);
+						dup.remove();
 					});
-					added = added.not(dup);
-					$(this).insertAfter(dup);
-					dup.remove();
-				});
+				}
 				added.each(decorateJsonListItem(here));
 				// done, set class to override inherited expand/collapse status
 				var cl = 'expanded';
@@ -147,9 +150,18 @@ $.fn.reposTree = function( options ) {
 					currentlist = $('ul', li);
 				}
 			}
-			// TODO we could skip expand here but then we need a way to expand root
+			// root expansion, more of the core behavior simulated
+			$('<li class="folder repo collapsed"><span style="cursor:pointer">' + (settings.base || '(root)') + '</span></li>')
+				.prependTo(root).click(function() {
+					expand(id, settings.target); // expected to remove
+				}).mouseover(function(ev) {
+					$(this).addClass('hovr');
+				}).mouseout(function(ev) {
+					$(this).removeClass('hovr');
+				});;
+		} else {
+			expand(id, settings.target);
 		}
-		expand(id, settings.target);
 	});
 
 };

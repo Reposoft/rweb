@@ -119,7 +119,7 @@ $().ready(function() {
 	// Firefox has introduced a default headline with roughly the same contents
 	if (/* settings.sidebar ||*/ settings.menu) {
 		var headline = $('#target').html('<span class="path">'+settings.target+'</span>');
-		if (settings.base) $('<span id="base"/>').text(settings.base).prependTo(headline);
+		if (settings.base) $('<span id="base" class="repo"/>').text(settings.base).prependTo(headline);
 		if (settings.hostname) $('<span/>').addClass('hostname').text(settings.hostname).prependTo(headline);
 		// make link, using redirect because here we don't know repository root
 		var url = settings.web + 'open/?target=' + encodeURIComponent(settings.target)

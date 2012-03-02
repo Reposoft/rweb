@@ -250,7 +250,7 @@
 			</xsl:call-template>
 		</xsl:param>
 		<xsl:if test="$base">
-			<a id="base" href="{$return}"><xsl:value-of select="$base"/></a>
+			<a id="base" class="repo" href="{$return}"><xsl:value-of select="$base"/></a>
 		</xsl:if>
 		<xsl:if test="not($rest)">
 			<a id="realurl" href="./" class="path{$classadd}">

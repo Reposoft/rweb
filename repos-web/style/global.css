@@ -125,8 +125,10 @@ td.filesize {
 .projectname {
 	color: #663300;
 }
+.repo {
+	color: #808080;
+}
 #base {
-	color: gray;
 	margin-right: .2em;
 }
 /* elements to get user's attention  */
