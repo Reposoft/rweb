@@ -29,7 +29,7 @@ from the the history for the <a class="folder" href="{=$file,folderUrl}">parent 
 </div>
 {=if $file,isWritable and not $file,isLockedBySomeoneElse}
 <div class="column" style="width: 70%">
-<form id="delete" name="delete" method="post" action="#">
+<form id="delete" name="delete" method="post" action="">
 	<fieldset>
 	<legend>Delete <a class="{=$file,kind2}" href="{=$file,url}" title="open {=$file,kind}: {=$file,filename}">{=$file,kind}</a></legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />

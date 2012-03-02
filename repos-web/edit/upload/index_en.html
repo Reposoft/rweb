@@ -32,7 +32,7 @@ You can not rename this file.</p>
 <p>As a new file in folder: {=$target}</p>
 <!--{/if}-->
 {=if not $isfile or $file,isWritable and not $file,isLockedBySomeoneElse}
-<form action="./" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
+<form action="" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
 <fieldset>
   <legend>Upload to repos</legend>
   <input type="hidden" name="target" value="{=$target}"/>

@@ -52,22 +52,15 @@ RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/file/?base=$1&target=$2
 
 # --- Edit operations, convenient access from index ---
 
-# New folder
-RewriteCond		%{QUERY_STRING}		^rweb=mkdir|.*&rweb=mkdir
-RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/mkdir/?base=$1&target=$2 [R,QSA,L]
+# Edit overview, collection of services, not supporting POST
+RewriteCond		%{QUERY_STRING}		^rweb=edit|.*&rweb=edit
+RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/?base=$1&target=$2 [PT,QSA,L]
 
-# Upload, new file when on folder, new version when on file
-RewriteCond		%{QUERY_STRING}		^rweb=upload|.*&rweb=upload
-RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/upload/?base=$1&target=$2 [R,QSA,L]
-
-# Edit text, note that upload POST should go to 'upload'
-# TODO should there be a generic 'edit' service with support for different formats, plaintext, svg-edit, html...?
-RewriteCond		%{QUERY_STRING}		^rweb=text|.*&rweb=text
-RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/text/?base=$1&target=$2 [R,QSA,L]
-
-# Propedit, currently not supported for folders
-RewriteCond		%{QUERY_STRING}		^rweb=propedit|.*&rweb=propedit
-RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/propedit/?base=$1&target=$2 [R,QSA,L]
+# Arbitrary edit service, POSTable
+# "text" is just a plaintext form, shoud be posted to "upload"
+# "upload" creates new file when on folder, new version when on file
+RewriteCond		%{QUERY_STRING}		^rweb=e\.(\w+)|.*&rweb=e\.(\w+)
+RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/%1%2/?base=$1&target=$2 [PT,QSA,L]
 
 # --- Transforms ---
 # All these services must start with t, names must be word characters a-z0-9_

@@ -5,7 +5,7 @@ require("../SvnEdit.class.php" );
 
 targetLogin(); // edit operation can not be public
 
-if (isset($_REQUEST[SUBMIT])) {
+if ($_SERVER['REQUEST_METHOD']=='POST') {
 	createNewFolder($_REQUEST['name'],$_REQUEST['message']); 
 } else {
 	$target = getTarget();

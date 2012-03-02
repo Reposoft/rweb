@@ -444,22 +444,31 @@ function getService() {
 
 /**
  * Identifies service requests (requests for non-html output).
- * Note that this does not work on error pages, because they don't get the query string.
+ * Note that error pages don't get the query string but may get HTTP Accept.
+ * Redirect-after-post should not be used when this method returns true.
  * @return true if the current request is for contents, not a user page
  * @see ServiceRequest
  * @see isRequestInternal()
  */
 function isRequestService() {
 	if (isRequestNoBody()) return true;
-	if (!isset($_REQUEST[WEBSERVICE_KEY])) {
-		// This method may be used in CLI mode, in which case there are no service requests
-		if (!isset($_SERVER['REQUEST_URI'])) return false;
-		// ErrorDocument in repository might not get the proper superglobals
-		if (strpos($_SERVER['REQUEST_URI'], 'serv=') > 0) return true;
-		return false;
+	// Explicit service request using query/post parameter
+	if (isset($_REQUEST[WEBSERVICE_KEY])) {
+		return in_array($_REQUEST[WEBSERVICE_KEY], array('json','text','xml'));
 	}
-	return in_array($_REQUEST[WEBSERVICE_KEY],
-		array('json','text','xml'));
+	// accept header, service if not html, for example return edit result as json
+	if (isset($_SERVER["HTTP_ACCEPT"])
+			// TODO we don't want false positives here so maybe we should parse properly and also consider */* to be possible browser request?
+			// Until then, apply this new rule only for the new service URLs 
+			&& isset($_REQUEST['rweb'])
+			) {
+		if (!strBegins($_SERVER["HTTP_ACCEPT"], "text/html")) return true; // Expecting all browsers to send text/html,...
+	}
+	// This method may be used in CLI mode, in which case there are no service requests
+	if (!isset($_SERVER['REQUEST_URI'])) return false;
+	// ErrorDocument in repository might not get the proper superglobals
+	if (strpos($_SERVER['REQUEST_URI'], 'serv=') > 0) return true;
+	return false;
 }
 
 /**

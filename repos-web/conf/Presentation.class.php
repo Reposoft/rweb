@@ -339,6 +339,7 @@ class Presentation {
 		unset($data['SCRIPT_NAME']); // internal Smarty field
 		$json = new Services_JSON(); // SERVICES_JSON_LOOSE_TYPE?
 		echo $json->encode($data);
+		echo "\n"; // convenient for command line requests
 	}
 
 	function getDefaultTemplate() {
