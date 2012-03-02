@@ -15,9 +15,9 @@ function setMove(move) {
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$file,folderUrl}">return to repository</a>
-<a id="view" href="../../open/?target={=$target}{=if $file,isRevisionRequested}&rev={=$file,revisionRequested}{=/if}">details</a>
+<a id="view" href="{=if $isrealurl}{=$repository}{=$target}?{=if $file,isRevisionRequested}p={=$file,revisionRequested}&{=/if}rweb=details{=else}../../open/?target={=$target}{=if $file,isRevisionRequested}&rev={=$file,revisionRequested}{=/if}{=/if}">details</a>
 <!--{if $file,isFile and not $file,isRevisionRequested}-->
-<a id="edit" href="../?target={=$target}">edit</a>
+<a id="edit" href="{=if $isrealurl}{=$repository}{=$target}?rweb=edit{=else}../?target={=$target}{=/if}">edit</a>
 <!--{/if}-->
 </div>
 <div id="intro">

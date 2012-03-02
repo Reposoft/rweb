@@ -8,8 +8,8 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$folderurl}">return to repository</a>
-<a id="view" href="../../open/?target={=$target}">details</a>
-<a id="edit" href="../?target={=$target}">edit</a>
+<a id="view" href="{=if $isrealurl}{=$repository}{=$target}?rweb=details{=else}../../open/?target={=$target}{=/if}">details</a>
+<a id="edit" href="{=if $isrealurl}{=$repository}{=$target}?rweb=edit{=else}../?target={=$target}{=/if}">edit</a>
 </div>
 <h1>Lock</h1>
 <form id="lock" name="lock" method="post" action="">

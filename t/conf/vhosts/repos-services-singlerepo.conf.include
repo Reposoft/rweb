@@ -1,3 +1,5 @@
+# TODO update to match repos-services.conf.include
+
 # Apache2 configuration for Subversion Service Layer (C) 2007 www.repos.se
 # Included in config per host, not per repository (because rewrite behaves differently in Location)
 

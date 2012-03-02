@@ -389,6 +389,9 @@ function getRequestUri() {
  * @return the path to the current script without query string
  */
 function getSelfPath() {
+	if (isRealUrl()) {
+		return getParent($_SERVER['SCRIPT_NAME']);
+	}
 	$uri = getRequestUri();
 	$q = strpos($uri, '?');
 	if ($q > 0) {
@@ -498,6 +501,14 @@ function isRequestLocal() {
 function isRepositoryUrl($url) {
 	// TODO should ignore http/https
 	return strpos($url, getRepository())===0;
+}
+
+/**
+ * @return true if the current page is delivered from a "real url", i.e. a servicelayer rewrite
+ */
+function isRealUrl() {
+	// false positives is better than false negatives because realurl links tend to work from anywhere
+	return !strBegins($_SERVER['SCRIPT_NAME'], $_SERVER['SCRIPT_URL']);
 }
 
 /**

@@ -11,9 +11,9 @@ label.newproperty { color: gray; }
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$repository}{=$target|dirname}/">return to repository</a>
-<a id="view" href="../../open/?target={=$target}">details</a>
+<a id="view" href="{=if $isrealurl}{=$repository}{=$target}?rweb=details{=else}../../open/?target={=$target}{=/if}">details</a>
 <!--{if $file,isFile}-->
-<a id="edit" href="../?target={=$target}">edit</a>
+<a id="edit" href="{=if $isrealurl}{=$repository}{=$target}?rweb=edit{=else}../?target={=$target}{=/if}">edit</a>
 <!--{/if}-->
 </div>
 <h1>Edit properties</h1>
@@ -24,7 +24,7 @@ label.newproperty { color: gray; }
 </dl>
 <form id="propedit" name="propedit" method="post" action="">
   <fieldset>
-	<legend><a class="folder" href="{=$repository}{=$target}">{=$target|getPathName}</a></legend>
+	<legend>Properties on {=$file,kind2} <a class="folder" href="{=$repository}{=$target}">{=$target|getPathName}</a></legend>
     <input name="target" type="hidden" id="target" value="{=$target}" />
 <!--{foreach from=$keys key=i item=p}-->
   <p>

@@ -298,6 +298,8 @@ class Presentation {
 		$webapp = $this->_getStaticWebappUrl();
 		$this->assign('referer', $this->getReferer());
 		$this->assign('webapp', $webapp);
+		// service URL mode
+		$this->assign('isrealurl', isRealUrl());
 		// repository root URL
 		$this->assign('repository', getRepository());
 		// support mod_dav_svn's @base attrubute for multirepo

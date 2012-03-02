@@ -54,7 +54,7 @@ RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/file/?base=$1&target=$2
 
 # Edit overview, collection of services, not supporting POST
 RewriteCond		%{QUERY_STRING}		^rweb=edit|.*&rweb=edit
-RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/?base=$1&target=$2 [PT,QSA,L]
+RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/?base=$1&target=$2 [R,QSA,L]
 
 # Arbitrary edit service, POSTable
 # "text" is just a plaintext form, shoud be posted to "upload"

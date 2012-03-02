@@ -8,7 +8,7 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$folderurl}">return to repository</a>
-<a id="view" href="../../open/?target={=$target}">details</a>
+<a id="view" href="{=if $isrealurl}{=$repository}{=$target}?rweb=details{=else}../../open/?target={=$target}{=/if}">details</a>
 </div>
 <h1>Unlock</h1>
 <form id="unlock" name="unlock" method="post" action="">
