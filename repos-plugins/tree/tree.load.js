@@ -124,6 +124,12 @@ $.fn.reposTree = function( options ) {
 		// collapse+expand
 		$('#' + id).empty().parent().removeClass('expanded').addClass('collapsed');
 	};
+	
+	// Like getRepository but with support for static index.html
+	var getHrefBase = function() {
+		// tree page lacks this metadata, fall back to details page
+		return Repos.getRepository() || settings.web + 'open/?' + (settings.base ? 'base=' + settings.base + '&' : '') + 'target='; 
+	};
 
 	return this.each(function() { 
 		var id; // list json script uses IDs
@@ -138,13 +144,15 @@ $.fn.reposTree = function( options ) {
 		if (!settings.showfiles) root.addClass('hidefiles');
 		if (!settings.showdetails) root.addClass('hidedetails');
 		if (settings.startpath && !settings.autoexpand) {
+			var hrefbase = getHrefBase(); // not known anywhere else now because listjson script contains it
 			var path = settings.startpath.split('/'); // should be a folder
 			var currentpath = '/';
 			var currentlist = root;
 			for (var i = 0; i < path.length; i++) {
 				if (path[i]) {
 					// mimic json list's format, note that these will be switched for real nodes after collapse/expand
-					var li = $('<li class="folder repostree-startpath"><a href="' + path[i] + '">' + path[i] + '</a></li>').appendTo(currentlist);
+					var li = $('<li class="folder repostree-startpath"><a href="' + hrefbase + currentpath + path[i] + '/">' + 
+							path[i] + '</a></li>').appendTo(currentlist);
 					decorateJsonListItem(currentpath).apply(li);
 					currentpath += path[i] + '/';
 					currentlist = $('ul', li);
