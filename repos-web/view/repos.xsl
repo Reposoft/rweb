@@ -15,7 +15,7 @@
 	<!-- static contents urls, set to {$web}style/ for default theme -->
 	<xsl:param name="cssUrl"><xsl:value-of select="$static"/>style/</xsl:param>
 	<!-- start url for simple WebDAV-like manipulation of repository, empty if not available -->
-	<xsl:param name="editUrl"><xsl:value-of select="$web"/>edit/</xsl:param>
+	<xsl:param name="editUrl">?rweb=e.</xsl:param>
 	<!-- optional startpage to enable home button and special link for project, empty to disable -->
 	<xsl:param name="startpage">/?rweb=start</xsl:param>
 	<!-- link up, empty to hide up button -->
@@ -75,13 +75,7 @@
 				<xsl:with-param name="toolcheck" select="string-length($tool)>1 or $tool='.'"/>
 			</xsl:call-template>
 		</xsl:param>
-		<xsl:call-template name="commandbar">
-			<xsl:with-param name="target">
-				<xsl:value-of select="$folder"/>
-				<xsl:text>&#38;base=</xsl:text>
-				<xsl:value-of select="@base"/>
-			</xsl:with-param>
-		</xsl:call-template>
+		<xsl:call-template name="commandbar"/>
 		<xsl:call-template name="contents">
 			<xsl:with-param name="folder" select="$folder"/>
 			<xsl:with-param name="pathlinks" select="$pathlinks"/>
@@ -91,7 +85,6 @@
 	</xsl:template>
 	<!-- toolbar, directory actions -->
 	<xsl:template name="commandbar">
-		<xsl:param name="target"/>
 		<div id="commandbar">
 		<div class="right">
 			<img id="logo" src="{$static}style/logo/repos1.png" border="0" width="72" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
@@ -104,11 +97,11 @@
 		</xsl:if>
 		<a id="view" class="command translate" href="?rweb=details">details</a>
 		<xsl:if test="$editUrl">
-			<a id="createfolder" class="command translate" href="{$editUrl}mkdir/?target={$target}">new&#xA0;folder</a>
-			<a id="addfile" class="command translate" href="{$editUrl}upload/?target={$target}">add&#xA0;file</a>
+			<a id="createfolder" class="command translate" href="{$editUrl}mkdir">new&#xA0;folder</a>
+			<a id="addfile" class="command translate" href="{$editUrl}upload">add&#xA0;file</a>
 		</xsl:if>
-		<a id="history" class="command translate" href="{$web}open/log/?target={$target}">folder&#xA0;history</a>
-		<a id="list" class="command translate" href="{$web}open/list/?target={$target}">list</a>
+		<a id="history" class="command translate" href="?rweb=history">folder&#xA0;history</a>
+		<a id="list" class="command translate" href="?rweb=list">list</a>
 		</div>
 	</xsl:template>
 	<!-- directory listing -->
@@ -145,17 +138,6 @@
 		<xsl:param name="href">
 			<xsl:call-template name="getHref"/>
 		</xsl:param>
-		<xsl:param name="target">
-			<xsl:call-template name="getHref">
-				<xsl:with-param name="href">
-					<xsl:value-of select="../@path"/>
-					<xsl:value-of select="'/'"/>
-					<xsl:value-of select="@href"/>
-				</xsl:with-param>
-			</xsl:call-template>
-			<xsl:text>&#38;base=</xsl:text>
-			<xsl:value-of select="../@base"/>
-		</xsl:param>
 		<xsl:param name="toolcheck"/>
 		<xsl:param name="classadd">
 			<xsl:if test="$toolcheck and contains($tools,@href)">
@@ -180,17 +162,6 @@
 		<xsl:param name="href">
 			<xsl:call-template name="getHref"/>
 			<xsl:text>?rweb=details</xsl:text>
-		</xsl:param>
-		<xsl:param name="target">
-			<xsl:call-template name="getHref">
-				<xsl:with-param name="href">
-					<xsl:value-of select="../@path"/>
-					<xsl:value-of select="'/'"/>
-					<xsl:value-of select="@href"/>
-				</xsl:with-param>
-			</xsl:call-template>
-			<xsl:text>&#38;base=</xsl:text>
-			<xsl:value-of select="../@base"/>
 		</xsl:param>
 		<xsl:param name="n" select="count(/svn/index/dir) + position() - 1"/>
 		<li id="row:{$id}" class="n{$n mod 4}">
