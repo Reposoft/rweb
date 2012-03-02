@@ -203,16 +203,17 @@ function processFile($upload) {
 	// commit returns nothing if there are no local changes
 	if ($commit->isSuccessful() && !$commit->getCommittedRevision()) {
 		// normal behaviour
-		displayEditAndExit($presentation, null, 'The uploaded file '.$upload->getOriginalFilename()
+		displayEditAndExit($presentation, null, null, 'The uploaded file '.$upload->getOriginalFilename()
 			.' is identical to the current file '.$upload->getName());
 	}
 	if (!$commit->isSuccessful()) {
-		displayEditAndExit($presentation, null, 'Failed to save file');
+		displayEditAndExit($presentation, null, null, 'Failed to save file');
 	}
 	// TODO present as error if any of the operations failed (or did they already exit?)
-	displayEdit($presentation, dirname($upload->getTargetUrl().'/'), 
-		'New version committed',
-		$upload->getTargetUrl().' is now at revision '.$commit->getCommittedRevision());
+	displayEdit($presentation, getParent($upload->getTargetUrl()),
+		$upload->getTarget(),
+		$upload->isCreate() ? 'File added' : 'New version committed',
+		$upload->getTargetUrl().' is at revision '.$commit->getCommittedRevision());
 }
 
 function _canEditAsTextarea($mimetype) {
@@ -315,6 +316,16 @@ class Upload {
 	 */
 	function getMessage() {
 		return $_POST['message'];
+	}
+
+	/**
+	 * @return destination path
+	 */
+	function getTarget() {
+		if ($this->isCreate()) {
+			return getTarget() . $this->getName();
+		}
+		return getTarget();
 	}
 	
 	/**

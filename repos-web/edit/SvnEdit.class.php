@@ -136,16 +136,18 @@ class ResourceExistsAndIsWritableRule extends ResourceExistsRule {
  * The last Edit's success status decides if the page should say error or done.
  * 
  * @param Presentation $presentation the page to the user
- * @param String $nextUrl URL to suggest in the link to next page
+ * @param String $nextUrl The "return to" URL to suggest for continued browsing, typically a folder
+ * @param String $target Target path for the edit result's details page, HEAD
  * @param String $headline The h1 of the resulting page
  * @param String $summary The final word of the resulting page 
  * @package edit
  * @see SvnEdit::show()
  */
-function displayEdit(&$presentation, $nextUrl=null, $headline=null, $summary=null) {
-	if (isTargetSet()) {
-		$presentation->assign('target', getTarget());
+function displayEdit(&$presentation, $nextUrl=null, $target=null, $headline=null, $summary=null) {
+	if (!$target && isTargetSet()) {
+		$target = getTarget();
 	}
+	$presentation->assign('target', $target);
 	if (!$nextUrl) {
 		if (!isTargetSet()) trigger_error("Server error. No target given, nextUrl required.", E_USER_ERROR);
 		$nextUrl = getTargetUrl();
@@ -156,11 +158,7 @@ function displayEdit(&$presentation, $nextUrl=null, $headline=null, $summary=nul
 	$presentation->assign('nexturl',$nextUrl);
 	$presentation->assign('headline',$headline);
 	$presentation->assign('summary',$summary);
-	if (!isRequestService() && !$presentation->isRedirectBeforeDisplay()) {
-		// always do redirect after post, even if redirectWaiting is not enabled
-		$presentation->enableRedirectWaiting();
-	}
-	//exit;
+	// TODO error presentation for enableRedirectWaiting instead of current wait until timeout
 	$presentation->display(dirname(__FILE__) . '/edit_done.html');
 }
 
@@ -193,9 +191,9 @@ function displayEdit(&$presentation, $nextUrl=null, $headline=null, $summary=nul
  * @param String $errorMessage
  * @package edit
  */
-function displayEditAndExit(&$presentation, $nextUrl=null, $errorMessage=null) {
+function displayEditAndExit(&$presentation, $nextUrl=null, $target=null, $errorMessage=null) {
 	if (!$errorMessage) $errorMessage = 'Versioning operation failed';
-	displayEdit($presentation, $nextUrl, $errorMessage);
+	displayEdit($presentation, $nextUrl, $target, $errorMessage);
 	exit;
 }
 

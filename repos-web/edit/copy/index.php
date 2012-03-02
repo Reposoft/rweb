@@ -26,11 +26,11 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 	$template->assign('oldname', getPathName($target));
 	$folder = getParent($target);
 	if (!$folder) $folder = '/'; // getParent resturns empty string for file in root	
-	$template->assign('folder', getParent($folder));
+	$template->assign('folder', $folder);
 	if (isset($_REQUEST['tofolder'])) {
 		$template->assign('tofolder', $_REQUEST['tofolder']);
 	} else {
-		$template->assign('tofolder', getParent($folder));
+		$template->assign('tofolder', $folder);
 	}
 	$template->display();
 }
@@ -44,7 +44,8 @@ function svnCopy($tofolder) {
 		$edit = new SvnEdit('copy');
 	}
 	$oldUrl = getTargetUrl();
-	$newUrl = getRepository().$tofolder.$_POST['newname'];
+	$newTarget = $tofolder.$_POST['newname'];
+	$newUrl = getRepository().$newTarget;
 	if (isset($_POST['message'])) {
 		$edit->setMessage($_POST['message']);
 	}
@@ -55,6 +56,6 @@ function svnCopy($tofolder) {
 	}
 	$edit->addArgUrl($newUrl);
 	$edit->exec();
-	displayEdit($template);
+	displayEdit($template, getParent($oldUrl), $newTarget); // old target would sometimes be interesting too, needs additional edit result page logic 
 }
 ?>

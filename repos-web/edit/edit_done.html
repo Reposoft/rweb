@@ -12,11 +12,15 @@
 <body>
 <div id="commandbar">
 <a id="repository" href="{=$nexturl}">return to repository</a>
+<!--{if $target}-->
 <a id="view" href="{=$webapp}open/?target={=$target}">details</a>
+<!--{/if}-->
 </div>
 <!--{if $headline}-->
 <h1>{=$headline}</h1>
+<!--{if $summary}-->
 <p>{=$summary}</p>
+<!--{/if}-->
 <!--{else}-->
 <h1>Completed operation <a target="_blank" href="http://svnbook.red-bean.com/nightly/en/svn.ref.svn.c.{=$operation}.html">{=$operation}</a></h1>
 <!--{/if}-->
@@ -40,7 +44,12 @@
 <p class="error">Aborted operation:
 <em> {=$result|htmlspecialchars|nl2br}</em></p>
 <!--{/if}-->
-<p><a id="return" class="action" href="{=$nexturl}">return to repository</a></p>
+<p>
+<a id="return" class="action" href="{=$nexturl}">return to repository</a> &nbsp; 
+<!--{if $target}-->
+<a class="action" href="{=$webapp}open/?target={=$target}">details for {=$target|basename|htmlspecialchars}</a>
+<!--{/if}-->
+</p>
 <script type="text/javascript">document.getElementById('return').focus();</script>
 <!--{if isset($redirect)}-->
 <p><small>You should be automatically redirected to <a id="meta-refresh-url" href="{=$redirect}">{=$redirect}</a></small></p>
