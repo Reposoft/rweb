@@ -470,7 +470,7 @@ function isRequestService() {
 	// This method may be used in CLI mode, in which case there are no service requests
 	if (!isset($_SERVER['REQUEST_URI'])) return false;
 	// ErrorDocument in repository might not get the proper superglobals
-	if (strpos($_SERVER['REQUEST_URI'], 'serv=') > 0) return true;
+	if (preg_match('/serv=(json|text|xml)/', $_SERVER['REQUEST_URI'])) return true;
 	return false;
 }
 
