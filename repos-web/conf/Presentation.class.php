@@ -611,6 +611,7 @@ function Presentation_removeIndentation($tpl_source, &$smarty) {
  * Will of course not affect links generated in javascript.
  */
 function Repos_cust_output_embed($tpl_output, &$smarty) {
+	// TODO to make any difference this filter would have to really modify the HTML and get rid of command bar etc
 	$patterns[] = '/<body>/';
 	$replacements[] = '<body class="serv-embed">';
 	$patterns[] = '/(<a [^>]*)href=/';

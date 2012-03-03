@@ -21,6 +21,10 @@
 	padding: 2px;
 	padding-left: 18px;
 }
+.contentdetails {
+	width: 50%;
+	float: right;
+}
 #repos-edit {
 	background-image: url('../commands/16x16/edit.png');
 }

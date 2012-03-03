@@ -10,7 +10,11 @@ $.fn.reposDetailsTarget = function(options) {
 		/**
 		 * {string} Selector for the element where details HTML should be written.
 		 */
-		container: '.contentdetails'
+		container: '.contentdetails',
+		error: function(req) {
+			alert('Details load error ' + 
+					(typeof req == 'undefined' ? '' : req.status));
+		}
 	}, options);
 	
 	/**
@@ -45,11 +49,19 @@ $.fn.reposDetailsTarget = function(options) {
 	 * @param {function} callback The content callback, jQuery AJAX success handler, taking XHTML
 	 */
 	var reposDetailsLoad = function(detailsHref, callback) {
-		
+		$.ajax({
+			//url: detailsHref,
+			url: detailsHref + '&serv=embed', // until xhtml extraction works
+			dataType: callback.dataType || 'html',
+			success: callback,
+			error: settings.error
+		});
 	};
 	
 	var reposDetailsInsert = function(html, container) {
-		
+		//var body = $('body > *', html);
+		//container.append(body);
+		container.html(html); // TODO make xhtml extraction work
 	};
 	
 	/**
@@ -73,12 +85,16 @@ $.fn.reposDetailsTarget = function(options) {
 	};
 	
 	var asEmbeddedHtml = function() {
-		console.log('show details ', this);
+		var href = getDetailsUrl(this);
+		console.log('show details ', this, href);
+		reposDetailsLoad(href, function(html) {
+			reposDetailsInsert(html, $(settings.container));
+		});
 	};
 	
 	// run
-	return captureIntent(this, asIframePopup);
-	//return captureIntent(this, asEmbeddedHtml);
+	//return captureIntent(this, asIframePopup);
+	return captureIntent(this, asEmbeddedHtml);
 	
 };
 	
