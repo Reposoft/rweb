@@ -144,7 +144,7 @@ class ResourceExistsAndIsWritableRule extends ResourceExistsRule {
  * @see SvnEdit::show()
  */
 function displayEdit(&$presentation, $nextUrl=null, $target=null, $headline=null, $summary=null) {
-	if (!$target && isTargetSet()) {
+	if ($target === null && isTargetSet()) {
 		$target = getTarget();
 	}
 	$presentation->assign('target', $target);

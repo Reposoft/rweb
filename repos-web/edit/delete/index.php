@@ -27,6 +27,6 @@ function delete($message) {
 	$edit->setMessage($message);
 	$edit->addArgUrl(getTargetUrl());
 	$edit->exec();
-	displayEdit(Presentation::background(), dirname(rtrim(getTargetUrl(),'/')));
+	displayEdit(Presentation::background(), dirname(rtrim(getTargetUrl(),'/')), false);
 }
 ?>
