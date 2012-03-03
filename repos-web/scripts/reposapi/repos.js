@@ -221,6 +221,7 @@ jQuery.fn.say = function(message) {
 	
 	if (typeof message == 'string') message = {text:message};
 	var m = jQuery.extend({
+		select:'reposmessage',
 		tag:'div',
 		level:'note',
 		text:'',
@@ -229,23 +230,31 @@ jQuery.fn.say = function(message) {
 		temporary:true
 	},message);
 	
-	var e = $('<'+m.tag+'/>').addClass(m.level).html(m.text);
+	var e = $('.' + m.select);
+	var existing = e.size() > 0;
+	if (existing) {
+		m.temporary = message.temporary || false;
+	} else {
+		e = $('<'+m.tag+'/>');
+	}
+	e.hide().addClass(m.level);
 	
 	if (m.temporary) e.addClass('temporarymessage');
 	
 	if (m.title) e.attr('title',m.title);
 	if (m.id) e.attr('id',m.id);
 	
+	e.html(m.text);
 	// placement, highest priority last
-	e.hide();
-	// after first headline
-	$('h1,h2,h3', this).eq(0).after(e);
-	// inside form
-	this.filter('form').find('fieldset').prepend(e.wrap('<p/>'));
-	// after input
-	this.filter('input').parent().append(e);
-	// done
-	e.show('slow');
+	if (!existing) {
+		// after first headline
+		$('h1,h2,h3', this).eq(0).after(e);
+		// inside form
+		this.filter('form').find('fieldset').prepend(e.wrap('<p/>'));
+		// after input
+		this.filter('input').parent().append(e);
+	}
+	e.show('fast');
 };
 
 /**

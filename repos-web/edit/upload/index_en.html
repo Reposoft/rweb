@@ -35,7 +35,7 @@ You can not rename this file.</p>
 {=if not $isfile or $file,isWritable and not $file,isLockedBySomeoneElse}
 <form action="" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
 <fieldset>
-  <legend>Upload to repos</legend>
+  <legend>Upload {=if $isfile}new version of <a href="{=$file,url}">{=$file,filename}</a>{=else}to <a href="{=$folderurl}">{=$folderurl|basename}</a>{=/if}</legend>
   <input type="hidden" name="target" value="{=$target}"/>
   <input type="hidden" name="type" value="upload"/>
   <!--{foreach from=$customfields key=fname item=fval}-->

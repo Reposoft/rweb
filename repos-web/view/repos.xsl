@@ -112,6 +112,7 @@
 		<h2 id="path">
 			<xsl:copy-of select="$pathlinks"/>
 		</h2>
+		<div class="readme readme-top reposmessage"></div>
 		<!-- TODO add support or make this test more robust, for example work when there's no updir -->
 		<xsl:if test="/svn/index/updir/@href = concat('../?p=', /svn/index/@rev)">
 			<p class="warning">
@@ -120,6 +121,7 @@
 			</p>
 		</xsl:if>
 		<div class="contentcommands"/>
+		<div class="contentdetails"/>
 		<ul class="index">
 			<xsl:apply-templates select="dir">
 				<xsl:sort select="@name"/>
@@ -129,6 +131,7 @@
 				<xsl:sort select="@name"/>
 			</xsl:apply-templates>
 		</ul>
+		<div class="readme readme-bottom"></div>
 	</xsl:template>
 	<!-- generate directory -->
 	<xsl:template match="dir">
