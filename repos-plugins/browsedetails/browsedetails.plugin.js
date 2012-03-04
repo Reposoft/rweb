@@ -50,18 +50,23 @@ $.fn.reposDetailsTarget = function(options) {
 	 */
 	var reposDetailsLoad = function(detailsHref, callback) {
 		$.ajax({
-			//url: detailsHref,
-			url: detailsHref + '&serv=embed', // until xhtml extraction works
-			dataType: callback.dataType || 'html',
+			url: detailsHref,
+			dataType: callback.dataType || 'text',
 			success: callback,
 			error: settings.error
 		});
 	};
 	
 	var reposDetailsInsert = function(html, container) {
-		//var body = $('body > *', html);
-		//container.append(body);
-		container.html(html); // TODO make xhtml extraction work
+		// Handling page as string because DOM handling from AJAX response didn't work
+		// This is very sensitive to details page markup changes
+		html = html.replace(/\r?\n/g,'');
+		html = html.match(/.*(<div id="intro".*)/)[1];
+		html = html.replace(/<div id="footer".*/, '');
+		html = html.replace(/<p[^<]*(<a[^<]*<\/a>)?[^<]*<\/p>/g,'');
+		html = html.replace(/<dl class="properties.*\/dl>/, '');
+		html = html.replace(/href="/g, 'href="/repos-web/open/');
+		container.html(html);
 	};
 	
 	/**
@@ -86,9 +91,11 @@ $.fn.reposDetailsTarget = function(options) {
 	
 	var asEmbeddedHtml = function() {
 		var href = getDetailsUrl(this);
-		console.log('show details ', this, href);
 		reposDetailsLoad(href, function(html) {
-			reposDetailsInsert(html, $(settings.container));
+			var container = $(settings.container);
+			container.addClass('loading');
+			reposDetailsInsert(html, container);
+			container.removeClass('loading');
 		});
 	};
 	
