@@ -61,7 +61,13 @@ $.fn.reposDetailsTarget = function(options) {
 		// Handling page as string because DOM handling from AJAX response didn't work
 		// This is very sensitive to details page markup changes
 		html = html.replace(/\r?\n/g,'');
-		html = html.match(/.*(<div id="intro".*)/)[1];
+		var from = html.match(/.*(<div id="intro".*)/);
+		if (!from) {
+			container.html('<p class="error">Failed to load details</p>');
+			window.console && window.console.error('Content extraction failed from html: ', html);
+			return;
+		}
+		html = from[1];
 		html = html.replace(/<div id="footer".*/, '');
 		html = html.replace(/<p[^<]*(<a[^<]*<\/a>)?[^<]*<\/p>/g,'');
 		html = html.replace(/<dl class="properties.*\/dl>/, '');
