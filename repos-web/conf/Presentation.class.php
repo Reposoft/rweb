@@ -169,8 +169,15 @@ class Presentation {
 	 *  after input validation (to simplify for validation frameworks)
 	 *  but before operation starts (as soon as possible).
 	 *
-	 * They should call this method instead of getInstance
+	 * They should call this method instead of getInstance.
+	 * 
+	 * Exceptions are made automatically to allow operations from clients other
+	 * than browsers to get the result without redirect.
 	 *
+	 * To force redirect call Presentation->enableRedirectWaiting() on a newInstance().
+	 *
+	 * @return Presentation with redirect-after-post if the request
+	 *  looks like being from a browser showing a form
 	 * @static
 	 */
 	function background() {
@@ -198,11 +205,10 @@ class Presentation {
 		$this->smarty->load_filter('pre', 'Presentation_urlEncodeQueryString');
 		$this->smarty->register_prefilter('Presentation_supportRepoBase');
 		$this->smarty->load_filter('pre', 'Presentation_supportRepoBase');
-		$this->smarty->load_filter('pre', 'Presentation_urlEncodeQueryString');
 		$this->smarty->register_prefilter('Presentation_useDotNotationForObjects');
 		$this->smarty->load_filter('pre', 'Presentation_useDotNotationForObjects');
-		$this->smarty->register_prefilter('Presentation_removeIndentation');
-		$this->smarty->load_filter('pre', 'Presentation_removeIndentation');
+		//$this->smarty->register_prefilter('Presentation_removeIndentation');
+		//$this->smarty->load_filter('pre', 'Presentation_removeIndentation');
 		if (PRESENTATION_XTHML) {
 			$this->smarty->register_prefilter('Presentation_useXmlEntities');
 			$this->smarty->load_filter('pre', 'Presentation_useXmlEntities');
