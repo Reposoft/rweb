@@ -51,7 +51,7 @@ $.fn.reposDetailsTarget = function(options) {
 	var reposDetailsLoad = function(detailsHref, callback) {
 		$.ajax({
 			url: detailsHref,
-			dataType: callback.dataType || 'text',
+			dataType: callback.dataType || 'html',
 			success: callback,
 			error: settings.error
 		});
