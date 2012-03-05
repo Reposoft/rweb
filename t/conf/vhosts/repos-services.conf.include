@@ -1,4 +1,4 @@
-# Apache2 configuration for Subversion Service Layer (C) 2007 www.repos.se
+# Apache2 configuration for Subversion Service Layer (C) 2007-2012 www.repos.se
 # Included in config per host, not per repository (because rewrite behaves differently in Location)
 
 # Hard coded settings:

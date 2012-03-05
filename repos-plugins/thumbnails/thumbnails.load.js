@@ -14,7 +14,6 @@ Repos.target(Repos.thumbnails.match, function() {
 	var parent = $('#intro');
 	if (parent.size()==0) return;
 	Repos.thumbnails.addThumbnail(parent);
-	parent.append('<div style="clear: both;"></div>'); 
 });
 
 /**

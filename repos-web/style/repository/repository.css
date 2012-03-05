@@ -24,6 +24,8 @@
 .contentdetails {
 	width: 50%;
 	float: right;
+	padding-left: 1em;
+	border-left: 1px solid #ebebeb;
 }
 #repos-edit {
 	background-image: url('../commands/16x16/edit.png');

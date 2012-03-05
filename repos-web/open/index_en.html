@@ -48,6 +48,8 @@ You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 <!--{/if}-->
 </div>
 
+<div class="clearer"></div>
+
 <div class="main columns">
 
 <div id="activities" class="column column-activities">
@@ -67,10 +69,10 @@ Depending on your browser, it may also work for file types like pdf, documents a
 to your hard drive. The revision number {=$file,revision}
 will be appended to the filename, so you will know which version it is.</p>
 {=if $file|reposViewGetImageUrl}
-<h3 class="view"><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in repos</a></h3>
+<h3 class="view"><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in Repos</a></h3>
 <p>View image in screen size</p>
 {=elseif $file,isFile and $file,size lte REPOS_TEXT_MAXSIZE}
-<h3 class="view"><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in repos</a></h3>
+<h3 class="view"><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in Repos</a></h3>
 <p>Read the file's contents in a web page. This is like View in browser, but with menus.
 This works for text files. If the file is a binary file, like a word document,
 you will see only a long line of characters.</p>

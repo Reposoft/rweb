@@ -185,6 +185,7 @@ function showImage($file, $type='jpeg') {
 }
 
 function handleError($code, $message, $image='error.jpg') {
+	header('HTTP/1.0 500 Server Error');
 	// for viewing the error using copy image location + curl or paste in new tab
 	if (!getHttpReferer()) {
 		header('Content-Type: text/plain');
