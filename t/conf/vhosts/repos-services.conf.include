@@ -66,7 +66,7 @@ RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/%1%2/?base=$1&target=$2
 # All these services must start with t, names must be word characters a-z0-9_
 
 # Repos thumbnails plugin, "tothumb" etc, p and r are supported, for specific page append comma and number to transform name
-RewriteCond		%{QUERY_STRING}		^rweb=to(\w+)(?:,(\d+))?|.*&rweb=to(\w+)(?:,(\d+))?
+RewriteCond		%{QUERY_STRING}		^rweb=t\.(\w+)(?:,(\d+))?|.*&rweb=t\.(\w+)(?:,(\d+))?
 RewriteRule		^/svn/([^/]+)(/.*)$	/repos-plugins/thumbnails/convert/?base=$1&target=$2&tf=%1%3&page=%2%4 [PT,QSA,L]
 
 # --- Post processing, should apply to both R and PT ---
