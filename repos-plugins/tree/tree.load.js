@@ -106,7 +106,8 @@ $.fn.reposTree = function( options ) {
 				// done, set class to override inherited expand/collapse status
 				var cl = 'expanded';
 				if (added.filter(':visible').size() == 0) cl += 'empty';
-				list.parent().filter('li').addClass(cl).removeClass('loading');
+				list.parent().filter('li').addClass(cl).removeClass('loading')
+					.removeClass('hovr'); // don't do hover action immediately after expanding
 			},
 			error : function(req, textStatus, errorThrown) {
 				window.console && console.error('Tree load error', req, textStatus, errorThrown);
@@ -122,7 +123,8 @@ $.fn.reposTree = function( options ) {
 	var collapse = function(id, target) {
 		// no use in preserving content as user expects refresh at
 		// collapse+expand
-		$('#' + id).empty().parent().removeClass('expanded').addClass('collapsed');
+		$('#' + id).empty().parent().removeClass('expanded').addClass('collapsed')
+			.removeClass('hovr'); // don't do hover action immediately after collapsing
 	};
 	
 	// Like getRepository but with support for static index.html
