@@ -10,6 +10,7 @@ div.columns {
 }
 div.column {
 	display: table-cell;
+	vertical-align: top;
 }
 div.column-activities {
 }

@@ -68,12 +68,13 @@ $.fn.reposDetailsTarget = function(options) {
 			return;
 		}
 		html = from[1];
-		html = html.replace('id="realurl" class="file"', 'id="realurl"');
 		html = html.replace(/<div id="footer".*/, '');
 		html = html.replace(/<p[^<]*(<a[^<]*<\/a>)?[^<]*<\/p>/g,'');
 		html = html.replace(/<dl class="properties.*\/dl>/, '');
 		html = html.replace(/href="/g, 'href="/repos-web/open/');
 		container.html(html);
+		var intro = $('#intro', container).css({margin: 0, padding: 0});
+		$('h1 a', intro).css('background-position', 'left .25em');
 	};
 	
 	var addCloseButton = function(container) {
@@ -87,18 +88,19 @@ $.fn.reposDetailsTarget = function(options) {
 	};
 	
 	var addThumbnail = function(href, container) {
-		var thref = href.replace('?rweb=details', '?rweb=t.thumb');
+		var thref = href.replace('?rweb=details', '?rweb=t.preview');
+		var preview = $('<div/>').addClass('preview').css({marginLeft: 5, marginRight: 5, textAlign: 'center'});
 		var img = $("<img />").addClass('thumbnail').attr('src', thref).load(function() {
 					if (!this.complete
 							|| typeof this.naturalWidth == "undefined"
 							|| this.naturalWidth == 0) {
 						window.console && console.warn('No error message, no image', thref);
 					} else {
-						$("#intro", container).prepend(img);
+						$(".column-info", container).prepend(preview.append(img));
 					}
 				}).error(function() {
-					$(this).hide();
-					window.console && console.log('Image service failed', thref);
+					// normally status=415, error not called for status=500 which is good because we want to show the error thumbnail instead
+					$(this).hide(); 
 				});
 	};
 	
@@ -124,6 +126,7 @@ $.fn.reposDetailsTarget = function(options) {
 	};
 	
 	var asEmbeddedHtml = function() {
+		var isFile = $(this).is('.file');
 		var href = getDetailsUrl(this);
 		var container = $(settings.container);
 		var topstart = $('.index').offset().top;
@@ -133,7 +136,10 @@ $.fn.reposDetailsTarget = function(options) {
 		reposDetailsLoad(href, function(html) {
 			reposDetailsInsert(html, container);
 			addCloseButton(container);
-			addThumbnail(href, container);
+			if (isFile)	{
+				$('#editlog', container).hide();
+				addThumbnail(href, container);
+			}
 		});
 	};
 	

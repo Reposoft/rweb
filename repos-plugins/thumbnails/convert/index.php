@@ -85,6 +85,19 @@ if (!$transform->getHeight()) {
 }
 $thumbtype = $transform->getOutputFormat();
 
+// See if the source extension is supported
+// In future the supported extensions may depend on transform definitions
+$supportedExtensions = explode('|', 'jpg|png|gif'
+		.'|bmp|eps|pdf|ps|psd|ico|svg|tif|tiff'
+		.'|avi'
+		.'|cgm' // users that need CGM must install delegate RalCGM for ImageMagick or GraphicsMagick
+		.'|ai' // some adobe formats are actually pdf or postscript
+		.'');
+if (!in_array($file->getExtension(), $supportedExtensions)) {
+	// TODO use a different image? This error will be common with the new trial-and-error thumbnailing approach.
+	handleError(415, $file->getExtension() . ' not a supported format', 'error.png', 'HTTP/1.1 415 Unsupported Media Type');
+}
+
 // Originals could be large so we should avoid local storage if possible, but need
 // alternative flow for convert that fails with stdin, such as when ralcgm is used 
 $temporg = false;
@@ -184,8 +197,8 @@ function showImage($file, $type='jpeg') {
 	fclose($f);	
 }
 
-function handleError($code, $message, $image='error.jpg') {
-	header('HTTP/1.0 500 Server Error');
+function handleError($code, $message, $image='error.jpg', $statusline='HTTP/1.1 500 Server Error') {
+	header($statusline);
 	// for viewing the error using copy image location + curl or paste in new tab
 	if (!getHttpReferer()) {
 		header('Content-Type: text/plain');

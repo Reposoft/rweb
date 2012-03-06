@@ -1,4 +1,5 @@
 
+// This list was for Repos <1.4, is now depending on the transforms defined in convert service
 Repos.thumbnails = {
 	filetypes: 'jpg|png|gif'+
 		'|bmp|eps|pdf|ps|psd|ico|svg|tif|tiff'+
@@ -8,13 +9,22 @@ Repos.thumbnails = {
 		'' 
 };
 
+/**
+ * @deprecated Try thumbnails service instead and abort on status 415
+ */
 Repos.thumbnails.match = new RegExp('\.(' + Repos.thumbnails.filetypes + ')$', 'i');
 
-Repos.target(Repos.thumbnails.match, function() {
-	var parent = $('#intro');
+/**
+ * Identify the intro section (in current thisArg) for details/edit page thumbnail 
+ */
+Repos.thumbnails.addThumbnailToIntro = function() {
+	var parent = $('#intro', this);
 	if (parent.size()==0) return;
 	Repos.thumbnails.addThumbnail(parent);
-});
+};
+
+Repos.service('open/', Repos.thumbnails.addThumbnailToIntro);
+Repos.service('edit/', Repos.thumbnails.addThumbnailToIntro);
 
 /**
  * Prepend thumbnail tag to jQuery element(s)
@@ -25,7 +35,18 @@ Repos.thumbnails.addThumbnail = function(parent) {
 	var revIsPeg = Repos.isRevisionRequested(); // do we always display a "changed" revision or might it be rev < requested?
 	var src = Repos.thumbnails.getSrc(target, rev, revIsPeg);
 	if (!src) return;
-	parent.prepend('<img class="thumbnail" src="'+src+'" alt="Creating thumbnail..." border="0"/>');	
+	var img = $("<img />").addClass('thumbnail').attr('src', src).load(function() { // alt="Creating thumbnail..."
+		if (!this.complete
+				|| typeof this.naturalWidth == "undefined"
+				|| this.naturalWidth == 0) {
+			window.console && console.warn('No error message, no image', thref);
+		} else {
+			parent.prepend(img);
+		}
+	}).error(function() {
+		// normally status=415, error not called for status=500 which is good because we want to show the error thumbnail instead
+		$(this).hide(); 
+	});	
 };
 
 /**
