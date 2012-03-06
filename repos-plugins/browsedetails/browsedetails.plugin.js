@@ -144,7 +144,6 @@ $.fn.reposDetailsTarget = function(options) {
 };
 	
 Repos.service('index/', function() {
-	if ($('body').is('.static')) return;
 	$('.file, .folder').reposDetailsTarget({});
 });
 
