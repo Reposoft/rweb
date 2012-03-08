@@ -24,8 +24,13 @@
 .contentdetails {
 	width: 50%;
 	float: right;
-	padding-left: 1em;
+	/* align with rowmiddle background, pixels or no padding: padding-left: 1em; */
 	border-left: 1px solid #ebebeb;
+}
+.index li:hover {
+	background-position: top center;
+	background-repeat: no-repeat;
+	background-image: url('../rowmiddle.png');
 }
 #repos-edit {
 	background-image: url('../commands/16x16/edit.png');
