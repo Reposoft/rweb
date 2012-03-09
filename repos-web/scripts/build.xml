@@ -25,7 +25,7 @@
 	<property name="api.folder" value="./reposapi" />	
 	<property name="plugins.folder" value="../plugins" />
 	
-	<property name="excludes.default" value="**/*.test.js,**/test/**,**/*.externs.js" />
+	<property name="excludes.default" value="**/*.test.js,**/test/**,**/*.min.js,**/*.externs.js" />
 	
 	<property name="head.js.file" value="./head.js" />
 	
@@ -42,13 +42,11 @@
 		<!-- compiler task does not support fileset -->
 		<!-- https://groups.google.com/group/closure-compiler-discuss/browse_thread/thread/25b55f9cb5e88248?pli=1 -->
 		<concat destfile="${head.js.file}.big" append="no">
-			<fileset dir="${intro.folder}" includes="**/*.js" excludes="${excludes.default}" />
 			<fileset dir="${lib.folder}" includes="jquery/*.js" excludes="${excludes.default}" />
 			<fileset dir="${lib.folder}" includes="**/*.js" excludes="jquery/**,${excludes.default}"/>
 			<fileset dir="${api.folder}" includes="**/*.js" excludes="${excludes.default}" />
 			<fileset dir="${plugins.folder}" includes="**/*.js" excludes="${excludes.default}" />
 			<fileset refid="pluginset"/>
-			<fileset dir="${outro.folder}" includes="**/*.js" excludes="${excludes.default}" />
 		</concat>
 		
 		<concat destfile="${head.js.file}.externs.big">
@@ -56,7 +54,13 @@
 			<fileset dir="${plugins.folder}" includes="**/*.externs.js"/>
 		</concat>
 		
-		<jscomp output="${head.js.file}"
+		<concat destfile="${head.js.file}.precompiled">
+			<fileset dir="${lib.folder}" includes="jquery/*.min.js"/>
+			<fileset dir="${lib.folder}" includes="**/*.min.js" excludes="jquery/**"/>
+			<!-- not allowed for plugins because these are placed first in bundle -->
+		</concat>
+		
+		<jscomp output="${head.js.file}.compiled"
 				compilationLevel="simple"
 				warning="verbose"
 				debug="yes"
@@ -72,6 +76,15 @@
 			</sources>
 			
 		</jscomp>
+		
+		<concat destfile="${head.js.file}">
+			<fileset dir="${intro.folder}" includes="**/*.js" excludes="${excludes.default}" />
+			<filelist>
+				<file name="${head.js.file}.precompiled"/>
+				<file name="${head.js.file}.compiled"/>
+			</filelist>
+			<fileset dir="${outro.folder}" includes="**/*.js" excludes="${excludes.default}" />
+		</concat>
 
 	</target>	
 	
@@ -144,6 +157,10 @@
 
 	<target name="clean">
 		<delete file="${head.js.file}.big" />
+		<delete file="${head.js.file}.compiled" />
+		<delete file="${head.js.file}.externs" />
+		<delete file="${head.js.file}.info.txt" />		
+		<delete file="${head.js.file}" />
 	</target>
 
 	<target name="head.js" depends="compress">
