@@ -1,6 +1,4 @@
 @CHARSET "UTF-8";
-/* dependencies */
-@import "jquery-ui/jquery-ui.custom.css";
 /* shared layout between themes instead of plugin solution */
 @import "layout.css";
 /* repos.se common styles */

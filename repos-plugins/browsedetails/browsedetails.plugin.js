@@ -104,27 +104,6 @@ $.fn.reposDetailsTarget = function(options) {
 				});
 	};
 	
-	/**
-	 * Alternative concept loading an iframe in a jQuery UI dialog, using
-	 * "embed" mode
-	 */
-	var asIframePopup = function() {
-		var item = $(this);
-		var href = getDetailsUrl(this) + '&serv=embed';
-		var title = item.text();
-		var extendbox = $('<div/>').addClass('extendbox');
-		extendbox
-			.html('<iframe src="' + href + '" width="100%" height="100%"></iframe>')
-        	.dialog({
-	            autoOpen: false,
-	            modal: false,
-	            height: 500,
-	            width: '55em',
-	            title: title
-	        });
-        extendbox.dialog('open');		
-	};
-	
 	var asEmbeddedHtml = function() {
 		var isFile = $(this).is('.file');
 		var href = getDetailsUrl(this);
