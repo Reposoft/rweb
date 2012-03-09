@@ -23,10 +23,14 @@ $.fn.reposDetailsTarget = function(options) {
 	 * @param callback {Function} the function to call when details should be loaded for "this"
 	 */
 	var captureIntent = function(targetElement, callback) {
-		var extend = $('<span>&raquo;</span>').addClass('itemextend').appendTo($(targetElement).parent());
-		extend.click(function() {
-			callback.call($(this).parent().find('a:first'));
+		return targetElement.each(function() {
+			var a = $(this);
+			var row = a.parent(); 
+			row.click(function(ev) {
+				if (row.is(ev.target)) callback.call(a);
+			});
 		});
+		$(targetElement)
 		return targetElement;
 	};
 	
@@ -64,7 +68,7 @@ $.fn.reposDetailsTarget = function(options) {
 		var from = html.match(/.*(<div id="intro".*)/);
 		if (!from) {
 			container.html('<p class="error">Failed to load details</p>');
-			window.console && window.console.error('Content extraction failed from html: ', html);
+			console.error('Content extraction failed from html: ', html);
 			return;
 		}
 		html = from[1];
@@ -78,11 +82,7 @@ $.fn.reposDetailsTarget = function(options) {
 	};
 	
 	var addCloseButton = function(container) {
-		var b = $('<div>x</div>').css({
-			color: '#999',
-			cursor: 'pointer',
-			fontSize: '120%'
-		}).prependTo(container).click(function() {
+		var b = $('<div>x</div>').addClass('closebutton').prependTo(container).click(function() {
 			container.empty();
 		});
 	};
@@ -94,7 +94,7 @@ $.fn.reposDetailsTarget = function(options) {
 					if (!this.complete
 							|| typeof this.naturalWidth == "undefined"
 							|| this.naturalWidth == 0) {
-						window.console && console.warn('No error message, no image', thref);
+						console.warn('No error message, no image', thref);
 					} else {
 						$(".column-info", container).prepend(preview.append(img));
 					}
@@ -110,9 +110,14 @@ $.fn.reposDetailsTarget = function(options) {
 		var container = $(settings.container);
 		var topstart = $('.index').offset().top;
 		var topscroll = $(document).scrollTop();
-		container.empty().css('margin-top', topscroll > topstart ? Math.floor(topscroll - topstart + 10) : 0);
-		container.html('<img border="0" src="/repos-web/style/loading.gif"/>');
+		container.css('opacity', '.3').css('margin-top', topscroll > topstart ? Math.floor(topscroll - topstart + 10) : 0);
+		if (container.is(':empty')) {
+			container.html('<img border="0" src="/repos-web/style/loading.gif"/>'); // need to get dimensions
+		} else {
+			container.addClass('loading');
+		}
 		reposDetailsLoad(href, function(html) {
+			container.css('opacity', 'inherit').removeClass('loading');
 			reposDetailsInsert(html, container);
 			addCloseButton(container);
 			if (isFile)	{
@@ -129,7 +134,7 @@ $.fn.reposDetailsTarget = function(options) {
 };
 	
 Repos.service('index/', function() {
-	$('.file, .folder').reposDetailsTarget({});
+	$('.file, .folder', $('.index')).reposDetailsTarget({});
 });
 
 })(jQuery);

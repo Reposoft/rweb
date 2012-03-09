@@ -28,6 +28,14 @@
 	border-left: 1px solid #ebebeb;
 	background-color: #fff;
 }
+.contentdetails .closebutton {
+	color: #999;
+	cursor: pointer;
+	font-size: 120%;
+}
+.contentdetails.loading .closebutton {
+	visibility: hidden;
+}
 .index li:hover {
 	background-position: top center;
 	background-repeat: no-repeat;
