@@ -81,7 +81,7 @@
 		
 		<concat destfile="${head.js.file}">
 			<fileset dir="${intro.folder}" includes="**/*.js" excludes="${excludes.default}" />
-			<filelist>
+			<filelist dir="${basedir}">
 				<file name="${head.js.file}.precompiled"/>
 				<file name="${head.js.file}.compiled"/>
 			</filelist>
