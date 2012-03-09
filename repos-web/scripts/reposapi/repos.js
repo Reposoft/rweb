@@ -18,24 +18,25 @@ if (!Array.prototype.indexOf) { Array.prototype.indexOf = function (obj, start) 
 
 /**
  * Replaces $(document).ready since jQuery ready runs even if selector is empty.
- * @param {String} repos selector starting with :
- * @param {Function} fn for jQuery().ready
+ * @param {string} repos selector starting with :
+ * @param {function()} fn for jQuery().ready
+ * @deprecated jQuery $(document).ready recommended now that repos selectors are removed
  */
 Repos.ready = function(selector, fn) {
 	return $('html'+selector).size() && $(document).ready(fn);
 };
 /**
  * Shorthand for Repos.ready(':repos-target(t)',fn)
- * @param {String} t
- * @param {Function} fn
+ * @param {string} t
+ * @param {function()} fn
  */
 Repos.target = function(t, fn) {
 	return Repos.isTarget(t) && $(document).ready(fn);
 };
 /**
  * Shorthand for Repos.ready(':repos-service(s)',fn)
- * @param {String} s
- * @param {Function} fn
+ * @param {string} s
+ * @param {function()} fn
  */
 Repos.service = function(s, fn) {
 	return Repos.isService(s) && $(document).ready(fn);
@@ -72,7 +73,7 @@ Repos.onUiParam = function(pname, callback, evns) {
 
 /**
  * Calculates webapp root based on the include path of this script (repos.js or head.js)
- * @return String webapp root url with trailing slash
+ * @return {string} Webapp root url with trailing slash
  */
 Repos.getWebapp = function() {
 	var tags = document.getElementsByTagName("head")[0].childNodes;
@@ -116,7 +117,7 @@ Repos.getService = function() {
 };
 
 /**
- * @return {String} root url, no trailing slash
+ * @return {string} root url, no trailing slash
  */
 Repos.getRepository = function() {
 	// no meta tag in index yet, xslt should and repository name in path made clickable
@@ -162,7 +163,7 @@ Repos.getRevisionRequested = function() {
 
 /**
  * Compares current Repos target with a pattern
- * @param {String} selector The pattern to compare with
+ * @param {string} selector The pattern to compare with
  * @param {Object} context Optional context to get current target for
  * @return true if current target matches the selector
  */
@@ -187,7 +188,7 @@ Repos.isTarget = function(selector,context) {
 
 /**
  * Compares current Repos service with a pattern
- * @param {String} selector The service name, a relative path, to compare with
+ * @param {string} selector The service name, a relative path, to compare with
  * @param {Object} context
  */
 Repos.isService = function(selector,target) {
@@ -204,7 +205,7 @@ Repos.isService = function(selector,target) {
 
 /**
  * Reads the username cookie
- * @return {String} false if user not authenticated through repos, else username
+ * @return {string} false if user not authenticated through repos, else username
  */
 Repos.getUser = function() {
 	var u = $.cookie('account');
@@ -260,7 +261,7 @@ jQuery.fn.say = function(message) {
  * Elements start collapsed.
  * Only some element structures are supported.
  * To toggle, toggle class collapsed/expanded.
- * @param {String} [state] State to switch to, "collapsed" or "expanded"
+ * @param {string} [state] State to switch to, "collapsed" or "expanded"
  */
 jQuery.fn.reposCollapsable = function(state) {
 	var support = { // matches css
