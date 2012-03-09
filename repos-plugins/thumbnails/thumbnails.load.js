@@ -39,7 +39,7 @@ Repos.thumbnails.addThumbnail = function(parent) {
 		if (!this.complete
 				|| typeof this.naturalWidth == "undefined"
 				|| this.naturalWidth == 0) {
-			window.console && console.warn('No error message, no image', thref);
+			window.console && console.warn('No error message, no image', src);
 		} else {
 			parent.prepend(img);
 		}

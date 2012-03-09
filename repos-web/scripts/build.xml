@@ -50,7 +50,12 @@
 			<fileset refid="pluginset"/>
 			<fileset dir="${outro.folder}" includes="**/*.js" excludes="${excludes.default}" />
 		</concat>
-				
+		
+		<concat destfile="${head.js.file}.externs.big">
+			<fileset dir="${lib.folder}" includes="**/*.externs.js"/>
+			<fileset dir="${plugins.folder}" includes="**/*.externs.js"/>
+		</concat>
+		
 		<jscomp output="${head.js.file}"
 				compilationLevel="simple"
 				warning="verbose"
@@ -59,7 +64,7 @@
 				managedependencies="yes">
 
 			<externs dir="${basedir}">
-				<file name="lib/jquery/jquery.externs.js"/>
+				<file name="${head.js.file}.externs.big"/>
 			</externs>
 
 			<sources dir="${basedir}">

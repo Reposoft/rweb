@@ -10,7 +10,7 @@ $.fn.reposTree = function( options ) {
 		callbackLoad: function(link, name, target, base, isFile) {
 		},
 		callbackSelect: function(link, name, target, base, isFile) { // args are not URL-encoded
-			window.console && console.log('Selected', node, name, target, base, isFile);
+			window.console && console.log('Selected', link, name, target, base, isFile);
 			return false; // don't follow click
 		},
 		web: '/repos-web/',

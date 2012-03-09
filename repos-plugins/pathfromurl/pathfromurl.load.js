@@ -5,6 +5,7 @@
 	
 	// return path if url argument is a path inside current repository
 	var getPathFromUrl = function(url) {
+		var r;
 		if (url==null) {
 			return;
 		}

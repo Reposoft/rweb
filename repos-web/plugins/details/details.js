@@ -108,7 +108,7 @@ var details_writeThumb = that.details_writeThumb = function(e, entry) {
 		if (!this.complete
 				|| typeof this.naturalWidth == "undefined"
 				|| this.naturalWidth == 0) {
-			console.warn('No error message, no image', thref);
+			console.warn('No error message, no image', src);
 		} else {
 			thumb.append(img);
 		}

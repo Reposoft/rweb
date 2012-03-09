@@ -2153,3 +2153,6 @@ jQuery.prototype.wrapAll = function(wrappingElement) {};
  * @return {jQuery}
  */
 jQuery.prototype.wrapInner = function(arg1) {};
+
+// avoid compiler error with "AMD module"
+var define;
