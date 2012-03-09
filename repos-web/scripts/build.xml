@@ -36,9 +36,11 @@
 
 	<!-- transitional task for compiling with closure compiler, will be default -->
 	<target name="compress.closure" description="Compress using closure compiler">
+		
 		<fileset id="pluginset" dir="${plugins.external.folder}"
 			includes="**/*.load.js,**/*.plugin.js"
 			excludes="${plugins.excludes}" />
+		
 		<!-- compiler task does not support fileset -->
 		<!-- https://groups.google.com/group/closure-compiler-discuss/browse_thread/thread/25b55f9cb5e88248?pli=1 -->
 		<concat destfile="${head.js.file}.big" append="no">
@@ -87,74 +89,10 @@
 		</concat>
 
 	</target>	
-	
-	<target name="compile" depends="head.js.concat">
-	</target>
-	
-	<target name="head.js.concat"
-		description="Concatenate all script parts to one big file">
-		<echo message="Collecting parts for ${head.js.file}" />
-		<fileset id="pluginset" dir="${plugins.external.folder}"
-			includes="**/*.load.js,**/*.plugin.js"
-			excludes="${plugins.excludes}" />
-		<pathconvert pathsep="${line.separator}" property="pluginsettext" refid="pluginset"/>
-		
-		<path id="plugins.info.file" path="${head.js.file}.info.txt"/>
-		<echo>Writing plugin info to ${head.js.file}.info.txt</echo>
-		<echo append="no" file="${head.js.file}.info.txt"></echo> 
-		<echo append="yes" file="${head.js.file}.info.txt">Including optional plugins from ${plugins.external.folder}${line.separator}</echo>
-		<echo append="yes" file="${head.js.file}.info.txt">This build excludes: ${plugins.excludes}${line.separator}</echo>
-		<echo append="yes" file="${head.js.file}.info.txt">Including the following plugin js files:${line.separator}</echo>
-		<echo append="yes" file="${head.js.file}.info.txt">${pluginsettext}${line.separator}</echo>
-		<echo append="yes" file="${head.js.file}.info.txt">--- end plugin js list ---</echo>
-		<echo append="yes" file="${head.js.file}.info.txt">${line.separator}</echo>
-		<replace token="${plugins.external.folder}" value="" file="${head.js.file}.info.txt" description="Not exposing local paths"/>
-		<concat destfile="${head.js.file}.big" append="no">
-			<fileset dir="${intro.folder}" includes="**/*.js" excludes="${excludes.default}" />
-			<fileset dir="${lib.folder}" includes="jquery/*.js"/>
-			<fileset dir="${lib.folder}" includes="**/*.js" excludes="jquery/**,${excludes.default}"/>
-			<fileset dir="${api.folder}" includes="**/*.js" excludes="${excludes.default}" />
-			<fileset dir="${plugins.folder}" includes="**/*.js" excludes="${excludes.default}" />
-			<fileset refid="pluginset"/>
-			<fileset dir="${outro.folder}" includes="**/*.js" excludes="${excludes.default}" />
-		</concat>
-		<echo message="${head.js.file}.big built." />
-	</target>
 
-	<target name="compress" depends="compile, compress.rhino, compress.arm"
-		description="Remove all comments and whitespace, no compression">
+	<target name="compress" depends="compress.closure">
 	</target>
 	
-	<target name="compress.rhino" unless="java.arm">
-		<echo message="Building ${head.js.file}" />
-		<java jar="${build.jar}" fork="true">
-			<arg value="${build.script}" />
-			<arg value="${head.js.file}.big" />
-			<arg value="${head.js.file}" />
-		</java>
-		<echo message="${head.js.file} built." />
-	</target>
-	
-	<target name="compress.arm" if="java.arm" description="Avoid issues with Rhino on ARM/sablevm">
-		<echo message="Building ${head.js.file} with non-java minifier" />
-		<exec executable="${build.folder}/jsmin.arm"
-			input="${head.js.file}.big" output="${head.js.file}">
-		</exec>
-		<echo message="${head.js.file} minified." />
-	</target>
-	
-	<target name="dev" depends="head.js.concat"
-		description="Use full script with comments in runtime (development only)">
-		<concat destfile="${head.js.file}">
-			<header filtering="no" trimleading="yes">/* DEVELOPMENT USE ONLY */</header>
-			<fileset file="${head.js.file}.big"/>
-		</concat>
-		<echo message="DEVELOPMENT VERSION: ${head.js.file} built." />
-	</target>
-
-	<target name="test">
-	</target>
-
 	<target name="clean">
 		<delete file="${head.js.file}.big" />
 		<delete file="${head.js.file}.compiled" />
