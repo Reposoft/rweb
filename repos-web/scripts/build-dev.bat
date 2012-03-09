@@ -1,1 +1,1 @@
-ant -Dcompile.level=""
+ant -Dcompile.level=none

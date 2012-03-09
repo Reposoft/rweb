@@ -11,6 +11,10 @@
 	
 	<property name="compile.level" value="simple"/>
 	
+	<condition property="compile.level.closure">
+		<not><equals arg1="${compile.level}" arg2="none"/></not>
+	</condition>
+	
 	<!-- Customer-specific plugins may override build settings -->
 	<property file="${plugins.external.folder}/build.properties" />
 	
@@ -75,11 +79,11 @@
 		</concat>
 	</target>
 	
-	<target name="compile.none" unless="compile.level.set">
+	<target name="compile.none" unless="compile.level.closure">
 		<copy tofile="${head.js.file}.compiled" file="${head.js.file}.big"/>
 	</target>
 	
-	<target name="compile.closure" if="compile.level.set">
+	<target name="compile.closure" if="compile.level.closure">
 		<jscomp output="${head.js.file}.compiled"
 				compilationLevel="${compile.level}"
 				warning="verbose"
