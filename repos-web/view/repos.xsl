@@ -120,8 +120,8 @@
 				You may <a href="./">return to browsing latest</a> if this folder still exists.
 			</p>
 		</xsl:if>
-		<div class="contentcommands"/>
-		<div class="contentdetails"/>
+		<div class="contentcommands"></div>
+		<div class="contentdetails"></div>
 		<ul class="index">
 			<xsl:apply-templates select="dir">
 				<xsl:sort select="@name"/>

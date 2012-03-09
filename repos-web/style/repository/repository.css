@@ -24,8 +24,9 @@
 .contentdetails {
 	width: 50%;
 	float: right;
-	/* align with rowmiddle background, pixels or no padding: padding-left: 1em; */
+	padding-left: 10px;
 	border-left: 1px solid #ebebeb;
+	background-color: #fff;
 }
 .index li:hover {
 	background-position: top center;
