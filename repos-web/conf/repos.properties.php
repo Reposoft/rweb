@@ -464,6 +464,8 @@ function isRequestService() {
 			// TODO we don't want false positives here so maybe we should parse properly and also consider */* to be possible browser request?
 			// Until then, apply this new rule only for the new service URLs 
 			&& isset($_REQUEST['rweb'])
+			// ... problems with IE6 already, sends 
+			&& (!strContains($_SERVER['HTTP_USER_AGENT'], 'MSIE') || !strContains($_SERVER["HTTP_ACCEPT"], '*/*'))
 			) {
 		if (!strBegins($_SERVER["HTTP_ACCEPT"], "text/html")) return true; // Expecting all browsers to send text/html,...
 	}
