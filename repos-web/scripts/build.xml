@@ -9,15 +9,14 @@
 	<property name="plugins.external.folder" location="../../repos-plugins" />
 	<property name="plugins.excludes" value="" description="External plugins to excluded from build" />
 	
+	<property name="compile.level" value="simple"/>
+	
 	<!-- Customer-specific plugins may override build settings -->
 	<property file="${plugins.external.folder}/build.properties" />
 	
 	<available file="${plugins.external.folder}" property="plugins.external.include" />
 	
 	<property name="build.folder" value="build" />
-	<property name="build.jar" value="${build.folder}/js.jar" description="Rhino JS Engine" />
-	<property name="build.script" value="${build.folder}/min.js"/>
-	<available file="/usr/lib/sablevm" property="java.arm" description="Java running on a non-standard VM"/>
 
 	<property name="intro.folder" value="./reposin" />
 	<property name="outro.folder" value="./reposout" />
@@ -34,8 +33,9 @@
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
 		classpath="${build.folder}/compiler.jar"/>
 
-	<!-- transitional task for compiling with closure compiler, will be default -->
-	<target name="compress.closure" description="Compress using closure compiler">
+	<!-- TODO use Closure Compilers managed dependencies instead of concatenation" -->
+	
+	<target name="compile.concat" description="Concat scripts for compilation of single file">
 		
 		<fileset id="pluginset" dir="${plugins.external.folder}"
 			includes="**/*.load.js,**/*.plugin.js"
@@ -61,9 +61,27 @@
 			<fileset dir="${lib.folder}" includes="**/*.min.js" excludes="jquery/**"/>
 			<!-- not allowed for plugins because these are placed first in bundle -->
 		</concat>
+
+	</target>
 		
+	<target name="compile.collect">
+		<concat destfile="${head.js.file}">
+			<fileset dir="${intro.folder}" includes="**/*.js" excludes="${excludes.default}" />
+			<filelist dir="${basedir}">
+				<file name="${head.js.file}.precompiled"/>
+				<file name="${head.js.file}.compiled"/>
+			</filelist>
+			<fileset dir="${outro.folder}" includes="**/*.js" excludes="${excludes.default}" />
+		</concat>
+	</target>
+	
+	<target name="compile.none" unless="compile.level.set">
+		<copy tofile="${head.js.file}.compiled" file="${head.js.file}.big"/>
+	</target>
+	
+	<target name="compile.closure" if="compile.level.set">
 		<jscomp output="${head.js.file}.compiled"
-				compilationLevel="simple"
+				compilationLevel="${compile.level}"
 				warning="verbose"
 				debug="yes"
 				printinputdelimiter="yes"
@@ -77,21 +95,10 @@
 				<file name="${head.js.file}.big" />
 			</sources>
 			
-		</jscomp>
-		
-		<concat destfile="${head.js.file}">
-			<fileset dir="${intro.folder}" includes="**/*.js" excludes="${excludes.default}" />
-			<filelist dir="${basedir}">
-				<file name="${head.js.file}.precompiled"/>
-				<file name="${head.js.file}.compiled"/>
-			</filelist>
-			<fileset dir="${outro.folder}" includes="**/*.js" excludes="${excludes.default}" />
-		</concat>
-
-	</target>	
-
-	<target name="compress" depends="compress.closure">
+		</jscomp>		
 	</target>
+	
+	<target name="compile" depends="compile.concat, compile.none, compile.closure, compile.collect"/>
 	
 	<target name="clean">
 		<delete file="${head.js.file}.big" />
@@ -101,7 +108,7 @@
 		<delete file="${head.js.file}" />
 	</target>
 
-	<target name="head.js" depends="compress">
+	<target name="head.js" depends="compile">
 	</target>
 	
 </project>

@@ -1,1 +1,1 @@
-ant dev
+ant -Dcompile.level=""
