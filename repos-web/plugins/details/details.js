@@ -81,6 +81,7 @@ var details_write = that.details_write = function(e, entry) {
 			$('.filesize', e).attr('title', size + ' bytes');
 		}
 		if (details_isLocked(this)) details_writeLock(e, this);
+		details_writeThumb(e, this);
 	});
 	e.show();
 };
@@ -94,6 +95,27 @@ var details_writeLock = that.details_writeLock = function(e, entry) {
 	s.append('<span class="username">'+ $('owner', lock).text() +'</span>&nbsp;');
 	$('<span class="datetime">'+ $('created', lock).text() +'</span>&nbsp;').appendTo(s).dateformat();
 	s.append(' <span class="message">'+ $('comment', lock).text() +'</span>');
+};
+
+var details_writeThumb = that.details_writeThumb = function(e, entry) {
+	var thumb = $('<span/>').addClass('thumbnail').prependTo(e);
+	
+	var src = $('a:first', e).attr('href').replace('rweb=details', 'rweb=t.tiny');
+	console.log(e, entry, thumb, src);
+	if (!src) return;
+	
+	var img = $("<img />").addClass('thumbnail').attr('src', src).load(function() { // alt="Creating thumbnail..."
+		if (!this.complete
+				|| typeof this.naturalWidth == "undefined"
+				|| this.naturalWidth == 0) {
+			console.warn('No error message, no image', thref);
+		} else {
+			thumb.append(img);
+		}
+	}).error(function() {
+		// normally status=415, error not called for status=500 which is good because we want to show the error thumbnail instead
+		$(this).hide(); 
+	});
 };
 
 var details_repository = that.details_repository = function(path, url) {

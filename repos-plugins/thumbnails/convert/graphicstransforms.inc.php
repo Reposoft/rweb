@@ -2,6 +2,7 @@
 
 $reposGraphicsTransforms = array(
 	'default' => 'ReposGraphicsTransformThumb',
+	'tiny' => 'ReposGraphicsTransformTiny',
 	'thumb' => 'ReposGraphicsTransformThumb',
 	'preview' => 'ReposGraphicsTransformPreview',
 	'screen' => 'ReposGraphicsTransformScreen'
@@ -63,6 +64,18 @@ class ReposGraphicsTransformBase extends ReposGraphicsTransform {
 		return 'png';
 	}
 	
+}
+
+class ReposGraphicsTransformTiny extends ReposGraphicsTransformBase {
+
+	function getWidth() {
+		return 75;
+	}
+
+	function getHeight() {
+		return 75;
+	}
+
 }
 
 class ReposGraphicsTransformThumb extends ReposGraphicsTransformBase {
