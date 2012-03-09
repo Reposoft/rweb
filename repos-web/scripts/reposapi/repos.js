@@ -265,7 +265,7 @@ jQuery.fn.say = function(message) {
 jQuery.fn.reposCollapsable = function(state) {
 	var support = { // matches css
 			'dl': '> lh',
-			'div': '> h2:first-child, h3:first-child',
+			'div': '> h2:first-child, h3:first-child'
 		};
 	if (typeof state == 'undefined') state = 'collapsed';
 	var enabler = function(container, clickElem) {

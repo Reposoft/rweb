@@ -25,7 +25,7 @@
 	<property name="api.folder" value="./reposapi" />	
 	<property name="plugins.folder" value="../plugins" />
 	
-	<property name="excludes.default" value="**/*.test.js,**/test/**" />
+	<property name="excludes.default" value="**/*.test.js,**/test/**,**/*.externs.js" />
 	
 	<property name="head.js.file" value="./head.js" />
 	
@@ -43,7 +43,7 @@
 		<!-- https://groups.google.com/group/closure-compiler-discuss/browse_thread/thread/25b55f9cb5e88248?pli=1 -->
 		<concat destfile="${head.js.file}.big" append="no">
 			<fileset dir="${intro.folder}" includes="**/*.js" excludes="${excludes.default}" />
-			<fileset dir="${lib.folder}" includes="jquery/*.js"/>
+			<fileset dir="${lib.folder}" includes="jquery/*.js" excludes="${excludes.default}" />
 			<fileset dir="${lib.folder}" includes="**/*.js" excludes="jquery/**,${excludes.default}"/>
 			<fileset dir="${api.folder}" includes="**/*.js" excludes="${excludes.default}" />
 			<fileset dir="${plugins.folder}" includes="**/*.js" excludes="${excludes.default}" />
@@ -58,7 +58,9 @@
 				printinputdelimiter="yes"
 				managedependencies="yes">
 
-			<!--<externs dir="${basedir}/src"/>-->
+			<externs dir="${basedir}">
+				<file name="lib/jquery/jquery.externs.js"/>
+			</externs>
 
 			<sources dir="${basedir}">
 				<file name="${head.js.file}.big" />
