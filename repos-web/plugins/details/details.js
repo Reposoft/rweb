@@ -1,26 +1,34 @@
 /**
- * Repos details plugin (c) 2006-2009 repos.se
+ * Repos details plugin (c) 2006-2012 repos.se
  *
+ * Replaces the "list" command with dynamically loaded details.
+ *  
  * @author Staffan Olsson (solsson)
  */
 
 (function($) {
 
-function button() {
+var button = function() {
 	var index = $('.index li');
-	var c = $('<span id="showdetails">');
-	if (index.size() > 0) {
-		c = $('<a id="showdetails" name="showdetails"/>');
-		c.click( function() {
-			index.reposDetails();
-		} );
+	var button = $('#commandbar #list');
+	if (button.size() == 0) {
+		button = $('<a id="list"/>');
 	}
-	c.html('info').appendTo('#commandbar');
-}
+	button.attr('href', '#view=list');
+	// detect true change in hash param
+	Repos.onUiParam('view', function(mode) {
+		// currently we have only one mode and can only switch it on
+		index.reposDetails();
+	});	
+};
 
 Repos.service('index/', button);
 
 $.fn.reposDetails = function(s) {
+
+	$('a.folder', this).add('#parent').each(function() {
+		$(this).attr('href', $(this).attr('href') + '#view=list');
+	});
 	
 	s = $.extend({
 		url: Repos.getWebapp() + 'open/list/?base=' + Repos.getBase() + '&target=',
@@ -31,7 +39,7 @@ $.fn.reposDetails = function(s) {
 	if (s.encode) s.target = encodeURIComponent(s.target);
 	
 	details_repository(s.target, s.url+s.target);
-	
+
 };
 
 // scope for unit tests, internally we still use the function var name in current scope
@@ -82,7 +90,7 @@ var details_writeLock = that.details_writeLock = function(e, entry) {
 	e.addClass('locked');
 	// addtags does not create lock spans
 	var s = $('lock', e);
-	if (s.size() == 0) s = $('<div class="lock"></div>').appendTo(e);
+	if (s.size() == 0) s = $('<div class="details lock"></div>').appendTo(e);
 	s.append('<span class="username">'+ $('owner', lock).text() +'</span>&nbsp;');
 	$('<span class="datetime">'+ $('created', lock).text() +'</span>&nbsp;').appendTo(s).dateformat();
 	s.append(' <span class="message">'+ $('comment', lock).text() +'</span>');
@@ -96,13 +104,17 @@ var details_repository = that.details_repository = function(path, url) {
 		dataType: 'xml',
 		error: function() { $('#showdetails').removeClass('loading').text('error'); },
 		success: function(xml){
+			$('.index').addClass('table'); // TODO locate the list that details are appended to
+			$('.itemextend').remove(); // TODO deactivate browsedetails for real
+			$('.index li').css('display', 'table-row'); // TODO why doesn't the CSS style happen?
+			// TODO thumbnail
 			$('lists>list>entry', xml).each(function() {
 				var name = $('name', this).text();
 				if (this.getAttribute('kind')=='dir') name = name + '/';
 				// note that there might be id conflicts in repos.xsl pages due to limitations in name escape
 				var row = new ReposFileId(name).find('row');
 				if (row == null) {
-					if (console && console.log) console.log('No row found for', name, new ReposFileId(name).get());
+					window.console && console.log('No row found for', name, new ReposFileId(name).get());
 					return; // silently skip items that can't be found
 				}
 				row = $(row);
@@ -137,7 +149,7 @@ var details_isNoaccess = that.details_isNoaccess = function(entry) {
  */
 var details_addtags = that.details_addtags = function(e) {
  	$(e).find('div.details, span.lock').remove(); // allow refresh
-	e.append('<div class="details"><span class="revision"></span><span class="datetime"></span><span class="username"></span><span class="filesize"></span></div>');
+	e.append('<span class="details revision"></span><span class="details datetime"></span><span class="details username"></span><span class="details filesize"></span>');
 };
 
 })(jQuery);

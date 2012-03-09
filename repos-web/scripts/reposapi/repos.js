@@ -13,25 +13,8 @@ if (!Array.prototype.indexOf) { Array.prototype.indexOf = function (obj, start) 
 	for (var i = (start || 0); i < this.length; i++) if (this[i] == obj) return i; return -1;
 };}
 
-/**
- * DISABLED
- * Repos selectors (c) 2007 Staffan Olsson www.repos.se
- * These selectors are the possible pointcuts for dynamically added plugins.
- * <code>
- * $(':repos-target(/admin/repos.accs)').ready( ... only if target is identical ... );
- * $(':repos-target(*.user').ready( ... only if target matches ... );
- * $(':repos-service(open/log/).ready( ... only for log service ... );
- * </code>
- * Note that this can not be used with $(document).ready, use Repos.ready instead
- */
-//jQuery.extend(jQuery.expr[':'], {
-//	'repos-target'		: 'Repos.isTarget(m[3],a)',
-//	'repos-service'	: 'Repos.isService(m[3],a)'
-//});
-// Note that this can not be used with $(document).ready,
-// because jQuery runs ready for empty selections too,
-// use Repos.ready instead
-//$('body.nonexisting').ready(function() { console.warn('ready executed for empty bucket'); });
+// ------------ logging ------------
+// Firebug dummy is added to head.js - use console directly
 
 /**
  * Replaces $(document).ready since jQuery ready runs even if selector is empty.
@@ -59,17 +42,32 @@ Repos.service = function(s, fn) {
 };
 
 /**
- * Checks plugin dependencies using syntax:
- * $.depends($.differentplugin).depends($.fn.differentplugin).ready( function() {...} );
- * @param {Object, String} currently only functions are accepted, not function names
+ * Generic trigger on user interface parameter.
+ * 
+ * Act on parameter change in hash (jQuery BBQ hash style),
+ * including param set when this function is called (typically on load).
+ * 
+ * TODO support reuse of namespace
+ * 
+ * @param {string} pname Parameter name in hash, query string style
+ * @param {function(string)} callback Callback on change, given the parameter value as single argument
+ * @param {string=} evns Specific namespace, null to get triggered on global hashchange
  */
-// TODO make this suck less or remove it
-jQuery.depends = function(func) {
-	if ($.isFunction(func)) return jQuery;
-
-	//console.error('Repos customization error. This plugin\'s dependencies are not met.');
-	// TODO return dummy so that event add is avoided?
-	return new jQuery([]);
+Repos.onUiParam = function(pname, callback, evns) {
+	if (typeof evns == 'undefined') {
+		evns = ('' + Math.random()).substr(2); // need a namespace so initial trigger is not repeated
+	}
+	var evname = 'hashchange' + (evns ? '.' + evns : '');
+	var pv = null;
+	$(window).bind(evname, function(ev) {
+		var v = ev.getState(pname);
+		if (typeof v == 'undefined') v = null; // param not set
+		if (pv !== v) {
+			callback(v);
+		}
+		pv = v;
+	});
+	$(window).trigger(evname);
 };
 
 /**
@@ -294,71 +292,3 @@ jQuery.fn.reposCollapsable = function(state) {
 		}
 	});
 };
-
-/**
- * Multi-repo support.
- * Customize jQuery.ajax to transparently support 'base' parameter
- * (otherwise every plugin would need if-else for SVNPath/SVNParentPath)
- * It is still undecided how the GUI knows if server user SVNParentPath.
- */
-/* Disabled to see how compatible we are, now there's ?rweb= so base should be implicit
-(function supportMultiRepo() {
-	var base = Repos.getBase();
-
-	var _jQ_ajax = jQuery.ajax;
-	jQuery.ajax = function(options) {
-		if (base && options.url.match(/[?&]target=/) && !options.url.match(/[?&]base=/)) options.url += '&base=' + base;
-		_jQ_ajax(options);
-	};
-})();
- */
-
-	/*
-	 Dynamic loading of scripts and css has been disabled,
-	 because it was not reliable. Can be found in reposweb-1.1-B1.
-
-	 Anyway, it seems like $(document).ready() in plugins work even
-	 if they are loaded dynamically. So the only limitation is that
-	 3rd party libs must be loaded in page head.
-
-	 And how about $(document).load()?
-	 */
-
-	// -------------- plugin setup --------------
-
-	/**
-	 * Adds a javascript to the current page and evaluates it (asynchronously).
-	 * @param src script url from repos root, not starting with slash
-	 * @return the script element that was appended
-	 */
-	Repos.addScript = function(src, loadEventHandler) {
-		// maybe it would be better to load and eval using AJAX
-		var srcUrl = Repos.url + src;
-		if (/:\/\/localhost[:\/]/.test(window.location.href)) srcUrl += '?'+(new Date().getTime());
-		var s = document.createElement('script');
-		s.type = "text/javascript";
-		s.src = srcUrl;
-		document.getElementsByTagName('head')[0].appendChild(s);
-		return s;
-	};
-
-	/**
-	 * Adds a stylesheet to the current page.
-	 * @param src css url from repos root, not starting with slash
-	 * @return the link element that was appended
-	 * @todo is the appended css accepted by IE6?
-	 */
-	Repos.addCss = function(src) {
-		var s = document.createElement('link');
-		s.type = "text/css";
-		s.rel = "stylesheet";
-		s.href = Repos.url + src;
-		document.getElementsByTagName('head')[0].appendChild(s);
-		return s;
-	};
-
-	// ----- end plugin setup -----
-
-
-// ------------ logging ------------
-// firebug dummy is added to head.js: use console directly
