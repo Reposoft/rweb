@@ -96,12 +96,12 @@
 			<a id="parent" class="command translate" href="{$parentlink}">up</a>
 		</xsl:if>
 		<a id="view" class="command translate" href="?rweb=details">details</a>
+		<a id="history" class="command translate" href="?rweb=history">history</a>
 		<xsl:if test="$editUrl">
 			<a id="createfolder" class="command translate" href="{$editUrl}mkdir">new&#xA0;folder</a>
 			<a id="addfile" class="command translate" href="{$editUrl}upload">add&#xA0;file</a>
 		</xsl:if>
-		<a id="history" class="command translate" href="?rweb=history">folder&#xA0;history</a>
-		<a id="list" class="command translate" href="?rweb=list">list</a>
+		<a id="list" class="command translate" href="?rweb=list">change&#xA0;view</a>
 		</div>
 	</xsl:template>
 	<!-- directory listing -->

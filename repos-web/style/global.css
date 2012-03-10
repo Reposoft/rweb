@@ -2,10 +2,6 @@
 /* shared layout between themes instead of plugin solution */
 @import "layout.css";
 /* repos.se common styles */
-html {
-	/* Fix IE background image flicker */
-	filter: expression(document.execCommand("BackgroundImageCache", false, true));
-}
 body {
 	margin-top: 0px;
 	font-family: Verdana, Helvetica, Arial, sans-serif;
