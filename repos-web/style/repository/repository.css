@@ -36,10 +36,15 @@
 .contentdetails.loading .closebutton {
 	visibility: hidden;
 }
-.index li:hover {
+.index li {
 	background-position: top center;
 	background-repeat: no-repeat;
+}
+.index li:hover {
 	background-image: url('../rowmiddle.png');
+}
+.index li.browsedetail {
+	background-image: url('../rowdetailed.png');
 }
 #repos-edit {
 	background-image: url('../commands/16x16/edit.png');
