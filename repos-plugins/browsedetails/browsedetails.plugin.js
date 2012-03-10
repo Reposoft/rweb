@@ -88,12 +88,12 @@ $.fn.reposDetailsTarget = function(options) {
 		}
 		html = from[1];
 		html = html.replace(/<div id="footer".*/, '');
-		html = html.replace(/<p[^<]*(<a[^<]*<\/a>)?[^<]*<\/p>/g,'');
-		html = html.replace(/<dl class="properties.*\/dl>/, '');
-		html = html.replace(/href="/g, 'href="/repos-web/open/');
 		container.html(html);
 		var intro = $('#intro', container).css({margin: 0, padding: 0});
 		$('h1 a', intro).css('background-position', 'left .25em');
+		$('a', container).each(function() {
+			$(this).attr('href', '/repos-web/open', $(this).attr('href'));
+		});
 	};
 	
 	var addCloseButton = function(container) {
@@ -112,6 +112,7 @@ $.fn.reposDetailsTarget = function(options) {
 							|| this.naturalWidth == 0) {
 						console.warn('No error message, no image', thref);
 					} else {
+						container.addClass('preview');
 						$(".column-info", container).prepend(preview.append(img));
 					}
 				}).error(function() {
@@ -121,7 +122,8 @@ $.fn.reposDetailsTarget = function(options) {
 	};
 	
 	var asEmbeddedHtml = function() {
-		var isFile = $(this).is('.file');
+		var a = $(this);
+		var isFile = a.is('.file');
 		var href = getDetailsUrl(this);
 		var container = $(settings.container);
 		var topstart = $('.index').offset().top;
@@ -136,10 +138,8 @@ $.fn.reposDetailsTarget = function(options) {
 			container.css('opacity', 'inherit').removeClass('loading');
 			reposDetailsInsert(html, container);
 			addCloseButton(container);
-			if (isFile)	{
-				$('#editlog', container).hide();
-				addThumbnail(href, container);
-			}
+			if (isFile)	addThumbnail(href, container);
+			Repos.asyncService('open/', $('.path', container).text(), container);
 		});
 	};
 	

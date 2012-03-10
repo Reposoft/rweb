@@ -36,6 +36,12 @@
 .contentdetails.loading .closebutton {
 	visibility: hidden;
 }
+.contentdetails #intro p, 
+.contentdetails #activities p,
+.contentdetails .proplist,
+.contentdetails.preview #editlog {
+	display: none;
+}
 .index li {
 	background-position: top center;
 	background-repeat: no-repeat;

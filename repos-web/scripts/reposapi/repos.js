@@ -16,6 +16,8 @@ if (!Array.prototype.indexOf) { Array.prototype.indexOf = function (obj, start) 
 // ------------ logging ------------
 // Firebug dummy is added to head.js - use console directly
 
+Repos.contentHandlers = [];
+
 /**
  * Replaces $(document).ready since jQuery ready runs even if selector is empty.
  * @param {string} repos selector starting with :
@@ -31,6 +33,7 @@ Repos.ready = function(selector, fn) {
  * @param {function()} fn
  */
 Repos.target = function(t, fn) {
+	//Repos.contentHandlers.push({service:null, target:t, handler:fn});
 	return Repos.isTarget(t) && $(document).ready(fn);
 };
 /**
@@ -39,7 +42,51 @@ Repos.target = function(t, fn) {
  * @param {function()} fn
  */
 Repos.service = function(s, fn) {
+	//Repos.contentHandlers.push({service:s, target:null, handler:fn});
 	return Repos.isService(s) && $(document).ready(fn);
+};
+
+/**
+ * Registers content handler.
+ * @param {string} service Match services, null for all
+ * @param {string|RegExp} target Match targets, null for all
+ * @param {function} fn Callback, content container given as thisArg
+ */
+Repos.content = function(service, target, fn) {
+	Repos.contentHandlers.push({service:service, target:target, handler:fn});
+	var t = function() {
+		if (target && Repos.isTarget(target)) {
+			fn.apply(document);
+		}
+	};
+	if (service) {
+		Repos.service(service, t);
+	} else {
+		t();
+	}
+};
+
+/**
+ * Invokes service and target handlers after page load.
+ * 
+ * Note that Repos.getTarget and Repos.getService have
+ * not been updated to work with custom containers.
+ * 
+ * @param service {string} The service that is now loaded
+ * @param target {string} The target that this service operates on
+ * @param container {jQuery} The element that this service is loaded in,
+ *  corresponding to document for full page services
+ */
+Repos.asyncService = function(service, target, container) {
+	for (var i = 0; i < Repos.contentHandlers.length; i++) {
+		var h = Repos.contentHandlers[i];
+		if (!h.service || Repos.isService(h.service, container, service)) {
+			if (!h.target || Repos.isTarget(h.target, container, target)) {
+				console.debug('invoking handler', service, target, h);
+				h.handler.apply(container);
+			}
+		}
+	}
 };
 
 /**
@@ -164,12 +211,17 @@ Repos.getRevisionRequested = function() {
 /**
  * Compares current Repos target with a pattern
  * @param {string} selector The pattern to compare with
- * @param {Object} context Optional context to get current target for
+ * @param {Element=} context Optional context to get current target for
+ * @param {string=} t Actual target to compare with, overries Repos.getTarget
  * @return true if current target matches the selector
  */
-Repos.isTarget = function(selector,context) {
-	// allow regexp as selector, matching target direcly
-	if (typeof selector.test == 'function') return selector.test(Repos.getTarget(context));
+Repos.isTarget = function(selector,context,t) {
+	if (typeof t == 'undefined') {
+		t = Repos.getTarget(context);
+		console.debug('isTarget', selector, this, 'got', t);
+	}
+	// allow regexp as selector, matching target directly
+	if (typeof selector.test == 'function') return selector.test(t);
 	// not regexp, handle as Ant pattern
 	var s = selector;
 	// escape valid path characters
@@ -181,7 +233,6 @@ Repos.isTarget = function(selector,context) {
 	s = s.replace(/\*/g,'[^//]{0,}');
 	// match
 	var r = new RegExp('^'+s+'$');
-	var t = Repos.getTarget(context);
 	var is = r.test(t);
 	return is;
 };
@@ -189,18 +240,20 @@ Repos.isTarget = function(selector,context) {
 /**
  * Compares current Repos service with a pattern
  * @param {string} selector The service name, a relative path, to compare with
- * @param {Object} context
+ * @param {Element=} context
+ * @param {string=} s Actaul value, overrides Repos.getService()
  */
-Repos.isService = function(selector,target) {
+Repos.isService = function(selector,context,s) {
 	// a bit more flexibility
 	if (Repos.getMeta('serv') !== 'embed') {
 		// use "details/" for the full details page, "open/" for all view modes
 		if (selector == 'details/') selector = 'open/'
 	}
+	if (typeof s == 'undefined') s = Repos.getService();
 	if (selector == 'view/') selector = 'open/file/';
 	if (selector == 'open/view/') selector = 'open/file';
 	// check with page meta
-	return (Repos.getService() == selector);
+	return (s == selector);
 };
 
 /**
