@@ -17,6 +17,10 @@ $.fn.reposDetailsTarget = function(options) {
 		}
 	}, options);
 	
+	var isActive = function() {
+		return $('.index').is('.view-list');
+	};
+	
 	/**
 	 * Adds visual indications and/or event handling to activate details loading.
 	 * @param {jQuery} target The element(s) for which to allow details opened
@@ -27,6 +31,7 @@ $.fn.reposDetailsTarget = function(options) {
 			var a = $(this);
 			var row = a.parent();
 			var yes = function(ev) {
+				if (!isActive) return;
 				var current = $('.browsedetail'); 
 				if (row.is(ev.target) && !row.is(current)) {
 					current.removeClass('browsedetail');

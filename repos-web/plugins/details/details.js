@@ -7,28 +7,68 @@
  */
 
 (function($) {
+	
+// new approach, configure rotating view modes here
+Repos.view = {
+	list: {
+		next: '#view=details',
+		on: function() {},
+		off: function() {}
+	},
+	details: {
+		next: '#', // hash must be there so page does not reload
+		on: function(list) {
+			$('.contentdetails').empty(); // browsedetails plugin
+			$('li', list).reposDetails();
+		},
+		off: function(list) {
+			$('.details', list).remove();
+		}
+	}
+};
 
-var button = function() {
-	var index = $('.index li');
+var uisetup = function() {
+	// markup elements
+	var index = $('.index');
 	var button = $('#commandbar #list');
 	if (button.size() == 0) {
 		button = $('<a id="list"/>');
 	}
-	button.attr('href', '#view=list');
-	// detect true change in hash param
+	// view switch operations
+	var activate = function(mode) {
+		button.attr('href', Repos.view[mode].next);
+		index.addClass('view-' + mode);
+		var hash = mode == 'list' ? '' : '#view=' + mode;
+		$('a.folder', index).add('#parent').add('h2 a').each(function() {
+			$(this).attr('href', $(this).attr('href').replace(/(#.*)?$/, hash));
+		});
+		Repos.view[mode].on(index);
+	}
+	var deactivate = function(oldmode) {
+		index.removeClass('view-' + oldmode);
+		Repos.view[oldmode].off(index);
+	}
+	// state
+	var currentview = 'list';	
+	// initial activation
+	activate(currentview);
+	// state change
 	Repos.onUiParam('view', function(mode) {
+		if (mode === null) mode = 'list';
+		if (!Repos.view[mode]) {
+			console.warn('Unknown view mode', mode);
+			return;
+		}
 		// currently we have only one mode and can only switch it on
-		index.reposDetails();
-	});	
+		deactivate(currentview);
+		currentview = mode;
+		activate(currentview);
+	});
 };
 
-Repos.service('index/', button);
+Repos.service('index/', uisetup);
 
 $.fn.reposDetails = function(s) {
-
-	$('a.folder', this).add('#parent').each(function() {
-		$(this).attr('href', $(this).attr('href') + '#view=list');
-	});
 	
 	s = $.extend({
 		url: Repos.getWebapp() + 'open/list/?base=' + Repos.getBase() + '&target=',
@@ -42,11 +82,8 @@ $.fn.reposDetails = function(s) {
 
 };
 
-// scope for unit tests, internally we still use the function var name in current scope
-var that = $.fn.reposDetails;
-
 // show details for an existing element (page designer sets target with the 'title' attribute)
-var details_read = that.details_read = function() {
+var details_read = function() {
 	var e = $('body').find('div.details');
 	if (e.size() > 0) {
 		$.get(Repos.getWebapp() + 'open/list/?target='+encodeURIComponent(e.attr("title")), function(xml) {
@@ -59,7 +96,7 @@ var details_read = that.details_read = function() {
  * @param e jQuery element to write details to
  * @param entry the entry node from svn list --xml 
  */
-var details_write = that.details_write = function(e, entry) {
+var details_write = function(e, entry) {
 	entry.each(function(){
 		$('.filename', e).append($('name', this).text());
 		if (details_isNoaccess(this)) {
@@ -81,12 +118,12 @@ var details_write = that.details_write = function(e, entry) {
 			$('.filesize', e).attr('title', size + ' bytes');
 		}
 		if (details_isLocked(this)) details_writeLock(e, this);
-		details_writeThumb(e, this);
+		// TODO layout+inview for thumbnail: details_writeThumb(e, this);
 	});
 	e.show();
 };
 
-var details_writeLock = that.details_writeLock = function(e, entry) {
+var details_writeLock = function(e, entry) {
 	var lock = $('lock', entry);
 	e.addClass('locked');
 	// addtags does not create lock spans
@@ -97,7 +134,7 @@ var details_writeLock = that.details_writeLock = function(e, entry) {
 	s.append(' <span class="message">'+ $('comment', lock).text() +'</span>');
 };
 
-var details_writeThumb = that.details_writeThumb = function(e, entry) {
+var details_writeThumb = function(e, entry) {
 	var thumb = $('<span/>').addClass('thumbnail').prependTo(e);
 	
 	var src = $('a:first', e).attr('href').replace('rweb=details', 'rweb=t.tiny');
@@ -118,7 +155,7 @@ var details_writeThumb = that.details_writeThumb = function(e, entry) {
 	});
 };
 
-var details_repository = that.details_repository = function(path, url) {
+var details_repository = function(path, url) {
 	$('#commandbar #showdetails').addClass('loading');
 	$.ajax({
 		type: 'GET',
@@ -126,10 +163,7 @@ var details_repository = that.details_repository = function(path, url) {
 		dataType: 'xml',
 		error: function() { $('#showdetails').removeClass('loading').text('error'); },
 		success: function(xml){
-			$('.index').addClass('table'); // TODO locate the list that details are appended to
-			$('.itemextend').remove(); // TODO deactivate browsedetails for real
 			$('.index li').css('display', 'table-row'); // TODO why doesn't the CSS style happen?
-			// TODO thumbnail
 			$('lists>list>entry', xml).each(function() {
 				var name = $('name', this).text();
 				if (this.getAttribute('kind')=='dir') name = name + '/';
@@ -152,15 +186,15 @@ var details_repository = that.details_repository = function(path, url) {
 	});
 };
 
-var details_isFolder = that.details_isFolder = function(entry) {
+var details_isFolder = function(entry) {
 	return $('size', entry).size() == 0;
 };
 
-var details_isLocked = that.details_isLocked = function(entry) {
+var details_isLocked = function(entry) {
 	return $('lock', entry).size() > 0;
 };
 
-var details_isNoaccess = that.details_isNoaccess = function(entry) {
+var details_isNoaccess = function(entry) {
 	// commit>author may be empty for anonymous commit, but date seems to be empty only on no read access
 	return $('commit>date', entry).size() == 0;
 };
@@ -169,7 +203,7 @@ var details_isNoaccess = that.details_isNoaccess = function(entry) {
  * Adds empty placeholders for common detail entries (except name, which is probably displayed already)
  * @param e jQuery element to add to
  */
-var details_addtags = that.details_addtags = function(e) {
+var details_addtags = function(e) {
  	$(e).find('div.details, span.lock').remove(); // allow refresh
 	e.append('<span class="details revision"></span><span class="details datetime"></span><span class="details username"></span><span class="details filesize"></span>');
 };
