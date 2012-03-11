@@ -200,7 +200,8 @@ Repos.getService = function(context) {
 Repos.getRepository = function() {
 	// no meta tag in index yet, but base is a link
 	if (Repos.isService('index/')) {
-		return $('#base')[0].href.replace(/\/$/,'');
+		var rootlink = $('#base');
+		if (rootlink.size()) return $('#base')[0].href.replace(/\/$/,'');
 	}
 	// pages known to still lack repository meta: edit result page
 	return Repos.getMeta('repository');
