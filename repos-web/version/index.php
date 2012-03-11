@@ -8,7 +8,7 @@ require(ReposWeb."conf/Command.class.php" );
 $v = array();
 
 # tag replaced by build script
-$v['releaseversion'] = '1.3';
+$v['releaseversion'] = '1.4';
 
 # info from svn if the application is checked out
 $v['system'] = array();

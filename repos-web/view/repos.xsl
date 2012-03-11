@@ -177,7 +177,7 @@
 	<xsl:template name="footer">
 		<div id="footer">
 		<span>version <span class="revision"><xsl:value-of select="@rev"/></span></span>
-		<span id="resourceversion" class="versiondisplay" style="display:none"> - repos.se stylesheet 1.3 $Rev$</span>
+		<span id="resourceversion" class="versiondisplay" style="display:none"> - repos.se stylesheet 1.4 $Rev$</span>
 		<span id="badges">
 		</span>
 		<span class="legal">
