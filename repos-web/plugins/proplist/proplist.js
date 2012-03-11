@@ -1,7 +1,7 @@
 
 // Repos 1.4 loads the proplist by default, publishes the event for backwards compatibility
-Repos.service('open/', function() {
-	var container = $('.proplist'), p, data = {};
+Repos.content('open/', null, function() {
+	var container = $('.proplist', this), p, data = {};
 	$('dt, dd', container).each(function() {
 		if ($(this).is('dt')) {
 			p = $(this).text();

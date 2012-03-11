@@ -81,7 +81,6 @@ Repos.asyncService = function(service, target, container) {
 		var h = Repos.contentHandlers[i];
 		if (!h.service || Repos.isService(h.service, container, service)) {
 			if (!h.target || Repos.isTarget(h.target, container, target)) {
-				console.debug('invoking handler', service, target, h);
 				h.handler.apply(container);
 			}
 		}
@@ -151,6 +150,11 @@ Repos.getMeta = function(id) {
 	return m[0].getAttribute('content');
 };
 
+/**
+ * TODO support new style context target, see getService
+ * @param {Element=} context Container for the target
+ * @returns Target path in repository
+ */
 Repos.getTarget = function(context) {
 	// functionality from the proplist plugin
 	if (typeof context != 'undefined' && $(context).attr('title')) return $(context).attr('title');
@@ -171,9 +175,8 @@ Repos.getTarget = function(context) {
  */
 Repos.getService = function(context) {
 	if (typeof context != 'undefined') {
-		var d = $(context).data().reposService;
+		var d = $(context).data();
 		if (typeof d != 'undefined' && d.reposService) {
-			console.debug('Using context based service identification', d.reposService, d.reposTarget);
 			return d.reposService;
 		}
 		if (!$(context).is(document)) {
