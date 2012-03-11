@@ -54,15 +54,13 @@ Repos.service = function(s, fn) {
  */
 Repos.content = function(service, target, fn) {
 	Repos.contentHandlers.push({service:service, target:target, handler:fn});
-	var t = function() {
-		if (target && Repos.isTarget(target)) {
-			fn.apply(document);
-		}
-	};
 	if (service) {
-		Repos.service(service, t);
+		var targetmatch = target && Repos.isTarget(target); // check immediately, along with isSerivice, not after load 
+		Repos.service(service, function() {
+			if (!target || targetmatch) fn.apply(document);
+		});
 	} else {
-		t();
+		Repos.target(target, fn);
 	}
 };
 
@@ -78,6 +76,7 @@ Repos.content = function(service, target, fn) {
  *  corresponding to document for full page services
  */
 Repos.asyncService = function(service, target, container) {
+	container.data({reposService: service, reposTarget: target});
 	for (var i = 0; i < Repos.contentHandlers.length; i++) {
 		var h = Repos.contentHandlers[i];
 		if (!h.service || Repos.isService(h.service, container, service)) {
@@ -159,7 +158,29 @@ Repos.getTarget = function(context) {
 	return Repos.getMeta('target');
 };
 
-Repos.getService = function() {
+/**
+ * Uses meta value by default, although that storage method
+ * mith be deprecated with HTML5.
+ * 
+ * If a context is given the value from asyncService
+ * will be returned. If there is no such value,
+ * the meta value will be used if context=document.
+ * 
+ * @param {Element=} context Container for the service
+ * @returns Service identifier, commonly with trailing slash but not with leading.
+ */
+Repos.getService = function(context) {
+	if (typeof context != 'undefined') {
+		var d = $(context).data().reposService;
+		if (typeof d != 'undefined' && d.reposService) {
+			console.debug('Using context based service identification', d.reposService, d.reposTarget);
+			return d.reposService;
+		}
+		if (!$(context).is(document)) {
+			console.warn('No service set for requested context', context);
+			return null;
+		}
+	}
 	return Repos.getMeta('service');
 };
 
@@ -216,10 +237,7 @@ Repos.getRevisionRequested = function() {
  * @return true if current target matches the selector
  */
 Repos.isTarget = function(selector,context,t) {
-	if (typeof t == 'undefined') {
-		t = Repos.getTarget(context);
-		console.debug('isTarget', selector, this, 'got', t);
-	}
+	if (typeof t == 'undefined') t = Repos.getTarget(context);
 	// allow regexp as selector, matching target directly
 	if (typeof selector.test == 'function') return selector.test(t);
 	// not regexp, handle as Ant pattern
@@ -244,12 +262,12 @@ Repos.isTarget = function(selector,context,t) {
  * @param {string=} s Actaul value, overrides Repos.getService()
  */
 Repos.isService = function(selector,context,s) {
-	// a bit more flexibility
+	if (typeof s == 'undefined') s = Repos.getService(context);
+	// a bit more flexibility, although use of the embed mode is experimental and will probably not be maintained
 	if (Repos.getMeta('serv') !== 'embed') {
 		// use "details/" for the full details page, "open/" for all view modes
 		if (selector == 'details/') selector = 'open/'
 	}
-	if (typeof s == 'undefined') s = Repos.getService();
 	if (selector == 'view/') selector = 'open/file/';
 	if (selector == 'open/view/') selector = 'open/file';
 	// check with page meta
