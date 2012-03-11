@@ -82,7 +82,7 @@ Repos.asyncService = function(service, target, container) {
 		var h = Repos.contentHandlers[i];
 		if (!h.service || Repos.isService(h.service, container, service)) {
 			if (!h.target || Repos.isTarget(h.target, container, target)) {
-				console.debug('starting target override', target);
+				// TODO get rid of this concept console.debug('starting target override', target);
 				Repos.targetOverride = target;
 				h.handler.apply(container);
 				//console.debug('ending target override');
