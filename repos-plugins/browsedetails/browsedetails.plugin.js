@@ -138,6 +138,7 @@ $.fn.reposDetailsTarget = function(options) {
 			container.css('opacity', 'inherit').removeClass('loading');
 			reposDetailsInsert(html, container);
 			addCloseButton(container);
+			$('.datetime', container).dateformat();
 			if (isFile)	addThumbnail(href, container);
 			Repos.asyncService('open/', $('.path', container).text(), container);
 		});

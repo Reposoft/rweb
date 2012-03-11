@@ -39,8 +39,12 @@
 .contentdetails #intro p, 
 .contentdetails #activities p,
 .contentdetails .proplist,
-.contentdetails.preview #editlog {
+.contentdetails.preview #editlog,
+.contentdetails .aboutitem-path {
 	display: none;
+}
+.contentdetails .collapsed .aboutfile-size {
+	display: inherit;
 }
 .index li {
 	background-position: top center;
