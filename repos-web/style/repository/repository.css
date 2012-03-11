@@ -43,9 +43,6 @@
 .contentdetails .aboutitem-path {
 	display: none;
 }
-.contentdetails .collapsed .aboutfile-size {
-	display: inherit;
-}
 .index li {
 	background-position: top center;
 	background-repeat: no-repeat;
