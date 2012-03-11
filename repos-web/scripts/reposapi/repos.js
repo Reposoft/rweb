@@ -17,6 +17,7 @@ if (!Array.prototype.indexOf) { Array.prototype.indexOf = function (obj, start) 
 // Firebug dummy is added to head.js - use console directly
 
 Repos.contentHandlers = [];
+Repos.targetOverride = false; // temporary solution for all the getTarget calls without context
 
 /**
  * Replaces $(document).ready since jQuery ready runs even if selector is empty.
@@ -81,7 +82,11 @@ Repos.asyncService = function(service, target, container) {
 		var h = Repos.contentHandlers[i];
 		if (!h.service || Repos.isService(h.service, container, service)) {
 			if (!h.target || Repos.isTarget(h.target, container, target)) {
+				console.debug('starting target override', target);
+				Repos.targetOverride = target;
 				h.handler.apply(container);
+				//console.debug('ending target override');
+				//Repos.targetOverride = false;
 			}
 		}
 	}
@@ -156,8 +161,10 @@ Repos.getMeta = function(id) {
  * @returns Target path in repository
  */
 Repos.getTarget = function(context) {
-	// functionality from the proplist plugin
+	// functionality from the proplist plugin, the old context shortcut
 	if (typeof context != 'undefined' && $(context).attr('title')) return $(context).attr('title');
+	// new shortcut, until all calls send proper context
+	if (typeof context == 'undefined' && Repos.targetOverride) return Repos.targetOverride;
 	// target for this page
 	return Repos.getMeta('target');
 };
@@ -191,11 +198,9 @@ Repos.getService = function(context) {
  * @return {string} root url, no trailing slash
  */
 Repos.getRepository = function() {
-	// no meta tag in index yet, xslt should and repository name in path made clickable
+	// no meta tag in index yet, but base is a link
 	if (Repos.isService('index/')) {
-		var u = decodeURI(window.location.href);
-		var t = Repos.getTarget();
-		return u.substr(0, u.length - t.length);
+		return $('#base')[0].href.replace(/\/$/,'');
 	}
 	// pages known to still lack repository meta: edit result page
 	return Repos.getMeta('repository');
