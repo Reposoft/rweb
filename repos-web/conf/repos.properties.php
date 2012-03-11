@@ -386,12 +386,10 @@ function getRequestUri() {
 }
 
 /**
- * @return the path to the current script without query string
+ * @return the path to the current script without query string,
+ *  with service rewrite this returns the path of the URL, not the php script
  */
 function getSelfPath() {
-	if (isRealUrl()) {
-		return getParent($_SERVER['SCRIPT_NAME']);
-	}
 	$uri = getRequestUri();
 	$q = strpos($uri, '?');
 	if ($q > 0) {
@@ -430,6 +428,10 @@ function getService() {
 		return REPOS_SERVICE_NAME;
 	}
 	$p = getSelfPath();
+	// Self path is not accurate in the rewrite case, need to use the actual script path
+	if (isRealUrl()) {
+		$p = getParent($_SERVER['SCRIPT_NAME']);
+	}
 	// extract from path
 	if ($p == '/') {
 		if (strpos(getSelfQuery(),'login')===0) return 'account/login/';
