@@ -29,7 +29,7 @@ function reposViewGetImageUrl($file) {
 	// TODO the dependence on thumbnail plugin location and base would be avoided if we
 	// created a service that is simply a query parameter appended to the real URL
 	$url = '/repos-plugins/thumbnails/convert/';
-	$url .= '?gt=screen'; // see thumbnails plugin
+	$url .= '?tf=screen'; // see thumbnails plugin
 	$url .= '&target='.rawurldecode($file->getPath());
 	if (isset($_REQUEST['base'])) $url .= '&base=' . $_REQUEST['base'];
 	
