@@ -1,12 +1,8 @@
-# TODO update to match repos-services.conf.include
-
-# Apache2 configuration for Subversion Service Layer (C) 2007 www.repos.se
+# Apache2 configuration for Subversion Service Layer (C) 2007-2012 www.repos.se
 # Included in config per host, not per repository (because rewrite behaves differently in Location)
 
-# Parameters hard coded in the examples below:
-# Repository = "/svn"
-# Using parent path, not single repo
-# Many Repos services accept a target that includes /[base], but support is untested
+# Hard coded settings:
+# Parent path = /svn
 
 RewriteEngine	on
 
@@ -22,27 +18,60 @@ RewriteCond %{IS_SUBREQ} !=true
 # Note that redirect happens before authentication
 # For PT the repository might need to allow non-SSL access from localhost (?)
 
-# Until Repos Web supports ?p instead of ?r, duplicate p= to rev=
-RewriteCond		%{QUERY_STRING}		\?p=(\d+)|&p=(\d+)
-RewriteCond 	%{QUERY_STRING}		!^rev=|.*&rev=
-RewriteRule 	^/repos-web/(.*)$	%{ENV:REPOS_WEBAPP}$1?rev=%1%2 [PT,QSA]
-
 # --- Subversion service layer ---
 # Services using ?rweb=[service]
 # Note that service identifiers must not be substrings of each other
 
 # Details
-RewriteCond		%{QUERY_STRING}		^rweb=details|.*&rweb=details$
-RewriteRule		^/data(/.*)$		%{ENV:REPOS_WEBAPP}open/?target=$1 [R,QSA,L]
+RewriteCond		%{QUERY_STRING}		^rweb=details|.*&rweb=details
+RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/?target=$1 [R,QSA,L]
 
 # History (log), uses absolute URLs in links so PT is already supported
-RewriteCond		%{QUERY_STRING}		^rweb=history|.*&rweb=history$
-RewriteRule		^/data(/.*)$		%{ENV:REPOS_WEBAPP}open/log/?target=$1 [PT,QSA,L]
+RewriteCond		%{QUERY_STRING}		^rweb=history|.*&rweb=history
+RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/log/?target=$1 [PT,QSA,L]
 
 # List
-RewriteCond		%{QUERY_STRING}		^rweb=list|.*&rweb=list$
-RewriteRule		^/data(/.*)$		%{ENV:REPOS_WEBAPP}open/list/?target=$1 [R,QSA,L]
+RewriteCond		%{QUERY_STRING}		^rweb=list|.*&rweb=list
+RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/list/?target=$1 [R,QSA,L]
 
 # Json, list for folders, details for files, PT supported because there are no links
-RewriteCond		%{QUERY_STRING}		^rweb=json|.*&rweb=json$
-RewriteRule		^/data(/.*)$		%{ENV:REPOS_WEBAPP}open/json/?target=$1 [PT,QSA,L]
+RewriteCond		%{QUERY_STRING}		^rweb=json|.*&rweb=json
+RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/json/?target=$1 [PT,QSA,L]
+
+# Proplist Json, PT supported because there are no links
+RewriteCond		%{QUERY_STRING}		^rweb=proplist|.*&rweb=proplist
+RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/proplist/?target=$1 [PT,QSA,L]
+
+# Propget, suffixed with property name (or just add a propname param), returns text/plain only
+RewriteCond		%{QUERY_STRING}		^rweb=propget([\w:-]*)|.*&rweb=propget([\w:-]*)
+RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/propget/?target=$1&propname=%1%2 [PT,QSA,L]
+
+# View in Repos
+RewriteCond		%{QUERY_STRING}		^rweb=view|.*&rweb=view
+RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/file/?target=$1 [R,QSA,L]
+
+# --- Edit operations, convenient access from index ---
+
+# Edit overview, collection of services, not supporting POST
+RewriteCond		%{QUERY_STRING}		^rweb=edit|.*&rweb=edit
+RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}edit/?target=$1 [R,QSA,L]
+
+# Arbitrary edit service, POSTable
+# "text" is just a plaintext form, shoud be posted to "upload"
+# "upload" creates new file when on folder, new version when on file
+RewriteCond		%{QUERY_STRING}		^rweb=e\.(\w+)|.*&rweb=e\.(\w+)
+RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}edit/%1%2/?target=$1 [PT,QSA,L]
+
+# --- Transforms ---
+# All these services must start with t, names must be word characters a-z0-9_
+
+# Repos thumbnails plugin, "tothumb" etc, p and r are supported, for specific page append comma and number to transform name
+RewriteCond		%{QUERY_STRING}		^rweb=t\.(\w+)(?:,(\d+))?|.*&rweb=t\.(\w+)(?:,(\d+))?
+RewriteRule		^/data(/.*)$	/repos-plugins/thumbnails/convert/?target=$1&tf=%1%3&page=%2%4 [PT,QSA,L]
+
+# --- Post processing, should apply to both R and PT ---
+
+# Until Repos Web supports ?p instead of ?r, duplicate p= to rev=
+RewriteCond		%{QUERY_STRING}		\?p=(\d+)|&p=(\d+)
+RewriteCond 	%{QUERY_STRING}		!^rev=|.*&rev=
+RewriteRule 	^/repos-web/(.*)$	%{ENV:REPOS_WEBAPP}$1?rev=%1%2 [PT,QSA]
