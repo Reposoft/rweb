@@ -98,6 +98,7 @@ var details_read = function() {
  */
 var details_write = function(e, entry) {
 	entry.each(function(){
+		console.log('Details write ', $('name', this).text());
 		$('.filename', e).append($('name', this).text());
 		if (details_isNoaccess(this)) {
 			e.addClass('noaccess');
@@ -169,6 +170,7 @@ var details_repository = function(path, url) {
 				if (this.getAttribute('kind')=='dir') name = name + '/';
 				// note that there might be id conflicts in repos.xsl pages due to limitations in name escape
 				var row = new ReposFileId(name).find('row');
+				console.log('Details row for ', name, ': ', row);
 				if (row == null) {
 					window.console && console.log('No row found for', name, new ReposFileId(name).get());
 					return; // silently skip items that can't be found

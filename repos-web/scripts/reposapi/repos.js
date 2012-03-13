@@ -363,7 +363,7 @@ jQuery.fn.reposCollapsable = function(state) {
 			if ($this.is(t)) {
 				var c = $(support[t], $this);
 				if ($this.is('.collapsable')) {
-					if (!$this.is(state)) {
+					if (!$this.is('.' + state)) {
 						c.trigger('click');
 					}
 				} else {

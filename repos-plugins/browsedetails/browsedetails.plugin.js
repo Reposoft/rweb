@@ -92,7 +92,7 @@ $.fn.reposDetailsTarget = function(options) {
 		var intro = $('#intro', container).css({margin: 0, padding: 0});
 		$('h1 a', intro).css('background-position', 'left .25em');
 		$('a', container).each(function() {
-			$(this).attr('href', '/repos-web/open', $(this).attr('href'));
+			$(this).attr('href', '/repos-web/open/' + $(this).attr('href'));
 		});
 	};
 	
