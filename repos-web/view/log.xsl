@@ -110,6 +110,7 @@
 	<!-- layout -->
 	<xsl:template match="logentry">
 		<xsl:param name="n" select="position() - 1"/>
+		<xsl:param name="fromrev" select="following-sibling::*[1]/@revision"/><!-- TODO does this work for the last entry, use -1 instead? -->
 		<div id="rev{@revision}" class="logentry n{$n mod 4}">
 			<h3>
 				<span class="revision" title="the changeset number (version number)">
@@ -132,9 +133,14 @@
 				</div>
 			</xsl:if>
 			<xsl:apply-templates select="paths">
-				<xsl:with-param name="fromrev" select="following-sibling::*[1]/@revision"/>
+				<xsl:with-param name="fromrev" select="$fromrev"/>
 			</xsl:apply-templates>
-			<div id="logentry_actions{@revision}" class="actions"></div>
+			<div id="logentry_actions{@revision}" class="actions">
+				<!-- TODO most accurate peg would be from request but we don't have it now, also we should remove the extra rev when repos understands p and r -->
+				<!-- We're not sure if the page is displayed using a service URL or a real url so we need the full URL in links, TODO verify https compatibility -->
+				<a id="logentry_view{@revision}" class="action" href="{/log/@repo}{/log/@target}?p={/log/logentry[1]/@revision}&amp;r={@revision}&amp;rweb=details&amp;rev={@revision}">details for <xsl:value-of select="/log/@name"/> at <xsl:value-of select="@revision"/></a>
+				<a id="logentry_diff{@revision}" class="action" href="{/log/@repo}{/log/@target}?p={/log/logentry[1]/@revision}&amp;r={@revision}&amp;rweb=diff&amp;rev={@revision}&amp;fromrev={$fromrev}">diff from <xsl:value-of select="$fromrev"/></a>
+			</div>
 		</div>
 	</xsl:template>
 	<xsl:template match="paths">

@@ -50,6 +50,10 @@ RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/propget/?base=$1&target
 RewriteCond		%{QUERY_STRING}		^rweb=view|.*&rweb=view
 RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/file/?base=$1&target=$2 [R,QSA,L]
 
+# Diff
+RewriteCond		%{QUERY_STRING}		^rweb=diff|.*&rweb=diff
+RewriteRule		^/svn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/diff/?base=$1&target=$2 [R,QSA,L]
+
 # --- Edit operations, convenient access from index ---
 
 # Edit overview, collection of services, not supporting POST

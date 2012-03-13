@@ -50,6 +50,10 @@ RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/propget/?target=$1&propname=%1
 RewriteCond		%{QUERY_STRING}		^rweb=view|.*&rweb=view
 RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/file/?target=$1 [R,QSA,L]
 
+# Diff
+RewriteCond		%{QUERY_STRING}		^rweb=diff|.*&rweb=diff
+RewriteRule		^/data(/.*)$	%{ENV:REPOS_WEBAPP}open/diff/?target=$1 [R,QSA,L]
+
 # --- Edit operations, convenient access from index ---
 
 # Edit overview, collection of services, not supporting POST
