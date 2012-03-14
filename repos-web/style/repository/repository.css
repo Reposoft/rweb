@@ -32,6 +32,12 @@
 	color: #999;
 	cursor: pointer;
 	font-size: 120%;
+	display: inline;
+}
+.contentdetails .path {
+	display: inline;
+	color: #999;
+	margin-left: 1em;
 }
 .contentdetails.loading .closebutton {
 	visibility: hidden;

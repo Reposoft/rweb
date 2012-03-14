@@ -43,7 +43,6 @@ $.fn.reposDetailsTarget = function(options) {
 			};
 			row.hoverIntent({over: yes, out: no, timeout: 200, interval: 1500, sensitivity: 20, evIn: 'mouseover', evOut: 'mouseout', withChildren: false});
 			row.click(yes);
-			//row.mouseout(no);
 		});
 		$(targetElement)
 		return targetElement;
@@ -92,8 +91,20 @@ $.fn.reposDetailsTarget = function(options) {
 		var intro = $('#intro', container).css({margin: 0, padding: 0});
 		$('h1 a', intro).css('background-position', 'left .25em');
 		$('a', container).each(function() {
-			$(this).filter('#open:contains("List")').remove(); // or should we change it to normal index for use from search results? 
-			$(this).attr('href', '/repos-web/open/' + $(this).attr('href'));
+			$(this).filter('#open:contains("List")').remove(); // or should we change it to normal index for use from search results?
+			var href = $(this).attr('href');
+			if (href.charAt(0) != '/' && href.indexOf('://') < 0) {
+				$(this).attr('href', '/repos-web/open/' + $(this).attr('href'));
+			}
+			if (this.id == 'realurl') {
+				this.id = 'embedurl'; // realurl already exists in parent page
+				console.log('detailify', this);
+				var real = href;
+				$(this).attr('href', real + '?rweb=details'); // TODO support ?p/r
+				var text = $('dd.aboutitem-path', container).text();
+				if (text.length > 63) text = '...' + text.substr(text.length - 60);
+				$('<a/>').addClass("path").attr('href', href).text(text).prependTo(container);
+			}
 		});
 	};
 	
