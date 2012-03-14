@@ -184,6 +184,11 @@ Repos.service('index/', function() {
 * @param  f  onMouseOver function || An object with configuration options
 * @param  g  onMouseOut function  || Nothing (use configuration options object)
 * @author    Brian Cherne brian(at)cherne(dot)net
+* 
+* Updated by Staffan Olsson, www.repos.se
+*  - Event names as config,
+*  - A class to mark the candidate element
+*  - Event only handled as enter if the element is the event target (not children)
 */
 (function($) {
 	$.fn.hoverIntent = function(f,g) {
@@ -191,7 +196,12 @@ Repos.service('index/', function() {
 		var cfg = {
 			sensitivity: 7,
 			interval: 100,
-			timeout: 0
+			timeout: 0,
+			withChildren: true,
+			evIn: 'mouseenter',
+			evOut: 'mouseleave',
+			evMove: 'mousemove',
+			mark: 'intent-maybe'
 		};
 		// override configuration options with user supplied object
 		cfg = $.extend(cfg, g ? { over: f, out: g } : f );
@@ -212,7 +222,7 @@ Repos.service('index/', function() {
 			ob.hoverIntent_t = clearTimeout(ob.hoverIntent_t);
 			// compare mouse positions to see if they've crossed the threshold
 			if ( ( Math.abs(pX-cX) + Math.abs(pY-cY) ) < cfg.sensitivity ) {
-				$(ob).unbind("mousemove",track);
+				$(ob).unbind(cfg.evMove,track);
 				// set hoverIntent state to true (so mouseOut can be called)
 				ob.hoverIntent_s = 1;
 				return cfg.over.apply(ob,[ev]);
@@ -241,24 +251,26 @@ Repos.service('index/', function() {
 			if (ob.hoverIntent_t) { ob.hoverIntent_t = clearTimeout(ob.hoverIntent_t); }
 
 			// if e.type == "mouseenter"
-			if (e.type == "mouseenter") {
+			if (e.type == cfg.evIn && (cfg.withChildren || $(ob).is(e.target))) {
 				// set "previous" X and Y position based on initial entry point
 				pX = ev.pageX; pY = ev.pageY;
 				// update "current" X and Y position based on mousemove
-				$(ob).bind("mousemove",track);
+				$(ob).bind(cfg.evMove,track);
 				// start polling interval (self-calling timeout) to compare mouse coordinates over time
 				if (ob.hoverIntent_s != 1) { ob.hoverIntent_t = setTimeout( function(){compare(ev,ob);} , cfg.interval );}
-
+				if (cfg.mark) $(ob).addClass(cfg.mark);
+				
 			// else e.type == "mouseleave"
 			} else {
 				// unbind expensive mousemove event
-				$(ob).unbind("mousemove",track);
+				$(ob).unbind(cfg.evMove,track);
 				// if hoverIntent state is true, then call the mouseOut function after the specified delay
 				if (ob.hoverIntent_s == 1) { ob.hoverIntent_t = setTimeout( function(){delay(ev,ob);} , cfg.timeout );}
+				if (cfg.mark) $(ob).removeClass(cfg.mark);
 			}
 		};
 
 		// bind the function to the two event listeners
-		return this.bind('mouseenter',handleHover).bind('mouseleave',handleHover);
+		return this.bind(cfg.evIn,handleHover).bind(cfg.evOut,handleHover);
 	};
 })(jQuery);
