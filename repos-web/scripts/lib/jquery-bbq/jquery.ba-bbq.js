@@ -78,7 +78,6 @@
 // 1.0   - (10/2/2009) Initial release
 
 (function($,window){
-  '$:nomunge'; // Used by YUI compressor.
   
   // Some convenient shortcuts.
   var undefined,
@@ -962,7 +961,6 @@
 //         part of jQuery BBQ, but also be available separately.
 
 (function($,window,undefined){
-  '$:nomunge'; // Used by YUI compressor.
   
   // Method / object references.
   var fake_onhashchange,

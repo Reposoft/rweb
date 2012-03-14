@@ -10,6 +10,8 @@
 	<property name="plugins.excludes" value="" description="External plugins to excluded from build" />
 	
 	<property name="compile.level" value="simple"/>
+	<!--<property name="compile.warning" value="verbose"/>-->
+	<property name="compile.warning" value="default"/>
 	
 	<condition property="compile.level.closure">
 		<not><equals arg1="${compile.level}" arg2="none"/></not>
@@ -86,7 +88,7 @@
 	<target name="compile.closure" if="compile.level.closure">
 		<jscomp output="${head.js.file}.compiled"
 				compilationLevel="${compile.level}"
-				warning="verbose"
+				warning="${compile.warning}"
 				debug="yes"
 				printinputdelimiter="yes"
 				managedependencies="yes">

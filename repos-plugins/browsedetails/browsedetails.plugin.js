@@ -44,8 +44,6 @@ $.fn.reposDetailsTarget = function(options) {
 			row.hoverIntent({over: yes, out: no, timeout: 200, interval: 1500, sensitivity: 20, evIn: 'mouseover', evOut: 'mouseout', withChildren: false});
 			row.click(yes);
 		});
-		$(targetElement)
-		return targetElement;
 	};
 	
 	var getContainer = function(targetElement) {
