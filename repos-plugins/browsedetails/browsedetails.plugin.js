@@ -98,14 +98,10 @@ $.fn.reposDetailsTarget = function(options) {
 			}
 			if (this.id == 'realurl') {
 				this.id = 'embedurl'; // realurl already exists in parent page
-				console.log('detailify', this);
-				var real = href;
-				$(this).attr('href', real + '?rweb=details'); // TODO support ?p/r
-				var text = $('dd.aboutitem-path', container).text();
-				if (text.length > 63) text = '...' + text.substr(text.length - 60);
-				$('<a/>').addClass("path").attr('href', href).text(text).prependTo(container);
+				$(this).attr('href', $(this).attr('href') + '?rweb=details'); // TODO support ?p/r
 			}
 		});
+		$('#editlog li:gt(2)').hide(); // does this cause flickering?
 	};
 	
 	var addCloseButton = function(container) {
