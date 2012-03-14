@@ -138,8 +138,8 @@
 			<div id="logentry_actions{@revision}" class="actions">
 				<!-- TODO most accurate peg would be from request but we don't have it now, also we should remove the extra rev when repos understands p and r -->
 				<!-- We're not sure if the page is displayed using a service URL or a real url so we need the full URL in links, TODO verify https compatibility -->
-				<a id="logentry_view{@revision}" class="action" href="{/log/@repo}{/log/@target}?p={/log/logentry[1]/@revision}&amp;r={@revision}&amp;rweb=details&amp;rev={@revision}">details for <xsl:value-of select="/log/@name"/> at <xsl:value-of select="@revision"/></a>
-				<a id="logentry_diff{@revision}" class="action" href="{/log/@repo}{/log/@target}?p={/log/logentry[1]/@revision}&amp;r={@revision}&amp;rweb=diff&amp;rev={@revision}&amp;fromrev={$fromrev}">diff from <xsl:value-of select="$fromrev"/></a>
+				<a id="logentry_view{@revision}" class="action" href="{/log/@repo}{/log/@target}?p={/log/logentry[1]/@revision}&amp;r={@revision}&amp;rweb=details">details for <xsl:value-of select="/log/@name"/> at <xsl:value-of select="@revision"/></a>
+				<a id="logentry_diff{@revision}" class="action" href="{/log/@repo}{/log/@target}?p={/log/logentry[1]/@revision}&amp;r={@revision}&amp;rweb=diff&amp;fromrev={$fromrev}">diff from <xsl:value-of select="$fromrev"/></a>
 			</div>
 		</div>
 	</xsl:template>

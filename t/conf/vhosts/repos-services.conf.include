@@ -75,7 +75,11 @@ RewriteRule		^/svn/([^/]+)(/.*)$	/repos-plugins/thumbnails/convert/?base=$1&targ
 
 # --- Post processing, should apply to both R and PT ---
 
-# Until Repos Web supports ?p instead of ?r, duplicate p= to rev=
-RewriteCond		%{QUERY_STRING}		\?p=(\d+)|&p=(\d+)
+# Until Repos Web understands peg and operative, set 'rev' to 'r' or 'p'
 RewriteCond 	%{QUERY_STRING}		!^rev=|.*&rev=
+RewriteCond		%{QUERY_STRING}		\?r=(\d+)|&r=(\d+)
+RewriteRule 	^/repos-web/(.*)$	%{ENV:REPOS_WEBAPP}$1?rev=%1%2 [PT,QSA]
+RewriteCond 	%{QUERY_STRING}		!^rev=|.*&rev=
+RewriteCond		%{QUERY_STRING}		!\?r=(\d+)|&r=(\d+)
+RewriteCond		%{QUERY_STRING}		\?p=(\d+)|&p=(\d+)
 RewriteRule 	^/repos-web/(.*)$	%{ENV:REPOS_WEBAPP}$1?rev=%1%2 [PT,QSA]
