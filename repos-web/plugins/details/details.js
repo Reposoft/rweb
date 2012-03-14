@@ -18,11 +18,12 @@ Repos.view = {
 	details: {
 		next: '#', // hash must be there so page does not reload
 		on: function(list) {
-			$('.contentdetails').empty(); // browsedetails plugin
+			$('.contentdetails').empty(); // browsedetails plugin, TODO publish events?
 			$('li', list).reposDetails();
 		},
 		off: function(list) {
 			$('.details', list).remove();
+			$('.index li').css('display', 'inherit'); // because the CSS style is not applied, see details_repository
 		}
 	}
 };
@@ -98,7 +99,6 @@ var details_read = function() {
  */
 var details_write = function(e, entry) {
 	entry.each(function(){
-		console.log('Details write ', $('name', this).text());
 		$('.filename', e).append($('name', this).text());
 		if (details_isNoaccess(this)) {
 			e.addClass('noaccess');
@@ -170,9 +170,8 @@ var details_repository = function(path, url) {
 				if (this.getAttribute('kind')=='dir') name = name + '/';
 				// note that there might be id conflicts in repos.xsl pages due to limitations in name escape
 				var row = new ReposFileId(name).find('row');
-				console.log('Details row for ', name, ': ', row);
 				if (row == null) {
-					window.console && console.log('No row found for', name, new ReposFileId(name).get());
+					console.error('No row found for', name, new ReposFileId(name).get());
 					return; // silently skip items that can't be found
 				}
 				row = $(row);
