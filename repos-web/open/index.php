@@ -52,8 +52,12 @@ $p->assign_by_ref('file', $file);
 $p->assign('target', getTarget());
 if ($fromrev) $p->assign('fromrev', $fromrev);
 // display a short log for the file on the edit page
-require(dirname(__FILE__).'/getlog.php');
-$p->assign('log', getLog(getTargetUrl())); // TODO to $rev?
+if (!isset($_REQUEST['history']) || $_REQUEST['history'] != 'false') {
+	require(dirname(__FILE__).'/getlog.php');
+	$p->assign('log', getLog(getTargetUrl())); // TODO to $rev?
+} else {
+	$p->assign('log', array());
+}
 require(dirname(__FILE__).'/getproplist.php');
 $p->assign('proplist', getProplistGrouped(getTargetUrl(), $rev));
 // before entering smarty template code, read some file info so that in the event of access error

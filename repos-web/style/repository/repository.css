@@ -38,8 +38,6 @@
 }
 .contentdetails #intro p, 
 .contentdetails #activities p,
-.contentdetails .proplist,
-.contentdetails.preview #editlog,
 .contentdetails .aboutitem-path {
 	display: none;
 }

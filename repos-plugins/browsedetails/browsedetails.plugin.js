@@ -101,7 +101,6 @@ $.fn.reposDetailsTarget = function(options) {
 				$(this).attr('href', $(this).attr('href') + '?rweb=details'); // TODO support ?p/r
 			}
 		});
-		$('#editlog li:gt(2)').hide(); // does this cause flickering?
 	};
 	
 	var addCloseButton = function(container) {
@@ -132,7 +131,7 @@ $.fn.reposDetailsTarget = function(options) {
 	var asEmbeddedHtml = function() {
 		var a = $(this);
 		var isFile = a.is('.file');
-		var href = getDetailsUrl(this);
+		var href = getDetailsUrl(this) + '&history=false';
 		var container = $(settings.container);
 		var topstart = $('.index').offset().top;
 		var topscroll = $(document).scrollTop();
