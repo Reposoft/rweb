@@ -181,6 +181,7 @@ In many programs you can open the URL directly, without downloading the file fir
 <h2>About this {=$file,kind2}</h2>
 <!-- in headline: <p>Version number: <span class="revision">{=$file,revision}</span></p> -->
 <dl class="aboutitem">
+<!--{* path will be important when supporting ?p and ?r *}-->
 <dt class="aboutitem-path">Path</dt><dd class="aboutitem-path path">{=$file,path}</dd>
 <dt class="aboutitem-rev">Revision</dt><dd class="aboutitem-rev revision">{=$file,revisionLastChanged}</dd> <dd class="aboutitem-rev datetime">{=$file,date}</dd> <dd class="aboutitem-rev username">{=$file,author}</dd>
 <!--{if $file,isFile and $file,isLocked}-->

@@ -145,7 +145,7 @@ class SvnOpenFile {
 	 * Sets the vital information: path, url and revision string.
 	 * Actual calls for data are being made (and cached) when requested with get* and is* methods.
 	 *
-	 * @param String $path file path, absolute from repository root
+	 * @param String $path file path, absolute from repository root with leading slash
 	 * @param String $revision requested revision, integer/date/string (svn syntax), null for latest
 	 * @param boolean $validate false to not validate authentication/authorization immediately
 	 * @param boolean $revisionIsPeg set to false if the path is from HEAD but the revision migt be older
@@ -264,7 +264,17 @@ class SvnOpenFile {
 		return SvnOpen::getAuthenticatedUser();
 	}
 	
+	/**
+	 * @return boolean true if the path is repository root
+	 */
+	function isRoot() {
+		return $this->path == '/';
+	}
+	
 	function getFilename() {
+		if ($this->isRoot()) {
+			return getPathName($this->getRepository());
+		}
 		return getPathName($this->path);
 	}
 	
@@ -284,6 +294,7 @@ class SvnOpenFile {
 	 */
 	function getKind2() {
 		$k = $this->getKind();
+		if ($k == 'dir' && $this->path == '/') return 'repository';
 		if ($k == 'dir') return 'folder';
 		return $k;
 	}

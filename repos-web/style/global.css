@@ -119,7 +119,7 @@ td.filesize {
 .projectname {
 	color: #663300;
 }
-.repo {
+.repo /*deprecated*/, .repository {
 	color: #808080;
 }
 #base {
