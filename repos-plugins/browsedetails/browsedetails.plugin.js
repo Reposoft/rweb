@@ -92,6 +92,7 @@ $.fn.reposDetailsTarget = function(options) {
 		var intro = $('#intro', container).css({margin: 0, padding: 0});
 		$('h1 a', intro).css('background-position', 'left .25em');
 		$('a', container).each(function() {
+			$(this).filter('#open:contains("List")').remove(); // or should we change it to normal index for use from search results? 
 			$(this).attr('href', '/repos-web/open/' + $(this).attr('href'));
 		});
 	};
