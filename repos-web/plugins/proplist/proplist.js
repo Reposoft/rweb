@@ -9,8 +9,8 @@ Repos.content('open/', null, function() {
 			data[p] = (data[p] ? data[p] + '\n' : '') + $(this).text();
 		}
 	});
-	// emulate the old asynchronous events, let other plugins bind to this event at DOM ready
-	window.setTimeout(function() {
+	// Proplist was once asynghronouse, other plugins bound to this event at DOM ready, so trigger after plugins TODO remove
+	$(document).one('repos-content-end', function() {
 	$(document).trigger('repos-proplist-loaded', [container, data]);
 	for (var p in data) {  
 	    if (data.hasOwnProperty(p)) {  
@@ -18,5 +18,5 @@ Repos.content('open/', null, function() {
 	    }
 	}
 	$(container).trigger('repos-proplist-loaded-prop-all');
-	}, 1);
+	});
 } );

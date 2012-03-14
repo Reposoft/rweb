@@ -60,8 +60,10 @@ Repos.content = function(service, target, fn) {
 		Repos.service(service, function() {
 			if (!target || targetmatch) fn.apply(document);
 		});
-	} else {
+	} else if (target) {
 		Repos.target(target, fn);
+	} else {
+		$(document).ready(fn);
 	}
 };
 
@@ -78,19 +80,19 @@ Repos.content = function(service, target, fn) {
  */
 Repos.asyncService = function(service, target, container) {
 	container.data({reposService: service, reposTarget: target});
+	Repos.targetOverride = target; // TODO get rid of this override concept, make plugins use getTarget(context)
 	for (var i = 0; i < Repos.contentHandlers.length; i++) {
 		var h = Repos.contentHandlers[i];
 		if (!h.service || Repos.isService(h.service, container, service)) {
 			if (!h.target || Repos.isTarget(h.target, container, target)) {
-				// TODO get rid of this concept console.debug('starting target override', target);
-				Repos.targetOverride = target;
 				h.handler.apply(container);
-				//console.debug('ending target override');
-				//Repos.targetOverride = false;
 			}
 		}
 	}
 };
+$(document).bind('repos-content-end-internal', function() {
+	Repos.targetOverride = false;
+});
 
 /**
  * Generic trigger on user interface parameter.
