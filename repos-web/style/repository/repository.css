@@ -47,7 +47,7 @@
 	background-position: top center;
 	background-repeat: no-repeat;
 }
-.view-list li:hover {
+.view-list li.intent-maybe {
 	background-image: url('../rowmiddle.png');
 }
 .index li.browsedetail {

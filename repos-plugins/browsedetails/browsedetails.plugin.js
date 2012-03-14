@@ -41,7 +41,7 @@ $.fn.reposDetailsTarget = function(options) {
 			};
 			var no = function(ev) {
 			};
-			row.hoverIntent({over: yes, out: no, timeout: 500, interval: 1500, sensitivity: 20, evIn: 'mouseover', evOut: 'mouseout', withChildren: false});
+			row.hoverIntent({over: yes, out: no, timeout: 200, interval: 1500, sensitivity: 20, evIn: 'mouseover', evOut: 'mouseout', withChildren: false});
 			row.click(yes);
 			//row.mouseout(no);
 		});
@@ -258,7 +258,9 @@ Repos.service('index/', function() {
 				$(ob).bind(cfg.evMove,track);
 				// start polling interval (self-calling timeout) to compare mouse coordinates over time
 				if (ob.hoverIntent_s != 1) { ob.hoverIntent_t = setTimeout( function(){compare(ev,ob);} , cfg.interval );}
-				if (cfg.mark) $(ob).addClass(cfg.mark);
+				if (cfg.mark) {
+					ob.hoverIntent_ct = setTimeout(function(){$(ob).addClass(cfg.mark);}, cfg.timeout); 
+				}
 				
 			// else e.type == "mouseleave"
 			} else {
@@ -266,7 +268,10 @@ Repos.service('index/', function() {
 				$(ob).unbind(cfg.evMove,track);
 				// if hoverIntent state is true, then call the mouseOut function after the specified delay
 				if (ob.hoverIntent_s == 1) { ob.hoverIntent_t = setTimeout( function(){delay(ev,ob);} , cfg.timeout );}
-				if (cfg.mark) $(ob).removeClass(cfg.mark);
+				if (cfg.mark) {
+					clearTimeout(ob.hoverIntent_ct);
+					$(ob).removeClass(cfg.mark);
+				}
 			}
 		};
 
