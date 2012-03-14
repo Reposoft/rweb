@@ -36,6 +36,7 @@
 .contentdetails.loading .closebutton {
 	visibility: hidden;
 }
+.contentdetails .noembed,
 .contentdetails #intro p, 
 .contentdetails #activities p,
 .contentdetails .aboutitem-path {
