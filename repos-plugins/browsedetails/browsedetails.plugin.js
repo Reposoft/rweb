@@ -41,7 +41,7 @@ $.fn.reposDetailsTarget = function(options) {
 			};
 			var no = function(ev) {
 			};
-			row.hoverIntent({over: yes, out: no, timeout: 500, interval: 2000, sensitivity: 20});
+			row.hoverIntent({over: yes, out: no, timeout: 500, interval: 1500, sensitivity: 20, evIn: 'mouseover', evOut: 'mouseout', withChildren: false});
 			row.click(yes);
 			//row.mouseout(no);
 		});
