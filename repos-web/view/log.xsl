@@ -111,6 +111,14 @@
 	<xsl:template match="logentry">
 		<xsl:param name="n" select="position() - 1"/>
 		<xsl:param name="fromrev" select="following-sibling::*[1]/@revision"/><!-- TODO does this work for the last entry, use -1 instead? -->
+		<xsl:param name="name">
+			<xsl:if test="/log/@name != ''">
+				<xsl:value-of select="/log/@name"/>
+			</xsl:if>
+			<xsl:if test="/log/@name = ''">
+				<xsl:value-of select="/log/@base"/>
+			</xsl:if>
+		</xsl:param>
 		<div id="rev{@revision}" class="logentry n{$n mod 4}">
 			<h3>
 				<span class="revision" title="the changeset number (version number)">
@@ -138,7 +146,7 @@
 			<div id="logentry_actions{@revision}" class="actions">
 				<!-- TODO most accurate peg would be from request but we don't have it now, also we should remove the extra rev when repos understands p and r -->
 				<!-- We're not sure if the page is displayed using a service URL or a real url so we need the full URL in links, TODO verify https compatibility -->
-				<a id="logentry_view{@revision}" class="action" href="{/log/@repo}{/log/@target}?p={/log/logentry[1]/@revision}&amp;r={@revision}&amp;rweb=details">details for <xsl:value-of select="/log/@name"/> at <xsl:value-of select="@revision"/></a>
+				<a id="logentry_view{@revision}" class="action" href="{/log/@repo}{/log/@target}?p={/log/logentry[1]/@revision}&amp;r={@revision}&amp;rweb=details">details for <xsl:value-of select="$name"/> at <xsl:value-of select="@revision"/></a>
 				<a id="logentry_diff{@revision}" class="action" href="{/log/@repo}{/log/@target}?p={/log/logentry[1]/@revision}&amp;r={@revision}&amp;rweb=diff&amp;fromrev={$fromrev}">diff from <xsl:value-of select="$fromrev"/></a>
 			</div>
 		</div>
@@ -172,44 +180,62 @@
 				<xsl:value-of select="/log/@base"/>
 			</xsl:if>
 		</xsl:param>
-		<xsl:param name="defaultaction">
-			<xsl:text>open/</xsl:text>
-			<xsl:if test="@kind='file'">open/</xsl:if>
-		</xsl:param>
 		<div class="row log-{@action}">
 			<xsl:if test="@action='A' or @action='R'">
-				<a id="open:{$pathid}" class="folder" title="Added {.}" href="{$web}{$defaultaction}?target={$target}{$basep}&amp;rev={../../@revision}">
+				<a id="open:{$pathid}" class="path {@kind}" title="Added {.}" href="{$web}open/?target={$target}{$basep}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
-				<xsl:value-of select="$spacer"/>
-				<xsl:if test="not(@copyfrom-path)">
-					<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={../../@revision}&amp;action={@action}">details</a>
-				</xsl:if>
 				<xsl:if test="@copyfrom-path">
+					<xsl:value-of select="$spacer"/>
 					<span class="copied" title="Copied from {@copyfrom-path} version {@copyfrom-rev}">
-						<span class="path">
-							<xsl:value-of select="@copyfrom-path"/>&#160;</span>
-						<span class="revision">
+						<a class="path {@kind}" title="Go to {@copyfrom-path}">
+							<xsl:attribute name="href">
+								<xsl:value-of select="$web"/>
+								<xsl:value-of select="'open/?target='"/>
+								<xsl:call-template name="getHref">
+									<xsl:with-param name="href" select="@copyfrom-path"/>
+								</xsl:call-template>
+								<xsl:value-of select="$basep"/>
+							</xsl:attribute>
+							<xsl:value-of select="@copyfrom-path"/>
+						</a>
+						<xsl:value-of select="$spacer"/>
+						<a class="revision">
+							<xsl:attribute name="href">
+								<xsl:value-of select="$web"/>
+								<xsl:value-of select="'open/?target='"/>
+								<xsl:call-template name="getHref">
+									<xsl:with-param name="href" select="@copyfrom-path"/>
+								</xsl:call-template>
+								<xsl:value-of select="$basep"/>
+								<xsl:value-of select="concat('&amp;rev=',@copyfrom-rev)"/>
+							</xsl:attribute>
 							<xsl:value-of select="@copyfrom-rev"/>
-						</span>
+						</a>
 					</span>
 					<xsl:value-of select="$spacer"/>
-					<a id="view:{$pathid}" class="action" href="{$web}open/?target={@copyfrom-path}{$basep}&amp;rev={@copyfrom-rev}&amp;action={@action}">details</a>
 				</xsl:if>
 			</xsl:if>
 			<xsl:if test="@action='D'">
-				<span class="path" title="Deleted {.}, so it only exists in versions prior to {../../@revision}.">
+				<a class="path {@kind}" title="Deleted {.}, so it only exists in versions prior to {../../@revision}.">
+					<xsl:attribute name="href">
+						<xsl:value-of select="$web"/>
+						<xsl:value-of select="'open/?target='"/>
+						<xsl:value-of select="$target"/>
+						<xsl:value-of select="$basep"/>
+						<xsl:value-of select="concat('&amp;rev=',../../@revision - 1)"/>
+					</xsl:attribute>
+					<xsl:value-of select="@copyfrom-rev"/>				
 					<xsl:value-of select="."/>
-				</span>
+				</a>
 				<xsl:value-of select="$spacer"/>
 				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={$fromrev}&amp;action={@action}">details</a>
 			</xsl:if>
 			<xsl:if test="@action='M'">
-				<a id="open:{$pathid}" class="file" title="Modified {.}" href="{$web}{$defaultaction}?target={.}{$basep}&amp;rev={../../@revision}">
+				<a id="open:{$pathid}" class="path {@kind}" title="Modified {.}" href="{$web}open/?target={.}{$basep}&amp;rev={../../@revision}">
 					<xsl:value-of select="."/>
 				</a>
 				<xsl:value-of select="$spacer"/>
-				<a id="view:{$pathid}" class="action" href="{$web}open/?target={$target}{$basep}&amp;rev={../../@revision}&amp;fromrev={$fromrev}&amp;action={@action}">details</a>
 				<a id="diff:{$pathid}" class="action" href="{$web}open/diff/?target={$target}{$basep}&amp;rev={../../@revision}&amp;fromrev={$fromrev}">diff</a>
 			</xsl:if>
 		</div>

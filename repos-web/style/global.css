@@ -81,10 +81,10 @@ acronym, span.explain {
 a.file {
 	color: #001155;
 }
-.folder {
+.folder, .dir {
 
 }
-a.folder {
+a.folder, a.dir {
 	color: #001133;
 }
 .revision {

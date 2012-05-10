@@ -89,7 +89,7 @@ dt.aboutitem-lockcomment {
 }
 
 #editlog span, #editlog li > a {
-	margin: .3em 1em .3em 0;
+	margin: .3em .5em .3em 0;
 }
 
 #editlog .message {

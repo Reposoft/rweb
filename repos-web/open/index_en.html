@@ -183,7 +183,7 @@ In many programs you can open the URL directly, without downloading the file fir
 <dl class="aboutitem">
 <!--{* path will be important when supporting ?p and ?r *}-->
 <dt class="aboutitem-path">Path</dt><dd class="aboutitem-path path">{=$file,path}</dd>
-<dt class="aboutitem-rev">Revision</dt><dd class="aboutitem-rev revision">{=$file,revisionLastChanged}</dd> <dd class="aboutitem-rev datetime">{=$file,date}</dd> <dd class="aboutitem-rev username">{=$file,author}</dd>
+<dt class="aboutitem-rev">Revision</dt><dd class="aboutitem-rev revision">{=$file,revisionLastChanged}</dd> <dd class="aboutitem-rev username">{=$file,author}</dd> <dd class="aboutitem-rev datetime">{=$file,date}</dd>
 <!--{if $file,isFile and $file,isLocked}-->
 <dt class="aboutitem-lock">Lock</dt>
 <dd class="aboutitem-lock datetime">{=$file,lockCreated}</dd> <dd class="aboutitem-lock username">{=$file,lockOwner}</dd>
@@ -224,8 +224,8 @@ In many programs you can open the URL directly, without downloading the file fir
 	<!--{assign var='e' value=$log.$r}-->
 	<li>
 		<a class="revision" href="?target={=$target}&rev={=$r}">{=$r}</a>
-		<span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span>
 		<span class="username">{=$e.user}</span>
+		<span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span>
 		<span class="message">{=$e.message|nl2br}</span>
 	</li>
 <!--{/foreach}-->
