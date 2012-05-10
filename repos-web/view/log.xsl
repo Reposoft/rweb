@@ -80,15 +80,7 @@
 		<xsl:apply-templates select="logentry"/>
 		<xsl:if test="@limit">
 			<xsl:call-template name="limit">
-				<xsl:with-param name="url">
-					<xsl:value-of select="'?target='"/>
-					<xsl:value-of select="@target"/>
-					<xsl:if test="@base">
-						<xsl:value-of select="'&amp;base='"/>
-						<xsl:value-of select="@base"/>
-					</xsl:if>
-				</xsl:with-param>
-				<xsl:with-param name="size" select="@limit"/>
+				<xsl:with-param name="size" select="@limit + 20"/>
 				<xsl:with-param name="next" select="@limitrev"/>
 			</xsl:call-template>
 		</xsl:if>
@@ -242,13 +234,13 @@
 	</xsl:template>
 	<!-- links to browse log pages -->
 	<xsl:template name="limit">
-		<xsl:param name="url"/><!-- should be target maybe -->
 		<xsl:param name="size"/>
 		<xsl:param name="next"/>
 		<p>
 			<span>Limited to <xsl:value-of select="$size"/> entries.</span>
-			<xsl:text>&#160;</xsl:text>
-			<a id="next" href="{$url}&amp;torev={$next}&amp;limit={$size}">Show next page.</a>
+			<xsl:value-of select="$spacer"/>
+			<!-- <a id="next" href="{$url}&amp;torev={$next}&amp;limit={$size}">Show next page.</a> -->
+			<a id="next" href="?rweb=history&amp;limit={$size}#rev{$next}">More...</a>
 		</p>
 	</xsl:template>
 	<!-- links to select revisions -->
