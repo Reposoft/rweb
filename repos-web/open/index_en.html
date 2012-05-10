@@ -44,7 +44,7 @@ You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 <!--{/if}-->
 </p>
 <!--{else}-->
-<p>This is an old version of the file. You can also <a href="?target={=$target}">view latest version</a>.</p>
+<p>This is an old version of the file. You can also <a href="?target={=$target}">view current version</a>.</p>
 <!--{/if}-->
 </div>
 
@@ -56,8 +56,9 @@ You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 
 <div id="activities-time">
 <!--{if $file,isRevisionRequested}-->
-<h3 class="latest"><a id="latest" href="?target={=$target}">View latest</a></h3>
-<p>Go to the page that shows the current version of the file. Unless it has been deleted.</p>
+<h3 class="current"><a id="current" href="?target={=$target}">View current</a></h3>
+<p>Without a revision specified the {=$file,kind2} is &quot;current&quot; (or HEAD in Subversion terminology).
+The revision when the {=$file,kind2} was modified most recently is called &quot;latest&quot;.</p>
 <!--{/if}-->
 </div>
 

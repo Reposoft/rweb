@@ -126,10 +126,10 @@ td.filesize {
 	margin-right: .2em;
 }
 .file.historical {
-	color: #876D47;
+	color: #61513B;
 }
 .folder.historical {
-	color: #876D33;
+	color: #4D3F2B;
 }
 /* elements to get user's attention  */
 .error, .warning, .note {
