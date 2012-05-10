@@ -167,9 +167,6 @@ div.editlog {
 	padding: 3px;
 	border-bottom: 1px solid #CCCCCC;
 }
-.repository #commandbar {
-	min-width: 980px;
-}
 ul.index {
 	padding: 0;
 	margin: 0;
