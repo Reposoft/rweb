@@ -3,12 +3,19 @@
  * Reads a summary of the svn log
  * @return array[int revision => array]
  */
-function getLog($targetUrl, $limit = 10) {
+function getLog($targetUrl, $limit = 10, $p = null, $r = null) {
 	$svnlog = new SvnOpen('log');
 	//$svnlog->addArgOption('-q');
 	$svnlog->addArgOption('--stop-on-copy'); // based-on-revision can't handle renamed files
 	$svnlog->addArgOption('--limit', $limit, false);
-	$svnlog->addArgUrl($targetUrl);
+	if ($p === null) {
+		$svnlog->addArgUrl($targetUrl);
+	} else {
+		$svnlog->addArgUrlPeg($targetUrl, $p);
+	}
+	if ($r) {
+		$o->addArgOption('-r', $r->getValue());
+	}
 	if ($svnlog->exec()) {
 		trigger_error(implode("\n", $svnlog->getOutput()), E_USER_ERROR);
 	}
