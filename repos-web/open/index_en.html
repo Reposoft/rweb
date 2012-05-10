@@ -18,7 +18,7 @@
 </div>
 <div id="intro">
 <h1>
-<a id="realurl" class="{=$file,kind2}" href="{=$file,url}">{=$file,filename}</a>
+<a id="realurl" class="{=$file,kind2} {=if $file,isRevisionRequested}historical{=/if}" href="{=$file,url}">{=$file,filename}</a>
 {=if $file,isFolder}/{=/if}
 <!--{if $file,isRevisionRequested}-->
  <span class="revision">{=$file,revisionRequested}</span>
@@ -53,6 +53,13 @@ You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 <div class="main columns">
 
 <div id="activities" class="column column-activities">
+
+<div id="activities-time">
+<!--{if $file,isRevisionRequested}-->
+<h3 class="latest"><a id="latest" href="?target={=$target}">View latest</a></h3>
+<p>Go to the page that shows the current version of the file. Unless it has been deleted.</p>
+<!--{/if}-->
+</div>
 
 <div id="activities-view" class="activities">
 {=if $file,isFile}

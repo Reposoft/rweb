@@ -156,6 +156,9 @@ div#activities p {
 #activities #useurl {
 	background-image: url(commands/32x32/url.png);
 }
+#activities #latest {
+	background-image: url(commands/32x32/latest.png);
+}
 #activities #history {
 	background-image: url(commands/32x32/history.png);
 }
