@@ -826,6 +826,7 @@ class SvnOpenFile {
 		$info = new SvnOpen('info', true);
 		$this->_specifyUrlAndRev($info);
 		if ($info->exec()) {
+			// error message instead: trigger_error('Failure to read '.$this->getUrlNoquery()." from svn. \n".implode("\n", $info->getOutput()), E_USER_ERROR);
 			return $this->_nonexisting();
 		}		
 		$result = $info->getOutput();
