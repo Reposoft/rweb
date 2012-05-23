@@ -181,7 +181,7 @@ function processFile($upload) {
 	$commit = new SvnEdit('commit');
 	$commit->setMessage($upload->getMessage());
 	$commit->addArgPath($dir . $filename); // only commit the file
-	// locks are not set in this working copy -- reclaim
+	// The form/request may order unlock, without this set we won't even steal the same user's own lock
 	if ($upload->isLocked()) {
 		$unlock = new SvnOpen('unlock');
 		$unlock->addArgUrl($upload->getTargetUrl());
