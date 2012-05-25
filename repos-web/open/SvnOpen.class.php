@@ -328,7 +328,11 @@ class SvnOpen {
 	}
 	
 	function getOutput() {
-		return $this->command->getOutput();
+		if ($this->getExitcode()) {
+			return preg_replace('/ --password="[^"]*"/', '--password="***"', $this->command->getOutput());
+		} else {
+			return $this->command->getOutput();
+		}
 	}
 	
 	function getContentLength() {
