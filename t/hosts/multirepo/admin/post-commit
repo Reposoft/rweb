@@ -5,9 +5,17 @@ export LANG="en_US.UTF-8"
 # filenames containing non-ASCII characters.
 #locale > /home/solsson/workspace/repos/t/logs/locale
 
-LOGNAME=$(echo $1 | sed -e 's/\//_/g')
+REPOS="$1"
+REV="$2"
+
+REPONAME=$(echo $REPOS | sed 's|.*\/||g')
+[ -d /opt/svnrepos/$REPONAME ] && {
+ REPOS=$(echo $REPOS | sed 's|.*/t/hosts/multirepo/svn/|/opt/svnrepos/|g')
+}
+
+LOGNAME=$(echo $REPOS | sed -e 's/\//_/g')
 
 # to get verbose logging add --loglevel debug 
-/usr/bin/python "/home/solsson/workspace/cms/hookscripts/indexing/hook.py" -p "$1" -r $2 >> /home/solsson/workspace/repos/t/logs/indexing$LOGNAME.out 2>&1 &
+/usr/bin/python "/home/solsson/workspace/cms/hookscripts/indexing/hook.py" -p "$REPOS" -r $REV >> /home/solsson/workspace/repos/t/logs/indexing$LOGNAME.out 2>&1 &
 
-/usr/bin/curl "http://localhost:8531/cms/rest/hook/postcommit?repo=$1&rev=$2"
+/usr/bin/curl "http://localhost:8531/cms/rest/hook/postcommit?repo=$REPOS&rev=$REV"
