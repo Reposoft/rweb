@@ -1,0 +1,13 @@
+#!/bin/sh
+export LANG="en_US.UTF-8"
+
+# Useful for diagnosing locale issues which makes indexing fail for 
+# filenames containing non-ASCII characters.
+#locale > /home/solsson/workspace/repos/t/logs/locale
+
+LOGNAME=$(echo $1 | sed -e 's/\//_/g')
+
+# to get verbose logging add --loglevel debug 
+/usr/bin/python "/home/solsson/workspace/cms/hookscripts/indexing/hook.py" -p "$1" -r $2 >> /home/solsson/workspace/repos/t/logs/indexing$LOGNAME.out 2>&1 &
+
+/usr/bin/curl "http://localhost:8531/cms/rest/hook/postcommit?repo=$1&rev=$2"
