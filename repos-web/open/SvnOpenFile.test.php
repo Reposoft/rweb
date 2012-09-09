@@ -272,7 +272,8 @@ class TestSvnOpenFile extends UnitTestCase {
 		   	'</info>');
 		$file = new SvnOpenFile('/not-existing', HEAD, false);
 		$a = $file->_parseInfoXml($list);
-		$this->assertEqual($file->_nonexisting(), $a);
+		$this->assertEqual('/not-existing', $a['path']);
+		$this->assertEqual('http://example.net/svn/not-existing:  (Not a valid URL)', $a['info']);
 	}
 
 	function testParseInfoXmlOddChars() {
@@ -281,7 +282,7 @@ class TestSvnOpenFile extends UnitTestCase {
 				<info>
 				<entry
 				kind="dir"
-				path="a<"
+				path="a&lt;"
 				revision="22">
 				<url>http://localhost:8530/svn/o&amp;e/a</url>
 				<repository>

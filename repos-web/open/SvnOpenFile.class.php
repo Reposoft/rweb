@@ -858,32 +858,6 @@ class SvnOpenFile {
 	 */
 	function _parseListXml($xmlArray) {
 		return $this->xml_parseSax($xmlArray);
-		$parsed = array();
-		$patternsInOrder = array(
-			'path' => '/path="([^"]+)"/',
-			'kind' => '/kind="([^"]+)"/',
-			'name' => '/<name>([^<]+)</',
-			'size' => '/<size>(\d+)</',
-			'revision' => '/revision="(\d+)"/',
-			'author' => '/<author>([^<]+)</', // not set by svn if empty (unknown user in last commit)
-			'date' => '/<date>([^<]+)</',
-			'locktoken' => '/<token>([^<]+)</',
-			'lockowner' => '/<owner>([^<]+)</',
-			'lockcomment' => '/<comment>([^<]+)</m',
-			'lockcreated' => '/<created>([^<]+)</'
-		);
-		list($n, $p) = each($patternsInOrder);
-		for ($i=0; $i<count($xmlArray); $i++) {
-			if (preg_match($p, $xmlArray[$i], $matches) || 
-					(strEnds($p, '/m') && preg_match($p, implode("\n", array_slice($xmlArray, $i)), $matches))) {
-				$parsed[$n] = $matches[1];
-				if(!(list($n, $p) = each($patternsInOrder))) break;
-			} else if ($n == 'author' || $n == 'lockcomment') { // optional entry (works only right after mandatory entry)
-				list($n, $p) = each($patternsInOrder);
-				$i--;
-			}
-		}
-		return $parsed;
 	}
 	
 	/**
@@ -893,29 +867,6 @@ class SvnOpenFile {
 	 */
 	function _parseInfoXml($xmlArray) {
 		return $this->xml_parseSax($xmlArray);
-		$parsed = array();
-		$matches = array();
-		// this xml is basically key-value so we don't bother with xml parsing, await java impl
-		foreach ($xmlArray as $line) {
-			preg_match('/(\w+)(>|=")([^"<]+)/', $line, $matches);
-			if ($matches && count($matches > 0)) {
-				$key = $matches[1];
-				if (array_key_exists($key, $parsed)) {
-					if ($key == 'revision') {
-						$key = 'lastChangedRevision';
-					} else {
-						trigger_error('Parser error at '.$line);
-					}
-				}
-				$parsed[$key] = $matches[3];
-			}
-		}
-		// quite terrible error handling
-		if (!isset($parsed['path'])) return $this->_nonexisting();
-		// for consistency in field getters
-		$parsed['name'] = $parsed['path']; // looks like this is only the name
-		if (!isset($parsed['author'])) $parsed['author'] = null;
-		return $parsed;
 	}
 	
 	/**
@@ -933,6 +884,7 @@ class SvnOpenFile {
 	var $_xml_fields = array();
 	var $_xml_name = null;
 	var $_xml_text = null;
+	var $_xml_lock = false;
 	
 	/**
 	 * Convert both info and list xml to item info array.
@@ -952,6 +904,16 @@ class SvnOpenFile {
 			}
 		}
 		xml_parser_free($xml_parser);
+		// extra rules, legacy, could probably be in getters but tests use the result array directly
+		if (1 >= count($this->_xml_fields)) {
+			return array_merge($this->_xml_fields, $this->_nonexisting());
+		}
+		if (!array_key_exists('name', $this->_xml_fields) && array_key_exists('path', $this->_xml_fields)) {
+			$this->_xml_fields['name'] = $this->_xml_fields['path'];
+		}
+		if (!array_key_exists('author', $this->_xml_fields)) {
+			$this->_xml_fields['author'] = null;
+		}
 		return $this->_xml_fields;
 	}
 	
@@ -959,10 +921,14 @@ class SvnOpenFile {
 	 * php 
 	 */
 	function _xml_start($parser, $name, $attrs) {
+		if ($name == 'LOCK') $this->_xml_lock = true;		
 		$this->_xml_text = null;
-		$this->_xml_name = $name;
+		$this->_xml_name = ($this->_xml_lock ? 'lock' : '') . $name;
 		if ($name == 'COMMIT') {
 			$this->_xml_fields['lastChangedRevision'] = $attrs['REVISION'];
+			if (!array_key_exists('revision', $this->_xml_fields)) {
+				$this->_xml_fields['revision'] = $attrs['REVISION'];
+			}
 		} else {
 			foreach ($attrs as $key => $value) {
 				$this->_xml_fields[strtolower($key)] = $value;
@@ -971,6 +937,7 @@ class SvnOpenFile {
 	}
 	
 	function _xml_end($parser, $name) {
+		if ($name == 'LOCK') $this->_xml_lock = false;
 		if ($this->_xml_name && !is_null($this->_xml_text)) {
 			$this->_xml_fields[strtolower($this->_xml_name)] = trim($this->_xml_text);
 		}
