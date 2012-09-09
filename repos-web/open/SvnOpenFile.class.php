@@ -918,7 +918,7 @@ class SvnOpenFile {
 	}
 	
 	/**
-	 * php 
+	 * php sax handlers for xml_parseSax
 	 */
 	function _xml_start($parser, $name, $attrs) {
 		if ($name == 'LOCK') $this->_xml_lock = true;		
