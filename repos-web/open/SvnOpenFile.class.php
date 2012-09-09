@@ -830,6 +830,7 @@ class SvnOpenFile {
 			return $this->_nonexisting();
 		}		
 		$result = $info->getOutput();
+		header('Content-Type: text/plain');
 		$parsed = $this->_parseInfoXml($result);
 		if (preg_match('/non-existent/', $result[0].$result[4])) return $this->_nonexisting(); // does not exist in svn
 		return $parsed;
@@ -856,6 +857,7 @@ class SvnOpenFile {
 	 * @return array[String] metadata entry name => value
 	 */
 	function _parseListXml($xmlArray) {
+		return $this->xml_parseSax($xmlArray);
 		$parsed = array();
 		$patternsInOrder = array(
 			'path' => '/path="([^"]+)"/',
@@ -890,24 +892,22 @@ class SvnOpenFile {
 	 * @return unknown_type
 	 */
 	function _parseInfoXml($xmlArray) {
+		return $this->xml_parseSax($xmlArray);
 		$parsed = array();
-		$patternsInOrder = array(
-			'kind' => '/kind="([^"]+)"/',
-			'path' => '/path="([^"]+)"/',
-			'revision' => '/revision="(\d+)"/', // must be the revision in <entry>, not <commit>
-			'url' => '/<url>([^<]+)</', // need something between the two revision= because we should read the last one
-			'lastChangedRevision' => '/revision="(\d+)"/',
-			'author' => '/<author>([^<]+)</',
-			'date' => '/<date>([^<]+)</',
-		);
-		list($n, $p) = each($patternsInOrder);
-		for ($i=0; $i<count($xmlArray); $i++) {
-			if (preg_match($p, $xmlArray[$i], $matches)) {
-				$parsed[$n] = $matches[1];
-				if(!(list($n, $p) = each($patternsInOrder))) break;
-			} else if ($n == 'author') { // optional entry
-				list($n, $p) = each($patternsInOrder);
-				$i--;
+		$matches = array();
+		// this xml is basically key-value so we don't bother with xml parsing, await java impl
+		foreach ($xmlArray as $line) {
+			preg_match('/(\w+)(>|=")([^"<]+)/', $line, $matches);
+			if ($matches && count($matches > 0)) {
+				$key = $matches[1];
+				if (array_key_exists($key, $parsed)) {
+					if ($key == 'revision') {
+						$key = 'lastChangedRevision';
+					} else {
+						trigger_error('Parser error at '.$line);
+					}
+				}
+				$parsed[$key] = $matches[3];
 			}
 		}
 		// quite terrible error handling
@@ -926,6 +926,61 @@ class SvnOpenFile {
 	function _readInfoHttp() {
 		// http can not read the actual revision number for HEAD
 		return true;
+	}
+	
+	
+	// instance field needed for sax parsing
+	var $_xml_fields = array();
+	var $_xml_name = null;
+	var $_xml_text = null;
+	
+	/**
+	 * Convert both info and list xml to item info array.
+	 * $return parsed info fields, our own keys being quite close to subversion terminology
+	 */
+	function xml_parseSax($xmlArray) {
+		$this->_xml_fields = array();
+		$this->_xml_name = null;
+		$xml_parser = xml_parser_create();
+		xml_set_element_handler($xml_parser, array(&$this, '_xml_start'), array(&$this, '_xml_end'));
+		xml_set_character_data_handler($xml_parser, array(&$this, '_xml_data'));
+		for ($i = 0; $i < count($xmlArray);) {
+			if (!xml_parse($xml_parser, $xmlArray[$i]."\n", count($xmlArray) == $i++)) {
+				trigger_error(sprintf("XML error: %s at line %d",
+						xml_error_string(xml_get_error_code($xml_parser)),
+						xml_get_current_line_number($xml_parser)), E_USER_ERROR);
+			}
+		}
+		xml_parser_free($xml_parser);
+		return $this->_xml_fields;
+	}
+	
+	/**
+	 * php 
+	 */
+	function _xml_start($parser, $name, $attrs) {
+		$this->_xml_text = null;
+		$this->_xml_name = $name;
+		if ($name == 'COMMIT') {
+			$this->_xml_fields['lastChangedRevision'] = $attrs['REVISION'];
+		} else {
+			foreach ($attrs as $key => $value) {
+				$this->_xml_fields[strtolower($key)] = $value;
+			}
+		}
+	}
+	
+	function _xml_end($parser, $name) {
+		if ($this->_xml_name && !is_null($this->_xml_text)) {
+			$this->_xml_fields[strtolower($this->_xml_name)] = trim($this->_xml_text);
+		}
+	}
+	
+	function _xml_data($parser, $data) {
+		if ($this->_xml_name) {
+			if (is_null($this->_xml_text)) $this->_xml_text = '';
+			$this->_xml_text .= $data;
+		}
 	}
 	
 }
