@@ -830,7 +830,6 @@ class SvnOpenFile {
 			return $this->_nonexisting();
 		}		
 		$result = $info->getOutput();
-		header('Content-Type: text/plain');
 		$parsed = $this->_parseInfoXml($result);
 		if (preg_match('/non-existent/', $result[0].$result[4])) return $this->_nonexisting(); // does not exist in svn
 		return $parsed;
