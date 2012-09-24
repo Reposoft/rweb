@@ -8,7 +8,7 @@
 # and edit the hosts file of the client
 # Then try the shutdown command from ./TEST -stop
 
-<VirtualHost multirepo>
+<VirtualHost cms>
 	# the server name added by Apache::Test sets correct SelfRoot in repos.properties.php
 
 	# Support ssl proxy for subversion
@@ -122,7 +122,7 @@
 ##
 ## Should be combined with some logic to set HTTPS=on for proxied requests
 ##
-<VirtualHost multirepo-ssl>
+<VirtualHost cms-ssl>
 
 	# enable reverse proxying
 	ProxyRequests Off
@@ -134,7 +134,7 @@
 	# proxy to non-ssl where the virtual hosts are defined, don't reverse proxy
 	RewriteEngine	on
 	# In Apacke::Test this requres that the conf.in file is read after multirepo	
-	RewriteRule	^(.*)$	http://@ServerName@:@multirepo_port@$1 [P,L]
+	RewriteRule	^(.*)$	http://@ServerName@:@cms_port@$1 [P,L]
 
 	#   SSL Engine Switch:
 	#   Enable/Disable SSL for this virtual host.
