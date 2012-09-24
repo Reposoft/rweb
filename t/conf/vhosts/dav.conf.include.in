@@ -16,65 +16,52 @@
 		AuthName "repos test multirepo"
 		AuthUserFile @ServerRoot@/hosts/multirepo/admin/repos-users
 		
-		# Microsoft webdav client folder support fix; it strips trailing slashes
-#		RewriteCond %{HTTP_USER_AGENT} ^Microsoft.*
-		# not needed inside location #RewriteCond %{REQUEST_URI} ^/dav/(.*[^/])$
-		# The current fix relies on knowing the local path, to identify directory without subrequests
-		# REQUEST_URI is urldecoded; can be used to check local path
-		#RewriteCond @ServerRoot@/hosts/multirepo/dav/files/%1 -d
-#		RewriteCond %{REQUEST_FILENAME} -d
-		# Change URI internally, redirect would not be followed
-#		RewriteRule ^(.*)$ $1/
-		# Makes an internal redirect to the local path, but the request still results in redirect
 	</Location>
 
-	<Location /dav/allusers>
-		Require valid-user
-	</Location>
+   RewriteEngine on
 
-	# 'user' section, access only folder==username	
-	<Location /dav/user>
-		Require valid-user
-		
-		RewriteEngine on
-		RewriteCond %{REQUEST_URI} ^/dav/user/([^/]+)/.*$
-		# REMOTE_USER would require LA-U to be non-empty if outside Location/Directory
-		RewriteCond %{REMOTE_USER}#%1 !^([^#]+)#(\1)$
-		RewriteRule .* - [F]
-    </Location>
-    
-    # 'share' section, accesss only to subfolders with exact URL given
-    <Location /dav/share>
-    	RewriteEngine on
-		RewriteCond %{REQUEST_URI} ^/dav/share/([^/]*)/?$
-		RewriteCond %1 !^$
-		RewriteCond %{REQUEST_FILENAME} !-d
-		# Shares should be created with name that is last day it should exist + 10 chars random string
-		RewriteCond %{REQUEST_METHOD}#%1 !^MKCOL#\d{8}-\w{10}$
-		RewriteRule .* - [F]
-		
-		<LimitExcept GET OPTIONS>
-			Require valid-user
-		</LimitExcept>
-    </Location>
+   # Fix Windows WebDAV behavior for folder operations
+   # WinXP client: Microsoft Data Access Internet Publishing Provider DAV
+   RewriteCond msfix-%{HTTP_USER_AGENT} ^msfix-Microsoft.*
+   RewriteCond msfix-%{REQUEST_URI} ^msfix-/dav/(.*[^/])$
+   # REQUEST_URI is urldecoded; can be used to check local path
+   RewriteCond /home/cmsadmin/dav/files/%1 -d
+   RewriteRule ^(.*)$ $1/ [PT]
 
-    <Location /dav/public/>
+   # ----- Dav areas -----
 
-		# Public writable and readable would be dangerous
-		<LimitExcept GET OPTIONS>
-			Require valid-user
-		</LimitExcept>
-	</Location>
-
-    # public+share, don't require authentication for read access
-
-	# Fix Windows WebDAV behavior for folder operations
-	RewriteEngine on
-	# WinXP client: Microsoft Data Access Internet Publishing Provider DAV
-	RewriteCond %{HTTP_USER_AGENT} ^Microsoft.*
-	RewriteCond %{REQUEST_URI} ^/dav/(.*[^/])$
-	# REQUEST_URI is urldecoded; can be used to check local path
-	# Must know what the alias maps to here, for performance I guess
-	RewriteCond @ServerRoot@/hosts/multirepo/dav/files/%1 -d
-	RewriteRule ^(.*)$ $1/ [PT]
+   # For rule development
+   #RewriteLog @ServerRoot@/logs/rewrite.log
+   #RewriteLogLevel 5
+   
+   # Analyze dav requests for recognized areas and put results in environmnet variables
+   RewriteRule ^/dav/(private|share|work)/([^/]+)/([^/]*)?(.*)?$ - [E=CMS_DAV_AREA:$1,E=CMS_DAV_GROUP:$2,E=CMS_DAV_FOLDER:$3,E=CMS_DAV_USER:%{LA-U:REMOTE_USER}]
+   
+   # Compare group and authenticated user to decide access level
+   RewriteCond %{ENV:CMS_DAV_GROUP}#%{ENV:CMS_DAV_USER} ^([^#]+)#(\1)$
+   RewriteRule .* - [E=CMS_DAV_OWNER:true]
+   
+   # Show debug output on URLs ending with "dav-rewrite-debug"
+   RewriteCond %{REQUEST_URI} ^/dav/.*/dav-rewrite-debug$
+   RewriteRule ^(.*)$ $1/%{ENV:CMS_DAV_AREA},%{ENV:CMS_DAV_GROUP},%{ENV:CMS_DAV_FOLDER},user:%{ENV:CMS_DAV_USER},owner:%{ENV:CMS_DAV_OWNER} [R,L]
+   
+   # Disallow access to anyone but owner
+   RewriteCond priv-user-%{ENV:CMS_DAV_USER} !^priv-user-$
+   RewriteCond priv-area-%{ENV:CMS_DAV_AREA} ^priv-user-(work|private)$
+   RewriteCond priv-own-%{ENV:CMS_DAV_OWNER} !^priv-own-true$
+   RewriteRule .* - [F]
+   
+   # Disallow write except when authenticated user matches "group" folder (all groups should be single user)
+   RewriteCond shw-user-%{ENV:CMS_DAV_USER} !^shw-user-$
+   RewriteCond shw-area-%{ENV:CMS_DAV_AREA} ^shw-area-share$
+   RewriteCond shw-method-%{REQUEST_METHOD} !^shw-method-(GET|OPTIONS|HEAD)$
+   RewriteCond shw-own-%{ENV:CMS_DAV_OWNER} !^shw-own-true$
+   RewriteRule .* - [F]
+   
+   # Disallow listing except for owner
+   RewriteCond shl-user-%{ENV:CMS_DAV_USER} !^shl-user-$
+   RewriteCond shl-area-%{ENV:CMS_DAV_AREA} ^shl-area-share$
+   RewriteCond shl-f-%{ENV:CMS_DAV_FOLDER} ^shl-f-$
+   RewriteCond shl-own-%{ENV:CMS_DAV_OWNER} !^shl-own-true$
+   RewriteRule .* - [F]
 
