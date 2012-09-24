@@ -28,7 +28,7 @@
 	ErrorDocument 500 /repos-web/errors/500/
 
 	# Service URL rewrites
-	Include @ServerRoot@/conf/vhosts/repos-services-singlerepo.conf.include
+	Include @ServerRoot@/conf/services/repos-services-singlerepo.conf.include
 
 	<Location /data>
 		DAV svn

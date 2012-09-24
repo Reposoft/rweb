@@ -1,0 +1,9 @@
+<VirtualHost ppu>
+	DocumentRoot @ServerRoot@/../../../Chalmers/
+
+	<Directory @ServerRoot@/../../../Chalmers/>
+		Allow from all
+		Options Indexes
+	</Directory>
+</VirtualHost>
+

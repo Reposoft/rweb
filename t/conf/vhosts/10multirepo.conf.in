@@ -79,7 +79,7 @@
 	</Location>
 	
 	# Service URL rewrites
-	Include @ServerRoot@/conf/vhosts/repos-services.conf.include
+	Include @ServerRoot@/conf/services/repos-services.conf.include
 	
 	# WebDAV module config, normally predefined on production servers
 	DAVLockDB @ServerRoot@/hosts/multirepo/dav/DAVLockDB.bin
@@ -88,7 +88,7 @@
 	Alias /dav @ServerRoot@/hosts/multirepo/dav/files/
 	RewriteLog "@ServerRoot@/logs/multirepo-rewrite.log" 
 	RewriteLogLevel 4
-	Include @ServerRoot@/conf/vhosts/dav.conf.include
+	Include @ServerRoot@/conf/services/dav.conf.include
 	
 	# Image transforms repository
 	<Location /repos-thumbs>
