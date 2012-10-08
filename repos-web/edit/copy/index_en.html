@@ -43,14 +43,14 @@ Select "delete the original" to make this a move operation.</p>
 		<label for="moveyes">operation</label>
 		<!--{if $file,isRevisionRequested}-->
 			<input id="moveno" name="move" type="radio" value="0" checked="checked"/> Copy (historical&nbsp;revision&nbsp;can&nbsp;not&nbsp;be&nbsp;deleted)
-			<input id="moveyes" name="move" type="radio" value="1" disabled="disabled"/> Move 
+			<input id="moveyes" name="move" type="radio" value="1" disabled="disabled"/> Move / Rename
 			<input id="movehidden" name="move" type="hidden" value="0" />			
 		<!--{elseif $file,isWriteAllow}-->
 			<input id="moveno" name="move" type="radio" value="0" checked="checked" onchange="setMove(!this.checked)" /> Copy
-			<input id="moveyes" name="move" type="radio" value="1" onchange="setMove(this.checked)"/> Move 
+			<input id="moveyes" name="move" type="radio" value="1" onchange="setMove(this.checked)"/> Move / Rename 
 		<!--{else}-->
 			<input id="moveno" name="move" type="radio" value="0" checked="checked"/> Copy (original&nbsp;is&nbsp;locked)
-			<input id="moveyes" name="move" type="radio" value="1" disabled="disabled"/> Move 
+			<input id="moveyes" name="move" type="radio" value="1" disabled="disabled"/> Move / Rename
 			<input id="movehidden" name="move" type="hidden" value="0" />
 		<!--{/if}-->
 	</p>	
