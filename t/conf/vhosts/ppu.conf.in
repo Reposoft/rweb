@@ -1,3 +1,5 @@
+
+# APACHE_TEST_CONFIG_ORDER 3
 <VirtualHost ppu>
 	DocumentRoot @ServerRoot@/../../../Chalmers/
 

@@ -8,6 +8,7 @@
 # and edit the hosts file of the client
 # Then try the shutdown command from ./TEST -stop
 
+# APACHE_TEST_CONFIG_ORDER 10
 <VirtualHost cms>
 	# the server name added by Apache::Test sets correct SelfRoot in repos.properties.php
 
