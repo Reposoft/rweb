@@ -93,7 +93,7 @@ $supportedExtensions = explode('|', 'jpg|png|gif'
 		.'|cgm' // users that need CGM must install delegate RalCGM for ImageMagick or GraphicsMagick
 		.'|ai' // some adobe formats are actually pdf or postscript
 		.'');
-if (!in_array($file->getExtension(), $supportedExtensions)) {
+if (!in_array(strtolower($file->getExtension()), $supportedExtensions)) {
 	// TODO use a different image? This error will be common with the new trial-and-error thumbnailing approach.
 	handleError(415, $file->getExtension() . ' not a supported format', 'error.png', 'HTTP/1.1 415 Unsupported Media Type');
 }
