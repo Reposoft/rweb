@@ -12,8 +12,12 @@ $.fn.reposDetailsTarget = function(options) {
 		 */
 		container: '.contentdetails',
 		error: function(req) {
-			alert('Details load error ' + 
+			if (!req.status) { // probably aborted because of page leave
+				window.logger && logger.info('details load interrupted with status', req.status);
+			} else {
+				alert('Details load error ' + 
 					(typeof req == 'undefined' ? '' : req.status));
+			}
 		}
 	}, options);
 	
