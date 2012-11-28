@@ -22,12 +22,10 @@ function setMove(move) {
 </div>
 <div id="intro">
 <h1>Copy, move, rename</h1>
-<p>Make a copy of the {=$file,kind2} at a new location in the repository. 
-{=if not $file,isRevisionRequested}Select "delete the original" to make this a move operation.{=/if}
+<p>Make a copy of the {=if $file,isRevisionRequested}historical{=/if} {=$file,kind2} to a new location in the repository, optionally deleting the original. 
 </p>
 {=if not $file,isWritable} <p>You have read access only. You can only copy the file.</p>
-{=elseif $file,isLockedByThisUser} <p>The file is currently <strong>locked</strong> by you, so other users can not edit it.
-Select "delete the original" to make this a move operation.</p>
+{=elseif $file,isLockedByThisUser} <p>The file is currently <strong>locked</strong> by you, so other users can not edit it.</p>
 {=elseif $file,isLockedBySomeoneElse} <p>The file is currently <strong>locked</strong> by 
 <span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}. You can only copy the file.</p>
 {=else}
