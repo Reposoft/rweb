@@ -15,10 +15,16 @@ if (isRequestService()) {
 	exit;
 }
 
+$hint = '';
+
+if (isset($_SERVER['PHP_AUTH_USER']) && preg_match('/[A-Z]/', $_SERVER['PHP_AUTH_USER'])) {
+	$hint = ' <br />Note: you have upper case letters in username which is disallowed on many servers.';
+}
+
 // should be able to view this page without a login
 if (!isRepositoryUrl($url)) {
 	$p->showErrorNoRedirect(
-		'Access denied to URL '.$url,
+		'Access denied to URL '.$url.'. '.$hint,
 		'403 Forbidden');
 	exit;
 }
@@ -43,13 +49,15 @@ if ($userWantsStartpage) {
 	header('Location: '.$startpage);
 }
 
+if ($near != $url) {
+	$hint .= ' <br />The nearest parent folder that you have access to is <a href="'.$near.'">'.$near.'</a>.';
+}
+
 // if user is authorized to one of the parent folders in the repository, show a link
 $p->showErrorNoRedirect('
-Your user account does not have access rights to URL '.$url.'.
+Your user account does not have access rights to URL '.$url. '.
 '
-.($near==$url ? '' :
-' The nearest parent folder that you have access to is <a href="'.$near.'">'.$near.'</a>.'
-)
+.$hint
 ,'Access Denied');
 
 ?>
