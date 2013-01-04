@@ -233,11 +233,26 @@ Repos.isRevisionRequested = function() {
  * Can be any revision, always >=getRevision().
  * Boolean null if no revision requested.
  * This implementation does not support revisions such as HEAD or {date}.
+ * Reads operative revision if there is both p and r, but of course the getTarget is for peg.
  * TODO is this same as working/entry revision in svn info?
  */
 Repos.getRevisionRequested = function() {
-	var m = (/[?&](rev|p)=(\d+)/).exec(window.location.search);
-	return m && m[2];
+	// result is safely cacheable as long as we get it from location.search
+	var c = Repos.getRevisionRequested; 
+	if (c.hasOwnProperty('_peg')) {
+		return c._rev || c._peg;
+	}
+	c._peg = null;
+	var re = /[?&](rev|p|r)=(\d+)/g;
+	var m;
+	while ((m = re.exec(window.location.search)) !== null) {
+		if (m[1] == 'r') {
+			c._rev = m[2];
+		} else {
+			c._peg = m[2];
+		}
+	};
+	return c._rev || c._peg;
 };
 
 /**
