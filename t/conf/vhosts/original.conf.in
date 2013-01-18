@@ -1,5 +1,5 @@
 
-# APACHE_TEST_CONFIG_ORDER -150
+# APACHE_TEST_CONFIG_ORDER 20
 <VirtualHost original>
 	# the server name added by Apache::Test sets correct SelfRoot in repos.properties.php
 

@@ -1,0 +1,32 @@
+
+# APACHE_TEST_CONFIG_ORDER 30
+<VirtualHost lean>
+	DocumentRoot @ServerRoot@/../../../Chalmers/
+
+	<Directory @ServerRoot@/../../../Chalmers/>
+		Allow from all
+		Options Indexes
+	</Directory>
+
+	
+	<Location /trac>
+		SetHandler mod_python
+		PythonInterpreter main_interpreter
+		PythonHandler trac.web.modpython_frontend
+		# For a single project
+		#PythonOption TracEnv /var/trac/myproject
+		# For multiple projects
+		PythonOption TracEnvParentDir @ServerRoot@/hosts/lean/trac
+		# For the index of multiple projects
+		#PythonOption TracEnvIndexTemplate /srv/www/htdocs/trac/project_list_template.html
+		# A space delimited list, with a "," between key and value pairs.
+		#PythonOption TracTemplateVars key1,val1 key2,val2
+		# Useful to get the date in the wanted order
+		#PythonOption TracLocale sv_SE.UTF8
+		# See description above
+		#PythonOption TracUriRoot /projects/myproject
+
+	</Location>
+
+</VirtualHost>
+
