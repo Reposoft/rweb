@@ -390,6 +390,9 @@ ul.repostree {
 #commandbar #listrecursive {
 	background-image: url('commands/24x24/listrecursive.png');
 }
+#commandbar .listthumbs {
+	background-image: url('commands/24x24/listthumbs.png');
+}
 #commandbar #repostree {
 	background-image: url('commands/24x24/tree.png');
 }
