@@ -20,7 +20,6 @@ Repos.service('open/file/', function() {
 
 Repos.linehistory = {
 	show: function(highlighted, xml) {
-		console.log(highlighted, xml);i
 		var list = highlighted;
 		var lines = [];
 		$('.line', list).each(function() {
