@@ -77,11 +77,13 @@ if (!isset($reposGraphicsTransforms[$tf])) {
 }
 $transformClass = $reposGraphicsTransforms[$tf];
 $transform = new $transformClass($file);
-if (!$transform->getWidth()) {
-	trigger_error("Graphics transform $gt is invalid, width not set", E_USER_ERROR);
-}
-if (!$transform->getHeight()) {
-	trigger_error("Graphics transform $gt is invalid, height not set", E_USER_ERROR);
+if (!method_exists($transform,'getCustomCommand')) {
+	if (!$transform->getWidth()) {
+		trigger_error("Graphics transform $tf is invalid, width not set", E_USER_ERROR);
+	}
+	if (!$transform->getHeight()) {
+		trigger_error("Graphics transform $tf is invalid, height not set", E_USER_ERROR);
+	}
 }
 $thumbtype = $transform->getOutputFormat();
 
@@ -109,7 +111,11 @@ if ($file->getExtension() == 'cgm') {
 $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 
 // create the ImageMagick/GraphicsMagick command
-$convert = $convert . ' ' . getThumbnailCommand($transform, $file->getExtension(), $tempfile);
+if (method_exists($transform,'getCustomCommand')) {
+	$convert = $transform->getCustomCommand($file->getExtension(), $tempfile);
+} else {
+	$convert = $convert . ' ' . getThumbnailCommand($transform, $file->getExtension(), $tempfile);
+}
 
 $o = new SvnOpen($temporg ? 'export' : 'cat');
 

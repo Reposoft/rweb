@@ -5,7 +5,8 @@ $reposGraphicsTransforms = array(
 	'tiny' => 'ReposGraphicsTransformTiny',
 	'thumb' => 'ReposGraphicsTransformThumb',
 	'preview' => 'ReposGraphicsTransformPreview',
-	'screen' => 'ReposGraphicsTransformScreen'
+	'screen' => 'ReposGraphicsTransformScreen',
+	'extract' => 'ReposGraphicsTransformExtract'
 );
 
 /**
@@ -110,6 +111,27 @@ class ReposGraphicsTransformScreen extends ReposGraphicsTransformBase {
 
 	function getHeight() {
 		return 720;
+	}
+
+}
+
+class ReposGraphicsTransformExtract extends ReposGraphicsTransformBase {
+
+	function getOutputFormat() {
+		// jpeg is generally smaller than png but graphicsmagick produced some invalid images for line art in jpg
+		if (preg_match('/^pdf$/i', $this->source->getExtension())) {
+			return 'pdf';
+		}
+		handleError(0, 'Operation "extract" only supported for format pdf');
+	}
+	
+	function getCustomCommand($extension, $tempfile) {
+		if (!isset($_REQUEST['page'])) {
+			handleError(0, 'Missing page parameter for extract operation');
+		}
+		$page = $_REQUEST['page'];
+		unset($_REQUEST['page']); // disable default page handling
+		return 'pdftk - cat '.$page.' output "'.$tempfile.'"';
 	}
 
 }
