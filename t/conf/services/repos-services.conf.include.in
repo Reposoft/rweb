@@ -23,10 +23,10 @@ RewriteCond %{IS_SUBREQ} !=true
 # Note that service identifiers must not be substrings of each other
 
 #RewriteCond		%{QUERY_STRING}		^rweb=([^&]+)|.*&rweb=([^&]+)
-#RewriteRule		^(/svn/.*)$			ajp://127.0.0.1:8009/cms/rweb/%1$1 [P,L]
+#RewriteRule		^(/svn/.*)$			ajp://127.0.0.1:8009/cms/rweb/op/%1$1 [P,L]
 
 #RewriteCond		%{REQUEST_METHOD}	=GET
-#RewriteRule		^(/svn/.*/)$		ajp://127.0.0.1:8009/cms/browse$1 [P,L]
+#RewriteRule		^(/svn/.*/)$		ajp://127.0.0.1:8009/cms/rweb/browse$1 [P,L]
 
 # Details
 RewriteCond		%{QUERY_STRING}		^rweb=details|.*&rweb=details
