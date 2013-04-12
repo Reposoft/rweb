@@ -19,13 +19,13 @@ function reposExportZip(/*SvnOpenFile*/ $folder) {
 	// TODO make use of peg revision, this logic fails for folder with revision specified that is no longer in HEAD
 	// TODO consider using the same as SvnOpenFile->_specifyUrlAndRev
 	$export->addArgRevision($folder->getRevision());
-	$export->addArgUrl($folder->getUrl());
+	$export->addArgUrl($folder->getUrlNoquery());
 	$export->addArgPath($tmpe);
 	// set max time for this phase
 	//set_time_limit('max_execution_time', 300);
 	set_time_limit(300);
 	if ($export->exec()) {
-		trigger_error('Export of folder fialed. Can not create zip for download.', E_USER_ERROR);
+		trigger_error('Export of folder failed. Can not create zip for download.', E_USER_ERROR);
 	}
 	
 	// open archive
