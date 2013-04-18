@@ -131,6 +131,15 @@ td.filesize {
 .folder.historical {
 	color: #4D3F2B;
 }
+.status {
+	padding-left: .1em;
+	padding-right: .1em;
+	border: 1px dotted #bbb;
+	border-left: 5px solid #ccc;
+}
+.status-Released { border-left-color: #ada; }
+.status-Obsolete { border-left-color: #daa; }
+.status-In_Translation { border-left-color: #cca; }
 /* elements to get user's attention  */
 .error, .warning, .note {
 	padding-left: 26px;
