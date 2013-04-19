@@ -38,7 +38,7 @@ function autoFillFilename(path) {
 			});
 	} else {
 		enableBased();
-		$(button).attr('checked','checked').trigger('change');
+		$(button).prop('checked',true).trigger('change');
 		$('body').say({
 			title:'autodetect file revision',
 			text:'Automatically selected &quot;based on version&quot; '+rev+', because your filename ends with (r'+rev+').'
@@ -75,7 +75,7 @@ function hideBased() {
 	var val = $("input[name='fromrev']:checked", org).val();
 	if (val && val != 'HEAD') enableBased();
 	// make sure something is always selected, even after back button click (sometimes in firefox fromrev has no value)
-	if (!val) $('#fromrevHEAD').attr('checked','checked');
+	if (!val) $('#fromrevHEAD').prop('checked',true);
 
 	check.change(function() {
 		if ($(this).is(':checked')) {
@@ -108,7 +108,7 @@ function enableBased() {
 	});
 
 	// as long as there is a checkbox for this we must make sure it is checked if enabled programmatically
-	$("input[name='tempcheckbox']").attr('checked','checked');
+	$("input[name='tempcheckbox']").prop('checked',true);
 }
 
 })();
