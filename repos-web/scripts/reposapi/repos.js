@@ -168,12 +168,14 @@ Repos.getTarget = function(context) {
 	// new shortcut, until all calls send proper context
 	if (typeof context == 'undefined' && Repos.targetOverride) return Repos.targetOverride;
 	// target for this page
-	return Repos.getMeta('target');
+	var t = Repos.getMeta('target');
+	if (t == '//') t = '/';
+	return t;
 };
 
 /**
  * Uses meta value by default, although that storage method
- * mith be deprecated with HTML5.
+ * might be deprecated with HTML5.
  * 
  * If a context is given the value from asyncService
  * will be returned. If there is no such value,
