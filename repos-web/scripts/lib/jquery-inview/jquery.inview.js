@@ -106,6 +106,13 @@
   $(w).bind("scroll resize", function() {
     viewportSize = viewportOffset = null;
   });
+  
+  // IE < 9 scrolls to focused elements without firing the "scroll" event
+  if (!documentElement.addEventListener && documentElement.attachEvent) {
+    documentElement.attachEvent("onfocusin", function() {
+      viewportOffset = null;
+    });
+  }
 
   // Use setInterval in order to also make sure this captures elements within
   // "overflow:scroll" elements or elements that appeared in the dom tree due to
