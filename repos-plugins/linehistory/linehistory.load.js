@@ -5,17 +5,18 @@ Repos.service('open/file/', function() {
 	// must use explicit revision number to get matching blame
 	var rev = Repos.getRevision();
 	var command = $('<a id="linehistory" href="#">show line history</a>').appendTo('#commandbar');
-	command.toggle(function() {
+	command.click(function() {
+		if (!command.is('.active')) {
 			var element = $('.syntaxhighlighter:first .lines');
 			// trust transparent @base support
 			var blame = $.get(Repos.getWebapp() + 'open/blame/?target=' + encodeURI(target), // need API method for this too
 				{}, function(xml) { Repos.linehistory.show(element, xml); }, 'xml');
-			command.text('hide line history');
-		},function() {
+			command.addClass('active').text('hide line history');			
+		} else {
 			$('.linehistory').remove();
-			command.text('show line history');
-		});
-
+			command.removeClass('active').text('show line history');			
+		}
+	});
 });
 
 Repos.linehistory = {

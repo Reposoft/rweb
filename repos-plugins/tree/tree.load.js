@@ -49,12 +49,14 @@ $.fn.reposTree = function( options ) {
 				// enable expansion
 				var id = Math.random().toString().substr(2);
 				$('<ul/>').attr('id', id).appendTo(this);
-				$(this).toggle(function() {
+				$(this).click(function() {
 					if (li.is('.loading')) return;
-					li.addClass('loading');
-					expand(id, target);
-				}, function() {
-					collapse(id, target);
+					if (li.is('.expanded')) {
+						collapse(id, target);
+					} else {
+						li.addClass('loading');
+						expand(id, target);
+					}
 				});
 				if (settings.autoexpand) a.trigger('click');
 				// Indicate which element would expand if a click is done, tricky because of nested structure
@@ -221,12 +223,14 @@ Repos.service('index/', function() {
 		a.attr('title', document.title); // the suggested bookmark name
 		return;
 	}
-	a.toggle(function() {
+	a.click(function() {
 		if (!tree) tree = reposTreeIframe();
-		tree.show();
-		$(this).html('hide');
-	},function() {
-		tree.hide();
-		$(this).html('tree');
+		if (tree.is(':visible')) {
+			tree.hide();
+			$(this).html('tree');
+		} else {
+			tree.show();
+			$(this).html('hide');
+		}
 	});
 });
