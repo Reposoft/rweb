@@ -25,6 +25,10 @@ $.fn.reposDetailsTarget = function(options) {
 		return $('.index').is('.view-list');
 	};
 	
+	var isLoading = function() {
+		return $(settings.container).is('.loading');
+	}
+	
 	/**
 	 * Adds visual indications and/or event handling to activate details loading.
 	 * @param {jQuery} target The element(s) for which to allow details opened
@@ -36,6 +40,7 @@ $.fn.reposDetailsTarget = function(options) {
 			var row = a.parent();
 			var yes = function(ev) {
 				if (!isActive) return;
+				if (ev.type != 'click' && isLoading()) return; 
 				var current = $('.browsedetail'); 
 				if (row.is(ev.target) && !row.is(current)) {
 					current.removeClass('browsedetail');
@@ -139,10 +144,9 @@ $.fn.reposDetailsTarget = function(options) {
 		var topscroll = $(document).scrollTop();
 		container.css('opacity', '.3').css('margin-top', topscroll > topstart ? Math.floor(topscroll - topstart + 10) : 0);
 		if (container.is(':empty')) {
-			container.html('<img border="0" src="/repos-web/style/loading.gif"/>'); // need to get dimensions
-		} else {
-			container.addClass('loading');
+			container.html('<img border="0" src="/repos-web/style/loading.gif" style="visibility:hidden;"/>'); // need to get dimensions
 		}
+		container.addClass('loading');
 		reposDetailsLoad(href, function(html) {
 			container.css('opacity', 'inherit').removeClass('loading');
 			reposDetailsInsert(html, container);
