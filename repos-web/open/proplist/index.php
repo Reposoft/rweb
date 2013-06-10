@@ -34,6 +34,7 @@ $tExec = microtime(true);
 
 $output = $cmd->getOutput(); // Currently not possible to stream command output directly to SAX parser
 header('Content-Type: text/plain');
+header('Cache-Control: max-age=0, must-revalidate'); // IE9 does too aggressive caching by default in AJAX requests
 echo '{';
 echo '"tInit": '.($tInit - $tStart).",\n";
 echo '"tExec": '.($tExec - $tInit).",\n";

@@ -31,6 +31,7 @@ $json = getListJson($url, $rev);
 
 // javascript output
 header('Content-Type: text/plain');
+header('Cache-Control: max-age=0, must-revalidate'); // IE9 does too aggressive caching by default in AJAX requests
 
 // second part of the script is printed if there is a selector
 if (!isset($_GET['selector'])) {
