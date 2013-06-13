@@ -96,9 +96,9 @@ You can not rename this file.</p>
   <!--{/if}-->
   <!--{foreach from=$customfields key=fname item=fval name=customfield}-->
   <p id="custom{=$smarty.foreach.customfield.index}">
-    <label for="custom_{=$fname}">{=$fname}</label>
+    <label for="custom_{=$fname}">{=$fname|substr:5}</label>
     <input type="checkbox" name="{=$fname}" value="{=$fval}" checked="checked"/>
-  	<input type="text" disabled="disabled" value="{=$fval}"/>
+    <input type="text" disabled="disabled" value="{=$fval}"/>
   </p>
   <!--{/foreach}-->  
   <p>
