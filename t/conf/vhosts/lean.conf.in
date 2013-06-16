@@ -1,4 +1,3 @@
-
 # APACHE_TEST_CONFIG_ORDER 30
 <VirtualHost lean>
 	DocumentRoot @ServerRoot@/../../../Chalmers/
@@ -8,25 +7,119 @@
 		Options Indexes
 	</Directory>
 
+	# Repos 
+	Alias /repos-web /home/solsson/workspace/repos/repos-web/
+	Alias /repos-plugins /home/solsson/workspace/repos/repos-plugins/
+	SetEnv REPOS_WEBAPP /repos-web/
+	SetEnv REPOS_REPO_PARENT /testsvn
 	
+	<Location /testsvn>
+		DAV svn
+		SVNParentPath /home/solsson/Chalmers/_testsvn
+		SVNIndexXSLT "/repos-web/view/repos.xsl"
+		SVNListParentPath on
+	</Location>
+
 	<Location /trac>
 		SetHandler mod_python
 		PythonInterpreter main_interpreter
 		PythonHandler trac.web.modpython_frontend
-		# For a single project
-		#PythonOption TracEnv /var/trac/myproject
-		# For multiple projects
 		PythonOption TracEnvParentDir @ServerRoot@/hosts/lean/trac
-		# For the index of multiple projects
-		#PythonOption TracEnvIndexTemplate /srv/www/htdocs/trac/project_list_template.html
-		# A space delimited list, with a "," between key and value pairs.
-		#PythonOption TracTemplateVars key1,val1 key2,val2
-		# Useful to get the date in the wanted order
-		#PythonOption TracLocale sv_SE.UTF8
-		# See description above
-		#PythonOption TracUriRoot /projects/myproject
-
 	</Location>
+
+
+# Apache2 configuration for Subversion Service Layer (C) 2007-2012 www.repos.se
+# Included in config per host, not per repository (because rewrite behaves differently in Location)
+
+# Hard coded settings:
+# Parent path = /testsvn
+
+RewriteEngine	on
+
+# Repos parameter defaults, same as in repos.properties.php
+# so they can be used in rules even if not set in host
+RewriteCond	%{REPOS_WEBAPP}   ^$
+RewriteRule .* - [E=REPOS_WEBAPP:/repos-web/]
+
+# Prevent multiple layers of redirects
+RewriteCond %{IS_SUBREQ} !=true
+
+# Until Repos Web pages support links between services, rules do R instead of PT
+# Note that redirect happens before authentication
+# For PT the repository might need to allow non-SSL access from localhost (?)
+
+# --- Subversion service layer ---
+# Services using ?rweb=[service]
+# Note that service identifiers must not be substrings of each other
+
+#RewriteCond		%{QUERY_STRING}		^rweb=([^&]+)|.*&rweb=([^&]+)
+#RewriteRule		^(/testsvn/.*)$			ajp://127.0.0.1:8009/cms/rweb/op/%1$1 [P,L]
+
+#RewriteCond		%{REQUEST_METHOD}	=GET
+#RewriteRule		^(/testsvn/.*/)$		ajp://127.0.0.1:8009/cms/rweb/browse$1 [P,L]
+
+# Details
+RewriteCond		%{QUERY_STRING}		^rweb=details|.*&rweb=details
+RewriteRule		^/testsvn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/?base=$1&target=$2 [R,QSA,L]
+
+# History (log), uses absolute URLs in links so PT is already supported
+RewriteCond		%{QUERY_STRING}		^rweb=history|.*&rweb=history
+RewriteRule		^/testsvn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/log/?base=$1&target=$2 [PT,QSA,L]
+
+# List
+RewriteCond		%{QUERY_STRING}		^rweb=list|.*&rweb=list
+RewriteRule		^/testsvn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/list/?base=$1&target=$2 [R,QSA,L]
+
+# Json, list for folders, details for files, PT supported because there are no links
+RewriteCond		%{QUERY_STRING}		^rweb=json|.*&rweb=json
+RewriteRule		^/testsvn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/json/?base=$1&target=$2 [PT,QSA,L]
+
+# Proplist Json, PT supported because there are no links
+RewriteCond		%{QUERY_STRING}		^rweb=proplist|.*&rweb=proplist
+RewriteRule		^/testsvn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/proplist/?base=$1&target=$2 [PT,QSA,L]
+
+# Propget, suffixed with property name (or just add a propname param), returns text/plain only
+RewriteCond		%{QUERY_STRING}		^rweb=propget([\w:-]*)|.*&rweb=propget([\w:-]*)
+RewriteRule		^/testsvn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/propget/?base=$1&target=$2&propname=%1%2 [PT,QSA,L]
+
+# View in Repos
+RewriteCond		%{QUERY_STRING}		^rweb=view|.*&rweb=view
+RewriteRule		^/testsvn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/file/?base=$1&target=$2 [R,QSA,L]
+
+# Diff
+RewriteCond		%{QUERY_STRING}		^rweb=diff|.*&rweb=diff
+RewriteRule		^/testsvn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}open/diff/?base=$1&target=$2 [R,QSA,L]
+
+# --- Edit operations, convenient access from index ---
+
+# Edit overview, collection of services, not supporting POST
+RewriteCond		%{QUERY_STRING}		^rweb=edit|.*&rweb=edit
+RewriteRule		^/testsvn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/?base=$1&target=$2 [R,QSA,L]
+
+# Arbitrary edit service, POSTable
+# "text" is just a plaintext form, shoud be posted to "upload"
+# "upload" creates new file when on folder, new version when on file
+RewriteCond		%{QUERY_STRING}		^rweb=e\.(\w+)|.*&rweb=e\.(\w+)
+RewriteRule		^/testsvn/([^/]+)(/.*)$	%{ENV:REPOS_WEBAPP}edit/%1%2/?base=$1&target=$2 [PT,QSA,L]
+
+# --- Transforms ---
+# All these services must start with t, names must be word characters a-z0-9_
+
+# Repos thumbnails plugin, "tothumb" etc, p and r are supported, for specific page append comma and number to transform name
+RewriteCond		%{QUERY_STRING}		^rweb=t\.(\w+)(?:,(\d+))?|.*&rweb=t\.(\w+)(?:,(\d+))?
+RewriteRule		^/testsvn/([^/]+)(/.*)$	/repos-plugins/thumbnails/convert/?base=$1&target=$2&tf=%1%3&page=%2%4 [PT,QSA,L]
+
+# --- Post processing, should apply to both R and PT ---
+
+# Until Repos Web understands peg and operative, set 'rev' to 'r' or 'p'
+RewriteCond		%{QUERY_STRING}		\?r=(\d+)|&r=(\d+)
+RewriteCond 	%{QUERY_STRING}		!^rev=|.*&rev=
+RewriteRule 	^/repos-web/(.*)$	%{ENV:REPOS_WEBAPP}$1?rev=%1%2 [PT,QSA]
+RewriteCond		%{QUERY_STRING}		\?p=(\d+)|&p=(\d+)
+RewriteCond		%{QUERY_STRING}		!\?r=(\d+)|&r=(\d+)
+RewriteCond 	%{QUERY_STRING}		!^rev=|.*&rev=
+RewriteRule 	^/repos-web/(.*)$	%{ENV:REPOS_WEBAPP}$1?rev=%1%2 [PT,QSA]
+
 
 </VirtualHost>
 
