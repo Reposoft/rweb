@@ -1,0 +1,148 @@
+# APACHE_TEST_CONFIG_ORDER 40
+
+<VirtualHost rweb>
+	# the server name added by Apache::Test sets correct SelfRoot in repos.properties.php
+
+	# Support ssl proxy for subversion
+	RequestHeader edit Destination ^https http early
+	# Emulate env from SSLEngine on
+	SetEnvIf X-Forwarded-Server "^@ServerName@$" HTTPS=on 
+	
+	SetEnv REPOS_TEST_ALLOW_RESET on
+
+	# needed because currently access file path is used for test setup to get host structure folder
+	# But commented out to test direct authentication with repository root in open/start/
+	#SetEnv REPOS_ACCESS_FILE @ServerRoot@/hosts/original/admin/repos-access
+
+	# during development browsers should revalidate on each request for static resources too
+	#Header add Cache-Control "max-age=0, must-revalidate"
+
+	# Install repos components
+	#Alias /repos-web @ServerRoot@/../repos-web
+	#Alias /repos-admin @ServerRoot@/../repos-admin
+	Alias /repos-plugins @ServerRoot@/../repos-plugins
+	Alias /repos-test @ServerRoot@/../repos-test
+
+	# Rweb servlet container
+	ProxyPass /repos-web ajp://127.0.0.1:8009/repos-web
+	ProxyPass /repos-plugins ajp://127.0.0.1:8009/repos-plugins
+	# Future single rewrite target
+	ProxyPass /rweb ajp://127.0.0.1:8009/rweb
+
+	# Service URL rewrites
+	#Include @ServerRoot@/conf/services/repos-services.conf.include
+	RewriteEngine	on
+	RewriteCond		%{QUERY_STRING}		^rweb=|.*&rweb=
+	RewriteRule		^(/svn/.*)	ajp://127.0.0.1:8009/repos-web/v$1 [P,L]
+
+	# Repos error pages
+	ErrorDocument 400 /repos-web/errors/400/
+	ErrorDocument 401 /repos-web/errors/401/
+	ErrorDocument 403 /repos-web/errors/403/
+	ErrorDocument 404 /repos-web/errors/404/
+	ErrorDocument 500 /repos-web/errors/500/
+
+	# CMS webapp proxy, has its own access control
+	ProxyPass /cms ajp://127.0.0.1:8009/cms
+	ProxyPreserveHost On
+
+	# Solr proxy, access control can be a Location block, be sure to protect 8009 in firewall
+	ProxyPass /solr ajp://127.0.0.1:8009/solr
+	ProxyPreserveHost On
+
+	# Master repositories 
+	# Traling slash in location required for SVNParentPath+AuthSVNAccessFile
+	RedirectMatch ^(/svn)$ $1/
+	<Location /svn/>
+	
+		DAV svn
+		SVNAutoversioning on
+
+		SVNIndexXSLT "/repos-web/view/repos.xsl"
+
+		SVNParentPath @ServerRoot@/hosts/multirepo/svn
+		SVNListParentPath on
+
+		# Auth didn't work for this host for unknown reason
+		#AuthType Basic
+		#AuthName "repos test multirepo"
+		#AuthUserFile @ServerRoot@/hosts/multirepo/admin/repos-users
+		#Require valid-user
+
+		#AuthzSVNAccessFile @ServerRoot@/hosts/multirepo/admin/repos-access
+		#Satisfy Any
+		
+		# Svn module does not set caching behavior as expected for dynamic contents
+		Header add Cache-Control "max-age=0, must-revalidate"
+	</Location>
+	
+	# WebDAV module config, normally predefined on production servers
+	DAVLockDB @ServerRoot@/hosts/multirepo/dav/DAVLockDB.bin
+
+	# WebDAV area
+	Alias /dav @ServerRoot@/hosts/multirepo/dav/files/
+	RewriteLog "@ServerRoot@/logs/multirepo-rewrite.log" 
+	RewriteLogLevel 4
+	Include @ServerRoot@/conf/services/dav.conf.include
+	
+	# Image transforms repository
+	<Location /repos-thumbs>
+		DAV svn
+		# Transform service may use PUT to store thumbnails (because there is no simple svn overwrite without wc)
+		SVNAutoversioning on
+
+		SVNParentPath @ServerRoot@/hosts/multirepo/repos-thumbs
+		SVNListParentPath on
+
+		# Should be same authentication and authorization as main repository
+		AuthType Basic
+		AuthName "repos test multirepo"
+		AuthUserFile @ServerRoot@/hosts/multirepo/admin/repos-users
+		Require valid-user
+
+		#AuthzSVNAccessFile @ServerRoot@/hosts/multirepo/admin/repos-access
+		#Satisfy Any
+		
+		# Svn module does not set caching behavior as expected for dynamic contents
+		Header add Cache-Control "max-age=0, must-revalidate"
+		
+		# Create thumbnails on demand
+		ErrorDocument 404 /repos-plugins/thumbnails/convert/
+	</Location>
+
+</VirtualHost>
+
+##
+## SSL Virtual Host Context
+##
+## Should be combined with some logic to set HTTPS=on for proxied requests
+##
+<VirtualHost rweb-ssl>
+
+	# enable reverse proxying
+	ProxyRequests Off
+	<Proxy *>
+		Order deny,allow
+		Allow from all
+	</Proxy>
+
+	# proxy to non-ssl where the virtual hosts are defined, don't reverse proxy
+	RewriteEngine	on
+	# In Apacke::Test this requres that the conf.in file is read after multirepo	
+	RewriteRule	^(.*)$	http://@ServerName@:@rweb_port@$1 [P,L]
+
+	#   SSL Engine Switch:
+	#   Enable/Disable SSL for this virtual host.
+	SSLEngine on
+
+	#   Server Certificate:
+	#   Point SSLCertificateFile at a PEM encoded certificate.  If
+	#   the certificate is encrypted, then you will be prompted for a
+	#   pass phrase.  Note that a kill -HUP will prompt again.  Keep
+	#   in mind that if you have both an RSA and a DSA certificate you
+	#   can configure both in parallel (to also allow the use of DSA
+	#   ciphers, etc.)
+	SSLCertificateFile hosts/ssl/localhost.crt
+	SSLCertificateKeyFile hosts/ssl/localhost.key
+
+</VirtualHost>
