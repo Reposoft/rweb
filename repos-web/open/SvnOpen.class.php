@@ -50,6 +50,9 @@ function _svnopen_getSvnSwitches() {
  * @package open
  */
 function _svnFileIsWritable($url) {
+	if (isReposJava()) {
+		return getReposJavaBridge()->isWritable($url);
+	}
 	$r = new ServiceRequest($url);
 	$r->setCustomHttpMethod('LOCK');
 	// Use If-Match to make dummy request that does not cause an entry in the error log
@@ -71,6 +74,9 @@ function _svnFileIsWritable($url) {
  * @package open
  */
 function _svnFolderIsWritable($url) {
+	if (isReposJava()) {
+		return getReposJavaBridge()->isWritableFolder($url);
+	}	
 	// don't use lock (logs "Could not LOCK /testrepo/ due to a failed precondition")
 	//return _svnFileIsWritable($url);
 	$dummyName = '.repos_writable_check';

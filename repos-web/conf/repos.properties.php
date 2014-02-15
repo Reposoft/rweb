@@ -526,7 +526,17 @@ function isQuercus() {
  * @return boolean true if java integration is available
  */
 function isReposJava() {
-	return isEmbedded();	
+	return isQuercus();	
+}
+
+/**
+ * For isReposJava() runtime.
+ * Supports methods like getInfo(repositoryUrl, path).
+ * If there's any statefulness or caching this method hides that from callers, who just invoke the methods.
+ */
+function getReposJavaBridge() {
+	// using a static bridge to let rweb java handle the state
+	return java_class('se.repos.rweb.php.ReposPhpBridge');
 }
 
 /**

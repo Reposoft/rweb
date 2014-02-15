@@ -822,9 +822,7 @@ class SvnOpenFile {
 	 * @return array like the one returned from sax parsing (which is not supported in Quercus)
 	 */
 	function _readInfoJava() {
-		$bridge = java_class('se.repos.rweb.php.ReposPhpBridge');
-		$info = $bridge->getInfo($this->getRepository(), $this->getPath());
-		return $info;
+		return getReposJavaBridge()->getInfo($this->getRepository(), $this->getPath());
 	}
 	
 	/**
