@@ -823,7 +823,7 @@ class SvnOpenFile {
 	 */
 	function _readInfoJava() {
 		$bridge = java_class('se.repos.rweb.php.ReposPhpBridge');
-		$info = $bridge->getInfo('repo1', $this->path);
+		$info = $bridge->getInfo($this->getRepository(), $this->getPath());
 		return $info;
 	}
 	
