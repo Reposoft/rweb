@@ -818,10 +818,23 @@ class SvnOpenFile {
 	}
 	
 	/**
+	 * CMS service to read info.
+	 * @return array like the one returned from sax parsing (which is not supported in Quercus)
+	 */
+	function _readInfoJava() {
+		$bridge = java_class('se.repos.rweb.php.ReposPhpBridge');
+		$info = $bridge->getInfo('repo1', $this->path);
+		return $info;
+	}
+	
+	/**
 	 * Reads all file information with a 
 	 * @return array[String] metadata name=>value, empty array or array with only path if file does not exist
 	 */
 	function _readInfoSvn() {
+		if (isQuercus()) {
+			return $this->_readInfoJava();
+		}
 		// the reason we do 'list' and not 'info' is that 'info' does not contain file size
 		$info = new SvnOpen('info', true);
 		$this->_specifyUrlAndRev($info);
