@@ -167,7 +167,7 @@ class System {
 	function getApplicationTemp($subfolder=null) {
 		// Get temporary directory
 		$systemp = System::_getSystemTemp();
-		if (is_writable($systemp) == false) die ('Error. Can not write to temp foloder.');
+		if (is_writable($systemp) == false) die ('Error. Can not write to temp foloder "'.$systemp.'"');
 		// Create a repos subfolder, allow multiple repos installations on the same server
 		$appname = 'r'.trim(base64_encode(dirname(dirname(__FILE__))),'=');
 		$tmpdir = $systemp . $appname;
@@ -491,12 +491,17 @@ class System {
 		} elseif (getenv('TEMP')) {
 			$type = 'TEMP';
 			$tempdir = getenv('TEMP');
+		} elseif (isQuercus()) {
+			$type = 'java';
+			$tempdir = '/tmp'; // Shouldn't be too hard to use Quercus env or java env here instead
+			if (!is_dir($tempdir)) trigger_error("Unsupported platform for java php, no folder at $tempdir", E_USER_ERROR);
 		} else {
 			$type = 'tempnam';
 			// suggest a directory that does not exist, so that tempnam uses system temp dir
 			$doesnotexist = 'dontexist'.rand();
 			$tmpfile = tempnam($doesnotexist, 'emptytempfile');
-			if (strpos($tmpfile, $doesnotexist)!==false) trigger_error("Could not get system temp, got: ".$tmpfile);
+			if (strpos($tmpfile, $doesnotexist)!==false) trigger_error("Could not get system temp, got: ".$tmpfile, E_USER_ERROR);
+			if (!file_exists($tmpfile)) trigger_error("Failed to create temp file using $type", E_USER_ERROR);
 			$tempdir = dirname($tmpfile);
 			unlink($tmpfile);
 			if (strlen($tempdir)<4) trigger_error("Attempted to use tempnam() to get system temp dir, but the result is: $tempdir", E_USER_ERROR);
