@@ -516,6 +516,20 @@ function isRealUrl() {
 }
 
 /**
+ * @return boolean true if the current request is running in embedded hosting, i.e. with Quercus limitations
+ */
+function isQuercus() {
+	return strBegins($_SERVER['SERVER_SOFTWARE'], 'Apache PHP Quercus');
+}
+
+/**
+ * @return boolean true if java integration is available
+ */
+function isReposJava() {
+	return isEmbedded();	
+}
+
+/**
  * Enocdes a url for use as href,
  * does not replace URL metacharacters like /, ? and : (for port number).
  * In other words: escapes URL metacharacters, but only if they are not needed to browse to the URL

@@ -28,6 +28,16 @@ if (!function_exists('_command_env')) {
 }
 
 // the actual command execution, can be mocked
+if (isQuercus() && !function_exists('_command_run')) {
+	/**
+	 * Exec not working as expected on Quercus. Do we need to use proc_ if we want to get exit code?
+	 */
+	function _command_run($cmd, &$output) {
+		_command_env();
+		$output = shell_exec($cmd);
+		return 0;
+	}	
+}
 if (!function_exists('_command_run')) {
 	/**
 	 * @param String $cmd the complete command line
