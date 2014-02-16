@@ -36,11 +36,12 @@
 	RewriteRule		^(/svn/.*)	ajp://127.0.0.1:8009/repos-web/v$1 [P,L]
 
 	# Repos error pages
-	ErrorDocument 400 /repos-web/errors/400/
-	ErrorDocument 401 /repos-web/errors/401/
-	ErrorDocument 403 /repos-web/errors/403/
-	ErrorDocument 404 /repos-web/errors/404/
-	ErrorDocument 500 /repos-web/errors/500/
+	#was a source of error while developing repos-web for quercus
+	#ErrorDocument 400 /repos-web/errors/400/
+	#ErrorDocument 401 /repos-web/errors/401/
+	#ErrorDocument 403 /repos-web/errors/403/
+	#ErrorDocument 404 /repos-web/errors/404/
+	#ErrorDocument 500 /repos-web/errors/500/
 
 	# CMS webapp proxy, has its own access control
 	ProxyPass /cms ajp://127.0.0.1:8009/cms
