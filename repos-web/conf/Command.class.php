@@ -34,7 +34,7 @@ if (isQuercus() && !function_exists('_command_run')) {
 	 */
 	function _command_run($cmd, &$output) {
 		_command_env();
-		$output = shell_exec($cmd);
+		$output = explode("\n", trim(shell_exec($cmd)));
 		return 0;
 	}	
 }
