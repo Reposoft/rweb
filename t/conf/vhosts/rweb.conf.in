@@ -33,7 +33,7 @@
 	#Include @ServerRoot@/conf/services/repos-services.conf.include
 	RewriteEngine	on
 	RewriteCond		%{QUERY_STRING}		^rweb=|.*&rweb=
-	RewriteRule		^(/svn/.*)	ajp://127.0.0.1:8009/repos-web/v$1 [P,L]
+	RewriteRule		^(/svn/.*)	ajp://localhost:8009/repos-web/v1$1 [P,L]
 
 	# Repos error pages
 	#was a source of error while developing repos-web for quercus
