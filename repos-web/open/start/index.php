@@ -32,7 +32,7 @@ function repos_start_tryRepoRoot() {
 	// For status 401 ServiceRequest should transparently request authentication
 	// Repository access ok for user, redirect
 	if ($s->exec() == 200) {
-		header("Location: ".asLink($repo).'/?rweb=start');
+		header("Location: ".asLink($repo).'/');
 		exit;
 	}
 }
