@@ -274,7 +274,9 @@ class Upload {
 			}
 			fclose($to);
 			fclose($from);
-			unlink($current); // because we don't use move_uploaded_file anymore
+			if (!isReposJava()) { // removes uploaded tmp automatically
+				unlink($current); // because we don't use move_uploaded_file anymore
+			}
 		} else {
 			if ($n = $this->getOriginalFilename()) trigger_error("Could not access the uploaded file ", E_USER_ERROR);
 			Validation::error('A local file must be selected for upload');
