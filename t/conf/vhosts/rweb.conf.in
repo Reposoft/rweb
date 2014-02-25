@@ -7,6 +7,7 @@
 	RequestHeader edit Destination ^https http early
 	# Emulate env from SSLEngine on
 	SetEnvIf X-Forwarded-Server "^@ServerName@$" HTTPS=on
+	RequestHeader add X-Forwarded-Proto https env=HTTPS	
 	
 	SetEnv REPOS_TEST_ALLOW_RESET on
 
