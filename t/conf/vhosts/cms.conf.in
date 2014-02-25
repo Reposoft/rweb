@@ -73,6 +73,7 @@
 		Require valid-user
 
 		AuthzSVNAccessFile @ServerRoot@/hosts/multirepo/admin/repos-access
+		# though deprecated with CMS we have some * = r in the sample access file, meant to test public access
 		Satisfy Any
 		
 		# Svn module does not set caching behavior as expected for dynamic contents
@@ -87,6 +88,7 @@
 
 	# WebDAV area
 	Alias /dav @ServerRoot@/hosts/multirepo/dav/files/
+	# This has been here for a long time, but it might need to be outside vhost
 	RewriteLog "@ServerRoot@/logs/multirepo-rewrite.log" 
 	RewriteLogLevel 4
 	Include @ServerRoot@/conf/services/dav.conf.include

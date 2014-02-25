@@ -6,7 +6,7 @@
 	# Support ssl proxy for subversion
 	RequestHeader edit Destination ^https http early
 	# Emulate env from SSLEngine on
-	SetEnvIf X-Forwarded-Server "^@ServerName@$" HTTPS=on 
+	SetEnvIf X-Forwarded-Server "^@ServerName@$" HTTPS=on
 	
 	SetEnv REPOS_TEST_ALLOW_RESET on
 
@@ -18,30 +18,36 @@
 	#Header add Cache-Control "max-age=0, must-revalidate"
 
 	# Install repos components
-	#Alias /repos-web @ServerRoot@/../repos-web
-	#Alias /repos-admin @ServerRoot@/../repos-admin
+	# Can be used for static content even as services are proxied through ajp
+	Alias /repos-web @ServerRoot@/../repos-web
 	Alias /repos-plugins @ServerRoot@/../repos-plugins
-	Alias /repos-test @ServerRoot@/../repos-test
 
-	# Rweb servlet container
-	ProxyPass /repos-web ajp://127.0.0.1:8009/repos-web
-	ProxyPass /repos-plugins ajp://127.0.0.1:8009/repos-plugins
-	# Future single rewrite target
-	ProxyPass /rweb ajp://127.0.0.1:8009/rweb
-
-	# Service URL rewrites
+	# Service URL rewrites, no longer needed
 	#Include @ServerRoot@/conf/services/repos-services.conf.include
+	
+	# Note that Tomcat's AJP Connector must have URIEncoding="UTF-8"
 	RewriteEngine	on
+	
+	# Rweb servlet container, repos-web proxied using rewrite so we can add exception for error pages
+	#ProxyPass /repos-web ajp://127.0.0.1:8009/repos-web
+	# Plugins not packaged as webapp, will probably never be, better to remove any server-side pages
+	#ProxyPass /repos-plugins ajp://127.0.0.1:8009/repos-plugins
+	RewriteCond		%{REQUEST_URI}		!^/repos-web/errors/
+	RewriteRule		^/repos-web/(.*)	ajp://localhost:8009/repos-web/$1 [P,L]
+	
+	# Skipping subrequests here might be a good idea, to avoid internal dependency on the rewrites
+	RewriteCond		%{IS_SUBREQ}		^false$
 	RewriteCond		%{QUERY_STRING}		^rweb=|.*&rweb=
+	# Error pages must be produced within Apache or svn gets disrupted TODO not working here
 	RewriteRule		^(/svn/.*)	ajp://localhost:8009/repos-web/v1$1 [P,L]
 
 	# Repos error pages
 	#was a source of error while developing repos-web for quercus
-	#ErrorDocument 400 /repos-web/errors/400/
-	#ErrorDocument 401 /repos-web/errors/401/
-	#ErrorDocument 403 /repos-web/errors/403/
-	#ErrorDocument 404 /repos-web/errors/404/
-	#ErrorDocument 500 /repos-web/errors/500/
+	ErrorDocument 400 /repos-web/errors/400/
+	ErrorDocument 401 /repos-web/errors/401/
+	ErrorDocument 403 /repos-web/errors/403/
+	ErrorDocument 404 /repos-web/errors/404/
+	ErrorDocument 500 /repos-web/errors/500/
 
 	# CMS webapp proxy, has its own access control
 	ProxyPass /cms ajp://127.0.0.1:8009/cms
@@ -65,13 +71,13 @@
 		SVNListParentPath on
 
 		# Auth didn't work for this host for unknown reason
-		#AuthType Basic
-		#AuthName "repos test multirepo"
-		#AuthUserFile @ServerRoot@/hosts/multirepo/admin/repos-users
-		#Require valid-user
+		AuthType Basic
+		AuthName "repos test multirepo"
+		AuthUserFile @ServerRoot@/hosts/multirepo/admin/repos-users
+		Require valid-user
 
-		#AuthzSVNAccessFile @ServerRoot@/hosts/multirepo/admin/repos-access
-		#Satisfy Any
+		AuthzSVNAccessFile @ServerRoot@/hosts/multirepo/admin/repos-access
+		Satisfy Any
 		
 		# Svn module does not set caching behavior as expected for dynamic contents
 		Header add Cache-Control "max-age=0, must-revalidate"
