@@ -214,7 +214,13 @@ function getRepositoryDefault() {
  * @return boolean true if the current client uses SSL
  */
 function isSSLClient() {
-	return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
+	if (isset($_SERVER['HTTPS'])) {
+		return $_SERVER['HTTPS'] == 'on';
+	}
+	if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+		return true;
+	}
+	return false;
 }
 
 /**
@@ -372,6 +378,7 @@ function getSelfRoot() {
  */
 function getHostDefault() {
 	$url = 'http://' . $_SERVER['SERVER_NAME'];
+	// We can't handle both http and SSL on non-standard port because we need to be able to switch protocol between internal use and asLink
 	if (!isSSLClient() && isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT']!=80) {
 		$url .= ':'.$_SERVER['SERVER_PORT'];
 	}
