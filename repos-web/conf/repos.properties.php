@@ -518,8 +518,10 @@ function isRepositoryUrl($url) {
  * @return true if the current page is delivered from a "real url", i.e. a servicelayer rewrite
  */
 function isRealUrl() {
-	// false positives is better than false negatives because realurl links tend to work from anywhere
-	return !strBegins($_SERVER['SCRIPT_NAME'], $_SERVER['SCRIPT_URL']);
+	// For rewrite with QSA we can use the rweb parameter, for servlet filter we have no other choice because the original URI is not known by Quercus
+	return isset($_REQUEST['rweb']) ||
+		// false positives is better than false negatives because realurl links tend to work from anywhere
+		!strBegins($_SERVER['SCRIPT_NAME'], $_SERVER['SCRIPT_URL']);
 }
 
 /**
