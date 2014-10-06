@@ -33,6 +33,10 @@ function createNewFolder($name, $message) {
 	new NewFilenameRule('name', $parent->getValue());
 	// check required fields and process
 	Validation::expect('target', 'name', 'message');
+	if (strContains($name,"+")){
+		trigger_error("Name may not contain +.");
+		exit;
+	}
 	$template = Presentation::background();
 	$newurl = getTargetUrl().$name;
 	$tmp = System::getTempFolder('emptyfolders');
