@@ -33,6 +33,7 @@ if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 }
 
 if ($file->isFolder()) {
+	echo 'This service has been disabled.'; exit;
 	require dirname(__FILE__).'/zipfolder.php';
 	$zip = reposExportZip($file);
 	if ($zip === false) {
