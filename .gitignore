@@ -1,0 +1,23 @@
+# installed libs
+repos-web/lib/**/downloaded.tmp
+repos-web/lib/selenium/core
+repos-web/lib/selenium/selenium-core-*
+repos-web/lib/simpletest/simpletest*
+repos-web/lib/smarty/Smarty.tar
+repos-web/lib/smarty/cache/
+repos-web/lib/smarty/libs/
+repos-web/lib/syntaxhighlighter/sh/
+# apache test framework output
+t/TEST
+t/conf/apache_test_config.pm
+t/conf/extra.conf
+t/conf/httpd.conf
+t/conf/modperl_inc.pl
+t/conf/modperl_startup.pl
+t/conf/services/*.include
+t/conf/vhosts/*.conf
+t/htdocs/
+t/logs/
+# compiled js
+repos-web/scripts/head.js*
+
