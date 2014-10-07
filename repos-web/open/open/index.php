@@ -20,10 +20,14 @@ if ($file->isFolder()) {
 	exit;
 }
 
-header('Content-Type: '.$file->getType());
-header('Content-Length: '.$file->getSize());
-header('Content-Disposition: inline; attachment; filename="'.$file->getFilename().'"');
-
-$file->sendInline();
+if ($file->getType() == "text/html"){
+	header('Location: '.$file->url);
+	die();
+} else {
+	header('Content-Type: '.$file->getType());
+	header('Content-Length: '.$file->getSize());
+	header('Content-Disposition: inline; attachment; filename="'.$file->getFilename().'"');
+	$file->sendInline();
+}
 
 ?>
