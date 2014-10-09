@@ -58,6 +58,8 @@ function _svnFileIsWritable($url) {
 	// Use If-Match to make dummy request that does not cause an entry in the error log
 	// If the server does not understand this, we'll soon have locked files all over the repository
 	$r->setRequestHeader('If-Match', '"shouldnevermatch"');
+	// Apache 2.4 compatible
+	$r->setRequestHeader('If', '(<opaquelocktoken:000000000-0000-0000-0000-000000000000>)');
 	$r->exec();
 	if ($r->getStatus() == 412) return true;
 	if ($r->getStatus() == 403) return false;
