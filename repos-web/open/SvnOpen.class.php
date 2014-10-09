@@ -53,12 +53,17 @@ function _svnFileIsWritable($url) {
 // 	if (isReposJava()) {
 // 		return getReposJavaBridge()->isWritable($url);
 // 	}
+	// Temporarily assume write access for unauthenticated users on new servers (lean style)
+	// until we've found an access emthods that does not fail with "Lock token is in request, but no user name  [423, #160039]" 
+	if (!isLoggedIn() && isset($_SERVER['SERVER_SOFTWARE']) && strBegins($_SERVER['SERVER_SOFTWARE'],'Apache/2.4.')) {
+		return true;
+	}
 	$r = new ServiceRequest($url);
 	$r->setCustomHttpMethod('LOCK');
 	// Use If-Match to make dummy request that does not cause an entry in the error log
 	// If the server does not understand this, we'll soon have locked files all over the repository
 	$r->setRequestHeader('If-Match', '"shouldnevermatch"');
-	// Apache 2.4 compatible
+	// Apache 2.4 compatible (if a user is authenticated)
 	$r->setRequestHeader('If', '(<opaquelocktoken:000000000-0000-0000-0000-000000000000>)');
 	$r->exec();
 	if ($r->getStatus() == 412) return true;
