@@ -425,6 +425,7 @@ class Upload {
 	}
 	
 	/**
+	 * Duplicated to ../copy/index.php so if more operations need prop support we should extrac to reusable location.
 	 * @return {array(String)} arbitrary propery name to values 
 	 */
 	function getCustomProperties() {
