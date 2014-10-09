@@ -491,7 +491,7 @@ class System {
 		} elseif (getenv('TEMP')) {
 			$type = 'TEMP';
 			$tempdir = getenv('TEMP');
-		} elseif (isQuercus()) {
+		} elseif (function_exists('isReposJava') && isReposJava()) {
 			$type = 'java';
 			$tempdir = '/tmp'; // Shouldn't be too hard to use Quercus env or java env here instead
 			if (!is_dir($tempdir)) trigger_error("Unsupported platform for java php, no folder at $tempdir", E_USER_ERROR);
