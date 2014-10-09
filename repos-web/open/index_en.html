@@ -123,6 +123,7 @@ Repos Web alternatives for editing the file
 <p>
 Edit versioned metadata on this item.
 </p>
+{=if $file,authenticatedUser}
 {=if not $file,isLocked}
 <h3 class="edit"><a id="lock" href="../edit/lock/?target={=$target}">Lock</a></h3>
 <p>You can always lock a file to make it read-only for everyone else.</p>
@@ -130,6 +131,7 @@ Edit versioned metadata on this item.
 <h3 class="edit"><a id="unlock" href="../edit/unlock/?target={=$target}">Unlock</a></h3>
 <p>This file is locked by you. If you are not working with it,
 you can unlock it so that others are able to edit it.</p>
+{=/if}
 {=/if}
 <h3 class="edit"><a id="upload" href="../edit/upload/?target={=$target}">Upload new version</a></h3>
 <p>

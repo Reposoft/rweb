@@ -49,6 +49,7 @@
 	<input type="hidden" id="create" name="create" value="yes"/>
 	<!--{/if}-->
   </p>
+ <!--{if $isfile}-->
   {=if $file,isLockedByThisUser}
   <p>
   	 <label for="unlock">unlock at commit</label>
@@ -57,6 +58,7 @@
   	 <input type="hidden" id="lockcomment" name="lockcomment" value="{=$file,lockComment}"/>
   </p>
   {=/if}  
+ <!--{/if}-->
   <p>
     <label for="message">log message</label>
     <textarea id="message" name="message" cols="40" rows="2" tabindex="3"></textarea>
