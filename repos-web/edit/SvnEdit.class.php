@@ -34,8 +34,8 @@ class FilenameRule extends RuleRegexp {
 	function FilenameRule($fieldname, $required=true) {
 		$this->required = $required;
 		$this->RuleRegexp($fieldname, 
-			'may not contain any of the characters :*?<>\/| or quotes', 
-			'/^[^\/\\:\*\?<>\|\'"]+$/');
+			'may not contain any of the characters +:*?<>\/| or quotes', 
+			'/^[^+\/\\:\*\?+<>\|\'"]+$/');
 	}
 	function validate($value) {
 		if (empty($value)) return $this->required ? 'This is a required field' : null;
