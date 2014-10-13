@@ -66,7 +66,7 @@
 			<xsl:value-of select="substring(@target,0,string-length(@target)-string-length(@file)+1)"/>
 		</xsl:param>
 		<div id="commandbar">
-		<img id="logo" src="{$static}style/logo/repos1.png" border="0" align="right" width="72" height="18"/>
+		<img id="logo" src="{$static}style/logo/R_Web1.png" border="0" align="right" width="57" height="18"/>
 		<a id="repository" href="{$repourl}">return to repository</a>
 		<!-- can't really apply revision number to details link because log is specified using fromrev and torev
 		Omitting this button because there should be one for each revision in the list.
