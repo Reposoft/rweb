@@ -173,8 +173,7 @@ div.editlog {
 }
 /* common page elements, may also be layouted for each tool */
 #commandbar {
-	background: url(commandbarbg.png) top repeat-x;
-	background-color: #ECF1EF;
+	background-color: #F0F0F0;
 	padding: 3px;
 	border-bottom: 1px solid #CCCCCC;
 }
