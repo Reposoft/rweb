@@ -547,7 +547,14 @@ class SvnOpenFile {
 		// general rule
 		return ($this->getTypeDiscrete() == 'text');
 	}
-	
+
+	/**
+	 * @return boolean true if the file is displayable as HTML in a browser
+	 */
+	function isHtml() {
+		return $this->getType() == 'text/html';
+	}
+
 	/**
 	 * @return the size of the file in bytes
 	 */

@@ -64,7 +64,11 @@ The revision when the {=$file,kind2} was modified most recently is called &quot;
 
 <div id="activities-view" class="activities">
 {=if $file,isFile}
+<!--{if $file,isHtml}-->
+<h3 class="view"><a id="open" href="{=$file,url|asLink}">View</a></h3>
+<!--{else}-->
 <h3 class="view"><a id="open" href="open/?target={=$target}{=$file,revParam}">View</a></h3>
+<!--{/if}-->
 <p>Shows the file in the current window. It is good for text files, HTML and images.
 Depending on your browser, it may also work for file types like pdf, documents and spreadsheets.</p>
 {=else}
