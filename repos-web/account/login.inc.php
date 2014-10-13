@@ -266,7 +266,14 @@ function isTargetSet() {
  */
 function getTarget() {
 	if(!isTargetSet()) trigger_error('This page is expected to have a "target", but the parameter was not set.', E_USER_WARNING);
-	return login_decodeQueryParam($_REQUEST,'target');
+	$target = login_decodeQueryParam($_REQUEST,'target');
+	if (function_exists('isReposJava') && !isReposJava()) {
+		// support double encoding of this parameter, i.e. service rewrites with apache's B flag
+		if (substr($target, 0, 1) === '%') {
+			$target = urldecode($target);
+		}
+	}
+	return $target;
 }
 
 /**
