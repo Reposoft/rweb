@@ -2,10 +2,12 @@
 /* shared layout between themes instead of plugin solution */
 @import "layout.css";
 /* repos.se common styles */
+@import "grayscale.css";
+
 body {
 	margin-top: 0px;
 	font-family: Verdana, Helvetica, Arial, sans-serif;
-	font-size: 82.5%;
+	font-size: 82.5%;	
 }
 /* resume with em font sizes relative to the above */
 a {
