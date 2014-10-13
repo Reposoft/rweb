@@ -1,5 +1,7 @@
 #commandbar a, 
 #activities a,
+thead,
+table a,
 h2,
 li a {
 	color: black;
