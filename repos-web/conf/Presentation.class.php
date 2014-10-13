@@ -72,12 +72,6 @@ function getUserLocale() {
 	if( !isset($possibleLocales[$locale]) ) {
 		$locale = array_shift(array_keys($possibleLocales));
 	}
-	// save and return
-	if (!isset($_COOKIE[LOCALE_KEY])) {
-		setcookie(LOCALE_KEY,$locale,0,'/');
-	} else {
-		$_COOKIE[LOCALE_KEY] = $locale;
-	}
 	return $locale;
 }
 

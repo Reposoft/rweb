@@ -109,10 +109,6 @@ function processFile($upload) {
 	$repoFolder = getParent($upload->getTargetUrl());
 	// check out existing files of the given revision
 	$filename = $upload->getName();
-	if (strContains($filename,"+")){
-		trigger_error("File name may not contain +."); 
-		exit;
-	}
 	$fromrev = $upload->getFromrev();
 	// try svn 1.5 sparse checkout, with fallback to non-recursive complete checkout
 	$checkout = new SvnEdit('checkout');
@@ -199,6 +195,7 @@ function processFile($upload) {
 			$commit->addArgOption('--no-unlock');
 		}
 	}
+	$commit->addArgRevpropsFromPost();
 	$commit->exec();
 	// clean up
 	$upload->cleanUp();
@@ -425,6 +422,7 @@ class Upload {
 	}
 	
 	/**
+	 * Duplicated to ../copy/index.php so if more operations need prop support we should extrac to reusable location.
 	 * @return {array(String)} arbitrary propery name to values 
 	 */
 	function getCustomProperties() {

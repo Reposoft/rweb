@@ -26,6 +26,7 @@ function delete($message) {
 	$edit = new SvnEdit('delete');
 	$edit->setMessage($message);
 	$edit->addArgUrl(getTargetUrl());
+	$edit->addArgRevpropsFromPost();
 	$edit->exec();
 	displayEdit(Presentation::background(), dirname(rtrim(getTargetUrl(),'/')), false);
 }

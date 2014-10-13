@@ -16,6 +16,8 @@ require_once(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php'
 // ---- standard rules that the pages can instantiate ----
 define('REPOS_FILENAME_MAX_LENGTH',200);
 
+define('PARAM_REVPROP_PREFIX','revprop_');
+
 /**
  * Shared validation rule representing file- or foldername restrictions.
  * 
@@ -32,8 +34,8 @@ class FilenameRule extends RuleRegexp {
 	function FilenameRule($fieldname, $required=true) {
 		$this->required = $required;
 		$this->RuleRegexp($fieldname, 
-			'may not contain any of the characters :*?<>\/| or quotes', 
-			'/^[^\/\\:\*\?<>\|\'"]+$/');
+			'may not contain any of the characters +:*?<>\/| or quotes', 
+			'/^[^+\/\\:\*\?+<>\|\'"]+$/');
 	}
 	function validate($value) {
 		if (empty($value)) return $this->required ? 'This is a required field' : null;
@@ -302,6 +304,23 @@ class SvnEdit {
 	 */	
 	function addArgOption($option, $value=null, $valueNeedsEscape=true) {
 		$this->command->addArgOption($option, $value, $valueNeedsEscape);
+	}
+
+	/**
+	 * Sets a --with-revprop option on the command, see svn CLI docs.
+	 * @param String $revpropName
+	 * @param String $revpropValue
+	 */
+	function addArgRevprop($revpropName, $revpropValue) {
+		$this->addArgOption("--with-revprop", "$revpropName=$revpropValue");
+	}
+
+	function addArgRevpropsFromPost() {
+		foreach ($_POST as $name => $value) {
+			if (strBegins($name, PARAM_REVPROP_PREFIX)) {
+				$this->addArgRevprop(substr($name, strlen(PARAM_REVPROP_PREFIX)), $value);
+			}
+		}
 	}
 
 	/**

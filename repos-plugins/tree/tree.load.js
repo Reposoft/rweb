@@ -49,7 +49,8 @@ $.fn.reposTree = function( options ) {
 				// enable expansion
 				var id = Math.random().toString().substr(2);
 				$('<ul/>').attr('id', id).appendTo(this);
-				$(this).click(function() {
+				$(this).click(function(ev) {
+				  ev.stopPropagation();
 					if (li.is('.loading')) return;
 					if (li.is('.expanded')) {
 						collapse(id, target);

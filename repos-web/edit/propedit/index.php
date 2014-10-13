@@ -154,6 +154,7 @@ function svnPropset($target, $keys, $values, $message=null) {
 	// commit
 	$commit = new SvnEdit('commit');
 	$commit->addArgPath($workingCopy);
+	$commit->addArgRevpropsFromPost();
 	if ($message) {
 		$commit->setMessage($message);
 	}

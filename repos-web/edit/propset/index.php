@@ -34,6 +34,7 @@ function svnPropset($target, $name, $value, $message=null) {
 	// commit
 	$commit = new SvnEdit('commit');
 	$commit->addArgPath($workingCopy);
+	$commit->addArgRevpropsFromPost();
 	if ($message==null) $message = "Set property '$name' to '$value'";
 	$commit->addArgOption('-m',$message);
 	$commit->exec();
