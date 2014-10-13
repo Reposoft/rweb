@@ -10,6 +10,14 @@
 	filter: grayscale(100%);
 }
 
+#filedetails lh {
+	color: #333;
+}
+
 fieldset {
-	border: 2px solid #f0f0f0;
+	border-color: #f0f0f0;
+}
+
+fieldset legend {
+        color: #333;
 }
