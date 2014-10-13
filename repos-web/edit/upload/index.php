@@ -199,6 +199,7 @@ function processFile($upload) {
 			$commit->addArgOption('--no-unlock');
 		}
 	}
+	$commit->addArgRevpropsFromPost();
 	$commit->exec();
 	// clean up
 	$upload->cleanUp();

@@ -57,15 +57,16 @@ function svnCopy($tofolder) {
 	$oldUrl = getTargetUrl();
 	$newTarget = $tofolder.$_POST['newname'];
 	$newUrl = getRepository().$newTarget;
-	if (isset($_POST['message'])) {
-		$edit->setMessage($_POST['message']);
-	}
 	if (isset($_POST['rev'])) {
 		$edit->addArgUrlPeg($oldUrl, $_POST['rev']);	
 	} else {
 		$edit->addArgUrl($oldUrl);
 	}
 	$edit->addArgUrl($newUrl);
+	$edit->addArgRevpropsFromPost();
+	if (isset($_POST['message'])) {
+		$edit->setMessage($_POST['message']);
+	}
 	$edit->exec();
 	displayEdit($template, getParent($oldUrl), $newTarget); // old target would sometimes be interesting too, needs additional edit result page logic 
 }
@@ -108,6 +109,7 @@ function svnCopyInWc($tofolder, $props) {
 	// commit
 	$commit = new SvnEdit('commit');
 	$commit->addArgPath($workingCopy);
+	$commit->addArgRevpropsFromPost();
 	if (isset($_POST['message'])) {
 		$commit->setMessage($_POST['message']);
 	}
