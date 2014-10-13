@@ -47,7 +47,7 @@ function createNewFolder($name, $message) {
 	$edit->addArgRevpropsFromPost();
 	$edit->exec();
 	System::deleteFolder($tmp);
-	displayEdit($template, getTargetUrl());
+	displayEdit($template, getTargetUrl(), getTarget().$name);
 }
 
 ?>
