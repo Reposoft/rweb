@@ -146,7 +146,9 @@ $.fn.dateformat = function(options) {
 		if ($(texttag).is('.dateformatted')) return;
 		var date = F.parse(texttag);
 		if (!date) return false;
-		$(texttag).text(date.toLocaleString())
+		var display = date.toLocaleString();
+		display = display.replace(/-(\d)-/,'-0$1-').replace(/-(\d\d)-(\d\s)/,'-$1-0$2'); // minimal correction to avoid the odd non-zeropadded pseudo-ISO format
+		$(texttag).text(display)
 			.addClass('dateformatted')
 			.trigger('repos-dateformat-done', [date]);
 	};
