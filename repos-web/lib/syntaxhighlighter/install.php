@@ -20,6 +20,7 @@ $home = "http://code.google.com/p/syntaxhighlighter/";
 
 $version = "2.1.382";
 $archive = "http://alexgorbatchev.com/SyntaxHighlighter/download/download.php?sh_$version";
+// from v3 this lib is MIT+GPL but the 2.1 distributable contains the LGPLv3.txt
 $license = "http://www.gnu.org/licenses/lgpl-3.0.txt";
 
 $basedir = dirname(__FILE__);
