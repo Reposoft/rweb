@@ -88,7 +88,7 @@
 	<!-- extra info and logos -->
 	<xsl:template name="footer">
 		<div id="footer">
-		<span id="resourceversion" class="versiondisplay" style="display:none">repos.se log stylesheet 1.4 $Rev$</span>
+		<span id="resourceversion" class="versiondisplay" style="display:none">repos.se log stylesheet 1.5</span>
 		<span id="badges">
 		</span>
 		</div>
