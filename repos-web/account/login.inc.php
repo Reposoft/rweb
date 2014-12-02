@@ -328,6 +328,10 @@ function getReposUser($force = null) {
 		 if ($u == LOGIN_VOID_USER) {
 		 	$_user = false;
 		 } else {
+			if ($u == '') {
+				// This should be a warning, but clients can behave this way and we need it to pass
+				return false;
+			}
 		 	validateUsername($u);
 		 	$_user = $u;
 		 }
