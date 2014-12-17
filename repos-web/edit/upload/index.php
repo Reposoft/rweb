@@ -225,7 +225,15 @@ function setArbitraryProperties($workingCopyFilePath, $upload) {
 	$props = $upload->getCustomProperties();
 	foreach ($props as $name => $value) {
 		$propset = new SvnEdit('propset');
-		$propset->addArgOption($name, $value);
+		if ($value == "*") {
+			$argtempfile = System::getTempFile();
+			$fp = fopen($argtempfile, 'w');
+			fwrite($fp, $value);
+			fclose($fp);
+			$propset->addArgOption("$name --file", $argtempfile);
+		} else {
+			$propset->addArgOption($name, $value);
+		}
 		$propset->addArgPath($workingCopyFilePath);
 		$propset->exec("Set property '$name' to '$value'");
 	}
