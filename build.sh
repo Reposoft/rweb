@@ -6,6 +6,6 @@ cp -r repos-plugins/ repos-web/ target/
 php target/repos-web/lib/smarty/install.php
 php target/repos-web/lib/syntaxhighlighter/install.php
 php target/repos-web/lib/simpletest/install.php
-pushd target/repos-web/scripts/ && ./build-arbortext.bat && popd
-pushd target && tar cfz ../ReposWeb-$VERSION.tgz repos-web/ repos-plugins/ && popd
+cd target/repos-web/scripts/ && ./build-arbortext.bat && cd ../../../
+cd target && tar cfz ../ReposWeb-$VERSION.tgz repos-web/ repos-plugins/ && cd ..
 
