@@ -1,8 +1,7 @@
 @CHARSET "UTF-8";
 /* shared layout between themes instead of plugin solution */
 @import "layout.css";
-/* repos.se common styles */
-@import "grayscale.css";
+/* repos common styles, with branding at the end for higher specificity */
 
 body {
 	margin-top: 0px;
@@ -443,3 +442,6 @@ div.versiondisplay {
 .lock-oooo {
 	background-image: url('lock-oooo.png');
 }
+
+/* end default styles */
+@import "branding.css";
