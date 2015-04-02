@@ -1,6 +1,4 @@
 @CHARSET "UTF-8";
-/* shared layout between themes instead of plugin solution */
-@import "layout.css";
 /* repos common styles, with branding at the end for higher specificity */
 
 body {
@@ -443,5 +441,3 @@ div.versiondisplay {
 	background-image: url('lock-oooo.png');
 }
 
-/* end default styles */
-@import "branding.css";
