@@ -22,6 +22,9 @@ function getThumbnailCommand($transform, $format='', $target='-') {
 	}
 	$cmd[] = "-quality 75";
 	$cmd[] = "-";
+	if ($format == 'psd') {
+		$cmd[] = "-flatten";
+	}
 	$cmd[] = "\"$target\"";
 	// todo select -filter?
 	// ImageMagick
@@ -111,10 +114,11 @@ if ($file->getExtension() == 'cgm') {
 $tempfile = System::getTempFile('thumb', '.'.$thumbtype);
 
 // create the ImageMagick/GraphicsMagick command
+$format = strtolower($file->getExtension());
 if (method_exists($transform,'getCustomCommand')) {
-	$convert = $transform->getCustomCommand($file->getExtension(), $tempfile);
+	$convert = $transform->getCustomCommand($format, $tempfile);
 } else {
-	$convert = $convert . ' ' . getThumbnailCommand($transform, $file->getExtension(), $tempfile);
+	$convert = $convert . ' ' . getThumbnailCommand($transform, $format, $tempfile);
 }
 
 $o = new SvnOpen($temporg ? 'export' : 'cat');
