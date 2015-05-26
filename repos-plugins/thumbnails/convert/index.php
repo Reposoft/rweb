@@ -15,12 +15,20 @@ reposCustomizationInclude('transforms/graphics.php');
 function getThumbnailCommand($transform, $format='', $target='-') {
 	$maxWidth = $transform->getWidth();
 	$maxHeight =  $transform->getHeight();
+	$cmd = array();
+	if ($maxWidth || $maxHeight) {
+		$cmd[] = "-size {$maxWidth}x{$maxHeight}";
+		$cmd[] = "-geometry {$maxWidth}x{$maxHeight}";
+	}
+	$cmd[] = "-quality 75";
+	$cmd[] = "-";
+	$cmd[] = "\"$target\"";
 	// todo select -filter?
 	// ImageMagick
 	//if ($format) $format.=':'; // odd but this is how it was in r3111
 	//return "$format- -thumbnail {$maxWidth}x{$maxHeight}\">\" -quality 60 -background white -flatten jpg:\"$target\"";
 	// GraphicsMagick, don't specify format because it won't work with EPS
-	return "-size {$maxWidth}x{$maxHeight} -geometry {$maxWidth}x{$maxHeight} -quality 75 - \"$target\"";
+	return join(" ", $cmd);
 }
 
 // verify that the graphics tool exists
@@ -77,14 +85,6 @@ if (!isset($reposGraphicsTransforms[$tf])) {
 }
 $transformClass = $reposGraphicsTransforms[$tf];
 $transform = new $transformClass($file);
-if (!method_exists($transform,'getCustomCommand')) {
-	if (!$transform->getWidth()) {
-		trigger_error("Graphics transform $tf is invalid, width not set", E_USER_ERROR);
-	}
-	if (!$transform->getHeight()) {
-		trigger_error("Graphics transform $tf is invalid, height not set", E_USER_ERROR);
-	}
-}
 $thumbtype = $transform->getOutputFormat();
 
 // See if the source extension is supported
