@@ -6,7 +6,8 @@ $reposGraphicsTransforms = array(
 	'thumb' => 'ReposGraphicsTransformThumb',
 	'preview' => 'ReposGraphicsTransformPreview',
 	'screen' => 'ReposGraphicsTransformScreen',
-	'extract' => 'ReposGraphicsTransformExtract'
+	'extract' => 'ReposGraphicsTransformExtract',
+	'png' => 'ReposGraphicsTransformPng'
 );
 
 /**
@@ -133,6 +134,29 @@ class ReposGraphicsTransformExtract extends ReposGraphicsTransformBase {
 		unset($_REQUEST['page']); // disable default page handling
 		return 'pdftk - cat '.$page.' output "'.$tempfile.'"';
 	}
+
+}
+
+class ReposGraphicsTransformNoresize {
+
+	function getWidth() {
+		return false;
+	}
+
+	function getHeight() {
+		return false;
+	}
+
+}
+
+/**
+ * Interface defining the parameters available when creating transforms.
+ */
+class ReposGraphicsTransformPng extends ReposGraphicsTransformNoresize {
+
+        function getOutputFormat() {
+                return 'png';
+        }
 
 }
 

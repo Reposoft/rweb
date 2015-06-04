@@ -10,7 +10,7 @@ $repos_package = "simpletest";
 $home = "simpletest.sourceforge.net";
 
 $version = "1.0.1";
-$archive = "http://switch.dl.sourceforge.net/sourceforge/simpletest/simpletest_$version.tar.gz";
+$archive = "http://downloads.sourceforge.net/project/simpletest/simpletest/simpletest_$version/simpletest_$version.tar.gz";
 
 $basedir = dirname(__FILE__);
 //$dir_backslash = rtrim($basedir, DIRECTORY_SEPARATOR);
