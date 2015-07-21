@@ -68,6 +68,7 @@ function _svnFileIsWritable($url) {
 	$r->exec();
 	if ($r->getStatus() == 412) return true;
 	if ($r->getStatus() == 403) return false;
+	if ($r->getStatus() == 423) return false;
 	if ($r->getStatus() == 200) {
 		// unlock before error message?
 	}
