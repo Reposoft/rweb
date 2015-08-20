@@ -55,7 +55,7 @@ function _svnFileIsWritable($url) {
 // 	}
 	// Temporarily assume write access for unauthenticated users on new servers (lean style)
 	// until we've found an access emthods that does not fail with "Lock token is in request, but no user name  [423, #160039]" 
-	if (!isLoggedIn() && isset($_SERVER['SERVER_SOFTWARE']) && strBegins($_SERVER['SERVER_SOFTWARE'],'Apache/2.')) {
+	if (!isLoggedIn()) {
 		return true;
 	}
 	$r = new ServiceRequest($url);
