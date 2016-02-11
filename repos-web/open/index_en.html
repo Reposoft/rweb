@@ -222,7 +222,7 @@ In many programs you can open the URL directly, without downloading the file fir
 	<!--{foreach from=$props key=propname item=propvals}-->
 		<dt class="prop-{=$propname|getFileId}">{=$propname}</dt>
 		<!--{foreach from=$propvals item=propval}-->
-		<dd class="prop-{=$propname|getFileId}">{=$propval}</dd>
+		<dd class="prop-{=$propname|getFileId}">{=$propval|htmlspecialchars}</dd>
 		<!--{/foreach}-->
 	<!--{/foreach}-->
 </dl>
@@ -240,7 +240,7 @@ In many programs you can open the URL directly, without downloading the file fir
 		<a class="revision" href="?target={=$target}&rev={=$r}">{=$r}</a>
 		<span class="username">{=$e.user}</span>
 		<span class="datetime">{=$e.date}T{=$e.time}{=$e.z}</span>
-		<span class="message">{=$e.message|nl2br}</span>
+		<span class="message">{=$e.message|htmlspecialchars|nl2br}</span>
 	</li>
 <!--{/foreach}-->
 	<li><a href="log/?target={=$target}{=if $file,isRevisionRequested}&torev={=$file,revision}{=/if}">more</a></li>
