@@ -23,6 +23,7 @@ function autoFillFilename(path) {
 	var filename = path.substring(pos + 1);
 	
 	if (!v) {
+		suggested = suggested && !!$('#name').val();
 		if (!suggested) {
 			$('#name').val(filename);
 		}
