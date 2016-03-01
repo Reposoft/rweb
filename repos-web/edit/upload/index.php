@@ -75,6 +75,7 @@ function showUploadForm() {
 		$template->assign('folderurl', getParent($file->getUrl()));
 	} else {
 		$template->assign('folderurl', $file->getUrl());
+		$template->assign('suggestname', isset($_GET['suggestname']) ? $_GET['suggestname'] : '');
 	}
 	$template->assign('maxfilesize',MAX_FILE_SIZE);
 	$template->assign('isfile',$file->isFile());

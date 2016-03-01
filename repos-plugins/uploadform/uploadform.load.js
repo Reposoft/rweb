@@ -2,10 +2,12 @@
 (function() {
 
 var v; // true for upload new version, false for add file
+var suggested;
 
 Repos.service('edit/upload/', function() {
 	v = $('#name').is(':disabled');
 	// copy filename from selected local file
+	suggested = $('#name').val() || false;
 	$('#userfile').change(function() {
 		autoFillFilename($(this).val());	
 	});
@@ -21,7 +23,10 @@ function autoFillFilename(path) {
 	var filename = path.substring(pos + 1);
 	
 	if (!v) {
-		$('#name').val(filename);
+		suggested = suggested && !!$('#name').val();
+		if (!suggested) {
+			$('#name').val(filename);
+		}
 		return;
 	}
 	
