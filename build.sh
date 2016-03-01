@@ -8,4 +8,5 @@ php target/repos-web/lib/syntaxhighlighter/install.php
 php target/repos-web/lib/simpletest/install.php
 cd target/repos-web/scripts/ && ./build-arbortext.bat && cd ../../../
 cd target && tar cfz ../ReposWeb-$VERSION.tgz repos-web/ repos-plugins/ && cd ..
+cd target && zip -qr ../ReposWeb-$VERSION.zip repos-web/ repos-plugins/ && cd ..
 
