@@ -437,7 +437,12 @@ function getService() {
 	$p = getSelfPath();
 	// Self path is not accurate in the rewrite case, need to use the actual script path
 	if (isRealUrl()) {
-		$p = getParent($_SERVER['SCRIPT_NAME']);
+		$n = $_SERVER['SCRIPT_NAME'];
+		if ($n == $_SERVER['SCRIPT_URL']) { // with isRealUrl()==true this is typical for fcgi from rweb-services
+			$n = $_SERVER['SCRIPT_FILENAME'];
+			$n = substr($n, strpos($n, '/repos-web/'));
+		}
+		$p = getParent($n);
 	}
 	// extract from path
 	if ($p == '/') {
