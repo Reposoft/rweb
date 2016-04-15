@@ -68,9 +68,9 @@ function getUserLocale() {
 	if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) $locale = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 	if(array_key_exists(LOCALE_KEY,$_COOKIE)) $locale = $_COOKIE[LOCALE_KEY];
 	if(array_key_exists(LOCALE_KEY,$_GET)) $locale = $_GET[LOCALE_KEY];
-	// validate that the locale exists
+	// validate that the locale exists, if not select default
 	if( !isset($possibleLocales[$locale]) ) {
-		$locale = array_shift(array_keys($possibleLocales));
+		$locale = array_keys($possibleLocales)[0];
 	}
 	return $locale;
 }
