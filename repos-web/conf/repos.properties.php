@@ -227,19 +227,24 @@ function isSSLClient() {
  * Internally URLs have the default protocol, usually 'http'
  *  - this function is for transforming to the browser's protocol.
  * Note that this is done auomatically for getWebapp().
- * 
+ *
  * Protocol is httpS if isSSLClient()==true, meaning that the result
  * is based on server configuration rather than current request
  * (to allow for SSL proxies).
- * 
+ *
  * The current implementation does not support custom port number for SSL.
- * 
+ *
  * @param String $url the URL that should be presented to the user
  * @return String the URL with the current protocol for navigation.
  *  If the URL is not absolute, only encoding with urlSpecialChars will be done.
  */
 function asLink($url) {
 	if (isSSLClient() && substr($url, 0, 5)=='http:') {
+		if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+			// TODO handle comma separated hosts https://httpd.apache.org/docs/2.4/mod/mod_proxy.html#x-headers
+			// And should we expect Host header to be preserved? instead?
+			return preg_replace('/https?:\/\/[^\/]+/', 'https://'.$_SERVER['HTTP_X_FORWARDED_HOST'], $url);
+		}
 		$url = 'https:'.substr($url, 5);
 		// currently there is no setting for custom https port numer so we use default
 		if (strpos($url,':',8) && preg_match('/^(.+)(\:\d+)(\/.*)?$/', $url, $m)) {
