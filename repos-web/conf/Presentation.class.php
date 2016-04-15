@@ -51,8 +51,8 @@ function setupResponse() {
 // -------- user settings from cookies ---------
 
 $possibleLocales = array(
-	'sv' => 'Svenska',
 	'en' => 'English',
+	'sv' => 'Svenska',
 	'de' => 'Deutsch'
 	);
 
