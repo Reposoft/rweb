@@ -301,7 +301,7 @@ class Presentation {
 		// service URL mode
 		$this->assign('isrealurl', isRealUrl());
 		// repository root URL
-		$this->assign('repository', getRepository());
+		$this->assign('repository', asLink(getRepository()));
 		// support mod_dav_svn's @base attrubute for multirepo
 		$this->assign('base', isset($_REQUEST['base']) ? $_REQUEST['base'] : '');
 		// the dynamic part of the html header
