@@ -18,8 +18,8 @@ t/conf/services/*.include
 t/conf/vhosts/*.conf
 t/htdocs/
 t/logs/
-# compiled js
-repos-web/scripts/head.js*
+# compiled js extras
+repos-web/scripts/head.js.*
 # eclipse project
 .buildpath
 .project
