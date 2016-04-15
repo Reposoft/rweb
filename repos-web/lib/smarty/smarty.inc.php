@@ -1,10 +1,11 @@
 <?php
 if (!class_exists('System')) require(dirname(dirname(dirname(__FILE__))).'/conf/System.class.php');
 
-if (!file_exists(dirname(__FILE__).'/libs/')) {
+$smartylib = dirname(__FILE__).'/libs';
+if (!file_exists($smartylib) && !file_exists($smartylib = '/opt/libs-rweb/lib/smarty/libs')) {
 	trigger_error("Smarty 'libs' folder has not been installed. Go to repos-web/lib/ to install it.");
 }
-require(dirname(__FILE__).'/libs/Smarty.class.php');
+require($smartylib.'/Smarty.class.php');
 
 // globale template settings, compatible with inline with css and javascript
 define('LEFT_DELIMITER', '{=');
