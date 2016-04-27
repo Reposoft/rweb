@@ -1,0 +1,19 @@
+version: '2'
+services:
+  svn:
+    # Proxied is good because it has mod_auth_anon
+    image: "solsson/svn-httpd:proxied"
+    ports:
+      - "80:80"
+    volumes:
+      # Overrides default container config, to add SVNIndexXslt etc
+      - ./conf-svn:/usr/local/apache2/conf/svn
+      # Persistent volumes make repatable tests harder, but expermienation easier
+      # There is no REST endpont to manage repositories, so we only have docker-compose exec svn repocreate
+      - ./svn:/svn
+  rweb:
+    image: "solsson/rweb:libs"
+    ports:
+      - "9000:9000"
+    volumes:
+      - ../:/opt/rweb
