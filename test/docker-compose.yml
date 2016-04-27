@@ -11,6 +11,8 @@ services:
       # Persistent volumes make repatable tests harder, but expermienation easier
       # There is no REST endpont to manage repositories, so we only have docker-compose exec svn repocreate
       - ./svn:/svn
+      # PHP-FPM expects the app to be at the same path in both containers
+      - ../:/opt/rweb
   rweb:
     image: "solsson/rweb:libs"
     ports:
