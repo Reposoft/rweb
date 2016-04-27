@@ -323,6 +323,9 @@ function getReposUser($force = null) {
 	if ($force !== null) $_user = $force; // testing
 	if ($_user !== null) return $_user;
 	// read the auth only once per request
+	if (isset($_SERVER['HTTP_X_LOGON_ACCOUNTNAME'])) {
+		return $_SERVER['HTTP_X_LOGON_ACCOUNTNAME'];
+	}
 	if (isset($_SERVER['PHP_AUTH_USER'])) {
 		 $u = $_SERVER['PHP_AUTH_USER'];
 		 if ($u == LOGIN_VOID_USER) {
@@ -346,6 +349,8 @@ function _getReposPass($force = null) {
 	if ($_pass !== null) return $_pass;
 	if (!isLoggedIn()) {
 		$_pass = false;
+	} else if (isset($_SERVER['HTTP_X_LOGON_ACCOUNTNAME'])) {
+		return "";
 	} else {
 		$_pass = $_SERVER['PHP_AUTH_PW'];
 	}
