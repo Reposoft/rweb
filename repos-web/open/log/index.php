@@ -85,7 +85,7 @@ $log = $command->getOutput();
 if ($accept == 'application/json') {
 	$xml = simplexml_load_string(implode("", $log));
 	setContentType('application/json');
-	echo json_encode($xml, JSON_PRETTY_PRINT);
+	echo json_encode($xml);
 	echo "\n";
 	exit;
 }
