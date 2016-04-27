@@ -322,9 +322,11 @@ function getReposUser($force = null) {
 	static $_user = null;
 	if ($force !== null) $_user = $force; // testing
 	if ($_user !== null) return $_user;
-	// read the auth only once per request
-	if (isset($_SERVER['HTTP_X_LOGON_ACCOUNTNAME'])) {
-		return $_SERVER['HTTP_X_LOGON_ACCOUNTNAME'];
+
+	if (isset($_SERVER['REMOTE_USER'])) {
+		// read the auth only once per request, same way we always did, hasn't been validated with fpm
+		$_user = $_SERVER['REMOTE_USER'];
+		return $_user;
 	}
 	if (isset($_SERVER['PHP_AUTH_USER'])) {
 		 $u = $_SERVER['PHP_AUTH_USER'];
@@ -336,6 +338,7 @@ function getReposUser($force = null) {
 				return false;
 			}
 		 	validateUsername($u);
+			// read the auth only once per request
 		 	$_user = $u;
 		 }
 	} else {
@@ -349,10 +352,12 @@ function _getReposPass($force = null) {
 	if ($_pass !== null) return $_pass;
 	if (!isLoggedIn()) {
 		$_pass = false;
-	} else if (isset($_SERVER['HTTP_X_LOGON_ACCOUNTNAME'])) {
-		return "";
-	} else {
+	} else if (isset($_SERVER['PHP_AUTH_PW'])) {
 		$_pass = $_SERVER['PHP_AUTH_PW'];
+	} else if (isset($_SERVER['REMOTE_USER'])) {
+		// we may want to decode auth header here, but empty pass assumes mod_auth_anon behind proxy
+		// See also https://bz.apache.org/bugzilla/show_bug.cgi?id=56855 and https://httpd.apache.org/docs/2.4/en/mod/core.html#cgipassauth
+		$_pass = "";
 	}
 	return $_pass;
 }
