@@ -1,7 +1,10 @@
 version: '2'
+# Note: you need http://svn/ to point to the docker-machine ip
+# because rweb connects to svn on SERVER_NAME which it gets from host
+# (or we can probably set a static ServerName in conf)
 services:
   svn:
-    # Proxied is good because it has mod_auth_anon
+    # :proxied is good because it has mod_auth_anon
     image: "solsson/svn-httpd:proxied"
     ports:
       - "80:80"
