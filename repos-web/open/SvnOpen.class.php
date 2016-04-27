@@ -154,6 +154,9 @@ class SvnOpen {
 	function SvnOpen($subversionOperation, $asXml=false) {
 		$this->operation = $subversionOperation;
 		$this->command = new Command('svn');
+		if ($this->operation == 'dump') {
+			$this->command = new Command('svnrdump');
+		}
 		$this->_addSvnOptions();
 		$this->command->addArgOption($subversionOperation);
 		if ($asXml) $this->command->addArgOption('--xml');
