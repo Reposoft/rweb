@@ -14,7 +14,7 @@ require_once(dirname(dirname(__FILE__)).'/plugins/validation/validation.inc.php'
 define('HEAD','HEAD');
 
 // *** Subversion client usage ***
-define('SVN_CONFIG_DIR', System::getApplicationTemp().'svn-config-dir/');
+define('SVN_CONFIG_DIR', System::getApplicationTemp().'svn-config-dir');
 if (!file_exists(SVN_CONFIG_DIR)) svnCreateConfigDir(SVN_CONFIG_DIR);
 
 /**
