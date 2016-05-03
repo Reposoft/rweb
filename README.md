@@ -16,3 +16,6 @@ TODO
  * syntaxhighlight evaluate server side options
  * errorpages generate in docker httpd:rweb from source's template
    - using sed etc, probably only hostname?
+ * A docker concept with indexing would be interesting
+   - needs to share the svn volume for svnlook but that's no problem in compose
+   - and can be done in the same pod in k8s
