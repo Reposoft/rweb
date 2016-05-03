@@ -16,6 +16,16 @@ function getParameter($name, $default=null) {
 	return $default;
 }
 
+// TODO move to some generic place and define constants for content types
+function setContentLength($bytes) {
+	header('Content-Length: '.$bytes);
+}
+function setContentType($mimetype, $charser=null) {
+	header('Content-Type: '.$mimetype);
+}
+
+$accept = isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : false;
+
 // always use a limit for the number of records, to prevent big transforms
 // if the limit is active (meaning that there are more records than returned) the xml sets the limit attribute
 $limit = getParameter('limit', '20');
@@ -44,7 +54,9 @@ $command->addArgOption('--xml');
 if (!isset($_REQUEST['verbose']) || $_REQUEST['verbose']) {
 	$command->addArgOption('-v');
 }
-$command->addArgOption('--incremental');
+if ($accept !== 'application/json') {
+	$command->addArgOption('--incremental');
+}
 // set limit +1 to be able to see if there are more entries
 $command->addArgOption('--limit', $limit+1, false); // limit is a number, if not this will be an empty string (so it's safe)
 if ($rev) {
@@ -69,6 +81,14 @@ if ($command->exec()) {
 	trigger_error('Could not read log for URL '.$url.".\n".$message, E_USER_ERROR);
 }
 $log = $command->getOutput();
+
+if ($accept == 'application/json') {
+	$xml = simplexml_load_string(implode("", $log));
+	setContentType('application/json');
+	echo json_encode($xml);
+	echo "\n";
+	exit;
+}
 
 // count entries
 $size = 0;
@@ -101,15 +121,7 @@ if ($singlefile) $head .= ' file="'.xmlEncodePath(getPathName(getTarget())).'"';
 if ($limited) $head .= ' limit="'.$limit.'" limitrev="'.$lastrev.'"';
 $head .= ">\n";
 
-$foot = "\n</log>\n"; 
-
-// TODO move to some generic place and define constants for content types
-function setContentLength($bytes) {
-	header('Content-Length: '.$bytes);
-}
-function setContentType($mimetype, $charser=null) {
-	header('Content-Type: '.$mimetype);
-}
+$foot = "\n</log>\n";
 
 setContentType('text/xml');
 // not needed? setContentLength($size);
