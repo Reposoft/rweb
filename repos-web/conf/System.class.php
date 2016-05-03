@@ -257,6 +257,8 @@ class System {
 				return ( getParent(System::getCommand('svn')) . 'svnlook' );
 			case 'svnadmin':
 				return ( getParent(System::getCommand('svn')) . 'svnadmin' );
+			case 'svnrdump':
+				return ( getParent(System::getCommand('svn')) . 'svnrdump' );
 			case 'gzip':
 				return ( 'gzip' );
 			case 'gunzip':

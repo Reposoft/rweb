@@ -84,13 +84,13 @@ class Command {
 	function Command($commandName, $validate=true) {
 		if (!$validate) {
 			// command executed as given
-		} else if (System::getCommand($commandName) === false) { 
-			trigger_error("Repos Web does not recognize the command '$commandName' on this patform.", E_USER_ERROR);
+		} else if (System::getCommand($commandName) === false) {
+			trigger_error("Repos Web does not recognize the command '$commandName' on this platform.", E_USER_ERROR);
 		}
 		// currently only the name is stored, and the command is retreived again at exec
 		$this->operation = $commandName;
 	}
-	
+
 	/**
 	 * Adds a command line element that is an option to the command.
 	 * Only ASCII strings that do _not_ come from user input may be used as options.
