@@ -1,5 +1,5 @@
 #!/bin/sh
-VERSION=1.5.6
+VERSION=1.6.0
 rm target -Rf
 mkdir target
 cp -r repos-plugins/ repos-web/ target/

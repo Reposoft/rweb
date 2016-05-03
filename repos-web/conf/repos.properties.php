@@ -5,19 +5,19 @@
  * The core, Repos Web, is only configurable to a minimum.
  * Each configuration entry has a getEntry() and getEntryDefault(),
  * where getEntry may read server variables to get a cutom setting.
- *  
+ *
  * This file also configures error handling for Repos application.
- * 
+ *
  * Output (headers AND response) is controlled by either Report or Presentation.
- * 
+ *
  * Global functions in repos start with "get", "is" (+ some "str"), and are found
  * in this script or in System.class.php.
- * 
+ *
  * @see Report
  * @see Presentation
  * @package conf
  */
-define('REPOS_VERSION','1.5');
+define('REPOS_VERSION','1.6');
 
 // ----- global settings -----
 
