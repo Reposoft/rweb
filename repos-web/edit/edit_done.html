@@ -26,7 +26,7 @@
 <!--{/if}-->
 
 <!--{foreach item=edit from=$log}-->
-<p>{=$edit.description|nl2br}</p>
+<p>{=$edit.description|htmlspecialchars|nl2br}</p>
 <div class="editlog {=$edit.operation} {=if not $edit.successful}error{=/if}" id="edit{=counter}">
 	<p>
 	{=if $edit.revision}<span class="revision">{=$edit.revision}</span>{=/if}
