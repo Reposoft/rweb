@@ -19,8 +19,8 @@ label.newproperty { color: gray; }
 <h1>Edit properties</h1>
 <dl id="proplist" style="display:none">
 <!--{foreach from=$keys key=i item=p}-->
-<dt>{=$p}</dt><dd>{=$values[$i]|nl2br}</dd>
-<!--{/foreach}--> 
+<dt>{=$p}</dt><dd>{=$values[$i]|htmlspecialchars|nl2br}</dd>
+<!--{/foreach}-->
 </dl>
 <form id="propedit" name="propedit" method="post" action="">
   <fieldset>
