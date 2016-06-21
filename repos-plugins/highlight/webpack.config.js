@@ -1,7 +1,15 @@
 module.exports = {
-   entry: './worker.js',
+   entry: {
+     "highlight.load.js": "./index",
+     "highlight.worker.js": "./worker"
+   },
    output: {
      path: './',
-     filename: 'worker.bundle.js'
+     filename: 'bundle-[name]'
+   },
+   module: {
+     loaders: [
+       //{ test: /\.css$/, loader: "style-loader!css-loader" }
+     ]
    }
  };
