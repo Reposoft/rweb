@@ -20,7 +20,7 @@
 	&nbsp; <span class="filesize">{=$file,size|formatSize}</span>
 </h3>
 <!-- on javascript browsers the box will be resized by the syntax plugin -->
-<pre id="file" class="{=$file,extension}">{=$file->sendInlineHtml()}</pre>
+<pre id="file"><code class="{=$file,extension}">{=$file->sendInlineHtml()}</code></pre>
 {=else}
 {=* mimic the error page *}
 <h1>An error occurred</h1>
