@@ -1,3 +1,5 @@
+const webpack = require('webpack');
+
 module.exports = {
    entry: {
      "highlight.load.js": "./index",
@@ -9,7 +11,11 @@ module.exports = {
    },
    module: {
      loaders: [
-       //{ test: /\.css$/, loader: "style-loader!css-loader" }
      ]
-   }
+   },
+   plugins: [
+    new webpack.optimize.UglifyJsPlugin({
+      exclude: "bundle-highlight.load.js"
+    })
+  ]
  };

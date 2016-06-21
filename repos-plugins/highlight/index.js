@@ -1,5 +1,5 @@
 
-require('style!css!highlight.js/styles/default.css');
+require('style!css!highlight.js/styles/github.css');
 
 Repos.service('open/file/', function() {
   var code = document.querySelector('#file');
