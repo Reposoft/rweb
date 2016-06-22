@@ -19,7 +19,6 @@ $libraries = array(
 'smarty',
 'simpletest',
 'selenium',
-'syntaxhighlighter',
 'tinymce',
 //'phpicalendar',
 );

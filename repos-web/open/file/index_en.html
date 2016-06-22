@@ -20,7 +20,7 @@
 	&nbsp; <span class="filesize">{=$file,size|formatSize}</span>
 </h3>
 <!-- on javascript browsers the box will be resized by the syntax plugin -->
-<textarea id="file" cols="82" rows="20" name="file" class="{=$file,extension}" readonly="readonly" >{=$file->sendInlineHtml()}</textarea>
+<pre id="file"><code class="{=$file,extension}">{=$file->sendInlineHtml()}</code></pre>
 {=else}
 {=* mimic the error page *}
 <h1>An error occurred</h1>

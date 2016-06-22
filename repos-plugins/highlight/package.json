@@ -1,0 +1,20 @@
+{
+  "name": "repos-plugins-highlight",
+  "version": "1.0.0",
+  "description": "",
+  "main": "worker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/webpack"
+  },
+  "author": "",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "dependencies": {
+    "highlight.js": "^9.4.0"
+  },
+  "devDependencies": {
+    "css-loader": "^0.23.1",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.1"
+  }
+}
