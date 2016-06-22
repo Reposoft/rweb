@@ -24,3 +24,5 @@ repos-web/scripts/head.js.*
 .buildpath
 .project
 .settings
+target
+ReposWeb-1.6.0.tgz ReposWeb-1.6.0.zip
