@@ -66,6 +66,9 @@ body.static a#start, body.static a#parent, body.static a#logout {
 body.static .actions {
 	display: none;
 }
+body.static .contentcommands {
+	display: none;
+}
 /* special folders */
 #path .separator {
 	color: #777;
