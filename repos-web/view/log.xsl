@@ -67,7 +67,7 @@
 		</xsl:param>
 		<div id="commandbar">
 		<div class="right">
-			<img id="logo" src="{$static}style/logo/R_Web1.png" border="0" width="57" height="18"/>
+			<img id="logo" src="{$static}style/logo/R_Web1.png" border="0"/>
 		</div>
 		<a id="repository" href="{$repourl}">return to repository</a>
 		<!-- can't really apply revision number to details link because log is specified using fromrev and torev

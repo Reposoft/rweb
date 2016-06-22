@@ -87,7 +87,7 @@
 	<xsl:template name="commandbar">
 		<div id="commandbar">
 		<div class="right">
-			<img id="logo" src="{$static}style/logo/R_Web1.png" border="0" width="57" height="18" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
+			<img id="logo" src="{$static}style/logo/R_Web1.png" border="0" alt="repos.se" title="Using repos.se stylesheet $Rev$"/>
 		</div>
 		<xsl:if test="$startpage">
 			<a id="start" class="command translate" href="{$startpage}">start</a>
