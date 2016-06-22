@@ -11,9 +11,7 @@ Repos.service('open/file/', function() {
   }
   var worker = new Worker('/repos-plugins/highlight/bundle-highlight.worker.js');
   worker.onmessage = function(event) {
-    console.log('Highlight worker returned', event.data && event.data.length);
     code.innerHTML = event.data;
   }
-  console.log('Highlight worker post', content.length);
   worker.postMessage(content);
 });
