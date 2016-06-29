@@ -1,0 +1,15 @@
+{
+  "name": "rweb",
+  "version": "1.6.0",
+  "description": "Repos Web REST API and simple UI for version control",
+  "author": "Repos Mjukvara AB",
+  "license": "CC-BY-NC-4.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Reposoft/rweb"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
