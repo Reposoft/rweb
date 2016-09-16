@@ -1,12 +1,18 @@
 #!/usr/bin/perl -w
 use strict;
 
-  use Getopt::Long;
-  my %o = (
-    'parent' => '/svn'
-  );
+use CGI;
 
-  my $name = '';
+my %o = (
+  'parent' => '/svn'
+);
+
+my $name = '';
+
+if (not $ENV{SERVER_SOFTWARE}) {
+  use Getopt::Long;
+
+  # ugly avoid multiple unnamed args
   sub reponame {
     die("Respository name already set to $name\n") if $name;
     $name = $_[0];
@@ -25,6 +31,18 @@ use strict;
               '<>' => \&reponame
               )
   or die("Error in command line arguments\n");
+} else {
+  # curl -d reponame=test1 -d owner=daemon http://test@svn/cgi-bin/repocreate
+  print "Content-type: text/plain\n\n";
+  die("Request method isn't POST") unless (CGI->request_method() eq 'POST');
+  my $q = CGI->new;
+  my $rest = $q->Vars;
+  $name = $rest->{'reponame'};
+  $o{'revpropchange'} = $rest->{'revpropchange'};
+  $o{'uuid'} = $rest->{'uuid'};
+  $o{'owner'} = $rest->{'owner'};
+  $o{'group'} = $rest->{'group'};
+}
 
 die("Repository name is a required argument") if not $name;
 
