@@ -11,7 +11,7 @@ services:
     volumes:
       # Overrides default container config, to add SVNIndexXslt etc
       - ./conf-svn:/usr/local/apache2/conf/svn
-      # Persistent volumes make repatable tests harder, but expermienation easier
+      # Persistent volumes make repatable tests harder, but experimentation easier
       # There is no REST endpont to manage repositories, so we only have docker-compose exec svn repocreate
       #- ./svn:/svn
       # PHP-FPM expects the app to be at the same path in both containers
