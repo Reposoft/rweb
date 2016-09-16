@@ -16,6 +16,8 @@ services:
       #- ./svn:/svn
       # PHP-FPM expects the app to be at the same path in both containers
       - ../:/opt/rweb
+      # cgi development
+      - ./cgi-bin:/usr/local/apache2/cgi-bin
   rweb:
     image: "solsson/rweb:libs"
     ports:
