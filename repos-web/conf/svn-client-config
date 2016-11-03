@@ -3,24 +3,88 @@
 [auth]
 # Repos disables this for each command; avoid admin mistakes:
 store-passwords = no
+store-auth-creds = no
 
 [helpers]
 
 [tunnels]
 
 [miscellany]
+### Set global-ignores to a set of whitespace-delimited globs
+### which Subversion will ignore in its 'status' output, and
+### while importing or adding files and directories.
+### '*' matches leading dots, e.g. '*.rej' matches '.foo.rej'.
+# global-ignores = *.o *.lo *.la *.al .libs *.so *.so.[0-9]* *.a *.pyc *.pyo __pycache__
+#   *.rej *~ #*# .#* .*.swp .DS_Store [Tt]humbs.db
+### Set log-encoding to the default encoding for log messages
 # log-encoding = latin1
+### Set use-commit-times to make checkout/update/switch/revert
+### put last-committed timestamps on every file touched.
 # use-commit-times = yes
+### Set no-unlock to prevent 'svn commit' from automatically
+### releasing locks on files.
 # no-unlock = yes
+### Set mime-types-file to a MIME type registry file, used to
+### provide hints to Subversion's MIME type auto-detection
+### algorithm.
+# mime-types-file = /path/to/mime.types
+### Set preserved-conflict-file-exts to a whitespace-delimited
+### list of patterns matching file extensions which should be
+### preserved in generated conflict file names.  By default,
+### conflict files use custom extensions.
+# preserved-conflict-file-exts = doc ppt xls od?
+### Set enable-auto-props to 'yes' to enable automatic properties
+### for 'svn add' and 'svn import', it defaults to 'no'.
+### Automatic properties are defined in the section 'auto-props'.
 enable-auto-props = yes
+### Set interactive-conflicts to 'no' to disable interactive
+### conflict resolution prompting.  It defaults to 'yes'.
+interactive-conflicts = no
+### Set memory-cache-size to define the size of the memory cache
+### used by the client when accessing a FSFS repository via
+### ra_local (the file:// scheme). The value represents the number
+### of MB used by the cache.
+# memory-cache-size = 16
+### Set diff-ignore-content-type to 'yes' to cause 'svn diff' to
+### attempt to show differences of all modified files regardless
+### of their MIME content type.  By default, Subversion will only
+### attempt to show differences for files believed to have human-
+### readable (non-binary) content.  This option is especially
+### useful when Subversion is configured (via the 'diff-cmd'
+### option) to employ an external differencing tool which is able
+### to show meaningful differences for binary file formats.  [New
+### in 1.9]
+# diff-ignore-content-type = no
 
 [auto-props]
-
 # Repos auto-props
 *.png = svn:mime-type=image/png
 *.gif = svn:mime-type=image/gif
 *.jpg = svn:mime-type=image/jpeg
 *.pdf = svn:mime-type=application/pdf
-*.html = svn:mime-type=text/html
 *.svg = svn:mime-type=image/svg+xml
+# Serve static web content directly from svn
+*.html = svn:eol-style=native;svn:mime-type=text/html
+*.js = svn:eol-style=native;svn:mime-type=text/javascript
+*.css = svn:eol-style=native;svn:mime-type=text/css
 # allow svn to identify binary files for the rest, like .doc
+
+[working-copy]
+### Set to a list of the names of specific clients that should use
+### exclusive SQLite locking of working copies.  This increases the
+### performance of the client but prevents concurrent access by
+### other clients.  Third-party clients may also support this
+### option.
+### Possible values:
+###   svn                (the command line client)
+# exclusive-locking-clients =
+### Set to true to enable exclusive SQLite locking of working
+### copies by all clients using the 1.8 APIs.  Enabling this may
+### cause some clients to fail to work properly. This does not have
+### to be set for exclusive-locking-clients to work.
+# exclusive-locking = false
+### Set the SQLite busy timeout in milliseconds: the maximum time
+### the client waits to get access to the SQLite database before
+### returning an error.  The default is 10000, i.e. 10 seconds.
+### Longer values may be useful when exclusive locking is enabled.
+# busy-timeout = 10000
