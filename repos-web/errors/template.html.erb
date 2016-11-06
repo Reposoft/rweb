@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>repos error message</title>
+<meta name="repos-repository" content="http://<%= node['cms']['hostname'].downcase %>/svn" />
+<meta name="repos-service" content="<%= @service %>" />
+<meta name="repos-static" content="yes" />
+<link href="/repos-web/style/global.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/repos-web/scripts/head.js"></script>
+</head>
+<body>
+<div id="commandbar">
+<a style="display:none;" id="back" href="javascript:history.back()">back</a>
+<a id="start" href="/?rweb=start">start</a>
+</div>
+<h1><%= @headline %></h1>
+<p><em><%= @error %></em></p>
+<p style="display:none" class="ok">If this happens repeatedly and <a href="/?rweb=start">start</a> won't help try <a class="okurl"></a> instead.</p>
+<div id="footer"></div>
+<script type="text/javascript">
+if (history.length > 1) document.getElementById('back').style.display='initial';
+
+function okstop(url, onok) {
+  var u = /(\/.*\/)[^\/]+\/?$/.exec(url);
+  if (!(u = u && u[1])) return;
+  var h = new XMLHttpRequest();
+  h.open('HEAD', u);
+  h.onreadystatechange = function() {
+    if (this.readyState === this.DONE) {
+      if (this.status < 400) {
+        onok(u);
+      } else {
+        okstop(u, onok);
+      }
+    }
+  };
+  h.send();
+}
+
+okstop(location.pathname, function(ok) {
+  var p = document.querySelector('.ok'), a = p.querySelector('.okurl');
+  if (p) {
+    p.style.display='initial';
+  }
+  if (a) {
+    a.setAttribute('href', ok);
+    a.innerHTML = ok;
+  }
+});
+
+var svn = document.querySelector('meta[name="repos-repository"]').getAttribute('content');
+if (svn && svn.indexOf(location.host) < 0) {
+  var e = document.querySelector('em');
+  e.innerHTML = e.innerHTML + ' Could be that the address used for the connection is unexpected, for example an IP-number or a name without a domain. Try the configured <a href="' + svn + '">' + svn + '</a>.';
+}
+</script>
+</body>
+</html>
