@@ -20,6 +20,10 @@ function getThumbnailCommand($transform, $format='', $target='-') {
 		$cmd[] = "-size {$maxWidth}x{$maxHeight}";
 		$cmd[] = "-geometry {$maxWidth}x{$maxHeight}";
 	}
+	$resolution =  $transform->getResolution();
+	if ($resolution) {
+		$cmd[] = "-density {$resolution}";
+	}
 	$cmd[] = "-quality 75";
 	$cmd[] = "-";
 	if ($format == 'psd') {
