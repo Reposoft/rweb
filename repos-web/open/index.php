@@ -25,12 +25,12 @@ $fromrev = $fromrevRule->getValue();
 $file = new SvnOpenFile($target, $rev);
 // identify folders, even without trailing slash, for example when coming from history
 $isFoler = $file->isFolder();
+// for old revisions SvnOpenFile detects folder even if trailing slash is missing
+if (!strEnds($target, '/')) $target .= '/';
 
 // support redirect directly to real resorce (for services that don't know repository root but have target and base)
 if (isset($_GET['redirect']) && $_GET['redirect']) {
 	if ($rev) {
-		// for old revisions SvnOpenFile detects folder even if trailing slash is missing
-		if (!strEnds($target, '/')) $target .= '/';
 		// does not use getRepository so "base" must be added manually
 		$b = isset($_REQUEST['base']) ? '&base='.$_REQUEST['base'] : '';
 		header('Location: '.getWebapp().'open/list/?target='.rawurlencode($target).$b.'&rev='.$rev);
@@ -49,7 +49,7 @@ if (isset($_GET['redirect']) && $_GET['redirect']) {
 $p = Presentation::getInstance();
 $p->assign_by_ref('file', $file);
 // for links to other operations we use the original parameters
-$p->assign('target', getTarget());
+$p->assign('target', $target);
 if ($fromrev) $p->assign('fromrev', $fromrev);
 // display a short log for the file on the edit page
 if (!isset($_REQUEST['history']) || $_REQUEST['history'] != 'false') {
