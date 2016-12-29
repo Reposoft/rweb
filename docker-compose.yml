@@ -1,0 +1,24 @@
+# For development at http://svn/, assuming local scripts build and libs install
+# Create repo: docker-compose exec svn repocreate test -o daemon
+# Install libs: http://svn/repos-web/lib/smarty/install.php
+version: '2.1'
+services:
+  svn:
+    image: solsson/rweb-httpd@sha256:f69fc496a781e6cdcd8156e6a2c14b33377ef6b2b8538cdc6b570e47cb89adc8
+    expose:
+      - "80"
+    ports:
+      - "80:80"
+    environment:
+      ADMIN_REST_ACCESS: "true"
+      AUTHN: "anon"
+    volumes:
+      - .:/opt/rweb
+  rweb:
+    image: solsson/rweb@sha256:4531be10995942642442a4efa73762dd9e11828a8457a98c2a15f673fbfa93d4
+    expose:
+      - "9000"
+    links:
+      - svn:svn
+    volumes:
+      - .:/opt/rweb
