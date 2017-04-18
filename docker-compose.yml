@@ -16,7 +16,7 @@ services:
     volumes:
       - .:/opt/rweb
   rweb:
-    image: solsson/rweb@sha256:c39b35eb6dc65c1baa165eb6635f16375354328a7edd481927ad12db4a89b6fc
+    image: solsson/rweb@sha256:af472c0e4895a98d92f2dfaaf54dd2b2a7f511e5e5315a310d131184072f35b4
     expose:
       - "9000"
     links:
