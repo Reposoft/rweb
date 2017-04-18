@@ -299,7 +299,7 @@ class Upload {
 	function getName() {
 		if ($this->isCreate()) {
 			Validation::expect('name');
-			return $_POST['name'];
+			return reposNormalizePath($_POST['name']);
 		}
 		return getPathName(getTarget());
 	}

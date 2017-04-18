@@ -625,6 +625,14 @@ function xmlEncodePath($path) {
 	return str_replace('&', '&amp;', $path);
 }
 
+/**
+ * Try to avoid https://issues.apache.org/jira/browse/SVN-2464 regardless of client platform
+ */
+function reposNormalizePath($path) {
+	if (Normalizer::isNormalized($path)) return $path;
+	return Normalizer::normalize($path);
+}
+
 // ----- internal functions -----
 
 function _getStackTrace() {
