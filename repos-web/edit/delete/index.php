@@ -28,6 +28,7 @@ function delete($message) {
 	$edit->addArgUrl(getTargetUrl());
 	$edit->addArgRevpropsFromPost();
 	$edit->exec();
-	displayEdit(Presentation::background(), dirname(rtrim(getTargetUrl(),'/')), false);
+	$template = Presentation::background();
+	displayEdit($template, dirname(rtrim(getTargetUrl(),'/')), false);
 }
 ?>
