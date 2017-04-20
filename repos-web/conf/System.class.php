@@ -501,7 +501,7 @@ class System {
 			$type = 'tempnam';
 			// suggest a directory that does not exist, so that tempnam uses system temp dir
 			$doesnotexist = 'dontexist'.rand();
-			$tmpfile = tempnam($doesnotexist, 'emptytempfile');
+			$tmpfile = @tempnam($doesnotexist, 'emptytempfile');
 			if (strpos($tmpfile, $doesnotexist)!==false) trigger_error("Could not get system temp, got: ".$tmpfile, E_USER_ERROR);
 			if (!file_exists($tmpfile)) trigger_error("Failed to create temp file using $type", E_USER_ERROR);
 			$tempdir = dirname($tmpfile);
