@@ -484,7 +484,10 @@ class System {
 		static $tempfolder = null;
 		if (!is_null($tempfolder)) return $tempfolder;
 		$type = '';
-		if (getenv('TMP')) {
+		if (getenv('REPOS_TEMP')) {
+			$type = 'REPOS_TEMP';
+			$tempdir = getenv('REPOS_TEMP');
+		} elseif (getenv('TMP')) {
 			$type = 'TMP';
 			$tempdir = getenv('TMP');
 		} elseif (getenv('TMPDIR')) {
