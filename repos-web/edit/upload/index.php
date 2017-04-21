@@ -44,7 +44,9 @@ if (!isTargetSet()) {
 		// it might not automatically send credentials for this path
 		targetLogin();	
 	}
-	
+
+	reposNormalizeParams($_POST, ['name']);
+
 	$folderRule = new ResourceExistsRule('target');
 	new NewFilenameRule("name", $folderRule->getValue());
 	
@@ -299,7 +301,7 @@ class Upload {
 	function getName() {
 		if ($this->isCreate()) {
 			Validation::expect('name');
-			return reposNormalizePath($_POST['name']);
+			return $_POST['name'];
 		}
 		return getPathName(getTarget());
 	}

@@ -626,11 +626,22 @@ function xmlEncodePath($path) {
 }
 
 /**
- * Try to avoid https://issues.apache.org/jira/browse/SVN-2464 regardless of client platform
+ * Runs unicode normalization on request parameters.
+ *
+ * For example to help avoid https://issues.apache.org/jira/browse/SVN-2464
+ * reposNormalizeParams($_POST, ['name']);
  */
-function reposNormalizePath($path) {
-	if (Normalizer::isNormalized($path)) return $path;
-	return Normalizer::normalize($path);
+function reposNormalizeParams(&$hash, $params) {
+	if (!is_array($hash)) {
+		error_log("reposNormalizeParams called with a non-hash");
+		return;
+	}
+	foreach ($params as $param) {
+		if (array_key_exists($param, $hash) && !Normalizer::isNormalized($hash[$param])) {
+			error_log("Param '$param' needs unicode normalization from: $hash[$param]");
+			$hash[$param] = Normalizer::normalize($hash[$param]);
+		}
+	}
 }
 
 // ----- internal functions -----
