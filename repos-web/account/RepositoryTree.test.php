@@ -16,7 +16,7 @@ class TestRepositoryTree extends UnitTestCase {
 	var $tree;
 	
 	function TestRepositoryTree() {
-		$this->UnitTestCase();
+		// empty constructor
 	}
 	
 	function setUp() {

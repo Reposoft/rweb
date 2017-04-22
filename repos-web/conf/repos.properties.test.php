@@ -5,7 +5,7 @@ require("../lib/simpletest/setup.php");
 class TestReposProperties extends UnitTestCase {
 
 	function TestReposProperties() {
-		$this->UnitTestCase();
+		// empty constructor
 	}
 	
 	// -------- configuration -------- 
