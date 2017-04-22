@@ -9,8 +9,8 @@ $report->info("Simpletest is installing...");
 $repos_package = "simpletest";
 $home = "simpletest.sourceforge.net";
 
-$version = "1.0.1";
-$archive = "http://downloads.sourceforge.net/project/simpletest/simpletest/simpletest_$version/simpletest_$version.tar.gz";
+$version = "1.1.7";
+$archive = "https://github.com/simpletest/simpletest/archive/v$version.tar.gz";
 
 $basedir = dirname(__FILE__);
 //$dir_backslash = rtrim($basedir, DIRECTORY_SEPARATOR);
@@ -54,6 +54,8 @@ if(!uncompressGZ($tmp, $tarfile, 2000000 )) {
 if(uncompressTAR( $tarfile, null, null )) {
 	$report->ok("Archive extracted.");
 }
+
+rename("$dir/simpletest-$version", "$dir/simpletest");
 
 // delete the docs and test folder
 System::deleteFile($tmp);

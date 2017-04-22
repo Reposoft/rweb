@@ -3,6 +3,9 @@
 # Create repo: docker-compose exec svn repocreate test -o daemon
 # Install libs: http://svn/repos-web/lib/smarty/install.php
 # or: docker-compose exec rweb php /opt/rweb/repos-web/lib/smarty/install.php
+# Unit tests:
+# docker-compose exec rweb php /opt/rweb/repos-web/lib/simpletest/install.php
+# http://svn/repos-web/conf/repos.properties.test.php
 version: '2.1'
 services:
   svn:
