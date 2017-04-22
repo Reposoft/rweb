@@ -107,7 +107,8 @@ class TestServerSettings extends UnitTestCase {
 
 }
 
-testrun(new TestServerSettings());
+$testcase = new TestServerSettings();
+testrun($testcase);
 
 ?>
 

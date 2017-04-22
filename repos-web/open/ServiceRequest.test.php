@@ -212,6 +212,7 @@ class TestServiceRequest extends UnitTestCase {
 	
 }
 
-testrun(new TestServiceRequest());
+$testcase = new TestServiceRequest();
+testrun($testcase);
 
 ?>

@@ -174,4 +174,5 @@ class TestRepositoryTree extends UnitTestCase {
 	
 }
     
-testrun(new TestRepositoryTree());
+$testcase = new TestRepositoryTree();
+testrun($testcase);

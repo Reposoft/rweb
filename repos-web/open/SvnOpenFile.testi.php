@@ -352,5 +352,6 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 	
 }
 
-testrun(new TestIntegrationSvnOpenFile());
+$testcase = new TestIntegrationSvnOpenFile();
+testrun($testcase);
 ?>

@@ -924,6 +924,7 @@ class ConflicthandlerTest extends UnitTestCase {
 	
 }
 
-testrun(new ConflicthandlerTest());
+$testcase = new ConflicthandlerTest();
+testrun($testcase);
 
 ?>

@@ -289,16 +289,17 @@ class TestReposProperties extends UnitTestCase {
 		$_SERVER['REQUEST_URI'] = '/repos-component/';
 		$this->assertEqual(getService(),'home/','Repos root page is "home/". %s');
 	}
-	
+
 	function testGetServiceAdmin() {
 		$_SERVER['REQUEST_URI'] = '/repos-admin/account/';
 		$this->assertEqual(getService(),'repos-admin/account/','repos-admin services should be prefixed with repos-admin. %s');
 		$_SERVER['REQUEST_URI'] = '/repos-backup/store/';
 		$this->assertEqual(getService(),'repos-backup/store/','repos-backup services should be prefixed with repos-backup. %s');
 	}
-	
+
 }
 
-testrun(new TestReposProperties());
+$testcase = new TestReposProperties();
+testrun($testcase);
 
 ?>

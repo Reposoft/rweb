@@ -85,5 +85,6 @@ class TestListJson extends UnitTestCase {
 	
 }
 
-testrun(new TestListJson());
+$testcase = new TestListJson();
+testrun($testcase);
 ?>

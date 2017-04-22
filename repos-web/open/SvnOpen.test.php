@@ -101,5 +101,6 @@ class TestSvnOpen extends UnitTestCase {
 	
 }
 
-testrun(new TestSvnOpen());
+$testcase = new TestSvnOpen();
+testrun($testcase);
 ?>

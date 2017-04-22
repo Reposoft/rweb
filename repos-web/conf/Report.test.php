@@ -73,6 +73,7 @@ class TestReport extends UnitTestCase {
 	}
 }
 
-testrun(new TestReport());
+$testcase = new TestReport();
+testrun($testcase);
 
 ?>

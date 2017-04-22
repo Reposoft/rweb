@@ -318,5 +318,6 @@ class TestSystem extends UnitTestCase {
 
 }
 
-testrun(new TestSystem());
+$testcase = new TestSystem();
+testrun($testcase);
 ?>

@@ -137,5 +137,6 @@ class TestCommand extends UnitTestCase {
 	
 }
 
-testrun(new TestCommand());
+$testcase = new TestCommand();
+testrun($testcase);
 ?>

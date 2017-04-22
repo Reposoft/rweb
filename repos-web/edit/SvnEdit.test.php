@@ -328,5 +328,6 @@ This is the post-commit hook printing a number 10.
 	
 }
 
-testrun(new SvnEditTest());
+$testcase = new SvnEditTest();
+testrun($testcase);
 ?>

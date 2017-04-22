@@ -113,5 +113,6 @@ class Login_include_Test extends UnitTestCase {
 	
 }
 
-testrun(new Login_include_Test());
+$testcase = new Login_include_Test();
+testrun($testcase);
 ?>

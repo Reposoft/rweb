@@ -138,6 +138,7 @@ class TestValidation extends UnitTestCase {
 	
 }
 
-testrun(new TestValidation());
+$testcase = new TestValidation();
+testrun($testcase);
 
 ?>

@@ -114,5 +114,6 @@ class Login_integraton_Test extends UnitTestCase {
 	
 }
 
-testrun(new Login_integraton_Test());
+$testcase = new Login_integraton_Test();
+testrun($testcase);
 ?>

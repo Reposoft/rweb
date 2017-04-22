@@ -208,6 +208,7 @@ class TestPresentation extends UnitTestCase {
 
 }
 
-testrun(new TestPresentation());
+$testcase = new TestPresentation();
+testrun($testcase);
 
 ?>

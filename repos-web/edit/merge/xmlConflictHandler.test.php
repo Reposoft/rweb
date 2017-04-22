@@ -116,5 +116,6 @@ merge
 	}
 }
 
-testrun(new TestXmlConflictHandler());
+$testcase = new TestXmlConflictHandler();
+testrun($testcase);
 ?>

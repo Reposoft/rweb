@@ -28,6 +28,7 @@ class TestX extends UnitTestCase {&#13;
 	&#13;
 }&#13;
 &#13;
-testrun(new TestX());&#13;
+$testcase = new TestX();
+testrun($testcase);&#13;
 ?&gt;&#13;
 </template></templates>
