@@ -2,6 +2,7 @@
 # Image builds see https://github.com/Reposoft/docker-svn
 # Create repo: docker-compose exec svn repocreate test -o daemon
 # Install libs: http://svn/repos-web/lib/smarty/install.php
+# or: docker-compose exec rweb php /opt/rweb/repos-web/lib/smarty/install.php
 version: '2.1'
 services:
   svn:
