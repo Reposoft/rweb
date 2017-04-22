@@ -1,6 +1,13 @@
 
 ## Changelog
 
+### 1.7.0
+
+ * Adds normalization of file upload name (https://github.com/Reposoft/rweb/pull/14)
+ * Drops support for svn <1.5
+ * Adds support for a REPOS_TEMP variable to specify tmp dir
+   - Performance of the backing volume matters in edit operations due to temporary WCs
+
 ### 1.6.0
 
  * Recommends PHP 7

@@ -44,7 +44,9 @@ if (!isTargetSet()) {
 		// it might not automatically send credentials for this path
 		targetLogin();	
 	}
-	
+
+	reposNormalizeParams($_POST, ['name']);
+
 	$folderRule = new ResourceExistsRule('target');
 	new NewFilenameRule("name", $folderRule->getValue());
 	
@@ -125,19 +127,7 @@ function processFile($upload) {
 		$sparse->addArgPath($dir . $filename);
 		if ($sparse->execNoDisplay()) trigger_error('Failed to get target file from repository.', E_USER_ERROR);
 	} else {
-		// warn because this operation may have serious performance impact
-		error_log('svn depth=empty checkout for file upload failed -- temp working copy will contain all folder immediates');
-		// fallback: svn 1.4 and older
-		$checkout = new SvnEdit('checkout');
-		$checkout->addArgOption('--non-recursive');
-		if ($fromrev) $checkout->addArgOption('-r', $fromrev, false);
-		$checkout->addArgUrl($repoFolder);
-		$checkout->addArgPath($dir);
-		$checkout->exec();
-		if (!$checkout->isSuccessful()) {
-			$presentation->showError("Could not read current version of file "
-				.$upload->getTargetUrl().". ".$checkout->getResult());
-		}
+		trigger_error('Failed to create working copy', E_USER_ERROR);
 	}
 	// for PHP operations like file_exist below, we need to use an encoded path on windows
 	// while the subversion commands use $dir.$filename and the setlocale in Command class

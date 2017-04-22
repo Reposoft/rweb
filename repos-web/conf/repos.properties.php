@@ -17,7 +17,7 @@
  * @see Presentation
  * @package conf
  */
-define('REPOS_VERSION','1.6');
+define('REPOS_VERSION','1.7');
 
 // ----- global settings -----
 
@@ -623,6 +623,32 @@ function _urlEncodeQueryString($params) {
  */
 function xmlEncodePath($path) {
 	return str_replace('&', '&amp;', $path);
+}
+
+/**
+ * Runs unicode normalization on request parameters.
+ *
+ * For example to help avoid https://issues.apache.org/jira/browse/SVN-2464
+ * reposNormalizeParams($_POST, ['name']);
+ */
+function reposNormalizeParams(&$hash, $params) {
+	if (isset($_SERVER['REPOS_NORMALIZE']) && $_SERVER['REPOS_NORMALIZE']=='off') {
+		return;
+	}
+	if (!is_array($hash)) {
+		error_log("reposNormalizeParams called with a non-hash");
+		return;
+	}
+	if (!class_exists('Normalizer')) {
+		error_log("Normalize class not found. Is the intl extension enabled?");
+		return;
+	}
+	foreach ($params as $param) {
+		if (array_key_exists($param, $hash) && !Normalizer::isNormalized($hash[$param])) {
+			error_log("Param '$param' needs unicode normalization from: $hash[$param]");
+			$hash[$param] = Normalizer::normalize($hash[$param]);
+		}
+	}
 }
 
 // ----- internal functions -----
