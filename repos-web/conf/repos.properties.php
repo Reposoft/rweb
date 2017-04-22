@@ -632,8 +632,15 @@ function xmlEncodePath($path) {
  * reposNormalizeParams($_POST, ['name']);
  */
 function reposNormalizeParams(&$hash, $params) {
+	if (isset($_SERVER['REPOS_NORMALIZE']) && $_SERVER['REPOS_NORMALIZE']=='off') {
+		return;
+	}
 	if (!is_array($hash)) {
 		error_log("reposNormalizeParams called with a non-hash");
+		return;
+	}
+	if (!class_exists('Normalizer')) {
+		error_log("Normalize class not found. Is the intl extension enabled?");
 		return;
 	}
 	foreach ($params as $param) {
