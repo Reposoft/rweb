@@ -84,7 +84,7 @@ class SvnEditTest extends UnitTestCase
 		$edit->exec();
 		$this->assertTrue(strpos(_getLastCommand(), "\"\\\\temp\\\\file.txt\""));
 		$utf8command = _getLastCommand();
-		$this->sendMessage("Filename '$utf8filename' resulted in command '$utf8command'");
+		$this->dump(null, "Filename '$utf8filename' resulted in command '$utf8command'");
 		if (System::isWindows()) {
 			// not utf-8, but how to test? nowadays we can use utf-8 on windows too (sometimes)
 			//$this->assertFalse(strpos($utf8command, "\"file\xc3\xa5.txt\""));
@@ -154,7 +154,7 @@ class SvnEditTest extends UnitTestCase
 			$edit->setMessage('msg " `ls` \'ls\' \ " | rm END');
 			$edit->exec();
 			$result = _getLastCommand();
-			$this->sendMessage($result);
+			$this->dump(null, $result);
 			//should operation be escaped?//$this->assertTrue(strpos($result, '\" \$\(ls\)'));
 			$this->assertTrue(preg_match('/-m\s(.*)END/', $result, $matches));
 			// this more complex escape was expected before
@@ -221,7 +221,7 @@ What does it say here when commit fails?');
 		$e->command->command->output = $o;
 		$e->command->command->exitcode = 1;	
 		$result = $e->getResult();
-		$this->sendMessage("Result: $result");
+		$this->dump(null, "Result: $result");
 		$this->assertPattern('/Commit failed/', $result);
 		$this->assertPattern('/Can\'t open file .*repo1.db.txn-current-lock.* Permission denied/', $result);
 		$this->assertFalse($e->isSuccessful());
@@ -243,7 +243,7 @@ This is the post-commit hook printing a number 10.
 		$c->exitcode = 0; // is 0 even if post-commit returns >0
 		$this->assertEqual(28, $e->getCommittedRevision(), 'Should get the revision number along with post-commit output. %s');
 		$result = $e->getResult();
-		$this->sendMessage("Result: $result");
+		$this->dump(null, "Result: $result");
 		$this->assertNoPattern('/Sending/', $result, 'Should not return the svn file transfer output. %s');
 		$this->assertNoPattern('/Transmitting file data/', $result, '%s');
 		$this->assertPattern('/Warning: post-commit hook failed \(exit code 1\) with output:/', $result);
@@ -273,7 +273,7 @@ This is the post-commit hook printing a number 10.
 		$r = new FilenameRule('file');
 		$this->assertNull($r->validate('abc.txt'));
 		$this->assertEqual('This is a required field', $r->validate(''));
-		$this->sendMessage("Message on validate 'a\"': ".$r->validate('a"'));
+		$this->dump(null, "Message on validate 'a\"': ".$r->validate('a"'));
 		$this->assertNotNull($r->validate('a"'), 'double quote not allowed in filename');
 		$this->assertNotNull($r->validate('a*'), '* not allowed in filename');
 		$this->assertNull($r->validate('a!'), '! is allowed in filename');
@@ -305,7 +305,7 @@ This is the post-commit hook printing a number 10.
 		$r = new FilenameRule('file', false);
 		$this->assertNull($r->validate(''));
 		$this->assertNull($r->validate('abc.txt'));
-		$this->sendMessage("Error on invalid characters: ".$r->validate('a\\/'));
+		$this->dump(null, "Error on invalid characters: ".$r->validate('a\\/'));
 		$this->assertNotNull($r->validate('a\\/'));
 	}
 	

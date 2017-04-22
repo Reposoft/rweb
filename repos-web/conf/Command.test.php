@@ -104,7 +104,7 @@ class TestCommand extends UnitTestCase {
 		$c->addArgOption("4");
 		$c->addArg("5");
 		$c->exec();
-		$this->sendMessage(_getLastCommand());
+		$this->dump(null, _getLastCommand());
 		$this->assertTrue(strpos(_getLastCommand(), '1') < strpos(_getLastCommand(), '2'));	
 		$this->assertTrue(strpos(_getLastCommand(), '2') < strpos(_getLastCommand(), '3'));
 		$this->assertTrue(strpos(_getLastCommand(), '3') < strpos(_getLastCommand(), '4'));
@@ -117,7 +117,7 @@ class TestCommand extends UnitTestCase {
 		$c->addArg("2");
 		$c->addArg("3");
 		$c->exec();
-		$this->sendMessage(_getLastCommand());
+		$this->dump(null, _getLastCommand());
 		$this->assertTrue(strpos(_getLastCommand(), ' 1 '), "Option arguments should not be escaped");				
 		$this->assertTrue(strpos(_getLastCommand(), ' "2" '), "Non-option arguments should be escaped");
 		$this->assertEqual(0, $c->getExitcode());

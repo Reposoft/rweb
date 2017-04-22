@@ -58,7 +58,7 @@ class TestValidation extends UnitTestCase {
 	
 	function testRuleRegexp() {
 		$regexp = '/[^@]+@[^@]+/';
-		$this->sendMessage("The reqular expression in this test is '$regexp'");
+		$this->dump(null, "The reqular expression in this test is '$regexp'");
 		$r = new RuleRegexp('name', 'must be a string with @ somewhere in the middle', $regexp);
 		$this->assertTrue($r->valid('a@b'));
 		$this->assertFalse($r->valid('ab'));
@@ -81,7 +81,7 @@ class TestValidation extends UnitTestCase {
 		$_REQUEST['myfield'] = '';
 		$this->expectError(new PatternExpectation('/Error.*myfield/'), 'The "myfield" parameter is set, so when the validation rule is created it should validate directly. %s');
 		$r = new Rule('myfield');
-		$this->sendMessage("If a rule is defined and a matching parameter is given, it should be validated directly.");
+		$this->dump(null, "If a rule is defined and a matching parameter is given, it should be validated directly.");
 		// verify that validation rule works: if ($r->valid('')) $this->fail("Test error. The default rule does not validate correctly.");
 		unset($_REQUEST['myfield']);
 	}
@@ -102,12 +102,12 @@ class TestValidation extends UnitTestCase {
 		$params = array(VALIDATION_KEY=>'','name'=>'somename');
 		
 		$s = new ServiceRequest($url, $params, false);
-		$this->sendMessage("Request url: ".$s->_buildUrl());
+		$this->dump(null, "Request url: ".$s->_buildUrl());
 		$s->exec();
 		$this->assertEqual(200, $s->getStatus(), "Should have got a response. %s");
 		$result = $s->getResponse();
 		$this->assertFalse(strContains($result, '<html'), "Should not return HTML, only a response string.");
-		$this->sendMessage(array('Result:',$result));
+		$this->dump(null, array('Result:',$result));
 		
 		// should be valid
 		$expected = array('id'=>'name', 'value'=>'somename', 'success'=>true, 'msg'=>'');

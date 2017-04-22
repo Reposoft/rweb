@@ -49,7 +49,7 @@ class TestListJson extends UnitTestCase {
 </list>
 </lists>';
 		$json = getListJsonFromXml($list);
-		$this->sendMessage($json);
+		$this->dump(null, $json);
 		$this->assertTrue($json, 'should have been converted to json. %s');
 		$this->assertTrue(strpos($json,'2007-11-07T12:29:34.95839'), 'json should include date. %s');
 		// now create array without going into syntax details on the json

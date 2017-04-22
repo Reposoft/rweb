@@ -255,7 +255,7 @@ class TestSystem extends UnitTestCase {
 		System::deleteFile($file);
 		$this->assertFalse(file_exists($file));
 		} else {
-			$this->sendMessage("Can not run this test because folder '$dir' is not writable for this user.");
+			$this->dump(null, "Can not run this test because folder '$dir' is not writable for this user.");
 		}
 	}
 	
@@ -302,18 +302,18 @@ class TestSystem extends UnitTestCase {
 		chmod($dir.'.sv/test.txt', 0700);
 		System::deleteFolder($dir);
 		} else {
-			$this->sendMessage("Can not run this test because folder '".dirname(__FILE__)."' is not writable for this user.");
+			$this->dump(null, "Can not run this test because folder '".dirname(__FILE__)."' is not writable for this user.");
 		}
 	}
 	
 	function testGetHtpasswdCommand() {
 		$h = System::getCommand('htpasswd');
 		$this->assertPattern('/\w+/', $h, $h.' should be a htpasswd command. %s');
-		$this->sendMessage('Executing: '.$h);
+		$this->dump(null, 'Executing: '.$h);
 		exec("$h 2>&1", $output, $ret);
 		$this->assertEqual($ret, 2, 'htpasswd command with no arguments should return exit code 2. %s');
 		$this->assertTrue(strpos(implode(' ',$output),'password'));
-		$this->sendMessage($output);
+		$this->dump(null, $output);
 	}
 
 }

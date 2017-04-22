@@ -136,7 +136,7 @@ class ConflicthandlerTest extends UnitTestCase {
 		$this->assertTrue($this->containsConflictMarker($file), "Testing the test function");
 		$log = array();
 		$actual = handleConflict_excel2003xml($file, $log);
-		$this->sendMessage($log);
+		$this->dump(null, $log);
 		$this->assertTrue($actual, "Should have automatically merged LatestAuthor conflict");
 		$this->assertFalse($this->containsConflictMarker($file), "All conflict markers should be gone");
 		$this->assertTrue($this->containsLine($file, '/.*<LastAuthor>test<\/LastAuthor>.*/'),
@@ -258,7 +258,7 @@ class ConflicthandlerTest extends UnitTestCase {
 		$file = tempfile_create($contents);
 		$log = array();
 		$actual = handleConflict_excel2003xml($file, $log);
-		$this->sendMessage($log);
+		$this->dump(null, $log);
 		$this->assertFalse($actual, "Cannot automatically merge value conflicts");		
 		$this->assertTrue($this->containsConflictMarker($file), "Should still contain the conflict markers");	
 	}
@@ -377,7 +377,7 @@ class ConflicthandlerTest extends UnitTestCase {
 		$file = tempfile_create($contents);
 		$log = array();
 		$actual = handleConflict_excel2003xml($file, $log);
-		$this->sendMessage($log);
+		$this->dump(null, $log);
 		$this->assertFalse($actual, "Cannot automatically merge modified formulas");		
 		$this->assertTrue($this->containsConflictMarker($file), "Should still contain the conflict markers");	
 }	
@@ -498,7 +498,7 @@ class ConflicthandlerTest extends UnitTestCase {
 		$this->assertTrue($this->containsConflictMarker($file), "Testing the test function");
 		$log = array();
 		$actual = handleConflict_excel2003xml($file, $log);
-		$this->sendMessage($log);
+		$this->dump(null, $log);
 		$this->assertTrue($actual, "Should have automatically merged calculated results of identical functions");
 		$this->assertFalse($this->containsConflictMarker($file), "All conflict markers should be gone");
 		$this->assertTrue($this->containsLine($file, '/.*<Data ss:Type="Number">4<.*/'),

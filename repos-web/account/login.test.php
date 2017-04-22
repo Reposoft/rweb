@@ -61,7 +61,7 @@ class Login_include_Test extends UnitTestCase {
 	}
 	
 	function testVerifyLoginNotRepositoryUrl() {
-		$this->sendMessage('It would be a serous secority risk if authentication accepts non-repository urls');
+		$this->dump(null, 'It would be a serous secority risk if authentication accepts non-repository urls');
 		$this->expectError(new PatternExpectation('* not a repository *'));
 		// reportErrorInTest does not force 'return' so there will be extra errors
 		$this->expectError(new AnythingExpectation());

@@ -209,7 +209,7 @@ class TestReposProperties extends UnitTestCase {
 		$_SERVER['HTTPS'] = 'on';
 		$this->assertEqual('https://my.host', asLink('http://my.host'),
 			'asLink should change to https when HTTPS=on. %s');
-		$this->sendMessage('administrator can only configure the non-ssl url, and we cant guess SSL port number');
+		$this->dump(null, 'administrator can only configure the non-ssl url, and we cant guess SSL port number');
 		$this->assertEqual('https://my.host', asLink('http://my.host:88'),
 			'Currently repos does not support custom port number for SSL. Should be removed. %s');
 		$this->assertEqual('https://my.host/a/b', asLink('http://my.host:88/a/b'),
@@ -268,7 +268,7 @@ class TestReposProperties extends UnitTestCase {
 	}
 	
 	function testIsRepositoryUrl() {
-		$this->sendMessage('repository:', getRepository());
+		$this->dump(null, 'repository:', getRepository());
 		$this->assertTrue(isRepositoryUrl(getRepository()),getRepository().' is a repository url. %s');
 		$this->assertFalse(isRepositoryUrl(getSelfRoot()),getSelfRoot().' is not a repository url. %s');
 		$this->assertFalse(isRepositoryUrl(getSelfRoot().'/repos/'),getSelfRoot().'/repos/ is not a repository url. %s');

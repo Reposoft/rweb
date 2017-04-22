@@ -27,7 +27,7 @@ class Login_integraton_Test extends UnitTestCase {
 	function test___integrationtests_below___() {
 		$this->assertTrue(strBegins(TESTHOST, 'http'), "The integration tests below require a hostname TESTHOST");
 		$this->assertTrue(strBegins(TESTREPO, TESTHOST) && strlen(TESTREPO)>strlen(TESTHOST), "The integration tests below require a TESTREPO");
-		$this->sendMessage("The integration tests will run with the repository: ".TESTREPO);
+		$this->dump(null, "The integration tests will run with the repository: ".TESTREPO);
 		
 		$url = parse_url(TESTREPO);
 		$fp = fsockopen($url['host'], $url['port'], $errno, $errstr, 3);
@@ -69,16 +69,16 @@ class Login_integraton_Test extends UnitTestCase {
 		$url = TESTREPO.'/t-e_st@user.acc/';
 		//$this->assertTrue(verifyLogin($url), "Should find $url account and accept login");
 		// not sure this is supported in apache
-		$this->sendMessage("Login to $url: ".(verifyLogin($url) ? 'yes' : 'no'));
+		$this->dump(null, "Login to $url: ".(verifyLogin($url) ? 'yes' : 'no'));
 		$this->assertNoErrors();
 	}
 	
 	function testVerifyLoginTestServerUmlaut() {
-		$this->sendMessage('This test requires the PHP file to be UTF-8 encoded');
+		$this->dump(null, 'This test requires the PHP file to be UTF-8 encoded');
 		$url = TESTREPO.'/téstüsär/';
 		//$this->assertTrue(verifyLogin($url), "Should find $url account and accept login");
 		// not sure this is supported in apache
-		$this->sendMessage("Login to $url: ".(verifyLogin($url) ? 'yes' : 'no'));
+		$this->dump(null, "Login to $url: ".(verifyLogin($url) ? 'yes' : 'no'));
 		$this->assertNoErrors();
 	}
 	
@@ -97,7 +97,7 @@ class Login_integraton_Test extends UnitTestCase {
 	}
 	
 	function testVerifyLoginNonexistingBelow403() {
-		$this->sendMessage('It is essential that the server sends 403, not 404, for a missing folder inside Forbidden');
+		$this->dump(null, 'It is essential that the server sends 403, not 404, for a missing folder inside Forbidden');
 		setTestUser();
 		$url = TESTREPO.'/svensson/nonexistingxyz/';
 		$result = verifyLogin($url);
@@ -105,7 +105,7 @@ class Login_integraton_Test extends UnitTestCase {
 	}	
 
 	function testVerifyLoginNonexisting() {
-		$this->sendMessage('If we get 404 inside the repository we know that login was successful');
+		$this->dump(null, 'If we get 404 inside the repository we know that login was successful');
 		setTestUser();
 		$url = TESTREPO.'/test/nonexistingxyz/';
 		$result = verifyLogin($url);
