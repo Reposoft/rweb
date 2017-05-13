@@ -47,7 +47,7 @@ if (isset($_GET['redirect']) && $_GET['redirect']) {
 $p = Presentation::getInstance();
 $p->assign_by_ref('file', $file);
 // for links to other operations we use the original parameters
-$p->assign('target', getTarget());
+$p->assign('target', $target);
 if ($fromrev) $p->assign('fromrev', $fromrev);
 // display a short log for the file on the edit page
 if (!isset($_REQUEST['history']) || $_REQUEST['history'] != 'false') {
