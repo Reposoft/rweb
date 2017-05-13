@@ -23,8 +23,6 @@ $fromrevRule = new RevisionRule('fromrev');
 $fromrev = $fromrevRule->getValue();
 
 $file = new SvnOpenFile($target, $rev);
-// identify folders, even without trailing slash, for example when coming from history
-$isFoler = $file->isFolder();
 
 // support redirect directly to real resorce (for services that don't know repository root but have target and base)
 if (isset($_GET['redirect']) && $_GET['redirect']) {
