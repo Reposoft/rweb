@@ -1,6 +1,11 @@
 
 ## Changelog
 
+### 1.6.4
+
+ * Adds opt-in folder download support (https://github.com/Reposoft/rweb/pull/18)
+ * Download and json sometimes produces more useful HTTP response codes
+
 ### 1.6.3
 
  * Fixes a regression in file download (https://github.com/Reposoft/rweb/issues/16)
