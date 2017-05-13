@@ -78,8 +78,8 @@ Depending on your browser, it may also work for file types like pdf, documents a
 <h3 class="view"><a id="open" href="list/?target={=$target}{=$file,revParam}">List contents</a></h3>
 <p>Shows a defailed view of the folder's contents at the current revision.</p>
 {=/if}
-{=if $file,isFile}<h3 class="view"><a id="download" href="download/?target={=$target}{=$file,revParam}">Download</a></h3>
-<p>Download this 
+{=if $file,isDownloadAllowed}<h3 class="view"><a id="download" href="download/?target={=$target}{=$file,revParam}">Download</a></h3>
+<p>Download this
 {=if $file,isFile} file {=else} folder as zip archive {=/if}
 to your hard drive. The revision number {=$file,revision}
 will be appended to the filename, so you will know which version it is.</p>

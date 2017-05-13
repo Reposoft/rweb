@@ -413,7 +413,18 @@ class SvnOpenFile {
 		$this->_head();
 		return ($this->headStatus == 200);
 	}
-	
+
+	function isDownloadAllowed() {
+		$rule = isset($_SERVER['REPOS_DOWNLOAD_RULE']) ? $_SERVER['REPOS_DOWNLOAD_RULE'] : '';
+		if ($rule) {
+			$urlFull = $this->getUrlNoquery();
+			$pathFromRoot = substr($urlFull, strpos($urlFull, '/', 8));
+			if (preg_match($rule, $pathFromRoot)) return true;
+		}
+		// backwards compatibility with no env
+		return $this->isFile();
+	}
+
 	/**
 	 * Checks for write access.
 	 * Authenticates if prompted by server upon DAV request.
