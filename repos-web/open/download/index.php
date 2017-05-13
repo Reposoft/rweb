@@ -16,6 +16,10 @@ if ($file->getStatus() != 200) {
 	'). Maybe it exists in a version other than '.$revisionRule->getValue().'.', E_USER_ERROR);
 }
 
+if (!$file->isDownloadAllowed()) {
+	trigger_error('Download has been disabled at '.$file->getPath(), E_USER_ERROR);
+}
+
 // Revision number should be "last changed" so we don't get different downloads for identical file
 // This is also the revision number expected by the "based on version" feature in upload changes
 // For folders: last changed revision can not be used because subitems might have changed
@@ -33,7 +37,6 @@ if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 }
 
 if ($file->isFolder()) {
-	echo 'This service has been disabled.'; exit;
 	require dirname(__FILE__).'/zipfolder.php';
 	$zip = reposExportZip($file);
 	if ($zip === false) {
