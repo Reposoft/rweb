@@ -28,7 +28,17 @@ if ($rev) {
 	$list->addArgUrl($url);
 }
 
-if ($list->exec()) trigger_error('Could not read entry for URL '.$url, E_USER_ERROR);
+	if ($list->exec()) {
+		$err = implode(array_slice($list->getOutput(), -1));
+		if (strBegins($err,'svn: E200009')) {
+			header('HTTP/1.1 404 Not Found', true, 404);
+		} else {
+			header('HTTP/1.1 500 Internal Server Error', true, 500);
+		}
+		echo '{"end": "'.preg_replace('/"/', '\\"', $err);
+		echo '"}'."\n";
+		exit;
+	}
 // TODO detect access denied
 
 	return implode($list->getOutput(),"\n");
