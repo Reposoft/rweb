@@ -17,7 +17,12 @@ if ($file->getStatus() != 200) {
 }
 
 if (!$file->isDownloadAllowed()) {
-	trigger_error('Download has been disabled at '.$file->getPath(), E_USER_ERROR);
+	require("../../conf/Presentation.class.php");
+	$p = Presentation::getInstance();
+	$p->showErrorNoRedirect('Download has been disabled at '.$file->getPath().
+		'. Folder downloads can grow very big, which is why the feature is blocked by default.',
+		'405 Method Not Allowed');
+	exit;
 }
 
 // Revision number should be "last changed" so we don't get different downloads for identical file
