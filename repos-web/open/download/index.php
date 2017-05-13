@@ -10,10 +10,21 @@ $revisionRule = new RevisionRule();
 // if revision is set it is peg
 $file = new SvnOpenFile(getTarget(), $revisionRule->getValue());
 if ($file->getStatus() != 200) {
-	// TODO have some kind of forwarding to the error pages for matching status code
 	require("../../conf/Presentation.class.php");
-	trigger_error('Failed to read '.$file->getPath().' from repository (status '.$file->getStatus().
-	'). Maybe it exists in a version other than '.$revisionRule->getValue().'.', E_USER_ERROR);
+	$p = Presentation::getInstance();
+	$p->showErrorNoRedirect('Failed to read '.$file->getPath().' from repository (status '.$file->getStatus().
+		'). Maybe it exists in '.($revisionRule->getValue() ? 'a revision other than '.$revisionRule->getValue().'.' : 'a historical revision.'),
+		'404 Not Found');
+	exit;
+}
+
+if (!$file->isDownloadAllowed()) {
+	require("../../conf/Presentation.class.php");
+	$p = Presentation::getInstance();
+	$p->showErrorNoRedirect('Download has been disabled at '.$file->getPath().
+		'. Folder downloads can grow very big, which is why the feature is blocked by default.',
+		'405 Method Not Allowed');
+	exit;
 }
 
 // Revision number should be "last changed" so we don't get different downloads for identical file
@@ -33,7 +44,6 @@ if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 }
 
 if ($file->isFolder()) {
-	echo 'This service has been disabled.'; exit;
 	require dirname(__FILE__).'/zipfolder.php';
 	$zip = reposExportZip($file);
 	if ($zip === false) {

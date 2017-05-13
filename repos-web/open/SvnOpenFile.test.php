@@ -12,7 +12,6 @@ class TestSvnOpenFile extends UnitTestCase {
 
 	function setUp() {
 		_svnOpenFile_setInstance(null);
-		$_SERVER['SERVER_NAME'] = 'localhost';
 	}
 	
 	function testGetUrl() {
@@ -433,6 +432,20 @@ class TestSvnOpenFile extends UnitTestCase {
 		//$file = new SvnOpenFile('/test/a.folder/');
 		// The below will give isFolder = false, but how to test?
 		$file = new SvnOpenFile('/test/a.folder', HEAD, false);
+	}
+
+	function testIsDownloadAllowed() {
+		$orgRule = isset($_SERVER['REPOS_DOWNLOAD_RULE']) && $_SERVER['REPOS_DOWNLOAD_RULE'];
+
+		$file = new SvnOpenFile('/testfolder/file.txt', HEAD, false);
+		$this->assertEqual('http://svn/svn', $file->getRepository(), 'This tests assumes the docker-compose setup or equivalent. %s');
+		$_SERVER['REPOS_DOWNLOAD_RULE'] = '|^/svn/test.*|';
+		$this->assertTrue($file->isDownloadAllowed(), 'Matching REPOS_DOWNLOAD_RULE so should be downloadable. %s');
+
+		$_SERVER['REPOS_DOWNLOAD_RULE'] = $orgRule;
+		return; // the test below requires a response, mock or real
+		$file = new SvnOpenFile('/test/a.txt', HEAD, false);
+		$this->assertTrue($file->isDownloadAllowed(), 'Files can always be downloadable, as they are streamed. %s');
 	}
 
 }

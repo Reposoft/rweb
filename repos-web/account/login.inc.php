@@ -163,7 +163,13 @@ function _login_getParentUrl($url) {
  * Note that this can not handle old revisions of folders that have been deleted.
  */
 function login_followRedirect($fromUrl, $headers) {
-	$location = rawurldecode($headers['Location']);  // location header is urlencoded
+	$locationHeader = $headers['Location'];
+	$locationQuery = strAfter($locationHeader, '?');
+	if ($locationQuery) {
+		if ($locationQuery != 'serv=json') return;
+		$locationHeader = substr($locationHeader, 0, strlen($locationHeader) - strlen($locationQuery) - 1);
+	}
+	$location = rawurldecode($locationHeader);  // location header is urlencoded
 	$from = substr($fromUrl, strlen(getRepository()));
 	$to = substr($location, strlen(getRepository()));
 	$url = getSelfUrl().'?'.getSelfQuery();

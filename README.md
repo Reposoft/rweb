@@ -1,12 +1,21 @@
 
 ## Changelog
 
-### 1.7.0
+### 1.7.0 (released from f56ced90 excluding 1.6.3 and 1.6.4 changes)
 
  * Adds normalization of file upload name (https://github.com/Reposoft/rweb/pull/14)
  * Drops support for svn <1.5
  * Adds support for a REPOS_TEMP variable to specify tmp dir
    - Performance of the backing volume matters in edit operations due to temporary WCs
+
+### 1.6.4
+
+ * Adds opt-in folder download support (https://github.com/Reposoft/rweb/pull/18)
+ * Download and json sometimes produces more useful HTTP response codes
+
+### 1.6.3
+
+ * Fixes a regression in file download (https://github.com/Reposoft/rweb/issues/16)
 
 ### 1.6.0
 
@@ -19,7 +28,6 @@
  * Default script bundle comes with the release
 
 TODO
- * http://svn/svn/test1/?rweb=history&serv=json doesn't give you json
  * syntaxhighlight evaluate server side options
  * errorpages generate in docker httpd:rweb from source's template
    - using sed etc, probably only hostname?

@@ -5,6 +5,9 @@
  */
 require(dirname(dirname(dirname(__FILE__))).'/conf/Presentation.class.php');
 require(dirname(dirname(__FILE__)).'/SvnEdit.class.php');
+
+targetLogin(); // edit operation can not be public
+
 require(dirname(dirname(dirname(__FILE__))).'/open/getlog.php');
 require(dirname(__FILE__).'/filewrite.inc.php');
 
