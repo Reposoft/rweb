@@ -10,10 +10,12 @@ $revisionRule = new RevisionRule();
 // if revision is set it is peg
 $file = new SvnOpenFile(getTarget(), $revisionRule->getValue());
 if ($file->getStatus() != 200) {
-	// TODO have some kind of forwarding to the error pages for matching status code
 	require("../../conf/Presentation.class.php");
-	trigger_error('Failed to read '.$file->getPath().' from repository (status '.$file->getStatus().
-	'). Maybe it exists in a version other than '.$revisionRule->getValue().'.', E_USER_ERROR);
+	$p = Presentation::getInstance();
+	$p->showErrorNoRedirect('Failed to read '.$file->getPath().' from repository (status '.$file->getStatus().
+		'). Maybe it exists in '.($revisionRule->getValue() ? 'a revision other than '.$revisionRule->getValue().'.' : 'a historical revision.'),
+		'404 Page Not Found');
+	exit;
 }
 
 if (!$file->isDownloadAllowed()) {
