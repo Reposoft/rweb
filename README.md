@@ -1,6 +1,10 @@
 
 ## Changelog
 
+### 1.6.3
+
+ * Fixes a regression in file download (https://github.com/Reposoft/rweb/issues/16)
+
 ### 1.6.0
 
  * Recommends PHP 7
@@ -12,7 +16,6 @@
  * Default script bundle comes with the release
 
 TODO
- * http://svn/svn/test1/?rweb=history&serv=json doesn't give you json
  * syntaxhighlight evaluate server side options
  * errorpages generate in docker httpd:rweb from source's template
    - using sed etc, probably only hostname?
