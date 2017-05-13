@@ -12,7 +12,6 @@ class TestSvnOpenFile extends UnitTestCase {
 
 	function setUp() {
 		_svnOpenFile_setInstance(null);
-		$_SERVER['SERVER_NAME'] = 'localhost';
 	}
 	
 	function testGetUrl() {
