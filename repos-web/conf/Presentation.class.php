@@ -186,7 +186,7 @@ class Presentation {
 	 * This function does everything that is required befor compiling templates.
 	 * @private This class is Singleton. Use Presentation::getInstance().
 	 */
-	function Presentation() {
+	function __construct() {
 		setupResponse();
 
 		$this->smarty = smarty_getInstance();

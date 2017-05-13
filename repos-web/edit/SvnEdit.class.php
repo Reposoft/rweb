@@ -31,7 +31,7 @@ define('PARAM_REVPROP_PREFIX','revprop_');
  */
 class FilenameRule extends RuleRegexp {
 	var $required;
-	function FilenameRule($fieldname, $required=true) {
+	function __construct($fieldname, $required=true) {
 		$this->required = $required;
 		$this->RuleRegexp($fieldname, 
 			'may not contain any of the characters +&:*?<>\/| or quotes',
@@ -55,7 +55,7 @@ class FilenameRule extends RuleRegexp {
  */
 class NewFilenameRule extends Rule {
 	var $_pathPrefix;
-	function NewFilenameRule($fieldname, $pathPrefix='') {
+	function __construct($fieldname, $pathPrefix='') {
 		$this->_pathPrefix = $pathPrefix; // fields first, then parent constructor
 		$this->Rule($fieldname, '');
 	}
@@ -89,7 +89,7 @@ class NewFilenameRule extends Rule {
  * @package edit
  */
 class ResourceExistsRule extends Rule {
-	function ResourceExistsRule($fieldname='target') {
+	function __construct($fieldname='target') {
 		$this->Rule($fieldname, 'The path does not exist in the repository.');
 	}
 	function valid($fieldvalue) {
@@ -116,7 +116,7 @@ class ResourceExistsRule extends Rule {
 }
 
 class ResourceExistsAndIsWritableRule extends ResourceExistsRule {
-	function ResourceExistsAndIsWritableRule($fieldname='target') {
+	function __construct($fieldname='target') {
 		$this->ResourceExistsRule($fieldname);
 	}
 	function valid($fieldvalue) {
@@ -241,7 +241,7 @@ class SvnEdit {
 	 * @param String $subversionOperation svn command line operation, for example mkdir or del.
 	 *  It is recommended to use the long name, like 'list' instead of 'ls' because it is more readable.
 	 */
-	function SvnEdit($subversionOperation) {
+	function __construct($subversionOperation) {
 		$this->command = new SvnOpen($subversionOperation);
 		// default commit message setting, can always be enabled with setMessage
 		$this->commitWithMessage = ($subversionOperation=='commit' || $subversionOperation=='import');

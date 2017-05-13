@@ -81,7 +81,7 @@ class Command {
 	 * @param boolean $validate set to false to bypass command name resolution and validation (requires careful security considerations)
 	 * @return Command
 	 */
-	function Command($commandName, $validate=true) {
+	function __construct($commandName, $validate=true) {
 		if (!$validate) {
 			// command executed as given
 		} else if (System::getCommand($commandName) === false) {
