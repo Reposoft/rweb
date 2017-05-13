@@ -14,7 +14,7 @@ if ($file->getStatus() != 200) {
 	$p = Presentation::getInstance();
 	$p->showErrorNoRedirect('Failed to read '.$file->getPath().' from repository (status '.$file->getStatus().
 		'). Maybe it exists in '.($revisionRule->getValue() ? 'a revision other than '.$revisionRule->getValue().'.' : 'a historical revision.'),
-		'404 Page Not Found');
+		'404 Not Found');
 	exit;
 }
 

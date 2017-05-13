@@ -440,6 +440,9 @@ class Presentation {
 	 * @param String $headline the contents of the <h1> tag
 	 */
 	function showErrorNoRedirect($error_msg, $headline='An error occurred') {
+		if (preg_match('/^[1-5][0-9][0-9] /', $headline)) {
+			header("HTTP/1.1 $headline");
+		}
 		$template = $this->getLocaleFile(dirname(__FILE__) . '/Error');
 		$this->assign('headline', $headline);
 		$this->assign('error', $error_msg);
