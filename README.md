@@ -1,6 +1,13 @@
 
 ## Changelog
 
+### 1.7.1
+
+ * Makes unit tests runnable in docker-compose setup with manual simpletest install
+   - ./build-contracts/unittest/run-curl.sh says 8/15 .test.php files fail
+ * Switches to PHP5 constructors (__construct instead of ClassName) to avoid deprecation warning
+ * Includes the stuff from 1.6.3 and 1.6.4
+
 ### 1.7.0 (released from f56ced90 excluding 1.6.3 and 1.6.4 changes)
 
  * Adds normalization of file upload name (https://github.com/Reposoft/rweb/pull/14)
