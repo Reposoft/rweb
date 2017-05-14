@@ -110,7 +110,7 @@ function _svnFolderIsWritable($url) {
 class RevisionRule extends Rule {
 
 	function __construct($fieldname='rev', $message='Not a valid revision number') {
-		$this->Rule($fieldname, $message);
+		parent::__construct($fieldname, $message);
 	}
 	
 	function valid($value) {

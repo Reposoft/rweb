@@ -13,7 +13,7 @@ class MyRuleWithDynamicMessage extends Rule {
 
 class MyRuleRegexp extends RuleRegexp {
 	function MyRuleRegexp($fieldname) {
-		$this->RuleRegexp($fieldname,	'empty or 1-5 lowercase letters please', '/^[a-z]{0,5}$/');
+		parent::__construct($fieldname,	'empty or 1-5 lowercase letters please', '/^[a-z]{0,5}$/');
 	}
 }
 
