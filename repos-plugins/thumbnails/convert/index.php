@@ -74,6 +74,21 @@ $r = new RevisionRule($revField);
 //	handleError(412, "Revision number required ".$r->getValue());
 //}
 
+if (isset($_REQUEST['accept'])) {
+	$extensions = preg_split('/[,\s]+/', $_REQUEST['accept'], -1, PREG_SPLIT_NO_EMPTY);
+	$targetUrl = getTargetUrl();
+	$probe = '';
+	do {
+		$s = new ServiceRequest($targetUrl.$probe);
+		$s->setSkipBody();
+		$s->exec();
+		if ($s->getStatus() == 200) {
+			$_REQUEST['target'] .= $probe;
+			break;
+		}
+	} while ($probe = array_shift($extensions));
+}
+
 // First get the data about the repository image
 // Consider this an implementation of ReposGraphicsTransformSource
 // We only use SvnOpenFile to check existence, and the operation could maybe be made faster as we don't need the info

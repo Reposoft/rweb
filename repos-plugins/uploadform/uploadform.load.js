@@ -21,6 +21,14 @@ function autoFillFilename(path) {
 	$(document).say();
 	var pos = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
 	var filename = path.substring(pos + 1);
+
+	var fileext = (/\.(\w{1,4})$/.exec(filename) || [])[1];
+	var qs = $.deparam.querystring();
+
+	if (fileext && qs.accept && /^[^\.]+$/.test(suggested)) {
+		suggested = suggested + '.' + fileext.toLowerCase();
+		$('#name').val(suggested);
+	}
 	
 	if (!v) {
 		suggested = suggested && !!$('#name').val();
