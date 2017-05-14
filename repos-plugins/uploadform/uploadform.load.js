@@ -26,7 +26,7 @@ function autoFillFilename(path) {
 	var qs = $.deparam.querystring();
 
 	if (fileext && qs.accept && /^[^\.]+$/.test(suggested)) {
-		suggested = suggested + '.' + fileext;
+		suggested = suggested + '.' + fileext.toLowerCase();
 		$('#name').val(suggested);
 	}
 	
