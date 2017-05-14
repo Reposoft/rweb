@@ -41,7 +41,7 @@ You can not rename this file.</p>
   <p>
     <label for="userfile">local file</label>
 	 <input type="hidden" name="MAX_FILE_SIZE" value="{=$maxfilesize}" />
-    <input type="file" id="userfile" name="userfile" class="required current-name" size="40" tabindex="1" {=$suggestname|fileInputAccept}/>
+    <input type="file" id="userfile" name="userfile" class="required current-name" size="40" tabindex="1" {=if $accept}accept="{=$accept}"{=/if}/>
     <span class="note">Maximum file size {=$maxfilesize|formatSize}</span>
   </p>
   <p>
