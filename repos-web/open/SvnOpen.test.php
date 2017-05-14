@@ -26,7 +26,7 @@ class TestSvnOpen extends UnitTestCase {
 
 	function testGetSvnSwitches() {
 		setTestUser('a b', 'c"d');
-		$this->sendMessage(_svnopen_getSvnSwitches());
+		$this->dump(null, _svnopen_getSvnSwitches());
 		$this->assertTrue(strContains(_svnopen_getSvnSwitches(), '--username="a b"'), "Username should be escaped for command line.");
 		if (System::isWindows()) {
 			$this->assertTrue(strContains(_svnopen_getSvnSwitches(), '--password="c""d"'), "Password should be escaped for command line.");
@@ -101,5 +101,6 @@ class TestSvnOpen extends UnitTestCase {
 	
 }
 
-testrun(new TestSvnOpen());
+$testcase = new TestSvnOpen();
+testrun($testcase);
 ?>

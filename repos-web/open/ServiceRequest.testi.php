@@ -57,5 +57,6 @@ class TestServiceRequestIntegration extends UnitTestCase {
 	
 }
 
-testrun(new TestServiceRequestIntegration());
+$testcase = new TestServiceRequestIntegration();
+testrun($testcase);
 ?>

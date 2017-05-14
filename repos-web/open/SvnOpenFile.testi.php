@@ -206,7 +206,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$import->addArgUrl($url);
 		if ($import->execNoDisplay()) {
 			$this->fail('Failed to import test file');
-			$this->sendMessage($import->getOutput());
+			$this->dump(null, $import->getOutput());
 			return;
 		}
 		
@@ -227,7 +227,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$file = new SvnOpenFile("/demoproject/trunk/public/");
 		$this->assertEqual(200, $file->getStatus());
 		$this->assertTrue($file->isFolder());
-		$this->sendMessage("Note that isWritable should not generate an error in apache error log");
+		$this->dump(null, "Note that isWritable should not generate an error in apache error log");
 		$this->assertTrue($file->_isWritable());
 		$this->assertEqual('public', $file->getFilename());
 		$this->assertEqual('/demoproject/trunk/', $file->getFolderPath());
@@ -259,7 +259,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$file = new SvnOpenFile("/demoproject/trunk/readonly/");
 		$this->assertEqual(200, $file->getStatus());
 		$this->assertTrue($file->isFolder());
-		$this->sendMessage("Note that isWritable should not generate an error in apache error log");
+		$this->dump(null, "Note that isWritable should not generate an error in apache error log");
 		$this->assertFalse($file->_isWritable());	
 		$this->assertFalse($file->isLocked(), "Folders are never locked. %s");	
 	}
@@ -268,7 +268,7 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$file = new SvnOpenFile("/demoproject/trunk/noaccess/");
 		$this->assertEqual(403, $file->getStatus());
 		$this->assertTrue($file->isFolder());
-		$this->sendMessage("Note that isWritable should not generate an error in apache error log");
+		$this->dump(null, "Note that isWritable should not generate an error in apache error log");
 		$this->assertFalse($file->_isWritable());
 		$this->assertFalse($file->isLocked(), "Folders are never locked. %s");
 	}
@@ -324,9 +324,9 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 		$import->addArgUrl($url);
 		if ($import->execNoDisplay()) {
 			$this->fail('Failed to import test folder');
-			$this->sendMessage($import->getOutput());
+			$this->dump(null, $import->getOutput());
 		}
-		$this->sendMessage($import->getResult());
+		$this->dump(null, $import->getResult());
 		$revWhenAdded = $import->getCommittedRevision();
 		$this->assertNotNull($revWhenAdded, 'The test needs a revision number');
 		$delete = new SvnEdit('rm');
@@ -352,5 +352,6 @@ class TestIntegrationSvnOpenFile extends UnitTestCase {
 	
 }
 
-testrun(new TestIntegrationSvnOpenFile());
+$testcase = new TestIntegrationSvnOpenFile();
+testrun($testcase);
 ?>

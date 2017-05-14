@@ -3,10 +3,13 @@
 # Create repo: docker-compose exec svn repocreate test -o daemon
 # Install libs: http://svn/repos-web/lib/smarty/install.php
 # or: docker-compose exec rweb php /opt/rweb/repos-web/lib/smarty/install.php
+# Unit tests:
+# docker-compose exec rweb php /opt/rweb/repos-web/lib/simpletest/install.php
+# http://svn/repos-web/conf/repos.properties.test.php
 version: '2.1'
 services:
   svn:
-    image: solsson/rweb-httpd@sha256:4a0661e12da2ef4cc5dfbff08213a28b628bd522c85607e26e3425e30310821b
+    image: solsson/rweb-httpd:1.6.4@sha256:ea15cc8e7826af8e81fd675707381cc2148524d839fbcda2376a452361cc942d
     expose:
       - "80"
     ports:
@@ -17,7 +20,7 @@ services:
     volumes:
       - .:/opt/rweb
   rweb:
-    image: solsson/rweb@sha256:9690296ec8c59cef6a65e7a5bdb7fe77bbd8edc5cdd07b3bccc294c2cb6f02e2
+    image: solsson/rweb:1.6.4@sha256:fe32cc82f675d447ffb4f4a7a03fe9a62a83097eda5097dded6134c6ecba46b9
     expose:
       - "9000"
     links:

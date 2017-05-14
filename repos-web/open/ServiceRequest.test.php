@@ -110,18 +110,18 @@ class TestServiceRequest extends UnitTestCase {
 	function testExec() {
 		$service = new ServiceRequest('', array());
 		$service->uri = getSelfUrl();
-		$this->sendMessage($service->_buildUrl());
+		$this->dump(null, $service->_buildUrl());
 		$service->exec();
 		$this->assertEqual('{"message":"test","user":"Test User","pass":"pwd"}', $service->getResponse());
 		$this->assertTrue($service->isOK());
 		$this->assertEqual(200, $service->getStatus());
-		$this->sendMessage($service->getResponseHeaders());
+		$this->dump(null, $service->getResponseHeaders());
 	}
 	
 	function testExcecHeadersOnly() {
 		$service = new ServiceRequest(getSelfUrl(), array());
 		$service->setSkipBody();
-		$this->sendMessage($service->_buildUrl());
+		$this->dump(null, $service->_buildUrl());
 		$service->exec();
 		$headers = $service->getResponseHeaders();
 		$this->assertEqual('HTTP/1.1 200 OK', $headers[0]);
@@ -135,10 +135,10 @@ class TestServiceRequest extends UnitTestCase {
 	
 	function testExcecAbsolutePath() {
 		$path = substr(getSelfUrl(), strlen(getHost()));
-		$this->sendMessage("Using url without host: $path");
+		$this->dump(null, "Using url without host: $path");
 		$service = new ServiceRequest(getSelfUrl(), array());
 		
-		$this->sendMessage($service->_buildUrl());
+		$this->dump(null, $service->_buildUrl());
 		$service->exec();
 		$headers = $service->getResponseHeaders();
 		$this->assertEqual('HTTP/1.1 200 OK', $headers[0]);
@@ -147,7 +147,7 @@ class TestServiceRequest extends UnitTestCase {
 	function testExcecNoService() {
 		$service = new ServiceRequest(getSelfUrl(), array());
 		$service->setResponseTypeDefault();
-		$this->sendMessage("This test hangs in an infinite loop if the internal user agent string is not set.");
+		$this->dump(null, "This test hangs in an infinite loop if the internal user agent string is not set.");
 		// or does it? maybe it nowadays sets the serv=json parameter anyway and that is what's detected?
 		$service->exec();
 		$this->assertEqual(412, $service->getStatus());
@@ -157,19 +157,19 @@ class TestServiceRequest extends UnitTestCase {
 		// get redirect page but don't follow redirect
 		$service = new ServiceRequest(getSelfUrl(), array('redirect'=>'1'));
 		$service->exec();
-		$this->sendMessage('This test expects a 302 and Location header for encoded URL: '.$service->_buildUrl());
+		$this->dump(null, 'This test expects a 302 and Location header for encoded URL: '.$service->_buildUrl());
 		$this->assertEqual(0, $service->getRedirectCount());
 		$this->assertEqual(302, $service->getStatus());
-		$this->sendMessage($service->getResponseHeaders());
-		$this->sendMessage($service->getResponse());
+		$this->dump(null, $service->getResponseHeaders());
+		$this->dump(null, $service->getResponse());
 		// enable redirect
 		$service = new ServiceRequest(getSelfUrl(), array('redirect'=>'1'));
 		$service->setFollowRedirects();
 		$service->exec();
 		$this->assertEqual(1, $service->getRedirectCount());
 		$this->assertEqual(412, $service->getStatus());
-		$this->sendMessage($service->getResponseHeaders());
-		$this->sendMessage($service->getResponse());
+		$this->dump(null, $service->getResponseHeaders());
+		$this->dump(null, $service->getResponse());
 	}
 	
 	function testAuthentication() {
@@ -212,6 +212,7 @@ class TestServiceRequest extends UnitTestCase {
 	
 }
 
-testrun(new TestServiceRequest());
+$testcase = new TestServiceRequest();
+testrun($testcase);
 
 ?>

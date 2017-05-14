@@ -11,7 +11,7 @@ class TestClazz {
 class TestPresentation extends UnitTestCase {
 
 	function TestPresentation() {
-		$this->UnitTestCase();
+		// empty constructor
 	}
 
 	function setUp() {
@@ -208,6 +208,7 @@ class TestPresentation extends UnitTestCase {
 
 }
 
-testrun(new TestPresentation());
+$testcase = new TestPresentation();
+testrun($testcase);
 
 ?>

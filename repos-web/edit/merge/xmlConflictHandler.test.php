@@ -31,18 +31,18 @@ merge
   <Created>2006-11-24T14:13:43Z</Created>';
 		$array = explode("\n", $data);	
 		$conflicts = findConflict($array, $log);
-		$this->sendMessage($log);
+		$this->dump(null, $log);
 		$this->assertEqual(1, count($conflicts));
 		$c = $conflicts[0];
 		$this->assertEqual(3, $c->getStartLine());
 		$this->assertEqual(5, $c->getLimitLine());
 		$this->assertEqual(7, $c->getEndLine());
 		$w = $c->getWorking();
-		$this->sendMessage($w);
+		$this->dump(null, $w);
 		$this->assertEqual(1, count($w));
 		$this->assertEqual($array[4], $w[0]);
 		$w = $c->getMerge();
-		$this->sendMessage($w);
+		$this->dump(null, $w);
 		$this->assertEqual(1, count($w));
 		$this->assertEqual($array[6], $w[0]);
 	}
@@ -116,5 +116,6 @@ merge
 	}
 }
 
-testrun(new TestXmlConflictHandler());
+$testcase = new TestXmlConflictHandler();
+testrun($testcase);
 ?>

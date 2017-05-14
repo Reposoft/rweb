@@ -63,7 +63,19 @@ if (!isTargetSet()) {
 		processFile($upload);
 	}
 }
-	
+
+function fileInputAccept($suggestname) {
+	if (!$suggestname) return;
+
+	//preg_match('/\((?:([a-z0-9]+)[|)])+$/', $suggestname, $matches);
+
+	preg_match('/\(((?:[a-z0-9]+\|?)+)\)$/', $suggestname, $matches);
+	if (!count($matches)) return;
+	$extensions = explode('|', $matches[1]);
+
+	return 'accept=".' . implode(',.', $extensions) . '" ';
+}
+
 function showUploadForm() {
 	header("Cache-Control: no-cache, must-revalidate"); // the history part of the form must be updated after successful upload to avoid strange conflicts - disable caching until we have a better solution
 	$template = Presentation::getInstance();

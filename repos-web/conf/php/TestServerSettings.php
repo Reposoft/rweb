@@ -88,9 +88,9 @@ class TestServerSettings extends UnitTestCase {
 	}
 
 	function testLocale() {
-		$this->sendMessage('PHP_OS='.PHP_OS);
-		$this->sendMessage('Repos parses svn command output, which is localized in most svn installations, so it must set language to english.');
-		$this->sendMessage('It also needs the shell to be UTF-8 so that paths and messages can be encoded for the svn command.');
+		$this->dump(null, 'PHP_OS='.PHP_OS);
+		$this->dump(null, 'Repos parses svn command output, which is localized in most svn installations, so it must set language to english.');
+		$this->dump(null, 'It also needs the shell to be UTF-8 so that paths and messages can be encoded for the svn command.');
 		exec('locale -a 2>&1', $locales, $r);
 		$rlocale = 'en_US.utf8'; // TODO let this test require repos.properties.php and use getLocale()
 		if (PHP_OS == 'Darwin') $rlocale = str_replace('utf8', 'UTF-8', $rlocale); // This is what Command.class.php does in _command_env
@@ -98,7 +98,7 @@ class TestServerSettings extends UnitTestCase {
 			$this->assertTrue(in_array($rlocale, $locales), 'Locale '.$rlocale.' not found in '.implode(',',$locales));
 		} else {
 			if (substr(PHP_OS,0,3)=='WIN') {
-				$this->sendMessage('Locale command not available, but this is windows so that\'s ok');
+				$this->dump(null, 'Locale command not available, but this is windows so that\'s ok');
 			} else {
 				$this->fail('The package "locale" is required, got '.implode(" ",$locales));
 			}
@@ -107,7 +107,8 @@ class TestServerSettings extends UnitTestCase {
 
 }
 
-testrun(new TestServerSettings());
+$testcase = new TestServerSettings();
+testrun($testcase);
 
 ?>
 

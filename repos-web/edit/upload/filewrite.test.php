@@ -121,5 +121,6 @@ class TestFilewrite extends UnitTestCase {
 	
 }
 
-testrun(new TestFilewrite());
+$testcase = new TestFilewrite();
+testrun($testcase);
 ?>
