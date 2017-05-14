@@ -20,20 +20,20 @@ define('PARAM_REVPROP_PREFIX','revprop_');
 
 /**
  * Shared validation rule representing file- or foldername restrictions.
- * 
+ *
  * Not required field. Use Validation::expect(...) to require.
- * 
- * Basically same rules as in windows, but max 50 characters, 
+ *
+ * Basically same rules as in windows, but max 50 characters,
  * no \/:*?"<> or |.
  * Unlike windows, we don't accept single quote.
- * 
+ *
  * @package edit
  */
 class FilenameRule extends RuleRegexp {
 	var $required;
-	function FilenameRule($fieldname, $required=true) {
+	function __construct($fieldname, $required=true) {
 		$this->required = $required;
-		$this->RuleRegexp($fieldname, 
+		parent::__construct($fieldname,
 			'may not contain any of the characters +&:*?<>\/| or quotes',
 			'/^[^+&\/\\:\*\?+<>\|\'"]+$/');
 	}
@@ -50,14 +50,14 @@ class FilenameRule extends RuleRegexp {
  * Shared validation rule, used before attempting a create,
  * to check that the name is not already in use.
  * This is a common error case, so we don't want to wait for the commit error.
- * 
+ *
  * @package edit
  */
 class NewFilenameRule extends Rule {
 	var $_pathPrefix;
-	function NewFilenameRule($fieldname, $pathPrefix='') {
+	function __construct($fieldname, $pathPrefix='') {
 		$this->_pathPrefix = $pathPrefix; // fields first, then parent constructor
-		$this->Rule($fieldname, '');
+		parent::__construct($fieldname, '');
 	}
 	function validate($fieldvalue) {
 		$target = $this->_getPath($fieldvalue);
@@ -89,8 +89,8 @@ class NewFilenameRule extends Rule {
  * @package edit
  */
 class ResourceExistsRule extends Rule {
-	function ResourceExistsRule($fieldname='target') {
-		$this->Rule($fieldname, 'The path does not exist in the repository.');
+	function __construct($fieldname='target') {
+		parent::__construct($fieldname, 'The path does not exist in the repository.');
 	}
 	function valid($fieldvalue) {
 		$s = new ServiceRequest(getRepository().$fieldvalue);
@@ -116,8 +116,8 @@ class ResourceExistsRule extends Rule {
 }
 
 class ResourceExistsAndIsWritableRule extends ResourceExistsRule {
-	function ResourceExistsAndIsWritableRule($fieldname='target') {
-		$this->ResourceExistsRule($fieldname);
+	function __construct($fieldname='target') {
+		parent::__construct($fieldname);
 	}
 	function valid($fieldvalue) {
 		$v = parent::valid($fieldvalue);
@@ -241,7 +241,7 @@ class SvnEdit {
 	 * @param String $subversionOperation svn command line operation, for example mkdir or del.
 	 *  It is recommended to use the long name, like 'list' instead of 'ls' because it is more readable.
 	 */
-	function SvnEdit($subversionOperation) {
+	function __construct($subversionOperation) {
 		$this->command = new SvnOpen($subversionOperation);
 		// default commit message setting, can always be enabled with setMessage
 		$this->commitWithMessage = ($subversionOperation=='commit' || $subversionOperation=='import');

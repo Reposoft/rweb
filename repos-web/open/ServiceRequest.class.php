@@ -101,7 +101,7 @@ class ServiceRequest {
 	 *  to detect Authorization Required header from the service, forward those headers and exit.
 	 * @return ServiceRequest which might be further configured with set* methods
 	 */
-	function ServiceRequest($service, $parameters=array(), $authenticate=true) {
+	function __construct($service, $parameters=array(), $authenticate=true) {
 		$this->uri = $service;
 		$this->parameters = $parameters;
 		// get client ip and set header according to constant

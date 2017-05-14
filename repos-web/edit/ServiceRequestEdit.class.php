@@ -13,9 +13,9 @@ define('SERVICE_EDIT_PROPSET', 'edit/propset/');
  * ServiceRequest that expects JSON response and returns revision number from it.
  */
 class ServiceRequestEdit extends ServiceRequest {
-	
-	function ServiceRequestEdit($service, $parameters=array(), $authenticate=true) {
-		$this->ServiceRequest($service, $parameters, $authenticate);
+
+	function __construct($service, $parameters=array(), $authenticate=true) {
+		parent::__construct($service, $parameters, $authenticate);
 		$this->setCustomHttpMethod('POST'); // all operation that edit data should be POST according to HTTP spec
 	}
 	

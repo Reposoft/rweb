@@ -108,9 +108,9 @@ function _svnFolderIsWritable($url) {
  * Validates revision (number or string) parameters.
  */
 class RevisionRule extends Rule {
-	
-	function RevisionRule($fieldname='rev', $message='Not a valid revision number') {	
-		$this->Rule($fieldname, $message);
+
+	function __construct($fieldname='rev', $message='Not a valid revision number') {
+		parent::__construct($fieldname, $message);
 	}
 	
 	function valid($value) {
@@ -151,7 +151,7 @@ class SvnOpen {
 	 * @param boolean $asXml set to true to add the --xml parameter (allowed only if the svn command accepts it)
 	 * @return SvnOpen
 	 */
-	function SvnOpen($subversionOperation, $asXml=false) {
+	function __construct($subversionOperation, $asXml=false) {
 		$this->operation = $subversionOperation;
 		$this->command = new Command('svn');
 		if ($this->operation == 'dump') {

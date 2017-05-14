@@ -151,7 +151,7 @@ class SvnOpenFile {
 	 * @param boolean $revisionIsPeg set to false if the path is from HEAD but the revision migt be older
 	 * @return SvnOpenFile
 	 */
-	function SvnOpenFile($path, $revision=null, $validate=true, $revisionIsPeg=true) {
+	function __construct($path, $revision=null, $validate=true, $revisionIsPeg=true) {
 		$this->path = $path;
 		// TODO split between internal and external use and call getRespositoryInternal where possible
 		$this->url = SvnOpenFile::getRepository().$path;

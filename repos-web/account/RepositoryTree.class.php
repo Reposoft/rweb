@@ -65,7 +65,7 @@ class RepositoryTree {
 	// the entrypoints given to the user by this ACL, directly or through a group
 	var $_entries;
 
-	function RepositoryTree($aclFile, $username) {
+	function __construct($aclFile, $username) {
 		$this->_user = $username;
 		$this->_acl = $this->_parseToAcl($aclFile, $this->_user);
 		if ($this->_acl === false) {
@@ -191,14 +191,14 @@ class RepositoryEntryPoint {
 	var $path;
 	var $readonly;
 	var $bygroup;
-	
+
 	/**
 	 * Constructor
 	 * @param path the path starting with '/' but not ending with one
 	 * @param accessString 'rw' or 'r' are currently the only accepted
 	 * @param byGroupMembership true if the user got access through a group
 	 */
-	function RepositoryEntryPoint($path, $accessString, $byGroupMembership) { 
+	function __construct($path, $accessString, $byGroupMembership) {
 		if ($accessString == 'rw') {
 			$this->readonly = false;
 		} elseif ($accessString = 'r') {

@@ -118,7 +118,7 @@ class RuleRegexp extends Rule {
 	var $regexp;
 	function RuleRegexp($fieldname, $message, $pRegexp) {
 		$this->regexp = $pRegexp;
-		$this->Rule($fieldname, $message);
+		parent::__construct($fieldname, $message);
 	}
 	function valid($value) {
 		return preg_match($this->regexp, $value);
@@ -127,7 +127,7 @@ class RuleRegexp extends Rule {
 
 class RuleRegexpInvert extends RuleRegexp {
 	function RuleRegexpInvert($fieldname, $message, $pRegexpNoMatch) {
-		$this->RuleRegexp($fieldname, $message, $pRegexpNoMatch);
+		parent::__construct($fieldname, $message, $pRegexpNoMatch);
 	}
 	function valid($value) {
 		return !parent::valid($value);

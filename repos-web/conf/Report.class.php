@@ -117,7 +117,7 @@ class Report {
 	 * Creates a new report, which is a new page.
 	 * @param boolean $plaintext Overrides the default detection of offline/online output: true to get plaintext output, false to get html.
 	 */
-	function Report($title='Repos system report', $category='', $plaintext=null) {
+	function __construct($title='Repos system report', $category='', $plaintext=null) {
 		if (is_null($plaintext)) {
 			$this->offline = isTextmode();
 		} else {
