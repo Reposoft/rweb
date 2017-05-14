@@ -1,6 +1,10 @@
 
 ## Changelog
 
+### 1.7.2
+
+ * Supports "accept" at upload new file and ?rweb=t.x (https://github.com/Reposoft/rweb/pull/20)
+
 ### 1.7.1
 
  * Makes unit tests runnable in docker-compose setup with manual simpletest install

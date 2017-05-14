@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION=1.7.1
+VERSION=1.7.2
 rm -Rf target
 mkdir target
 cp -r repos-plugins target/
