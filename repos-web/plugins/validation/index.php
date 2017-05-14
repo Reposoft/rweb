@@ -16,8 +16,8 @@ require('../../conf/Presentation.class.php');
 
 // define custom validation rules
 class TestUsernameRule extends RuleRegexp {
-	function TestUsernameRule($fieldname) {
-		$this->RuleRegexp($fieldname,
+	function __construct($fieldname) {
+		parent::__construct($fieldname,
 			'Username is 4-20 characters and can not contain special characters',
 			'/^$|^[a-zA-Z0-9]{4,20}$/'); // not required
 	}
