@@ -749,14 +749,19 @@ class SvnOpenFile {
 		$cmd->addArgOption('svn:mime-type');
 		$this->_specifyUrlAndRev($cmd);
 		$cmd->exec();
-		if ($cmd->getExitcode()) trigger_error("Could not find the file '$targetUrl' revision $revision in the repository.", E_USER_ERROR );
+		if ($cmd->getExitcode()) {
+			if (strContains($cmd->getOutput()[0], "W200017: Property 'svn:mime-type' not found")) {
+				return false;
+			}
+			trigger_error("Failed to propget path '{$this->getPath()}' revision {$this->getRevisionRequestedString()} (peg={$this->isRevisionPeg()}).", E_USER_ERROR );
+		}
 		$result = $cmd->getOutput();
 		if (count($result) == 0) { // mime type property not set, return default
 			return false;
 		}
 		return $result[0];
 	}
-	
+
 	/**
 	 * Reads the contents of the file to a string of characters, even if it is binary
 	 */
