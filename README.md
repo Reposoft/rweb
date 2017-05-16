@@ -1,6 +1,11 @@
 
 ## Changelog
 
+### 1.6.5
+
+ * Fixes details page mime-type for historical revision with svn 1.9 (https://github.com/Reposoft/rweb/issues/22)
+ * Backports fix for details page result with new PHP (https://github.com/Reposoft/rweb/issues/21)
+
 ### 1.6.4
 
  * Adds opt-in folder download support (https://github.com/Reposoft/rweb/pull/18)
