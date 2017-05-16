@@ -749,7 +749,12 @@ class SvnOpenFile {
 		$cmd->addArgOption('svn:mime-type');
 		$this->_specifyUrlAndRev($cmd);
 		$cmd->exec();
-		if ($cmd->getExitcode()) trigger_error("Failed to propget path '{$this->getPath()}' revision {$this->getRevisionRequestedString()} (peg={$this->isRevisionPeg()}).", E_USER_ERROR );
+		if ($cmd->getExitcode()) {
+			if (strContains($cmd->getOutput()[0], "W200017: Property 'svn:mime-type' not found")) {
+				return false;
+			}
+			trigger_error("Failed to propget path '{$this->getPath()}' revision {$this->getRevisionRequestedString()} (peg={$this->isRevisionPeg()}).", E_USER_ERROR );
+		}
 		$result = $cmd->getOutput();
 		if (count($result) == 0) { // mime type property not set, return default
 			return false;
