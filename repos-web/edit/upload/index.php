@@ -50,6 +50,21 @@ if (!isTargetSet()) {
 
 	reposNormalizeParams($_POST, ['name']);
 
+	if (isset($_GET['accept']) && !isset($_GET['suggestname'])) {
+		$extensions = preg_split('/[,\s]+/', $_GET['accept'], -1, PREG_SPLIT_NO_EMPTY);
+		$targetUrl = getTargetUrl();
+		$probe = '';
+		do {
+			$s = new ServiceRequest($targetUrl.$probe);
+			$s->setSkipBody();
+			$s->exec();
+			if ($s->getStatus() == 200) {
+				$_REQUEST['target'] .= $probe;
+				break;
+			}
+		} while ($probe = array_shift($extensions));
+	}
+
 	$folderRule = new ResourceExistsRule('target');
 	new NewFilenameRule("name", $folderRule->getValue());
 	
