@@ -78,6 +78,7 @@ function showUploadForm() {
 		$log = getLog($file->getUrl());
 		$template->assign_by_ref('log', $log);
 		$template->assign('folderurl', getParent($file->getUrl()));
+		$template->assign('accept', isset($_GET['accept']) ? $_GET['accept'] : '');
 	} else {
 		$template->assign('folderurl', $file->getUrl());
 		$template->assign('suggestname', isset($_GET['suggestname']) ? $_GET['suggestname'] : '');
