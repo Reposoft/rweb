@@ -176,7 +176,7 @@ if ($temporg) {
 }
 
 // Page param, if >0 the file must be multi-page
-$page = isset($_REQUEST['page']) ? $_REQUEST['page'] - 1 : '0';
+$page = isset($_REQUEST['page']) && is_numeric($_REQUEST['page']) ? $_REQUEST['page'] - 1 : '0';
 
 // it might happen that convert exits with code 0 but the thumbnail is not created
 if (!file_exists($tempfile) || !filesize($tempfile)) {
