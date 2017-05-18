@@ -9,7 +9,7 @@
 version: '2.1'
 services:
   svn:
-    image: solsson/rweb-httpd:1.7.1@sha256:1c7e5aeac975444d1f04dc4b973fa3ec022e4090771cdfd6f9dfd933d4ae5f81
+    image: solsson/rweb-httpd:1.7.1@sha256:80fba5dd8581f30302b8c6a98c4440ec8c1adb10ef59fa3b841e11b45db8a6a4
     expose:
       - "80"
     ports:
@@ -20,7 +20,7 @@ services:
     volumes:
       - .:/opt/rweb
   rweb:
-    image: solsson/rweb:1.7.1@sha256:ba81308d841f1cc62409b77afd9f178c16c10c450aa3f863ac828350c7bdd28e
+    image: solsson/rweb:1.7.1@sha256:72f18e6829d223454213901d5b57d728c4a4528e673d5330a36e441b4dc7202e
     expose:
       - "9000"
     links:

@@ -50,6 +50,24 @@ if (!isTargetSet()) {
 
 	reposNormalizeParams($_POST, ['name']);
 
+	if (isset($_GET['accept']) && !isset($_GET['suggestname'])) {
+		$extensions = preg_split('/[,\s]+/', $_GET['accept'], -1, PREG_SPLIT_NO_EMPTY);
+		$targetUrl = getTargetUrl();
+		$probe = '';
+		do {
+			$s = new ServiceRequest($targetUrl.$probe);
+			$s->setSkipBody();
+			$s->exec();
+			if ($s->getStatus() == 200) {
+				$_REQUEST['target'] .= $probe;
+				if ($probe) {
+					$_GET['accept'] = $probe; // for the upload form, same extension as original
+				}
+				break;
+			}
+		} while ($probe = array_shift($extensions));
+	}
+
 	$folderRule = new ResourceExistsRule('target');
 	new NewFilenameRule("name", $folderRule->getValue());
 	
@@ -78,6 +96,7 @@ function showUploadForm() {
 		$log = getLog($file->getUrl());
 		$template->assign_by_ref('log', $log);
 		$template->assign('folderurl', getParent($file->getUrl()));
+		$template->assign('accept', isset($_GET['accept']) ? $_GET['accept'] : '');
 	} else {
 		$template->assign('folderurl', $file->getUrl());
 		$template->assign('suggestname', isset($_GET['suggestname']) ? $_GET['suggestname'] : '');
