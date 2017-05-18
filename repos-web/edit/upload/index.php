@@ -60,6 +60,9 @@ if (!isTargetSet()) {
 			$s->exec();
 			if ($s->getStatus() == 200) {
 				$_REQUEST['target'] .= $probe;
+				if ($probe) {
+					$_GET['accept'] = $probe; // for the upload form, same extension as original
+				}
 				break;
 			}
 		} while ($probe = array_shift($extensions));
