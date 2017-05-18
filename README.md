@@ -1,6 +1,11 @@
 
 ## Changelog
 
+### 1.7.3
+
+ * Supports "accept" at upload new version (https://github.com/Reposoft/rweb/pull/25)
+ * Fixes issue with broken form for upload new version (https://github.com/Reposoft/rweb/pull/24)
+
 ### 1.6.5
 
  * Fixes details page mime-type for historical revision with svn 1.9 (https://github.com/Reposoft/rweb/issues/22)
