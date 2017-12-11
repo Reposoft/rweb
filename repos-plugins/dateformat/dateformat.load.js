@@ -108,7 +108,10 @@ $.fn.dateformat = function(options) {
 	
 	// allow unit testing by adding all internal functions to this object
 	var F = $.fn.dateformat;
-	
+
+	// argument to Date.toLocaleString
+	var toLocales = navigator.languages || undefined;
+
 	/**
 	 * Verify that a string is an ISO8601 date, with date+time or only date
 	 */
@@ -146,7 +149,7 @@ $.fn.dateformat = function(options) {
 		if ($(texttag).is('.dateformatted')) return;
 		var date = F.parse(texttag);
 		if (!date) return false;
-		var display = date.toLocaleString();
+		var display = date.toLocaleString(toLocales);
 		display = display.replace(/-(\d)-/,'-0$1-').replace(/-(\d\d)-(\d\s)/,'-$1-0$2'); // minimal correction to avoid the odd non-zeropadded pseudo-ISO format
 		$(texttag).text(display)
 			.addClass('dateformatted')

@@ -9,18 +9,20 @@
 version: '2.1'
 services:
   svn:
-    image: solsson/rweb-httpd:1.7.3@sha256:dcc26dca1a52864ac1fbe94b8433b8af85768b9f24339342bc98e7f4d03ebb41
+    image: solsson/rweb-httpd
     expose:
       - "80"
     ports:
       - "80:80"
     environment:
       ADMIN_REST_ACCESS: "true"
-      AUTHN: "anon"
+    command:
+      -DRWEB=fpm
+      -DAUTHN=anon
     volumes:
       - .:/opt/rweb
   rweb:
-    image: solsson/rweb:1.7.3@sha256:94353fbcea1ea10304d42cc8cae85b33a9b6108a10988c3badada1649473584a
+    image: solsson/rweb
     expose:
       - "9000"
     links:
