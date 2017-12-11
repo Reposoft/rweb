@@ -1,6 +1,4 @@
 # For development at http://svn/, assuming local scripts build and libs install, and hosts file record for svn
-# Image builds see https://github.com/Reposoft/docker-svn
-# Create repo: docker-compose exec svn repocreate test -o daemon
 # Install libs: http://svn/repos-web/lib/smarty/install.php
 # or: docker-compose exec rweb php /opt/rweb/repos-web/lib/smarty/install.php
 # Unit tests:
@@ -9,6 +7,7 @@
 version: '2.1'
 services:
   svn:
+    # https://github.com/Reposoft/docker-svn
     image: solsson/rweb-httpd
     expose:
       - "80"
@@ -16,12 +15,24 @@ services:
       - "80:80"
     environment:
       ADMIN_REST_ACCESS: "true"
+    entrypoint:
+      - /bin/sh
+      - -c
     command:
-      -DRWEB=fpm
-      -DAUTHN=anon
+      - >
+        [ ! -d /svn/test ] && repocreate test -o daemon
+        ;
+        [ ! -f /svn/authz ] && echo '[/]' >> /svn/authz && echo '* = rw' >> /svn/authz
+        ;
+        httpd
+        -DFOREGROUND
+        -DRWEB=fpm
+        -DAUTHN=anon
+        -DAUTHZ=svn
     volumes:
       - .:/opt/rweb
   rweb:
+    # https://github.com/Reposoft/docker-svn
     image: solsson/rweb
     expose:
       - "9000"
