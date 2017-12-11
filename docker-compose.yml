@@ -24,6 +24,8 @@ services:
         ;
         [ ! -f /svn/authz ] && echo '[/]' >> /svn/authz && echo '* = rw' >> /svn/authz
         ;
+        echo '[/qa/readonly]' >> /svn/authz && echo '* = r' >> /svn/authz
+        ;
         httpd
         -DFOREGROUND
         -DRWEB=fpm
