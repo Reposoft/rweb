@@ -149,7 +149,12 @@ $.fn.dateformat = function(options) {
 		if ($(texttag).is('.dateformatted')) return;
 		var date = F.parse(texttag);
 		if (!date) return false;
-		var display = date.toLocaleString(toLocales);
+		var display;
+		if (toLocales != undefined && toLocales[0] && toLocales[0].length == 2) {
+			display = date.toLocaleString('sv'); // Use ISO format if the top accept-language does not explicitly request a region/format. Using 'sv' but could be any language using ISO format.
+		} else {
+			display = date.toLocaleString(toLocales);
+		}
 		display = display.replace(/-(\d)-/,'-0$1-').replace(/-(\d\d)-(\d\s)/,'-$1-0$2'); // minimal correction to avoid the odd non-zeropadded pseudo-ISO format
 		$(texttag).text(display)
 			.addClass('dateformatted')
