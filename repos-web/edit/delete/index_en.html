@@ -22,7 +22,7 @@
 from the the history for the <a class="folder" href="{=$file,folderUrl}">parent folder</a>.
 {=if not $file,isFolder}The last version of the file will be <span class="revision">{=$file,revision}</span>.{=/if}</p>
 {=elseif $file,isLockedBySomeoneElse} <p>This file is currently <strong>locked</strong> by 
-<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}. You can not delete this file.</p>
+<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment|htmlspecialchars}</span>&quot;{=/if}. You can not delete this file.</p>
 {=else}
 {=/if}
 
