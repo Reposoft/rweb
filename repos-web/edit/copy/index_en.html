@@ -27,7 +27,7 @@ function setMove(move) {
 {=if not $file,isWritable} <p>You have read access only. You can only copy the file.</p>
 {=elseif $file,isLockedByThisUser} <p>The file is currently <strong>locked</strong> by you, so other users can not edit it.</p>
 {=elseif $file,isLockedBySomeoneElse} <p>The file is currently <strong>locked</strong> by 
-<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}. You can only copy the file.</p>
+<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment|htmlspecialchars}</span>&quot;{=/if}. You can only copy the file.</p>
 {=else}
 {=/if}
 </div>

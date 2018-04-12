@@ -27,7 +27,7 @@ You may <a href="../edit/?target={=$target}">edit current version of {=$file,fil
 <p>You have only read access to this file.</p>
 <!--{elseif $file,isLockedBySomeoneElse}-->
 <p>You can not edit the file, because it is currently <strong>locked</strong> by 
-<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}.
+<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment|htmlspecialchars}</span>&quot;{=/if}.
 The file will be unlocked when a new version is committed.
 </p>
 <!--{else}-->
@@ -134,7 +134,7 @@ an integrated Subversion client will definitely be able to use the URL.</p>
 <!--{if $file,isLocked}-->
 <p class="lock">Locked by 
 <span class="username">{=$file,lockOwner}</span> <span class="datetime">{=$file,lockCreated}</span>
-{=if $file,lockComment}<br /> <span class="message">{=$file,lockComment}</span>{=/if}
+{=if $file,lockComment}<br /> <span class="message">{=$file,lockComment|htmlspecialchars}</span>{=/if}
 </p>
 <!--{/if}-->
 </div>
