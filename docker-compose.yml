@@ -16,9 +16,8 @@ services:
       - "80:80"
     environment:
       ADMIN_REST_ACCESS: "true"
-    command:
-      -DRWEB=fpm
-      -DAUTHN=anon
+      RWEB: "fpm"
+      AUTHN: "anon"
     volumes:
       - .:/opt/rweb
   rweb:
