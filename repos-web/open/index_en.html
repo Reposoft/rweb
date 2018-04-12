@@ -40,7 +40,7 @@ This is the current version of the file.
 {=elseif $file,isLockedByThisUser} The file is currently <strong>locked</strong> by you, so other users can not edit it.
 You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 {=elseif $file,isLockedBySomeoneElse} The file is currently <strong>locked</strong> by 
-<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment}</span>&quot;{=/if}.
+<span class="username">{=$file,lockOwner}</span> {=if $file,lockComment} with message &quot;<span class="message">{=$file,lockComment|htmlspecialchars}</span>&quot;{=/if}.
 {=else}
 You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 {=/if}
@@ -206,7 +206,7 @@ In many programs you can open the URL directly, without downloading the file fir
 <dd class="aboutitem-lock datetime">{=$file,lockCreated}</dd> <dd class="aboutitem-lock username">{=$file,lockOwner}</dd>
 	<!--{if $file,lockComment}-->
 	<dt class="aboutitem-lock aboutitem-lockcomment">Lock comment</dt>
-	<dd class="aboutitem-lock aboutitem-lockcomment comment">{=$file,lockComment}</dd>
+	<dd class="aboutitem-lock aboutitem-lockcomment comment">{=$file,lockComment|htmlspecialchars}</dd>
 	<!--{/if}-->
 <!--{/if}-->
 </dl>
