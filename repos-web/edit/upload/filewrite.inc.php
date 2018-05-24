@@ -28,6 +28,7 @@ define('EDIT_DEFAULT_NEWLINE', "\r\n");
 function editWriteNewVersion(&$postedText, $destinationFile, $type) {
 	$custom = 'editWriteNewVersion_'.$type;
 	if ($type && function_exists($custom)) {
+		// note that content must be passed by value here
 		return call_user_func($custom, $postedText, $destinationFile);
 	}
 	return _defaultWriteNewVersion($postedText, $destinationFile);
@@ -58,7 +59,7 @@ function _defaultWriteNewVersion(&$postedText, $destinationFile) {
  * @return int the number of bytes in the new version of the file
  * @package edit
  */
-function editWriteNewVersion_txt(&$postedText, $destinationFile) {
+function editWriteNewVersion_txt($postedText, $destinationFile) {
 	// Already made UTF-8 by browser encoding
 	// Suggest newline type for new files.
 	$nl = EDIT_DEFAULT_NEWLINE;
