@@ -1,6 +1,14 @@
 
 ## Changelog
 
+### 1.7.8
+
+ * Uses Ghostscript instead of pdf tk for PDF page extraction.
+
+### 1.7.7
+
+ * Fixes issue with text "upload" (POST new version) in PHP 7.2
+
 ### 1.7.3
 
  * Supports "accept" at upload new version (https://github.com/Reposoft/rweb/pull/25)
