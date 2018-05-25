@@ -143,7 +143,7 @@ class ReposGraphicsTransformExtract extends ReposGraphicsTransformBase {
 		}
 		$page = $_REQUEST['page'];
 		unset($_REQUEST['page']); // disable default page handling
-		return 'pdftk - cat '.$page.' output "'.$tempfile.'"';
+		return 'gs -dBATCH -dNOPAUSE -sOutputFile="'.$tempfile.'" -dFirstPage='.$page.' -dLastPage='.$page.' -sDEVICE=pdfwrite -';
 	}
 
 }
