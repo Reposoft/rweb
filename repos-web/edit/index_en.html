@@ -55,14 +55,14 @@ edit on your computer, then <a href="upload/?target={=$target}">upload new versi
 {=/if}
 
 {=if not $file,isLockedByThisUser}
-<h3><a id="download_upload" href="upload/?target={=$target}{=$file,revParam}&download">Download, modify, upload</a></h3>
+<h3 id="btn_download_upload"><a id="download_upload" href="upload/?target={=$target}{=$file,revParam}&download">Download, modify, upload</a></h3>
 <p>
 <span class="explain" title="files stored as lines of text that are human-readable in any text editor, like Notepad">Text files</span> 
 can be edited by different users at the same time.
 The system will <span class="explain" title="combine two different changes of the same file into a new version of the file">merge</span>
 changes based on the lines that changed.
 </p>
-<h3><a id="download_lock" href="lock/?target={=$target}&download">Download with lock</a></h3>
+<h3 id="btn_download_lock"><a id="download_lock" href="lock/?target={=$target}&download">Download with lock</a></h3>
 <p>
 For <span class="explain" title="files stored in a non-text format created and read by a specific application">binary</span>
 files, changes can not be expressed as a line
@@ -70,16 +70,16 @@ files, changes can not be expressed as a line
 Binary files should be edited by one user at a time.
 </p>
 {=/if}
-<h3><a id="upload" href="upload/?target={=$target}">Upload new version</a></h3>
+<h3 id="btn_upload"><a id="upload" href="upload/?target={=$target}">Upload new version</a></h3>
 <p>
 If you have already downloaded and edited the file, upload your changes to create a new verison.
 </p>
-<h3><a id="editfile" href="text/?target={=$target}">Edit in Repos</a></h3>
+<h3 id="btn_editfile"><a id="editfile" href="text/?target={=$target}">Edit in Repos</a></h3>
 <p>
 Plaintext file formats can be conveniently edited in your browser.
 No locking is needed.
 </p>
-<h3><a id="propedit" href="propedit/?target={=$target}">Edit properties</a></h3>
+<h3 id="btn_propedit"><a id="propedit" href="propedit/?target={=$target}">Edit properties</a></h3>
 <p>
 Edit versioned metadata on this item.
 </p>
@@ -99,17 +99,17 @@ You will get a link to the branch, and from there you can access the "merge" fun
 <!--{/if}-->
 
 {=if not $file,isLocked}
-<h3><a id="lock" href="lock/?target={=$target}">Lock file</a></h3>
+<h3 id="btn_lock"><a id="lock" href="lock/?target={=$target}">Lock file</a></h3>
 <p>You can always lock a file to make it read-only for everyone else.</p>
 {=elseif $file,isLockedByThisUser}
-<h3><a id="unlock" href="unlock/?target={=$target}">Unlock file</a></h3>
+<h3 id="btn_unlock"><a id="unlock" href="unlock/?target={=$target}">Unlock file</a></h3>
 <p>This file is locked by you. If you are not working with it,
 you can unlock it so that others are able to edit it.</p>
 {=/if}
 </div>
 
 <div id="activities-custom" class="activities">
-<h3><a id="useurl" href="#urlcopy" onblur="document.getElementById('urlcopy').select();">Use the URL</a></h3>
+<h3 id="btn_useurl"><a id="useurl" href="#urlcopy" onblur="document.getElementById('urlcopy').select();">Use the URL</a></h3>
 <p>Many modern programs can use URLs to open files directly from the server.</p>
 <p>Depending on the server configuration, it might be possible to save files 
 directly to the URL in for example Microsoft Office. Applications that have
