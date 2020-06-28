@@ -1,6 +1,11 @@
 
 ## Changelog
 
+### 1.7.9
+
+ * Adds id attributes to deails page actions
+ * Fontawesome upgrade to 4.7.0
+
 ### 1.7.8
 
  * Uses Ghostscript instead of pdf tk for PDF page extraction.
