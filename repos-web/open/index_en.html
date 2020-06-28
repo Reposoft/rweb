@@ -59,7 +59,7 @@ You may <a href="../edit/?target={=$target}{=$file,revParam}">edit</a> the file.
 
 <div id="activities-time">
 <!--{if $file,isRevisionRequested}-->
-<h3 class="current"><a id="current" href="?target={=$target}">View current</a></h3>
+<h3 class="current" id="btn_current"><a id="current" href="?target={=$target}">View current</a></h3>
 <p>Without a revision specified the {=$file,kind2} is &quot;current&quot; (or HEAD in Subversion terminology).
 The revision when the {=$file,kind2} was modified most recently is called &quot;latest&quot;.</p>
 <!--{/if}-->
@@ -68,36 +68,36 @@ The revision when the {=$file,kind2} was modified most recently is called &quot;
 <div id="activities-view" class="activities">
 {=if $file,isFile}
 <!--{if $file,isHtml}-->
-<h3 class="view"><a id="open" href="{=$file,url|asLink}">View</a></h3>
+<h3 class="view" id="btn_open"><a id="open" href="{=$file,url|asLink}">View</a></h3>
 <!--{else}-->
-<h3 class="view"><a id="open" href="open/?target={=$target}{=$file,revParam}">View</a></h3>
+<h3 class="view" id="btn_open"><a id="open" href="open/?target={=$target}{=$file,revParam}">View</a></h3>
 <!--{/if}-->
 <p>Shows the file in the current window. It is good for text files, HTML and images.
 Depending on your browser, it may also work for file types like pdf, documents and spreadsheets.</p>
 {=else}
-<h3 class="view"><a id="open" href="list/?target={=$target}{=$file,revParam}">List contents</a></h3>
+<h3 class="view" id="btn_list"><a id="list" href="list/?target={=$target}{=$file,revParam}">List contents</a></h3>
 <p>Shows a defailed view of the folder's contents at the current revision.</p>
 {=/if}
-{=if $file,isDownloadAllowed}<h3 class="view"><a id="download" href="download/?target={=$target}{=$file,revParam}">Download</a></h3>
+{=if $file,isDownloadAllowed}<h3 class="view" id="btn_id"><a id="download" href="download/?target={=$target}{=$file,revParam}">Download</a></h3>
 <p>Download this
 {=if $file,isFile} file {=else} folder as zip archive {=/if}
 to your hard drive. The revision number {=$file,revision}
 will be appended to the filename, so you will know which version it is.</p>
 {=if $file|reposViewGetImageUrl}{=/if}
-<h3 class="view"><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in Repos</a></h3>
+<h3 class="view" id="btn_viewfile"><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in Repos</a></h3>
 <p>View image in screen size</p>
 {=elseif $file,isFile and $file,size lte REPOS_TEXT_MAXSIZE}
-<h3 class="view"><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in Repos</a></h3>
+<h3 class="view" id="btn_viewfile"><a id="viewfile" href="file/?target={=$target}{=$file,revParam}">View in Repos</a></h3>
 <p>Read the file's contents in a web page. This is like View in browser, but with menus.
 This works for text files. If the file is a binary file, like a word document,
 you will see only a long line of characters.</p>
 {=/if}
-<h3 class="view"><a id="history" href="log/?target={=$target}{=if $file,isRevisionRequested}&torev={=$file,revision}{=/if}">View history</a></h3>
+<h3 class="view" id="btn_history"><a id="history" href="log/?target={=$target}{=if $file,isRevisionRequested}&torev={=$file,revision}{=/if}">View history</a></h3>
 <p>View the commits that
 {=if $file,isFile} have changed this file or its properties
 {=else} have affected contents in this folder{=/if}.</p>
 <!--{if $file,isRevisionRequested and isset($fromrev)}-->
-<h3 class="view"><a id="changeset" href="diff/?target={=$target}{=$file,revParam}&fromrev={=$fromrev}">Diff from {=$fromrev}</a></h3>
+<h3 class="view" id="btn_changeset"><a id="changeset" href="diff/?target={=$target}{=$file,revParam}&fromrev={=$fromrev}">Diff from {=$fromrev}</a></h3>
 <p>
 View the line-based differences from revision {=$fromrev}</a>.
 </p>
@@ -122,52 +122,52 @@ This is a binary or unknown fileformat. We recommend you Download with lock.
 {=/if}
 </p>
 
-<h3 class="edit"><a id="editfile" href="../edit/?target={=$target}">Edit contents</a></h3>
+<h3 class="edit" id="btn_editfile"><a id="editfile" href="../edit/?target={=$target}">Edit contents</a></h3>
 <p>
 Repos Web alternatives for editing the file
 </p>
-<h3 class="edit"><a id="propedit" href="../edit/propedit/?target={=$target}">Edit properties</a></h3>
+<h3 class="edit" id="btn_propedit"><a id="propedit" href="../edit/propedit/?target={=$target}">Edit properties</a></h3>
 <p>
 Edit versioned metadata on this item.
 </p>
 {=if $file,authenticatedUser}
 {=if not $file,isLocked}
-<h3 class="edit"><a id="lock" href="../edit/lock/?target={=$target}">Lock</a></h3>
+<h3 class="edit" id="btn_lock"><a id="lock" href="../edit/lock/?target={=$target}">Lock</a></h3>
 <p>You can always lock a file to make it read-only for everyone else.</p>
 {=elseif $file,isLockedByThisUser}
-<h3 class="edit"><a id="unlock" href="../edit/unlock/?target={=$target}">Unlock</a></h3>
+<h3 class="edit" id="btn_unlock"><a id="unlock" href="../edit/unlock/?target={=$target}">Unlock</a></h3>
 <p>This file is locked by you. If you are not working with it,
 you can unlock it so that others are able to edit it.</p>
 {=/if}
 {=/if}
-<h3 class="edit"><a id="upload" href="../edit/upload/?target={=$target}">Upload new version</a></h3>
+<h3 class="edit" id="btn_upload"><a id="upload" href="../edit/upload/?target={=$target}">Upload new version</a></h3>
 <p>
 If you have already downloaded and edited the file, upload your changes to create a new verison.
 </p>
-<h3 class="edit"><a id="copy" href="../edit/copy/?target={=$target}">Copy&#124;move&#124;rename</a></h3>
+<h3 class="edit" id="btn_copy"><a id="copy" href="../edit/copy/?target={=$target}">Copy&#124;move&#124;rename</a></h3>
 <p>
 Make a versioned copy of the file. Remove the file at its original location to make this a move or rename.
 </p>
-<h3 class="edit"><a id="delete" href="../edit/delete/?target={=$target}">Delete</a></h3>
+<h3 class="edit" id="btn_delete"><a id="delete" href="../edit/delete/?target={=$target}">Delete</a></h3>
 <p>
 Mark the file as deleted from now on. It will exist in History but won't be editable, and no longer visible when browsing.
 To later recover the file, navigate to it in History and do a Copy Historical.
 </p>
 
 <!--{else}--><!-- folder -->
-<h3 class="edit"><a id="upload" href="../edit/upload/?target={=$target}">Add file</a></h3>
+<h3 class="edit" id="btn_upload"><a id="upload" href="../edit/upload/?target={=$target}">Add file</a></h3>
 <p>
 Upload a new file to this folder. For uploading new versions go instead to the details page of the file.
 </p>
-<h3 class="edit"><a id="propedit" href="../edit/propedit/?target={=$target}">Edit properties</a></h3>
+<h3 class="edit" id="btn_propedit"><a id="propedit" href="../edit/propedit/?target={=$target}">Edit properties</a></h3>
 <p>
 Edit versioned metadata on this item.
 </p>
-<h3 class="edit"><a id="copy" href="../edit/copy/?target={=$target}">Copy&#124;move&#124;rename</a></h3>
+<h3 class="edit" id="btn_copy"><a id="copy" href="../edit/copy/?target={=$target}">Copy&#124;move&#124;rename</a></h3>
 <p>
 Make a versioned copy of the folder and all its contents. Remove the original folder to make this a move or rename.
 </p>
-<h3 class="edit"><a id="delete" href="../edit/delete/?target={=$target}">Delete</a></h3>
+<h3 class="edit" id="btn_delete"><a id="delete" href="../edit/delete/?target={=$target}">Delete</a></h3>
 <p>
 Mark the folder and its contents as deleted from now on. It will exist in History but won't be editable, and no longer visible when browsing.
 To later recover the folder, navigate to it in History and do a Copy Historical.
@@ -175,7 +175,7 @@ To later recover the folder, navigate to it in History and do a Copy Historical.
 <!--{/if}-->
 
 <!--{elseif $file,isRevisionRequested}-->
-<h3 class="edit"><a class="edit" id="copyhistorical" href="../edit/copy/?target={=$target}&rev={=$file,revision}">Copy historical</a></h3>
+<h3 class="edit" id="btn_edit"><a class="edit" id="copyhistorical" href="../edit/copy/?target={=$target}&rev={=$file,revision}">Copy historical</a></h3>
 <p>Any historical file or folder can be copied to the current tree.
 This makes it possible to start editing removed files with preserved history.
 For files or folders that still exist it creates a new branch.</p>
@@ -183,7 +183,7 @@ For files or folders that still exist it creates a new branch.</p>
 </div>
 
 <div id="activities-custom" class="activities">
-<h3 class="edit"><a class="realurl" id="useurl" href="#urlcopy" onblur="document.getElementById('urlcopy').select();">Use the URL</a></h3>
+<h3 class="edit" id="btn_useurl"><a class="realurl" id="useurl" href="#urlcopy" onblur="document.getElementById('urlcopy').select();">Use the URL</a></h3>
 <p>The URL is a global ID for the file.
 In e-mails it can be used instead of attachments.
 If the recipient also has a login, simply copy the URL below into the mail.
