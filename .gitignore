@@ -26,3 +26,4 @@ repos-web/scripts/head.js.*
 .settings
 target
 ReposWeb-1.6.0.tgz ReposWeb-1.6.0.zip
+ReposWeb-*
