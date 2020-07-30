@@ -3,7 +3,7 @@
 
 ### 1.7.10
 
- * The `/repos-web/open/json/` endpoint returns json with `Content-Type`: `application/json
+ * The `/repos-web/open/json/` endpoint returns json with `Content-Type`: `application/json`
  * Requests with a `selector` query param to that same endpoint get `application/javascript`
  * Both were formerly `text/plain`
  * The `tree` plugin is installed by default
