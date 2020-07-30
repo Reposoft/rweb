@@ -85,10 +85,11 @@ $.fn.reposTree = function( options ) {
 		var list = $('#' + id);
 		var here = target;
 		$.ajax({
-			dataType : 'script',
+			dataType : 'text',
 			url : json + '?selector=' + id + '&target=' + encodeURI(here)
 					+ (settings.base ? '&base=' + settings.base : ''),
-			success : function() {
+			success : function(script) {
+				$.globalEval(script);
 				// list item has the expand/collapse logic
 				var added = $('> li', list);
 				if (settings.startpath) {

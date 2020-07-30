@@ -29,16 +29,17 @@ $rev = $revisionRule->getValue();
 
 $json = getListJson($url, $rev);
 
-// javascript output
-header('Content-Type: text/plain');
 header('Cache-Control: max-age=0, must-revalidate'); // IE9 does too aggressive caching by default in AJAX requests
 
 // second part of the script is printed if there is a selector
 if (!isset($_GET['selector'])) {
+	header('Content-Type: application/json');
 	header('Content-Length: '.strlen($json));
 	echo($json);
 	exit;
 } else {
+	// javascript output
+	header('Content-Type: application/javascript;charset=UTF-8');
 	// put the data in a variable for the bundled script below
 	// the data must be included in the script to allow cross-domain listings
 	$json = 'var svn = '.$json.';';
