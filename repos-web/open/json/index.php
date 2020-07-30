@@ -39,7 +39,7 @@ if (!isset($_GET['selector'])) {
 	exit;
 } else {
 	// javascript output
-	header('Content-Type: text/plain;charset=utf-8');
+	header('Content-Type: application/javascript;charset=UTF-8');
 	// put the data in a variable for the bundled script below
 	// the data must be included in the script to allow cross-domain listings
 	$json = 'var svn = '.$json.';';
