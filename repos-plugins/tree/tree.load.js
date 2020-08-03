@@ -212,7 +212,7 @@ function reposTreeIframe() {
 
 /**
  * Sidebar integration.
- */
+ * - removed, incompatible with modern browsers
 Repos.service('index/', function() {
 	// tree button only shown at root and project roots
 	if (!/^(\/*|.*\/trunk\/)$/.test(Repos.getTarget())) return;
@@ -236,3 +236,4 @@ Repos.service('index/', function() {
 		}
 	});
 });
+ */
