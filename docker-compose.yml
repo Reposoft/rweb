@@ -44,6 +44,8 @@ services:
       mkdir target
       cp -r repos-plugins target/
       cp -r repos-web target/
+      sed -i "s|[\x24]Rev[\x24]|$$VERSION|g" target/repos-web/view/repos.xsl
+      ! diff -u repos-web/view/repos.xsl target/repos-web/view/repos.xsl
       php target/repos-web/lib/smarty/install.php
       php target/repos-web/lib/simpletest/install.php
       cd target/repos-plugins/highlight/ && npm install --ignore-scripts && ./node_modules/.bin/webpack --bail && rm -Rf node_modules && cd ../../../
