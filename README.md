@@ -1,6 +1,11 @@
 
 ## Changelog
 
+### 1.7.11
+
+ * Release archives now have the version number printed in the footer of the index stylesheet
+ * The tree sidebar plugin was removed from repo root toolbar because recent browsers don't display the sidebar
+
 ### 1.7.10
 
  * The `/repos-web/open/json/` endpoint returns json with `Content-Type`: `application/json`
