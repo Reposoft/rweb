@@ -17,8 +17,8 @@ define('MIMETYPE_UNKNOWN', 'application/x-unknown');
 // Limit size for open/file/ to not cause problems in:
 // - file passthru (does not support filtering so SvnOpenFile does html escape in memory)
 // - browser performance
-define('REPOS_TEXT_MAXSIZE', 1050000);
-define('REPOS_TEXT_MAXSIZE_STR', '1 MB');
+define('REPOS_TEXT_MAXSIZE', 4194304);
+define('REPOS_TEXT_MAXSIZE_STR', '4 MB');
 
 /**
  * Convert filesize from bytes to B, kB or MB.
