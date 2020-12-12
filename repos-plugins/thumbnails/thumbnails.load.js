@@ -6,7 +6,7 @@ Repos.thumbnails = {
 		'|avi'+
 		'|cgm'+ // users that need CGM must install delegate RalCGM for ImageMagick or GraphicsMagick
 		'|ai'+ // some adobe formats are actually pdf or postscript
-		'' 
+		''
 };
 
 /**
@@ -15,7 +15,7 @@ Repos.thumbnails = {
 Repos.thumbnails.match = new RegExp('\.(' + Repos.thumbnails.filetypes + ')$', 'i');
 
 /**
- * Identify the intro section (in current thisArg) for details/edit page thumbnail 
+ * Identify the intro section (in current thisArg) for details/edit page thumbnail
  */
 Repos.thumbnails.addThumbnailToIntro = function() {
 	var parent = $('#intro', this);
@@ -45,8 +45,8 @@ Repos.thumbnails.addThumbnail = function(parent) {
 		}
 	}).error(function() {
 		// normally status=415, error not called for status=500 which is good because we want to show the error thumbnail instead
-		$(this).hide(); 
-	});	
+		$(this).hide();
+	});
 };
 
 /**
@@ -58,9 +58,15 @@ Repos.thumbnails.addThumbnail = function(parent) {
  */
 Repos.thumbnails.getSrc = function(target, rev, revIsPeg) {
 	if (!target) return false;
-	var url = '/repos-plugins/thumbnails/convert/?target=';
-	url = url + encodeURIComponent(target);
-	url = url + '&base=' + Repos.getBase();
+	var repository = Repos.getRepository();
+	var url;
+	if (repository) {
+		url = repository + encodeURI(target) + '?rweb=t.thumb';
+	} else {
+		url = '/repos-plugins/thumbnails/convert/?target=';
+		url = url + encodeURIComponent(target);
+		url = url + '&base=' + Repos.getBase();
+	}
 	if (typeof rev != 'undefined' && rev) {
 		url = url + (revIsPeg ? '&p=' : '&r=') + rev;
 	} else {
