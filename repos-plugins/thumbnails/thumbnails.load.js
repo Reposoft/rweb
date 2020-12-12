@@ -58,9 +58,15 @@ Repos.thumbnails.addThumbnail = function(parent) {
  */
 Repos.thumbnails.getSrc = function(target, rev, revIsPeg) {
 	if (!target) return false;
-	var url = '/repos-plugins/thumbnails/convert/?target=';
-	url = url + encodeURIComponent(target);
-	url = url + '&base=' + Repos.getBase();
+	var repository = Repos.getRepository();
+	var url;
+	if (repository) {
+		url = repository + encodeURI(target) + '?rweb=t.thumb';
+	} else {
+		url = '/repos-plugins/thumbnails/convert/?target=';
+		url = url + encodeURIComponent(target);
+		url = url + '&base=' + Repos.getBase();
+	}
 	if (typeof rev != 'undefined' && rev) {
 		url = url + (revIsPeg ? '&p=' : '&r=') + rev;
 	} else {
