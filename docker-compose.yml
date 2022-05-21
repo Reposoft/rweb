@@ -1,4 +1,5 @@
-# For development at http://svn/, assuming local scripts build and libs install, and hosts file record for svn
+# For development at http://svn/, assuming local scripts build and libs install
+#   and /etc/hosts file record for 127.0.0.1 svn
 # Image builds see https://github.com/Reposoft/docker-svn
 # Create repo: docker-compose exec svn repocreate test -o daemon
 # Install libs: http://svn/repos-web/lib/smarty/install.php
@@ -9,7 +10,7 @@
 version: '2.1'
 services:
   svn:
-    image: solsson/rweb-httpd
+    image: docker.io/solsson/svn-httpd:${REPOSOFT_DOCKERSVN_TAG:-latest}
     expose:
       - "80"
     ports:
@@ -21,7 +22,7 @@ services:
     volumes:
       - .:/opt/rweb
   rweb:
-    image: solsson/rweb
+    image: docker.io/solsson/fpm-rweb:${REPOSOFT_DOCKERSVN_TAG:-latest}
     expose:
       - "9000"
     links:
