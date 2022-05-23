@@ -148,8 +148,7 @@ class Presentation {
 	 * @return Presentation
 	 * @static
 	 */
-	function getInstance() {
-	//not php4://static function getInstance() {
+	static function getInstance() {
 		static $instance = null;
 		if ($instance == null) {
 			$c = __CLASS__;
@@ -174,7 +173,7 @@ class Presentation {
 	 *  looks like being from a browser showing a form
 	 * @static
 	 */
-	function background() {
+	static function background() {
 		$p = Presentation::getInstance();
 		if (isRequestService()) return $p;
 		$p->enableRedirectWaiting();
@@ -414,7 +413,7 @@ class Presentation {
 		// redirect-after-post to the waiting page
 		header('Location: '.$nexturl);
 		echo 'Should have been redirected to result page.'; // browser will redirect before this is displayed
-		@ob_flush();flush(); // make sure headers have been sent
+		ob_get_level()==0||@ob_flush();flush(); // make sure headers have been sent
 		//sleep(2);//test
 		// note that this page continues execution in the background
 		// FIXME is there some way now to display fatal PHP errors?

@@ -10,7 +10,7 @@
 version: '2.1'
 services:
   svn:
-    image: docker.io/solsson/svn-httpd:${REPOSOFT_DOCKERSVN_TAG:-latest}
+    image: docker.io/solsson/rweb-httpd:${REPOSOFT_DOCKERSVN_TAG:-latest}
     expose:
       - "80"
     ports:
@@ -22,7 +22,7 @@ services:
     volumes:
       - .:/opt/rweb
   rweb:
-    image: docker.io/solsson/fpm-rweb:${REPOSOFT_DOCKERSVN_TAG:-latest}
+    image: docker.io/solsson/rweb-fpm:${REPOSOFT_DOCKERSVN_TAG:-latest}
     expose:
       - "9000"
     links:

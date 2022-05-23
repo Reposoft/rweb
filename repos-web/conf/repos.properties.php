@@ -105,9 +105,6 @@ if (defined('E_STRICT')) {
 	error_reporting(error_reporting() ^ E_STRICT);
 }
 
-// check essential configuration entries
-if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable magic_quotes"); }
-
 // special handling of build flags
 define('REPOS_VERSION_ARM','-bubba');
 if (strpos(REPOS_VERSION, REPOS_VERSION_ARM)) {
