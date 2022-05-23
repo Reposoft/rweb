@@ -1,9 +1,9 @@
 # For development at http://svn/, assuming local scripts build and libs install
 #   and /etc/hosts file record for 127.0.0.1 svn
 # Image builds see https://github.com/Reposoft/docker-svn
-# Create repo: docker-compose exec svn repocreate test -o daemon
+# Create repo: docker exec -ti rweb_svn_1 repocreate test -o daemon
 # Install libs: http://svn/repos-web/lib/smarty/install.php
-# or: docker-compose exec rweb php /opt/rweb/repos-web/lib/smarty/install.php
+# or: docker exec -ti rweb_rweb_1 php /opt/rweb/repos-web/lib/smarty/install.php
 # Unit tests:
 # docker-compose exec rweb php /opt/rweb/repos-web/lib/simpletest/install.php
 # http://svn/repos-web/conf/repos.properties.test.php
@@ -15,10 +15,10 @@ services:
       - "80"
     ports:
       - "80:80"
-    environment:
-      ADMIN_REST_ACCESS: "true"
-      RWEB: "fpm"
-      AUTHN: "anon"
+    command:
+      - -DADMIN_REST_ACCESS=true
+      - -DRWEB=fpm
+      - -DAUTHN=anon
     volumes:
       - .:/opt/rweb
   rweb:

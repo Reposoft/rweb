@@ -1,0 +1,4 @@
+*
+!repos-plugins
+!repos-web
+!test/conf-svn/rweb-services.conf
