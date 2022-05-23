@@ -145,14 +145,14 @@ class System {
 	/**
 	 * @return true if the web server is running windows
 	 */
-	function isWindows() {
+	static function isWindows() {
 		return ( substr(PHP_OS, 0, 3) == 'WIN' );
 	}
 
 	/**
 	 * @return newline character for this OS, the one used by subversion with "svn:eol-style native".
 	 */
-	function getNewline() {
+	static function getNewline() {
 		if (System::isWindows()) return "\r\n";
 		else return "\n";
 	}
@@ -164,7 +164,7 @@ class System {
 	 * @param String $subfolder optional name of a subfolder in the application temp folder, no slashes
 	 * @return absolute path to temp, or the subfolder of temp, with trailing slash
 	 */
-	function getApplicationTemp($subfolder=null) {
+	static function getApplicationTemp($subfolder=null) {
 		// Get temporary directory
 		$systemp = System::_getSystemTemp();
 		if (is_writable($systemp) == false) die ('Error. Can not write to temp foloder "'.$systemp.'"');
@@ -188,7 +188,7 @@ class System {
 	 * @param String $subfolder (optional) category (like 'upload'), subfolder to temp where the file will be created.
 	 * @param String $suffix (optional) end of file name, like .txt
 	 */
-	function getTempFile($subfolder=null, $suffix='') {
+	static function getTempFile($subfolder=null, $suffix='') {
 		$f = System::getTempPath($subfolder, $suffix);
 		if (!touch($f)) trigger_error('Failed to create temp file '.$f, E_USER_ERROR);
 		return $f;
@@ -198,7 +198,7 @@ class System {
 	 * @return a non-existing absolute path in the temp area, no trailing slash
 	 * @param $suffix may not contain /
 	 */
-	function getTempPath($subfolder=null, $suffix='') {
+	static function getTempPath($subfolder=null, $suffix='') {
 		return System::getApplicationTemp($subfolder).uniqid().$suffix;
 	}
 
@@ -207,7 +207,7 @@ class System {
 	 * @param String $subfolder optional category (like 'upload')
 	 * @see getApplicationTemp
 	 */
-	function getTempFolder($subfolder=null) {
+	static function getTempFolder($subfolder=null) {
 		$f = System::getTempPath($subfolder).'/';
 		// Create the temporary directory and returns its name.
 		if (mkdir($f)) return $f;
@@ -222,7 +222,7 @@ class System {
 	 * @param String $string the value with internal encoding (same as no encoding)
 	 * @return String the same value encoded as the OS expects it in php filesystem functions like unlink and file_exists
 	 */
-	function toShellEncoding($string) {
+	static function toShellEncoding($string) {
 		$to = false; // default: no special encoding
 		if (System::isWindows()) $to = 'ISO-8859-1'; // assume something
 		if (isset($_SERVER['REPOS_SHELL_ENCODING'])) $to = $_SERVER['REPOS_SHELL_ENCODING'];
@@ -239,7 +239,7 @@ class System {
 	 * @param Command name, i.e. 'svnadmin'.
 	 * @return Command line command, false if the command shouldn't be needed in current OS. Error message starting with 'Error:' if command name is not supported.
 	 */
-	function getCommand($command) {
+	static function getCommand($command) {
 		$key = 'REPOS_EXECUTABLE_'.strtoupper($command);
 		// customized
 		if (isset($_SERVER[$key])) {
@@ -277,7 +277,7 @@ class System {
 		return false;
 	}
 
-	function _getSpecialCommand($name) {
+	static function _getSpecialCommand($name) {
 		if ($name == 'htpasswd') {
 			$try = array();
 			// allow config
@@ -321,7 +321,7 @@ class System {
 	 * @param String $folder absolute path, with tailing slash like all folders.
 	 *  Valid path is either inside the repos folder or in the repos temp location
 	 */
-	function deleteFolder($folder) {
+	static function deleteFolder($folder) {
 		System::_authorizeFilesystemModify($folder);
 		if (!isFolder($folder)) {
 			trigger_error("Path \"$folder\" is not a folder.", E_USER_ERROR); return false;
@@ -360,7 +360,7 @@ class System {
 	 * replaces touch().
 	 * @deprecated use System::createFile
 	 */
-	function createFile($absolutePath) {
+	static function createFile($absolutePath) {
 		System::_authorizeFilesystemModify($absolutePath);
 		if (!isFile($absolutePath)) {
 			trigger_error("Path \" $absolutePath\" is not a valid file name.", E_USER_ERROR); return false;
@@ -371,7 +371,7 @@ class System {
 	/**
 	 * replaces mkdir().
 	 */
-	function createFolder($absolutePath) {
+	static function createFolder($absolutePath) {
 		System::_authorizeFilesystemModify($absolutePath);
 		if (!isFolder($absolutePath)) {
 			trigger_error("Path \" $absolutePath\" is not a valid folder name.", E_USER_ERROR); return false;
@@ -388,7 +388,7 @@ class System {
 	 * @param boolean $makeWritableIfNeeded set to false to disable the is_writable check.
 	 * 	Sometimes useful in windows where chomd and is_writable do not always reflect reality.
 	 */
-	function deleteFile($file, $makeWritableIfNeeded=true) {
+	static function deleteFile($file, $makeWritableIfNeeded=true) {
 		System::_authorizeFilesystemModify($file);
 		if (!isFile($file)) {
 			trigger_error("Path \" $file\" is not a file.", E_USER_ERROR); return false;
@@ -408,7 +408,7 @@ class System {
 	/**
 	 * Instead of createFile() and fopen+fwrite+fclose.
 	 */
-	function createFileWithContents($absolutePath, $contents, $convertToWindowsNewlineOnWindows=false, $overwrite=false) {
+	static function createFileWithContents($absolutePath, $contents, $convertToWindowsNewlineOnWindows=false, $overwrite=false) {
 		if (!isFile($absolutePath)) {
 			trigger_error("Path $absolutePath is not a file."); return false;
 		}
@@ -430,35 +430,17 @@ class System {
 	 * Only allowes chmodding of folders that are expected to be write protected, like .svn.
 	 * @return false if it is not allowed to chmod the path writable, or if 'chmod' function fails
 	 */
-	function _chmodWritable($absolutePath) {
+	static function _chmodWritable($absolutePath) {
 		if (strContains($absolutePath, '/.svn')) return chmod($absolutePath, 0777);
 		if (strBegins($absolutePath, System::_getSystemTemp())) return chmod($absolutePath, 0777);
 		return false;
 	}
 
 	/**
-	 * @todo
-	 *
-	 * @param unknown_type $absolutePath
-	 */
-	function chmodWebRuntimeWritable($absolutePath) {
-		// what if we are running in CLI mode? we probably are not.
-	}
-
-	/**
-	 * @todo
-	 *
-	 * @param unknown_type $absolutePath
-	 */
-	function chmodWebGroupWritable($absolutePath) {
-
-	}
-
-	/**
 	 * It is considered a serious system error if a modify path is invalid according to the internal rules.
 	 * Therefore we throw an error and do exit.
 	 */
-	function _authorizeFilesystemModify($path) {
+	static function _authorizeFilesystemModify($path) {
 		if (!isAbsolute($path)) {
 			trigger_error("Security error: local write not allowed in \"$path\". It is not absolute.", E_USER_ERROR);
 		}
@@ -480,7 +462,7 @@ class System {
 	 * Platform independen way of getting the server's temp folder.
 	 * @return String absolute path, folder, existing
 	 */
-	function _getSystemTemp() {
+	static function _getSystemTemp() {
 		static $tempfolder = null;
 		if (!is_null($tempfolder)) return $tempfolder;
 		$type = '';
