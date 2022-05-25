@@ -245,6 +245,11 @@ class Presentation {
 		$this->smarty->assign_by_ref($tpl_var, $value);
 	}
 
+	function _array_init($tpl_var) {
+		$var = $this->smarty->get_template_vars($tpl_var);
+		if (!$var) $this->smarty->assign($tpl_var, array());
+	}
+
 	/**
 	 * appends values to template variables
 	 *
@@ -252,6 +257,7 @@ class Presentation {
 	 * @param mixed $value the value to append
 	 */
 	function append($tpl_var, $value=null, $merge=false) {
+		$this->_array_init($tpl_var);
 		$this->smarty->append($tpl_var, $value, $merge);
 	}
 
@@ -262,6 +268,7 @@ class Presentation {
 	 * @param mixed $value the referenced value to append
 	 */
 	function append_by_ref($tpl_var, &$value, $merge=false) {
+		$this->_array_init($tpl_var);
 	    $this->smarty->append_by_ref($tpl_var, $value, $merge);
 	}
 
