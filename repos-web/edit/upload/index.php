@@ -276,7 +276,7 @@ class Upload {
 	 * Constructor
 	 * @param formFieldName the name of the form field that contains the file
 	 */
-	function Upload($formFieldName) {
+	function __construct($formFieldName) {
 		$this->file_id = $formFieldName;
 	}
 

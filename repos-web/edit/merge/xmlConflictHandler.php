@@ -163,7 +163,7 @@ class Conflict {
 	 * @param int $endLine
 	 * @return Conflict
 	 */
-	function Conflict($startLine, $limitLine=0, $endLine=0) {
+	function __construct($startLine, $limitLine=0, $endLine=0) {
 		$this->startLine = $startLine;
 		$this->limitLine = $limitLine;
 		$this->endLine = $endLine;

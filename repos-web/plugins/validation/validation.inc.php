@@ -172,7 +172,7 @@ class Validation {
 	 * @static
 	 * @see _respond method for service call validation error (connected to a filedname)
 	 */
-	function error($message) {
+	static function error($message) {
 		// TODO currently validation errors are not displayed in the form
 		$message = $message." \n\nPlease go back to correct the error.";
 		// use validation error code

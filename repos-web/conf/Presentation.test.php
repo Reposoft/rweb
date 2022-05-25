@@ -10,7 +10,7 @@ class TestClazz {
 
 class TestPresentation extends UnitTestCase {
 
-	function TestPresentation() {
+	function __construct() {
 		// empty constructor
 	}
 

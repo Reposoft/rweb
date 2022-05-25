@@ -33,7 +33,7 @@ class ReposGraphicsTransform {
 	/**
 	 * @param ReposGraphicsTransformSource $file
 	 */
-	function ReposGraphicsTransform($source) {}
+	function __construct($source) {}
 
 	/**
 	 * @return output width in pixels
