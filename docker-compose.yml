@@ -31,6 +31,16 @@ services:
       REPOS_DOWNLOAD_RULE: "|^/svn/[^/]+/downloadableDirs/.+|"
     volumes:
       - .:/opt/rweb
+  rebuild:
+    build: ./releaser
+    volumes:
+    - .:/opt/rweb
+    command:
+    - /bin/bash
+    - -cex
+    - |
+      cd /opt/rweb
+      cd repos-web/scripts/ && ./build-defaultexcludes.bat && cd ../../
   releaser:
     build: ./releaser
     volumes:
