@@ -17,7 +17,7 @@
  * @see Presentation
  * @package conf
  */
-define('REPOS_VERSION','1.7');
+define('REPOS_VERSION','1.8');
 
 // ----- global settings -----
 
