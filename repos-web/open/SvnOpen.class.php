@@ -167,7 +167,7 @@ class SvnOpen {
 	 * @return String username, false if not authenticated
 	 * @static 
 	 */
-	function getAuthenticatedUser() {
+	static function getAuthenticatedUser() {
 		return getReposUser();
 	}
 	

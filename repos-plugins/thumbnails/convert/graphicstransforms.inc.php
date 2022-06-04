@@ -33,7 +33,7 @@ class ReposGraphicsTransform {
 	/**
 	 * @param ReposGraphicsTransformSource $file
 	 */
-	function ReposGraphicsTransform($source) {}
+	function __construct($source) {}
 
 	/**
 	 * @return output width in pixels
@@ -62,7 +62,7 @@ class ReposGraphicsTransform {
  */
 class ReposGraphicsTransformBase extends ReposGraphicsTransform {
 
-	function ReposGraphicsTransformBase($source) {
+	function __construct($source) {
 		$this->source = $source;
 	}
 

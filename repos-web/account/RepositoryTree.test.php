@@ -15,7 +15,7 @@ class TestRepositoryTree extends UnitTestCase {
 	var $tempfile;
 	var $tree;
 	
-	function TestRepositoryTree() {
+	function __construct() {
 		// empty constructor
 	}
 	

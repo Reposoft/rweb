@@ -74,7 +74,7 @@ class Rule {
 	 * @param String $fieldname the parameter name when the field value is received
 	 * @param String $message the error message if validation fails, defaults to "This is a required field"
 	 */
-	function Rule($fieldname, $message='This is a required field') {
+	function __construct($fieldname, $message='This is a required field') {
 		$this->_message = $message;
 		$this->fieldname = $fieldname;
 		Validation::_add($this);
@@ -116,7 +116,7 @@ class Rule {
  */
 class RuleRegexp extends Rule {
 	var $regexp;
-	function RuleRegexp($fieldname, $message, $pRegexp) {
+	function __construct($fieldname, $message, $pRegexp) {
 		$this->regexp = $pRegexp;
 		parent::__construct($fieldname, $message);
 	}
@@ -126,7 +126,7 @@ class RuleRegexp extends Rule {
 }
 
 class RuleRegexpInvert extends RuleRegexp {
-	function RuleRegexpInvert($fieldname, $message, $pRegexpNoMatch) {
+	function __construct($fieldname, $message, $pRegexpNoMatch) {
 		parent::__construct($fieldname, $message, $pRegexpNoMatch);
 	}
 	function valid($value) {
@@ -152,7 +152,7 @@ class Validation {
 	 * Note that this does not mean that each field value must be set (see class description).
 	 * @param unknown_type $requiredFieldsSeparatedByComma
 	 */
-	function expect($requiredFieldsSeparatedByComma) {
+	static function expect($requiredFieldsSeparatedByComma) {
 		if (validationRequest()) {
 			_validation_trigger_error("This is a validation request ".$_SERVER['QUERY_STRING'].", but no rule has been enforced. Operation aborted.");
 		}
@@ -172,7 +172,7 @@ class Validation {
 	 * @static
 	 * @see _respond method for service call validation error (connected to a filedname)
 	 */
-	function error($message) {
+	static function error($message) {
 		// TODO currently validation errors are not displayed in the form
 		$message = $message." \n\nPlease go back to correct the error.";
 		// use validation error code
@@ -181,7 +181,7 @@ class Validation {
 	/**
 	 * Adds a new rule to the rules hash.
 	 */
-	function _add(&$rule) {
+	static function _add(&$rule) {
 		global $_validation_rules;
 		$f = $rule->fieldname;
 		if (array_key_exists($f, $_REQUEST)) {
@@ -200,7 +200,7 @@ class Validation {
 	 * @param Rule $rule to run
 	 * @param String $value to be validated by the rule
 	 */
-	function _run(&$rule, $value) {
+	static function _run(&$rule, $value) {
 		$r = $rule->validate($value);
 		if (!empty($r)) {
 			Validation::error('Error in field "'.$rule->fieldname.'", value "'.$value.'": '.$r);

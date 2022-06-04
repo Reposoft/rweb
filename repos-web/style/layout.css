@@ -129,6 +129,9 @@ div#activities p {
 	background-repeat: no-repeat;
 	white-space: nowrap;
 }
+#activities #list {
+	background-image: url(commands/32x32/view.png);
+}
 #activities #open {
 	background-image: url(commands/32x32/open.png);
 }

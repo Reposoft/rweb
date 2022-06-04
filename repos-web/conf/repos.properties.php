@@ -17,7 +17,7 @@
  * @see Presentation
  * @package conf
  */
-define('REPOS_VERSION','1.7');
+define('REPOS_VERSION','1.8');
 
 // ----- global settings -----
 
@@ -104,9 +104,6 @@ set_error_handler('reportError');
 if (defined('E_STRICT')) {
 	error_reporting(error_reporting() ^ E_STRICT);
 }
-
-// check essential configuration entries
-if (get_magic_quotes_gpc()!=0) { trigger_error("The repos server must disable magic_quotes"); }
 
 // special handling of build flags
 define('REPOS_VERSION_ARM','-bubba');

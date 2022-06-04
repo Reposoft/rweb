@@ -214,7 +214,7 @@ class Command {
 	 * @return String the escaped argument, encoded with the current system encoding
 	 * @static 
 	 */
-	function _escapeArgument($argument) {
+	static function _escapeArgument($argument) {
 		if (System::isWindows()) {
 			return Command::_escapeArgumentWindows($argument);
 		} else {
@@ -225,7 +225,7 @@ class Command {
 	/**
 	 * @static
 	 */
-	function _escapeArgumentNix($arg) {
+	static function _escapeArgumentNix($arg) {
 		// Shell metacharacters are: & ; ` ' \ " | * ? ~ < > ^ ( ) [ ] { } $ \n \r (WWW Security FAQ [Stein 1999, Q37])
 		// Use escapeshellcmd to make argument safe for command line
 		// (double qoutes around the string escapes: *, ?, ~, ', &, <, >, |, (, )

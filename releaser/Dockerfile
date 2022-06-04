@@ -1,13 +1,10 @@
-FROM php:5.6@sha256:6ce95208609dc66df163ab936c970b3b34cd901b85c747102c5999f08ade9143
+FROM php:8.1.6-alpine3.15@sha256:ad4a4d0c78da5867ba5ceb00d6d4275559560fb01deabb75bb1b7e162d49e98a
 
-RUN set -e; \
-  apt-get update; \
-  mkdir -p /usr/share/man/man1; \
-  apt-get install --no-install-recommends -y ant zip
-
-RUN set -e; \
-  curl -sL https://deb.nodesource.com/setup_12.x | bash -; \
-  apt-get install -y nodejs
+RUN apk add --no-cache \
+  bash \
+  apache-ant \
+  zip \
+  nodejs npm
 
 RUN mkdir /.npm && chown -R 1000:0 "/.npm"
 USER 1000

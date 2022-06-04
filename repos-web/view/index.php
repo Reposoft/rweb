@@ -32,7 +32,7 @@ if(isset($_GET['result'])) {
 			exit;
 		}
 		echo '<span class="wait">.</span>';
-		@ob_flush();flush(); // according to the docs this is still not 100% reliable for every possible php configuration
+		ob_get_level()==0||@ob_flush();flush(); // according to the docs this is still not 100% reliable for every possible php configuration
 		sleep(VIEW_INTERVAL);
 		clearstatcache();
 	}
@@ -71,5 +71,5 @@ function waitPage() {
 </head>
 <body>
 <span class="wait">Processing...</span><?php // no newline
-	@ob_flush();flush();
+	ob_get_level()==0||@ob_flush();flush();
 }

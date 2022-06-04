@@ -144,7 +144,7 @@ function uncompressTAR( $srcFileName, $dstDirectory = null, $unpackDir = null,  
 		}
 		// Create directories
 		
-		if ($file_name{strlen($file_name)-1} == "/"){
+		if ($file_name[strlen($file_name)-1] == "/"){
 			$delTrailSlash = rtrim($file_name, "/");
 			$directory_array = explode("/", $delTrailSlash);	// trailing slash causes explode to make an empty cell in the array
 			$_file = null;

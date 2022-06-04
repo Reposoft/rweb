@@ -22,9 +22,8 @@ if (!file_exists(CACHE_DIR)) {
 	$report->ok("Created empty cache folder ".CACHE_DIR.". Should be writable by webserver.");
 }
 
-$home = "http://www.smarty.net";
-$version = "2.6.28";
-$archive = "$home/files/Smarty-$version.tar.gz";
+$version = "2.6.33";
+$archive = "https://github.com/smarty-php/smarty/archive/refs/tags/v$version.tar.gz";
 $repos_package = "Smarty";
 
 $basedir = dirname(__FILE__);

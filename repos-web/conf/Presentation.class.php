@@ -148,8 +148,7 @@ class Presentation {
 	 * @return Presentation
 	 * @static
 	 */
-	function getInstance() {
-	//not php4://static function getInstance() {
+	static function getInstance() {
 		static $instance = null;
 		if ($instance == null) {
 			$c = __CLASS__;
@@ -174,7 +173,7 @@ class Presentation {
 	 *  looks like being from a browser showing a form
 	 * @static
 	 */
-	function background() {
+	static function background() {
 		$p = Presentation::getInstance();
 		if (isRequestService()) return $p;
 		$p->enableRedirectWaiting();
@@ -246,6 +245,11 @@ class Presentation {
 		$this->smarty->assign_by_ref($tpl_var, $value);
 	}
 
+	function _array_init($tpl_var) {
+		$var = $this->smarty->get_template_vars($tpl_var);
+		if (!$var) $this->smarty->assign($tpl_var, array());
+	}
+
 	/**
 	 * appends values to template variables
 	 *
@@ -253,6 +257,7 @@ class Presentation {
 	 * @param mixed $value the value to append
 	 */
 	function append($tpl_var, $value=null, $merge=false) {
+		$this->_array_init($tpl_var);
 		$this->smarty->append($tpl_var, $value, $merge);
 	}
 
@@ -263,6 +268,7 @@ class Presentation {
 	 * @param mixed $value the referenced value to append
 	 */
 	function append_by_ref($tpl_var, &$value, $merge=false) {
+		$this->_array_init($tpl_var);
 	    $this->smarty->append_by_ref($tpl_var, $value, $merge);
 	}
 
@@ -414,7 +420,7 @@ class Presentation {
 		// redirect-after-post to the waiting page
 		header('Location: '.$nexturl);
 		echo 'Should have been redirected to result page.'; // browser will redirect before this is displayed
-		@ob_flush();flush(); // make sure headers have been sent
+		ob_get_level()==0||@ob_flush();flush(); // make sure headers have been sent
 		//sleep(2);//test
 		// note that this page continues execution in the background
 		// FIXME is there some way now to display fatal PHP errors?
