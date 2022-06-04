@@ -62,7 +62,7 @@ class ReposGraphicsTransform {
  */
 class ReposGraphicsTransformBase extends ReposGraphicsTransform {
 
-	function ReposGraphicsTransformBase($source) {
+	function __construct($source) {
 		$this->source = $source;
 	}
 
