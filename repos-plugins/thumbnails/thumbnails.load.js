@@ -1,7 +1,7 @@
 
 // This list was for Repos <1.4, is now depending on the transforms defined in convert service
 Repos.thumbnails = {
-	filetypes: 'jpg|png|gif'+
+	filetypes: 'jpe?g|png|gif'+
 		'|bmp|eps|pdf|ps|psd|ico|svg|tif|tiff'+
 		'|avi'+
 		'|cgm'+ // users that need CGM must install delegate RalCGM for ImageMagick or GraphicsMagick
