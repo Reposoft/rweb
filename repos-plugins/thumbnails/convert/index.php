@@ -111,7 +111,7 @@ $thumbtype = $transform->getOutputFormat();
 
 // See if the source extension is supported
 // In future the supported extensions may depend on transform definitions
-$supportedExtensions = explode('|', 'jpg|png|gif'
+$supportedExtensions = explode('|', 'jpeg|jpg|png|gif'
 		.'|bmp|eps|pdf|ps|psd|ico|svg|tif|tiff'
 		.'|avi'
 		.'|cgm' // users that need CGM must install delegate RalCGM for ImageMagick or GraphicsMagick
@@ -119,7 +119,7 @@ $supportedExtensions = explode('|', 'jpg|png|gif'
 		.'');
 if (!in_array(strtolower($file->getExtension()), $supportedExtensions)) {
 	// TODO use a different image? This error will be common with the new trial-and-error thumbnailing approach.
-	handleError(415, $file->getExtension() . ' not a supported format', 'error.png', 'HTTP/1.1 415 Unsupported Media Type');
+	handleError(415, $file->getExtension() . ' not a supported format', 'error.jpg', 'HTTP/1.1 415 Unsupported Media Type');
 }
 
 // Originals could be large so we should avoid local storage if possible, but need
