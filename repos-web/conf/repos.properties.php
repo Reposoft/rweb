@@ -361,7 +361,6 @@ function getHttpReferer() {
  *  call asLink(getHost().'/the/script/path/').
  * @return The url to the host of this request, 
  * without tailing slash because absolute urls should be appended.
- * @deprecated Use the new function name getHost
  */
 function getHost() {
 	return getSelfRoot();

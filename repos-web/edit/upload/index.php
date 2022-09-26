@@ -228,7 +228,7 @@ function processFile($upload) {
 	displayEdit($presentation, getParent($upload->getTargetUrl()),
 		$upload->getTarget(),
 		$upload->isCreate() ? 'File added' : 'New version committed',
-		$upload->getTargetUrl().' is at revision '.$commit->getCommittedRevision());
+		$upload->getName().' is at revision '.$commit->getCommittedRevision());
 }
 
 function _canEditAsTextarea($mimetype) {
