@@ -1,6 +1,8 @@
 
 (function($){
 
+const RELOAD_401_DELAY_MS = 100;
+
 /**
  * Activates the possibility to load an embedded details page for repos target (file and folder link) elements.
  */
@@ -14,6 +16,9 @@ $.fn.reposDetailsTarget = function(options) {
 		error: function(req) {
 			if (!req.status) { // probably aborted because of page leave
 				window.logger && logger.info('details load interrupted with status', req.status);
+			} else if (req.status === 401) {
+				console.log('Response 401 triggers page reload as of https://github.com/Reposoft/rweb/issues/43', req);
+				setTimeout(() => window.location.reload(), RELOAD_401_DELAY_MS);
 			} else {
 				alert('Details load error ' + 
 					(typeof req == 'undefined' ? '' : req.status));
