@@ -31,6 +31,15 @@ services:
       REPOS_DOWNLOAD_RULE: "|^/svn/[^/]+/downloadableDirs/.+|"
     volumes:
       - .:/opt/rweb
+  proxy:
+    image: envoyproxy/envoy:v1.23.1
+    expose:
+    - "9901"
+    - "443"
+    ports:
+    - "443:443"
+    volumes:
+    - ./t/proxy:/etc/envoy
   rebuild:
     build: ./releaser
     volumes:
