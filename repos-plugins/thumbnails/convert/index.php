@@ -119,7 +119,7 @@ $supportedExtensions = explode('|', 'jpeg|jpg|png|gif'
 		.'');
 if (!in_array(strtolower($file->getExtension()), $supportedExtensions)) {
 	// TODO use a different image? This error will be common with the new trial-and-error thumbnailing approach.
-	handleError(415, $file->getExtension() . ' not a supported format', 'error.jpg', 'HTTP/1.1 415 Unsupported Media Type');
+	handleError(415, $file->getExtension() . ' not a supported format', '1.png', 'HTTP/1.1 415 Unsupported Media Type');
 }
 
 // Originals could be large so we should avoid local storage if possible, but need
