@@ -29,7 +29,7 @@ if ($rev) {
 }
 
 	if ($list->exec()) {
-		$err = implode(array_slice($list->getOutput(), -1));
+		$err = implode("\n", array_slice($list->getOutput(), -1));
 		if (strBegins($err,'svn: E200009')) {
 			header('HTTP/1.1 404 Not Found', true, 404);
 		} else {
@@ -41,7 +41,7 @@ if ($rev) {
 	}
 // TODO detect access denied
 
-	return implode($list->getOutput(),"\n");
+	return implode("\n", $list->getOutput());
 }
 
 // TODO we really need a better xml parser or xml to json
