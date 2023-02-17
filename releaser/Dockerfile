@@ -1,4 +1,4 @@
-FROM php:8.1.6-alpine3.15@sha256:ad4a4d0c78da5867ba5ceb00d6d4275559560fb01deabb75bb1b7e162d49e98a
+FROM php:8.1.16-alpine3.17@sha256:e69f7398a9830d9d08c23eaed7a59e989ee69d80bbcfbf991c819c8ddc2fcbdb
 
 RUN apk add --no-cache \
   bash \
