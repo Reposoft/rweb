@@ -18,6 +18,9 @@ function getListArray($url, $rev=false) {
 	return getListArrayFromJson($json);
 }
 
+/**
+ * @return {array(String)} list output
+ */
 function getListXml($url, $rev=false) {
 
 $list = new SvnOpen('list');
@@ -41,32 +44,90 @@ if ($rev) {
 	}
 // TODO detect access denied
 
-	return implode("\n", $list->getOutput());
+	return $list->getOutput();
 }
 
-// TODO we really need a better xml parser or xml to json
-// however xml->json mapping in the general case is non-trivial
+// globals for parsing
+$parsed = NULL;
+$current = NULL;
+$currentcommit = NULL;
+$currentlock = NULL;
+$currentkey = NULL;
 
+function xstart($parser, $name, $attrs) {
+	global $parsed, $current, $currentcommit, $currentlock, $currentkey;
+	if ($name == 'LISTS') {
+		// ignored because we don't support multiple list elements
+	} else if ($name == 'LIST') {
+		$parsed = array();
+		$parsed['path'] = $attrs['PATH'];
+		$parsed['list'] = array();
+	} else if ($name == 'ENTRY') {
+		$current = array();
+		$current['kind'] = $attrs['KIND'];
+	} else if ($name == 'LOCK') {
+		$currentlock = array();
+	} else if ($name == 'COMMIT') {
+		$currentcommit = array();
+		$currentcommit['revision'] = $attrs['REVISION'];
+	} else {
+		$currentkey = strtolower($name);
+	}
+}
+
+function xend($parser, $name) {
+	global $parsed, $current, $currentcommit, $currentlock, $currentkey;
+	if ($name == 'LIST') {
+		if ($currentkey) trigger_error('Unexpected state: element');
+		if (!is_null($currentlock)) trigger_error('Unexpected state: lock');
+		if (!is_null($currentcommit)) trigger_error('Unexpected state: commit');
+	} else if ($name == 'LOCK') {
+		$current['lock'] = $currentlock;
+		$currentlock = NULL;
+	} else if ($name == 'COMMIT') {
+		$current['commit'] = $currentcommit;
+		$currentcommit = NULL;
+	} else if ($name == 'ENTRY') {
+		$parsed['list'][$current['name']] = $current;
+		$current = NULL;
+	} else {
+		$currentkey = NULL;
+	}
+}
+
+function xdata($parser, $data) {
+	global $parsed, $current, $currentcommit, $currentlock, $currentkey;
+	if (!$currentkey) return;
+	if (is_array($currentlock)) {
+		$currentlock[$currentkey] = $data;
+	} else if (is_array($currentcommit)) {
+		$currentcommit[$currentkey] = $data;
+	} else {
+		$current[$currentkey] = $data;
+	}
+}
+
+/**
+ * @param {array(String)} svn list xml
+ */
 function getListJsonFromXml($xml) {
+	global $parsed;
 
-// xml is five levels deep
-// maximum one attribute
-// attributes never named same as child node
+	$xml_parser = xml_parser_create();
+	xml_set_element_handler($xml_parser, "xstart", "xend");
+	xml_set_character_data_handler($xml_parser, "xdata");
 
-// define the svn variable that wraps it up
-$xml = preg_replace('/.*<list\s+path="([^"]+)">/s','{"path":"\1", "list":{',$xml);
-// entries must have unique names in json
-$xml = preg_replace('/<entry\s+kind="(file|dir)">\s+<name>(.*)<\/name>(.*)<\/entry>/sU','"\2":{\3"kind":"\1"},',$xml);
-// elements with no attributes
-$xml = preg_replace('/<(\w+)>(.*)<\/\1>\s*/','"\1":"\2",',$xml);
-// elements with one attribute
-$xml = preg_replace('/<(\w+)\s+(\w+)="(\d+)">(.*)<\/\1>/sU','"\1":{\4"\2":"\3"},',$xml);
-// special treatment of lock, no attribute
-$xml = str_replace(array('<lock>',',</lock>'),array('"lock":{','},'),$xml);
-// remove last comma and close object
-$xml = preg_replace('/,?\s*<\/list>\s+<\/lists>/',"\n}}",$xml);
+	for ($i = 0; $i < count($xml);) {
+		if (!xml_parse($xml_parser, $xml[$i]."\n", count($xml) == $i++)) {
+			trigger_error(sprintf("XML error: %s at line %d",
+				xml_error_string(xml_get_error_code($xml_parser)),
+				xml_get_current_line_number($xml_parser)), E_USER_ERROR);
+		}
+	}
 
-	return $xml;
+	xml_parser_free($xml_parser);
+
+	return json_encode($parsed, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
 }
 
 /**

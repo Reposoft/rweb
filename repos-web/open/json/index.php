@@ -42,7 +42,7 @@ if (!isset($_GET['selector'])) {
 	header('Content-Type: application/javascript;charset=UTF-8');
 	// put the data in a variable for the bundled script below
 	// the data must be included in the script to allow cross-domain listings
-	$json = 'var svn = '.$json.';';
+	$json = 'var svn = '.$json.';'."\n";
 }
 
 // import configuration from query string to settings json object
